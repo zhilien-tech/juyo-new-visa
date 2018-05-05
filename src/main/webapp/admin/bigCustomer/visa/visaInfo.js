@@ -15,7 +15,7 @@ function deleteMoreDiv(divClass){
 
 //克隆时，查看当前div下是否有DateTimePicker，如果有则进行初始化
 function initDateTimePicker(obj){
-	obj.find("input[type='text'][class='datetimepickercss']").each(function() {
+	obj.find("input[type='text'][class *='datetimepickercss']").each(function() {
 		$(this).datetimepicker({
 			format: 'dd/mm/yyyy',
 			autoclose: true,//选中日期后 自动关闭

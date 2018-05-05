@@ -11,7 +11,7 @@
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<!-- 本页样式 -->
-		<link rel="stylesheet" href="${base}/references/public/css/touristVisaInfo.css">
+		<link rel="stylesheet" href="${base}/references/public/css/updateVisaInfo.css">
 		<style>
      		[v-cloak]{display:none;}
      	</style>
@@ -22,7 +22,7 @@
 				<span>美国签证信息</span>
 			</div>
 			<div class="btnRight">
-				<a class="saveVisa" onclick="save()">保存</a>
+				<a class="saveVisa" onclick="save(1)">保存</a>
 				<a class="cancelVisa" onclick="closeWindow()">取消</a>
 			</div>
 		</div>
@@ -208,12 +208,12 @@
 													<label>哪个州的驾照</label>
 													<select id="witchstateofdriver" name="witchstateofdriver">
 														<option value="0" selected="selected">请选择</option>
-														<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
-															<c:if test="${driver.witchstateofdriver != map.key}">
-																<option value="${map.key }">${map.value }</option>
+														<c:forEach items="${obj.stateUsList }" var="state">
+															<c:if test="${driver.witchstateofdriver != state.id}">
+																<option value="${state.id }">${state.name }</option>
 															</c:if>
-															<c:if test="${driver.witchstateofdriver == map.key}">
-																<option value="${map.key }" selected="selected">${map.value }</option>
+															<c:if test="${driver.witchstateofdriver == state.id}">
+																<option value="${state.id }" selected="selected">${state.name }</option>
 															</c:if>
 														</c:forEach>
 													</select>
@@ -232,8 +232,8 @@
 												<label>哪个州的驾照</label>
 												<select id="witchstateofdriver" name="witchstateofdriver">
 													<option value="0">请选择</option>
-													<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
-														<option value="${map.key }">${map.value }</option>
+													<c:forEach items="${obj.stateUsList }" var="state">
+														<option value="${state.id }">${state.name }</option>
 													</c:forEach>
 												</select>
 											</div>
@@ -358,9 +358,9 @@
 				</div>
 			</div>
 			<!--以前的美国旅游信息END-->
-			<!--美国联络点-->
+			<!--美国联络人-->
 			<div class="contactPoint">
-				<div class="titleInfo">美国联络点</div>
+				<div class="titleInfo">美国联络人</div>
 				<div class="groupInputInfo paddingLeft">
 					<label>联系人姓</label>
 					<input name="firstname" v-model="visaInfo.contactPointInfo.firstname" type="text" />
@@ -400,8 +400,8 @@
 					<label>州/省</label>
 						<select id="state" name="state" v-model="visaInfo.contactPointInfo.state">
 							<option value="0">请选择</option>
-							<c:forEach items="${obj.VisaUSStatesEnum }" var="map">
-								<option value="${map.key }">${map.value }</option>
+							<c:forEach items="${obj.stateUsList }" var="state">
+								<option value="${state.id }">${state.name }</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -599,8 +599,8 @@
 					<label>配偶的国籍</label>
 					<select id="spousenationality" name="spousenationality" v-model="visaInfo.familyInfo.spousenationality">
 						<option value="0">请选择</option>
-						<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-							<option value="${map.key }">${map.value }</option>
+						<c:forEach items="${obj.gocountryFiveList }" var="country">
+							<option value="${country.id }">${country.chinesename }</option>
 						</c:forEach>
 					</select>
 				</div>
@@ -614,8 +614,8 @@
 					<label>配偶的出生国家</label>
 					<select id="spousecountry" name="spousecountry" v-model="visaInfo.familyInfo.spousecountry">
 						<option value="0">请选择</option>
-						<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-							<option value="${map.key }">${map.value }</option>
+						<c:forEach items="${obj.gocountryFiveList }" var="country">
+							<option value="${country.id }">${country.chinesename }</option>
 						</c:forEach>
 					</select>
 				</div>
@@ -661,8 +661,8 @@
 						<label>国家/地区</label>
 						<select name="country" v-model="visaInfo.familyInfo.country">
 							<option value="0">请选择</option>
-							<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-								<option value="${map.key }">${map.value }</option>
+							<c:forEach items="${obj.gocountryFiveList }" var="country">
+								<option value="${country.id }">${country.chinesename }</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -722,8 +722,8 @@
 						<label>国家/地区</label>
 						<select name="country" v-model="visaInfo.workEducationInfo.country">
 							<option value="0">请选择</option>
-							<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-								<option value="${map.key }">${map.value }</option>
+							<c:forEach items="${obj.gocountryFiveList }" var="country">
+								<option value="${country.id }">${country.chinesename }</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -806,12 +806,12 @@
 											<label>国家/地区</label>
 											<select name="employercountry">
 												<option value="0">请选择</option>
-												<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-													<c:if test="${beforeWork.employercountry != map.key}">
-														<option value="${map.key }">${map.value }</option>
+												<c:forEach items="${obj.gocountryFiveList }" var="country">
+													<c:if test="${beforeWork.employercountry != country.id}">
+														<option value="${country.id }">${country.chinesename }</option>
 													</c:if>
-													<c:if test="${beforeWork.employercountry == map.key}">
-														<option value="${map.key }" selected="selected">${map.value }</option>
+													<c:if test="${beforeWork.employercountry == country.id}">
+														<option value="${country.id }" selected="selected">${country.chinesename }</option>
 													</c:if>
 												</c:forEach>
 											</select>
@@ -876,7 +876,7 @@
 									</div>
 									<div class="draBig leftNo marginLS groupInputInfo">
 										<label>雇主街道地址(次选)*可选</label>
-										<input name="" type="text" />
+										<input name="employeraddressSec" type="text" />
 									</div>
 									
 									<div class="paddingLeft leftNo groupInputInfo">
@@ -898,8 +898,8 @@
 										<label>国家/地区</label>
 										<select name="employercountry">
 											<option value="0">请选择</option>
-											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-												<option value="${map.key }">${map.value }</option>
+											<c:forEach items="${obj.gocountryFiveList }" var="country">
+												<option value="${country.id }">${country.chinesename }</option>
 											</c:forEach>
 										</select>
 									</div>
@@ -1004,12 +1004,12 @@
 											<label>国家/地区</label>
 											<select name="institutioncountry">
 												<option value="0">请选择</option>
-												<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-													<c:if test="${education.institutioncountry != map.key}">
-														<option value="${map.key }">${map.value }</option>
+												<c:forEach items="${obj.gocountryFiveList }" var="country">
+													<c:if test="${education.institutioncountry != country.id}">
+														<option value="${country.id }">${country.chinesename }</option>
 													</c:if>
-													<c:if test="${education.institutioncountry == map.key}">
-														<option value="${map.key }" selected="selected">${map.value }</option>
+													<c:if test="${education.institutioncountry == country.id}">
+														<option value="${country.id }" selected="selected">${country.chinesename }</option>
 													</c:if>
 												</c:forEach>
 											</select>
@@ -1044,7 +1044,7 @@
 									</div>
 									<div class="draBig leftNo groupInputInfo">
 										<label>街道地址(次选)*可选</label>
-										<input type="text" />
+										<input name="secinstitutionaddress"  type="text" />
 									</div>
 									<div class="paddingLeft leftNo groupcheckBoxInfo" >
 											<label>州/省</label>
@@ -1065,8 +1065,8 @@
 										<label>国家/地区</label>
 										<select name="institutioncountry">
 											<option value="0">请选择</option>
-											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-												<option value="${map.key }">${map.value }</option>
+											<c:forEach items="${obj.gocountryFiveList }" var="country">
+												<option value="${country.id }">${country.chinesename }</option>
 											</c:forEach>
 										</select>
 									</div>
@@ -1159,12 +1159,12 @@
 										
 											<select name="traveledcountry">
 												<option value="0">请选择</option>
-												<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-														<c:if test="${gocountry.traveledcountry != map.key}">
-															<option value="${map.key }">${map.value }</option>
+												<c:forEach items="${obj.gocountryFiveList }" var="country">
+														<c:if test="${gocountry.traveledcountry != country.id}">
+															<option value="${country.id }">${country.chinesename }</option>
 														</c:if>
-														<c:if test="${gocountry.traveledcountry == map.key}">
-															<option value="${map.key }" selected="selected">${map.value }</option>
+														<c:if test="${gocountry.traveledcountry == country.id}">
+															<option value="${country.id }" selected="selected">${country.chinesename }</option>
 														</c:if>
 												</c:forEach>
 											</select>
@@ -1175,7 +1175,14 @@
 							<c:if test="${empty obj.gocountryList }">
 								<div class="paddingTop travelCountry groupInputInfo">
 									<label>国家/地区</label>
-									<input name="traveledcountry" type="text"/>
+									<div class="groupInputInfo groupSelectInfo">
+										<select name="traveledcountry">
+											<option value="0">请选择</option>
+											<c:forEach items="${obj.gocountryFiveList }" var="country">
+												<option value="${country.id }">${country.chinesename }</option>
+											</c:forEach>
+										</select>
+									</div>
 								</div>
 							</c:if>
 						</div>
@@ -1244,12 +1251,12 @@
 										<label>国家/地区</label>
 										<select name="militarycountry">
 											<option value="0">请选择</option>
-											<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-													<c:if test="${conscientious.militarycountry != map.key}">
-														<option value="${map.key }">${map.value }</option>
+											<c:forEach items="${obj.gocountryFiveList }" var="country">
+													<c:if test="${conscientious.militarycountry != country.id}">
+														<option value="${country.id }">${country.chinesename }</option>
 													</c:if>
-													<c:if test="${conscientious.militarycountry == map.key}">
-														<option value="${map.key }" selected="selected">${map.value }</option>
+													<c:if test="${conscientious.militarycountry == country.id}">
+														<option value="${country.id }" selected="selected">${country.chinesename }</option>
 													</c:if>
 											</c:forEach>
 										</select>
@@ -1286,8 +1293,8 @@
 									<label>国家/地区</label>
 									<select name="militarycountry">
 										<option value="0">请选择</option>
-										<c:forEach items="${obj.VisaCitizenshipEnum }" var="map">
-											<option value="${map.key }">${map.value }</option>
+										<c:forEach items="${obj.gocountryFiveList }" var="country">
+											<option value="${country.id }">${country.chinesename }</option>
 										</c:forEach>
 									</select>
 								</div>
@@ -1669,7 +1676,8 @@
 	</body>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
-		var staffId = ${obj.staffId};
+		var staffId = '${obj.staffId}';
+		var isDisable = '${obj.isDisable}';
 	</script>
 	<script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
@@ -1682,14 +1690,13 @@
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-	<!-- 本页js -->
-	<script src="${base}/admin/touristUS/visa/openPageYesOrNo.js"></script><!-- 本页面  打开默认开关 js -->
-	<script src="${base}/admin/touristUS/visa/visaGetInfoList.js"></script><!-- 本页面  获取一对多信息 js -->
-	<script src="${base}/admin/touristUS/visa/visaInfoVue.js"></script><!-- 本页面 Vue加载页面内容 js -->
-	<script src="${base}/admin/touristUS/visa/visaInfo.js"></script><!-- 本页面 开关交互 js -->
-	<script src="${base}/touristUS/visa/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
+	
+	<script src="${base}/admin/touristUS/openPageYesOrNo.js"></script><!-- 本页面  打开默认开关 js -->
+	<script src="${base}/admin/touristUS/visaGetInfoList.js"></script><!-- 本页面  获取一对多信息 js -->
+	<script src="${base}/admin/touristUS/visaInfoVue.js"></script><!-- 本页面 Vue加载页面内容 js -->
+	<script src="${base}/admin/touristUS/visaInfo.js"></script><!-- 本页面 开关交互 js -->
+	<script src="${base}/admin/touristUS/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
 	<script type="text/javascript">
-		var isDisable = '${obj.isDisable}';
 		$(function(){
 			//页面不可编辑
 			if(isDisable == 1){
@@ -1703,10 +1710,12 @@
 	
 		//跳转到基本信息页
 		function baseInfoBtn(){
-			//左箭头跳转
-			window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
-			//保存签证信息
-			save();
+			if(isDisable == 1){
+				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
+			}else{
+				//保存签证信息
+				save(2);
+			}
 		}
 		
 	</script>
