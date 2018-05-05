@@ -482,7 +482,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			map.put("fill_3_2", record.getString("vouchphone"));
 			//地址
 			map.put("fill_4_2", record.getString("vouchaddress"));
-			if ("男".equals(record.getString("vouchsex"))) {
+			if ("男".equals(record.getString("vouchnan"))) {
 				map.put("toggle_1_2", "On");
 			} else if ("女".equals(record.getString("vouchsex"))) {
 				map.put("toggle_2_2", "On");
