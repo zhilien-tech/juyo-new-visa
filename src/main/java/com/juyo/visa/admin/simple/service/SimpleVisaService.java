@@ -86,6 +86,7 @@ import com.juyo.visa.entities.TFlightEntity;
 import com.juyo.visa.entities.THotelEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TOrderLogsEntity;
 import com.juyo.visa.entities.TOrderTravelplanHisJpEntity;
 import com.juyo.visa.entities.TOrderTravelplanJpEntity;
 import com.juyo.visa.entities.TOrderTripJpEntity;
@@ -224,6 +225,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("mainSaleTripTypeEnum", EnumUtil.enum2(MainSaleTripTypeEnum.class));
 		result.put("mainSalePayTypeEnum", EnumUtil.enum2(MainSalePayTypeEnum.class));
 		result.put("mainSaleVisaTypeEnum", EnumUtil.enum2(MainSaleVisaTypeEnum.class));
+		
 		return result;
 	}
 
@@ -495,6 +497,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		} else {
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
 			orderid = orderjp.getOrderId();
+			//根据订单ID查询
+			TOrderLogsEntity logs = dbDao.fetch(TOrderLogsEntity.class,Cnd.where("orderid", "=", orderid.longValue()));
+			if(Util.isEmpty(logs)) {
+				orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+			}
+			if(JpOrderSimpleEnum.PLACE_ORDER.intKey() != 1) {
+				orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+			}
 		}
 		TOrderJpEntity orderjpinfo = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderid.longValue());

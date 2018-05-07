@@ -41,6 +41,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.html.table.Table;
 import com.juyo.visa.admin.city.service.CityViewService;
 import com.juyo.visa.admin.flight.service.FlightViewService;
 import com.juyo.visa.admin.hotel.service.HotelViewService;
@@ -593,7 +594,6 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					if (!Util.isEmpty(ordertripjp.getGoDate())) {
 						map.put("checkInDate", hoteldateformat.format(ordertripjp.getGoDate()).substring(5));
 					}
-					String format = hoteldateformat.format(ordertripjp.getReturnDate());
 					if (!Util.isEmpty(ordertripjp.getReturnDate())) {
 						map.put("checkOutDate", hoteldateformat.format(ordertripjp.getReturnDate()).substring(5));
 					}
@@ -677,21 +677,42 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			Font font1 = ttf.getFont();
 			font1.setFamily("宋体");
 			font1.setSize(17);
-			Paragraph p = new Paragraph();
-			Chunk chunk1 = new Chunk("签证申请人名单", font1);
-			Chunk chunk3 = new Chunk("                                                                                            ", font);
-			Chunk chunk2 = null;
-			if(!Util.isEmpty(company.getName())) {
-				chunk2= new Chunk(company.getName(), font1);
-			}
-			p.add(chunk1);
-			p.add(chunk3);
-			p.add(chunk2);
-			p.setSpacingBefore(5);
-			p.setSpacingAfter(5);
-			p.setIndentationLeft(20);
-			p.setIndentationRight(20);
-			document.add(p);
+			 PdfPTable table1 = new PdfPTable(2); //表格两列
+			table1.setHorizontalAlignment(Element.ALIGN_CENTER); //垂直居中
+			  table1.setWidthPercentage(100);//表格的宽度为100%
+			float[] wid1 ={0.3f,0.7f}; //两列宽度的比例
+			table1.setWidths(wid1); 
+			table1.getDefaultCell().setBorderWidth(0); //不显示边框
+			PdfPCell cell11 = new PdfPCell(); 
+			PdfPCell cell12 = new PdfPCell(); 
+			Paragraph paragraph = new Paragraph("  签证申请人名单",font1);
+			Paragraph paragraph2 = new Paragraph(company.getName(), font1);
+			paragraph2.setAlignment(Element.ALIGN_RIGHT);
+			cell11.addElement(paragraph);
+			cell11.setBorder(0);
+			cell12.addElement(paragraph2);
+			cell12.setBorder(0);
+			paragraph.setSpacingBefore(30);
+			paragraph2.setSpacingAfter(200);
+			 table1.addCell(cell11);
+			 table1.addCell(cell12);
+			 table1.getDefaultCell().setBorderWidth(0);
+			 document.add(table1);
+//			Paragraph p = new Paragraph();
+//			Chunk chunk1 = new Chunk("签证申请人名单", font1);
+//			Chunk chunk3 = new Chunk("                                                                                            ", font);
+//			Chunk chunk2 = null;
+//			if(!Util.isEmpty(company.getName())) {
+//				chunk2= new Chunk(company.getName(), font1);
+//			}
+//			p.add(chunk1);
+//			p.add(chunk3);
+//			p.add(chunk2);
+//			p.setSpacingBefore(5);
+//			p.setSpacingAfter(5);
+//			p.setIndentationLeft(20);
+//			p.setIndentationRight(20);
+//			document.add(p);
 
 			float[] columns = { 2, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 4, 3, 2, 4, };
 			PdfPTable table = new PdfPTable(columns);
@@ -1109,7 +1130,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					if (ordertripjp.getTripType().equals(1)) {
 						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-						scenic = goflight.getFlightnum() + "：" + goflight.getTakeOffName() + "->"
+						scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
 								+ goflight.getLandingName();
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
@@ -1118,7 +1139,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 							TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
 							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-							scenic = goflight.getFlightnum() + "：" + goflight.getTakeOffName() + "->"
+							scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
 									+ goflight.getLandingName();
 						}
 					}
@@ -1126,7 +1147,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					if (ordertripjp.getTripType().equals(1)) {
 						TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-						scenic = returnflight.getFlightnum() + "：" + returnflight.getTakeOffName() + "->"
+						scenic = returnflight.getFlightnum().replace("*", "") + "：" + returnflight.getTakeOffName() + "->"
 								+ returnflight.getLandingName();
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
@@ -1135,7 +1156,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 							TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
 							TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
 									Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-							scenic = returnflight.getFlightnum() + "：" + returnflight.getTakeOffName() + "->"
+							scenic = returnflight.getFlightnum().replace("*", "") + "：" + returnflight.getTakeOffName() + "->"
 									+ returnflight.getLandingName();
 						}
 					}
