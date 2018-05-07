@@ -1694,7 +1694,7 @@
 			</div>
 			<!--安全和背景END-->
 		</div>
-		<div class="English">
+		<div class="English" style="display:none;">
 			<!--旅伴信息-->
 			<div class="companyInfoModule">
 				<div class="titleInfo">Company information</div>
