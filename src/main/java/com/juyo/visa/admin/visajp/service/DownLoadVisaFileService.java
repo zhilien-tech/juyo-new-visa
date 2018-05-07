@@ -608,7 +608,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 	 * 酒店信息
 	 */
 	public ByteArrayOutputStream hotelInfo(Map<String, Object> tempdata) {
-		DateFormat hoteldateformat = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat hoteldateformat = new SimpleDateFormat("yyyy/MM/dd hh:mm");
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		try {
 			//公司信息
@@ -638,10 +638,10 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						map.put("city", cityentity.getCity());
 					}
 					if (!Util.isEmpty(ordertripjp.getGoDate())) {
-						map.put("checkInDate", hoteldateformat.format(ordertripjp.getGoDate()));
+						map.put("checkInDate", hoteldateformat.format(ordertripjp.getGoDate()).substring(5));
 					}
 					if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-						map.put("checkOutDate", hoteldateformat.format(ordertripjp.getReturnDate()));
+						map.put("checkOutDate", hoteldateformat.format(ordertripjp.getReturnDate()).substring(5));
 					}
 				} else if (ordertripjp.getTripType().equals(2)) {
 					if (!Util.isEmpty(mutiltrip)) {
@@ -695,6 +695,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 					map.put("hotel", hotelinfo.getName());
 				}
 			}
+			map.put("breakfast", "無");
+			map.put("dinner", "無");
+			
 			//获取模板文件
 			URL resource = getClass().getClassLoader().getResource("japanfile/hotel.pdf");
 			TemplateUtil templateUtil = new TemplateUtil();

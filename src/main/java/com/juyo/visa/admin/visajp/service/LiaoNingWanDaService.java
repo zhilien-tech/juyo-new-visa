@@ -593,7 +593,6 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					if (!Util.isEmpty(ordertripjp.getGoDate())) {
 						map.put("checkInDate", hoteldateformat.format(ordertripjp.getGoDate()).substring(5));
 					}
-					String format = hoteldateformat.format(ordertripjp.getReturnDate());
 					if (!Util.isEmpty(ordertripjp.getReturnDate())) {
 						map.put("checkOutDate", hoteldateformat.format(ordertripjp.getReturnDate()).substring(5));
 					}
