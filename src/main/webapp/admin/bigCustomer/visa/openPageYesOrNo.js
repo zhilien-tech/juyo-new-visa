@@ -194,7 +194,6 @@ function openYesOrNoPage(){
 		$(".militaryServiceYes").hide();
 	}
 	
-	
 	//checkbox勾选时回显，设置input--->disabled           TODO
 	$("input[type='checkbox']").each(function(index,ele){
 		var beforeEle = $(this).prev();
@@ -204,8 +203,7 @@ function openYesOrNoPage(){
 			beforeEle.attr("disabled",false);
 		}
 	});
-
-	
+	showUSContactChecked("#isknowname","#isknownameen");
 }
 
 //勾选checkbox("不知道")，回显
@@ -216,5 +214,29 @@ function showEleBeforeCheckbox(obj){
 		beforeEle.attr("disabled",true);
 	}else{
 		beforeEle.attr("disabled",false);
+	}
+}
+
+//美国联络人姓名   回显 checked前两个	 有问题
+function showUSContactChecked(obj,objen){
+	var beforeElefitst = $(obj).parent().prev().find("input");
+	var beforeElelast = $(obj).prev();
+	var beforefirsten = $(objen).parent().prev().find("input");
+	var beforelasten = $(objen).prev();
+	beforeElefitst.val("");
+	beforeElelast.val("");
+	beforefirsten.val("");
+	beforelasten.val("");
+	if($(obj).is(':checked')){
+		beforeElefitst.attr("disabled",true);
+		beforeElelast.attr("disabled",true);
+		beforefirsten.attr("disabled",true);
+		beforelasten.attr("disabled",true);
+		
+	}else{
+		beforeElefitst.attr("disabled",false);
+		beforeElelast.attr("disabled",false);
+		beforefirsten.attr("disabled",false);
+		beforelasten.attr("disabled",false);
 	}
 }

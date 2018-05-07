@@ -152,7 +152,7 @@
 	<%-- <script src="${base}/admin/visaJapan/visaList.js"></script> --%>
 	<script src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
-	<script src="${base}/admin/simple/listpagejs.js"></script><!-- 图标提示语 -->
+	<script src="${base}/admin/simple/listpagejs.js"></script><!--下单 -->
 	<script type="text/javascript">
 	//异步加载的URL地址
     var url="${base}/admin/simple/listData.html";

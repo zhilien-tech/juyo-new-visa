@@ -1,5 +1,5 @@
 /**
-s * SaleModule.java
+BJTESTs * SaleModule.java
  * com.juyo.visa.admin.sale.module
  * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
 */

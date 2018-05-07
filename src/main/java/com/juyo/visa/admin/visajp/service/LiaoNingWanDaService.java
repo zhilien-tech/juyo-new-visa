@@ -482,7 +482,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			map.put("fill_3_2", record.getString("vouchphone"));
 			//地址
 			map.put("fill_4_2", record.getString("vouchaddress"));
-			if ("男".equals(record.getString("vouchsex"))) {
+			if ("男".equals(record.getString("vouchnan"))) {
 				map.put("toggle_1_2", "On");
 			} else if ("女".equals(record.getString("vouchsex"))) {
 				map.put("toggle_2_2", "On");
@@ -680,7 +680,10 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			Paragraph p = new Paragraph();
 			Chunk chunk1 = new Chunk("签证申请人名单", font1);
 			Chunk chunk3 = new Chunk("                                                                                            ", font);
-			Chunk chunk2= new Chunk(company.getName(), font1);
+			Chunk chunk2 = null;
+			if(!Util.isEmpty(company.getName())) {
+				chunk2= new Chunk(company.getName(), font1);
+			}
 			p.add(chunk1);
 			p.add(chunk3);
 			p.add(chunk2);
