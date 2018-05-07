@@ -369,7 +369,7 @@
 				<div class="groupcheckBoxInfo paddingRight">
 					<label>联系人名</label>
 					<input name="lastname" id="lastnameus" class="lastnameus" v-model="visaInfo.contactPointInfo.lastname" @change="liaisonlastname('lastnameus','lastnameusen','visaInfo.contactPointInfo.lastnameen')" type="text" />
-					<input id="isknowname" v-model="visaInfo.contactPointInfo.isknowname" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknowname" name="isknowname" type="checkbox" />
+					<input id="isknowname" v-model="visaInfo.contactPointInfo.isknowname" @click="isKnowContactPointName" name="isknowname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop groupcheckBoxInfo cbox">
@@ -2006,12 +2006,12 @@
 				<div class="titleInfo">Us contact point</div>
 				<div class="groupInputInfo paddingLeft">
 					<label>Surnames</label>
-					<input name="firstnameen" id="firstnameusen" :value="visaInfo.contactPointInfo.firstname" v-model="visaInfo.contactPointInfo.firstnameen" type="text" />
+					<input name="firstnameen" id="firstnameusen" v-model="visaInfo.contactPointInfo.firstnameen" type="text" />
 				</div>
 				<div class="groupcheckBoxInfo paddingRight">
 					<label>Given Names  </label>
 					<input name="lastnameen" id="lastnameusen" v-model="visaInfo.contactPointInfo.lastnameen" type="text"  />
-					<input id="isknownameen" v-model="visaInfo.contactPointInfo.isknownameen" v-on:click="isKnowContactPointName" :value="visaInfo.contactPointInfo.isknownameen" name="isknownameen" type="checkbox" />
+					<input id="isknownameen" v-model="visaInfo.contactPointInfo.isknownameen" v-on:click="isKnowContactPointName" name="isknownameen" type="checkbox" />
 				</div>
 				<div class="clear"></div>
 				<div class="paddingTop groupcheckBoxInfo cbox">

@@ -180,13 +180,18 @@ var visaVue = new Vue({
 		},
 		isKnowContactPointName:function(){
 			var isknowname = visaInfo.contactPointInfo.isknowname;
-			if(isknowname){
-				visaInfo.contactPointInfo.firstname = "";
-				visaInfo.contactPointInfo.lastname = "";
-				visaInfo.contactPointInfo.firstnameen = "";
-				visaInfo.contactPointInfo.lastnameen = "";
-				visaInfo.contactPointInfo.isknownameen = true;
-			}
+			visaInfo.contactPointInfo.isknownameen = isknowname;
+			visaInfo.contactPointInfo.firstname = "";
+			visaInfo.contactPointInfo.lastname = "";
+			visaInfo.contactPointInfo.firstnameen = "";
+			visaInfo.contactPointInfo.lastnameen = "";
+//			if(isknowname){
+//				visaInfo.contactPointInfo.firstname = "";
+//				visaInfo.contactPointInfo.lastname = "";
+//				visaInfo.contactPointInfo.firstnameen = "";
+//				visaInfo.contactPointInfo.lastnameen = "";
+//				visaInfo.contactPointInfo.isknownameen = true;
+//			}
 		},
 		isfirstname:function(){
 			var firstname = visaInfo.contactPointInfo.firstname;
@@ -1255,8 +1260,10 @@ function save(status){
 	visadata.previUSTripInfo = visaInfo.previUSTripInfo;
 	visaInfo.previUSTripInfo.issueddate = formatDate($('#issueddate').val());//最后一次签证的签发日期
 	visaInfo.previUSTripInfo.issueddateen = formatDate($('#issueddateen').val());
-	//美国联络点
+	//美国联络人
 	visadata.contactPointInfo = visaInfo.contactPointInfo;
+	//console.log(visaInfo.contactPointInfo.lastname + "--------" + visaInfo.contactPointInfo.firstname);
+	//console.log(visaInfo.contactPointInfo.lastnameen + "--------" + visaInfo.contactPointInfo.firstnameen);
 	//家庭信息
 	visadata.familyInfo = visaInfo.familyInfo;
 	visaInfo.familyInfo.spousebirthday = formatDate($('#spousebirthday').val());//配偶生日
