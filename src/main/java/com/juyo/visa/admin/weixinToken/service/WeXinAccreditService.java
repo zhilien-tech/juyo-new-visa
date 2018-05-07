@@ -219,7 +219,7 @@ public class WeXinAccreditService extends BaseService<TConfWxEntity> {
 				// 用户关注时间
 				wxinfo.setSubscribeTime(user.getString("subscribe_time"));
 				// 昵称
-				wxinfo.setNickname(user.getString("nickname"));
+//				wxinfo.setNickname(user.getString("nickname"));
 				// 用户的性别（1是男性，2是女性，0是未知）
 				wxinfo.setSex(user.getInteger("sex"));
 				// 用户所在国家

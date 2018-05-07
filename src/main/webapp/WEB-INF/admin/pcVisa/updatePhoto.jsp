@@ -273,7 +273,7 @@
 					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-overdue.jpeg" />
 				</div>
 				<!-- <div class="beforeOverdueInfo"></div> -->
-				<div class="uploadReleases" >
+				<div class="uploadReleases" style="display:none;">
 					<div>上传</div>
 					<img class="longitudinal" />
 				</div>
