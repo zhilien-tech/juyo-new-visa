@@ -11,7 +11,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * 
  */
 public enum DistrictEnum implements IEnum {
-	BEIJING(1, "北京"), SHANGHAI(2, "上海"), SHENYANG(3, "沈阳"), CHENGDU(4, "成都"), GUANGZHOU(5, "广州");
+	BEIJING(1, "北京"), SHANGHAI(2, "上海"), GUANGZHOU(5, "广州"), CHENGDU(4, "成都"), SHENYANG(3, "沈阳");
 	private int key;
 	private String value;
 

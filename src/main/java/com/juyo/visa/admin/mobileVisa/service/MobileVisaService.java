@@ -588,7 +588,7 @@ public class MobileVisaService extends BaseService<TAppStaffCredentialsEntity> {
 	 */
 	public Object getWxMorePhotos(@Param("type") int type, @Param("staffid") int staffid) {
 		List<TAppStaffCredentialsEntity> photoList = dbDao.query(TAppStaffCredentialsEntity.class,
-				Cnd.where("staffid", "=", staffid).and("type", "=", type).orderBy("id", "DESC"), null);
+				Cnd.where("staffid", "=", staffid).and("type", "=", type), null);
 		return photoList;
 	}
 

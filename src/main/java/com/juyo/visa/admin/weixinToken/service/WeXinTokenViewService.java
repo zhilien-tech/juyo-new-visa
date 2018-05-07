@@ -272,7 +272,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 	 */
 	public Object getEchoPictureList(Integer staffId, Integer type) {
 		List<TAppStaffCredentialsEntity> celist = dbDao.query(TAppStaffCredentialsEntity.class,
-				Cnd.where("staffid", "=", staffId).and("type", "=", type), null);
+				Cnd.where("staffid", "=", staffId).and("type", "=", type).orderBy("id", "DESC"), null);
 		String jsonStr = "";
 		if (!Util.isEmpty(celist)) {
 			jsonStr = JsonUtil.toJson(celist);
