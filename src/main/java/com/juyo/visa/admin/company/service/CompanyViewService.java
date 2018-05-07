@@ -242,6 +242,21 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 					record.set("designatedNum", cbsEntity.getDesignatedNum());
 				}
 			}
+			String scopes = record.getString("scopes");
+			String[] scopeKeys = scopes.split(",");
+			String scopeValues = "";
+			for (String scopekey : scopeKeys) {
+				Map<String, String> scopeMap = EnumUtil.enum2(BusinessScopesEnum.class);
+				for (Map.Entry<String, String> scopeEnum : scopeMap.entrySet()) {
+					String value = scopeEnum.getValue();
+					String key = scopeEnum.getKey();
+					if(Util.eq(scopekey, key)) {
+						scopeValues += value+",";
+					}
+				}
+			}
+			record.set("scopes", scopeValues);
+			
 			record.set("comBusinesss", comBusiness);
 			obj.put("company", record);
 		}
