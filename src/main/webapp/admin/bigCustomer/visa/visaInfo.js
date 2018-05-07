@@ -18,6 +18,7 @@ function initDateTimePicker(obj){
 	obj.find("input[type='text'][class *='datetimepickercss']").each(function() {
 		$(this).datetimepicker({
 			format: 'dd/mm/yyyy',
+			language: 'zh-CN',
 			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"top-left",//显示位置
 			minView: "month"//只显示年月日
