@@ -4,6 +4,9 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<meta http-equlv="proma" content="no-cache" />
+		<meta http-equlv="cache-control" content="no-cache" />
+		<meta http-equlv="expires" content="0" />
 		<title>签证信息</title>
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
@@ -11,7 +14,7 @@
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<!-- 本页样式 -->
-		<link rel="stylesheet" href="${base}/references/public/css/updateVisaInfo.css">
+		<link rel="stylesheet" href="${base}/references/public/css/updateVisaInfo.css?id='20180507'">
 		<style>
      		[v-cloak]{display:none;}
      	</style>
@@ -443,6 +446,10 @@
 					<input id="isKnowFatherMing" name="isknowfatherlastname" onchange="AddSingle(this,'isknowfatherlastnameen')" v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
+				<%-- <div>
+					<label>父亲的生日</label>
+					<input type="text" id="fatherbirday" onchange="translateZhToEn(this,'fatherbirdayen','')" value="${obj.fatherbirday}" class="datetimepickercss form-control" placeholder="日/月/年" />
+				</div> --%>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>你的父亲是否在美国</label>
@@ -632,7 +639,7 @@
 				</div>
 				
 				<!--配偶的联系地址select选择其他-->
-				<div class="otherSpouseInfo elementHide paddingTop padlongBom" >
+				<div class="otherSpouseInfo elementHide paddingTop paddingBom-8" >
 					<div class="groupInputInfo prvPadL">
 						<label>街道地址(首选)</label>
 						<input name="firstaddress" id="otherfrstaddress" @change="spouseotherstreet('otherfrstaddress','otherfrstaddressen','visaInfo.familyInfo.firstaddressen')" v-model="visaInfo.familyInfo.firstaddress" type="text" />
@@ -2787,7 +2794,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="languageYes">
+				<div class="languageYes paddingBom-35">
 					<c:if test="${!empty obj.languageList }">
 						<c:forEach var="language" items="${obj.languageList }">
 							<div class="languagename languagenameen languagenameDiven paddingTop padding-left">
