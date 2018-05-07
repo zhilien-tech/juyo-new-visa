@@ -217,21 +217,22 @@ function showEleBeforeCheckbox(obj){
 	}
 }
 
-//美国联络人姓名   回显 checked前两个	 有问题
+//美国联络人姓名   回显 checked前两个	 
 function showUSContactChecked(obj,objen){
 	var beforeElefitst = $(obj).parent().prev().find("input");
 	var beforeElelast = $(obj).prev();
 	var beforefirsten = $(objen).parent().prev().find("input");
 	var beforelasten = $(objen).prev();
-	beforeElefitst.val("");
-	beforeElelast.val("");
-	beforefirsten.val("");
-	beforelasten.val("");
+	console.log(beforeElefitst +"qqq"+beforeElelast+"www"+beforefirsten+"gg"+beforefirsten+"kk"+beforelasten);
 	if($(obj).is(':checked')){
 		beforeElefitst.attr("disabled",true);
 		beforeElelast.attr("disabled",true);
 		beforefirsten.attr("disabled",true);
 		beforelasten.attr("disabled",true);
+		beforeElefitst.val("");
+		beforeElelast.val("");
+		beforefirsten.val("");
+		beforelasten.val("");
 		
 	}else{
 		beforeElefitst.attr("disabled",false);
