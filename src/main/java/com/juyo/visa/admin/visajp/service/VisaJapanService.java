@@ -1672,7 +1672,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		if (!Util.isEmpty(designNum)) {
 			return JuYouResult.ok();
 		} else {
-			return new JuYouResult(500, company.getName() + "的指定番号不能为空", null);
+			return new JuYouResult(500, company.getName() + "的指定番号不能为空<br/>请联系优悦签客服", null);
 		}
 	}
 

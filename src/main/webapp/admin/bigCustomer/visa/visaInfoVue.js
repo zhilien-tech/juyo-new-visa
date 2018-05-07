@@ -162,6 +162,21 @@ var visaVue = new Vue({
 			var isfiledimmigrantpetition = visaInfo.previUSTripInfo.isfiledimmigrantpetition;
 			visaInfo.previUSTripInfo.isfiledimmigrantpetitionen = isfiledimmigrantpetition;
 		},
+		isapplyingsametypevisa:function(){
+//			是否在申请相同类型的签证
+			var isapplyingsametypevisa = visaInfo.previUSTripInfo.isapplyingsametypevisa;
+			visaInfo.previUSTripInfo.isapplyingsametypevisaen = isapplyingsametypevisa;
+		},
+		issamecountry:function(){
+			//是否在签发上述签证的国家或地区申请并且是您所在的国家或地区的居住地
+			var issamecountry = visaInfo.previUSTripInfo.issamecountry;
+			visaInfo.previUSTripInfo.issamecountryen = issamecountry;
+		},
+		istenprinted:function(){
+			//是否采集过指纹
+			var istenprinted = visaInfo.previUSTripInfo.istenprinted;
+			visaInfo.previUSTripInfo.istenprinteden = istenprinted;
+		},
 		visaNotLost:function(){
 			visaInfo.previUSTripInfo.lostyear = "";
 			visaInfo.previUSTripInfo.lostexplain = "";
@@ -180,29 +195,31 @@ var visaVue = new Vue({
 		},
 		isKnowContactPointName:function(){
 			var isknowname = visaInfo.contactPointInfo.isknowname;
+			visaInfo.contactPointInfo.isknownameen = isknowname;
 			if(isknowname){
 				visaInfo.contactPointInfo.firstname = "";
 				visaInfo.contactPointInfo.lastname = "";
 				visaInfo.contactPointInfo.firstnameen = "";
 				visaInfo.contactPointInfo.lastnameen = "";
-				visaInfo.contactPointInfo.isknownameen = true;
+				//visaInfo.contactPointInfo.isknownameen = true;
 			}
 		},
-		isfirstname:function(){
-			var firstname = visaInfo.contactPointInfo.firstname;
-			visaInfo.contactPointInfo.firstnameen = firstname;
-		},
-		islastname:function(){
-			var lastname = visaInfo.contactPointInfo.lastname;
-			visaInfo.contactPointInfo.lastnameen = lastname;
-		},
+//		isfirstname:function(){
+//			var firstname = visaInfo.contactPointInfo.firstname;
+//			visaInfo.contactPointInfo.firstnameen = firstname;
+//		},
+//		islastname:function(){
+//			var lastname = visaInfo.contactPointInfo.lastname;
+//			visaInfo.contactPointInfo.lastnameen = lastname;
+//		},
 		isKnowOrganizationName:function(){
 			var isknoworganizationname = visaInfo.contactPointInfo.isknoworganizationname;
+			visaInfo.contactPointInfo.isknoworganizationnameen = isknoworganizationname;
 			if(isknoworganizationname){
 				visaInfo.contactPointInfo.organizationname = "";
 				visaInfo.contactPointInfo.organizationnameen = "";
 			}
-			visaInfo.contactPointInfo.isknoworganizationnameen = isknoworganizationname;
+			
 		},
 		isorganizationname:function(){
 			var organizationname = visaInfo.contactPointInfo.organizationname;
@@ -527,43 +544,18 @@ var visaVue = new Vue({
 				}
 			});
 		},
-		liaisonfirstname:function(from, to, vueObj){
-//			联络人姓   修改成拼音
+		liaisonfirstname:function(from){
+//			联络人姓   
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.contactPointInfo.firstnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.contactPointInfo.firstnameen = pinyinchar;
 		},
-		liaisonlastname:function(from, to, vueObj){
-//			联络人名   修改成拼音
+		liaisonlastname:function(from){
+//			联络人名   
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.contactPointInfo.lastnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.contactPointInfo.lastnameen = pinyinchar;
+			
 		},
 		liaisonOrg:function(from, to, vueObj){
 //			联络人组织名称   
@@ -739,40 +731,16 @@ var visaVue = new Vue({
 		familyinfofirstname:function(from, to, vueObj){
 //			家庭信息 父亲的姓   拼音显示  需要修改
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.familyInfo.fatherfirstnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.familyInfo.fatherfirstnameen = pinyinchar;
+			
 		},
 		familyinfolastname:function(from, to, vueObj){
 //			家庭信息 父亲的名   拼音显示  需要修改
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.familyInfo.fatherlastnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.familyInfo.fatherlastnameen = pinyinchar;
+			
 		},
 		familyinfostatus:function(from, to, vueObj){
 //			家庭信息 父亲身份
@@ -796,40 +764,16 @@ var visaVue = new Vue({
 		familyinfomofirstname:function(from, to, vueObj){
 //			家庭信息 母亲的名   拼音显示  需要修改
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.familyInfo.motherfirstnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.familyInfo.motherfirstnameen = pinyincharb;
+			
 		},
 		familyinfomolastname:function(from, to, vueObj){
 //			家庭信息 母亲的名   拼音显示  需要修改
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.familyInfo.motherlastnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.familyInfo.motherlastnameen = pinyinchar;
+			
 		},
 		familyinfomostatus:function(from, to, vueObj){
 //			家庭信息 母亲身份
@@ -853,40 +797,16 @@ var visaVue = new Vue({
 		spousefirstname:function(from, to, vueObj){
 //			配偶姓
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.familyInfo.spousefirstnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.familyInfo.spousefirstnameen = pinyinchar;
+		
 		},
 		spouselastname:function(from, to, vueObj){
 //			配偶名
 			var toval = $("#" + from).val();
-			$.ajax({
-				url : '/admin/translate/translate',
-				data : {
-					api : 'google',
-					strType : to,
-					en : 'en',
-					q : toval
-				},
-				type : 'POST',
-				dataType : 'json',
-				success : function(result) {
-					$("#" + to).val(result).change();
-					visaInfo.familyInfo.spouselastnameen = result;
-				}
-			});
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.familyInfo.spouselastnameen = pinyinchar;
+			
 		},
 		spousenationality:function(from, to, vueObj){
 //			配偶国籍
@@ -1042,7 +962,7 @@ var visaVue = new Vue({
 				dataType : 'json',
 				success : function(result) {
 					$("#" + to).val(result).change();
-					visaInfo.familyInfo.othercityen = result;
+					visaInfo.familyInfo.cityen = result;
 				}
 			});
 		},
@@ -1080,7 +1000,7 @@ var visaVue = new Vue({
 				dataType : 'json',
 				success : function(result) {
 					$("#" + to).val(result).change();
-					visaInfo.familyInfo.othercountryen = result;
+					visaInfo.familyInfo.countryen = result;
 				}
 			});
 		},
@@ -1330,7 +1250,56 @@ var visaVue = new Vue({
 					visaInfo.workEducationInfo.skillexplainen = result;
 				}
 			});
-		}
+		},
+		isservedinrebelgroup:function(){
+			//是否参与或参加过准军事部队、治安单位、叛乱集团、游击队或叛乱组织
+			var isservedinrebelgroup = visaInfo.workEducationInfo.isservedinrebelgroup;
+			visaInfo.workEducationInfo.isservedinrebelgroupen = isservedinrebelgroup;
+		},
+//		iswitnessname:function(){
+////			证明人姓名
+//			var toval = $("#" + from).val();
+//			var pinyinchar = getPinYinStr(toval);
+//			visaInfo.workEducationInfo.witnessnameen = pinyinchar;
+//		},
+//		iswitnesstelphone:function(){
+////			证明人电话
+//			var toval = $("#" + from).val();
+//			$.ajax({
+//				url : '/admin/translate/translate',
+//				data : {
+//					api : 'google',
+//					strType : to,
+//					en : 'en',
+//					q : toval
+//				},
+//				type : 'POST',
+//				dataType : 'json',
+//				success : function(result) {
+//					$("#" + to).val(result).change();
+//					visaInfo.workEducationInfo.witnesstelphoneen = result;
+//				}
+//			});
+//		},
+//		iswitnesspost:function(){
+////			证明人职务
+//			var toval = $("#" + from).val();
+//			$.ajax({
+//				url : '/admin/translate/translate',
+//				data : {
+//					api : 'google',
+//					strType : to,
+//					en : 'en',
+//					q : toval
+//				},
+//				type : 'POST',
+//				dataType : 'json',
+//				success : function(result) {
+//					$("#" + to).val(result).change();
+//					visaInfo.workEducationInfo.witnessposten = result;
+//				}
+//			});
+//		}
 		
 	}
 });
@@ -1351,8 +1320,10 @@ function save(status){
 	visadata.previUSTripInfo = visaInfo.previUSTripInfo;
 	visaInfo.previUSTripInfo.issueddate = formatDate($('#issueddate').val());//最后一次签证的签发日期
 	visaInfo.previUSTripInfo.issueddateen = formatDate($('#issueddateen').val());
-	//美国联络点
+	//美国联络人
 	visadata.contactPointInfo = visaInfo.contactPointInfo;
+	console.log(visaInfo.contactPointInfo.lastname + "--------" + visaInfo.contactPointInfo.firstname);
+	console.log(visaInfo.contactPointInfo.lastnameen + "--------" + visaInfo.contactPointInfo.firstnameen);
 	//家庭信息
 	visadata.familyInfo = visaInfo.familyInfo;
 	visaInfo.familyInfo.spousebirthday = formatDate($('#spousebirthday').val());//配偶生日
