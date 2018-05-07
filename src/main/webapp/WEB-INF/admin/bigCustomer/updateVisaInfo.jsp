@@ -2165,7 +2165,7 @@
 										<label>Surnames</label>
 										<input name="relativesfirstnameen" id="relativesfirtstnameen" value="${zhifamily.relativesfirstnameen }" type="text" />
 									</div>
-									<div class="floatRight groupInputInfo">
+									<div class="floatRight groupInputInfo prvPadL">
 										<label>Given Names</label>
 										<input name="relativeslastnameen" id="relativeslastnameen" value="${zhifamily.relativeslastnameen }"  type="text" />
 									</div>
@@ -2207,7 +2207,7 @@
 									<label>Surnames</label>
 									<input name="relativesfirstnameen" id="relativesfirtstnameen"  type="text" />
 								</div>
-								<div class="floatRight groupInputInfo">
+								<div class="floatRight groupInputInfo prvPadL">
 									<label>Given Names</label>
 									<input name="relativeslastnameen" id="relativeslastnameen" type="text" />
 								</div>
@@ -2221,7 +2221,7 @@
 										</c:forEach>
 									</select>
 								</div>
-								<div class="paddingRight groupSelectInfo">
+								<div class="paddingRight groupSelectInfo prvPadL">
 									<label>Relative's Status</label>
 									<select id="exceptrelativesstatusen" name="relativesstatusen">
 										<option value="0">Please choose</option>

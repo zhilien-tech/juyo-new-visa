@@ -103,9 +103,11 @@ function openYesOrNoPage(){
 	var directUSRelatives = visaInfo.familyInfo.hasimmediaterelatives;
 	if(directUSRelatives == 1){
 		$(".directRelativesYes").show();
+		$(".directRelativesYesen").show();
 		$(".directRelativesNo").hide();
 	}else {
 		$(".directRelativesYes").hide();
+		$(".directRelativesYesen").hide();
 		$(".directRelativesNo").show();
 	}
 	
