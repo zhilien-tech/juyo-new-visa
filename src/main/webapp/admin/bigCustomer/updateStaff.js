@@ -1100,17 +1100,24 @@ function searchByCard(status){
 }*/
 
 function saveApplicant(status){
+	var urlName;
 	if(isDisable != 1){
 	$("#applicantInfo").data('bootstrapValidator').destroy();
 	$("#applicantInfo").data('bootstrapValidator', null);
 	if(flag == 1){
+		//游客
 		touristValidate();
+		//游客跳转
+		urlName = "touristVisaInfo";
 	}else{
+		//员工
 		applyValidate();
+		//员工跳转
+		urlName = "updateVisaInfo";
 	}
+	
 	//得到获取validator对象或实例 
-	var bootstrapValidator = $("#applicantInfo").data(
-	'bootstrapValidator');
+	var bootstrapValidator = $("#applicantInfo").data('bootstrapValidator');
 	// 执行表单验证 
 	bootstrapValidator.validate();
 	
@@ -1292,7 +1299,7 @@ function saveApplicant(status){
 			});
 		}else if(status == 3){
 			//右箭头跳转
-			window.location.href = '/admin/bigCustomer/updateVisaInfo.html?staffId='+staffId+'&isDisable='+isDisable;
+			window.location.href = '/admin/bigCustomer/'+urlName+'.html?staffId='+staffId+'&isDisable='+isDisable;
 			$.ajax({
 				type: 'POST',
 				data : applicantInfo,
