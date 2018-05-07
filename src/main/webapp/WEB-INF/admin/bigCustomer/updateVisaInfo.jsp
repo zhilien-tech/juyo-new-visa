@@ -592,11 +592,11 @@
 					<input name="spouselastname" id="spouselastname" @change="spouselastname('spouselastname','spouselastnameen','visaInfo.familyInfo.spouselastnameen')" v-model="visaInfo.familyInfo.spouselastname" type="text" />
 				</div>
 				<div class="clear"></div>
-				<div class="paddingLeft groupInputInfo">
+				<div class="groupInputInfo prvPadLT">
 					<label>配偶的生日</label>
 					<input id="spousebirthday" onchange="translateZhToEn(this,'spousebirthdayen','')" name="spousebirthday" value="${obj.spousebirthday}" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
 				</div>
-				<div class="paddingRight groupSelectInfo">
+				<div class="groupSelectInfo prvPadLT">
 					<label>配偶的国籍</label>
 					<select id="spousenationality" class="publicMarNone" @change="spousenationality('spousenationality','spousenationalityen','visaInfo.familyInfo.spousenationalityen')" name="spousenationality" v-model="visaInfo.familyInfo.spousenationality">
 						<option value="0">请选择</option>
@@ -606,12 +606,12 @@
 					</select>
 				</div>
 				<div class="clear"></div>
-				<div class="paddingLeft groupcheckBoxInfo">
+				<div class="groupcheckBoxInfo prvPadLT">
 					<label>配偶的出生城市</label>
 					<input name="spousecity" v-model="visaInfo.familyInfo.spousecity" id="spousefcity"  @change="spousecity('spousefcity','spousefcityen','visaInfo.familyInfo.spousecityen')" type="text" />
 					<input id="isKnowMatecity" name="isknowspousecity" onchange="AddSingle(this,'isknowspousecityen')" v-on:click="isknowspousecity" v-model="visaInfo.familyInfo.isknowspousecity" type="checkbox" />
 				</div>
-				<div class="paddingRight groupSelectInfo" >
+				<div class="groupSelectInfo prvPadLT" >
 					<label>配偶的出生国家</label>
 					<select id="spousecountry" @change="spousecountry('spousecountry','spousecountryen','visaInfo.familyInfo.spousecountryen')" name="spousecountry" v-model="visaInfo.familyInfo.spousecountry">
 						<option value="0">请选择</option>
@@ -621,7 +621,7 @@
 					</select>
 				</div>
 				<div class="clear"></div>
-				<div class="paddingTop groupSelectInfo padding-left padlongTop" >
+				<div class="paddingTop groupSelectInfo padding-left" >
 					<label>配偶的联系地址</label>
 					<select id="spouseaddress" @change="spouseaddress('spouseaddress','spouseaddressen','visaInfo.familyInfo.spouseaddressen')" name="spouseaddress" v-model="visaInfo.familyInfo.spouseaddress" class="spouse_Address">
 						<option value="0">请选择</option>
@@ -754,6 +754,20 @@
 						<input name="jobduty" class='areaInputPic' id="jobduty" @change="jobprofessionduty('jobduty','jobdutyen','visaInfo.workEducationInfo.dutyen')" v-model="visaInfo.workEducationInfo.duty" />
 					</div>
 					<div class="clear"></div>
+					<!-- 新加 -->
+					<!-- <div class="groupInputInfo paddingLeft">
+						<label>证明人姓名</label>
+						<input name="witnessname" id="witnessname" class="witnessname" v-model="visaInfo.workEducationInfo.witnessname" @change="iswitnessname('witnessname')" />
+					</div>
+					<div class="groupInputInfo paddingRight">
+						<label>证明人电话</label>
+						<input name="witnesstelphone" id="witnesstelphone" class="witnesstelphone"  v-model="visaInfo.workEducationInfo.witnesstelphone" @change="iswitnesstelphone('witnesstelphone','witnesstelphoneen','visaInfo.workEducationInfo.witnesstelphoneen')" />
+					</div>
+					<div class="clear"></div>
+					<div class="groupInputInfo prvPadLT">
+						<label>证明人职务</label>
+						<input name="witnesspost" id="witnesspost" class="witnesspost" v-model="visaInfo.workEducationInfo.witnesspost"  @change="iswitnesspost('witnesspost','witnessposten','visaInfo.workEducationInfo.witnessposten')" />
+					</div> -->
 				</div>
 				
 				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea">
@@ -2388,6 +2402,20 @@
 						<input name="jobdutyen" id="jobdutyen" class="areaInputPic" v-model="visaInfo.workEducationInfo.dutyen" />
 					</div>
 					<div class="clear"></div>
+					<!-- 新加 -->
+					<!-- <div class="groupInputInfo paddingLeft">
+						<label>Person's name</label>
+						<input name="witnessnameen" id="witnessnameen" class="witnessnameen" v-model="visaInfo.workEducationInfo.witnessnameen" />
+					</div>
+					<div class="groupInputInfo paddingRight">
+						<label>Human telephone</label>
+						<input name="witnesstelphoneen" id="witnesstelphoneen" class="witnesstelphoneen"  v-model="visaInfo.workEducationInfo.witnesstelphoneen" />
+					</div>
+					<div class="clear"></div>
+					<div class="groupInputInfo prvPadLT">
+						<label>Proof of a person's position</label>
+						<input name="witnessposten" id="witnessposten" class="witnessposten" v-model="visaInfo.workEducationInfo.witnessposten"  />
+					</div> -->
 				</div>
 				
 				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea">

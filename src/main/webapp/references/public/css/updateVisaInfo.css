@@ -489,7 +489,7 @@ label {
 	width:100% !important;
 }
 .margtop {
-	margin-top:30px !important;
+	margin-top:29px !important;
 }
 #issueddate {
 	margin-top:10px !important;
@@ -552,4 +552,13 @@ label {
 .goUS_driversen {
 	display:inline-block;
 	padding-bottom:30px;
+}
+#spousenationality {
+	width:100% !important;
+}
+#spousecountry {
+	width:100% !important;
+}
+#spousenationalityen {
+	margin-top:0px !important;
 }

@@ -1255,7 +1255,51 @@ var visaVue = new Vue({
 			//是否参与或参加过准军事部队、治安单位、叛乱集团、游击队或叛乱组织
 			var isservedinrebelgroup = visaInfo.workEducationInfo.isservedinrebelgroup;
 			visaInfo.workEducationInfo.isservedinrebelgroupen = isservedinrebelgroup;
-		}
+		},
+//		iswitnessname:function(){
+////			证明人姓名
+//			var toval = $("#" + from).val();
+//			var pinyinchar = getPinYinStr(toval);
+//			visaInfo.workEducationInfo.witnessnameen = pinyinchar;
+//		},
+//		iswitnesstelphone:function(){
+////			证明人电话
+//			var toval = $("#" + from).val();
+//			$.ajax({
+//				url : '/admin/translate/translate',
+//				data : {
+//					api : 'google',
+//					strType : to,
+//					en : 'en',
+//					q : toval
+//				},
+//				type : 'POST',
+//				dataType : 'json',
+//				success : function(result) {
+//					$("#" + to).val(result).change();
+//					visaInfo.workEducationInfo.witnesstelphoneen = result;
+//				}
+//			});
+//		},
+//		iswitnesspost:function(){
+////			证明人职务
+//			var toval = $("#" + from).val();
+//			$.ajax({
+//				url : '/admin/translate/translate',
+//				data : {
+//					api : 'google',
+//					strType : to,
+//					en : 'en',
+//					q : toval
+//				},
+//				type : 'POST',
+//				dataType : 'json',
+//				success : function(result) {
+//					$("#" + to).val(result).change();
+//					visaInfo.workEducationInfo.witnessposten = result;
+//				}
+//			});
+//		}
 		
 	}
 });
