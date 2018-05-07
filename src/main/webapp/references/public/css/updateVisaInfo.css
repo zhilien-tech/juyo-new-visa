@@ -437,7 +437,7 @@ label {
 	height:30px !important;
 }
 .visanumber {
-	margin-top:0px !important;
+	/* margin-top:0px !important; */
 }
 #workstartdate ,#workstartdateen {
 	margin-top:10px !important;
@@ -454,7 +454,11 @@ label {
 	width:100% !important;
 }
 .teamnamefalseen {
-	margin-bottom:38px;
+	/* margin-bottom:38px; */
+}
+.companyGroup {
+	margin-top:-44px;
+	margin-bottom:14px;
 }
 /* 以前的美国旅游信息 */
 #dateunit,.dateuniten {
@@ -467,16 +471,16 @@ label {
 	margin-bottom:10px;
 }
 .paddingBom {
-	padding-bottom:20px;
+	padding-bottom:18px;
 }
 #lostexplainen {
 	margin-top:0px !important;
 }
-.pad-top {
-	padding-top:30px;
+.publicPaddingBom {
+	padding-bottom:22px;
 }
-.pad-fivetop {
-	padding-top:50px;
+.publicPaddingBomLong {
+	padding-bottom:38px;
 }
 #fatherstatusen {
 	width:100% !important;
@@ -486,4 +490,66 @@ label {
 }
 .margtop {
 	margin-top:30px !important;
+}
+#issueddate {
+	margin-top:10px !important;
+}
+.paddingTop-9 {
+	padding-top:9px;
+}
+.paddingTop-8 {
+	padding-top:8px;
+}
+.paddingTop-15 {
+	padding-top:9px;
+}
+/* 配偶信息 */
+#spousenationalityen {
+	width:100% !important;
+}
+.publicMarNone {
+	margin-top:0px !important;
+}
+#spousecountryen {
+	width:100% !important;
+}
+#spouseaddressen{
+	width:100% !important;
+}
+#otherfrstaddress {
+	width:100% !important;
+}
+#othersecondaddress {
+	width:100% !important;
+}
+.prvPadL {
+	padding-left:15px;
+}
+.prvPadLT {
+	padding:10px 0 0 15px;
+}
+#otherfrstaddressen {
+	width:100% !important;
+}
+#othersecondaddressen {
+	width:100% !important;
+}
+#othercountryen {
+	width:100% !important;
+}
+.padlongTop {
+	padding-top:144px;
+}
+.padlongBom {
+	padding-bottom:67px;
+}
+.paddingBom-20 {
+	padding-bottom:20px;
+}
+.paddingBom-35 {
+	padding-bottom:35px;
+}
+.goUS_driversen {
+	display:inline-block;
+	padding-bottom:30px;
 }

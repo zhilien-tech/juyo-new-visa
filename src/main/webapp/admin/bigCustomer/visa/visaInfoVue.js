@@ -162,6 +162,21 @@ var visaVue = new Vue({
 			var isfiledimmigrantpetition = visaInfo.previUSTripInfo.isfiledimmigrantpetition;
 			visaInfo.previUSTripInfo.isfiledimmigrantpetitionen = isfiledimmigrantpetition;
 		},
+		isapplyingsametypevisa:function(){
+//			是否在申请相同类型的签证
+			var isapplyingsametypevisa = visaInfo.previUSTripInfo.isapplyingsametypevisa;
+			visaInfo.previUSTripInfo.isapplyingsametypevisaen = isapplyingsametypevisa;
+		},
+		issamecountry:function(){
+			//是否在签发上述签证的国家或地区申请并且是您所在的国家或地区的居住地
+			var issamecountry = visaInfo.previUSTripInfo.issamecountry;
+			visaInfo.previUSTripInfo.issamecountryen = issamecountry;
+		},
+		istenprinted:function(){
+			//是否采集过指纹
+			var istenprinted = visaInfo.previUSTripInfo.istenprinted;
+			visaInfo.previUSTripInfo.istenprinteden = istenprinted;
+		},
 		visaNotLost:function(){
 			visaInfo.previUSTripInfo.lostyear = "";
 			visaInfo.previUSTripInfo.lostexplain = "";
@@ -181,26 +196,22 @@ var visaVue = new Vue({
 		isKnowContactPointName:function(){
 			var isknowname = visaInfo.contactPointInfo.isknowname;
 			visaInfo.contactPointInfo.isknownameen = isknowname;
-			visaInfo.contactPointInfo.firstname = "";
-			visaInfo.contactPointInfo.lastname = "";
-			visaInfo.contactPointInfo.firstnameen = "";
-			visaInfo.contactPointInfo.lastnameen = "";
-//			if(isknowname){
-//				visaInfo.contactPointInfo.firstname = "";
-//				visaInfo.contactPointInfo.lastname = "";
-//				visaInfo.contactPointInfo.firstnameen = "";
-//				visaInfo.contactPointInfo.lastnameen = "";
-//				visaInfo.contactPointInfo.isknownameen = true;
-//			}
+			if(isknowname){
+				visaInfo.contactPointInfo.firstname = "";
+				visaInfo.contactPointInfo.lastname = "";
+				visaInfo.contactPointInfo.firstnameen = "";
+				visaInfo.contactPointInfo.lastnameen = "";
+				//visaInfo.contactPointInfo.isknownameen = true;
+			}
 		},
-		isfirstname:function(){
-			var firstname = visaInfo.contactPointInfo.firstname;
-			visaInfo.contactPointInfo.firstnameen = firstname;
-		},
-		islastname:function(){
-			var lastname = visaInfo.contactPointInfo.lastname;
-			visaInfo.contactPointInfo.lastnameen = lastname;
-		},
+//		isfirstname:function(){
+//			var firstname = visaInfo.contactPointInfo.firstname;
+//			visaInfo.contactPointInfo.firstnameen = firstname;
+//		},
+//		islastname:function(){
+//			var lastname = visaInfo.contactPointInfo.lastname;
+//			visaInfo.contactPointInfo.lastnameen = lastname;
+//		},
 		isKnowOrganizationName:function(){
 			var isknoworganizationname = visaInfo.contactPointInfo.isknoworganizationname;
 			visaInfo.contactPointInfo.isknoworganizationnameen = isknoworganizationname;
@@ -533,13 +544,13 @@ var visaVue = new Vue({
 				}
 			});
 		},
-		liaisonfirstname:function(from, to, vueObj){
+		liaisonfirstname:function(from){
 //			联络人姓   
 			var toval = $("#" + from).val();
 			var pinyinchar = getPinYinStr(toval);
 			visaInfo.contactPointInfo.firstnameen = pinyinchar;
 		},
-		liaisonlastname:function(from, to, vueObj){
+		liaisonlastname:function(from){
 //			联络人名   
 			var toval = $("#" + from).val();
 			var pinyinchar = getPinYinStr(toval);
@@ -951,7 +962,7 @@ var visaVue = new Vue({
 				dataType : 'json',
 				success : function(result) {
 					$("#" + to).val(result).change();
-					visaInfo.familyInfo.othercityen = result;
+					visaInfo.familyInfo.cityen = result;
 				}
 			});
 		},
@@ -989,7 +1000,7 @@ var visaVue = new Vue({
 				dataType : 'json',
 				success : function(result) {
 					$("#" + to).val(result).change();
-					visaInfo.familyInfo.othercountryen = result;
+					visaInfo.familyInfo.countryen = result;
 				}
 			});
 		},
@@ -1239,6 +1250,11 @@ var visaVue = new Vue({
 					visaInfo.workEducationInfo.skillexplainen = result;
 				}
 			});
+		},
+		isservedinrebelgroup:function(){
+			//是否参与或参加过准军事部队、治安单位、叛乱集团、游击队或叛乱组织
+			var isservedinrebelgroup = visaInfo.workEducationInfo.isservedinrebelgroup;
+			visaInfo.workEducationInfo.isservedinrebelgroupen = isservedinrebelgroup;
 		}
 		
 	}
@@ -1262,8 +1278,8 @@ function save(status){
 	visaInfo.previUSTripInfo.issueddateen = formatDate($('#issueddateen').val());
 	//美国联络人
 	visadata.contactPointInfo = visaInfo.contactPointInfo;
-	//console.log(visaInfo.contactPointInfo.lastname + "--------" + visaInfo.contactPointInfo.firstname);
-	//console.log(visaInfo.contactPointInfo.lastnameen + "--------" + visaInfo.contactPointInfo.firstnameen);
+	console.log(visaInfo.contactPointInfo.lastname + "--------" + visaInfo.contactPointInfo.firstname);
+	console.log(visaInfo.contactPointInfo.lastnameen + "--------" + visaInfo.contactPointInfo.firstnameen);
 	//家庭信息
 	visadata.familyInfo = visaInfo.familyInfo;
 	visaInfo.familyInfo.spousebirthday = formatDate($('#spousebirthday').val());//配偶生日
