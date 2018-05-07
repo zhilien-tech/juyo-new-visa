@@ -490,10 +490,7 @@ $(".fatherUSen").change(function(){
 		emptyContentByObj($("div.fatherUSYesen"));
 	}
 });
-//不知道父亲的姓 
-//editEleBeforeCheckbox($("#isKnowFatherXing"));
-//不知道父亲的名
-//editEleBeforeCheckbox($("#isKnowFatherMing"));
+
 //母亲是否在美国
 $(".motherUS").change(function(){
 	var motherUS = $("input[class=motherUS]:checked").val();
@@ -515,18 +512,17 @@ $(".motherUSen").change(function(){
 		emptyContentByObj($("div.motherUSYesen"));
 	}
 });
-//不知道母亲的姓 
-//editEleBeforeCheckbox($("#isKnowMotherXing"));
-//不知道父亲的名
-//editEleBeforeCheckbox($("#isKnowMotherMing"));
+
 //在美国除了父母还有没有直系亲属
 $(".directRelatives.directUSRelatives").change(function(){
 	var directUSRelatives = $("input[class='directRelatives directUSRelatives']:checked").val();
 	if(directUSRelatives == 1){
 		$(".directRelativesYes").show();
+		$(".directRelativesYesen").show();
 		$(".directRelativesNo").hide();
 	}else {
 		$(".directRelativesYes").hide();
+		$(".directRelativesYesen").hide();
 		$(".directRelativesNo").show();
 		emptyContentByObj($("div.directRelatives"));
 	}

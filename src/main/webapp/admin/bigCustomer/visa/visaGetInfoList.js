@@ -201,8 +201,8 @@ function getDirectList(){
 		}else{
 			directLength += '';
 		}
-		if(relativesstatus != 0){
-			directLength += relativesstatus;
+		if(relativesstatusen != 0){
+			directLength += relativesstatusen;
 		}else{
 			directLength += '';
 		}
