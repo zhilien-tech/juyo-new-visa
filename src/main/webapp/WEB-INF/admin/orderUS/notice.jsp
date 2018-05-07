@@ -23,15 +23,15 @@
 		</div>	
 		<div class="section">
 			<div class="shareInfo">
-				<a onclick="shareFun()" class="share">分享</a>
+				<a class="share" onclick="shareFun()">分享</a>
 				<span>短信通知参会人可通过邮件内的链接登录并填写所需的资料</span>
 			</div>
-			<div onclick="qualifiedFun()" class="qualifiedInfo">
-				<a class="qualified">合格</a>
+			<div class="qualifiedInfo">
+				<a class="qualified" onclick="qualifiedFun()">合格</a>
 				<span>短信、邮件通知参会人资料已合格</span>
 			</div>
-			<div onclick="interviewFun()" class="InterviewInfo">
-				<a class="Interview">通知面试</a>
+			<div class="InterviewInfo">
+				<a class="Interview" onclick="interviewFun()">通知面试</a>
 				<span>短信通知面签时间及所带资料，并发面试通知书（文件下载）</span>
 			</div>
 		</div>
