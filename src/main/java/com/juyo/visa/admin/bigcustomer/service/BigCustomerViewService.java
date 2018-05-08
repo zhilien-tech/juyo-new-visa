@@ -344,6 +344,21 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		String spousebirthdayen = familyInfo.getString("spousebirthdayen");
 		spousebirthdayen = formatDateStr(spousebirthdayen, FORMAT_DD_MM_YYYY);
 		familyInfo.set("spousebirthdayen", spousebirthdayen);
+		//父亲生日
+		String fatherbirthday = familyInfo.getString("fatherbirthday");
+		fatherbirthday = formatDateStr(fatherbirthday, FORMAT_DD_MM_YYYY);
+		familyInfo.put("fatherbirthday", fatherbirthday);
+		String fatherbirthdayen = familyInfo.getString("fatherbirthdayen");
+		fatherbirthdayen = formatDateStr(fatherbirthdayen, FORMAT_DD_MM_YYYY);
+		familyInfo.put("fatherbirthdayen", fatherbirthdayen);
+		//母亲生日
+		String motherbirthday = familyInfo.getString("motherbirthday");
+		motherbirthday = formatDateStr(motherbirthday, FORMAT_DD_MM_YYYY);
+		familyInfo.put("motherbirthday", motherbirthday);
+		String motherbirthdayen = familyInfo.getString("motherbirthdayen");
+		fatherbirthdayen = formatDateStr(motherbirthdayen, FORMAT_DD_MM_YYYY);
+		familyInfo.put("motherbirthdayen", motherbirthdayen);
+
 
 		//---直属亲戚信息集合
 		/*List<TAppStaffImmediaterelativesEntity> zhiFamilyList = dbDao.query(TAppStaffImmediaterelativesEntity.class,
@@ -850,11 +865,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		TAppStaffCredentialsEntity front = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-						.and("status", "=", AppPicturesTypeEnum.FRONT.intKey()));
+				.and("status", "=", AppPicturesTypeEnum.FRONT.intKey()));
 		TAppStaffCredentialsEntity back = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-						.and("status", "=", AppPicturesTypeEnum.BACK.intKey()));
+				.and("status", "=", AppPicturesTypeEnum.BACK.intKey()));
 		TAppStaffCredentialsEntity twoinch = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey()));
 		result.put("front", front);
