@@ -807,12 +807,15 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	public Object getStaffInfo(Integer staffId, Integer isDisable, Integer flag, HttpSession session) {
 
 		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
-
-		Map<String, Object> result = Maps.newHashMap();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Map<String, Object> result = Maps.newHashMap();
 		Integer userType = loginUser.getUserType();
+		if(userType == UserLoginEnum.BIG_TOURIST_IDENTITY.intKey()) {
+			flag = IsYesOrNoEnum.YES.intKey();
+		}else{
+			flag = IsYesOrNoEnum.NO.intKey();
+		}
 		result.put("userType", userType);
-
 		result.put("flag", flag);//从游客处进入，要去掉英文验证
 		result.put("isDisable", isDisable);//页面是否可编辑
 		result.put("marryStatus", staffInfo.getMarrystatus());
