@@ -52,6 +52,7 @@ import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
+import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TComBusinessscopeEntity;
 import com.juyo.visa.entities.TCompanyEntity;
@@ -121,6 +122,11 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		Cnd cnd = Cnd.NEW();
 		cnd.and("taoj.orderId", "=", orderjp.getId());
 		List<Record> applyinfo = dbDao.query(applysql, cnd, null);
+		for (Record record : applyinfo) {
+			List<TApplicantWealthJpEntity> query = dbDao.query(TApplicantWealthJpEntity.class,
+					Cnd.where("applicantId", "=", record.get("applicatid")), null);
+			record.put("wealthjpinfo", query);
+		}
 		Map<String, Object> tempdata = new HashMap<String, Object>();
 		//行程安排
 		List<TOrderTravelplanJpEntity> ordertravelplan = dbDao.query(TOrderTravelplanJpEntity.class,
@@ -232,7 +238,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		TOrderJpEntity orderjp = (TOrderJpEntity) tempdata.get("orderjp");
 		//多程信息
 		List<TOrderTripMultiJpEntity> mutiltrip = (List<TOrderTripMultiJpEntity>) tempdata.get("mutiltrip");
-
+		//订单信息
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class,Cnd.where("id", "=", orderjp.getOrderId()));
 		String visatypestr = "";
 		Integer visaType = orderjp.getVisaType();
 		if (!Util.isEmpty(visaType)) {
@@ -355,7 +362,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		map.put("telephone", company.getMobile());
 		map.put("phone", company.getMobile());
 		map.put("createDate", dateFormat.format(new Date()));
-
+		//受理日和发给日
+		map.put("startDate", dateFormat.format(order.getSendVisaDate()).substring(5, 11));
+		map.put("endDate", dateFormat.format(order.getOutVisaDate()).substring(5, 11));
 		//获取模板文件
 		URL resource = getClass().getClassLoader().getResource("japanfile/note.pdf");
 		TemplateUtil templateUtil = new TemplateUtil();
@@ -540,9 +549,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("danbaotelephone", record.getString("vouchphone"));
 			map.put("vouchaddress", record.getString("vouchaddress"));
 			if ("男".equals(record.getString("vouchsex"))) {
-				map.put("vouchnan", "On");
+				map.put("vouchnan", "0");
 			} else if ("女".equals(record.getString("vouchsex"))) {
-				map.put("vouchnv", "On");
+				map.put("vouchnv", "0");
 			}
 			if (!Util.isEmpty(record.get("vouchbirth"))) {
 				map.put("danbaobirthday", dateformat.format((Date) record.get("vouchbirth")));
@@ -555,9 +564,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("invitephone", record.getString("invitephone"));
 			map.put("inviteaddress", record.getString("inviteaddress"));
 			if ("男".equals(record.getString("invitesex"))) {
-				map.put("invitenan", "On");
+				map.put("invitenan", "0");
 			} else if ("女".equals(record.getString("invitesex"))) {
-				map.put("invitenv", "On");
+				map.put("invitenv", "0");
 			}
 			if (!Util.isEmpty(record.get("invitebirth"))) {
 				map.put("invitebirth", dateformat.format((Date) record.get("invitebirth")));
@@ -739,18 +748,38 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			Font font1 = ttf.getFont();
 			font1.setFamily("宋体");
 			font1.setSize(17);
-			Paragraph p = new Paragraph();
-			Chunk chunk1 = new Chunk("签证申请人名单", font1);
-			Chunk chunk3 = new Chunk("                                                                                            ", font);
-			Chunk chunk2= new Chunk(company.getName(), font1);
-			p.add(chunk1);
-			p.add(chunk3);
-			p.add(chunk2);
-			p.setSpacingBefore(5);
-			p.setSpacingAfter(5);
-			p.setIndentationLeft(20);
-			p.setIndentationRight(20);
-			document.add(p);
+//			Paragraph p = new Paragraph();
+//			Chunk chunk1 = new Chunk("签证申请人名单", font1);
+//			Chunk chunk3 = new Chunk("                                                                                            ", font);
+//			Chunk chunk2= new Chunk(company.getName(), font1);
+//			p.add(chunk1);
+//			p.add(chunk3);
+//			p.add(chunk2);
+//			p.setSpacingBefore(5);
+//			p.setSpacingAfter(5);
+//			p.setIndentationLeft(20);
+//			p.setIndentationRight(20);
+//			document.add(p);
+			 PdfPTable table1 = new PdfPTable(2); //表格两列
+			 table1.setWidthPercentage(95);
+			table1.setHorizontalAlignment(Element.ALIGN_CENTER); //垂直居中
+			table1.setTotalWidth(PageSize.A4.rotate().getWidth());
+			float[] wid1 ={0.5f,0.5f}; //两列宽度的比例
+			table1.setWidths(wid1); 
+			PdfPCell cell11 = new PdfPCell(); 
+			PdfPCell cell12 = new PdfPCell(); 
+			Paragraph paragraph = new Paragraph("签证申请人名单",font1);
+			Paragraph paragraph2 = new Paragraph(company.getName(), font1);
+			paragraph2.setAlignment(Element.ALIGN_RIGHT);
+			paragraph.setAlignment(Element.ALIGN_LEFT);
+			cell11.addElement(paragraph);
+			cell11.setBorder(0);
+			cell12.addElement(paragraph2);
+			cell12.setBorder(0);
+			 table1.addCell(cell11);
+			 table1.addCell(cell12);
+			 table1.getDefaultCell().setBorderWidth(0);
+			 document.add(table1);
 
 			float[] columns = { 2, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 4, 3, 2, 4, };
 			PdfPTable table = new PdfPTable(columns);
@@ -791,29 +820,207 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						}
 					}
 				}
-				String[] datas = {
-						"1-" + count,
+//				String[] datas = {
+//						"1-" + count,
+//						(!Util.isEmpty(record.get("firstname")) ? record.getString("firstname") : "")
+//								+ (!Util.isEmpty(record.get("lastname")) ? record.getString("lastname") : ""),
+//						(!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : "")
+//								+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : ""),
+//						(!Util.isEmpty(record.get("sex")) ? record.getString("sex") : ""),
+//						birthdaystr,
+//						(!Util.isEmpty(record.get("issuedorganization")) ? record.getString("issuedorganization") : ""),
+//						careerstatus,
+//						(!Util.isEmpty(record.get("province")) ? record.getString("province") : "")
+//								+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : "")
+//								+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress")
+//										: ""), "无", marryStatus, "身份证\n户口本",
+//						(!Util.isEmpty(record.get("wealthtype")) ? record.getString("wealthtype") : ""),
+//						(!Util.isEmpty(record.get("wealthcontent")) ? record.getString("wealthcontent") : ""),
+//						(!Util.isEmpty(record.get("relationremark")) ? record.getString("relationremark") : ""),
+//						(!Util.isEmpty(record.get("traveladvice")) ? record.getString("traveladvice") : "") };
+//				for (String data : datas) {
+//					PdfPCell cell = new PdfPCell(new Paragraph(data, font));
+//					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+//					table.addCell(cell);
+//				}
+				List<TApplicantWealthJpEntity> wealthjpinfo = new ArrayList<TApplicantWealthJpEntity>();
+				if(!Util.isEmpty(record.get("wealthjpinfo"))) {
+				 wealthjpinfo = (List<TApplicantWealthJpEntity>) record
+							.get("wealthjpinfo");
+				}
+				boolean flag = false;
+				if (wealthjpinfo.size() > 0) {
+					flag = true;
+				}
+				//
+				PdfPCell cell;
+				//序号
+				cell = new PdfPCell(new Paragraph("1-" + count, font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				if (flag) {
+					cell.setRowspan(wealthjpinfo.size());
+				}
+				table.addCell(cell);
+				//中文姓名
+				cell = new PdfPCell(new Paragraph(
 						(!Util.isEmpty(record.get("firstname")) ? record.getString("firstname") : "")
-								+ (!Util.isEmpty(record.get("lastname")) ? record.getString("lastname") : ""),
-						(!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : "")
-								+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : ""),
-						(!Util.isEmpty(record.get("sex")) ? record.getString("sex") : ""),
-						birthdaystr,
-						(!Util.isEmpty(record.get("issuedorganization")) ? record.getString("issuedorganization") : ""),
-						careerstatus,
-						(!Util.isEmpty(record.get("province")) ? record.getString("province") : "")
-								+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : "")
-								+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress")
-										: ""), "无", marryStatus, "身份证\n户口本",
-						(!Util.isEmpty(record.get("wealthtype")) ? record.getString("wealthtype") : ""),
-						(!Util.isEmpty(record.get("wealthcontent")) ? record.getString("wealthcontent") : ""),
-						(!Util.isEmpty(record.get("relationremark")) ? record.getString("relationremark") : ""),
-						(!Util.isEmpty(record.get("traveladvice")) ? record.getString("traveladvice") : "") };
-				for (String data : datas) {
-					PdfPCell cell = new PdfPCell(new Paragraph(data, font));
+								+ (!Util.isEmpty(record.get("lastname")) ? record.getString("lastname") : ""), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				if (flag) {
+					cell.setRowspan(wealthjpinfo.size());
+				}
+				table.addCell(cell);
+				//英文姓名
+				cell = new PdfPCell(
+						new Paragraph((!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : "")
+								+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : ""), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				if (flag) {
+					cell.setRowspan(wealthjpinfo.size());
+				}
+				table.addCell(cell);
+				//性别
+				cell = new PdfPCell(new Paragraph((!Util.isEmpty(record.get("sex")) ? record.getString("sex") : ""),
+						font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				if (flag) {
+					cell.setRowspan(wealthjpinfo.size());
+				}
+				table.addCell(cell);
+				//护照签发地
+				cell = new PdfPCell(new Paragraph(
+						(!Util.isEmpty(record.get("issuedplace")) ? record.getString("issuedplace") : ""), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				if (flag) {
+					cell.setRowspan(wealthjpinfo.size());
+				}
+				table.addCell(cell);
+				//居住地
+				cell = new PdfPCell(new Paragraph((!Util.isEmpty(record.get("province")) ? record.getString("province")
+						: "")
+						+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : "")
+						+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress") : ""),
+						font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				if (flag) {
+					cell.setRowspan(wealthjpinfo.size());
+				}
+				table.addCell(cell);
+				//出生日期
+				cell = new PdfPCell(new Paragraph(birthdaystr, font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				if (flag) {
+					cell.setRowspan(wealthjpinfo.size());
+				}
+				table.addCell(cell);
+				//职业
+				cell = new PdfPCell(new Paragraph(careerstatus, font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				if (flag) {
+					cell.setRowspan(wealthjpinfo.size());
+				}
+				table.addCell(cell);
+				//出境记录
+				cell = new PdfPCell(new Paragraph("无", font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				if (flag) {
+					cell.setRowspan(wealthjpinfo.size());
+				}
+				table.addCell(cell);
+				//婚姻
+				cell = new PdfPCell(new Paragraph(marryStatus, font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				if (flag) {
+					cell.setRowspan(wealthjpinfo.size());
+				}
+				table.addCell(cell);
+				//身份确认
+				cell = new PdfPCell(new Paragraph("身份证\n户口本", font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				if (flag) {
+					cell.setRowspan(wealthjpinfo.size());
+				}
+				table.addCell(cell);
+				//如果财产信息不为空
+				if (flag) {
+					TApplicantWealthJpEntity tApplicantWealthJpEntity = wealthjpinfo.get(0);
+					cell = new PdfPCell(new Paragraph(tApplicantWealthJpEntity.getType(), font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table.addCell(cell);
+					String detail = tApplicantWealthJpEntity.getDetails();
+					if ("银行存款".equals(tApplicantWealthJpEntity.getType())) {
+						detail += "万";
+					} else if ("理财".equals(tApplicantWealthJpEntity.getType())) {
+						detail += "万";
+					} else if ("房产".equals(tApplicantWealthJpEntity.getType())) {
+						detail += "平米";
+					}
+					cell = new PdfPCell(new Paragraph(detail, font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					table.addCell(cell);
+				} else {
+					cell = new PdfPCell(new Paragraph("", font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					table.addCell(cell);
+					cell = new PdfPCell(new Paragraph("", font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					table.addCell(cell);
+				}
+				//备注
+				cell = new PdfPCell(new Paragraph(
+						(!Util.isEmpty(record.get("relationremark")) ? record.getString("relationremark") : ""), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				if (flag) {
+					cell.setRowspan(wealthjpinfo.size());
+				}
+				table.addCell(cell);
+				//旅行社意见
+				cell = new PdfPCell(new Paragraph(
+						(!Util.isEmpty(record.get("traveladvice")) ? record.getString("traveladvice") : ""), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				if (flag) {
+					cell.setRowspan(wealthjpinfo.size());
+				}
+				table.addCell(cell);
+				//其他财产
+				if (wealthjpinfo.size() > 1) {
+					for (int i = 1; i < wealthjpinfo.size(); i++) {
+						TApplicantWealthJpEntity tApplicantWealthJpEntity = wealthjpinfo.get(i);
+						cell = new PdfPCell(new Paragraph(tApplicantWealthJpEntity.getType(), font));
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						table.addCell(cell);
+						String detail = tApplicantWealthJpEntity.getDetails();
+						if ("银行存款".equals(tApplicantWealthJpEntity.getType())) {
+							detail += "万";
+						} else if ("理财".equals(tApplicantWealthJpEntity.getType())) {
+							detail += "万";
+						} else if ("房产".equals(tApplicantWealthJpEntity.getType())) {
+							detail += "平米";
+						}
+						cell = new PdfPCell(new Paragraph(detail, font));
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						table.addCell(cell);
+					}
 				}
 			}
 			document.add(table);

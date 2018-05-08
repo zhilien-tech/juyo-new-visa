@@ -94,7 +94,12 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		String T_APP_STAFF_Fenroll_WX_URL = (String) kvConfigProperties.get("T_APP_STAFF_Fenroll_WX_URL");
 		return T_APP_STAFF_Fenroll_WX_URL;
 	}
-
+	//获取 进度访问路径
+	public String getProgressUrl() {
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		String T_APP_STAFF_Progress_WX_URL = (String) kvConfigProperties.get("T_APP_STAFF_Progress_WX_URL");
+		return T_APP_STAFF_Progress_WX_URL;
+	}
 	//获取ticket
 	public JSONObject getJsApiTicket() {
 		String accessToken = (String) getAccessToken();
