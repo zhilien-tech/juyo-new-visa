@@ -2247,6 +2247,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					Cnd.where("id", "=", passportForm.getOrderid()));
 		}
 		if (!Util.isEmpty(passportForm.getApplicantId())) {
+			Integer applyid = passportForm.getApplicantId();
 			TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
 					Cnd.where("applicantId", "=", passportForm.getApplicantId()));
 			passport.setOpId(loginUser.getId());
@@ -2283,7 +2284,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			passport.setValidType(passportForm.getValidType());
 			passport.setUpdateTime(new Date());
 			dbDao.update(passport);
-
+			//更新申请人表中的姓名
 			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, passportForm.getApplicantId().longValue());
 			apply.setFirstName(passportForm.getFirstName());
 			if (!Util.isEmpty(passportForm.getFirstNameEn())) {
@@ -2294,6 +2295,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				apply.setLastNameEn(passportForm.getLastNameEn().substring(1));
 			}
 			dbDao.update(apply);
+			//更新对应user表中的name
 			TUserEntity userEntity = dbDao.fetch(TUserEntity.class, apply.getUserId().longValue());
 			userEntity.setName(passport.getFirstName() + passport.getLastName());
 			dbDao.update(userEntity);

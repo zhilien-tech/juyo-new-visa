@@ -24,6 +24,7 @@ FROM
 SELECT
 	toj.id,
 	tr.orderNum japanNumber,
+	tr.isDisabled,
 	taoj.isSameLinker,
 	toj.acceptDesign number,
 	DATE_FORMAT(tr.sendVisaDate, '%Y-%m-%d') sendingTime,
