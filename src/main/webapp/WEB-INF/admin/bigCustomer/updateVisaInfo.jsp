@@ -3349,6 +3349,7 @@
 		var BASE_PATH = '${base}';
 		var staffId = '${obj.staffId}';
 		var isDisable = '${obj.isDisable}';
+		var flag = '${obj.flag}';
 	</script>
 	<!-- 公共js -->
 	<script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
@@ -3383,7 +3384,7 @@
 		//跳转到基本信息页
 		function baseInfoBtn(){
 			if(isDisable == 1){
-				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
+				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable+'&flag='+flag;
 			}else{
 				//保存签证信息
 				save(2);

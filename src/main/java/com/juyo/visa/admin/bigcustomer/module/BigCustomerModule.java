@@ -86,7 +86,7 @@ public class BigCustomerModule {
 			@Param("flag") Integer flag, HttpSession session) {
 		return bigCustomerViewService.getStaffInfo(staffId, isDisable, flag, session);
 	}
-	
+
 
 	/**
 	 * 执行'修改操作'
@@ -147,21 +147,21 @@ public class BigCustomerModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object updateVisaInfo(@Param("staffId") Integer staffId, @Param("isDisable") Integer isDisable,
+	public Object updateVisaInfo(@Param("staffId") Integer staffId, @Param("isDisable") Integer isDisable,@Param("flag") Integer flag,
 			HttpSession session) {
-		return bigCustomerViewService.updateVisaInfo(staffId, isDisable, session);
+		return bigCustomerViewService.updateVisaInfo(staffId, isDisable, flag, session);
 	}
-	
-	
+
+
 	/**
 	 *跳转到游客登录签证信息页面
 	 */
 	@At
 	@GET
 	@Ok("jsp")
-	public Object touristVisaInfo(@Param("staffId") Integer staffId, @Param("isDisable") Integer isDisable,
+	public Object touristVisaInfo(@Param("staffId") Integer staffId, @Param("isDisable") Integer isDisable,@Param("flag") Integer flag,
 			HttpSession session) {
-		return bigCustomerViewService.updateVisaInfo(staffId, isDisable, session);
+		return bigCustomerViewService.updateVisaInfo(staffId, isDisable, flag, session);
 	}
 
 	/**
