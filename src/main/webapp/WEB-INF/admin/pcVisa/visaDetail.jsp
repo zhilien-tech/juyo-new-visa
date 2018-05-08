@@ -6,6 +6,9 @@
 <html lang="en-US">
 <head>
 <meta charset="utf-8">
+<meta http-equlv="proma" content="no-cache" />
+<meta http-equlv="cache-control" content="no-cache" />
+<meta http-equlv="expires" content="0" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>签证详情</title>
 <link rel="stylesheet"
@@ -32,7 +35,7 @@
 <link rel="stylesheet" href="${base}/references/public/css/style.css">
 <!-- 签证详情样式 -->
 <link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/visaDetail.css">
+	href="${base}/references/public/dist/newvisacss/css/visaDetail.css?v='20180508'">
 <!-- 加载中。。。样式 -->
 <link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 </head>
@@ -42,16 +45,7 @@
 			<!-- 头部 -->
 			<div class="qz-head">
 			<input id="flag" type="hidden" value="${obj.flag}">
-				<span class="orderNum">订单号： <span>${obj.orderInfo.ordernumber}</span>
-				</span>
-				<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
-				<%-- <span class="state">状态： <c:if
-						test="${obj.orderInfo.status == '1'}">
-						<p>下单</p>
-					</c:if> <c:if test="${obj.orderInfo.status == '0'}">
-						<p>0</p>
-					</c:if>
-				</span>  --%>
+				<span class="orderNum">订单号： <span>${obj.orderInfo.ordernumber}</span></span>
 				<span class="state">状态： 
 					<p id="orderstatus">${obj.orderstatus }</p>
 				</span> 
@@ -152,7 +146,7 @@
 									<div class="form-group">
 										<label>停留天数：</label> <input id="stayday"
 											onchange="sendDate()" name="staydays" class="input-sm"
-											value="${obj.travelInfo.staydays}" type="text" />
+											value="${obj.travelInfo.staydays}" style="border:1px solid #d2d6de;" type="text" />
 									</div>
 								</div>
 								<!-- 停留天数END -->
@@ -262,8 +256,7 @@
 												<option value="${obj.travelInfo.returnDepartureCity}"
 													selected="selected">${obj.orderInfo.returnDepartureCity}</option>
 											</c:if>
-											<input id="returncity" name="returnDepartureCity"
-											type="hidden" />
+											<input id="returncity" name="returnDepartureCity" type="hidden" />
 										</select>
 									</div>
 								</div>
@@ -279,8 +272,7 @@
 												<option value="${obj.travelInfo.returnArrivedCity}"
 													selected="selected">${obj.orderInfo.returnArrivedCity}</option>
 											</c:if>
-											<input id="returnarrivecity" name="returnArrivedCity"
-											type="hidden">
+											<input id="returnarrivecity" name="returnArrivedCity" type="hidden">
 											<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
 													<c:when
@@ -308,8 +300,7 @@
 													${obj.returnFlightInfo.flightnum }
 													${obj.returnFlightInfo.takeOffTime }/${obj.returnFlightInfo.landingTime }</option>
 											</c:if>
-											<input id="returnflightnum" name="returnFlightNum"
-											type="hidden">
+											<input id="returnflightnum" name="returnFlightNum" type="hidden">
 											<c:forEach items="${obj.flightlist }" var="flight">
 												<c:if
 													test="${obj.tripinfo.returnFlightNum eq  flight.flightnum}">
@@ -370,12 +361,15 @@
 					<div class="info" id="mySwitch">
 						<!-- 标题以及按钮组 -->
 						<p class="info-head">申请人</p>
-						<div class="dataInfoGroup">
-						<input id="mypassportId" type="hidden" value="${obj.passportId }">
-							<a id="photoInfo" v-on:click="updatePhoto(${obj.staffid })">拍照资料</a>
-							<a v-on:click="passport(${obj.passportId },${obj.orderid})">护照信息</a>
-							<a v-on:click="baseInfo(${obj.staffid })">基本信息</a>
-							<a v-on:click="visa(${obj.staffid })">签证信息</a>
+						<div class="dataInfoGroup orderInfoGroup">
+							<input id="mypassportId" type="hidden" value="${obj.passportId }">
+							<a id="photoInfo" v-on:click="updatePhoto(${obj.staffid })">第一步:拍照资料</a>
+							<span class="icon-line"></span>
+							<a v-on:click="passport(${obj.passportId },${obj.orderid})">第二步:护照信息</a>
+							<span class="icon-line"></span>
+							<a v-on:click="baseInfo(${obj.staffid })">第三部:基本信息</a>
+							<span class="icon-line"></span>
+							<a v-on:click="visa(${obj.staffid })">第四部:签证信息</a>
 						</div>
 						<!-- 标题以及按钮组END -->
 
@@ -408,7 +402,7 @@
 								</div>
 								<!-- 申请人左侧END -->
 								<!-- 申请人右侧 -->
-								<div class="col-sm-9">
+								<div class="col-sm-9" style="width:73% !important;">
 									<!-- 右侧模块1 -->
 									<div class="row body-from-input">
 										<!-- 姓名/拼音 -->
