@@ -1276,50 +1276,36 @@ var visaVue = new Vue({
 			var isservedinrebelgroup = visaInfo.workEducationInfo.isservedinrebelgroup;
 			visaInfo.workEducationInfo.isservedinrebelgroupen = isservedinrebelgroup;
 		},
-//		iswitnessname:function(){
-////			证明人姓名
-//			var toval = $("#" + from).val();
-//			var pinyinchar = getPinYinStr(toval);
-//			visaInfo.workEducationInfo.witnessnameen = pinyinchar;
-//		},
-//		iswitnesstelphone:function(){
-////			证明人电话
-//			var toval = $("#" + from).val();
-//			$.ajax({
-//				url : '/admin/translate/translate',
-//				data : {
-//					api : 'google',
-//					strType : to,
-//					en : 'en',
-//					q : toval
-//				},
-//				type : 'POST',
-//				dataType : 'json',
-//				success : function(result) {
-//					$("#" + to).val(result).change();
-//					visaInfo.workEducationInfo.witnesstelphoneen = result;
-//				}
-//			});
-//		},
-//		iswitnesspost:function(){
-////			证明人职务
-//			var toval = $("#" + from).val();
-//			$.ajax({
-//				url : '/admin/translate/translate',
-//				data : {
-//					api : 'google',
-//					strType : to,
-//					en : 'en',
-//					q : toval
-//				},
-//				type : 'POST',
-//				dataType : 'json',
-//				success : function(result) {
-//					$("#" + to).val(result).change();
-//					visaInfo.workEducationInfo.witnessposten = result;
-//				}
-//			});
-//		}
+		iswitnessname:function(from){
+//			证明人姓名
+			var toval = $("#" + from).val();
+			var pinyinchar = getPinYinStr(toval);
+			visaInfo.workEducationInfo.witnessnameen = pinyinchar;
+		},
+		iswitnessmoblie:function(){
+//			证明人电话
+			var witnessmoblie = visaInfo.workEducationInfo.witnessmoblie;
+			visaInfo.workEducationInfo.witnessmoblieen = witnessmoblie;
+		},
+		iswitnessposition:function(from, to, vueObj){
+//			证明人职务
+			var toval = $("#" + from).val();
+			$.ajax({
+				url : '/admin/translate/translate',
+				data : {
+					api : 'google',
+					strType : to,
+					en : 'en',
+					q : toval
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(result) {
+					$("#" + to).val(result).change();
+					visaInfo.workEducationInfo.witnesspositionen = result;
+				}
+			});
+		}
 		
 	}
 });
