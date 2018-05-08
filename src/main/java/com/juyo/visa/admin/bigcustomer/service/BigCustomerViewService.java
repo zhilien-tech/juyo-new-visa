@@ -269,6 +269,19 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		String spousebirthdayen = familyInfo.getString("spousebirthdayen");
 		spousebirthdayen = formatDateStr(spousebirthdayen, FORMAT_DD_MM_YYYY);
 		result.put("spousebirthdayen", spousebirthdayen);
+		//家庭信息-父母亲生日
+		String fatherbirthday = familyInfo.getString("fatherbirthday");
+		fatherbirthday = formatDateStr(fatherbirthday, FORMAT_DD_MM_YYYY);
+		result.put("fatherbirthday", fatherbirthday);
+		String fatherbirthdayen = familyInfo.getString("fatherbirthdayen");
+		fatherbirthdayen = formatDateStr(fatherbirthdayen, FORMAT_DD_MM_YYYY);
+		result.put("fatherbirthdayen", fatherbirthdayen);
+		String motherbirthday = familyInfo.getString("motherbirthday");
+		motherbirthday = formatDateStr(motherbirthday, FORMAT_DD_MM_YYYY);
+		result.put("motherbirthday", motherbirthday);
+		String motherbirthdayen = familyInfo.getString("motherbirthdayen");
+		motherbirthdayen = formatDateStr(motherbirthdayen, FORMAT_DD_MM_YYYY);
+		result.put("motherbirthdayen", motherbirthdayen);
 
 		//工作/教育/培训信息---格式化工作开始日期 
 		String sqlStrw = sqlManager.get("pcVisa_word_education_training_list");
@@ -367,7 +380,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		motherbirthday = formatDateStr(motherbirthday, FORMAT_DD_MM_YYYY);
 		familyInfo.put("motherbirthday", motherbirthday);
 		String motherbirthdayen = familyInfo.getString("motherbirthdayen");
-		fatherbirthdayen = formatDateStr(motherbirthdayen, FORMAT_DD_MM_YYYY);
+		motherbirthdayen = formatDateStr(motherbirthdayen, FORMAT_DD_MM_YYYY);
 		familyInfo.put("motherbirthdayen", motherbirthdayen);
 
 
