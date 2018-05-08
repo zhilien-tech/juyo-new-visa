@@ -765,7 +765,7 @@ var visaVue = new Vue({
 //			家庭信息 母亲的名   拼音显示  需要修改
 			var toval = $("#" + from).val();
 			var pinyinchar = getPinYinStr(toval);
-			visaInfo.familyInfo.motherfirstnameen = pinyincharb;
+			visaInfo.familyInfo.motherfirstnameen = pinyinchar;
 			
 		},
 		familyinfomolastname:function(from, to, vueObj){
