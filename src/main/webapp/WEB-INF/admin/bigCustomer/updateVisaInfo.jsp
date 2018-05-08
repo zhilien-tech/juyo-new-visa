@@ -14,7 +14,7 @@
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<!-- 本页样式 -->
-		<link rel="stylesheet" href="${base}/references/public/css/updateVisaInfo.css?id='20180507'">
+		<link rel="stylesheet" href="${base}/references/public/css/updateVisaInfo.css?id='20180508'">
 		<style>
      		[v-cloak]{display:none;}
      	</style>
@@ -446,10 +446,10 @@
 					<input id="isKnowFatherMing" name="isknowfatherlastname" onchange="AddSingle(this,'isknowfatherlastnameen')" v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
-				<%-- <div>
+				<div class="groupInputInfo prvPadLT">
 					<label>父亲的生日</label>
-					<input type="text" id="fatherbirday" onchange="translateZhToEn(this,'fatherbirdayen','')" value="${obj.fatherbirday}" class="datetimepickercss form-control" placeholder="日/月/年" />
-				</div> --%>
+					<input type="text" id="fatherbirthday" onchange="translateZhToEn(this,'fatherbirthdayen','')" value="${obj.fatherbirthday}" class="datetimepickercss form-control" placeholder="日/月/年" />
+				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>你的父亲是否在美国</label>
@@ -2106,6 +2106,10 @@
 					<input id="isKnowFatherMing" name="isknowfatherlastnameen" class="isknowfatherlastnameen"  v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastnameen" type="checkbox" />
 				</div>
 				<div class="clear"></div>
+				<div class="groupInputInfo prvPadLT">
+					<label>Father's birthday</label>
+					<input type="text" id="fatherbirthdayen" value="${obj.fatherbirthdayen}" class="datetimepickercss form-control" placeholder="日/月/年" />
+				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Is your father in the U.S.</label>

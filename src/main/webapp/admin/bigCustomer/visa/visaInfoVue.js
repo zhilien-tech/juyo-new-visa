@@ -1326,6 +1326,9 @@ function save(status){
 	console.log(visaInfo.contactPointInfo.lastnameen + "--------" + visaInfo.contactPointInfo.firstnameen);
 	//家庭信息
 	visadata.familyInfo = visaInfo.familyInfo;
+	visaInfo.familyInfo.fatherbirthday = formatDate($('#fatherbirthday').val());//父亲的生日
+	visaInfo.familyInfo.fatherbirthdayen = formatDate($('#fatherbirthdayen').val());
+	//母亲的生日
 	visaInfo.familyInfo.spousebirthday = formatDate($('#spousebirthday').val());//配偶生日
 	visaInfo.familyInfo.spousebirthdayen = formatDate($('#spousebirthdayen').val());
 	//工作/教育/培训信息
