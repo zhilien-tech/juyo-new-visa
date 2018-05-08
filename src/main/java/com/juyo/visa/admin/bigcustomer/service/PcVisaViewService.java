@@ -18,6 +18,7 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
+import org.nutz.dao.util.cri.SqlExpressionGroup;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
@@ -33,6 +34,7 @@ import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.JapanPrincipalChangeEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TravelpurposeEnum;
+import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaStatusEnum;
@@ -71,6 +73,32 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 	//图片上传后连接websocket的地址
 	private static final String SEND_INFO_WEBSPCKET_ADDR = "simplesendinfosocket";
 
+	public Object toReload(HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Map<String, Object> result = Maps.newHashMap();
+		String mobile = loginUser.getMobile();
+		Cnd cnd = Cnd.NEW();
+		SqlExpressionGroup exp = new SqlExpressionGroup();
+		exp.and("mobile", "=", mobile);
+		cnd.and(exp);
+		SqlExpressionGroup expT = new SqlExpressionGroup();
+		expT.and("userType", "=", UserLoginEnum.TOURIST_IDENTITY.intKey()).or("userType", "=",
+				UserLoginEnum.BIG_TOURIST_IDENTITY.intKey());
+		cnd.and(expT);
+		List<TUserEntity> users = dbDao.query(TUserEntity.class, cnd, null);
+		if (users.size() == 2) {
+			result.put("url", "jsp:admin.pcVisa.orderCountryFlags");
+		}
+		if (users.size() == 1) {
+			if (users.get(0).getUserType() == UserLoginEnum.TOURIST_IDENTITY.intKey()) {//日本游客
+				result.put("url", "jsp:admin.myVisa.visaList");
+			} else {
+				result.put("url", "jsp:admin.pcVisa.visaList");
+			}
+		}
+		return result.get("url");
+	}
+
 	/**
 	 * 
 	 * 办理证签证列表页
@@ -84,7 +112,10 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		form.setUserid(loginUser.getId());
+		String mobile = loginUser.getMobile();
+		TUserEntity userEntity = dbDao.fetch(TUserEntity.class,
+				Cnd.where("mobile", "=", mobile).and("userType", "=", UserLoginEnum.BIG_TOURIST_IDENTITY.intKey()));
+		form.setUserid(userEntity.getId());
 		form.setAdminId(loginCompany.getAdminId());
 
 		Map<String, Object> result = Maps.newHashMap();

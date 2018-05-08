@@ -29,6 +29,7 @@ import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.YouKeExpressTypeEnum;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
@@ -68,7 +69,10 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		Integer userId = loginUser.getId();
+		String mobile = loginUser.getMobile();
+		TUserEntity userEntity = dbDao.fetch(TUserEntity.class,
+				Cnd.where("mobile", "=", mobile).and("userType", "=", UserLoginEnum.TOURIST_IDENTITY.intKey()));
+		Integer userId = userEntity.getId();
 		//判断当前登录用户,如果isSameLinker为1则为统一联系人，查询订单下所有申请人，为0时只查自己
 		TApplicantEntity apply = null;
 		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class, Cnd.where("userId", "=", userId), null);
@@ -132,12 +136,15 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		long startTime = System.currentTimeMillis();//获取当前时间
 
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		String mobile = loginUser.getMobile();
+		TUserEntity userEntity = dbDao.fetch(TUserEntity.class,
+				Cnd.where("mobile", "=", mobile).and("userType", "=", UserLoginEnum.TOURIST_IDENTITY.intKey()));
 		List<Record> list = new ArrayList<>();
 		Map<String, Object> result = Maps.newHashMap();
 		String orderSqlstr = sqlManager.get("myvisa_visaList_data");
 		Sql orderSql = Sqls.create(orderSqlstr);
 		Cnd orderJpCnd = Cnd.NEW();
-		orderJpCnd.and("ta.userId", "=", loginUser.getId());
+		orderJpCnd.and("ta.userId", "=", userEntity.getId());
 		orderSql.setCondition(orderJpCnd);
 		List<Record> orderRecord = dbDao.query(orderSql, orderJpCnd, null);
 
