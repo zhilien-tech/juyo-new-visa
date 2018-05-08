@@ -96,11 +96,12 @@
          	dataType:"json",
          	type:'post',
          	success: function(data){
+         		
          		//受付番号未填写
            		if(data.status == 500){
            			layer.msg(data.msg);
-           			layer.closeAll('loading');
-           			closeWindow();
+           			 layer.closeAll('loading'); 
+           			/* closeWindow();  */
            		}else{
            			$.ajax({ 
            	         	url: '${base}/admin/visaJapan/saveZhaoBao.html',
@@ -114,7 +115,7 @@
            	           	}
            	         });
            		}
-           		layer.closeAll('loading');
+       /*     		layer.closeAll('loading'); */
            	}
          	
          });
