@@ -49,6 +49,8 @@ public class OrderUSListDataForm implements SQLParamForm {
 	private Integer pageTotal;
 	//公司id
 	private Integer companyid;
+	//公司下的大客户
+	private String comids;
 	//用户id
 	private Integer userid;
 	//公司管理员id
@@ -101,13 +103,14 @@ public class OrderUSListDataForm implements SQLParamForm {
 		}
 		if (orderAuthority.equals("allOrder")) {
 			//全部
+			cnd.and("tou.comId", "in", comids);
 			if (userid.equals(adminId)) {
 				//公司管理员
-				cnd.and("tou.comId", "=", companyid);
+				//cnd.and("tou.comId", "=", companyid);
 			} else {
 				//普通的操作员
 				cnd.and("tu.usertype", "=", UserLoginEnum.BIG_TOURIST_IDENTITY.intKey());
-				cnd.and("tou.comId", "=", companyid);
+				//cnd.and("tou.comId", "=", companyid);
 			}
 		} else {
 			//我的

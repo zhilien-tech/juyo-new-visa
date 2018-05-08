@@ -89,6 +89,7 @@ import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffVisaUsEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCityEntity;
+import com.juyo.visa.entities.TCompanyCustomerMapEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TFlightEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
@@ -184,7 +185,15 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		//获取当前用户
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		String comidsString = "";
+		List<TCompanyCustomerMapEntity> coms = dbDao.query(TCompanyCustomerMapEntity.class,
+				Cnd.where("belongComId", "=", loginCompany.getId()), null);
+		for (TCompanyCustomerMapEntity tCompanyCustomerMapEntity : coms) {
+			comidsString += tCompanyCustomerMapEntity.getBigCustomerId() + ",";
+		}
+		String comids = comidsString + "" + loginCompany.getId();
 		form.setUserid(loginUser.getId());
+		form.setComids(comids);
 		form.setCompanyid(loginCompany.getId());
 		form.setAdminId(loginCompany.getAdminId());
 		Sql sql = form.sql(sqlManager);
@@ -1225,7 +1234,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	}
 
-
 	//工作人员  根据人员id添加订单
 	public Object addWorkerOrderByStuffId(Integer staffId, int loginUserid, int loginComId) {
 		TOrderUsEntity orderUs = new TOrderUsEntity();
@@ -1478,7 +1486,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffCredentialsEntity credentialsEntity = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-				.and("status", "=", 1));
+						.and("status", "=", 1));
 		USStaffJsonEntity jsonEntity = new USStaffJsonEntity();
 		if (!Util.isEmpty(credentialsEntity)) {
 			if (!Util.isEmpty(credentialsEntity.getUrl())) {
@@ -1547,7 +1555,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffCredentialsEntity credentialsEntity = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-				.and("status", "=", 2));
+						.and("status", "=", 2));
 		USStaffJsonEntity jsonEntity = new USStaffJsonEntity();
 		if (!Util.isEmpty(credentialsEntity)) {
 			if (!Util.isEmpty(credentialsEntity.getUrl())) {

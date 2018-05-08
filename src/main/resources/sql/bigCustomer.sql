@@ -74,7 +74,8 @@ GROUP BY
 SELECT
 	tos.id orderid,
 	tos.ordernumber,
-	tos.STATUS
+	tos.STATUS,
+	tos.isdisable
 FROM
 	t_order_us tos
 	LEFT JOIN t_app_staff_order_us tasou ON tasou.orderid = tos.id
