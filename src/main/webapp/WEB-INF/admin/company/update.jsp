@@ -438,7 +438,7 @@
 				var scopesList = scopesVal.split(",");
 
 				for (var i = 0; i < scopesList.length; i++) {
-					if (scopesList[i] == 1) {
+					if (scopesList[i] == "日本") {
 						$(".multiselectBtn").append("<span>日本,</span>");
 						$(".btnVal input").each(function() {
 							var btnVal = $(this).val();//按钮 text
@@ -451,7 +451,7 @@
 							}
 						});
 						$("#jpDesignNum_div").removeClass("none");
-					} else if (scopesList[i] == 2) {
+					} else if (scopesList[i] == "美国") {
 						$(".multiselectBtn").append( "<span>美国,</span>");
 						$(".btnVal input").each(function(){
 							var btnVal = $(this).val();//按钮 text
