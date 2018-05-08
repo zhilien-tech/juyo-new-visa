@@ -13,6 +13,7 @@ import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.uxuexi.core.web.form.SQLParamForm;
 
 /**
@@ -48,6 +49,7 @@ public class VisaListDataForm implements SQLParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		cnd.and("tasb.userid", "=", userid);
+		cnd.and("tos.isdisable", "=", IsYesOrNoEnum.NO.intKey());
 		cnd.groupBy("tos.id");
 		cnd.orderBy("tasb.createtime", "desc");
 		return cnd;
