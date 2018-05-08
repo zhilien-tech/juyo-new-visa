@@ -1299,7 +1299,7 @@ function saveApplicant(status){
 			});
 		}else if(status == 3){
 			//右箭头跳转
-			window.location.href = '/admin/bigCustomer/'+urlName+'.html?staffId='+staffId+'&isDisable='+isDisable;
+			window.location.href = '/admin/bigCustomer/'+urlName+'.html?staffId='+staffId+'&isDisable='+isDisable+'&flag='+flag;
 			$.ajax({
 				type: 'POST',
 				data : applicantInfo,

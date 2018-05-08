@@ -47,6 +47,7 @@ import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.MarryStatusEnEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
+import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.AppPictures.AppCredentialsTypeEnum;
 import com.juyo.visa.common.enums.AppPictures.AppPicturesTypeEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
@@ -156,12 +157,22 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * 跳转到签证信息页
 	 *
 	 * @param staffId
+	 * @param isDisable 是否可编辑
+	 * @param flag 是否为游客
 	 * @param session
 	 * @return 
 	 */
-	public Object updateVisaInfo(Integer staffId, Integer isDisable, HttpSession session) {
+	public Object updateVisaInfo(Integer staffId, Integer isDisable,Integer flag, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		if(userType == UserLoginEnum.BIG_TOURIST_IDENTITY.intKey()) {
+			flag = IsYesOrNoEnum.YES.intKey();
+		}else{
+			flag = IsYesOrNoEnum.NO.intKey();
+		}
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("isDisable", isDisable);//页面是否可编辑
+		result.put("flag", flag);//页面是否为游客
 		//旅伴信息---与你的关系
 		result.put("TravelCompanionRelationshipEnum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
 		result.put("TravelCompanionRelationshipEnumen", EnumUtil.enum2(TravelCompanionRelationshipEnEnum.class));
@@ -258,6 +269,19 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		String spousebirthdayen = familyInfo.getString("spousebirthdayen");
 		spousebirthdayen = formatDateStr(spousebirthdayen, FORMAT_DD_MM_YYYY);
 		result.put("spousebirthdayen", spousebirthdayen);
+		//家庭信息-父母亲生日
+		String fatherbirthday = familyInfo.getString("fatherbirthday");
+		fatherbirthday = formatDateStr(fatherbirthday, FORMAT_DD_MM_YYYY);
+		result.put("fatherbirthday", fatherbirthday);
+		String fatherbirthdayen = familyInfo.getString("fatherbirthdayen");
+		fatherbirthdayen = formatDateStr(fatherbirthdayen, FORMAT_DD_MM_YYYY);
+		result.put("fatherbirthdayen", fatherbirthdayen);
+		String motherbirthday = familyInfo.getString("motherbirthday");
+		motherbirthday = formatDateStr(motherbirthday, FORMAT_DD_MM_YYYY);
+		result.put("motherbirthday", motherbirthday);
+		String motherbirthdayen = familyInfo.getString("motherbirthdayen");
+		motherbirthdayen = formatDateStr(motherbirthdayen, FORMAT_DD_MM_YYYY);
+		result.put("motherbirthdayen", motherbirthdayen);
 
 		//工作/教育/培训信息---格式化工作开始日期 
 		String sqlStrw = sqlManager.get("pcVisa_word_education_training_list");
@@ -344,6 +368,21 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		String spousebirthdayen = familyInfo.getString("spousebirthdayen");
 		spousebirthdayen = formatDateStr(spousebirthdayen, FORMAT_DD_MM_YYYY);
 		familyInfo.set("spousebirthdayen", spousebirthdayen);
+		//父亲生日
+		String fatherbirthday = familyInfo.getString("fatherbirthday");
+		fatherbirthday = formatDateStr(fatherbirthday, FORMAT_DD_MM_YYYY);
+		familyInfo.put("fatherbirthday", fatherbirthday);
+		String fatherbirthdayen = familyInfo.getString("fatherbirthdayen");
+		fatherbirthdayen = formatDateStr(fatherbirthdayen, FORMAT_DD_MM_YYYY);
+		familyInfo.put("fatherbirthdayen", fatherbirthdayen);
+		//母亲生日
+		String motherbirthday = familyInfo.getString("motherbirthday");
+		motherbirthday = formatDateStr(motherbirthday, FORMAT_DD_MM_YYYY);
+		familyInfo.put("motherbirthday", motherbirthday);
+		String motherbirthdayen = familyInfo.getString("motherbirthdayen");
+		motherbirthdayen = formatDateStr(motherbirthdayen, FORMAT_DD_MM_YYYY);
+		familyInfo.put("motherbirthdayen", motherbirthdayen);
+
 
 		//---直属亲戚信息集合
 		/*List<TAppStaffImmediaterelativesEntity> zhiFamilyList = dbDao.query(TAppStaffImmediaterelativesEntity.class,
@@ -768,12 +807,15 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	public Object getStaffInfo(Integer staffId, Integer isDisable, Integer flag, HttpSession session) {
 
 		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
-
-		Map<String, Object> result = Maps.newHashMap();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Map<String, Object> result = Maps.newHashMap();
 		Integer userType = loginUser.getUserType();
+		if(userType == UserLoginEnum.BIG_TOURIST_IDENTITY.intKey()) {
+			flag = IsYesOrNoEnum.YES.intKey();
+		}else{
+			flag = IsYesOrNoEnum.NO.intKey();
+		}
 		result.put("userType", userType);
-
 		result.put("flag", flag);//从游客处进入，要去掉英文验证
 		result.put("isDisable", isDisable);//页面是否可编辑
 		result.put("marryStatus", staffInfo.getMarrystatus());
@@ -850,11 +892,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		TAppStaffCredentialsEntity front = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-						.and("status", "=", AppPicturesTypeEnum.FRONT.intKey()));
+				.and("status", "=", AppPicturesTypeEnum.FRONT.intKey()));
 		TAppStaffCredentialsEntity back = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-						.and("status", "=", AppPicturesTypeEnum.BACK.intKey()));
+				.and("status", "=", AppPicturesTypeEnum.BACK.intKey()));
 		TAppStaffCredentialsEntity twoinch = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey()));
 		result.put("front", front);
