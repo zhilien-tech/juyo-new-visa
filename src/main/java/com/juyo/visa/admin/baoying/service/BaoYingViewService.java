@@ -19,6 +19,7 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.baoying.form.TAppStaffMixInfoForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JapanPrincipalChangeEnum;
 import com.juyo.visa.common.enums.orderUS.DistrictEnum;
@@ -66,13 +67,20 @@ public class BaoYingViewService extends BaseService<TAppStaffBasicinfoEntity> {
 
 		long startTime = System.currentTimeMillis();//获取当前时间
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		Integer comId = loginCompany.getId();
-		//葆婴 可以看到誉尚的订单信息
-		TCompanyCustomerMapEntity comCusEntity = dbDao.fetch(TCompanyCustomerMapEntity.class, Cnd.where("bigCustomerId", "=", comId));
-		if(!Util.isEmpty(comCusEntity)) {
-			Integer belongComId = comCusEntity.getBelongComId();
-			queryForm.setComid(belongComId);
+		Integer comIdSelf = loginCompany.getId();
+		Integer comType = loginCompany.getComType();
+		if(comType == CompanyTypeEnum.BIGCUSTOMER.intKey()) {
+			//大客户只看到自己的单子
+			queryForm.setComid(comIdSelf);
+		}else {
+			//可以看到誉尚的订单信息
+			TCompanyCustomerMapEntity comCusEntity = dbDao.fetch(TCompanyCustomerMapEntity.class, Cnd.where("bigCustomerId", "=", comIdSelf));
+			if(!Util.isEmpty(comCusEntity)) {
+				Integer belongComId = comCusEntity.getBelongComId();
+				queryForm.setComid(belongComId);
+			}
 		}
+		
 
 		Map<String, Object> map = listPage4Datatables(queryForm);
 		List<Record> records = (List<Record>) map.get("data");
