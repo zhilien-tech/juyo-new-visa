@@ -446,9 +446,10 @@
 					<input id="isKnowFatherMing" name="isknowfatherlastname" onchange="AddSingle(this,'isknowfatherlastnameen')" v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
-				<div class="groupInputInfo prvPadLT">
+				<div class="groupcheckBoxInfo prvPadLT">
 					<label>父亲的生日</label>
-					<input type="text" id="fatherbirthday" onchange="translateZhToEn(this,'fatherbirthdayen','')" value="${obj.fatherbirthday}" class="datetimepickercss form-control" placeholder="日/月/年" />
+					<input type="text" id="fatherbirthday" onchange="translateZhToEn(this,'fatherbirthdayen','')" v-model="visaInfo.familyInfo.fatherbirthday" class="datetimepickercss form-control" placeholder="日/月/年" />
+					<input id="isknowfatherbirthday" name="isknowfatherbirthday" onchange="AddSingle(this,'isknowfatherbirthdayen')" v-on:click="isknowfatherbirthday" v-model="visaInfo.familyInfo.isknowfatherbirthday" type="checkbox" />
 				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
@@ -478,6 +479,11 @@
 					<input id="isKnowMotherMing" name="isknowmotherlastname" onchange="AddSingle(this,'isknowmotherlastnameen')" v-on:click="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
+				<div class="groupcheckBoxInfo prvPadLT">
+					<label>母亲的生日</label>
+					<input type="text" id="motherbirthday" onchange="translateZhToEn(this,'motherbirthdayen','')" v-model="visaInfo.familyInfo.motherbirthday" class="datetimepickercss form-control" placeholder="日/月/年" />
+					<input id="isknowmotherbirthday" name="isknowmotherbirthday" onchange="AddSingle(this,'isknowmotherbirthdayen')" v-on:click="isknowmotherbirthday" v-model="visaInfo.familyInfo.isknowmotherbirthday" type="checkbox" />
+				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>你的母亲是否在美国</label>
@@ -2106,9 +2112,10 @@
 					<input id="isKnowFatherMing" name="isknowfatherlastnameen" class="isknowfatherlastnameen"  v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastnameen" type="checkbox" />
 				</div>
 				<div class="clear"></div>
-				<div class="groupInputInfo prvPadLT">
+				<div class="groupcheckBoxInfo prvPadLT">
 					<label>Father's birthday</label>
-					<input type="text" id="fatherbirthdayen" value="${obj.fatherbirthdayen}" class="datetimepickercss form-control" placeholder="日/月/年" />
+					<input type="text" id="fatherbirthdayen" v-model="visaInfo.familyInfo.fatherbirthdayen" class="datetimepickercss form-control" placeholder="Day / month / year" />
+					<input id="isknowfatherbirthdayen" class="isknowfatherbirthdayen" name="isknowfatherbirthdayen"  v-model="visaInfo.familyInfo.isknowfatherbirthdayen" type="checkbox" />
 				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
@@ -2138,6 +2145,11 @@
 					<input id="isKnowMotherMing" name="isknowmotherlastnameen" class="isknowmotherlastnameen"  v-on:click="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastnameen" type="checkbox" />
 				</div>
 				<div class="clear"></div>
+				<div class="groupcheckBoxInfo prvPadLT">
+					<label>Mother's Birthday</label>
+					<input type="text" id="motherbirthdayen" v-model="visaInfo.familyInfo.motherbirthdayen" class="datetimepickercss form-control" placeholder="Day / month / year" />
+					<input id="isknowmotherbirthdayen" class="isknowmotherbirthdayen" name="isknowmotherbirthdayen" v-model="visaInfo.familyInfo.isknowmotherbirthdayen" type="checkbox" />
+				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Is your mother in the U.S.</label>

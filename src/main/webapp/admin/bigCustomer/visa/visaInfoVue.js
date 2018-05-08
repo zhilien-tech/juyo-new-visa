@@ -742,6 +742,26 @@ var visaVue = new Vue({
 			visaInfo.familyInfo.fatherlastnameen = pinyinchar;
 			
 		},
+		isknowfatherbirthday:function(){
+//			不知道父亲的生日
+			var isknowfatherbirthday = visaInfo.familyInfo.isknowfatherbirthday;
+			if(isknowfatherbirthday){
+				visaInfo.familyInfo.fatherbirthday = "";
+				visaInfo.familyInfo.fatherbirthdayen = "";
+			}
+			visaInfo.familyInfo.isknowfatherbirthdayen = isknowfatherbirthday;
+			
+		},
+		isknowmotherbirthday:function(){
+//			不知道母亲的生日
+			var isknowmotherbirthday = visaInfo.familyInfo.isknowmotherbirthday;
+			if(isknowmotherbirthday){
+				visaInfo.familyInfo.motherbirthday = "";
+				visaInfo.familyInfo.motherbirthdayen = "";
+			}
+			visaInfo.familyInfo.isknowmotherbirthdayen = isknowmotherbirthday;
+			
+		},
 		familyinfostatus:function(from, to, vueObj){
 //			家庭信息 父亲身份
 			var toval = $("#" + from).val();
@@ -1322,14 +1342,16 @@ function save(status){
 	visaInfo.previUSTripInfo.issueddateen = formatDate($('#issueddateen').val());
 	//美国联络人
 	visadata.contactPointInfo = visaInfo.contactPointInfo;
-	console.log(visaInfo.contactPointInfo.lastname + "--------" + visaInfo.contactPointInfo.firstname);
-	console.log(visaInfo.contactPointInfo.lastnameen + "--------" + visaInfo.contactPointInfo.firstnameen);
 	//家庭信息
 	visadata.familyInfo = visaInfo.familyInfo;
-	visaInfo.familyInfo.fatherbirthday = formatDate($('#fatherbirthday').val());//父亲的生日
+	//父亲的生日
+	visaInfo.familyInfo.fatherbirthday = formatDate($('#fatherbirthday').val());
 	visaInfo.familyInfo.fatherbirthdayen = formatDate($('#fatherbirthdayen').val());
 	//母亲的生日
-	visaInfo.familyInfo.spousebirthday = formatDate($('#spousebirthday').val());//配偶生日
+	visaInfo.familyInfo.motherbirthday = formatDate($('#motherbirthday').val());
+	visaInfo.familyInfo.motherbirthdayen = formatDate($('#motherbirthdayen').val());
+	//配偶生日
+	visaInfo.familyInfo.spousebirthday = formatDate($('#spousebirthday').val());
 	visaInfo.familyInfo.spousebirthdayen = formatDate($('#spousebirthdayen').val());
 	//工作/教育/培训信息
 	visadata.workEducationInfo = visaInfo.workEducationInfo;

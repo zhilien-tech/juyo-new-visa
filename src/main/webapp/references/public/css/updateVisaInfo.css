@@ -568,3 +568,7 @@ label {
 .directRelativesYesen {
 	display:inline-block;
 }
+/* 父亲的生日 */
+#fatherbirthday,#fatherbirthdayen,#motherbirthday,#motherbirthdayen {
+	display:inline-block;
+}
