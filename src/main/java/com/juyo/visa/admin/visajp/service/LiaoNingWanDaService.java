@@ -177,7 +177,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日");
-
+		DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
 		//公司信息
 		TCompanyEntity company = (TCompanyEntity) tempdata.get("company");
 		//出行信息
@@ -289,9 +289,9 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 		map.put("createDate", dateFormat.format(new Date()));
 		map.put("companyaddr", company.getAddress());
 		Date sendvisadate = orderinfo.getSendVisaDate();
-		map.put("sendvisadate", dateFormat.format(sendvisadate));
+		map.put("sendvisadate", dateFormat1.format(sendvisadate));
 		Date outvisadate = orderinfo.getOutVisaDate();
-		map.put("outvisadate", dateFormat.format(outvisadate));
+		map.put("outvisadate", dateFormat1.format(outvisadate));
 		//获取模板文件
 		URL resource = getClass().getClassLoader().getResource("japanfile/liaoningwanda/note.pdf");
 		TemplateUtil templateUtil = new TemplateUtil();
@@ -678,22 +678,25 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			font1.setFamily("宋体");
 			font1.setSize(17);
 			 PdfPTable table1 = new PdfPTable(2); //表格两列
+			 table1.setWidthPercentage(95);
 			table1.setHorizontalAlignment(Element.ALIGN_CENTER); //垂直居中
-			  table1.setWidthPercentage(100);//表格的宽度为100%
-			float[] wid1 ={0.3f,0.7f}; //两列宽度的比例
+			table1.setTotalWidth(PageSize.A4.rotate().getWidth());
+			float[] wid1 ={0.5f,0.5f}; //两列宽度的比例
 			table1.setWidths(wid1); 
-			table1.getDefaultCell().setBorderWidth(0); //不显示边框
+//			table1.getDefaultCell().setBorderWidth(0); //不显示边框
 			PdfPCell cell11 = new PdfPCell(); 
 			PdfPCell cell12 = new PdfPCell(); 
-			Paragraph paragraph = new Paragraph("  签证申请人名单",font1);
+			Paragraph paragraph = new Paragraph("签证申请人名单",font1);
 			Paragraph paragraph2 = new Paragraph(company.getName(), font1);
 			paragraph2.setAlignment(Element.ALIGN_RIGHT);
+			paragraph.setAlignment(Element.ALIGN_LEFT);
 			cell11.addElement(paragraph);
 			cell11.setBorder(0);
 			cell12.addElement(paragraph2);
 			cell12.setBorder(0);
-			paragraph.setSpacingBefore(30);
-			paragraph2.setSpacingAfter(200);
+//			paragraph.setSpacingBefore(30);
+//			paragraph.setIndentationLeft(50);
+//			paragraph2.setSpacingAfter(200);
 			 table1.addCell(cell11);
 			 table1.addCell(cell12);
 			 table1.getDefaultCell().setBorderWidth(0);
