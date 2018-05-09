@@ -376,7 +376,7 @@ $("#sendVisaDate").datetimepicker({
 	language: 'zh-CN',
 	startDate: now,//日期小于今天
 	autoclose: true,//选中日期后 自动关闭
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 }).on("click",function(){  
     $("#sendVisaDate").datetimepicker("setEndDate",$("#goDate").val()); 
@@ -399,7 +399,7 @@ $("#outVisaDate").datetimepicker({
 	language: 'zh-CN',
 	startDate: now,//日期小于今天
 	autoclose: true,//选中日期后 自动关闭
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 }).on("click",function(){  
 	$("#outVisaDate").datetimepicker("setEndDate",$("#goDate").val());  
@@ -410,7 +410,7 @@ $("#goDate").datetimepicker({
 	language: 'zh-CN',
 	startDate:now,
 	autoclose: true,//选中日期后 自动关闭
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 }).on("click",function(){  
 	var sendVisaDate = $('#sendVisaDate').val();
@@ -426,7 +426,7 @@ $("#returnDate").datetimepicker({
 	language: 'zh-CN',
 	startDate:now,
 	autoclose: true,//选中日期后 自动关闭
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 }).on("click",function(){  
 	var sendVisaDate = $('#sendVisaDate').val();
