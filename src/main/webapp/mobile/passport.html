@@ -60,8 +60,8 @@
 			<li class="validity">有效期 <span class="dateVal"></span><select
 				class="validitySelect" v-model="passportdata.validtype">
 					<option value=""></option>
-					<option value="2">10年</option>
-					<option value="1">5年</option>
+					<option value="1">10年</option>
+					<option value="2">5年</option>
 			</select>
 			</li>
 		</ul>
@@ -106,9 +106,9 @@
 	        	type:'post',
 	        	success: function(data){
 	        		_self.passportdata = data.passportdata;
-	        		if(_self.passportdata.validtype == 2){
+	        		if(_self.passportdata.validtype == 1){
 						$(".dateVal").text("10年");
-	        		}else if(_self.passportdata.validtype == 1){
+	        		}else if(_self.passportdata.validtype == 2){
 						$(".dateVal").text("5年");
 	        		}
 	          	}
@@ -339,10 +339,10 @@
 					_self.passportdata.validenddate = obj.expiryDay;
 					var years = getDateYearSub(obj.issueDate,obj.expiryDay);
 					if(years == 5){
-						_self.passportdata.validtype = 1;
+						_self.passportdata.validtype = 2;
 						$(".dateVal").text("5年");
 					}else{
-						_self.passportdata.validtype = 2;
+						_self.passportdata.validtype = 1;
 						$(".dateVal").text("10年");
 					}
 					console.log(JSON.stringify(_self.passportdata));
