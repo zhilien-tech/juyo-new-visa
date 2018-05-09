@@ -2,12 +2,15 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta http-equlv="proma" content="no-cache" />
+	<meta http-equlv="cache-control" content="no-cache" />
+	<meta http-equlv="expires" content="0" />
     <title>基本信息</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" type="text/css" href="css/lCalendar.css"><!-- 日历插件 .css -->
-    <link rel="stylesheet" type="text/css" href="css/passport.css">
+    <link rel="stylesheet" type="text/css" href="css/passport.css?v='20180509'">
     <script src="js/rem(750).js"></script>
     <script src="js/jquery-1.10.2.js"></script>
     <script src="js/lrz.bundle.js"></script>
@@ -130,6 +133,11 @@
 	        		_self.applicatdata.mainrelation = data.applicatdata.mainrelation;
 	        		$(".validitySelect").val(data.applicatdata.mainrelation);
 	        		$(".dateVal").text(data.applicatdata.mainrelation);
+	        		if(data.applicatdata.cardfront != ''){
+	        			$('#upload').css('opacity','0'); 
+	        		}else {
+	        			$('#upload').css('opacity','1'); 
+	        		}
 	        		if(data.applicatdata.addressissamewithcard == 1){
 	        			$("#consistent").attr('checked',true);
 		        		/* $('.isclose').each(function(){
@@ -693,5 +701,45 @@
 	      });
 	})
 	
+	//清除
+        $('.passport-clear').click(function(){
+        	_self.applicatdata.cardfront = '';
+        	_self.applicatdata.cardback = '';
+        	_self.applicatdata.telephone = '';
+        	_self.applicatdata.email = '';
+        	_self.applicatdata.sex = '';
+        	_self.applicatdata.birthday = '';
+        	_self.applicatdata.cardid = '';
+        	_self.applicatdata.cardprovince = '';
+        	_self.applicatdata.cardcity = '';
+        	_self.applicatdata.address = '';
+        	_self.applicatdata.issueorganization = '';
+        	_self.applicatdata.province = '';
+        	_self.applicatdata.city = '';
+        	_self.applicatdata.detailedaddress = '';
+        	_self.applicatdata.addressissamewithcard = 0;
+        	_self.applicatdata.hasothername = 2;
+        	_self.applicatdata.hasothernationality = 2;
+        	_self.applicatdata.otherfirstname = '';
+        	_self.applicatdata.otherfirstnameen = '';
+        	_self.applicatdata.otherlastname = '';
+        	_self.applicatdata.otherlastnameen = '';
+        	_self.applicatdata.nationality = '';
+        	_self.applicatdata.emergencylinkman = '';
+        	_self.applicatdata.emergencytelephone = '';
+        	_self.applicatdata.emergencyaddress = '';
+        	$('.dateVal').text("");
+        	$('.validitySelect').val("0");
+        	$("#consistent").attr('checked',false);
+        	$("#afterName").attr('checked',false);
+			$('.afterNameinput').each(function(){
+				$(this).hide();
+			});
+			$("#afterNatAndID").attr('checked',false);
+			$('.afterNatAndIDinput').each(function(){
+				$(this).hide();
+			});
+			 $('#upload').css('opacity','1'); 
+        });
 </script>
 </html>
