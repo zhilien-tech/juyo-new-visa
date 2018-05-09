@@ -2815,7 +2815,7 @@
 						<c:forEach var="language" items="${obj.languageList }">
 							<div class="languagename languagenameen languagenameDiven paddingTop padding-left">
 								<label>Language Name</label>
-								<div class="groupInputInfo paddingBom-35">
+								<div class="groupInputInfo">
 									<input name="languagenameen" class="languagenamewen" value="${language.languagenameen }" type="text" />
 								</div>
 							</div>
