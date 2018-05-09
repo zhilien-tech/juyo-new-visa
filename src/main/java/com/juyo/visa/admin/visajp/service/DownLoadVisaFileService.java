@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.compress.utils.Lists;
@@ -288,7 +289,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				//入境航班
 				if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
 					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-					map.put("entryPort", goflight.getLandingName()+",");
+					map.put("entryPort", goflight.getLandingName()+":");
 				}
 				map.put("entryFlight", ordertripjp.getGoFlightNum().replace("*",""));
 				if (!Util.isEmpty(ordertripjp.getReturnDate())) {
@@ -310,7 +311,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 //					TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
 //					map.put("departFlight", returnflight.getFlightnum());
 					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-					map.put("departPort", goflight.getLandingName()+",");
+					map.put("departPort", goflight.getLandingName()+":");
 				}
 				map.put("departFlight", ordertripjp.getReturnFlightNum().replace("*", ""));
 			} else if (ordertripjp.getTripType().equals(2)) {
@@ -328,7 +329,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 					//入境航班
 					if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
 						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-						map.put("entryPort", goflight.getLandingName()+",");
+						map.put("entryPort", goflight.getLandingName()+":");
 					}
 					map.put("entryFlight", entrytrip.getFlightNum().replaceAll("*", ""));
 					//最后一程作为返回日期
@@ -346,7 +347,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 //						TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
 //						map.put("departFlight", returnflight.getFlightnum());
 						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-						map.put("departPort", goflight.getLandingName()+",");
+						map.put("departPort", goflight.getLandingName()+":");
 					}
 					map.put("departFlight", returntrip.getFlightNum());
 					//停留天数
@@ -1047,8 +1048,12 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			List<Record> applyinfo = (List<Record>) tempdata.get("applyinfo");
 			//日本订单信息
 			TOrderJpEntity orderjp = (TOrderJpEntity) tempdata.get("orderjp");
+			//多程信息
+			List<TOrderTripMultiJpEntity> mutiltrip = (List<TOrderTripMultiJpEntity>) tempdata.get("mutiltrip");
+			DateFormat df = new SimpleDateFormat("dd MMMMM, yyyy", Locale.ENGLISH);
 			Map<String, String> map = new HashMap<String, String>();
 			StringBuffer strb = new StringBuffer("");
+			
 			for (Record record : applyinfo) {
 				if (!Util.isEmpty(record.get("firstnameen"))) {
 					strb.append(record.getString("firstnameen"));
@@ -1059,6 +1064,79 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				strb.append("\n");
 			}
 			map.put("guest", strb.toString().toUpperCase());
+			if (!Util.isEmpty(ordertripjp)) {
+				if (ordertripjp.getTripType().equals(1)) {
+					//入境航班
+					if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
+						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
+						//起飞机场
+						map.put("takeOffName", goflight.getTakeOffName());
+						//起飞时间 
+						map.put("file_7", goflight.getTakeOffTime());
+						//降落时间
+						map.put("file_9", goflight.getLandingTime());
+					}
+						//起飞航班号
+					map.put("file_3", ordertripjp.getGoFlightNum().replace("*",""));
+					
+					//出境航班
+					if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
+						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
+						//返回机场
+						map.put("takeOffName1", goflight.getTakeOffName());
+						//起飞时间 
+						map.put("file_8", goflight.getTakeOffTime());
+						//降落时间
+						map.put("file_10", goflight.getLandingTime());
+						map.put("LandingName", goflight.getLandingName());
+					}
+						//航班号
+					map.put("file_4", ordertripjp.getReturnFlightNum().replace("*", ""));
+						//出发航班日期
+					map.put("file_5", df.format(ordertripjp.getGoDate()));
+						//返回航班日期
+					map.put("file_6", df.format(ordertripjp.getReturnDate()));
+				} else if (ordertripjp.getTripType().equals(2)) {
+					//多程处理
+					if (!Util.isEmpty(mutiltrip)) {
+						//多程第一程为出发日期
+						TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
+						if (!Util.isEmpty(entrytrip.getDepartureDate())) {
+							map.put("file_5", df.format(entrytrip.getDepartureDate()));
+						}
+						//入境航班
+						if (!Util.isEmpty(entrytrip.getFlightNum())) {
+//							TFlightEntity goflight = flightViewService.fetch(entrytrip.getFlightNum().longValue());
+							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=",entrytrip.getFlightNum()));
+							//起飞机场
+							map.put("file_1", goflight.getTakeOffName());
+							//起飞时间 
+							map.put("file_7", goflight.getTakeOffTime());
+							//降落时间
+							map.put("file_9", goflight.getLandingTime());
+						}
+						map.put("file_3", entrytrip.getFlightNum());
+						//最后一程作为返回日期
+						TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
+						if (!Util.isEmpty(returntrip.getDepartureDate())) {
+							map.put("file_6", df.format(returntrip.getDepartureDate()));
+						}
+						if (!Util.isEmpty(returntrip.getFlightNum())) {
+							//出境航班
+							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", returntrip.getFlightNum()));
+							//返回机场
+							map.put("file_2", goflight.getTakeOffName());
+							//起飞时间 
+							map.put("file_8", goflight.getTakeOffTime());
+							//降落时间
+							map.put("file_10", goflight.getLandingTime());
+							map.put("file_22", goflight.getLandingName());
+						}
+						map.put("file_4", returntrip.getFlightNum());
+					}
+				}
+			}
+			
 			//获取模板文件
 			URL resource = getClass().getClassLoader().getResource("japanfile/flight.pdf");
 			TemplateUtil templateUtil = new TemplateUtil();
