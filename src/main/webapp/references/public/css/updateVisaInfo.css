@@ -549,6 +549,9 @@ label {
 .paddingBom-35 {
 	padding-bottom:35px;
 }
+.paddingBom-8 {
+	padding-bottom:8px;
+}
 .goUS_driversen {
 	display:inline-block;
 	padding-bottom:30px;
@@ -563,5 +566,9 @@ label {
 	margin-top:0px !important;
 }
 .directRelativesYesen {
+	display:inline-block;
+}
+/* 父亲的生日 */
+#fatherbirthday,#fatherbirthdayen,#motherbirthday,#motherbirthdayen {
 	display:inline-block;
 }

@@ -14,7 +14,7 @@
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<!-- 本页样式 -->
-		<link rel="stylesheet" href="${base}/references/public/css/updateVisaInfo.css?id='20180507'">
+		<link rel="stylesheet" href="${base}/references/public/css/updateVisaInfo.css?id='20180508'">
 		<style>
      		[v-cloak]{display:none;}
      	</style>
@@ -22,7 +22,7 @@
 	<body>
 		<div class="head">
 			<div class="title">
-				<span>游客签证信息</span>
+				<span>美国签证信息</span>
 			</div>
 			<div class="btnRight">
 				<a class="saveVisa" onclick="save(1)">保存</a>
@@ -446,6 +446,11 @@
 					<input id="isKnowFatherMing" name="isknowfatherlastname" onchange="AddSingle(this,'isknowfatherlastnameen')" v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
+				<div class="groupcheckBoxInfo prvPadLT">
+					<label>父亲的生日</label>
+					<input type="text" id="fatherbirthday" onchange="translateZhToEn('#fatherbirthday','fatherbirthdayen','')" value="${obj.fatherbirthday}" class="datetimepickercss form-control" placeholder="日/月/年" />
+					<input id="isknowfatherbirthday" name="isknowfatherbirthday" onchange="AddSingle(this,'isknowfatherbirthdayen')" v-on:click="isknowfatherbirthday" v-model="visaInfo.familyInfo.isknowfatherbirthday" type="checkbox" />
+				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>你的父亲是否在美国</label>
@@ -474,6 +479,11 @@
 					<input id="isKnowMotherMing" name="isknowmotherlastname" onchange="AddSingle(this,'isknowmotherlastnameen')" v-on:click="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
+				<div class="groupcheckBoxInfo prvPadLT">
+					<label>母亲的生日</label>
+					<input type="text" id="motherbirthday" onchange="translateZhToEn('#motherbirthday','motherbirthdayen','')" value="${obj.motherbirthday}" class="datetimepickercss form-control" placeholder="日/月/年" />
+					<input id="isknowmotherbirthday" name="isknowmotherbirthday" onchange="AddSingle(this,'isknowmotherbirthdayen')" v-on:click="isknowmotherbirthday" v-model="visaInfo.familyInfo.isknowmotherbirthday" type="checkbox" />
+				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>你的母亲是否在美国</label>
@@ -635,7 +645,7 @@
 				</div>
 				
 				<!--配偶的联系地址select选择其他-->
-				<div class="otherSpouseInfo elementHide paddingTop padlongBom" >
+				<div class="otherSpouseInfo elementHide paddingTop paddingBom-8" >
 					<div class="groupInputInfo prvPadL">
 						<label>街道地址(首选)</label>
 						<input name="firstaddress" id="otherfrstaddress" @change="spouseotherstreet('otherfrstaddress','otherfrstaddressen','visaInfo.familyInfo.firstaddressen')" v-model="visaInfo.familyInfo.firstaddress" type="text" />
@@ -758,19 +768,19 @@
 					</div>
 					<div class="clear"></div>
 					<!-- 新加 -->
-					<!-- <div class="groupInputInfo paddingLeft">
+					<div class="groupInputInfo paddingLeft">
 						<label>证明人姓名</label>
 						<input name="witnessname" id="witnessname" class="witnessname" v-model="visaInfo.workEducationInfo.witnessname" @change="iswitnessname('witnessname')" />
 					</div>
 					<div class="groupInputInfo paddingRight">
 						<label>证明人电话</label>
-						<input name="witnesstelphone" id="witnesstelphone" class="witnesstelphone"  v-model="visaInfo.workEducationInfo.witnesstelphone" @change="iswitnesstelphone('witnesstelphone','witnesstelphoneen','visaInfo.workEducationInfo.witnesstelphoneen')" />
+						<input name="witnessmoblie" id="witnessmoblie" class=""  v-model="visaInfo.workEducationInfo.witnessmoblie" @change="iswitnessmoblie()" />
 					</div>
 					<div class="clear"></div>
 					<div class="groupInputInfo prvPadLT">
 						<label>证明人职务</label>
-						<input name="witnesspost" id="witnesspost" class="witnesspost" v-model="visaInfo.workEducationInfo.witnesspost"  @change="iswitnesspost('witnesspost','witnessposten','visaInfo.workEducationInfo.witnessposten')" />
-					</div> -->
+						<input name="witnessposition" id="witnessposition" class="witnessposition" v-model="visaInfo.workEducationInfo.witnessposition"  @change="iswitnessposition('witnessposition','witnesspositionen','visaInfo.workEducationInfo.witnesspositionen')" />
+					</div>
 				</div>
 				
 				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea">
@@ -2102,6 +2112,11 @@
 					<input id="isKnowFatherMing" name="isknowfatherlastnameen" class="isknowfatherlastnameen"  v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastnameen" type="checkbox" />
 				</div>
 				<div class="clear"></div>
+				<div class="groupcheckBoxInfo prvPadLT">
+					<label>Father's birthday</label>
+					<input type="text" id="fatherbirthdayen" value="${obj.fatherbirthdayen}" class="datetimepickercss form-control" placeholder="Day / month / year" />
+					<input id="isknowfatherbirthdayen" class="isknowfatherbirthdayen" name="isknowfatherbirthdayen"  v-model="visaInfo.familyInfo.isknowfatherbirthdayen" type="checkbox" />
+				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Is your father in the U.S.</label>
@@ -2130,6 +2145,11 @@
 					<input id="isKnowMotherMing" name="isknowmotherlastnameen" class="isknowmotherlastnameen"  v-on:click="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastnameen" type="checkbox" />
 				</div>
 				<div class="clear"></div>
+				<div class="groupcheckBoxInfo prvPadLT">
+					<label>Mother's Birthday</label>
+					<input type="text" id="motherbirthdayen" value="${obj.motherbirthdayen}" class="datetimepickercss form-control" placeholder="Day / month / year" />
+					<input id="isknowmotherbirthdayen" class="isknowmotherbirthdayen" name="isknowmotherbirthdayen" v-model="visaInfo.familyInfo.isknowmotherbirthdayen" type="checkbox" />
+				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Is your mother in the U.S.</label>
@@ -2161,7 +2181,7 @@
 										<label>Surnames</label>
 										<input name="relativesfirstnameen" id="relativesfirtstnameen" value="${zhifamily.relativesfirstnameen }" type="text" />
 									</div>
-									<div class="floatRight groupInputInfo">
+									<div class="floatRight groupInputInfo prvPadL">
 										<label>Given Names</label>
 										<input name="relativeslastnameen" id="relativeslastnameen" value="${zhifamily.relativeslastnameen }"  type="text" />
 									</div>
@@ -2203,7 +2223,7 @@
 									<label>Surnames</label>
 									<input name="relativesfirstnameen" id="relativesfirtstnameen"  type="text" />
 								</div>
-								<div class="floatRight groupInputInfo">
+								<div class="floatRight groupInputInfo prvPadL">
 									<label>Given Names</label>
 									<input name="relativeslastnameen" id="relativeslastnameen" type="text" />
 								</div>
@@ -2217,7 +2237,7 @@
 										</c:forEach>
 									</select>
 								</div>
-								<div class="paddingRight groupSelectInfo">
+								<div class="paddingRight groupSelectInfo prvPadL">
 									<label>Relative's Status</label>
 									<select id="exceptrelativesstatusen" name="relativesstatusen">
 										<option value="0">Please choose</option>
@@ -2406,19 +2426,19 @@
 					</div>
 					<div class="clear"></div>
 					<!-- 新加 -->
-					<!-- <div class="groupInputInfo paddingLeft">
+					<div class="groupInputInfo paddingLeft">
 						<label>Person's name</label>
 						<input name="witnessnameen" id="witnessnameen" class="witnessnameen" v-model="visaInfo.workEducationInfo.witnessnameen" />
 					</div>
 					<div class="groupInputInfo paddingRight">
 						<label>Human telephone</label>
-						<input name="witnesstelphoneen" id="witnesstelphoneen" class="witnesstelphoneen"  v-model="visaInfo.workEducationInfo.witnesstelphoneen" />
+						<input name="witnessmoblieen" id="witnessmoblieen" class="witnessmoblieen"  v-model="visaInfo.workEducationInfo.witnessmoblieen" />
 					</div>
 					<div class="clear"></div>
 					<div class="groupInputInfo prvPadLT">
 						<label>Proof of a person's position</label>
-						<input name="witnessposten" id="witnessposten" class="witnessposten" v-model="visaInfo.workEducationInfo.witnessposten"  />
-					</div> -->
+						<input name="witnesspositionen" id="witnesspositionen" class="witnesspositionen" v-model="visaInfo.workEducationInfo.witnesspositionen"  />
+					</div>
 				</div>
 				
 				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea">
@@ -2790,7 +2810,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="languageYes">
+				<div class="languageYes paddingBom-35">
 					<c:if test="${!empty obj.languageList }">
 						<c:forEach var="language" items="${obj.languageList }">
 							<div class="languagename languagenameen languagenameDiven paddingTop padding-left">
@@ -3349,6 +3369,7 @@
 		var BASE_PATH = '${base}';
 		var staffId = '${obj.staffId}';
 		var isDisable = '${obj.isDisable}';
+		var flag = '${obj.flag}';
 	</script>
 	<!-- 公共js -->
 	<script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
@@ -3383,7 +3404,7 @@
 		//跳转到基本信息页
 		function baseInfoBtn(){
 			if(isDisable == 1){
-				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
+				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable+'&flag='+flag;
 			}else{
 				//保存签证信息
 				save(2);
