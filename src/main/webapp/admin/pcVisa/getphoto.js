@@ -34,7 +34,7 @@ function uploadPositive(rst, formData, staffid, usertype) {
 		}
 	}); // end of ajaxSubmit
 }
-// 2寸照片回显
+//2寸照片回显
 function twonichphoto(staffid, type) {
 	$.ajax({
 		url : "/admin/mobileVisa/getInfoByType.html",
@@ -55,7 +55,7 @@ function twonichphoto(staffid, type) {
 		}
 	});
 };
-// 护照回显
+//护照回显
 function huzhao(staffid, type) {
 	$.ajax({
 		url : "/admin/mobileVisa/getInfoByType.html",
@@ -74,7 +74,7 @@ function huzhao(staffid, type) {
 		}
 	});
 };
-// 老护照回显
+//老护照回显
 function oldhuzhao(staffid, type) {
 	$.ajax({
 		url : "/admin/mobileVisa/getMuchPhotoByStaffid.html",
@@ -93,7 +93,7 @@ function oldhuzhao(staffid, type) {
 					$(".beforeInfo").before('<div class="uploadPassports">'+
 							'<div>上传</div>'+
 							'<img src='+url+' class="loadImg" width="100%" height="170px;"/>'+
-						'</div>');
+					'</div>');
 					$(".oldpassports").css("display","none");
 				}	
 			}
@@ -114,14 +114,14 @@ function card(staffid, type) {
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data.query.length == 1){
-					var url=data.query[0].url;
-					if(data.query[0].status == 1){
-						$("#card").attr('src',url);
-						//$("#cardBack").attr('src',data.query[1].url);
-					}else{
-						$("#cardBack").attr('src',url);
-						//$("#card").attr('src',data.query[1].url);
-					}
+				var url=data.query[0].url;
+				if(data.query[0].status == 1){
+					$("#card").attr('src',url);
+					//$("#cardBack").attr('src',data.query[1].url);
+				}else{
+					$("#cardBack").attr('src',url);
+					//$("#card").attr('src',data.query[1].url);
+				}
 			}
 			if(data.query.length == 2){
 				var url=data.query[0].url;
@@ -150,7 +150,7 @@ function marray(staffid, type) {
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=null){
-			$("#marray").attr("src",data.url);
+				$("#marray").attr("src",data.url);
 			}
 		}
 	});
@@ -169,7 +169,7 @@ function jobCertificate(staffid, type) {
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=null){
-			$("#jobCertificate").attr("src",data.url);
+				$("#jobCertificate").attr("src",data.url);
 			}
 		}
 	});
@@ -188,7 +188,7 @@ function business(staffid, type) {
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=null){
-			$("#business").attr("src",data.url);
+				$("#business").attr("src",data.url);
 			}
 		}
 	});
@@ -234,7 +234,7 @@ function drive(staffid, type) {
 					$("#drive").attr('src',data.query[1].url);
 					$("#drive2").attr('src',url);
 				}
-				
+
 			}
 		}
 	});
@@ -254,10 +254,10 @@ function housecard(staffid, type) {
 			/* _self.passportdata = data.passportdata; */
 			if(data.query.length > 0){
 				for(var i = 0;i<data.query.length;i++){
-				$(".housecard").after('<div class="uploadReleases hoursecardMain housecard'+i+'" >'+
-					'<div>上传</div>'+
-					'<img src="'+data.query[i].url+'" class="longitudinal"/>'+
-				'</div>');
+					$(".housecard").after('<div class="uploadReleases hoursecardMain housecard'+i+'" >'+
+							'<div>上传</div>'+
+							'<img src="'+data.query[i].url+'" class="longitudinal"/>'+
+					'</div>');
 				}
 				$(".1").remove();
 			}
@@ -283,15 +283,15 @@ function household(staffid, type) {
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data.query.length > 0){
-			//	console.log(data);
-			//$("#household").attr("src",data.url);
+				//	console.log(data);
+				//$("#household").attr("src",data.url);
 				$(".householdBack").next().remove();
 				for(var i = data.query.length-1;i>=0;i--){
 					console.log(data.query[i].url);
 					$(".householdBack").after('<div class="uploadReleases">'+
-					'<div>户主页</div>'+
-					'<img src="'+data.query[i].url+'" class="longitudinal" />'+
-				'</div>');
+							'<div>户主页</div>'+
+							'<img src="'+data.query[i].url+'" class="longitudinal" />'+
+					'</div>');
 				}
 			}
 		}
@@ -314,10 +314,10 @@ function bankflow(staffid, type) {
 			if(data!=null){
 				for(var i = 0;i<data.length;i++){
 					$(".bankflow_moreImaage_WX_jssdk").after(
-						'<div class="uploadReleases bankGroup"><img src="'+data[i].url+'" class="sampleImg"/></div>'
+							'<div class="uploadReleases bankGroup"><img src="'+data[i].url+'" class="sampleImg"/></div>'
 					);
 				}
-				
+
 			}
 		}
 	});
@@ -339,32 +339,37 @@ function oldsigned(staffid, type) {
 			if(data!=null){
 				for(var i = 0;i<data.length;i++){
 					$(".oldsigned_moreImaage_WX_jssdk").after(
-						'<div class="uploadReleases"><img src="'+data[i].url+'" class="longitudinal"/></div>'
+							'<div class="uploadReleases"><img src="'+data[i].url+'" class="longitudinal"/></div>'
 					);
 				}
-				
+
 			}
 		}
 	});
 }
 
 
-// 返回
+//返回
 function closeWindow() {
 	parent.successCallback(2);
 	var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
 	parent.layer.close(index);
 }
 
-// 保存跳转下一页
+//保存
 function savePhoto() {
 	/*var staffid = $("#staffid").val();
 	var passportId = $("#passportId").val();
 	window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='
 			+ passportId;*/
-	parent.successCallback(2);
-	var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
-	parent.layer.close(index);
+	layer.msg("保存成功", {
+		time: 2000,
+		end: function () {
+			parent.successCallback(2);
+			var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+			parent.layer.close(index);
+		}
+	});
 }
 
 /* 删除二寸免冠照 */

@@ -101,7 +101,9 @@ public class TAppStaffMixInfoForm extends DataTablesParamForm {
 			cnd.and(expg);
 		}
 		cnd.and("tou.isdisable", "!=", IsYesOrNoEnum.YES.intKey());
-		cnd.and("tasb.comId", "=", comid);
+		SqlExpressionGroup expgComId = new SqlExpressionGroup();
+		expgComId.and("tasb.comId", "=", comid).or("tou.bigcustomername","=",comid);
+		cnd.and(expgComId);
 		cnd.orderBy("tou.updateTime", "DESC");
 		return cnd;
 	}
