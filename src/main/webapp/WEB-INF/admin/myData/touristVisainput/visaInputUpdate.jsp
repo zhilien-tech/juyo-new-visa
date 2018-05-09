@@ -271,7 +271,7 @@
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
 			autoclose: true,//选中日期后 自动关闭
-			pickerPosition:"top-left",//显示位置
+			pickerPosition:"bottom-right",//显示位置
 			minView: "month"//只显示年月日
 		}).on("click",function(){  
 		    $("#validDate").datetimepicker("setStartDate",$("#visaDate").val());  
@@ -280,7 +280,7 @@
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
 			autoclose: true,//选中日期后 自动关闭
-			pickerPosition:"top-left",//显示位置
+			pickerPosition:"bottom-right",//显示位置
 			minView: "month"//只显示年月日
 		});
 		//国家下拉
