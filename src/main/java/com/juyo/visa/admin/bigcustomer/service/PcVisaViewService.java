@@ -338,6 +338,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 		}*/
 		//格式化日期
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf2 = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
 		if (!Util.isEmpty(passportEntity.getBirthday())) {
 			result.put("birthday", sdf.format(passportEntity.getBirthday()));
 		}
@@ -349,7 +350,7 @@ public class PcVisaViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("id", "=", orderUsEntity.getStaffid()));
 		result.put("basicinfo", basicinfoEntity);
 		if (!Util.isEmpty(basicinfoEntity.getInterviewdate())) {
-			result.put("Interviewdate", sdf.format(basicinfoEntity.getInterviewdate()));
+			result.put("Interviewdate", sdf2.format(basicinfoEntity.getInterviewdate()));
 		}
 
 		//二寸照片从人员证件信息表中取

@@ -30,6 +30,10 @@ public class TOrderUsEntity implements Serializable {
 	private String groupname;
 
 	@Column
+	@Comment("大客户公司名称")
+	private String bigcustomername;
+
+	@Column
 	@Comment("订单号")
 	private String ordernumber;
 
