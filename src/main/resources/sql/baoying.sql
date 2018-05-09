@@ -4,6 +4,7 @@ SELECT
 	tasp.id passportid,
 	tou.id orderid,
 	tasb.comid,
+	tou.bigcustomername bigCustomerId,
 	CONCAT( tasb.firstname, tasb.lastname ) NAME,
 	tasb.telephone,
 	tasb.email,

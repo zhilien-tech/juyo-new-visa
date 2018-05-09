@@ -555,6 +555,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			map.put("staffId", String.valueOf(staffId));
 
 			//签证信息的添加
+			TCountryRegionEntity chinaEntity = dbDao.fetch(TCountryRegionEntity.class, Cnd.where("chinesename", "=", "中国"));
+			Integer chinaId = chinaEntity.getId();
 			//旅伴信息
 			TAppStaffTravelcompanionEntity travelCompanionInfo = new TAppStaffTravelcompanionEntity();
 			travelCompanionInfo.setStaffid(staffId);
@@ -613,8 +615,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			familyInfo.setMotherstatus(DEFAULT_SELECT);
 			familyInfo.setFatherstatusen(DEFAULT_SELECT);
 			familyInfo.setMotherstatusen(DEFAULT_SELECT);
-			familyInfo.setCountry(DEFAULT_SELECT);
-			familyInfo.setCountryen(DEFAULT_SELECT);
+			familyInfo.setCountry(chinaId);
+			familyInfo.setCountryen(chinaId);
 
 			familyInfo.setIsfatherinusen(DEFAULT_IS_NO);
 			familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
@@ -622,10 +624,10 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
 			familyInfo.setIsknowspousecityen(DEFAULT_IS_NO);
 
-			familyInfo.setSpousenationality(DEFAULT_SELECT);
-			familyInfo.setSpousenationalityen(DEFAULT_SELECT);
-			familyInfo.setSpousecountry(DEFAULT_SELECT);
-			familyInfo.setSpousecountryen(DEFAULT_SELECT);
+			familyInfo.setSpousenationality(chinaId);
+			familyInfo.setSpousenationalityen(chinaId);
+			familyInfo.setSpousecountry(chinaId);
+			familyInfo.setSpousecountryen(chinaId);
 			familyInfo.setSpouseaddress(DEFAULT_SELECT);
 			familyInfo.setSpouseaddressen(DEFAULT_SELECT);
 
@@ -637,8 +639,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 			workEducationInfo.setOccupation(DEFAULT_SELECT);
 			workEducationInfo.setOccupationen(DEFAULT_SELECT);
-			workEducationInfo.setCountry(DEFAULT_SELECT);
-			workEducationInfo.setCountryen(DEFAULT_SELECT);
+			workEducationInfo.setCountry(chinaId);
+			workEducationInfo.setCountryen(chinaId);
 
 			workEducationInfo.setIsemployed(DEFAULT_IS_NO);
 			workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
@@ -658,6 +660,28 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			workEducationInfo.setHasservedinmilitaryen(DEFAULT_IS_NO);
 			workEducationInfo.setIsservedinrebelgroupen(DEFAULT_IS_NO);
 			dbDao.insert(workEducationInfo);
+			
+			//以前工作
+			TAppStaffBeforeworkEntity beforeWork = new TAppStaffBeforeworkEntity();
+			beforeWork.setStaffid(staffId);
+			beforeWork.setEmployercountry(chinaId);
+			beforeWork.setEmployercountryen(chinaId);
+			dbDao.insert(beforeWork);
+			
+			//以前教育
+			TAppStaffBeforeeducationEntity beforeEducation = new TAppStaffBeforeeducationEntity();
+			beforeEducation.setStaffid(staffId);
+			beforeEducation.setInstitutioncountry(chinaId);
+			beforeEducation.setInstitutioncountryen(chinaId);
+			dbDao.insert(beforeEducation);
+			
+			//使用过的语言 默认为Chinese
+			TAppStaffLanguageEntity language = new TAppStaffLanguageEntity();
+			language.setStaffid(staffId);
+			language.setLanguagename("Chinese");
+			language.setLanguagenameen("Chinese");
+			dbDao.insert(language);
+			
 			return map;
 		}
 	}
@@ -1680,6 +1704,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		map.put("staffId", String.valueOf(staffId));
 
 		//签证信息的添加
+		TCountryRegionEntity chinaEntity = dbDao.fetch(TCountryRegionEntity.class, Cnd.where("chinesename", "=", "中国"));
+		Integer chinaId = chinaEntity.getId();
 		//旅伴信息
 		TAppStaffTravelcompanionEntity travelCompanionInfo = new TAppStaffTravelcompanionEntity();
 		travelCompanionInfo.setStaffid(staffId);
@@ -1738,17 +1764,19 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		familyInfo.setMotherstatus(DEFAULT_SELECT);
 		familyInfo.setFatherstatusen(DEFAULT_SELECT);
 		familyInfo.setMotherstatusen(DEFAULT_SELECT);
+		familyInfo.setCountry(chinaId);
+		familyInfo.setCountryen(chinaId);
 
 		familyInfo.setIsfatherinusen(DEFAULT_IS_NO);
 		familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
 		familyInfo.setHasimmediaterelativesen(DEFAULT_IS_NO);
 		familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
-		familyInfo.setIsknowspousecityen(DEFAULT_SELECT);
+		familyInfo.setIsknowspousecityen(DEFAULT_IS_NO);
 
-		familyInfo.setSpousenationality(DEFAULT_SELECT);
-		familyInfo.setSpousenationalityen(DEFAULT_SELECT);
-		familyInfo.setSpousecountry(DEFAULT_SELECT);
-		familyInfo.setSpousecountryen(DEFAULT_SELECT);
+		familyInfo.setSpousenationality(chinaId);
+		familyInfo.setSpousenationalityen(chinaId);
+		familyInfo.setSpousecountry(chinaId);
+		familyInfo.setSpousecountryen(chinaId);
 		familyInfo.setSpouseaddress(DEFAULT_SELECT);
 		familyInfo.setSpouseaddressen(DEFAULT_SELECT);
 
@@ -1760,8 +1788,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		workEducationInfo.setOccupation(DEFAULT_SELECT);
 		workEducationInfo.setOccupationen(DEFAULT_SELECT);
-		workEducationInfo.setCountry(DEFAULT_SELECT);
-		workEducationInfo.setCountryen(DEFAULT_SELECT);
+		workEducationInfo.setCountry(chinaId);
+		workEducationInfo.setCountryen(chinaId);
 
 		workEducationInfo.setIsemployed(DEFAULT_IS_NO);
 		workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
@@ -1781,6 +1809,27 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		workEducationInfo.setHasservedinmilitaryen(DEFAULT_IS_NO);
 		workEducationInfo.setIsservedinrebelgroupen(DEFAULT_IS_NO);
 		dbDao.insert(workEducationInfo);
+		
+		//以前工作
+		TAppStaffBeforeworkEntity beforeWork = new TAppStaffBeforeworkEntity();
+		beforeWork.setStaffid(staffId);
+		beforeWork.setEmployercountry(chinaId);
+		beforeWork.setEmployercountryen(chinaId);
+		dbDao.insert(beforeWork);
+		
+		//以前教育
+		TAppStaffBeforeeducationEntity beforeEducation = new TAppStaffBeforeeducationEntity();
+		beforeEducation.setStaffid(staffId);
+		beforeEducation.setInstitutioncountry(chinaId);
+		beforeEducation.setInstitutioncountryen(chinaId);
+		dbDao.insert(beforeEducation);
+		
+		//使用过的语言 默认为Chinese
+		TAppStaffLanguageEntity language = new TAppStaffLanguageEntity();
+		language.setStaffid(staffId);
+		language.setLanguagename("Chinese");
+		language.setLanguagenameen("Chinese");
+		dbDao.insert(language);
 
 		return map;
 
