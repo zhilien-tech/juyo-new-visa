@@ -662,7 +662,7 @@
 			startView: 4,//从年开始选择
 			forceParse: 0,
 	        showMeridian: false,
-			pickerPosition:"top-right",//显示位置
+			pickerPosition:"bottom-right",//显示位置
 			minView: "month"//只显示年月日
 		}); 
 		//面签时间日期格式处理

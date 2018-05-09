@@ -194,7 +194,7 @@ function initDuochengSelect(divobj){
 		startDate: new Date(),
 		language: 'zh-CN',
 		autoclose: true,//选中日期后 自动关闭
-		pickerPosition:"top-left",//显示位置
+		pickerPosition:"bottom-right",//显示位置
 		minView: "month"//只显示年月日
 	});
 }
@@ -240,7 +240,7 @@ $('.datetimepickercss').each(function(){
 		format: 'yyyy-mm-dd',
 		language: 'zh-CN',
 		autoclose: true,//选中日期后 自动关闭
-		pickerPosition:"top-left",//显示位置
+		pickerPosition:"bottom-right",//显示位置
 		minView: "month"//只显示年月日
 	});
 });
@@ -251,7 +251,7 @@ $('.datetimepickertoday').each(function(){
 		startDate: new Date(),
 		language: 'zh-CN',
 		autoclose: true,//选中日期后 自动关闭
-		pickerPosition:"top-left",//显示位置
+		pickerPosition:"bottom-right",//显示位置
 		minView: "month"//只显示年月日
 	});
 });*/
@@ -262,7 +262,7 @@ $("#gotripdate").datetimepicker({
 	language: 'zh-CN',
 	startDate:now,
 	autoclose: true,//选中日期后 自动关闭
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 }).on("click",function(){  
     $("#gotripdate").datetimepicker("setEndDate",$("#backtripdate").val());  
@@ -272,7 +272,7 @@ $("#backtripdate").datetimepicker({
 	language: 'zh-CN',
 	startDate:now,
 	autoclose: true,//选中日期后 自动关闭
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
 
@@ -281,7 +281,7 @@ $("#sendvisadate").datetimepicker({
 	language: 'zh-CN',
 	endDate: now,//日期小于今天
 	autoclose: true,//选中日期后 自动关闭
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 }).on("click",function(){  
     $("#sendvisadate").datetimepicker("setEndDate",$("#outvisadate").val());  
@@ -305,7 +305,7 @@ $("#outvisadate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
 	autoclose: true,//选中日期后 自动关闭
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
 
@@ -314,7 +314,7 @@ $("#goDate").datetimepicker({
 	language: 'zh-CN',
 	startDate:now,
 	autoclose: true,//选中日期后 自动关闭
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
 $("#returnDate").datetimepicker({
@@ -322,7 +322,7 @@ $("#returnDate").datetimepicker({
 	language: 'zh-CN',
 	startDate:now,
 	autoclose: true,//选中日期后 自动关闭
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
 //出行日期选中事件

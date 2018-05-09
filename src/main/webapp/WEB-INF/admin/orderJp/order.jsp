@@ -500,7 +500,7 @@
 			language: 'zh-CN',
 			startDate:now,
 			autoclose: true,//选中日期后 自动关闭
-			pickerPosition:"top-left",//显示位置
+			pickerPosition:"bottom-right",//显示位置
 			minView: "month"//只显示年月日
 		}).on("click",function(){  
 		    $("#goTripDate").datetimepicker("setEndDate",$("#backTripDate").val());  
@@ -510,7 +510,7 @@
 			language: 'zh-CN',
 			startDate:now,
 			autoclose: true,//选中日期后 自动关闭
-			pickerPosition:"top-left",//显示位置
+			pickerPosition:"bottom-right",//显示位置
 			minView: "month"//只显示年月日
 		});
 	
@@ -519,7 +519,7 @@
 			language: 'zh-CN',
 			startDate: now,//日期大于今天
 			autoclose: true,//选中日期后 自动关闭
-			pickerPosition:"top-left",//显示位置
+			pickerPosition:"bottom-right",//显示位置
 			minView: "month"//只显示年月日
 		}).on("click",function(){
 			$("#sendVisaDate").datetimepicker("setEndDate",getNewDaySub($("#goTripDate").val(),8));
@@ -534,7 +534,7 @@
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
 			autoclose: true,//选中日期后 自动关闭
-			pickerPosition:"top-left",//显示位置
+			pickerPosition:"bottom-right",//显示位置
 			minView: "month"//只显示年月日
 		});
 	</script>
