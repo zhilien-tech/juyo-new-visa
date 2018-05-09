@@ -1045,7 +1045,7 @@
 					$('#cardnum').val(data.basicinfo.cardnum);
 					$('#aacode').val(data.summaryInfo.aacode);
 					$('#passport').val(data.passportInfo.passport);
-					$('#interviewdate').val(data.summaryInfo.Interviewdate);
+					$('#interviewdate').val(data.Interviewdate);
 					
 					//姓名处理
 					var firstname = data.passportInfo.firstname;

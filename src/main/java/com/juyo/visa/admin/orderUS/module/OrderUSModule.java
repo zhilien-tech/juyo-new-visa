@@ -92,6 +92,15 @@ public class OrderUSModule {
 	}
 
 	/**
+	 * 获取大客户公司姓名select2下拉
+	 */
+	@At
+	@POST
+	public Object getBigcustomerSelect(@Param("bigcustomername") String bigcustomername) {
+		return orderUSViewService.getBigcustomerSelect(bigcustomername);
+	}
+
+	/**
 	 * 认领按钮功能
 	 */
 	@At
@@ -273,8 +282,8 @@ public class OrderUSModule {
 	 */
 	@At
 	@POST
-	public Object disabled(@Param("orderid") int orderid) {
-		return orderUSViewService.disabled(orderid);
+	public Object disabled(@Param("orderid") int orderid, HttpSession session) {
+		return orderUSViewService.disabled(orderid, session);
 	}
 
 	/**
