@@ -494,15 +494,6 @@ label {
 #issueddate {
 	margin-top:10px !important;
 }
-.paddingTop-9 {
-	padding-top:9px;
-}
-.paddingTop-8 {
-	padding-top:8px;
-}
-.paddingTop-15 {
-	padding-top:9px;
-}
 /* 配偶信息 */
 #spousenationalityen {
 	width:100% !important;
@@ -552,9 +543,8 @@ label {
 .paddingBom-8 {
 	padding-bottom:8px;
 }
-.goUS_driversen {
+.goUS_drivers,.goUS_driversen {
 	display:inline-block;
-	padding-bottom:30px;
 }
 #spousenationality {
 	width:100% !important;
@@ -571,4 +561,66 @@ label {
 /* 父亲的生日 */
 #fatherbirthday,#fatherbirthdayen,#motherbirthday,#motherbirthdayen {
 	display:inline-block;
+}
+.militaryYes {
+	display:inline-block;
+}
+/* padding */
+.paddingTop-9 {
+	padding-top:9px;
+}
+.paddingTop-8 {
+	padding-top:8px;
+}
+.paddingTop-11 {
+	padding-top:11px;
+}
+.paddingbottom-14 {
+	padding-bottom:14px;
+}
+.paddingleft-15 {
+	padding-left:15px;
+}
+.paddingtop-12 {
+	padding-top:12px !important;
+}
+.paddingbottom-65 {
+	padding-bottom:65px;
+}
+/* margin */
+.marginbotttom-0 {
+	margin-bottom:0px !important;
+}
+.marginbottom-5 {
+	margin-top:5px !important;
+} 
+.margintop-10 {
+	margin-top:10px !important;
+}
+.marginbottom-6 {
+	margin-bottom:6px !important;;
+}
+.marginbottom-14 {
+	margin-bottom:14px;
+}
+.marginbottom-19 {
+	margin-bottom:19px;
+}
+.margintop-20 {
+	margin-top:20px;
+}
+.marginbottom-20 {
+	margin-bottom:20px;
+}
+.marginbottom-32 {
+	margin-bottom:32px;
+}
+.marginbottom-36 {
+	margin-bottom:36px;
+}
+.marginbottom-40 {
+	margin-bottom:40px;
+}
+.marginbottom-46 {
+	margin-bottom:46px;
 }

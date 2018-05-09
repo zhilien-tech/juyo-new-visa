@@ -69,15 +69,12 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		String accessTokenUrl;
 		if (wx == null) {
 			accessTokenUrl = "请联系管理员配置微信公众号!";
-			System.out.println("----------没有wx");
 		} else {
 			accessTokenUrl = redisDao.get(WX_TOKENKEY);
 			if (Util.isEmpty(accessTokenUrl)) {
-				System.out.println("========redis中没有");
 				accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 				String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("APPSECRET", WX_APPSECRET);
 				JSONObject result = HttpUtil.doGet(requestUrl);
-				System.out.println("*************result:" + result);
 				//redis中设置 access_token
 				accessTokenUrl = result.getString("access_token");
 				redisDao.set(WX_TOKENKEY, accessTokenUrl);
@@ -97,11 +94,15 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		String T_APP_STAFF_Fenroll_WX_URL = (String) kvConfigProperties.get("T_APP_STAFF_Fenroll_WX_URL");
 		return T_APP_STAFF_Fenroll_WX_URL;
 	}
-
+	//获取 进度访问路径
+	public String getProgressUrl() {
+		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		String T_APP_STAFF_Progress_WX_URL = (String) kvConfigProperties.get("T_APP_STAFF_Progress_WX_URL");
+		return T_APP_STAFF_Progress_WX_URL;
+	}
 	//获取ticket
 	public JSONObject getJsApiTicket() {
 		String accessToken = (String) getAccessToken();
-		System.out.println("!!!!!!!!!!accessToken:" + accessToken);
 		String apiTicketUrl = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
 		String requestUrl = apiTicketUrl.replace("ACCESS_TOKEN", accessToken);
 		JSONObject result = HttpUtil.doGet(requestUrl);

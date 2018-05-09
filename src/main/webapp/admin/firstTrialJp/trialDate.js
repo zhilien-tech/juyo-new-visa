@@ -9,7 +9,7 @@ $("#gotripdate").datetimepicker({
 	startView: 4,//从年开始选择
 	forceParse: 0,
     showMeridian: false,
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
 //返回日期
@@ -23,7 +23,7 @@ $("#backtripdate").datetimepicker({
 	startView: 4,//从年开始选择
 	forceParse: 0,
 	showMeridian: false,
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
 //送签时间
@@ -37,7 +37,7 @@ $("#sendvisadate").datetimepicker({
 	startView: 4,//从年开始选择
 	forceParse: 0,
 	showMeridian: false,
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
 //出签时间
@@ -51,7 +51,7 @@ $("#outvisadate").datetimepicker({
 	startView: 4,//从年开始选择
 	forceParse: 0,
 	showMeridian: false,
-	pickerPosition:"top-left",//显示位置
+	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
 

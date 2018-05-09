@@ -43,6 +43,16 @@ public class WeiXinTokenModule {
 		return weXinTokenViewService.getFenrollUrl();
 	}
 
+	/**
+	 *获取 进度查询访问路径
+	 * <p>
+	 */
+	@At
+	@POST
+	public String getProgressUrl() {
+		return weXinTokenViewService.getProgressUrl();
+	}
+ 
 	//获取ticket
 	@At
 	@POST
