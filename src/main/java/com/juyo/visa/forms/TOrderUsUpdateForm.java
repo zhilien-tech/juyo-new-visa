@@ -25,6 +25,9 @@ public class TOrderUsUpdateForm extends ModForm implements Serializable {
 	/**团名*/
 	private String groupname;
 
+	/**大客户公司名称*/
+	private String bigcustomername;
+
 	/**领区*/
 	private Integer cityid;
 

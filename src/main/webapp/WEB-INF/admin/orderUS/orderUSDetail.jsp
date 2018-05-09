@@ -81,10 +81,24 @@
 					<div class="info-body-from">
 						<!-- 模块 -->
 						<div class="row body-from-input">
-							<div class="col-sm-3">
+							<%-- <div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>团名</label>
 									<input type="text" class="input-sm form-control" name="groupname" value="${obj.orderinfo.groupname }" />
+								</div>
+							</div> --%>
+							
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label><span>*</span>大客户公司名称</label>
+									<select id ="bigcustomername" name="bigcustomername"
+												class="form-control select2 cityselect2 " multiple="multiple"
+												data-placeholder="" >
+												<c:if test="${ !empty obj.bigcom.id }">
+													<option value="${obj.bigcom.id }" selected="selected">${obj.bigcom.name }</option>
+												</c:if>
+											</select>
+									<%-- <input type="text" class="input-sm form-control" name="bigcustomername" value="${obj.orderinfo.bigcustomername }" /> --%>
 								</div>
 							</div>
 							
@@ -775,6 +789,49 @@
 		function returnBack(){
 			window.history.go(-1);
 		}
+		
+		//大客户公司名称select2
+		$("#bigcustomername").select2({
+			ajax : {
+				url : "/admin/orderUS/getBigcustomerSelect.html",
+				dataType : 'json',
+				delay : 250,
+				type : 'post',
+				data : function(params) {
+					/*var cArrivalcity = $('#cArrivalcity').val();
+					if(cArrivalcity){
+						cArrivalcity = cArrivalcity.join(',');
+					}*/
+					return {
+						//exname : cArrivalcity,
+						bigcustomername : params.term, // search term
+						page : params.page
+					};
+				},
+				processResults : function(data, params) {
+					params.page = params.page || 1;
+					var selectdata = $.map(data, function(obj) {
+						obj.id = obj.id; // replace pk with your identifier
+						obj.text = obj.name; // replace pk with your identifier
+						/*obj.text = obj.dictCode;*/
+						return obj;
+					});
+					return {
+						results : selectdata
+					};
+				},
+				cache : false
+			},
+			//templateSelection: formatRepoSelection,
+			escapeMarkup : function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength : 1,
+			maximumInputLength : 20,
+			language : "zh-CN", //设置 提示语言
+			maximumSelectionLength : 1, //设置最多可以选择多少项
+			tags : false
+		});
 
 		//加载城市的select2
 		$('.select2City').select2({
