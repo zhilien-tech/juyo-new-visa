@@ -428,7 +428,7 @@
 										<span>*</span>Marital Status
 									</label>
 									<select id="marrystatusen" name="marrystatusen" class="form-control input-sm selectHeight">
-											<option value=""></option>
+											<option value="">please choose</option>
 											<c:forEach var="map" items="${obj.marryStatusEnEnum}">
 												<option value="${map.key}" ${map.key==obj.marryStatusEn?'selected':''}>${map.value}</option>
 											</c:forEach>
