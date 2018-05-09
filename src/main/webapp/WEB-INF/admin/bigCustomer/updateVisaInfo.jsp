@@ -1393,7 +1393,7 @@
 					</div>
 					<div class="paddingTop elementHide isPestilenceDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" class="" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1404,7 +1404,7 @@
 					</div>
 					<div class="paddingTop elementHide isThreatIllnessDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1415,7 +1415,7 @@
 					</div>
 					<div class="paddingTop elementHide isDrugDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1426,7 +1426,7 @@
 					</div>
 					<div class="paddingTop elementHide isSentencedDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1437,7 +1437,7 @@
 					</div>
 					<div class="paddingTop elementHide isMaterialLawDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1448,7 +1448,7 @@
 					</div>
 					<div class="paddingTop elementHide isProstitutionDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1459,7 +1459,7 @@
 					</div>
 					<div class="paddingTop elementHide isLaunderingDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1470,7 +1470,7 @@
 					</div>
 					<div class="paddingTop elementHide isSmugglingDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1481,7 +1481,7 @@
 					</div>
 					<div class="paddingTop elementHide isThreateningOthersDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1492,7 +1492,7 @@
 					</div>
 					<div class="paddingTop elementHide isSmugglingBenefitsDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1503,7 +1503,7 @@
 					</div>
 					<div class="paddingTop elementHide isSpyActivitiesDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1514,7 +1514,7 @@
 					</div>
 					<div class="paddingTop elementHide isTerroristActivitiesDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1525,7 +1525,7 @@
 					</div>
 					<div class="paddingTop elementHide isSupportTerroristsDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1536,7 +1536,7 @@
 					</div>
 					<div class="paddingTop elementHide isTerroristDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1547,7 +1547,7 @@
 					</div>
 					<div class="paddingTop elementHide isTakeGenocideDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1558,7 +1558,7 @@
 					</div>
 					<div class="paddingTop elementHide isOrderedThreatDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1569,7 +1569,7 @@
 					</div>
 					<div class="paddingTop elementHide isPoliticalKillingDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1580,7 +1580,7 @@
 					</div>
 					<div class="paddingTop elementHide isRecruitChildSoldierDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1591,7 +1591,7 @@
 					</div>
 					<div class="paddingTop elementHide isInroadReligionDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1602,7 +1602,7 @@
 					</div>
 					<div class="paddingTop elementHide isForcedControlPopulationDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1613,7 +1613,7 @@
 					</div>
 					<div class="paddingTop elementHide isForcedOrganTakeDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1624,7 +1624,7 @@
 					</div>
 					<div class="paddingTop elementHide isIllegalVisaUSDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1635,7 +1635,7 @@
 					</div>
 					<div class="paddingTop elementHide isDeportedDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1646,7 +1646,7 @@
 					</div>
 					<div class="paddingTop elementHide isRemoteHearingDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1657,7 +1657,7 @@
 					</div>
 					<div class="paddingTop elementHide isViolationVisaConditionsDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1668,7 +1668,7 @@
 					</div>
 					<div class="paddingTop elementHide isRefusalTransferCustodyDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1679,7 +1679,7 @@
 					</div>
 					<div class="paddingTop elementHide isIllegalVotingDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1690,7 +1690,7 @@
 					</div>
 					<div class="paddingTop elementHide isTaxEvasionDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1701,7 +1701,7 @@
 					</div>
 					<div class="paddingTop elementHide isNotPayTuitionFeesDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 			</div>
