@@ -1386,7 +1386,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String telephone = staffBaseInfo.getTelephone();
 		String toEmail = staffBaseInfo.getEmail();
 		String sex = staffBaseInfo.getSex();
-
+		Date interviewdate = staffBaseInfo.getInterviewdate();
+		//日期格式转化
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String interviewdateStr = sdf.format(interviewdate);
 		if (!Util.isEmpty(toEmail)) {
 			/*if (Util.eq("男", sex)) {
 				sex = "先生";
@@ -1407,7 +1410,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 			//面试
 			if (Util.eq(sendType, "interview")) {
-				emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum);
+				emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+						.replace("${interviewdate}", interviewdateStr);
 				result = mailService.send(toEmail, emailText, "美国面试通知", MailService.Type.HTML);
 			}
 		}
@@ -1428,6 +1432,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String telephone = staffBaseInfo.getTelephone();
 		String email = staffBaseInfo.getEmail();
 		String sex = staffBaseInfo.getSex();
+		Date interviewdate = staffBaseInfo.getInterviewdate();
+		//日期格式转化
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String interviewdateStr = sdf.format(interviewdate);
 		String result = "";
 		if (!Util.isEmpty(telephone)) {
 			/*if (Util.eq("男", sex)) {
@@ -1455,7 +1463,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			//面试
 			if (Util.eq(sendType, "interview")) {
 				smsContent = smsContent.replace("${name}", name).replace("${sex}", sex)
-						.replace("${ordernum}", orderNum);
+						.replace("${ordernum}", orderNum).replace("${interviewdate}", interviewdateStr);
 				result = sendSMS(telephone, smsContent);
 			}
 		}

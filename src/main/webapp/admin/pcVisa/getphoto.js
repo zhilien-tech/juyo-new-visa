@@ -356,15 +356,20 @@ function closeWindow() {
 	parent.layer.close(index);
 }
 
-// 保存跳转下一页
+// 保存
 function savePhoto() {
 	/*var staffid = $("#staffid").val();
 	var passportId = $("#passportId").val();
 	window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='
 			+ passportId;*/
-	parent.successCallback(2);
-	var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
-	parent.layer.close(index);
+	layer.msg("保存成功", {
+		time: 2000,
+		end: function () {
+			parent.successCallback(2);
+			var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+			parent.layer.close(index);
+		}
+	});
 }
 
 /* 删除二寸免冠照 */
