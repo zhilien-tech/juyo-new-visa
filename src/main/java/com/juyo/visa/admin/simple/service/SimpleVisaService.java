@@ -1312,7 +1312,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
 		//生成二维码
 		String qrurl = "http://" + request.getServerName() + ":" + localPort + "/simplemobile/info.html?applicantid="
-				+ applicantid;
+				+ applicantid + "&orderid=" + orderid;
 		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
 		result.put("qrCode", qrCode);
 		result.put("applicantid", applicant.getId());

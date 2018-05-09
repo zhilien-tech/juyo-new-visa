@@ -2,11 +2,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta http-equlv="proma" content="no-cache" />
+	<meta http-equlv="cache-control" content="no-cache" />
+	<meta http-equlv="expires" content="0" />
     <title>护照信息</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="css/common.css">
-    <link rel="stylesheet" type="text/css" href="css/passport.css">
+    <link rel="stylesheet" type="text/css" href="css/passport.css?v='20180509'">
     <link rel="stylesheet" type="text/css" href="css/lCalendar.css"><!-- 日历插件 .css -->
 </head>
 <body>
@@ -97,6 +100,11 @@
 	        		}else if(_self.passportdata.validtype == 1){
 						$(".dateVal").text("10年");
 	        		}
+	        		if(data.passportdata.passporturl != ''){
+	        			$('#upload').css('opacity','0'); 
+	        		}else {
+	        			$('#upload').css('opacity','1'); 
+	        		}
 	          	}
 	        });
 	    }
@@ -117,7 +125,7 @@
                     lrz(this.files[0])
                         .then(function (rst) {
                            /*  $('.bacimg').attr('src',rst.base64); */
-                            $('#upload').hide();
+                            $('#upload').css('opacity','0');
                             sourceSize = (that.files[0].size / 1024).toFixed(2);
                             resultSize = (rst.fileLen / 1024).toFixed(2);
                             scale = parseInt(100 - (resultSize / sourceSize * 100));
@@ -184,6 +192,7 @@
         	_self.passportdata.validtype = '';
         	_self.passportdata.validenddate = '';
         	$(".dateVal").text("");
+        	$('#upload').css('opacity','1'); 
         });
         //下一步保存
         $('.passport-next').click(function(){
@@ -319,7 +328,7 @@
 					console.log(JSON.stringify(_self.passportdata));
 				}
 				/* 关闭upload */
-				$('#upload').hide();
+				$('#upload').css('opacity','0');
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
 				layer.closeAll('loading');
