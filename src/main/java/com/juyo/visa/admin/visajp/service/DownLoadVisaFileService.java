@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.io.IOUtils;
 import org.jeecgframework.poi.excel.entity.params.ExcelExportEntity;
@@ -48,6 +50,7 @@ import com.juyo.visa.admin.hotel.service.HotelViewService;
 import com.juyo.visa.admin.scenic.service.ScenicViewService;
 import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.admin.visajp.util.TtfClassLoader;
+import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
@@ -87,6 +90,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 	private ScenicViewService scenicViewService;
 	@Inject
 	private CityViewService cityViewService;
+	@Inject
+	private QrCodeService qrCodeService;
 
 	private static DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -608,6 +613,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			URL resource = getClass().getClassLoader().getResource("japanfile/apply.pdf");
 			TemplateUtil templateUtil = new TemplateUtil();
 			stream = templateUtil.pdfTemplateStream(resource, map);
+			//编写二维码
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1730,6 +1736,15 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		return stream;
 	}
 
+	/***
+	 * 获取申请人数据
+	 * @param address
+	 * @param n
+	 * @return
+	 * @throws IOException
+	 * @throws BadElementException
+	 */
+	
 	public Image getSeal1(String address, int n) throws IOException, BadElementException {
 		if (!Util.isEmpty(address)) {
 
