@@ -671,7 +671,7 @@ $(".nowProvince").change(function(){
 });
 
 //根据身份证号搜索是否有游客信息
-$("#cardId").change(function(){
+/*$("#cardId").change(function(){
 	if(tourist == 1){
 		$.ajax({
 			type : "post",
@@ -806,10 +806,10 @@ $("#cardId").change(function(){
 			}
 		});
 	}
-});
+});*/
 
 //根据电话搜索是否有游客信息
-$("#telephone").change(function(){
+/*$("#telephone").change(function(){
 	if(tourist == 1){
 		$.ajax({
 			type : "post",
@@ -940,7 +940,7 @@ $("#telephone").change(function(){
 			}
 		});
 	}
-});
+});*/
 
 function toSet(data){
 	$("#firstName").val(data.base.firstName).change();
@@ -1090,7 +1090,7 @@ function saveApplicant(status){
 	}
 	applicantInfo.id = applicantId;
 	
-	if(tourist == 1){
+	/*if(tourist == 1){
 		layer.load(1);
 		$.ajax({
 			async: false,
@@ -1342,7 +1342,7 @@ function saveApplicant(status){
 				}
 			}
 		});
-	}else{
+	}else{*/
 		if(status == 2){
 			socket.onclose();
 			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrailOrder+'&orderProcessType='+orderProcessType+'&addApply='+addApply;
@@ -1373,13 +1373,13 @@ function saveApplicant(status){
 				}
 			});
 		}
-	}
+	//}
 	}
 }
 
 //返回 
 function closeWindow() {
-	if(tourist == 1){
+	/*if(tourist == 1){
 		$.ajax({
 			async: false,
 			type: 'POST',
@@ -1482,9 +1482,9 @@ function closeWindow() {
 			}
 		});
 		parent.successCallBack();
-	}else{
+	}else{*/
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 		parent.layer.close(index);
 		parent.cancelCallBack(1);
-	}
+	//}
 }

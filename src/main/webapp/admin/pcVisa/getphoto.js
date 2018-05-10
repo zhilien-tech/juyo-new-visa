@@ -356,6 +356,7 @@ function closeWindow() {
 	parent.layer.close(index);
 }
 
+
 //保存
 function savePhoto() {
 	/*var staffid = $("#staffid").val();
