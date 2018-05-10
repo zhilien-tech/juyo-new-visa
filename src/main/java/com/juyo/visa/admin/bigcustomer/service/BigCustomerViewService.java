@@ -490,10 +490,10 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		Map<String, String> map = new HashMap<String, String>();
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
-		String YuShangComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID"));
-		Integer US_YUSHANG_COM_ID = Integer.valueOf(YuShangComIdStr);
+		String BaoYingComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_BAOYING_COMPANY_ID"));
+		Integer US_BaoYing_COM_ID = Integer.valueOf(BaoYingComIdStr);
 		//基本信息
-		addForm.setComid(US_YUSHANG_COM_ID);
+		addForm.setComid(US_BaoYing_COM_ID);
 		//addForm.setUserid(userId);
 		//addForm.setOpid(userId);
 		addForm.setIsidentificationnumberapply(IsYesOrNoEnum.YES.intKey());
