@@ -828,7 +828,7 @@
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>邮政编码</label>
-											<input name="employerzipcode" onchange="addSegmentsTranslateZhToEn(this,'isKonwOrtherZipCodeen','')" value="${beforeWork.employerzipcode }" type="text" />
+											<input name="employerzipcode" onchange="addSegmentsTranslateZhToEn(this,'employerzipcodeen','')" value="${beforeWork.employerzipcode }" type="text" />
 											<c:if test="${beforeWork.isemployerzipcodeapply == 1}">
 												<input id="isKonwOrtherZipCode" name="isemployerzipcodeapply" onchange="AddSegment(this,'isemployerzipcodeapplyen')" value="${beforeWork.isemployerzipcodeapply }" checked="checked" type="checkbox"/>
 											</c:if>
@@ -1011,7 +1011,7 @@
 										</div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo" >
 											<label>州/省</label>
-											<input name="institutionprovince" onchange="addSegmentsTranslateZhToEn(this,'isinstitutionprovinceapplyen','')" value="${education.institutionprovince }" type="text" />
+											<input name="institutionprovince" onchange="addSegmentsTranslateZhToEn(this,'institutionprovinceen','')" value="${education.institutionprovince }" type="text" />
 											<c:if test="${education.isinstitutionprovinceapply == 1}">
 												<input name="isinstitutionprovinceapply" onchange="AddSegment(this,'isschoolprovinceen')" value="${education.isinstitutionprovinceapply }"  checked="checked" type="checkbox"/>
 											</c:if>
@@ -1050,20 +1050,19 @@
 											</select>
 										</div>
 										<div class="clear"></div>
-										<div class="paddingLeft leftNo groupInputInfo">
+										<div class="paddingTop leftNo groupInputInfo">
 											<label>学科</label>
 											<input name="course" onchange="addSegmentsTranslateZhToEn(this,'courseen','')" value="${education.course }" type="text" />
 										</div>
-										
-										<div class="paddingRight leftNo groupInputInfo">
+										<div class="paddingLeft leftNo groupInputInfo">
 											<label>参加课程开始时间</label>
 											<input id="coursestartdate" onchange="addSegmentsTranslateZhToEn(this,'coursestartdateen','')" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 										</div>
-										<div class="clear"></div>
-										<div class="leftNo paddingTop groupInputInfo margintop-10">
+										<div class="paddingRight leftNo  groupInputInfo">
 											<label>结束时间</label>
 											<input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 										</div>
+										<div class="clear"></div>
 									</div>
 								</c:forEach>
 							</c:if>
@@ -1106,19 +1105,19 @@
 										</select>
 									</div>
 									<div class="clear"></div>
-									<div class="paddingLeft leftNo groupInputInfo">
+									<div class="paddingTop leftNo groupInputInfo">
 										<label>学科</label>
 										<input name="course" onchange="addSegmentsTranslateZhToEn(this,'courseen','')" type="text" />
 									</div>
-									<div class="paddingRight leftNo groupInputInfo">
+									<div class="paddingLeft leftNo groupInputInfo">
 										<label>参加课程开始时间</label>
 										<input id="coursestartdate" onchange="addSegmentsTranslateZhToEn(this,'coursestartdateen','')" name="coursestartdate" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 									</div>
-									<div class="clear"></div>
-									<div class="leftNo groupInputInfo margintop-10">
+									<div class="paddingRight leftNo groupInputInfo">
 										<label>结束时间</label>
 										<input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 									</div>
+									<div class="clear"></div>
 								</div>
 							</c:if>
 							</div>
@@ -2486,7 +2485,7 @@
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>Postal Zone/ZIP Code</label>
-											<input name="employerzipcodeen" value="${beforeWork.employerzipcodeen }" classs="employerzipcodeen" type="text" />
+											<input name="employerzipcodeen" value="${beforeWork.employerzipcodeen }" class="employerzipcodeen" type="text" />
 											<c:if test="${beforeWork.isemployerzipcodeapplyen == 1}">
 												<input id="isKonwOrtherZipCodeen" class="isemployerzipcodeapplyen"  name="isemployerzipcodeapplyen" value="${beforeWork.isemployerzipcodeapplyen }" checked="checked" type="checkbox"/>
 											</c:if>
