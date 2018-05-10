@@ -1198,7 +1198,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderus.setGroupname(form.getGroupname());
 		orderus.setBigcustomername(form.getBigcustomername());
 		orderus.setUpdatetime(new Date());
-		dbDao.update(orderus);
 
 		//如果有面签时间，则改变订单状态为面签
 		if (!Util.isEmpty(form.getInterviewdate())) {
@@ -1207,6 +1206,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 			insertLogs(orderus.getId(), USOrderListStatusEnum.MIANQIAN.intKey(), loginUser.getId());
 		}
+		dbDao.update(orderus);
 		//把面签时间添加到人员信息中
 		TAppStaffOrderUsEntity fetch = dbDao.fetch(TAppStaffOrderUsEntity.class, Cnd.where("orderid", "=", orderid));
 		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, fetch.getStaffid().longValue());
