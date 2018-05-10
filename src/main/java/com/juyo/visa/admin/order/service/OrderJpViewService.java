@@ -382,7 +382,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicantUser.setMobile(applicant.getTelephone());
 		applicantUser.setOpid(applicant.getOpId());
 		applicantUser.setPassword("000000");
-		//applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
+		applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
 		if (!Util.isEmpty(applicant.getTelephone())) {
 			TUserEntity userEntity = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", applicant.getTelephone())
 					.and("userType", "=", UserLoginEnum.TOURIST_IDENTITY.intKey()));

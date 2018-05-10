@@ -10,6 +10,7 @@ import java.io.File;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -61,8 +62,8 @@ public class MobileModule {
 	@At
 	@POST
 	public Object saveApplicatinfo(@Param("..") MobileApplicantForm form,
-			@Param("..") TApplicantLowerEntity applicantEntity) {
-		return mobileService.saveApplicatinfo(form, applicantEntity);
+			@Param("..") TApplicantLowerEntity applicantEntity, HttpSession session) {
+		return mobileService.saveApplicatinfo(form, applicantEntity, session);
 	}
 
 	/**
