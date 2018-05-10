@@ -20,6 +20,8 @@
 	[v-cloak]{display:none}
 	.box-body {  overflow:hidden;}
 	.card-head { overflow:hidden; white-space:nowrap;}
+	.head { width:100%;height:60px;line-height:60px;margin-left:20px;text-align:left;}
+	.head span { font-size:16px;}
 	.card-head span { font-size:12px;}
 	.everybody-info {position:relative; }
 	.cf { overflow:visible !important;}

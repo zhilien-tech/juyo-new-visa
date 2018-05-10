@@ -76,7 +76,7 @@
 							<div class="card-head cf">
 								<div><label>订单号：</label><span>{{data.ordernumber}}</span></div>
 								<div class="ctid"><label>领区：</label><span>{{data.cityid}}</span></div>
-								<div><label>面试时间：</label><span>{{data.interviewdate}}</span></div>
+								<div><label>面签时间：</label><span>{{data.interviewdate}}</span></div>
 								<div><label>是否付款：</label><span>{{data.ispayed}}</span></div>
 								<div v-if="data.isdisable==1">
 								<label></label><span>作废</span>
