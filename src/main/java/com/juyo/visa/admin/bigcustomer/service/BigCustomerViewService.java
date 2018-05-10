@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -162,12 +163,12 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * @param session
 	 * @return 
 	 */
-	public Object updateVisaInfo(Integer staffId, Integer isDisable,Integer flag, HttpSession session) {
+	public Object updateVisaInfo(Integer staffId, Integer isDisable, Integer flag, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userType = loginUser.getUserType();
-		if(userType == UserLoginEnum.BIG_TOURIST_IDENTITY.intKey()) {
+		if (userType == UserLoginEnum.BIG_TOURIST_IDENTITY.intKey()) {
 			flag = IsYesOrNoEnum.YES.intKey();
-		}else{
+		} else {
 			flag = IsYesOrNoEnum.NO.intKey();
 		}
 		Map<String, Object> result = Maps.newHashMap();
@@ -383,7 +384,6 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		motherbirthdayen = formatDateStr(motherbirthdayen, FORMAT_DD_MM_YYYY);
 		familyInfo.put("motherbirthdayen", motherbirthdayen);
 
-
 		//---直属亲戚信息集合
 		/*List<TAppStaffImmediaterelativesEntity> zhiFamilyList = dbDao.query(TAppStaffImmediaterelativesEntity.class,
 				Cnd.where("staffid", "=", staffId), null);
@@ -555,7 +555,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			map.put("staffId", String.valueOf(staffId));
 
 			//签证信息的添加
-			TCountryRegionEntity chinaEntity = dbDao.fetch(TCountryRegionEntity.class, Cnd.where("chinesename", "=", "中国"));
+			TCountryRegionEntity chinaEntity = dbDao.fetch(TCountryRegionEntity.class,
+					Cnd.where("chinesename", "=", "中国"));
 			Integer chinaId = chinaEntity.getId();
 			//旅伴信息
 			TAppStaffTravelcompanionEntity travelCompanionInfo = new TAppStaffTravelcompanionEntity();
@@ -660,28 +661,28 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			workEducationInfo.setHasservedinmilitaryen(DEFAULT_IS_NO);
 			workEducationInfo.setIsservedinrebelgroupen(DEFAULT_IS_NO);
 			dbDao.insert(workEducationInfo);
-			
+
 			//以前工作
 			TAppStaffBeforeworkEntity beforeWork = new TAppStaffBeforeworkEntity();
 			beforeWork.setStaffid(staffId);
 			beforeWork.setEmployercountry(chinaId);
 			beforeWork.setEmployercountryen(chinaId);
 			dbDao.insert(beforeWork);
-			
+
 			//以前教育
 			TAppStaffBeforeeducationEntity beforeEducation = new TAppStaffBeforeeducationEntity();
 			beforeEducation.setStaffid(staffId);
 			beforeEducation.setInstitutioncountry(chinaId);
 			beforeEducation.setInstitutioncountryen(chinaId);
 			dbDao.insert(beforeEducation);
-			
+
 			//使用过的语言 默认为Chinese
 			TAppStaffLanguageEntity language = new TAppStaffLanguageEntity();
 			language.setStaffid(staffId);
 			language.setLanguagename("Chinese");
 			language.setLanguagenameen("Chinese");
 			dbDao.insert(language);
-			
+
 			return map;
 		}
 	}
@@ -834,9 +835,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
 		Integer userType = loginUser.getUserType();
-		if(userType == UserLoginEnum.BIG_TOURIST_IDENTITY.intKey()) {
+		if (userType == UserLoginEnum.BIG_TOURIST_IDENTITY.intKey()) {
 			flag = IsYesOrNoEnum.YES.intKey();
-		}else{
+		} else {
 			flag = IsYesOrNoEnum.NO.intKey();
 		}
 		result.put("userType", userType);
@@ -916,11 +917,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		TAppStaffCredentialsEntity front = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-				.and("status", "=", AppPicturesTypeEnum.FRONT.intKey()));
+						.and("status", "=", AppPicturesTypeEnum.FRONT.intKey()));
 		TAppStaffCredentialsEntity back = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-				.and("status", "=", AppPicturesTypeEnum.BACK.intKey()));
+						.and("status", "=", AppPicturesTypeEnum.BACK.intKey()));
 		TAppStaffCredentialsEntity twoinch = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey()));
 		result.put("front", front);
@@ -1045,7 +1046,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			staffInfo.setValidstartdate(updateForm.getValidstartdate());
 
 			updateNum = dbDao.update(staffInfo);
-			appEventsViewService.addLoginUser(staffInfo);
+			Integer loginId = (Integer) appEventsViewService.addLoginUser(staffInfo);
+			dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginId), Cnd.where("id", "=", staffId));
 		}
 
 		return updateNum;
@@ -1809,21 +1811,21 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		workEducationInfo.setHasservedinmilitaryen(DEFAULT_IS_NO);
 		workEducationInfo.setIsservedinrebelgroupen(DEFAULT_IS_NO);
 		dbDao.insert(workEducationInfo);
-		
+
 		//以前工作
 		TAppStaffBeforeworkEntity beforeWork = new TAppStaffBeforeworkEntity();
 		beforeWork.setStaffid(staffId);
 		beforeWork.setEmployercountry(chinaId);
 		beforeWork.setEmployercountryen(chinaId);
 		dbDao.insert(beforeWork);
-		
+
 		//以前教育
 		TAppStaffBeforeeducationEntity beforeEducation = new TAppStaffBeforeeducationEntity();
 		beforeEducation.setStaffid(staffId);
 		beforeEducation.setInstitutioncountry(chinaId);
 		beforeEducation.setInstitutioncountryen(chinaId);
 		dbDao.insert(beforeEducation);
-		
+
 		//使用过的语言 默认为Chinese
 		TAppStaffLanguageEntity language = new TAppStaffLanguageEntity();
 		language.setStaffid(staffId);
