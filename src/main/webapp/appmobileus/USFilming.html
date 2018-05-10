@@ -715,8 +715,13 @@
 			},2000);
 			return false;
 		} */
+		$(".dialogTwoMin").show();
+		$(".dialogTwoMin").html("保存成功");
+		setTimeout(function(){
+			$(".dialogTwoMin").hide();
+			WeixinJSBridge.call('closeWindow');
+		},1000);
 		
-		WeixinJSBridge.call('closeWindow');
 	}
 </script>
 </html>
