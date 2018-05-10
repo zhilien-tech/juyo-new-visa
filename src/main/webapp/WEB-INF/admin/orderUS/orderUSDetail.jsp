@@ -91,13 +91,6 @@
 							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>大客户公司名称</label>
-									<input type="text" class="input-sm form-control" name="groupname" value="${obj.orderinfo.groupname }" />
-								</div>
-							</div>
-							
-							<%-- <div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>大客户公司名称</label>
 									<select id ="bigcustomername" name="bigcustomername"
 												class="form-control select2 cityselect2 " multiple="multiple"
 												data-placeholder="" >
@@ -106,7 +99,7 @@
 												</c:if>
 											</select>
 								</div>
-							</div> --%>
+							</div>
 							
 							<div class="col-sm-3">
 								<div class="form-group">
