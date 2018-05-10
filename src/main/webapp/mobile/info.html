@@ -470,6 +470,44 @@
 		        });
 			}
 		});
+		
+		//清除
+        $('.clear').click(function(){
+        	_self.applicatdata.cardfront = '';
+        	_self.applicatdata.cardback = '';
+        	_self.applicatdata.telephone = '';
+        	_self.applicatdata.email = '';
+        	_self.applicatdata.sex = '';
+        	_self.applicatdata.birthday = '';
+        	_self.applicatdata.cardid = '';
+        	_self.applicatdata.cardprovince = '';
+        	_self.applicatdata.cardcity = '';
+        	_self.applicatdata.address = '';
+        	_self.applicatdata.issueorganization = '';
+        	_self.applicatdata.province = '';
+        	_self.applicatdata.city = '';
+        	_self.applicatdata.detailedaddress = '';
+        	_self.applicatdata.addressissamewithcard = 0;
+        	_self.applicatdata.hasothername = 2;
+        	_self.applicatdata.hasothernationality = 2;
+        	_self.applicatdata.otherfirstname = '';
+        	_self.applicatdata.otherfirstnameen = '';
+        	_self.applicatdata.otherlastname = '';
+        	_self.applicatdata.otherlastnameen = '';
+        	_self.applicatdata.nationality = '';
+        	_self.applicatdata.emergencylinkman = '';
+        	_self.applicatdata.emergencytelephone = '';
+        	_self.applicatdata.emergencyaddress = '';
+        	$("#consistent").attr('checked',false);
+        	$("#afterName").attr('checked',false);
+			$('.afterNameinput').each(function(){
+				$(this).hide();
+			});
+			$("#afterNatAndID").attr('checked',false);
+			$('.afterNatAndIDinput').each(function(){
+				$(this).hide();
+			});
+        });
 	})	
 /* 	function nextStep(){
 		$.ajax({

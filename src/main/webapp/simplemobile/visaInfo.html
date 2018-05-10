@@ -2,11 +2,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta http-equlv="proma" content="no-cache" />
+	<meta http-equlv="cache-control" content="no-cache" />
+	<meta http-equlv="expires" content="0" />
     <title>签证信息</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="css/common.css">
-    <link rel="stylesheet" type="text/css" href="css/passport.css">
+    <link rel="stylesheet" type="text/css" href="css/passport.css?v='20180509'">
     <script src="js/rem(750).js"></script>
     <script src="js/jquery-1.10.2.js"></script>
     <script src="js/lrz.bundle.js"></script>
@@ -173,10 +176,11 @@
 	//在日邀请人
 	//其他信息
 	//上一步
+	var orderid = GetQueryString('orderid');
 	$('.prev').click(function(){
 		saveVisaInfo(2);
 		var applicantid = GetQueryString('applicantid');
-		window.location.href='/simplemobile/info.html?applicantid='+ applicantid;
+		window.location.href='/simplemobile/info.html?applicantid='+ applicantid+'&orderid='+orderid;
 	});
 	
 	//保存
@@ -187,6 +191,7 @@
         	url: '/admin/simplemobile/saveVisaInfo.html',
         	data:{applicantid:applicantid,marrystatus:marrystatus},
         	dataType:"json",
+        	cache:false,
         	type:'post',
         	success: function(data){
         		if(status == 1){

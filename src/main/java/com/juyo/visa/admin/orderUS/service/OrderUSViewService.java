@@ -44,6 +44,7 @@ import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.json.Json;
+import org.nutz.lang.Strings;
 import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Lists;
@@ -58,7 +59,9 @@ import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.enums.AlredyVisaTypeEnum;
+import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JapanPrincipalChangeEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TravelpurposeEnum;
@@ -271,10 +274,13 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		Integer userid = loginUser.getId();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		Integer comid = loginCompany.getId();
+
 		//领区下拉
 		result.put("cityidenum", EnumUtil.enum2(DistrictEnum.class));
+
 		//是否付款下拉
 		result.put("ispayedenum", EnumUtil.enum2(IsPayedEnum.class));
+
 		//orderid=0时为下单,下单创建人员表以及相关表
 		if (addOrder == 1) {
 			//创建相关表
@@ -283,15 +289,25 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			return map;
 		}
 		result.put("orderid", orderid);
+
 		//格式化日期
 		DateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm");
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat sdf2 = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
+
 		//订单信息
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		result.put("orderinfo", orderus);
 		TAppStaffOrderUsEntity orderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
 				Cnd.where("orderid", "=", orderid));
+
+		//大客户公司名称
+		if (!Util.isEmpty(orderus.getBigcustomername())) {
+			Long bigcustomername = Long.valueOf(orderus.getBigcustomername());
+			TCompanyEntity bigcom = dbDao.fetch(TCompanyEntity.class, bigcustomername);
+			result.put("bigcom", bigcom);
+		}
+
 		//基本信息
 		TAppStaffOrderUsEntity staffOrder = dbDao.fetch(TAppStaffOrderUsEntity.class,
 				Cnd.where("orderid", "=", orderid));
@@ -303,6 +319,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 		Integer staffid = basicinfo.getId();
 		Integer status = orderus.getStatus();
+
 		//二寸照片从人员证件信息表中取
 		TAppStaffCredentialsEntity twoinchphoto = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey()));
@@ -319,6 +336,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				result.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
 			}*/
 		}
+
 		//护照信息
 		TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffid", "=", staffid));
@@ -340,9 +358,11 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			result.put("birthday", sdf.format(passport.getBirthday()));
 		}
 		result.put("passport", passport);
+
 		//出行信息
 		TOrderUsTravelinfoEntity orderTravelInfo = dbDao.fetch(TOrderUsTravelinfoEntity.class,
 				Cnd.where("orderid", "=", orderid));
+
 		//获取用户资料信息
 		TAppStaffOrderUsEntity stafforderUsEntity = dbDao.fetch(TAppStaffOrderUsEntity.class,
 				Cnd.where("orderid", "=", orderid));
@@ -417,6 +437,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				orderInfoEntity.setReturnArrivedCity(gocity.getCity());
 			}
 			result.put("travelInfo", orderTravelInfo);
+
 			//获取航班信息
 			TFlightEntity goFlightEntity = dbDao.fetch(TFlightEntity.class,
 					Cnd.where("flightnum", "=", orderTravelInfo.getGoFlightNum()));
@@ -434,12 +455,14 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				result.put("returnFlightInfo", null);
 			}
 		}
+
 		//送签美国州
 		Map<Integer, String> stateMap = new HashMap<Integer, String>();
 		for (VisaUSStatesEnum e : VisaUSStatesEnum.values()) {
 			stateMap.put(e.intKey(), e.value());
 		}
 		result.put("state", stateMap);
+
 		//跟进信息
 		String followSqlstr = sqlManager.get("orderUS_getFollows");
 		Sql followSql = Sqls.create(followSqlstr);
@@ -465,7 +488,16 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 		}
 		result.put("followinfo", followList);
+
 		return result;
+	}
+
+	public Object getBigcustomerSelect(String bigcustomer) {
+		List<TCompanyEntity> query = dbDao.query(
+				TCompanyEntity.class,
+				Cnd.where("name", "like", "%" + Strings.trim(bigcustomer) + "%").and("comType", "=",
+						CompanyTypeEnum.BIGCUSTOMER.intKey()), null);
+		return query;
 	}
 
 	public Object insertSomeInfo(Map<String, Object> result, Integer comid) {
@@ -953,6 +985,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 						record.put("orderstatus", statusEnum.value());
 					} else if (status == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
 						record.put("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
+					} else if (status == JPOrderStatusEnum.DISABLED.intKey()) {
+						record.put("orderstatus", JPOrderStatusEnum.DISABLED.value());
 					}
 				}
 			}
@@ -1069,11 +1103,14 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @param orderid 订单id
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object disabled(int orderid) {
+	public Object disabled(int orderid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		orderus.setIsdisable(IsYesOrNoEnum.YES.intKey());
 		orderus.setUpdatetime(new Date());
 		dbDao.update(orderus);
+		//插入日志
+		insertLogs(orderus.getId(), JPOrderStatusEnum.DISABLED.intKey(), loginUser.getId());
 		return null;
 	}
 
@@ -1159,6 +1196,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderus.setCityid(form.getCityid());
 		orderus.setIspayed(form.getIspayed());
 		orderus.setGroupname(form.getGroupname());
+		orderus.setBigcustomername(form.getBigcustomername());
 		orderus.setUpdatetime(new Date());
 		dbDao.update(orderus);
 
@@ -1386,10 +1424,13 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String telephone = staffBaseInfo.getTelephone();
 		String toEmail = staffBaseInfo.getEmail();
 		String sex = staffBaseInfo.getSex();
+		String interviewdateStr = "";
 		Date interviewdate = staffBaseInfo.getInterviewdate();
-		//日期格式转化
-		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
-		String interviewdateStr = sdf.format(interviewdate);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		if (!Util.isEmpty(interviewdate)) {
+			interviewdateStr = sdf.format(interviewdate);
+		}
+
 		if (!Util.isEmpty(toEmail)) {
 			/*if (Util.eq("男", sex)) {
 				sex = "先生";
@@ -1411,7 +1452,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			//面试
 			if (Util.eq(sendType, "interview")) {
 				emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-						.replace("${interviewdate}", interviewdateStr);
+						.replace("${interviewdateStr}", interviewdateStr);
 				result = mailService.send(toEmail, emailText, "美国面试通知", MailService.Type.HTML);
 			}
 		}
@@ -1432,10 +1473,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String telephone = staffBaseInfo.getTelephone();
 		String email = staffBaseInfo.getEmail();
 		String sex = staffBaseInfo.getSex();
+		String interviewdateStr = "";
 		Date interviewdate = staffBaseInfo.getInterviewdate();
-		//日期格式转化
-		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
-		String interviewdateStr = sdf.format(interviewdate);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		if (!Util.isEmpty(interviewdate)) {
+			interviewdateStr = sdf.format(interviewdate);
+		}
 		String result = "";
 		if (!Util.isEmpty(telephone)) {
 			/*if (Util.eq("男", sex)) {
@@ -1463,7 +1506,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			//面试
 			if (Util.eq(sendType, "interview")) {
 				smsContent = smsContent.replace("${name}", name).replace("${sex}", sex)
-						.replace("${ordernum}", orderNum).replace("${interviewdate}", interviewdateStr);
+						.replace("${ordernum}", orderNum).replace("${interviewdateStr}", interviewdateStr);
 				result = sendSMS(telephone, smsContent);
 			}
 		}

@@ -428,7 +428,7 @@
 										<span>*</span>Marital Status
 									</label>
 									<select id="marrystatusen" name="marrystatusen" class="form-control input-sm selectHeight">
-											<option value=""></option>
+											<option value="">please choose</option>
 											<c:forEach var="map" items="${obj.marryStatusEnEnum}">
 												<option value="${map.key}" ${map.key==obj.marryStatusEn?'selected':''}>${map.value}</option>
 											</c:forEach>
@@ -775,14 +775,14 @@
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
 				autoclose: true,//选中日期后 自动关闭
-				pickerPosition:"top-left",//显示位置
+				pickerPosition:"bottom-right",//显示位置
 				minView: "month"//只显示年月日
 			});
 			$("#validEndDate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
 				autoclose: true,//选中日期后 自动关闭
-				pickerPosition:"top-left",//显示位置
+				pickerPosition:"bottom-right",//显示位置
 				minView: "month"//只显示年月日
 			});
 			$("#birthday").datetimepicker({
@@ -795,7 +795,7 @@
 				startView: 4,//从年开始选择
 				forceParse: 0,
 		        showMeridian: false,
-				pickerPosition:"top-left",//显示位置
+				pickerPosition:"bottom-right",//显示位置
 				minView: "month"//只显示年月日
 			});
 		});

@@ -286,13 +286,13 @@ public class UserViewService extends BaseService<TUserEntity> {
 		if (Util.isEmpty(adminId)) {
 			count = nutDao.count(
 					TUserEntity.class,
-					Cnd.where("mobile", "=", mobile).and("comId", "=", comid)
+					Cnd.where("mobile", "=", mobile)
 							.and("userType", "!=", UserLoginEnum.BIG_TOURIST_IDENTITY.intKey())
 							.and("userType", "!=", UserLoginEnum.TOURIST_IDENTITY.intKey()));
 		} else {
 			count = nutDao.count(
 					TUserEntity.class,
-					Cnd.where("mobile", "=", mobile).and("id", "!=", adminId).and("comId", "=", comid)
+					Cnd.where("mobile", "=", mobile).and("id", "!=", adminId)
 							.and("userType", "!=", UserLoginEnum.BIG_TOURIST_IDENTITY.intKey())
 							.and("userType", "!=", UserLoginEnum.TOURIST_IDENTITY.intKey()));
 		}

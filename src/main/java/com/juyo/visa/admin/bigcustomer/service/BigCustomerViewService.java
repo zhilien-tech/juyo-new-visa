@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -47,6 +48,7 @@ import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.MarryStatusEnEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
+import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.AppPictures.AppCredentialsTypeEnum;
 import com.juyo.visa.common.enums.AppPictures.AppPicturesTypeEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
@@ -156,12 +158,22 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	 * 跳转到签证信息页
 	 *
 	 * @param staffId
+	 * @param isDisable 是否可编辑
+	 * @param flag 是否为游客
 	 * @param session
 	 * @return 
 	 */
-	public Object updateVisaInfo(Integer staffId, Integer isDisable, HttpSession session) {
+	public Object updateVisaInfo(Integer staffId, Integer isDisable, Integer flag, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();
+		if (userType == UserLoginEnum.BIG_TOURIST_IDENTITY.intKey()) {
+			flag = IsYesOrNoEnum.YES.intKey();
+		} else {
+			flag = IsYesOrNoEnum.NO.intKey();
+		}
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("isDisable", isDisable);//页面是否可编辑
+		result.put("flag", flag);//页面是否为游客
 		//旅伴信息---与你的关系
 		result.put("TravelCompanionRelationshipEnum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
 		result.put("TravelCompanionRelationshipEnumen", EnumUtil.enum2(TravelCompanionRelationshipEnEnum.class));
@@ -258,6 +270,19 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		String spousebirthdayen = familyInfo.getString("spousebirthdayen");
 		spousebirthdayen = formatDateStr(spousebirthdayen, FORMAT_DD_MM_YYYY);
 		result.put("spousebirthdayen", spousebirthdayen);
+		//家庭信息-父母亲生日
+		String fatherbirthday = familyInfo.getString("fatherbirthday");
+		fatherbirthday = formatDateStr(fatherbirthday, FORMAT_DD_MM_YYYY);
+		result.put("fatherbirthday", fatherbirthday);
+		String fatherbirthdayen = familyInfo.getString("fatherbirthdayen");
+		fatherbirthdayen = formatDateStr(fatherbirthdayen, FORMAT_DD_MM_YYYY);
+		result.put("fatherbirthdayen", fatherbirthdayen);
+		String motherbirthday = familyInfo.getString("motherbirthday");
+		motherbirthday = formatDateStr(motherbirthday, FORMAT_DD_MM_YYYY);
+		result.put("motherbirthday", motherbirthday);
+		String motherbirthdayen = familyInfo.getString("motherbirthdayen");
+		motherbirthdayen = formatDateStr(motherbirthdayen, FORMAT_DD_MM_YYYY);
+		result.put("motherbirthdayen", motherbirthdayen);
 
 		//工作/教育/培训信息---格式化工作开始日期 
 		String sqlStrw = sqlManager.get("pcVisa_word_education_training_list");
@@ -356,9 +381,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		motherbirthday = formatDateStr(motherbirthday, FORMAT_DD_MM_YYYY);
 		familyInfo.put("motherbirthday", motherbirthday);
 		String motherbirthdayen = familyInfo.getString("motherbirthdayen");
-		fatherbirthdayen = formatDateStr(motherbirthdayen, FORMAT_DD_MM_YYYY);
+		motherbirthdayen = formatDateStr(motherbirthdayen, FORMAT_DD_MM_YYYY);
 		familyInfo.put("motherbirthdayen", motherbirthdayen);
-
 
 		//---直属亲戚信息集合
 		/*List<TAppStaffImmediaterelativesEntity> zhiFamilyList = dbDao.query(TAppStaffImmediaterelativesEntity.class,
@@ -531,6 +555,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			map.put("staffId", String.valueOf(staffId));
 
 			//签证信息的添加
+			TCountryRegionEntity chinaEntity = dbDao.fetch(TCountryRegionEntity.class,
+					Cnd.where("chinesename", "=", "中国"));
+			Integer chinaId = chinaEntity.getId();
 			//旅伴信息
 			TAppStaffTravelcompanionEntity travelCompanionInfo = new TAppStaffTravelcompanionEntity();
 			travelCompanionInfo.setStaffid(staffId);
@@ -589,19 +616,19 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			familyInfo.setMotherstatus(DEFAULT_SELECT);
 			familyInfo.setFatherstatusen(DEFAULT_SELECT);
 			familyInfo.setMotherstatusen(DEFAULT_SELECT);
-			familyInfo.setCountry(DEFAULT_SELECT);
-			familyInfo.setCountryen(DEFAULT_SELECT);
+			familyInfo.setCountry(chinaId);
+			familyInfo.setCountryen(chinaId);
 
 			familyInfo.setIsfatherinusen(DEFAULT_IS_NO);
 			familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
 			familyInfo.setHasimmediaterelativesen(DEFAULT_IS_NO);
 			familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
-			familyInfo.setIsknowspousecityen(DEFAULT_IS_NO);
+			familyInfo.setIsknowspousecityen(DEFAULT_SELECT);
 
-			familyInfo.setSpousenationality(DEFAULT_SELECT);
-			familyInfo.setSpousenationalityen(DEFAULT_SELECT);
-			familyInfo.setSpousecountry(DEFAULT_SELECT);
-			familyInfo.setSpousecountryen(DEFAULT_SELECT);
+			familyInfo.setSpousenationality(chinaId);
+			familyInfo.setSpousenationalityen(chinaId);
+			familyInfo.setSpousecountry(chinaId);
+			familyInfo.setSpousecountryen(chinaId);
 			familyInfo.setSpouseaddress(DEFAULT_SELECT);
 			familyInfo.setSpouseaddressen(DEFAULT_SELECT);
 
@@ -613,8 +640,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 			workEducationInfo.setOccupation(DEFAULT_SELECT);
 			workEducationInfo.setOccupationen(DEFAULT_SELECT);
-			workEducationInfo.setCountry(DEFAULT_SELECT);
-			workEducationInfo.setCountryen(DEFAULT_SELECT);
+			workEducationInfo.setCountry(chinaId);
+			workEducationInfo.setCountryen(chinaId);
 
 			workEducationInfo.setIsemployed(DEFAULT_IS_NO);
 			workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
@@ -634,6 +661,28 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			workEducationInfo.setHasservedinmilitaryen(DEFAULT_IS_NO);
 			workEducationInfo.setIsservedinrebelgroupen(DEFAULT_IS_NO);
 			dbDao.insert(workEducationInfo);
+
+			//以前工作
+			TAppStaffBeforeworkEntity beforeWork = new TAppStaffBeforeworkEntity();
+			beforeWork.setStaffid(staffId);
+			beforeWork.setEmployercountry(chinaId);
+			beforeWork.setEmployercountryen(chinaId);
+			dbDao.insert(beforeWork);
+
+			//以前教育
+			TAppStaffBeforeeducationEntity beforeEducation = new TAppStaffBeforeeducationEntity();
+			beforeEducation.setStaffid(staffId);
+			beforeEducation.setInstitutioncountry(chinaId);
+			beforeEducation.setInstitutioncountryen(chinaId);
+			dbDao.insert(beforeEducation);
+
+			//使用过的语言 默认为Chinese
+			TAppStaffLanguageEntity language = new TAppStaffLanguageEntity();
+			language.setStaffid(staffId);
+			language.setLanguagename("Chinese");
+			language.setLanguagenameen("Chinese");
+			dbDao.insert(language);
+
 			return map;
 		}
 	}
@@ -718,7 +767,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		familyInfo.setIsmotherinus(DEFAULT_IS_NO);
 		familyInfo.setHasimmediaterelatives(DEFAULT_IS_NO);
 		familyInfo.setHasotherrelatives(DEFAULT_IS_NO);
-		familyInfo.setIsknowspousecity(DEFAULT_IS_NO);
+		familyInfo.setIsknowspousecity(DEFAULT_SELECT);
 
 		familyInfo.setFatherstatus(DEFAULT_SELECT);
 		familyInfo.setMotherstatus(DEFAULT_SELECT);
@@ -729,7 +778,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
 		familyInfo.setHasimmediaterelativesen(DEFAULT_IS_NO);
 		familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
-		familyInfo.setIsknowspousecityen(DEFAULT_IS_NO);
+		familyInfo.setIsknowspousecityen(DEFAULT_SELECT);
 
 		familyInfo.setSpousenationality(DEFAULT_SELECT);
 		familyInfo.setSpousenationalityen(DEFAULT_SELECT);
@@ -783,12 +832,15 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 	public Object getStaffInfo(Integer staffId, Integer isDisable, Integer flag, HttpSession session) {
 
 		TAppStaffBasicinfoEntity staffInfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, Cnd.where("id", "=", staffId));
-
-		Map<String, Object> result = Maps.newHashMap();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Map<String, Object> result = Maps.newHashMap();
 		Integer userType = loginUser.getUserType();
+		if (userType == UserLoginEnum.BIG_TOURIST_IDENTITY.intKey()) {
+			flag = IsYesOrNoEnum.YES.intKey();
+		} else {
+			flag = IsYesOrNoEnum.NO.intKey();
+		}
 		result.put("userType", userType);
-
 		result.put("flag", flag);//从游客处进入，要去掉英文验证
 		result.put("isDisable", isDisable);//页面是否可编辑
 		result.put("marryStatus", staffInfo.getMarrystatus());
@@ -865,11 +917,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		TAppStaffCredentialsEntity front = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-				.and("status", "=", AppPicturesTypeEnum.FRONT.intKey()));
+						.and("status", "=", AppPicturesTypeEnum.FRONT.intKey()));
 		TAppStaffCredentialsEntity back = dbDao.fetch(
 				TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey())
-				.and("status", "=", AppPicturesTypeEnum.BACK.intKey()));
+						.and("status", "=", AppPicturesTypeEnum.BACK.intKey()));
 		TAppStaffCredentialsEntity twoinch = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffId).and("type", "=", TAppStaffCredentialsEnum.TWOINCHPHOTO.intKey()));
 		result.put("front", front);
@@ -994,7 +1046,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			staffInfo.setValidstartdate(updateForm.getValidstartdate());
 
 			updateNum = dbDao.update(staffInfo);
-			appEventsViewService.addLoginUser(staffInfo);
+			Integer loginId = (Integer) appEventsViewService.addLoginUser(staffInfo);
+			dbDao.update(TAppStaffBasicinfoEntity.class, Chain.make("userid", loginId), Cnd.where("id", "=", staffId));
 		}
 
 		return updateNum;
@@ -1653,6 +1706,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		map.put("staffId", String.valueOf(staffId));
 
 		//签证信息的添加
+		TCountryRegionEntity chinaEntity = dbDao.fetch(TCountryRegionEntity.class, Cnd.where("chinesename", "=", "中国"));
+		Integer chinaId = chinaEntity.getId();
 		//旅伴信息
 		TAppStaffTravelcompanionEntity travelCompanionInfo = new TAppStaffTravelcompanionEntity();
 		travelCompanionInfo.setStaffid(staffId);
@@ -1711,6 +1766,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		familyInfo.setMotherstatus(DEFAULT_SELECT);
 		familyInfo.setFatherstatusen(DEFAULT_SELECT);
 		familyInfo.setMotherstatusen(DEFAULT_SELECT);
+		familyInfo.setCountry(chinaId);
+		familyInfo.setCountryen(chinaId);
 
 		familyInfo.setIsfatherinusen(DEFAULT_IS_NO);
 		familyInfo.setIsmotherinusen(DEFAULT_IS_NO);
@@ -1718,10 +1775,10 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		familyInfo.setHasotherrelativesen(DEFAULT_IS_NO);
 		familyInfo.setIsknowspousecityen(DEFAULT_SELECT);
 
-		familyInfo.setSpousenationality(DEFAULT_SELECT);
-		familyInfo.setSpousenationalityen(DEFAULT_SELECT);
-		familyInfo.setSpousecountry(DEFAULT_SELECT);
-		familyInfo.setSpousecountryen(DEFAULT_SELECT);
+		familyInfo.setSpousenationality(chinaId);
+		familyInfo.setSpousenationalityen(chinaId);
+		familyInfo.setSpousecountry(chinaId);
+		familyInfo.setSpousecountryen(chinaId);
 		familyInfo.setSpouseaddress(DEFAULT_SELECT);
 		familyInfo.setSpouseaddressen(DEFAULT_SELECT);
 
@@ -1733,8 +1790,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 
 		workEducationInfo.setOccupation(DEFAULT_SELECT);
 		workEducationInfo.setOccupationen(DEFAULT_SELECT);
-		workEducationInfo.setCountry(DEFAULT_SELECT);
-		workEducationInfo.setCountryen(DEFAULT_SELECT);
+		workEducationInfo.setCountry(chinaId);
+		workEducationInfo.setCountryen(chinaId);
 
 		workEducationInfo.setIsemployed(DEFAULT_IS_NO);
 		workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
@@ -1754,6 +1811,27 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		workEducationInfo.setHasservedinmilitaryen(DEFAULT_IS_NO);
 		workEducationInfo.setIsservedinrebelgroupen(DEFAULT_IS_NO);
 		dbDao.insert(workEducationInfo);
+
+		//以前工作
+		TAppStaffBeforeworkEntity beforeWork = new TAppStaffBeforeworkEntity();
+		beforeWork.setStaffid(staffId);
+		beforeWork.setEmployercountry(chinaId);
+		beforeWork.setEmployercountryen(chinaId);
+		dbDao.insert(beforeWork);
+
+		//以前教育
+		TAppStaffBeforeeducationEntity beforeEducation = new TAppStaffBeforeeducationEntity();
+		beforeEducation.setStaffid(staffId);
+		beforeEducation.setInstitutioncountry(chinaId);
+		beforeEducation.setInstitutioncountryen(chinaId);
+		dbDao.insert(beforeEducation);
+
+		//使用过的语言 默认为Chinese
+		TAppStaffLanguageEntity language = new TAppStaffLanguageEntity();
+		language.setStaffid(staffId);
+		language.setLanguagename("Chinese");
+		language.setLanguagenameen("Chinese");
+		dbDao.insert(language);
 
 		return map;
 

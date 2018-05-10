@@ -103,23 +103,45 @@ label {
 	display: inline-block; 
 	float: left;
 }
+.companionSurnNameen {
+	display: inline-block; 
+	width:100%;
+}
 .companionName {
 	display: inline-block;
 	float: right;
 }
+.companionNameen {
+	padding-top:10px;
+	display: inline-block;
+	width:100%;
+}
 .youRelationship {
 	padding-top: 10px;
+}
+.AndYouRS {
+	/* padding-bottom:68px; */
 }
 .youRelationship select {
 	width: 182px; 
 	height: 34px; 
 	margin-top: 5px;
 }
+.firstName,.lastname {
+	width:100% !important;
+}
 .clear {
 	clear: both;
 }
 .btnGroup {
 	/* margin-top: 10px; */
+}
+.everyMarTop {
+	margin-top:10px;
+}
+.visaNumen {
+	display:inline-block;
+	padding-top:11px !important;
 }
 .save {
 	display: inline-block; 
@@ -143,6 +165,9 @@ label {
 .save:hover,.cancel:hover {
 	color:#FFF;
 	text-decoration:none;
+}
+#dateunit{
+	width:150px !important;
 }
 /*以前的美国旅游信息*/
 .beforeTourism {
@@ -173,7 +198,7 @@ label {
 	float: left;
 	margin-bottom:10px;
 }
-.goUS_CountryDiv {
+.goUS_CountryDiv,.goUS_CountryDiv {
 	margin-bottom:10px;
 }
 .cbox {
@@ -224,8 +249,17 @@ label {
 	display: none;
 }
 .lastVisaDate {
-	padding-top: 10px; 
+	padding-top: 15px; 
 	float: left;
+}
+.lastVisaDateen {
+	float:left;
+}
+.lastVisaDateen label {
+	width:182px !important;
+}
+.visaisnumber {
+	padding-top:15px !important;
 }
 .visaNum {
 	padding-top: 10px; 
@@ -295,6 +329,10 @@ label {
 }
 .beforeWorkInfo {
 	display: none;
+}
+.selectInfoen {
+	display:inline-block;
+	padding:10px 0 0 15px;
 }
 .elementHide{
 	display: none;
@@ -393,4 +431,196 @@ label {
 	opacity: 0;
 	z-index: 100000000;
 	display: none;
+}
+.areaInputPic {
+	width:100% !important;
+	height:30px !important;
+}
+.visanumber {
+	/* margin-top:0px !important; */
+}
+#workstartdate ,#workstartdateen {
+	margin-top:10px !important;
+}
+/*****************英文样式*******************/
+#dateuniten {
+	width:150px !important;
+}
+.companyGroupen {
+	display:none !important;
+}
+/* 旅伴信息 */
+.firstnameen,.lastnameen {
+	width:100% !important;
+}
+.teamnamefalseen {
+	/* margin-bottom:38px; */
+}
+.companyGroup {
+	/* margin-top:-44px; */
+	/* margin-bottom:14px; */
+}
+/* 以前的美国旅游信息 */
+#dateunit,.dateuniten {
+	margin-left:10px;
+}
+.gotousInfoen {
+	margin-bottom:35px;
+}
+.goUS_CountryDiven {
+	margin-bottom:10px;
+}
+.paddingBom {
+	padding-bottom:18px;
+}
+#lostexplainen {
+	margin-top:0px !important;
+}
+.publicPaddingBom {
+	padding-bottom:22px;
+}
+.publicPaddingBomLong {
+	padding-bottom:38px;
+}
+#fatherstatusen {
+	width:100% !important;
+}
+#motherstatusen {
+	width:100% !important;
+}
+.margtop {
+	margin-top:29px !important;
+}
+#issueddate {
+	margin-top:10px !important;
+}
+/* 配偶信息 */
+#spousenationalityen {
+	width:100% !important;
+}
+.publicMarNone {
+	margin-top:0px !important;
+}
+#spousecountryen {
+	width:100% !important;
+}
+#spouseaddressen{
+	width:100% !important;
+}
+#otherfrstaddress {
+	width:100% !important;
+}
+#othersecondaddress {
+	width:100% !important;
+}
+.prvPadL {
+	padding-left:15px;
+}
+.prvPadLT {
+	padding:10px 0 0 15px;
+}
+#otherfrstaddressen {
+	width:100% !important;
+}
+#othersecondaddressen {
+	width:100% !important;
+}
+#othercountryen {
+	width:100% !important;
+}
+.padlongTop {
+	padding-top:144px;
+}
+.padlongBom {
+	padding-bottom:67px;
+}
+.paddingBom-20 {
+	padding-bottom:20px;
+}
+.paddingBom-35 {
+	padding-bottom:35px;
+}
+.paddingBom-8 {
+	padding-bottom:8px;
+}
+.goUS_drivers,.goUS_driversen {
+	display:inline-block;
+}
+#spousenationality {
+	width:100% !important;
+}
+#spousecountry {
+	width:100% !important;
+}
+#spousenationalityen {
+	margin-top:0px !important;
+}
+.directRelativesYesen {
+	display:inline-block;
+}
+/* 父亲的生日 */
+#fatherbirthday,#fatherbirthdayen,#motherbirthday,#motherbirthdayen {
+	display:inline-block;
+}
+.militaryYes {
+	display:inline-block;
+}
+/* padding */
+.paddingTop-9 {
+	padding-top:9px;
+}
+.paddingTop-8 {
+	padding-top:8px;
+}
+.paddingTop-11 {
+	padding-top:11px;
+}
+.paddingbottom-14 {
+	padding-bottom:14px;
+}
+.paddingleft-15 {
+	padding-left:15px;
+}
+.paddingtop-12 {
+	padding-top:12px !important;
+}
+.paddingbottom-65 {
+	padding-bottom:65px;
+}
+/* margin */
+.marginbotttom-0 {
+	margin-bottom:0px !important;
+}
+.marginbottom-5 {
+	margin-top:5px !important;
+} 
+.margintop-10 {
+	margin-top:10px !important;
+}
+.marginbottom-6 {
+	margin-bottom:6px !important;;
+}
+.marginbottom-14 {
+	margin-bottom:14px;
+}
+.marginbottom-19 {
+	margin-bottom:19px;
+}
+.margintop-20 {
+	margin-top:20px;
+}
+.marginbottom-20 {
+	margin-bottom:20px;
+}
+.marginbottom-32 {
+	margin-bottom:32px;
+}
+.marginbottom-36 {
+	margin-bottom:36px;
+}
+.marginbottom-40 {
+	margin-bottom:40px;
+}
+.marginbottom-46 {
+	margin-bottom:46px;
 }

@@ -14,7 +14,7 @@
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<!-- 本页样式 -->
-		<link rel="stylesheet" href="${base}/references/public/css/updateVisaInfo.css?id='20180507'">
+		<link rel="stylesheet" href="${base}/references/public/css/updateVisaInfo.css?v='20180509'">
 		<style>
      		[v-cloak]{display:none;}
      	</style>
@@ -132,7 +132,7 @@
 				<div class="goUSModule">
 					<div class="titleInfo">以前的美国旅游信息</div>
 					<div class="goUSMain">
-						<div class="groupRadioInfo goUSPad">
+						<div class="groupRadioInfo goUSPad paddingbottom-14">
 							<label>是否去过美国</label>
 					 		<input type="radio" id="hasbeeninus" name="hasbeeninus" v-model="visaInfo.previUSTripInfo.hasbeeninus" @change="hasbeeninus()" class="goUS" value="1" />是
 							<input type="radio" id="hasbeeninus" name="hasbeeninus" v-model="visaInfo.previUSTripInfo.hasbeeninus" @change="hasbeeninus()" class="goUS" value="2" checked />否
@@ -208,7 +208,7 @@
 														<input id="isknowdrivernumber"  class="isknowdrivernumber" onchange="AddSegment(this,'isknowdrivernumberen')" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" type="checkbox"/>
 													</c:if>
 												</div>
-												<div class="groupSelectInfo driverR">
+												<div class="groupSelectInfo driverR paddingleft-15">
 													<label>哪个州的驾照</label>
 													<select id="witchstateofdriver" onchange="addSegmentsTranslateZhToEn(this,'witchstateofdriveren','')" name="witchstateofdriver">
 														<option value="0" selected="selected">请选择</option>
@@ -232,7 +232,7 @@
 												<input id="driverlicensenumber" name="driverlicensenumber" onchange="addSegmentsTranslateZhToEn(this,'driverlicensenumberen','')" type="text" >
 												<input id="isknowdrivernumber"  class="isknowdrivernumber" onchange="AddSegment(this,'isknowdrivernumberen')" name="isknowdrivernumber" type="checkbox"/>
 											</div>
-											<div class="groupSelectInfo driverR">
+											<div class="groupSelectInfo driverR paddingleft-15">
 												<label>哪个州的驾照</label>
 												<select id="witchstateofdriver" onchange="addSegmentsTranslateZhToEn(this,'witchstateofdriveren','')" name="witchstateofdriver">
 													<option value="0">请选择</option>
@@ -301,7 +301,7 @@
 										<label>年份</label>
 										<input name="lostyear" id="lostyear" @change="lostyear('lostyear','lostyearen','visaInfo.previUSTripInfo.lostyearen')" v-model="visaInfo.previUSTripInfo.lostyear" type="text" />
 									</div>
-									<div class="paddingTop grouptextareaInfo">
+									<div class="paddingTop grouptextareaInfo paddingtop-12">
 										<label>说明</label>
 										<input class="areaInputPic" name="lostexplain" id="lostexplain" @change="lostexplain('lostexplain','lostexplainen','visaInfo.previUSTripInfo.lostexplainen')" v-model="visaInfo.previUSTripInfo.lostexplain" />
 									</div>
@@ -356,7 +356,7 @@
 					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" @change="isfiledimmigrantpetition()" class="onceImmigration" value="1" />是
 					<input type="radio" name="isfiledimmigrantpetition" v-model="visaInfo.previUSTripInfo.isfiledimmigrantpetition" @change="isfiledimmigrantpetition()" v-on:click="visaNotfiledimmigrantpetition" class="onceImmigration" value="2" checked />否
 				</div>
-				<div class="immigrationExplain grouptextareaInfo paddingTop-15">
+				<div class="immigrationExplain grouptextareaInfo paddingTop-11">
 					<label>说明</label>
 					<input name="immigrantpetitionexplain" id="immigrantpetitionexplain" @change="immigrantpetitionexplain('immigrantpetitionexplain','immigrantpetitionexplainen','visaInfo.previUSTripInfo.immigrantpetitionexplainen')" class="areaInputPic" v-model="visaInfo.previUSTripInfo.immigrantpetitionexplain" />
 				</div>
@@ -446,6 +446,11 @@
 					<input id="isKnowFatherMing" name="isknowfatherlastname" onchange="AddSingle(this,'isknowfatherlastnameen')" v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
+				<div class="groupcheckBoxInfo prvPadLT">
+					<label>父亲的生日</label>
+					<input type="text" id="fatherbirthday" onchange="translateZhToEn('#fatherbirthday','fatherbirthdayen','')" value="${obj.fatherbirthday}" class="datetimepickercss form-control" placeholder="日/月/年" />
+					<input id="isknowfatherbirthday" name="isknowfatherbirthday" onchange="AddSingle(this,'isknowfatherbirthdayen')" v-on:click="isknowfatherbirthday" v-model="visaInfo.familyInfo.isknowfatherbirthday" type="checkbox" />
+				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>你的父亲是否在美国</label>
@@ -474,6 +479,11 @@
 					<input id="isKnowMotherMing" name="isknowmotherlastname" onchange="AddSingle(this,'isknowmotherlastnameen')" v-on:click="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastname" type="checkbox" />
 				</div>
 				<div class="clear"></div>
+				<div class="groupcheckBoxInfo prvPadLT">
+					<label>母亲的生日</label>
+					<input type="text" id="motherbirthday" onchange="translateZhToEn('#motherbirthday','motherbirthdayen','')" value="${obj.motherbirthday}" class="datetimepickercss form-control" placeholder="日/月/年" />
+					<input id="isknowmotherbirthday" name="isknowmotherbirthday" onchange="AddSingle(this,'isknowmotherbirthdayen')" v-on:click="isknowmotherbirthday" v-model="visaInfo.familyInfo.isknowmotherbirthday" type="checkbox" />
+				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>你的母亲是否在美国</label>
@@ -585,7 +595,7 @@
 				</div>
 			<!--配偶-->
 			<div class="paddingTop">
-				<div class="titleInfo">配偶信息</div>
+				<div class="titleInfo marginbottom-6">配偶信息</div>
 				<div class="floatLeft groupInputInfo">
 					<label>配偶的姓</label>
 					<input name="spousefirstname" id="spousefirstname" @change="spousefirstname('spousefirstname','spousefirstnameen','visaInfo.familyInfo.spousefirstnameen')" v-model="visaInfo.familyInfo.spousefirstname" type="text" />
@@ -635,7 +645,7 @@
 				</div>
 				
 				<!--配偶的联系地址select选择其他-->
-				<div class="otherSpouseInfo elementHide paddingTop padlongBom" >
+				<div class="otherSpouseInfo elementHide paddingTop paddingbottom-65" >
 					<div class="groupInputInfo prvPadL">
 						<label>街道地址(首选)</label>
 						<input name="firstaddress" id="otherfrstaddress" @change="spouseotherstreet('otherfrstaddress','otherfrstaddressen','visaInfo.familyInfo.firstaddressen')" v-model="visaInfo.familyInfo.firstaddress" type="text" />
@@ -758,19 +768,19 @@
 					</div>
 					<div class="clear"></div>
 					<!-- 新加 -->
-					<!-- <div class="groupInputInfo paddingLeft">
+					<div class="groupInputInfo paddingLeft">
 						<label>证明人姓名</label>
 						<input name="witnessname" id="witnessname" class="witnessname" v-model="visaInfo.workEducationInfo.witnessname" @change="iswitnessname('witnessname')" />
 					</div>
 					<div class="groupInputInfo paddingRight">
 						<label>证明人电话</label>
-						<input name="witnesstelphone" id="witnesstelphone" class="witnesstelphone"  v-model="visaInfo.workEducationInfo.witnesstelphone" @change="iswitnesstelphone('witnesstelphone','witnesstelphoneen','visaInfo.workEducationInfo.witnesstelphoneen')" />
+						<input name="witnessmoblie" id="witnessmoblie" class=""  v-model="visaInfo.workEducationInfo.witnessmoblie" @change="iswitnessmoblie()" />
 					</div>
 					<div class="clear"></div>
 					<div class="groupInputInfo prvPadLT">
 						<label>证明人职务</label>
-						<input name="witnesspost" id="witnesspost" class="witnesspost" v-model="visaInfo.workEducationInfo.witnesspost"  @change="iswitnesspost('witnesspost','witnessposten','visaInfo.workEducationInfo.witnessposten')" />
-					</div> -->
+						<input name="witnessposition" id="witnessposition" class="witnessposition" v-model="visaInfo.workEducationInfo.witnessposition"  @change="iswitnessposition('witnessposition','witnesspositionen','visaInfo.workEducationInfo.witnesspositionen')" />
+					</div>
 				</div>
 				
 				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea">
@@ -986,16 +996,16 @@
 							<div class="educationYes">
 							<c:if test="${!empty obj.beforeEducationList }">
 								<c:forEach var="education" items="${obj.beforeEducationList }">
-									<div class="midSchoolEduDiv">
+									<div class="midSchoolEduDiv margintop-10">
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>机构名称</label>
 											<input name="institution" onchange="addSegmentsTranslateZhToEn(this,'institutionen','')" value="${education.institution }" type="text"/>
 										</div>
-										<div class="draBig leftNo marginLS groupInputInfo">
+										<div class="draBig leftNo margintop-10 groupInputInfo">
 											<label>街道地址(首选)</label>
 											<input name="institutionaddress" onchange="addSegmentsTranslateZhToEn(this,'institutionaddressen','')" value="${education.institutionaddress }" type="text" />
 										</div>
-										<div class="draBig leftNo marginLS groupInputInfo">
+										<div class="draBig leftNo margintop-10 groupInputInfo">
 											<label>街道地址(次选)*可选</label>
 											<input name="secinstitutionaddress" onchange="addSegmentsTranslateZhToEn(this,'secinstitutionaddressen','')" type="text" value="${education.secinstitutionaddress }" />
 										</div>
@@ -1047,27 +1057,27 @@
 										
 										<div class="paddingRight leftNo groupInputInfo">
 											<label>参加课程开始时间</label>
-											<input id="coursestartdate" onchange="addSegmentsTranslateZhToEn(this,'coursestartdateen','')" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+											<input id="coursestartdate" onchange="addSegmentsTranslateZhToEn(this,'coursestartdateen','')" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 										</div>
 										<div class="clear"></div>
-										<div class="leftNo paddingTop groupInputInfo">
+										<div class="leftNo paddingTop groupInputInfo margintop-10">
 											<label>结束时间</label>
-											<input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+											<input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 										</div>
 									</div>
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty obj.beforeEducationList }">
-								<div class="midSchoolEduDiv">
+								<div class="midSchoolEduDiv margintop-10">
 									<div class="draBig leftNo groupInputInfo">
 										<label>机构名称</label>
 										<input name="institution" onchange="addSegmentsTranslateZhToEn(this,'institutionen','')" type="text"/>
 									</div>
-									<div class="draBig leftNo groupInputInfo">
+									<div class="draBig leftNo margintop-10 groupInputInfo">
 										<label>街道地址(首选)</label>
 										<input name="institutionaddress" onchange="addSegmentsTranslateZhToEn(this,'institutionaddressen','')" type="text" />
 									</div>
-									<div class="draBig leftNo groupInputInfo">
+									<div class="draBig leftNo margintop-10 groupInputInfo">
 										<label>街道地址(次选)*可选</label>
 										<input name="secinstitutionaddress" onchange="addSegmentsTranslateZhToEn(this,'secinstitutionaddressen','')" type="text" />
 									</div>
@@ -1102,12 +1112,12 @@
 									</div>
 									<div class="paddingRight leftNo groupInputInfo">
 										<label>参加课程开始时间</label>
-										<input id="coursestartdate" onchange="addSegmentsTranslateZhToEn(this,'coursestartdateen','')" name="coursestartdate" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+										<input id="coursestartdate" onchange="addSegmentsTranslateZhToEn(this,'coursestartdateen','')" name="coursestartdate" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 									</div>
 									<div class="clear"></div>
-									<div class="leftNo groupInputInfo">
+									<div class="leftNo groupInputInfo margintop-10">
 										<label>结束时间</label>
-										<input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+										<input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 									</div>
 								</div>
 							</c:if>
@@ -1168,7 +1178,7 @@
 					<a class="cancel languagecancel">去掉</a>
 				</div>
 				<div class="paddingTop padding-left">
-					<div class="groupRadioInfo">
+					<div class="groupRadioInfo marginbottom-20">
 						<label>过去五年是否曾去过任何国家/地区旅游</label>
 						<input type="radio" name="istraveledanycountry" v-model="visaInfo.workEducationInfo.istraveledanycountry"  @change="istraveledanycountry()"  class="istraveledanycountry" value="1" />是
 						<input type="radio" name="istraveledanycountry" v-model="visaInfo.workEducationInfo.istraveledanycountry" @change="istraveledanycountry()" class="istraveledanycountry" value="2" checked/>否
@@ -1218,7 +1228,7 @@
 					</div>
 				</div>
 				<div class="padding-left paddingTop">
-					<div class="groupRadioInfo">
+					<div class="groupRadioInfo marginbottom-19">
 						<label>是否属于、致力于、或为任何专业、社会或慈善组织而工作</label>
 						<input type="radio" name="isworkedcharitableorganization" v-model="visaInfo.workEducationInfo.isworkedcharitableorganization" @change="isworkedcharitableorganization()"  class="isworkedcharitableorganization" value="1"/>是
 						<input type="radio" name="isworkedcharitableorganization" v-model="visaInfo.workEducationInfo.isworkedcharitableorganization" @change="isworkedcharitableorganization()" class="isworkedcharitableorganization" value="2" checked/>否
@@ -1252,7 +1262,7 @@
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
-					<div class="groupRadioInfo">
+					<div class="groupRadioInfo marginbottom-40">
 						<label>是否有专业技能或培训，如强制、爆炸物、核能、生物或化学</label>
 						<input type="radio" name="hasspecializedskill" v-model="visaInfo.workEducationInfo.hasspecializedskill" @change="hasspecializedskill()" class="hasspecializedskill" value="1" />是
 						<input type="radio"name="hasspecializedskill" v-on:click="hasspecializedskill()" v-model="visaInfo.workEducationInfo.hasspecializedskill" @change="hasspecializedskill()"  class="hasspecializedskill" value="2" checked />否
@@ -1289,16 +1299,16 @@
 											</c:forEach>
 										</select>
 									</div>
-									<div class="paddingRight leftNo groupInputInfo">
+									<div class="paddingRight groupInputInfo paddingleft-15">
 										<label>服务分支</label>
-										<input name="servicebranch"  onchange="addSegmentsTranslateZhToEn(this,'servicebranchen','')" value="${conscientious.servicebranch }" type="text" />
+										<input name="servicebranch" onchange="addSegmentsTranslateZhToEn(this,'servicebranchen','')" value="${conscientious.servicebranch }" type="text" />
 									</div>
 									<div class="clear"></div>
 									<div class="paddingLeft leftNo groupInputInfo" >
 										<label>排名/位置</label>
 										<input name="rank" onchange="addSegmentsTranslateZhToEn(this,'ranken','')" value="${conscientious.rank }" type="text" />
 									</div>
-									<div class="paddingRight leftNo groupInputInfo">
+									<div class="paddingRight groupInputInfo paddingleft-15">
 										<label>军事专业</label>
 										<input name="militaryspecialty" onchange="addSegmentsTranslateZhToEn(this,'militaryspecialtyen','')" value="${conscientious.militaryspecialty }" type="text"/>
 									</div>
@@ -1307,7 +1317,7 @@
 										<label>服兵役开始时间日期</label>
 										<input id="servicestartdate" onchange="addSegmentsTranslateZhToEn(this,'servicestartdateen','')" name="servicestartdate" value="<fmt:formatDate value="${conscientious.servicestartdate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss form-control" placeholder="日/月/年"/>
 									</div>
-									<div class="paddingRight leftNo groupInputInfo">
+									<div class="paddingRight groupInputInfo paddingleft-15">
 										<label>结束时间</label>
 										<input id="serviceenddate" onchange="addSegmentsTranslateZhToEn(this,'serviceenddateen','')" name="serviceenddate" value="<fmt:formatDate value="${conscientious.serviceenddate }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss form-control" placeholder="日/月/年"/>
 									</div>
@@ -1326,16 +1336,16 @@
 										</c:forEach>
 									</select>
 								</div>
-								<div class="paddingRight leftNo groupInputInfo">
+								<div class="paddingRight groupInputInfo paddingleft-15">
 									<label>服务分支</label>
-									<input name="servicebranch" onchange="addSegmentsTranslateZhToEn(this,'servicebranchen','')" type="text" />
+									<input name="servicebranch"  onchange="addSegmentsTranslateZhToEn(this,'servicebranchen','')" type="text" />
 								</div>
 								<div class="clear"></div>
 								<div class="paddingLeft leftNo groupInputInfo" >
 									<label>排名/位置</label>
 									<input name="rank" onchange="addSegmentsTranslateZhToEn(this,'ranken','')" type="text" />
 								</div>
-								<div class="paddingRight leftNo groupInputInfo">
+								<div class="paddingRight groupInputInfo paddingleft-15">
 									<label>军事专业</label>
 									<input name="militaryspecialty" onchange="addSegmentsTranslateZhToEn(this,'militaryspecialtyen','')" type="text"/>
 								</div>
@@ -1344,7 +1354,7 @@
 									<label>服兵役开始时间日期</label>
 									<input id="servicestartdate" onchange="addSegmentsTranslateZhToEn(this,'servicestartdateen','')" name="servicestartdate" type="text" class="datetimepickercss form-control" placeholder="日/月/年"/>
 								</div>
-								<div class="paddingRight leftNo groupInputInfo">
+								<div class="paddingRight groupInputInfo paddingleft-15">
 									<label>结束时间</label>
 									<input id="serviceenddate" onchange="addSegmentsTranslateZhToEn(this,'serviceenddateen','')" name="serviceenddate" type="text" class="datetimepickercss form-control" placeholder="日/月/年"/>
 								</div>
@@ -1359,7 +1369,7 @@
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
-					<div class="groupRadioInfo">
+					<div class="groupRadioInfo marginbottom-14">
 						<label>是否参与或参加过准军事部队、治安单位、叛乱集团、游击队或叛乱组织</label>
 						<input type="radio" name="isservedinrebelgroup" @change="isservedinrebelgroup()" v-model="visaInfo.workEducationInfo.isservedinrebelgroup" class="isservedinrebelgroup" value="1"/>是
 						<input type="radio" name="isservedinrebelgroup" @change="isservedinrebelgroup()" v-model="visaInfo.workEducationInfo.isservedinrebelgroup" class="isservedinrebelgroup" value="2" checked/>否
@@ -1383,7 +1393,7 @@
 					</div>
 					<div class="paddingTop elementHide isPestilenceDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" class="" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1394,7 +1404,7 @@
 					</div>
 					<div class="paddingTop elementHide isThreatIllnessDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1405,7 +1415,7 @@
 					</div>
 					<div class="paddingTop elementHide isDrugDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1416,7 +1426,7 @@
 					</div>
 					<div class="paddingTop elementHide isSentencedDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1427,7 +1437,7 @@
 					</div>
 					<div class="paddingTop elementHide isMaterialLawDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1438,7 +1448,7 @@
 					</div>
 					<div class="paddingTop elementHide isProstitutionDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1449,7 +1459,7 @@
 					</div>
 					<div class="paddingTop elementHide isLaunderingDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1460,7 +1470,7 @@
 					</div>
 					<div class="paddingTop elementHide isSmugglingDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1471,7 +1481,7 @@
 					</div>
 					<div class="paddingTop elementHide isThreateningOthersDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1482,7 +1492,7 @@
 					</div>
 					<div class="paddingTop elementHide isSmugglingBenefitsDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1493,7 +1503,7 @@
 					</div>
 					<div class="paddingTop elementHide isSpyActivitiesDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1504,7 +1514,7 @@
 					</div>
 					<div class="paddingTop elementHide isTerroristActivitiesDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1515,7 +1525,7 @@
 					</div>
 					<div class="paddingTop elementHide isSupportTerroristsDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1526,7 +1536,7 @@
 					</div>
 					<div class="paddingTop elementHide isTerroristDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1537,7 +1547,7 @@
 					</div>
 					<div class="paddingTop elementHide isTakeGenocideDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1548,7 +1558,7 @@
 					</div>
 					<div class="paddingTop elementHide isOrderedThreatDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1559,7 +1569,7 @@
 					</div>
 					<div class="paddingTop elementHide isPoliticalKillingDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1570,7 +1580,7 @@
 					</div>
 					<div class="paddingTop elementHide isRecruitChildSoldierDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1581,7 +1591,7 @@
 					</div>
 					<div class="paddingTop elementHide isInroadReligionDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1592,7 +1602,7 @@
 					</div>
 					<div class="paddingTop elementHide isForcedControlPopulationDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1603,7 +1613,7 @@
 					</div>
 					<div class="paddingTop elementHide isForcedOrganTakeDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1614,7 +1624,7 @@
 					</div>
 					<div class="paddingTop elementHide isIllegalVisaUSDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1625,7 +1635,7 @@
 					</div>
 					<div class="paddingTop elementHide isDeportedDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1636,7 +1646,7 @@
 					</div>
 					<div class="paddingTop elementHide isRemoteHearingDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1647,7 +1657,7 @@
 					</div>
 					<div class="paddingTop elementHide isViolationVisaConditionsDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1658,7 +1668,7 @@
 					</div>
 					<div class="paddingTop elementHide isRefusalTransferCustodyDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1669,7 +1679,7 @@
 					</div>
 					<div class="paddingTop elementHide isIllegalVotingDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1680,7 +1690,7 @@
 					</div>
 					<div class="paddingTop elementHide isTaxEvasionDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 				<div class="paddingTop padding-left">
@@ -1691,7 +1701,7 @@
 					</div>
 					<div class="paddingTop elementHide isNotPayTuitionFeesDiv grouptextareaInfo">
 						<label>说明</label>
-						<textarea></textarea>
+						<input type="text" />
 					</div>
 				</div>
 			</div>
@@ -1851,7 +1861,7 @@
 								<input type="radio" name="hasdriverlicenseen" v-model="visaInfo.previUSTripInfo.hasdriverlicenseen" class="licenseen" value="2" checked />NO
 							</div>
 							<div class="driverInfo driverInfoen elementHide">
-								<div class="driverYes">
+								<div class="driverYes marginbottom-40">
 									<c:if test="${!empty obj.driverList }">
 										<c:forEach var="driver" items="${obj.driverList }">
 											<div class="goUS_driversen">
@@ -1865,7 +1875,7 @@
 														<input id="isknowdrivernumberen"  class="isknowdrivernumberen"  value="${driver.isknowdrivernumberen }" name="isknowdrivernumberen" type="checkbox"/>
 													</c:if>
 												</div>
-												<div class="groupSelectInfo driverR">
+												<div class="groupSelectInfo driverR paddingleft-15">
 													<label>State of Driver's License</label>
 													<select id="witchstateofdriveren" class="witchstateofdriveren" name="witchstateofdriveren">
 														<option value="0" selected="selected">Please choose</option>
@@ -1890,7 +1900,7 @@
 												<!-- checkbox 调用实现单点onchange="disableden(this)" -->
 												<input id="isknowdrivernumberen"  class="isknowdrivernumberen"  name="isknowdrivernumberen" type="checkbox"/>
 											</div>
-											<div class="groupSelectInfo driverR">
+											<div class="groupSelectInfo driverR paddingleft-15">
 												<label>State of Driver's License</label>
 												<select id="witchstateofdriveren" class="witchstateofdriveren" name="witchstateofdriveren">
 													<option value="0">Please choose</option>
@@ -2102,6 +2112,11 @@
 					<input id="isKnowFatherMing" name="isknowfatherlastnameen" class="isknowfatherlastnameen"  v-on:click="isknowfatherlastname" v-model="visaInfo.familyInfo.isknowfatherlastnameen" type="checkbox" />
 				</div>
 				<div class="clear"></div>
+				<div class="groupcheckBoxInfo prvPadLT">
+					<label>Father's birthday</label>
+					<input type="text" id="fatherbirthdayen" value="${obj.fatherbirthdayen}" class="datetimepickercss form-control" placeholder="Day / month / year" />
+					<input id="isknowfatherbirthdayen" class="isknowfatherbirthdayen" name="isknowfatherbirthdayen"  v-model="visaInfo.familyInfo.isknowfatherbirthdayen" type="checkbox" />
+				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Is your father in the U.S.</label>
@@ -2130,6 +2145,11 @@
 					<input id="isKnowMotherMing" name="isknowmotherlastnameen" class="isknowmotherlastnameen"  v-on:click="isknowmotherlastname" v-model="visaInfo.familyInfo.isknowmotherlastnameen" type="checkbox" />
 				</div>
 				<div class="clear"></div>
+				<div class="groupcheckBoxInfo prvPadLT">
+					<label>Mother's Birthday</label>
+					<input type="text" id="motherbirthdayen" value="${obj.motherbirthdayen}" class="datetimepickercss form-control" placeholder="Day / month / year" />
+					<input id="isknowmotherbirthdayen" class="isknowmotherbirthdayen" name="isknowmotherbirthdayen" v-model="visaInfo.familyInfo.isknowmotherbirthdayen" type="checkbox" />
+				</div>
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label>Is your mother in the U.S.</label>
@@ -2406,19 +2426,19 @@
 					</div>
 					<div class="clear"></div>
 					<!-- 新加 -->
-					<!-- <div class="groupInputInfo paddingLeft">
+					<div class="groupInputInfo paddingLeft">
 						<label>Person's name</label>
 						<input name="witnessnameen" id="witnessnameen" class="witnessnameen" v-model="visaInfo.workEducationInfo.witnessnameen" />
 					</div>
 					<div class="groupInputInfo paddingRight">
 						<label>Human telephone</label>
-						<input name="witnesstelphoneen" id="witnesstelphoneen" class="witnesstelphoneen"  v-model="visaInfo.workEducationInfo.witnesstelphoneen" />
+						<input name="witnessmoblieen" id="witnessmoblieen" class="witnessmoblieen"  v-model="visaInfo.workEducationInfo.witnessmoblieen" />
 					</div>
 					<div class="clear"></div>
 					<div class="groupInputInfo prvPadLT">
 						<label>Proof of a person's position</label>
-						<input name="witnessposten" id="witnessposten" class="witnessposten" v-model="visaInfo.workEducationInfo.witnessposten"  />
-					</div> -->
+						<input name="witnesspositionen" id="witnesspositionen" class="witnesspositionen" v-model="visaInfo.workEducationInfo.witnesspositionen"  />
+					</div>
 				</div>
 				
 				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea">
@@ -2437,7 +2457,7 @@
 						</div>
 						<!--yes-->
 						<div class="beforeWorkInfo beforeWorkInfoen elementHide">
-						  <div class="beforeWorkYes">
+						  <div class="beforeWorkYes marginbottom-36">
 							<c:if test="${!empty obj.beforeWorkList }">
 								<c:forEach var="beforeWork" items="${obj.beforeWorkList }">
 									<div class="workBeforeInfosDiven">
@@ -2631,19 +2651,19 @@
 						</div>
 						<!--yes-->
 						<div class="educationInfo educationInfoen elementHide">
-							<div class="educationYes">
+							<div class="educationYes marginbottom-36">
 							<c:if test="${!empty obj.beforeEducationList }">
 								<c:forEach var="education" items="${obj.beforeEducationList }">
-									<div class="midSchoolEduDiven">
+									<div class="midSchoolEduDiven margintop-10">
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label>Name of Institution</label>
 											<input name="institutionen" class="institutionen" value="${education.institutionen }" type="text"/>
 										</div>
-										<div class="draBig leftNo marginLS groupInputInfo">
+										<div class="draBig leftNo margintop-10 groupInputInfo">
 											<label>Street Address (Line 1)</label>
 											<input name="institutionaddressen" class="institutionaddressen" value="${education.institutionaddressen }" type="text" />
 										</div>
-										<div class="draBig leftNo marginLS groupInputInfo">
+										<div class="draBig leftNo margintop-10 groupInputInfo">
 											<label>Street Address (Line 2) *Optional</label>
 											<input name="secinstitutionaddressen" class="secinstitutionaddressen" type="text" value="${education.secinstitutionaddressen }" />
 										</div>
@@ -2694,27 +2714,27 @@
 										
 										<div class="paddingRight leftNo groupInputInfo">
 											<label>Date of Attendance From</label>
-											<input id="coursestartdateen" name="coursestartdateen" value="<fmt:formatDate value="${education.coursestartdateen }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control coursestartdateen" type="text" placeholder="Day / month / year" />
+											<input id="coursestartdateen" name="coursestartdateen" value="<fmt:formatDate value="${education.coursestartdateen }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control coursestartdateen margintop-10" type="text" placeholder="Day / month / year" />
 										</div>
 										<div class="clear"></div>
-										<div class="leftNo groupInputInfo">
+										<div class="leftNo groupInputInfo margintop-10">
 											<label>Date of Attendance To</label>
-											<input id="courseenddateen" name="courseenddateen" value="<fmt:formatDate value="${education.courseenddateen }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control courseenddateen" type="text" placeholder="Day / month / year" />
+											<input id="courseenddateen" name="courseenddateen" value="<fmt:formatDate value="${education.courseenddateen }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control courseenddateen margintop-10" type="text" placeholder="Day / month / year" />
 										</div>
 									</div>
 								</c:forEach>
 							</c:if>
 							<c:if test="${empty obj.beforeEducationList }">
-								<div class="midSchoolEduDiven">
+								<div class="midSchoolEduDiven margintop-10">
 									<div class="draBig leftNo groupInputInfo">
 										<label>Name of Institution</label>
 										<input name="institutionen" class="institutionen" type="text"/>
 									</div>
-									<div class="draBig leftNo groupInputInfo">
+									<div class="draBig leftNo margintop-10 groupInputInfo">
 										<label>Street Address (Line 1)</label>
 										<input name="institutionaddressen" class="institutionaddressen" type="text" />
 									</div>
-									<div class="draBig leftNo groupInputInfo">
+									<div class="draBig leftNo margintop-10 groupInputInfo">
 										<label>Street Address (Line 2) *Optional</label>
 										<input name="secinstitutionaddressen" class="secinstitutionaddressen" type="text" />
 									</div>
@@ -2749,12 +2769,12 @@
 									</div>
 									<div class="paddingRight leftNo groupInputInfo">
 										<label>Date of Attendance From</label>
-										<input id="coursestartdateen" name="coursestartdateen" class="datetimepickercss form-control coursestartdateen" type="text" placeholder="Day / month / year" />
+										<input id="coursestartdateen" name="coursestartdateen" class="datetimepickercss form-control coursestartdateen margintop-10" type="text" placeholder="Day / month / year" />
 									</div>
 									<div class="clear"></div>
-									<div class="leftNo groupInputInfo">
+									<div class="leftNo groupInputInfo margintop-10">
 										<label>Date of Attendance To</label>
-										<input id="courseenddateen" name="courseenddateen" class="datetimepickercss form-control courseenddateen" type="text" placeholder="Day / month / year" />
+										<input id="courseenddateen" name="courseenddateen" class="datetimepickercss form-control courseenddateen margintop-10" type="text" placeholder="Day / month / year" />
 									</div>
 								</div>
 							</c:if>
@@ -2790,12 +2810,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="languageYes">
+				<div class="languageYes paddingBom-35">
 					<c:if test="${!empty obj.languageList }">
 						<c:forEach var="language" items="${obj.languageList }">
 							<div class="languagename languagenameen languagenameDiven paddingTop padding-left">
 								<label>Language Name</label>
-								<div class="groupInputInfo paddingBom-35">
+								<div class="groupInputInfo">
 									<input name="languagenameen" class="languagenamewen" value="${language.languagenameen }" type="text" />
 								</div>
 							</div>
@@ -2822,7 +2842,7 @@
 					</div>
 					<!--yes-->
 					<div class="isTravelYes isTravelYesen elementHide">
-						<div class="gocountryYes">
+						<div class="gocountryYes marginbottom-46">
 							<c:if test="${!empty obj.gocountryList }">
 								<c:forEach var="gocountry" items="${obj.gocountryList }">
 									<div class="travelCountryen paddingTop groupInputInfo">
@@ -2871,7 +2891,7 @@
 					</div>
 					<!--yes-->
 					<div class="isOrganizationYes isOrganizationYesen elementHide">
-						<div class="organizationYes">
+						<div class="organizationYes marginbottom-36">
 							<c:if test="${!empty obj.organizationList }">
 								<c:forEach var="organization" items="${obj.organizationList }">
 								<div class="organizationDiven">
@@ -2917,7 +2937,7 @@
 					</div>
 					<!--yes-->
 					<div class="paddingTop elementHide militaryServiceYes militaryServiceYesen">
-					  <div class="militaryYes">
+					  <div class="militaryYes marginbottom-32">
 						<c:if test="${!empty obj.conscientiousList }">
 							<c:forEach var="conscientious" items="${obj.conscientiousList }">
 								<div class="militaryInfoDiven">
@@ -2935,7 +2955,7 @@
 											</c:forEach>
 										</select>
 									</div>
-									<div class="paddingRight leftNo groupInputInfo">
+									<div class="paddingRight groupInputInfo paddingleft-15">
 										<label>Branch of Service</label>
 										<input name="servicebranchen" class="servicebranchen" value="${conscientious.servicebranchen }" type="text" />
 									</div>
@@ -2944,7 +2964,7 @@
 										<label>Rank/Position</label>
 										<input name="ranken" class="ranken" value="${conscientious.ranken }" type="text" />
 									</div>
-									<div class="paddingRight leftNo groupInputInfo">
+									<div class="paddingRight groupInputInfo paddingleft-15">
 										<label>Military Specialty</label>
 										<input name="militaryspecialtyen" class="militaryspecialtyen" value="${conscientious.militaryspecialtyen }" type="text"/>
 									</div>
@@ -2953,7 +2973,7 @@
 										<label>Date of Service From</label>
 										<input id="servicestartdateen" name="servicestartdateen" value="<fmt:formatDate value="${conscientious.servicestartdateen }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss form-control servicestartdateen" placeholder="日/月/年"/>
 									</div>
-									<div class="paddingRight leftNo groupInputInfo">
+									<div class="paddingRight groupInputInfo paddingleft-15">
 										<label>Date of Service To</label>
 										<input id="serviceenddateen" name="serviceenddateen" value="<fmt:formatDate value="${conscientious.serviceenddateen }" pattern="dd/MM/yyyy" />" type="text" class="datetimepickercss form-control serviceenddateen" placeholder="日/月/年"/>
 									</div>
@@ -2972,7 +2992,7 @@
 										</c:forEach>
 									</select>
 								</div>
-								<div class="paddingRight leftNo groupInputInfo">
+								<div class="paddingRight groupInputInfo paddingleft-15">
 									<label>Branch of Service</label>
 									<input name="servicebranchen" class="servicebranchen" type="text" />
 								</div>
@@ -2981,7 +3001,7 @@
 									<label>Rank/Position</label>
 									<input name="ranken" class="ranken" type="text" />
 								</div>
-								<div class="paddingRight leftNo groupInputInfo">
+								<div class="paddingRight groupInputInfo paddingleft-15">
 									<label>Military Specialty</label>
 									<input name="militaryspecialtyen" class="militaryspecialtyen" type="text"/>
 								</div>
@@ -2990,7 +3010,7 @@
 									<label>Date of Service From</label>
 									<input id="servicestartdateen" name="servicestartdateen" type="text" class="datetimepickercss form-control servicestartdateen" placeholder="Day / month / year"/>
 								</div>
-								<div class="paddingRight leftNo groupInputInfo">
+								<div class="paddingRight groupInputInfo paddingleft-15">
 									<label>Date of Service To</label>
 									<input id="serviceenddateen" name="serviceenddateen" type="text" class="datetimepickercss form-control serviceenddateen" placeholder="Day / month / year"/>
 								</div>
@@ -3349,6 +3369,7 @@
 		var BASE_PATH = '${base}';
 		var staffId = '${obj.staffId}';
 		var isDisable = '${obj.isDisable}';
+		var flag = '${obj.flag}';
 	</script>
 	<!-- 公共js -->
 	<script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
@@ -3378,12 +3399,13 @@
 			}
 			
 			openYesOrNoPage();
+			
 		});
 	
 		//跳转到基本信息页
 		function baseInfoBtn(){
 			if(isDisable == 1){
-				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
+				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable+'&flag='+flag;
 			}else{
 				//保存签证信息
 				save(2);
