@@ -6,6 +6,9 @@
 <html lang="en-US">
 <head>
 <meta charset="utf-8">
+<meta http-equlv="proma" content="no-cache" />
+<meta http-equlv="cache-control" content="no-cache" />
+<meta http-equlv="expires" content="0" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>签证详情</title>
 <link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
@@ -15,13 +18,13 @@
 <link rel="stylesheet" href="${base}/references/public/dist/bootstrapcss/css/font-awesome.min.css">
 <link rel="stylesheet" href="${base}/references/public/dist/bootstrapcss/css/ionicons.min.css">
 <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
 <link rel="stylesheet" href="${base}/references/public/css/style.css">
 <!-- 签证详情样式 -->
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/visaDetail.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/visaDetail.css?v='20180510'">
 <!-- 加载中。。。样式 -->
 <link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 </head>

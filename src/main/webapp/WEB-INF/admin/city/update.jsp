@@ -15,7 +15,7 @@
 	href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 <link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 </head>

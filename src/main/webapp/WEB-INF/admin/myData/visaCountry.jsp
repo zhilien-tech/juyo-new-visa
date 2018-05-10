@@ -5,6 +5,9 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
+		<meta http-equlv="proma" content="no-cache" />
+		<meta http-equlv="cache-control" content="no-cache" />
+		<meta http-equlv="expires" content="0" />
 		<title></title>
 		<style>
 			* { margin: 0; padding: 0; }

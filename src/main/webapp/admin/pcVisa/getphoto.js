@@ -364,7 +364,7 @@ function savePhoto() {
 	window.location.href = '/admin/bigCustomer/updatePassportInfo.html?passportId='
 			+ passportId;*/
 	layer.msg("保存成功", {
-		time: 2000,
+		time: 1000,
 		end: function () {
 			parent.successCallback(2);
 			var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引

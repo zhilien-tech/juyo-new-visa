@@ -3,9 +3,12 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equlv="proma" content="no-cache" />
+	<meta http-equlv="cache-control" content="no-cache" />
+	<meta http-equlv="expires" content="0" />
 	<title>游客登录</title>
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/login.css" />
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/login.css?v='20180510'" />
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<style type="text/css">
 		html {height: 100%;width:100%;display: table;}
