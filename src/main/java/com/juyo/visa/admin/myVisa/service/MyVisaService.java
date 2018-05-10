@@ -75,21 +75,25 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		Integer userId = userEntity.getId();
 		//判断当前登录用户,如果isSameLinker为1则为统一联系人，查询订单下所有申请人，为0时只查自己
 		TApplicantEntity apply = null;
+		int flag = 0;
+		List<TApplicantEntity> newList = new ArrayList<>();
 		List<TApplicantEntity> applyList = dbDao.query(TApplicantEntity.class, Cnd.where("userId", "=", userId), null);
 		for (TApplicantEntity tApplicantEntity : applyList) {
 			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", tApplicantEntity.getId()));
-			Integer orderId = applicantOrderJpEntity.getOrderId();
-			if (Util.eq(orderId, orderJpId)) {
+			if (applicantOrderJpEntity.getIsSameLinker() == IsYesOrNoEnum.YES.intKey()) {
+				flag = 1;
 				apply = tApplicantEntity;
 			}
 		}
-		TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
-				Cnd.where("applicantId", "=", apply.getId()));
-		Integer isSameLinker = applicantOrderJpEntity.getIsSameLinker();
 		form.setOrderjpid(orderJpId);
-		form.setIsMainLink(isSameLinker);
-		form.setApplicatid(apply.getId());
+		if (flag == 1) {
+			form.setIsMainLink(1);
+			form.setApplicatid(apply.getId());
+		} else {
+			form.setIsMainLink(0);
+			form.setUserid(userId);
+		}
 		Sql sql = form.sql(sqlManager);
 
 		Integer pageNumber = form.getPageNumber();
@@ -146,6 +150,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 		Cnd orderJpCnd = Cnd.NEW();
 		orderJpCnd.and("ta.userId", "=", userEntity.getId());
 		orderJpCnd.and("tr.isDisabled", "=", IsYesOrNoEnum.NO.intKey());
+		orderJpCnd.groupBy("tr.id");
 		orderSql.setCondition(orderJpCnd);
 		List<Record> orderRecord = dbDao.query(orderSql, orderJpCnd, null);
 
@@ -159,7 +164,7 @@ public class MyVisaService extends BaseService<TOrderJpEntity> {
 				recordCnd.and("taoj.orderId", "=", orderJpId);
 			} else {
 				recordCnd.and("taoj.orderId", "=", orderJpId);
-				recordCnd.and("ta.userId", "=", loginUser.getId());
+				recordCnd.and("ta.userId", "=", userEntity.getId());
 			}
 			applysql.setCondition(recordCnd);
 			List<Record> query = dbDao.query(applysql, recordCnd, null);

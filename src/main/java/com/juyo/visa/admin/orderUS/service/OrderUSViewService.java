@@ -213,10 +213,19 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		@SuppressWarnings("unchecked")
 		//主sql数据
 		List<Record> list = (List<Record>) sql.getResult();
+		//格式化面试时间
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
 		for (Record record : list) {
 			Integer orderid = (Integer) record.get("orderid");
 			Object payObj = record.get("ispayed");
 			Object cityObj = record.get("cityid");
+
+			//面签时间格式化
+			if (!Util.isEmpty(record.get("interviewdate"))) {
+				Date interviewdate = (Date) record.get("interviewdate");
+				record.put("interviewdate", sdf.format(interviewdate));
+			}
+			//领区
 			if (!Util.isEmpty(cityObj)) {
 				int cityid = (int) cityObj;
 				for (DistrictEnum district : DistrictEnum.values()) {
@@ -225,6 +234,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					}
 				}
 			}
+			//是否付款
 			if (!Util.isEmpty(payObj)) {
 				int ispayed = (int) payObj;
 				for (IsPayedEnum pay : IsPayedEnum.values()) {
@@ -238,6 +248,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			List<Record> records = dbDao.query(applysql, Cnd.where("tasou.orderid", "=", orderid), null);
 			record.put("everybodyInfo", records);
 
+			//订单状态
 			int orderStatus = (int) record.get("orderstatus");
 			for (USOrderListStatusEnum statusEnum : USOrderListStatusEnum.values()) {
 				if (!Util.isEmpty(orderStatus) && orderStatus == statusEnum.intKey()) {
@@ -274,6 +285,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		Integer userid = loginUser.getId();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		Integer comid = loginCompany.getId();
+		result.put("company", loginCompany);
 
 		//领区下拉
 		result.put("cityidenum", EnumUtil.enum2(DistrictEnum.class));
