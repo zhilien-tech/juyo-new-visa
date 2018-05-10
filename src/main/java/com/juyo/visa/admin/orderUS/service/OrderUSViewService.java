@@ -1424,9 +1424,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String telephone = staffBaseInfo.getTelephone();
 		String toEmail = staffBaseInfo.getEmail();
 		String sex = staffBaseInfo.getSex();
+		String interviewdateStr = "";
 		Date interviewdate = staffBaseInfo.getInterviewdate();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		String interviewdateStr = sdf.format(interviewdate);
+		if (!Util.isEmpty(interviewdate)) {
+			interviewdateStr = sdf.format(interviewdate);
+		}
 
 		if (!Util.isEmpty(toEmail)) {
 			/*if (Util.eq("男", sex)) {
@@ -1470,9 +1473,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String telephone = staffBaseInfo.getTelephone();
 		String email = staffBaseInfo.getEmail();
 		String sex = staffBaseInfo.getSex();
+		String interviewdateStr = "";
 		Date interviewdate = staffBaseInfo.getInterviewdate();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		String interviewdateStr = sdf.format(interviewdate);
+		if (!Util.isEmpty(interviewdate)) {
+			interviewdateStr = sdf.format(interviewdate);
+		}
 		String result = "";
 		if (!Util.isEmpty(telephone)) {
 			/*if (Util.eq("男", sex)) {

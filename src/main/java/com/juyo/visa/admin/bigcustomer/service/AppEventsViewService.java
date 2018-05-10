@@ -481,7 +481,7 @@ public class AppEventsViewService extends BaseService<TAppStaffBasicinfoEntity> 
 
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		Integer loginComId = loginCompany.getId();
-		
+
 		//校验姓名是否合格
 		String firstname = form.getFirstname();
 		String lastname = form.getLastname();
