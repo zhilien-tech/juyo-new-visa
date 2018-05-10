@@ -828,7 +828,7 @@
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>邮政编码</label>
-											<input name="employerzipcode" onchange="addSegmentsTranslateZhToEn(this,'isKonwOrtherZipCodeen','')" value="${beforeWork.employerzipcode }" type="text" />
+											<input name="employerzipcode" onchange="addSegmentsTranslateZhToEn(this,'employerzipcodeen','')" value="${beforeWork.employerzipcode }" type="text" />
 											<c:if test="${beforeWork.isemployerzipcodeapply == 1}">
 												<input id="isKonwOrtherZipCode" name="isemployerzipcodeapply" onchange="AddSegment(this,'isemployerzipcodeapplyen')" value="${beforeWork.isemployerzipcodeapply }" checked="checked" type="checkbox"/>
 											</c:if>
@@ -1011,7 +1011,7 @@
 										</div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo" >
 											<label>州/省</label>
-											<input name="institutionprovince" onchange="addSegmentsTranslateZhToEn(this,'isinstitutionprovinceapplyen','')" value="${education.institutionprovince }" type="text" />
+											<input name="institutionprovince" onchange="addSegmentsTranslateZhToEn(this,'institutionprovinceen','')" value="${education.institutionprovince }" type="text" />
 											<c:if test="${education.isinstitutionprovinceapply == 1}">
 												<input name="isinstitutionprovinceapply" onchange="AddSegment(this,'isschoolprovinceen')" value="${education.isinstitutionprovinceapply }"  checked="checked" type="checkbox"/>
 											</c:if>
@@ -2486,7 +2486,7 @@
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupcheckBoxInfo">
 											<label>Postal Zone/ZIP Code</label>
-											<input name="employerzipcodeen" value="${beforeWork.employerzipcodeen }" classs="employerzipcodeen" type="text" />
+											<input name="employerzipcodeen" value="${beforeWork.employerzipcodeen }" class="employerzipcodeen" type="text" />
 											<c:if test="${beforeWork.isemployerzipcodeapplyen == 1}">
 												<input id="isKonwOrtherZipCodeen" class="isemployerzipcodeapplyen"  name="isemployerzipcodeapplyen" value="${beforeWork.isemployerzipcodeapplyen }" checked="checked" type="checkbox"/>
 											</c:if>
