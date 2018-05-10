@@ -1254,15 +1254,17 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	//根据人员id添加订单
 	public Object addOrderByStuffId(Integer staffId, int userid) {
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
-		String YuShangComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID"));
-		Integer US_YUSHANG_COM_ID = Integer.valueOf(YuShangComIdStr);
+		String BaoYingComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_BAOYING_COMPANY_ID"));
+		Integer US_BaoYing_COM_ID = Integer.valueOf(BaoYingComIdStr);
 
 		TOrderUsEntity orderUs = new TOrderUsEntity();
 		String orderNum = generateOrderNumByDate();
 		Date nowDate = DateUtil.nowDate();
 		orderUs.setOrdernumber(orderNum);
 		orderUs.setOpid(userid);
-		orderUs.setComid(US_YUSHANG_COM_ID);
+		orderUs.setComid(US_BaoYing_COM_ID);
+		//大客户名称默认为： 葆婴
+		orderUs.setBigcustomername(BaoYingComIdStr);
 		orderUs.setStatus(USOrderStatusEnum.PLACE_ORDER.intKey());//下单
 		orderUs.setIspayed(IsPayedEnum.NOTPAY.intKey());
 		orderUs.setCreatetime(nowDate);
