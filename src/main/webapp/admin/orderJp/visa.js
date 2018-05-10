@@ -642,7 +642,7 @@ function save(status){
 		$("#wealth").val(0);
 	}
 	var passportInfo = $.param({"wealthType":wealthType}) + "&" +  $("#passportInfo").serialize();
-	if(tourist == 1){
+	/*if(tourist == 1){
 		layer.load(1);
 		$.ajax({
 			type: 'POST',
@@ -899,7 +899,7 @@ function save(status){
 			}
 		});
 		
-	}else{
+	}else{*/
 		if(status == 2){
 			socket.onclose();
 			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrail+'&orderProcessType='+orderProcessType+'&addApply='+addApply;
@@ -927,12 +927,12 @@ function save(status){
 				}
 			});
 		}
-	}
+	//}
 }
 
 //返回 
 function closeWindow() {
-	if(tourist == 1){
+	/*if(tourist == 1){
 		$.ajax({
 			async: false,
 			type: 'POST',
@@ -1034,11 +1034,11 @@ function closeWindow() {
 			}
 		});
 		parent.successCallBack();
-	}else{
+	}else{*/
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 		parent.layer.close(index);
 		parent.cancelCallBack(1);
-	}
+	//}
 }
 
 function cancelCallBack(status){

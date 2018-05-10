@@ -25,10 +25,16 @@
 			<div class="main">
 				<ul>
 					<li>
-						<a href="/admin/myData/visaInfo">
+						<a href="/admin/myVisa/visaList">
 							<img src="${base}/references/common/images/JapanFlag.png" />
 						</a>
 						<span>日本</span>
+					</li>
+					<li>
+						<a href="/admin/pcVisa/visaList">
+							<img src="${base}/references/common/images/USFlag.png" />
+						</a>
+						<span>美国</span>
 					</li>
 				</ul>
 			</div>

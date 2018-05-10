@@ -27,6 +27,11 @@
 	</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
+<div class="head">
+			<span>
+				办理中签证 >>申请人
+			</span>
+		</div>
 				<section class="content">
 					<div class="box-body" id="card"><!-- 卡片列表 -->
 					<div v-on:click="toInProcess(data.id)" class="card-list" v-cloak v-for="data in visaJapanData">
