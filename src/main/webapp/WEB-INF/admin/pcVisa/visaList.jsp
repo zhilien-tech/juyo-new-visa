@@ -4,10 +4,12 @@
 <html lang="en-US">
 	<head>
 		<meta charset="utf-8">
+		<meta http-equlv="proma" content="no-cache" />
+		<meta http-equlv="cache-control" content="no-cache" />
+		<meta http-equlv="expires" content="0" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>办理中签证</title>
-		<link rel="stylesheet" href="${base}/references/public/css/handleVisa.css">
-		
+		<link rel="stylesheet" href="${base}/references/public/css/handleVisa.css?v='20180510'">
 		<style>
 			[v-cloak]{display:none}
 		</style>

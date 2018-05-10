@@ -6,9 +6,12 @@
 <html lang="en-US">
 <head>
 <meta charset="UTF-8">
+<meta http-equlv="proma" content="no-cache" />
+<meta http-equlv="cache-control" content="no-cache" />
+<meta http-equlv="expires" content="0" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>拍摄资料</title>
-<link rel="stylesheet" href="/references/public/dist/newvisacss/css/photograph.css" />
+<link rel="stylesheet" href="/references/public/dist/newvisacss/css/photograph.css?v='20180510'" />
 </head>
 <body>
 	<div class="head">

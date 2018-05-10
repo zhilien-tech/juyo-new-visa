@@ -5,22 +5,25 @@
 <html lang="en-US">
 	<head>
 		<meta charset="utf-8">
+		<meta http-equlv="proma" content="no-cache" />
+		<meta http-equlv="cache-control" content="no-cache" />
+		<meta http-equlv="expires" content="0" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>初审 - 编辑</title>
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
 	    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 		<link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
-		<link rel="stylesheet" href="${base}/references/public/css/style.css">
+		<link rel="stylesheet" href="${base}/references/public/css/style.css?v='20180510'">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<!-- 加载中。。。样式 -->
 		<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 		<!-- 本页面样式 -->
-		<link rel="stylesheet" href="${base}/references/common/css/trailDetail.css">
+		<link rel="stylesheet" href="${base}/references/common/css/trailDetail.css?v='20180510'">
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 		<div class="wrapper" id="wrapper">
