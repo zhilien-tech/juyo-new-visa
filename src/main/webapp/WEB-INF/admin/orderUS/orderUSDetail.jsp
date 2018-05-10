@@ -81,14 +81,14 @@
 					<div class="info-body-from">
 						<!-- 模块 -->
 						<div class="row body-from-input">
-							<%-- <div class="col-sm-3">
+							<div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>团名</label>
 									<input type="text" class="input-sm form-control" name="groupname" value="${obj.orderinfo.groupname }" />
 								</div>
-							</div> --%>
+							</div>
 							
-							<div class="col-sm-3">
+							<%-- <div class="col-sm-3">
 								<div class="form-group">
 									<label><span>*</span>大客户公司名称</label>
 									<select id ="bigcustomername" name="bigcustomername"
@@ -98,9 +98,8 @@
 													<option value="${obj.bigcom.id }" selected="selected">${obj.bigcom.name }</option>
 												</c:if>
 											</select>
-									<%-- <input type="text" class="input-sm form-control" name="bigcustomername" value="${obj.orderinfo.bigcustomername }" /> --%>
 								</div>
-							</div>
+							</div> --%>
 							
 							<div class="col-sm-3">
 								<div class="form-group">
