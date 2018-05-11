@@ -6,6 +6,9 @@
 <html lang="en-US">
 <head>
 <meta charset="utf-8">
+<meta http-equlv="proma" content="no-cache" />
+<meta http-equlv="cache-control" content="no-cache" />
+<meta http-equlv="expires" content="0" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>订单详情</title>
 <link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
@@ -15,13 +18,13 @@
 <link rel="stylesheet" href="${base}/references/public/dist/bootstrapcss/css/font-awesome.min.css">
 <link rel="stylesheet" href="${base}/references/public/dist/bootstrapcss/css/ionicons.min.css">
 <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
 <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
-<link rel="stylesheet" href="${base}/references/public/css/style.css">
+<link rel="stylesheet" href="${base}/references/public/css/style.css?v='20180510'">
 <!-- 签证详情样式 -->
-<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/visaDetail.css">
+<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/visaDetail.css?v='20180510'">
 <!-- 加载中。。。样式 -->
 <link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 </head>
@@ -88,19 +91,24 @@
 								</div>
 							</div> --%>
 							
-							<div class="col-sm-3">
-								<div class="form-group">
-									<label><span>*</span>大客户公司名称</label>
-									<select id ="bigcustomername" name="bigcustomername"
-												class="form-control select2 cityselect2 " multiple="multiple"
-												data-placeholder="" >
-												<c:if test="${ !empty obj.bigcom.id }">
-													<option value="${obj.bigcom.id }" selected="selected">${obj.bigcom.name }</option>
-												</c:if>
-											</select>
-									<%-- <input type="text" class="input-sm form-control" name="bigcustomername" value="${obj.orderinfo.bigcustomername }" /> --%>
-								</div>
-							</div>
+							<c:choose>
+								<c:when test="${obj.company.comType == 5 }">
+									<div class="col-sm-3">
+										<div class="form-group">
+											<label><span>*</span>大客户公司名称</label>
+											<select id ="bigcustomername" name="bigcustomername"
+														class="form-control select2 cityselect2 " multiple="multiple"
+														data-placeholder="" >
+														<c:if test="${ !empty obj.bigcom.id }">
+															<option value="${obj.bigcom.id }" selected="selected">${obj.bigcom.name }</option>
+														</c:if>
+													</select>
+										</div>
+									</div>
+								</c:when>
+							
+							</c:choose>
+							
 							
 							<div class="col-sm-3">
 								<div class="form-group">

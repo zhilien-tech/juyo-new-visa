@@ -159,15 +159,16 @@ public class LoginService extends BaseService<TUserEntity> {
 			} else if (UserLoginEnum.BIG_COMPANY_ADMIN.intKey() == userType) {
 				//大客户公司管理员
 				form.setMainurl("/admin/baoying/listUS.html");
-			} else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
+			} /*else if (UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
 				//游客跳转的页面
 				form.setMainurl("/admin/myVisa/visaList.html");
-			} else if (UserLoginEnum.BIG_COMPANY_CUSTOMER.intKey() == userType) {
+				}*/else if (UserLoginEnum.BIG_COMPANY_CUSTOMER.intKey() == userType) {
 				//大客户跳转的页面
 				form.setMainurl("/admin/bigCustomer/list.html");
-			} else if (UserLoginEnum.BIG_TOURIST_IDENTITY.intKey() == userType) {
+			} else if (UserLoginEnum.BIG_TOURIST_IDENTITY.intKey() == userType
+					|| UserLoginEnum.TOURIST_IDENTITY.intKey() == userType) {
 				//大客户游客跳转的页面
-				form.setMainurl("/admin/pcVisa/visaList.html");
+				form.setMainurl("/admin/pcVisa/toReload.html");
 			} else if (UserLoginEnum.BAOYING_US.intKey() == userType) {
 				//大客户管理员跳转的页面
 				form.setMainurl("/admin/baoying/listUS.html");

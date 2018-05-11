@@ -213,10 +213,19 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		@SuppressWarnings("unchecked")
 		//主sql数据
 		List<Record> list = (List<Record>) sql.getResult();
+		//格式化面试时间
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
 		for (Record record : list) {
 			Integer orderid = (Integer) record.get("orderid");
 			Object payObj = record.get("ispayed");
 			Object cityObj = record.get("cityid");
+
+			//面签时间格式化
+			if (!Util.isEmpty(record.get("interviewdate"))) {
+				Date interviewdate = (Date) record.get("interviewdate");
+				record.put("interviewdate", sdf.format(interviewdate));
+			}
+			//领区
 			if (!Util.isEmpty(cityObj)) {
 				int cityid = (int) cityObj;
 				for (DistrictEnum district : DistrictEnum.values()) {
@@ -225,6 +234,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					}
 				}
 			}
+			//是否付款
 			if (!Util.isEmpty(payObj)) {
 				int ispayed = (int) payObj;
 				for (IsPayedEnum pay : IsPayedEnum.values()) {
@@ -238,6 +248,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			List<Record> records = dbDao.query(applysql, Cnd.where("tasou.orderid", "=", orderid), null);
 			record.put("everybodyInfo", records);
 
+			//订单状态
 			int orderStatus = (int) record.get("orderstatus");
 			for (USOrderListStatusEnum statusEnum : USOrderListStatusEnum.values()) {
 				if (!Util.isEmpty(orderStatus) && orderStatus == statusEnum.intKey()) {
@@ -274,6 +285,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		Integer userid = loginUser.getId();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		Integer comid = loginCompany.getId();
+		result.put("company", loginCompany);
 
 		//领区下拉
 		result.put("cityidenum", EnumUtil.enum2(DistrictEnum.class));
@@ -1198,7 +1210,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderus.setGroupname(form.getGroupname());
 		orderus.setBigcustomername(form.getBigcustomername());
 		orderus.setUpdatetime(new Date());
-		dbDao.update(orderus);
 
 		//如果有面签时间，则改变订单状态为面签
 		if (!Util.isEmpty(form.getInterviewdate())) {
@@ -1207,6 +1218,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 			insertLogs(orderus.getId(), USOrderListStatusEnum.MIANQIAN.intKey(), loginUser.getId());
 		}
+		dbDao.update(orderus);
 		//把面签时间添加到人员信息中
 		TAppStaffOrderUsEntity fetch = dbDao.fetch(TAppStaffOrderUsEntity.class, Cnd.where("orderid", "=", orderid));
 		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, fetch.getStaffid().longValue());
@@ -1242,15 +1254,17 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	//根据人员id添加订单
 	public Object addOrderByStuffId(Integer staffId, int userid) {
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
-		String YuShangComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID"));
-		Integer US_YUSHANG_COM_ID = Integer.valueOf(YuShangComIdStr);
+		String BaoYingComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_BAOYING_COMPANY_ID"));
+		Integer US_BaoYing_COM_ID = Integer.valueOf(BaoYingComIdStr);
 
 		TOrderUsEntity orderUs = new TOrderUsEntity();
 		String orderNum = generateOrderNumByDate();
 		Date nowDate = DateUtil.nowDate();
 		orderUs.setOrdernumber(orderNum);
 		orderUs.setOpid(userid);
-		orderUs.setComid(US_YUSHANG_COM_ID);
+		orderUs.setComid(US_BaoYing_COM_ID);
+		//大客户名称默认为： 葆婴
+		orderUs.setBigcustomername(BaoYingComIdStr);
 		orderUs.setStatus(USOrderStatusEnum.PLACE_ORDER.intKey());//下单
 		orderUs.setIspayed(IsPayedEnum.NOTPAY.intKey());
 		orderUs.setCreatetime(nowDate);
@@ -1424,9 +1438,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String telephone = staffBaseInfo.getTelephone();
 		String toEmail = staffBaseInfo.getEmail();
 		String sex = staffBaseInfo.getSex();
+		String interviewdateStr = "";
 		Date interviewdate = staffBaseInfo.getInterviewdate();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		String interviewdateStr = sdf.format(interviewdate);
+		if (!Util.isEmpty(interviewdate)) {
+			interviewdateStr = sdf.format(interviewdate);
+		}
 
 		if (!Util.isEmpty(toEmail)) {
 			/*if (Util.eq("男", sex)) {
@@ -1470,9 +1487,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String telephone = staffBaseInfo.getTelephone();
 		String email = staffBaseInfo.getEmail();
 		String sex = staffBaseInfo.getSex();
+		String interviewdateStr = "";
 		Date interviewdate = staffBaseInfo.getInterviewdate();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		String interviewdateStr = sdf.format(interviewdate);
+		if (!Util.isEmpty(interviewdate)) {
+			interviewdateStr = sdf.format(interviewdate);
+		}
 		String result = "";
 		if (!Util.isEmpty(telephone)) {
 			/*if (Util.eq("男", sex)) {

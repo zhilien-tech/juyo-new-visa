@@ -6,17 +6,20 @@
 <html lang="en-US">
 	<head>
 		<meta charset="UTF-8">
+		<meta http-equlv="proma" content="no-cache" />
+		<meta http-equlv="cache-control" content="no-cache" />
+		<meta http-equlv="expires" content="0" />
 		<title>报名</title>
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
     <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
     <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
     <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
-    <link rel="stylesheet" href="${base}/references/public/css/style.css">
+    <link rel="stylesheet" href="${base}/references/public/css/style.css?v='20180510'">
     <!-- 加载中。。。样式 -->
 	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 	<!-- 本页样式 -->
-	<link rel="stylesheet" href="${base}/references/common/css/addOrderUS.css">
+	<link rel="stylesheet" href="${base}/references/common/css/addOrderUS.css?v='20180510'">
 	</head>
 	<body>
 		<header>

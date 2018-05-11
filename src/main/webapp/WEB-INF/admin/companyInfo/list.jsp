@@ -5,11 +5,14 @@
 <html lang="en-US">
 <head>
 	<meta charset="utf-8">
+	<meta http-equlv="proma" content="no-cache" />
+	<meta http-equlv="cache-control" content="no-cache" />
+	<meta http-equlv="expires" content="0" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>公司信息</title>
 	<link rel="stylesheet"href="${base}/references/public/css/companyInfo.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 </head>
 <body>

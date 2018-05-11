@@ -431,7 +431,7 @@ function dataURLtoBlob(dataurl) {
 }
 
 //根据护照号查询游客信息
-$("#passport").change(function(){
+/*$("#passport").change(function(){
 	if(tourist == 1){
 		$.ajax({
 			type : "post",
@@ -551,7 +551,7 @@ $("#passport").change(function(){
 			}
 		});
 	}
-});
+});*/
 
 function toSet(data){
 	$("#passportUrl").val(data.pass.passportUrl);
@@ -598,7 +598,7 @@ function save(status){
 						return;
 				} */
 			var passportInfo = $("#passportInfo").serialize();
-			if(tourist == 1){
+			/*if(tourist == 1){
 				layer.load(1);
 				$.ajax({
 					async: false,
@@ -873,7 +873,7 @@ function save(status){
 					}
 				});
 
-			}else{
+			}else{*/
 				if(status == 2){
 					socket.onclose();
 					window.location.href = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid='+'&isTrial='+isTrail+'&orderProcessType='+orderProcessType+'&addApply='+addApply;
@@ -917,7 +917,7 @@ function save(status){
 					});
 
 				}
-			}
+			//}
 		}
 	}, 500);
 }
@@ -958,7 +958,7 @@ $(".qualified").click(function(){
 
 //返回 
 function closeWindow() {
-	if(tourist == 1){
+	/*if(tourist == 1){
 		$.ajax({
 			async: false,
 			type: 'POST',
@@ -1060,11 +1060,11 @@ function closeWindow() {
 			}
 		});
 		parent.successCallBack();
-	}else{
+	}else{*/
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 		parent.layer.close(index);
 		parent.cancelCallBack(1);
-	}
+	//}
 }
 
 function cancelCallBack(status){
