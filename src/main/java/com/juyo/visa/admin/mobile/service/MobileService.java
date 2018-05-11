@@ -196,7 +196,9 @@ public class MobileService extends BaseService<TApplicantEntity> {
 				mobileuser.setPassword(applicantUser.getPassword());
 				mobileuser.setOpId(applicantUser.getOpid());
 				mobileuser.setUpdateTime(new Date());
-				mobileuser.setName(applicantUser.getUsername());
+				if (!Util.isEmpty(applicantUser.getUsername())) {
+					mobileuser.setName(applicantUser.getUsername());
+				}
 				applicant.setUserid(mobileuser.getId());
 				dbDao.update(mobileuser);
 			} else {
@@ -215,7 +217,9 @@ public class MobileService extends BaseService<TApplicantEntity> {
 				mobileuser.setPassword(applicantUser.getPassword());
 				mobileuser.setOpId(applicantUser.getOpid());
 				mobileuser.setUpdateTime(new Date());
-				mobileuser.setName(applicantUser.getUsername());
+				if (!Util.isEmpty(applicantUser.getUsername())) {
+					mobileuser.setName(applicantUser.getUsername());
+				}
 				applicant.setUserid(mobileuser.getId());
 				dbDao.update(mobileuser);
 			} else {
