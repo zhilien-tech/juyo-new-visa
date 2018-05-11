@@ -5,10 +5,13 @@
 <html lang="en-US" id="addHtml">
 <head>
 	<meta charset="UTF-8">
+	<meta http-equlv="proma" content="no-cache" />
+	<meta http-equlv="cache-control" content="no-cache" />
+	<meta http-equlv="expires" content="0" />
 	<title>销售 - 日志</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<!-- 本页样式 -->
-	<link rel="stylesheet" href="${base}/references/common/css/notice.css">
+	<link rel="stylesheet" href="${base}/references/common/css/notice.css?v='20180510'">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<style type="text/css">
 	[v-cloak]{display:none;}

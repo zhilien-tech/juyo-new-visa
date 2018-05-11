@@ -4,20 +4,23 @@
 <html lang="en-US">
 <head>
 	<meta charset="utf-8">
+	<meta http-equlv="proma" content="no-cache" />
+	<meta http-equlv="cache-control" content="no-cache" />
+	<meta http-equlv="expires" content="0" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>美国列表页</title>
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
+    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
     <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
     <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
     <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
-    <link rel="stylesheet" href="${base}/references/public/css/style.css">
+    <link rel="stylesheet" href="${base}/references/public/css/style.css?v='20180510'">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css"><!-- 订单切换卡 样式 -->
     <!-- 加载中。。。样式 -->
 	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 	<!-- 本页样式 -->
-	<link rel="stylesheet" href="${base}/references/common/css/viasDetailUS.css">
+	<link rel="stylesheet" href="${base}/references/common/css/viasDetailUS.css?v='20180510'">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">
@@ -73,7 +76,7 @@
 							<div class="card-head cf">
 								<div><label>订单号：</label><span>{{data.ordernumber}}</span></div>
 								<div class="ctid"><label>领区：</label><span>{{data.cityid}}</span></div>
-								<div><label>面试时间：</label><span></span></div>
+								<div><label>面签时间：</label><span>{{data.interviewdate}}</span></div>
 								<div><label>是否付款：</label><span>{{data.ispayed}}</span></div>
 								<div v-if="data.isdisable==1">
 								<label></label><span>作废</span>

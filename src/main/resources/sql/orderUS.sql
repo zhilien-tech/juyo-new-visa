@@ -26,8 +26,8 @@ SELECT
 	taj.email,
 	taj.type,
 	taj.content,
-	taj.aacode
-	
+	taj.aacode,
+	taj.Interviewdate
 FROM
 	t_order_us tou
 	LEFT JOIN t_user tu ON tu.id = tou.opid
@@ -35,6 +35,7 @@ FROM
 		SELECT
 		tasou.orderid stafforderid,
 		tasb.id staffid,
+		tasb.Interviewdate,
 		tasp.passport,
 		tasb.telephone,
 		tasb.email,

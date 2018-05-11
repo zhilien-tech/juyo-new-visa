@@ -207,11 +207,11 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		//大客户与美签简公司关系表更新
 		if(comType == CompanyTypeEnum.BIGCUSTOMER.intKey()) {
 			Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
-			String YuShangComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID"));
-			Integer US_YUSHANG_COM_ID = Integer.valueOf(YuShangComIdStr);
+			String BaoYingComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_BAOYING_COMPANY_ID"));
+			Integer US_BaoYing_COM_ID = Integer.valueOf(BaoYingComIdStr);
 			TCompanyCustomerMapEntity entityNew = new TCompanyCustomerMapEntity();
 			entityNew.setBigCustomerId(comId);
-			entityNew.setBelongComId(US_YUSHANG_COM_ID);
+			entityNew.setBelongComId(US_BaoYing_COM_ID);
 			dbDao.insert(entityNew);
 			
 		}
@@ -278,8 +278,8 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		int opId = loginUser.getId();
 		
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
-		String YuShangComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_YUSHANG_COMPANY_ID"));
-		Integer US_YUSHANG_COM_ID = Integer.valueOf(YuShangComIdStr);
+		String BaoYingComIdStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_BAOYING_COMPANY_ID"));
+		Integer US_BaoYing_COM_ID = Integer.valueOf(BaoYingComIdStr);
 
 		//编辑管理员信息
 		Integer adminId = updateForm.getAdminId();
@@ -311,12 +311,12 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			if(comType == CompanyTypeEnum.BIGCUSTOMER.intKey()) {
 				if(!Util.isEmpty(entity)) {
 					entity.setBigCustomerId(bigComid);
-					entity.setBelongComId(US_YUSHANG_COM_ID);
+					entity.setBelongComId(US_BaoYing_COM_ID);
 					dbDao.update(entity);
 				}else {
 					TCompanyCustomerMapEntity entityNew = new TCompanyCustomerMapEntity();
 					entityNew.setBigCustomerId(bigComid);
-					entityNew.setBelongComId(US_YUSHANG_COM_ID);
+					entityNew.setBelongComId(US_BaoYing_COM_ID);
 					dbDao.insert(entityNew);
 				}
 			}else {

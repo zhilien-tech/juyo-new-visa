@@ -1047,20 +1047,19 @@
 											</select>
 										</div>
 										<div class="clear"></div>
-										<div class="paddingLeft leftNo groupInputInfo">
+										<div class="paddingTop leftNo groupInputInfo">
 											<label>学科</label>
 											<input name="course" onchange="addSegmentsTranslateZhToEn(this,'courseen','')" value="${education.course }" type="text" />
 										</div>
-										
-										<div class="paddingRight leftNo groupInputInfo">
+										<div class="paddingLeft leftNo groupInputInfo">
 											<label>参加课程开始时间</label>
 											<input id="coursestartdate" onchange="addSegmentsTranslateZhToEn(this,'coursestartdateen','')" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 										</div>
-										<div class="clear"></div>
-										<div class="leftNo paddingTop groupInputInfo margintop-10">
+										<div class="paddingRight leftNo  groupInputInfo">
 											<label>结束时间</label>
 											<input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 										</div>
+										<div class="clear"></div>
 									</div>
 								</c:forEach>
 							</c:if>
@@ -1103,19 +1102,19 @@
 										</select>
 									</div>
 									<div class="clear"></div>
-									<div class="paddingLeft leftNo groupInputInfo">
+									<div class="paddingTop leftNo groupInputInfo">
 										<label>学科</label>
 										<input name="course" onchange="addSegmentsTranslateZhToEn(this,'courseen','')" type="text" />
 									</div>
-									<div class="paddingRight leftNo groupInputInfo">
+									<div class="paddingLeft leftNo groupInputInfo">
 										<label>参加课程开始时间</label>
 										<input id="coursestartdate" onchange="addSegmentsTranslateZhToEn(this,'coursestartdateen','')" name="coursestartdate" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 									</div>
-									<div class="clear"></div>
-									<div class="leftNo groupInputInfo margintop-10">
+									<div class="paddingRight leftNo groupInputInfo">
 										<label>结束时间</label>
 										<input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 									</div>
+									<div class="clear"></div>
 								</div>
 							</c:if>
 							</div>

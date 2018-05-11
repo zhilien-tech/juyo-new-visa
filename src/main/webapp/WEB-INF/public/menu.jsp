@@ -5,11 +5,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equlv="proma" content="no-cache" />
+<meta http-equlv="cache-control" content="no-cache" />
+<meta http-equlv="expires" content="0" />
 <title>优悦签</title>
-<link rel="stylesheet" href="${base}/references/common/css/menuMain.css">
-<link rel="stylesheet" href="${base}/references/common/css/top.css">
-<link rel="stylesheet" href="${base}/references/common/css/nav.css">
-<link rel="stylesheet" href="${base}/references/common/css/iconfont.css">
+<link rel="stylesheet" href="${base}/references/common/css/menuMain.css?v='20180510'">
+<link rel="stylesheet" href="${base}/references/common/css/top.css?v='20180510'">
+<link rel="stylesheet" href="${base}/references/common/css/nav.css?v='20180510'">
+<link rel="stylesheet" href="${base}/references/common/css/iconfont.css?v='20180510'">
 <script src="${base}/references/common/js/jquery-1.10.2.js"></script>
 <script src="${base}/references/common/js/nav.js"></script>
 <script>

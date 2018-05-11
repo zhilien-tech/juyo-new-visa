@@ -2,11 +2,14 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<meta http-equlv="proma" content="no-cache" />
+		<meta http-equlv="cache-control" content="no-cache" />
+		<meta http-equlv="expires" content="0" />
 		<title>填写资料</title>
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	    <meta name="format-detection" content="telephone=no">
 	    <link rel="stylesheet" type="text/css" href="css/common.css">
-	    <link rel="stylesheet" type="text/css" href="css/passport.css">
+	    <link rel="stylesheet" type="text/css" href="css/passport.css?v='20180510'">
 	</head>
 	<body>
 		<form id="backmail_wrapper">
@@ -124,6 +127,7 @@
 				$.ajax({ 
 					url: url,
 					type:'post',
+					cache:false,
 					dataType:"json",
 					data:{
 						applicantId:applicantId
@@ -150,6 +154,7 @@
 			$.ajax({ 
 				url: url,
 				type:'post',
+				cache:false,
 				dataType:"json",
 				data:{
 					applicantId:applyid
@@ -196,6 +201,7 @@
 				url: '/admin/mobile/saveBackMailInfo.html',
 				dataType:"json",
 				data:editdata,
+				cache:false,
 				type:'post',
 				success: function(data){
 					if(data.applicantId>0){

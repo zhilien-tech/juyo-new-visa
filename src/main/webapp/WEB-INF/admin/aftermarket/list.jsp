@@ -4,6 +4,9 @@
 <html lang="en-US">
 <head>
 	<meta charset="utf-8">
+	<meta http-equlv="proma" content="no-cache" />
+	<meta http-equlv="cache-control" content="no-cache" />
+	<meta http-equlv="expires" content="0" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>售后-日本</title>
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
@@ -19,7 +22,7 @@
 	<!-- 加载中。。。样式 -->
 	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 	<!-- 本页css -->
-	<link rel="stylesheet" href="${base}/references/common/css/afterMarketList.css">
+	<link rel="stylesheet" href="${base}/references/common/css/afterMarketList.css?v='20180510'">
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">

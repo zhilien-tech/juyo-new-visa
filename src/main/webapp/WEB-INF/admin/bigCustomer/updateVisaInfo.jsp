@@ -1047,17 +1047,17 @@
 											</select>
 										</div>
 										<div class="clear"></div>
-										<div class="paddingLeft leftNo groupInputInfo">
+										<div class="paddingTop leftNo groupInputInfo">
 											<label>学科</label>
 											<input name="course" onchange="addSegmentsTranslateZhToEn(this,'courseen','')" value="${education.course }" type="text" />
 										</div>
-										
-										<div class="paddingRight leftNo groupInputInfo">
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupInputInfo">
 											<label>参加课程开始时间</label>
 											<input id="coursestartdate" onchange="addSegmentsTranslateZhToEn(this,'coursestartdateen','')" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 										</div>
-										<div class="clear"></div>
-										<div class="leftNo paddingTop groupInputInfo margintop-10">
+										
+										<div class="paddingRight leftNo groupInputInfo">
 											<label>结束时间</label>
 											<input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 										</div>
@@ -1103,16 +1103,16 @@
 										</select>
 									</div>
 									<div class="clear"></div>
-									<div class="paddingLeft leftNo groupInputInfo">
+									<div class="paddingTop leftNo groupInputInfo">
 										<label>学科</label>
 										<input name="course" onchange="addSegmentsTranslateZhToEn(this,'courseen','')" type="text" />
 									</div>
-									<div class="paddingRight leftNo groupInputInfo">
+									<div class="clear"></div>
+									<div class="paddingLeft leftNo groupInputInfo">
 										<label>参加课程开始时间</label>
 										<input id="coursestartdate" onchange="addSegmentsTranslateZhToEn(this,'coursestartdateen','')" name="coursestartdate" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 									</div>
-									<div class="clear"></div>
-									<div class="leftNo groupInputInfo margintop-10">
+									<div class="paddingRight leftNo groupInputInfo">
 										<label>结束时间</label>
 										<input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
 									</div>
@@ -2272,7 +2272,7 @@
 					<label>Spouse's Date of Birth</label>
 					<input id="spousebirthdayen" name="spousebirthdayen" value="${obj.spousebirthdayen}" class="datetimepickercss form-control" type="text" placeholder="Day / month / year" />
 				</div>
-				<div class="groupSelectInfo selectInfoen">
+				<div class="groupSelectInfo selectInfoen" style='width:100%;'>
 					<label>Spouse's Country/Region of Origin (Nationality)</label>
 					<select id="spousenationalityen" class="spousenationalityen" name="spousenationalityen" v-model="visaInfo.familyInfo.spousenationalityen">
 						<option value="0">Please choose</option>
@@ -2287,7 +2287,7 @@
 					<input name="spousecityen" id="spousefcityen" v-model="visaInfo.familyInfo.spousecityen" type="text" />
 					<input id="isKnowMatecityen" name="isknowspousecityen" class="isknowspousecityen" v-model="visaInfo.familyInfo.isknowspousecityen" type="checkbox" />
 				</div>
-				<div class=" groupSelectInfo selectInfoen" >
+				<div class=" groupSelectInfo selectInfoen" style='width:100%;' >
 					<label>Country/Region</label>
 					<select id="spousecountryen" class="spousecountryen" name="spousecountryen" v-model="visaInfo.familyInfo.spousecountryen">
 						<option value="0">Please choose</option>
@@ -2704,17 +2704,16 @@
 											</select>
 										</div>
 										<div class="clear"></div>
-										<div class="paddingLeft leftNo groupInputInfo">
+										<div class="paddingTop leftNo groupInputInfo">
 											<label>Course of Study</label>
 											<input name="courseen" class="courseen" value="${education.courseen }" type="text" />
 										</div>
-										
-										<div class="paddingRight leftNo groupInputInfo">
+										<div class="clear"></div>
+										<div class="paddingLeft leftNo groupInputInfo">
 											<label>Date of Attendance From</label>
 											<input id="coursestartdateen" name="coursestartdateen" value="<fmt:formatDate value="${education.coursestartdateen }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control coursestartdateen margintop-10" type="text" placeholder="Day / month / year" />
 										</div>
-										<div class="clear"></div>
-										<div class="leftNo groupInputInfo margintop-10">
+										<div class="paddingRight leftNo groupInputInfo">
 											<label>Date of Attendance To</label>
 											<input id="courseenddateen" name="courseenddateen" value="<fmt:formatDate value="${education.courseenddateen }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control courseenddateen margintop-10" type="text" placeholder="Day / month / year" />
 										</div>
@@ -2760,19 +2759,19 @@
 										</select>
 									</div>
 									<div class="clear"></div>
-									<div class="paddingLeft leftNo groupInputInfo">
+									<div class="paddingTop leftNo groupInputInfo">
 										<label>Course of Study</label>
 										<input name="courseen" class="courseen" type="text" />
 									</div>
-									<div class="paddingRight leftNo groupInputInfo">
+									<div class="paddingLeft leftNo groupInputInfo">
 										<label>Date of Attendance From</label>
 										<input id="coursestartdateen" name="coursestartdateen" class="datetimepickercss form-control coursestartdateen margintop-10" type="text" placeholder="Day / month / year" />
 									</div>
-									<div class="clear"></div>
-									<div class="leftNo groupInputInfo margintop-10">
+									<div class="paddingRight leftNo groupInputInfo">
 										<label>Date of Attendance To</label>
 										<input id="courseenddateen" name="courseenddateen" class="datetimepickercss form-control courseenddateen margintop-10" type="text" placeholder="Day / month / year" />
 									</div>
+									<div class="clear"></div>
 								</div>
 							</c:if>
 							</div>

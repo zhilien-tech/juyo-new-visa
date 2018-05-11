@@ -5,15 +5,18 @@
 <html lang="en-US" id="addHtml">
 <head>
 <meta charset="UTF-8">
-<title>权限管理-添加</title>
+<meta http-equlv="proma" content="no-cache" />
+<meta http-equlv="cache-control" content="no-cache" />
+<meta http-equlv="expires" content="0" />
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+<title>权限管理-添加</title>
 <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css">
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 <link rel="stylesheet" href="${base}/references/public/css/authority.css">
 <!-- 本页面style -->
 <!-- zTree -->
-<link rel="stylesheet" href="${base}/references/common/js/zTree/css/zTreeStyle/zTreeStyle.css">
+<link rel="stylesheet" href="${base}/references/common/js/zTree/css/zTreeStyle/zTreeStyle.css?v='20180510'">
 </head>
 <body>
 	<div class="modal-content">

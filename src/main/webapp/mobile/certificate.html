@@ -2,11 +2,14 @@
 <html>
 	<head>
 	<meta charset="UTF-8">
+	<meta http-equlv="proma" content="no-cache" />
+	<meta http-equlv="cache-control" content="no-cache" />
+	<meta http-equlv="expires" content="0" />
 	<title>上传</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="css/common.css">
-    <link rel="stylesheet" type="text/css" href="css/passport.css">
+    <link rel="stylesheet" type="text/css" href="css/passport.css?v='20180510'">
     <script src="js/rem(750).js"></script>
     <script src="js/jquery-1.10.2.js"></script>
     <script src="js/lrz.bundle.js"></script>
@@ -106,6 +109,7 @@
 			//dataType : "json",//返回结果格式  
 			url : '/admin/mobile/uploadPic.html',//请求地址  
 			async : true,
+			cache:false,
 			processData : false, //当FormData在jquery中使用的时候需要设置此项
 			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
 			//请求数据  
@@ -199,6 +203,7 @@
         	data:{applicantid:applicantid},
         	dataType:"json",
         	type:'post',
+        	cache:false,
         	success: function(data){
         		if(data.applicatdata.marryurltype == marryurltype){
         			$('#marrycardurl').attr('src',data.applicatdata.marryurl);
