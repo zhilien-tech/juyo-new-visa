@@ -562,7 +562,11 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				lastinfo += dateformat.format(orderjp.getLastreturndate());
 			}
 			lastinfo += "      " + (Util.isEmpty(orderjp.getLaststayday()) ? "" : orderjp.getLaststayday());
-			map.put("fill_26", lastinfo+"天");
+			if(Util.isEmpty(lastinfo)) {
+				map.put("fill_26", "无");
+			}else {
+				map.put("fill_26", lastinfo+"天");
+			}
 			//在日担保人信息
 			map.put("danbaoname", record.getString("vouchname"));
 			 int lastIndexOf = record.getString("vouchname").lastIndexOf("-");
@@ -625,11 +629,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("applydate", dateformat.format(new Date()));
 			map.put("applyname", record.getString("firstname") + record.getString("lastname"));
 			//获取模板文件
-			insertQrCode();
+//			insertQrCode();
 			URL resource = getClass().getClassLoader().getResource("japanfile/apply.pdf");
-			//
-			
-			
 			TemplateUtil templateUtil = new TemplateUtil();
 			stream = templateUtil.pdfTemplateStream(resource, map);
 			//编写二维码

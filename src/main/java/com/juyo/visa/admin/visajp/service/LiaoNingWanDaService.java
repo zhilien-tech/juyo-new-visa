@@ -472,7 +472,11 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				lastinfo += dateformat.format(orderjp.getLastreturndate());
 			}
 			lastinfo += "      " + (Util.isEmpty(orderjp.getLaststayday()) ? "" : orderjp.getLaststayday());
-			map.put("fill_26", lastinfo+"天");
+			if(Util.isEmpty(lastinfo)) {
+				map.put("fill_26", "无");
+			}else {
+				map.put("fill_26", lastinfo+"天");
+			}
 			//配偶职业
 			map.put("fill_1_2", record.getString("unitname"));
 			//在日担保人信息
