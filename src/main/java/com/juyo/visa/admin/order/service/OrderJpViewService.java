@@ -382,7 +382,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicantUser.setMobile(applicant.getTelephone());
 		applicantUser.setOpid(applicant.getOpId());
 		applicantUser.setPassword("000000");
-		//applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
+		applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
 		if (!Util.isEmpty(applicant.getTelephone())) {
 			TUserEntity userEntity = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", applicant.getTelephone())
 					.and("userType", "=", UserLoginEnum.TOURIST_IDENTITY.intKey()));
@@ -390,7 +390,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
 				applicant.setUserId(tUserEntity.getId());
 			} else {
-				userEntity.setName(applicantUser.getUsername());
+				if (!Util.isEmpty(applicantUser.getUsername())) {
+					userEntity.setName(applicantUser.getUsername());
+				}
 				userEntity.setMobile(applicant.getTelephone());
 				userEntity.setPassword(applicantUser.getPassword());
 				userEntity.setOpId(applicantUser.getOpid());
@@ -1017,7 +1019,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			applicantUser.setMobile(applicant.getTelephone());
 			applicantUser.setOpid(applicant.getOpId());
 			applicantUser.setPassword("000000");
-			//applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
+			applicantUser.setUsername(applicant.getFirstName() + applicant.getLastName());
 			if (!Util.isEmpty(applicant.getTelephone())) {
 				TUserEntity userEntity = dbDao.fetch(
 						TUserEntity.class,
@@ -1027,7 +1029,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
 					applicant.setUserId(tUserEntity.getId());
 				} else {
-					userEntity.setName(applicantUser.getUsername());
+					if (!Util.isEmpty(applicantUser.getUsername())) {
+						userEntity.setName(applicantUser.getUsername());
+					}
 					userEntity.setMobile(applicant.getTelephone());
 					userEntity.setPassword(applicantUser.getPassword());
 					userEntity.setOpId(applicantUser.getOpid());
