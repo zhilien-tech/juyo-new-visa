@@ -16,6 +16,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -33,6 +34,7 @@ import com.juyo.visa.admin.mobile.form.MarryImageForm;
 import com.juyo.visa.admin.mobile.form.MobileApplicantForm;
 import com.juyo.visa.admin.mobile.form.WealthInfoForm;
 import com.juyo.visa.admin.mobile.form.WorkInfoForm;
+import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.base.UploadService;
@@ -45,6 +47,7 @@ import com.juyo.visa.common.enums.MainBackMailTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PrepareMaterialsEnum_JP;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
@@ -59,6 +62,7 @@ import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TOrderLogsEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantBackmailJpForm;
 import com.juyo.visa.websocket.BasicInfoWSHandler;
@@ -83,6 +87,8 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	private UserViewService userViewService;
 	@Inject
 	private UploadService qiniuupService;
+	@Inject
+	private OrderJpViewService orderJpViewService;
 
 	private BasicInfoWSHandler basicInfoWSHandler = (BasicInfoWSHandler) SpringContextUtil.getBean(
 			"myBasicInfoHandler", BasicInfoWSHandler.class);
@@ -170,38 +176,58 @@ public class MobileService extends BaseService<TApplicantEntity> {
 	 * @param applicantEntity
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object saveApplicatinfo(MobileApplicantForm form, TApplicantLowerEntity applicant) {
+	public Object saveApplicatinfo(MobileApplicantForm form, TApplicantLowerEntity applicant, HttpSession session) {
 		TUserEntity mobileuser = null;
 		if (!Util.isEmpty(applicant.getTelephone())) {
-			mobileuser = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", applicant.getTelephone()));
+			mobileuser = dbDao.fetch(
+					TUserEntity.class,
+					Cnd.where("mobile", "=", applicant.getTelephone()).and("userType", "=",
+							UserLoginEnum.TOURIST_IDENTITY.intKey()));
 		}
+		ApplicantUser applicantUser = new ApplicantUser();
+		applicantUser.setMobile(applicant.getTelephone());
+		applicantUser.setOpid(form.getUserid());
+		applicantUser.setPassword("000000");
+		applicantUser.setUsername(applicant.getFirstname() + applicant.getLastname());
 		//编辑申请人信息
 		if (!Util.isEmpty(applicant.getId())) {
 			if (!Util.isEmpty(mobileuser)) {
+				mobileuser.setMobile(applicant.getTelephone());
+				mobileuser.setPassword(applicantUser.getPassword());
+				mobileuser.setOpId(applicantUser.getOpid());
+				mobileuser.setUpdateTime(new Date());
+				if (!Util.isEmpty(applicantUser.getUsername())) {
+					mobileuser.setName(applicantUser.getUsername());
+				}
 				applicant.setUserid(mobileuser.getId());
+				dbDao.update(mobileuser);
 			} else {
-				ApplicantUser applicantUser = new ApplicantUser();
-				applicantUser.setMobile(applicant.getTelephone());
-				applicantUser.setOpid(form.getUserid());
-				applicantUser.setPassword("000000");
-				applicantUser.setUsername(applicant.getFirstname() + applicant.getLastname());
-				TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
-				applicant.setUserid(tUserEntity.getId());
+				//applicantUser.setUsername(applicant.getFirstname() + applicant.getLastname());
+				if (!Util.isEmpty(applicant.getTelephone())) {
+					TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
+					applicant.setUserid(tUserEntity.getId());
+				}
 			}
 			dbDao.update(applicant);
 			form.setMessagetype(1);
 		} else {
 			//在用户表添加信息
 			if (!Util.isEmpty(mobileuser)) {
+				mobileuser.setMobile(applicant.getTelephone());
+				mobileuser.setPassword(applicantUser.getPassword());
+				mobileuser.setOpId(applicantUser.getOpid());
+				mobileuser.setUpdateTime(new Date());
+				if (!Util.isEmpty(applicantUser.getUsername())) {
+					mobileuser.setName(applicantUser.getUsername());
+				}
 				applicant.setUserid(mobileuser.getId());
+				dbDao.update(mobileuser);
 			} else {
-				ApplicantUser applicantUser = new ApplicantUser();
-				applicantUser.setMobile(applicant.getTelephone());
-				applicantUser.setOpid(form.getUserid());
-				applicantUser.setPassword("000000");
-				applicantUser.setUsername(applicant.getFirstname() + applicant.getLastname());
-				TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
-				applicant.setUserid(tUserEntity.getId());
+				//applicantUser.setUsername(applicant.getFirstname() + applicant.getLastname());
+				if (!Util.isEmpty(applicant.getTelephone())) {
+					TUserEntity tUserEntity = userViewService.addApplicantUser(applicantUser);
+					applicant.setUserid(tUserEntity.getId());
+				}
 			}
 
 			applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
@@ -228,6 +254,16 @@ public class MobileService extends BaseService<TApplicantEntity> {
 				orderinfo.setCreateTime(new Date());
 				orderinfo.setUpdateTime(new Date());
 				TOrderEntity orderinsert = dbDao.insert(orderinfo);
+				Integer orderId = orderinsert.getId();
+				//添加下单日志
+				TOrderLogsEntity logs = new TOrderLogsEntity();
+				logs.setCreateTime(new Date());
+				logs.setOpId(form.getUserid());
+				logs.setOrderId(orderId);
+				logs.setOrderStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
+				logs.setUpdateTime(new Date());
+				dbDao.insert(logs);
+
 				form.setOrderid(orderinsert.getId());
 				TOrderJpEntity orderjp = new TOrderJpEntity();
 				orderjp.setOrderId(orderinsert.getId());
@@ -383,6 +419,10 @@ public class MobileService extends BaseService<TApplicantEntity> {
 			apply.setLastName(passportinfo.getLastname());
 			apply.setLastNameEn(passportinfo.getLastnameen());
 			dbDao.update(apply);
+			//更新对应user表中的name
+			TUserEntity userEntity = dbDao.fetch(TUserEntity.class, apply.getUserId().longValue());
+			userEntity.setName(apply.getFirstName() + apply.getLastName());
+			dbDao.update(userEntity);
 		}
 		MobileApplicantForm form = new MobileApplicantForm();
 		form.setApplicantid(passportinfo.getApplicantid());
