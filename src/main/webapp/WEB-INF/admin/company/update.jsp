@@ -82,6 +82,15 @@
 							</div>
 						</div>
 					</div>
+					
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label>传真：</label> 
+								<input id="fax" name="fax" value="${obj.company.fax}" type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
 
 					<div class="row">
 						<div class="col-sm-12">
@@ -193,6 +202,11 @@
 							<input id="designatedNum" name="designatedNum" value="${obj.company.designatednum}" type="text" style="text-transform:uppercase" class="form-control input-sm" placeholder=" " />
 						</div>
 					</div>
+				</div>
+				
+				<!-- PDF模板 -->
+				<div id="pdf_div" class="row none">
+					
 				</div>
 
 			</div>
