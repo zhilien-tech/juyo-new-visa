@@ -10,21 +10,6 @@ $(function(){
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
-
-				firstName : {
-					validators : {
-						notEmpty : {
-							message : '姓不能为空'
-						}
-					}
-				},
-				lastName : {
-					validators : {
-						notEmpty : {
-							message : '名不能为空'
-						}
-					}
-				},
 				telephone : {
 					validators : {
 						regexp: {
@@ -174,21 +159,6 @@ function applyValidate(){
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
-
-				firstName : {
-					validators : {
-						notEmpty : {
-							message : '姓不能为空'
-						}
-					}
-				},
-				lastName : {
-					validators : {
-						notEmpty : {
-							message : '名不能为空'
-						}
-					}
-				},
 				telephone : {
 					validators : {
 						regexp: {
@@ -224,23 +194,6 @@ function applyValidate(){
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
-				
-				firstName : {
-					trigger:"change keyup",
-					validators : {
-						notEmpty : {
-							message : '姓不能为空'
-						}
-					}
-				},
-				lastName : {
-					trigger:"change keyup",
-					validators : {
-						notEmpty : {
-							message : '名不能为空'
-						}
-					}
-				},
 				telephone : {
 					trigger:"change keyup",
 					validators : {
@@ -1345,7 +1298,7 @@ function saveApplicant(status){
 	}else{*/
 		if(status == 2){
 			socket.onclose();
-			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrailOrder+'&orderProcessType='+orderProcessType+'&addApply='+addApply;
+			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrailOrder+'&orderProcessType='+orderProcessType+'&addApply='+addApply+'&tourist='+tourist;
 			$.ajax({
 				type: 'POST',
 				data : applicantInfo,

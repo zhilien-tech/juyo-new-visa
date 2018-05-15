@@ -49,7 +49,7 @@
 		<div class="wrapper">
 			<div class="content-wrapper" >
 				<ul class="title">
-					<li>签证补录</li>
+					<li>出境记录</li>
 					<li class="liClose">
 						<a onclick="closeWindow()">
 							<div class="closed"></div>
