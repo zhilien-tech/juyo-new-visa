@@ -914,6 +914,18 @@ function save(status){
 					});
 				}
 				if(status == 1){
+					if(tourist == 1){
+						$("#passportInfo").data('bootstrapValidator').destroy();
+						$("#passportInfo").data('bootstrapValidator', null);
+						passValidate();
+					}
+					if(tourist == 1 && status != 2){
+						if($(".front").hasClass("has-error")){
+							$(".help-blockFront").attr("style","display: block;");  
+							$("#borderColor").attr("style", "border-color:#ff1a1a");
+							return;
+						}
+					}
 					layer.load(1);
 					$.ajax({
 						type: 'POST',
