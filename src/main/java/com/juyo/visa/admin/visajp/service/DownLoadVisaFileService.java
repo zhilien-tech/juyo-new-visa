@@ -401,6 +401,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 	 */
 	private ByteArrayOutputStream applyinfo(Record record, Map<String, Object> tempdata,HttpServletRequest request) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DateFormat dateFormat1= new SimpleDateFormat("yyyy/MM/dd");
 		TOrderTripJpEntity ordertripjp = (TOrderTripJpEntity) tempdata.get("ordertripjp");
 		//多程信息
 		List<TOrderTripMultiJpEntity> mutiltrip = (List<TOrderTripMultiJpEntity>) tempdata.get("mutiltrip");
@@ -480,11 +481,11 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				if (ordertripjp.getTripType().equals(1)) {
 					//出行时间
 					if (!Util.isEmpty(ordertripjp.getGoDate())) {
-						map.put("goDate", dateformat.format(ordertripjp.getGoDate()));
+						map.put("goDate", dateFormat1.format(ordertripjp.getGoDate()));
 					}
 					//返回时间
 					if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-						map.put("returnDate", dateformat.format(ordertripjp.getReturnDate()));
+						map.put("returnDate", dateFormat1.format(ordertripjp.getReturnDate()));
 					}
 					//逗留时间
 					if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
@@ -515,7 +516,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						//多程第一程为出发日期
 						TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
 						if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-							map.put("goDate", dateformat.format(entrytrip.getDepartureDate()));
+							map.put("goDate", dateFormat1.format(entrytrip.getDepartureDate()));
 						}
 						//入境口岸
 						TCityEntity arrivecity = dbDao.fetch(TCityEntity.class, entrytrip.getArrivedCity().longValue());
@@ -531,7 +532,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						//最后一程作为返回日期
 						TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
 						if (!Util.isEmpty(returntrip.getDepartureDate())) {
-							map.put("returnDate", dateformat.format(returntrip.getDepartureDate()));
+							map.put("returnDate", dateFormat1.format(returntrip.getDepartureDate()));
 						}
 						//停留天数
 						if (!Util.isEmpty(entrytrip.getDepartureDate()) && !Util.isEmpty(returntrip.getDepartureDate())) {
@@ -558,15 +559,13 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("hotelphone", record.getString("hotelphone"));
 			map.put("hoteladdress", record.getString("hoteladdress"));
 			String lastinfo = "";
-			if (!Util.isEmpty(orderjp.getLaststartdate())) {
-				lastinfo += dateformat.format(orderjp.getLaststartdate());
+			if (!Util.isEmpty(orderjp.getLaststartdate()) && !Util.isEmpty(orderjp.getLastreturndate())) {
+				lastinfo += dateFormat1.format(orderjp.getLaststartdate());
+				lastinfo += "~";
+				lastinfo += dateFormat1.format(orderjp.getLastreturndate());
+				lastinfo += "      " + (Util.isEmpty(orderjp.getLaststayday()) ? "" : orderjp.getLaststayday());
 			}
-			lastinfo += "~";
-			if (!Util.isEmpty(orderjp.getLastreturndate())) {
-				lastinfo += dateformat.format(orderjp.getLastreturndate());
-			}
-			lastinfo += "      " + (Util.isEmpty(orderjp.getLaststayday()) ? "" : orderjp.getLaststayday());
-			if(Util.isEmpty(lastinfo)) {
+			if (Util.isEmpty(lastinfo)) {
 				map.put("fill_26", "无");
 			}else {
 				map.put("fill_26", lastinfo+"天");
