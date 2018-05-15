@@ -101,7 +101,7 @@
 
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label><span>*</span>邮箱：</label> <input id="email" name="email"
+								<label><span></span>邮箱：</label> <input id="email" name="email"
 									value="${obj.customer.email}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
@@ -206,9 +206,6 @@
 									},
 									email : {
 										validators : {
-											notEmpty : {
-												message : '邮箱不能为空'
-											},
 											regexp : {
 												regexp : /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
 												message : '邮箱格式错误'

@@ -114,6 +114,7 @@ import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TApplicantUnqualifiedEntity;
 import com.juyo.visa.entities.TApplicantVisaJpEntity;
+import com.juyo.visa.entities.TApplicantVisaOtherInfoEntity;
 import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
@@ -1196,6 +1197,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("applicantRelation", EnumUtil.enum2(MainApplicantRelationEnum.class));
 		result.put("applicantRemark", EnumUtil.enum2(MainApplicantRemarkEnum.class));
 		result.put("jobStatusEnum", EnumUtil.enum2(JobStatusEnum.class));
+		result.put("mainsalevisatypeenum", EnumUtil.enum2(MainSaleVisaTypeEnum.class));
+		result.put("isyesornoenum", EnumUtil.enum2(IsYesOrNoEnum.class));
 		String visaInfoSqlstr = sqlManager.get("visaInfo_byApplicantId");
 		Sql visaInfoSql = Sqls.create(visaInfoSqlstr);
 		visaInfoSql.setParam("id", id);
@@ -1224,6 +1227,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		//获取日本申请人信息
 		result.put("orderStatus", orderEntity.getStatus());
 		result.put("orderJpId", orderJpEntity.getId());
+		result.put("jporderinfo", orderJpEntity);
 		result.put("orderJp", applicantOrderJpEntity);
 		result.put("infoType", ApplicantInfoTypeEnum.VISA.intKey());
 		//获取财产信息
@@ -1242,6 +1246,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		result.put("mainApply", records);
 		result.put("visaInfo", visaInfo);
 		result.put("isOrderUpTime", isOrderUpTime);
+		TApplicantVisaOtherInfoEntity visaother = dbDao.fetch(TApplicantVisaOtherInfoEntity.class,
+				Cnd.where("applicantid", "=", applicantOrderJpEntity.getId()));
+		if (Util.isEmpty(visaother)) {
+			visaother = new TApplicantVisaOtherInfoEntity();
+		}
+		result.put("visaother", visaother);
 		//获取所访问的ip地址
 		String localAddr = request.getServerName();
 		//所访问的端口
@@ -1370,6 +1380,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					new Long(applicantOrderJpEntity.getApplicantId()).intValue());
 			TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
 					.longValue());
+			orderJpEntity.setVisaType(visaForm.getVisatype());
+			orderJpEntity.setVisaCounty(visaForm.getVisacounty());
+			orderJpEntity.setIsVisit(visaForm.getIsVisit());
+			orderJpEntity.setThreeCounty(visaForm.getThreecounty());
+			orderJpEntity.setLaststartdate(visaForm.getLaststartdate());
+			orderJpEntity.setLaststayday(visaForm.getLaststayday());
+			orderJpEntity.setLastreturndate(visaForm.getLastreturndate());
+			dbDao.update(orderJpEntity);
 			List<TApplicantOrderJpEntity> applyJpList = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("orderId", "=", orderJpEntity.getId()), null);
 			TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
@@ -1657,6 +1675,41 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					}
 				}
 			}
+			TApplicantVisaOtherInfoEntity otherinfo = dbDao.fetch(TApplicantVisaOtherInfoEntity.class,
+					Cnd.where("applicantid", "=", applicantOrderJpEntity.getId()));
+			if (Util.isEmpty(otherinfo)) {
+				otherinfo = new TApplicantVisaOtherInfoEntity();
+			}
+			otherinfo.setApplicantid(applicantOrderJpEntity.getId());
+			otherinfo.setHotelname(visaForm.getHotelname());
+			otherinfo.setHotelphone(visaForm.getHotelphone());
+			otherinfo.setHoteladdress(visaForm.getHoteladdress());
+			otherinfo.setVouchname(visaForm.getVouchname());
+			otherinfo.setIsname(visaForm.getIsname());
+			otherinfo.setVouchnameen(visaForm.getVouchnameen());
+			otherinfo.setVouchphone(visaForm.getVouchphone());
+			otherinfo.setVouchaddress(visaForm.getVouchaddress());
+			otherinfo.setVouchbirth(visaForm.getVouchbirth());
+			otherinfo.setVouchsex(visaForm.getVouchsex());
+			otherinfo.setVouchmainrelation(visaForm.getVouchmainrelation());
+			otherinfo.setVouchjob(visaForm.getVouchjob());
+			otherinfo.setVouchcountry(visaForm.getVouchcountry());
+			otherinfo.setInvitename(visaForm.getInvitename());
+			otherinfo.setInvitephone(visaForm.getInvitephone());
+			otherinfo.setInviteaddress(visaForm.getInviteaddress());
+			otherinfo.setInvitebirth(visaForm.getInvitebirth());
+			otherinfo.setInvitesex(visaForm.getInvitesex());
+			otherinfo.setInvitemainrelation(visaForm.getInvitemainrelation());
+			otherinfo.setInvitejob(visaForm.getInvitejob());
+			otherinfo.setInvitecountry(visaForm.getInvitecountry());
+			otherinfo.setTraveladvice(visaForm.getTraveladvice());
+			otherinfo.setIsyaoqing(visaForm.getIsyaoqing());
+			if (!Util.isEmpty(otherinfo.getId())) {
+				dbDao.update(otherinfo);
+			} else {
+				dbDao.insert(otherinfo);
+			}
+
 			//更新工作信息
 			TApplicantWorkJpEntity applicantWorkJpEntity = dbDao.fetch(TApplicantWorkJpEntity.class,
 					Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()));

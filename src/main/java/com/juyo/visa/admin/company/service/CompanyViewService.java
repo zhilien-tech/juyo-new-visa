@@ -333,6 +333,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		String linkman = updateForm.getLinkman();
 		String mobile = updateForm.getMobile();
 		String email = updateForm.getEmail();
+		String fax = updateForm.getFax();
 		String address = updateForm.getAddress();
 		String license = updateForm.getLicense();
 		String seal = updateForm.getSeal();
@@ -344,6 +345,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			company.setLinkman(linkman);
 			company.setMobile(mobile);
 			company.setEmail(email);
+			company.setFax(fax);
 			company.setAddress(address);
 			company.setLicense(license);
 			company.setSeal(seal);
