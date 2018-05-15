@@ -54,7 +54,7 @@
 						</div>
 					</div>
 
-					<div class="row">
+					<div class="row">	
 						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>公司简称：</label> <input id="shortname"
@@ -67,7 +67,7 @@
 								<label><span>*</span>支付方式：</label> 
 								<select id="payType"
 									name="payType" class="form-control input-sm inpImportant"
-									>
+									placeholder="  " >
 									<option>--请选择--</option>
 									<c:forEach var="map" items="${obj.payTypeEnum}">
 										<option value="${map.key}">${map.value}</option>
