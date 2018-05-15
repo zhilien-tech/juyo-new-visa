@@ -56,14 +56,14 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span></span>QQ：</label> <input id="qq" name="qq"
+								<label>QQ：</label> <input id="qq" name="qq"
 									value="${obj.user.qq}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span></span>E-mail：</label> <input id="email"
+								<label>E-mail：</label> <input id="email"
 									name="email" value="${obj.user.email}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
