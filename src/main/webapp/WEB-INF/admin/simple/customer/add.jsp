@@ -63,7 +63,7 @@
 							</div>
 						</div>
 						<div class="col-sm-4">
-							<div class="form-group">
+							<div class="form-grouxp">
 								<label><span>*</span>支付方式：</label> 
 								<select id="payType"
 									name="payType" class="form-control input-sm inpImportant"
@@ -95,7 +95,7 @@
 
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label><span>*</span>邮箱：</label> <input id="email" name="email"
+								<label>邮箱：</label> <input id="email" name="email"
 									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -210,7 +210,7 @@
 											}
 										}
 									},
-									email : {
+									/* email : {
 										validators : {
 											notEmpty : {
 												message : '邮箱不能为空'
@@ -220,7 +220,7 @@
 												message : '邮箱格式错误'
 											}
 										}
-									},
+									}, */
 
 								}
 							});

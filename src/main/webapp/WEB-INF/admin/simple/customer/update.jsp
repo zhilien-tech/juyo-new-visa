@@ -100,7 +100,7 @@
 
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label><span>*</span>邮箱：</label> <input id="email" name="email"
+								<label>邮箱：</label> <input id="email" name="email"
 									value="${obj.customer.email}" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
@@ -219,7 +219,7 @@
 											}
 										}
 									},
-									email : {
+									/* email : {
 										validators : {
 											notEmpty : {
 												message : '邮箱不能为空'
@@ -229,7 +229,7 @@
 												message : '邮箱格式错误'
 											}
 										}
-									},
+									}, */
 									amount: {
 										validators : {
 											notEmpty : {
@@ -290,11 +290,11 @@
 					layer.msg('mobile不能为空');
 					return;
 				}
-				var email = $("#email").val();
+				/* var email = $("#email").val();
 				if (email == "") {
 					layer.msg('email不能为空');
 					return;
-				}
+				} */
 				var formdata = getFormJson('#customerUpdateForm');
 				var visatypes = [];
 				$('.visatyperow').each(function(){
