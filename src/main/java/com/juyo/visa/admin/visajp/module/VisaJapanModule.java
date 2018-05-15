@@ -283,10 +283,19 @@ public class VisaJapanModule {
 	 */
 	@At
 	@GET
-	public Object downloadFile(@Param("orderid") Long orderid, HttpServletResponse response, HttpSession session) {
-		return visaJapanSimulateService.downloadFile(orderid, response, session);
+	public Object downloadFile(@Param("orderid") Long orderid, HttpServletResponse response, HttpSession session,HttpServletRequest request) {
+		return visaJapanSimulateService.downloadFile(orderid, response, session,request);
 	}
-
+//	@At
+//	@GET
+//	@Ok("jsp")
+//	public Object applyInfo(@Param("id") Integer id, @Param("orderid") Integer orderid,
+//			@Param("isOrderUpTime") Integer isOrderUpTime, @Param("isTrial") Integer isTrial,
+//			@Param("orderProcessType") Integer orderProcessType, @Param("addApply") int addApply,
+//			@Param("tourist") int tourist, HttpServletRequest request) {
+//		return visaJapanSimulateService.getUserInfo(id, orderid, isOrderUpTime, isTrial, orderProcessType, addApply, tourist,
+//				request);
+//	}
 	/**
 	 * 上传签证文件
 	 */

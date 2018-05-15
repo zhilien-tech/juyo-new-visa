@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,22 +38,29 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.AcroFields;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.juyo.visa.admin.city.service.CityViewService;
 import com.juyo.visa.admin.flight.service.FlightViewService;
@@ -77,7 +85,6 @@ import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderTravelplanJpEntity;
 import com.juyo.visa.entities.TOrderTripJpEntity;
 import com.juyo.visa.entities.TOrderTripMultiJpEntity;
-import com.lowagie.text.pdf.PdfContentByte;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -114,7 +121,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 	 * @param orderjp
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public ByteArrayOutputStream generateFile(TOrderJpEntity orderjp) {
+	public ByteArrayOutputStream generateFile(TOrderJpEntity orderjp,HttpServletRequest request) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		Map<String, File> fileMap = new HashMap<String, File>();
@@ -162,7 +169,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		pdffiles.add(note);
 		//
 		for (Record record : applyinfo) {
-			ByteArrayOutputStream apply = applyinfo(record, tempdata);
+			ByteArrayOutputStream apply = applyinfo(record, tempdata,request);
 			pdffiles.add(apply);
 		}
 		//excel名称日期格式化
@@ -212,9 +219,6 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		//申请人名单
 		ByteArrayOutputStream applyList = applyList(tempdata);
 		pdffiles.add(applyList);
-		//申请人信息
-		ByteArrayOutputStream applyList1 = applyInfo1(tempdata);
-		pdffiles.add(applyList1);
 		//航班信息
 		ByteArrayOutputStream flightinfo = flightinfo(tempdata);
 		pdffiles.add(flightinfo);
@@ -395,7 +399,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 	/**
 	 * 申请人信息
 	 */
-	private ByteArrayOutputStream applyinfo(Record record, Map<String, Object> tempdata) {
+	private ByteArrayOutputStream applyinfo(Record record, Map<String, Object> tempdata,HttpServletRequest request) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		TOrderTripJpEntity ordertripjp = (TOrderTripJpEntity) tempdata.get("ordertripjp");
 		//多程信息
@@ -629,11 +633,14 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("applydate", dateformat.format(new Date()));
 			map.put("applyname", record.getString("firstname") + record.getString("lastname"));
 			//获取模板文件
-//			insertQrCode();
+			//编写二维码
+			if(!Util.isEmpty(map)) {
+				insertQrCode(request,map);
+			}
 			URL resource = getClass().getClassLoader().getResource("japanfile/apply.pdf");
 			TemplateUtil templateUtil = new TemplateUtil();
 			stream = templateUtil.pdfTemplateStream(resource, map);
-			//编写二维码
+	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -644,41 +651,103 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 	 * @throws IOException 
 	 * @throws DocumentException 
 	 */
-	public void insertQrCode() throws IOException, DocumentException {
+	public void insertQrCode(HttpServletRequest request,Map<String, String> map) throws Exception {
 		 // 模板文件路径
-        String templatePath = "/Users/dong/Desktop/common/apply66.pdf";
-        // 生成的文件路径
-        String targetPath = "/Users/dong/Desktop/common/target.pdf";
+		URL resource = getClass().getClassLoader().getResource("japanfile/apply.pdf");
+		String templatePath= null ;
+		String targetPath = null;
+		if(!Util.isEmpty(resource)) {
+			 templatePath = resource.toString().replace("file:", "");
+	        // 生成的文件路径
+	         targetPath = resource.toString().replace("file:", "");
+		}
         // 书签名
-        String fieldName = "field";
+//        String fieldName = "field";
         // 图片路径
-        String imagePath = "http://oyu1xyxxk.bkt.clouddn.com/36d0bd34-a62e-40dc-9282-f96b502286aa.png";
-
+        String imagePath = getImageUrl(request,map);
         // 读取模板文件
-        InputStream input = new FileInputStream(new File(templatePath));
-        PdfReader reader = new PdfReader(input);
+        InputStream input = null;
+        if(!Util.isEmpty(targetPath)) {
+        	 input = new FileInputStream(new File(templatePath));
+        }
+        PdfReader reader = null;
+        if(!Util.isEmpty(input)) {
+        	 reader = new PdfReader(input);
+        }
         PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(targetPath));
         // 提取pdf中的表单
         AcroFields form = stamper.getAcroFields();
         // 通过域名获取所在页和坐标，左下角为起点
-        int pageNo = form.getFieldPositions(fieldName).get(0).page;
-        Rectangle signRect = form.getFieldPositions(fieldName).get(0).position;
-        float x = signRect.getLeft();
-        float y = signRect.getBottom();
-
+//        int pageNo = form.getFieldPositions(fieldName).get(0).page;
+//        Rectangle signRect = form.getFieldPositions(fieldName).get(0).position;
+//        float x = signRect.getLeft();
+//        float y = signRect.getBottom();
         // 读图片
-        Image image = Image.getInstance(imagePath);
+        Image image = null;
+        if(!Util.isEmpty(imagePath)) {
+        	 image = Image.getInstance(imagePath);
+        }
         // 获取操作的页面
-        com.itextpdf.text.pdf.PdfContentByte under = stamper.getOverContent(1);
+        PdfContentByte under = stamper.getOverContent(1);
         // 根据域的大小缩放图片
-        image.scaleToFit(x, y);
+        image.scaleToFit(75, 70);
         // 添加图片
-        image.setAbsolutePosition(x, y);
+        image.setAbsolutePosition(50, 670);
         under.addImage(image);
         stamper.close();
         reader.close();
+		
 	}
-	
+	/***
+	 * 生成二维码
+	 * 
+	 */
+	public String getImageUrl(HttpServletRequest request,Map<String, String> map) {
+		//姓
+		String firstNameEn =  map.get("firstNameEn");
+		//名
+		String lastNameEn =  map.get("lastNameEn");
+		//性别
+		String sex = null;
+		if(!Util.isEmpty(map.get("boy"))) {
+			if(map.get("boy") .equals("0")) {
+				sex = "F";
+			}
+		}
+		if(!Util.isEmpty(map.get("girl"))) {
+			if(map.get("gril") .equals("0")) {
+				sex = "M";
+			}
+		}
+		//出生日期
+		String birthday = null;
+		if(!Util.isEmpty(map.get("birthday"))) {
+			 birthday =  map.get("birthday");
+		}
+		//年份
+		String year = birthday.substring(6, 9);
+		String month = birthday.substring(3,5);
+		String day = birthday.substring(0,2);
+		birthday = year+month+day;
+		//护照号
+		String passport =  map.get("passport");
+		//护照有效期
+		String validEndDate = null;
+		if(!Util.isEmpty(map.get("validEndDate"))) {
+			validEndDate =  map.get("validEndDate");
+		}
+		String year1 = validEndDate.substring(6, 9);
+		String month1 = validEndDate.substring(3,5);
+		String day1 = validEndDate.substring(0,2);
+		validEndDate = year1+month1+day1;
+		//身份证号
+		String cardId =  map.get("cardId");
+		//二维码显示内容  序号，护照号，护照截止日期，姓 ，名，性别，出生日期，固定CHN，身份证号
+		String passporturl ="1,"+passport+","+validEndDate+","+firstNameEn+","+lastNameEn+","+sex+","+birthday+","+"CHN"+","+cardId+","+" "+","+" ";
+		//生成二维码
+		String qrCode = qrCodeService.encodeQrCode(request, passporturl);
+		return  qrCode;
+	}
 	/**
 	 * 酒店信息
 	 */
@@ -1795,279 +1864,6 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		return stream;
 	}
 
-
-	/**
-	 * 给申请人信息插入二维码
-	 * 
-	 */
-	public ByteArrayOutputStream applyInfo1( Map<String, Object> tempdata) {
-
-
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		TOrderTripJpEntity ordertripjp = (TOrderTripJpEntity) tempdata.get("ordertripjp");
-		//多程信息
-		List<TOrderTripMultiJpEntity> mutiltrip = (List<TOrderTripMultiJpEntity>) tempdata.get("mutiltrip");
-		List<TOrderTravelplanJpEntity> ordertravelplan = (List<TOrderTravelplanJpEntity>) tempdata
-				.get("ordertravelplan");
-		TOrderJpEntity orderjp = (TOrderJpEntity) tempdata.get("orderjp");
-		
-		try {
-			Document document = new Document(PageSize.A4.rotate(), 0, 0, 36, 36);
-			TtfClassLoader ttf = new TtfClassLoader();
-			PdfWriter.getInstance(document, stream);
-			document.open();
-			Font font = ttf.getFont();
-			font.setFamily("宋体");
-			 PdfPTable table1 = new PdfPTable(1); //表格两列
-			 table1.setWidthPercentage(95);
-			table1.setHorizontalAlignment(Element.ALIGN_CENTER); //垂直居中
-			table1.setTotalWidth(PageSize.A4.rotate().getWidth());
-//			float[] wid1 ={0.5f,0.5f}; //两列宽度的比例
-//			table1.setWidths(wid1); 
-			PdfPCell cell11 = new PdfPCell(); 
-			Paragraph paragraph = new Paragraph("赴 日 签 证 申 请 表",font);
-			paragraph.setAlignment(Element.ALIGN_LEFT);
-			cell11.addElement(paragraph);
-			cell11.setBorder(0);
-			 table1.addCell(cell11);
-			 table1.getDefaultCell().setBorderWidth(0);
-			 document.add(table1);
-//			Map<String, String> map = new HashMap<String, String>();
-//			map.put("firstName", record.getString("firstname"));
-//			map.put("firstNameEn", record.getString("firstnameen"));
-//			map.put("lastName", record.getString("lastname"));
-//			map.put("lastNameEn", record.getString("lastnameen"));
-//			//曾用名
-//			String otherfirstnameen = !Util.isEmpty(record.get("otherfirstnameen")) ? record
-//					.getString("otherfirstnameen") : "";
-//			String otherlastnameen = !Util.isEmpty(record.get("otherlastnameen")) ? record.getString("otherlastnameen")
-//					: "";
-//			String otherfirstname = !Util.isEmpty(record.get("otherfirstname")) ? record.getString("otherfirstname")
-//					: "";
-//			String otherlastname = !Util.isEmpty(record.get("otherlastname")) ? record.getString("otherlastname") : "";
-//			map.put("othernameen", otherfirstnameen + otherlastnameen);
-//			map.put("othername", otherfirstname + otherlastname);
-//			//性别
-//			if ("男".equals(record.getString("sex"))) {
-//				map.put("boy", "0");
-//			} else if ("女".equals(record.getString("sex"))) {
-//				map.put("gril", "0");
-//			}
-//			//出生日期
-//			if (!Util.isEmpty(record.get("birthday"))) {
-//				map.put("birthday", dateformat.format((Date) record.get("birthday")));
-//			}
-//			//出生地
-//			map.put("address", record.getString("address"));
-//			//婚姻状况
-//			if (!Util.isEmpty(record.get("marrystatus"))) {
-//				Integer marrystatus = record.getInt("marrystatus");
-//				if (marrystatus.equals(MarryStatusEnum.YIHUN.intKey())) {
-//					map.put("married", "0");
-//				} else if (marrystatus.equals(MarryStatusEnum.DANSHEN.intKey())) {
-//					map.put("single", "0");
-//				} else if (marrystatus.equals(MarryStatusEnum.LIYI.intKey())) {
-//					map.put("divorce", "0");
-//				} else if (marrystatus.equals(MarryStatusEnum.SANGOU.intKey())) {
-//					map.put("widowed", "0");
-//				}
-//			}
-//			//国籍
-//			map.put("country", "中国");
-//			//曾有的或另有的国际
-////			if(Util.isEmpty(record.getString("nationality"))) {
-////				map.put("othernationality", "无");
-////			}
-//			map.put("othernationality", record.getString("nationality"));
-//			//身份证号
-//			map.put("cardId", record.getString("cardid"));
-//			//护照类别:普通
-//			map.put("common", "0");
-//			//护照号
-//			map.put("passport", record.getString("passportno"));
-//			//签发地点
-//			map.put("issuedPlace", record.getString("issuedplace"));
-//			//签发日期
-//			if (!Util.isEmpty(record.get("issuedDate"))) {
-//				map.put("issuedDate", dateformat.format((Date) record.get("issuedDate")));
-//			}
-//			//签发机关
-//			map.put("issuedOrganization", record.getString("issuedOrganization"));
-//			//有效期至
-//			if (!Util.isEmpty(record.get("passportenddate"))) {
-//				map.put("validEndDate", dateformat.format((Date) record.get("passportenddate")));
-//			}
-//			if (!Util.isEmpty(ordertripjp)) {
-//				//赴日目的
-//				map.put("tripPurpose", ordertripjp.getTripPurpose());
-//				if (ordertripjp.getTripType().equals(1)) {
-//					//出行时间
-//					if (!Util.isEmpty(ordertripjp.getGoDate())) {
-//						map.put("goDate", dateformat.format(ordertripjp.getGoDate()));
-//					}
-//					//返回时间
-//					if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-//						map.put("returnDate", dateformat.format(ordertripjp.getReturnDate()));
-//					}
-//					//逗留时间
-//					if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
-//						int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
-//						map.put("stayday", String.valueOf(stayday) + "天");
-//					}
-//					//入境口岸
-//					if (!Util.isEmpty(ordertripjp.getGoArrivedCity())) {
-//						TCityEntity goarrivecirtentity = cityViewService.fetch(ordertripjp.getGoArrivedCity());
-//						if (!Util.isEmpty(goarrivecirtentity)) {
-//							map.put("goArrivedCity", goarrivecirtentity.getCity());
-//						}
-//					}
-//					//航空公司.0
-//					TFlightEntity goflightentity = dbDao.fetch(TFlightEntity.class,
-//							Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-//					if (!Util.isEmpty(goflightentity)) {
-//						map.put("goFlightNum", goflightentity.getAirlinecomp());
-//					}
-////					if (!Util.isEmpty(entrytrip.getFlightNum())) {
-////						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-////								Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-////						map.put("fill_22", goflight.getFlightnum());
-////					}
-//				} else if (ordertripjp.getTripType().equals(2)) {
-//					//多程处理
-//					if (!Util.isEmpty(mutiltrip)) {
-//						//多程第一程为出发日期
-//						TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
-//						if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-//							map.put("goDate", dateformat.format(entrytrip.getDepartureDate()));
-//						}
-//						//入境口岸
-//						TCityEntity arrivecity = dbDao.fetch(TCityEntity.class, entrytrip.getArrivedCity().longValue());
-//						if (!Util.isEmpty(arrivecity)) {
-//							map.put("goArrivedCity", arrivecity.getCity());
-//						}
-//						//航空公司
-//						if (!Util.isEmpty(entrytrip.getFlightNum())) {
-//							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-//									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-//							map.put("goFlightNum", goflight.getFlightnum());
-//						}
-//						//最后一程作为返回日期
-//						TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
-//						if (!Util.isEmpty(returntrip.getDepartureDate())) {
-//							map.put("returnDate", dateformat.format(returntrip.getDepartureDate()));
-//						}
-//						//停留天数
-//						if (!Util.isEmpty(entrytrip.getDepartureDate()) && !Util.isEmpty(returntrip.getDepartureDate())) {
-//							int stayday = DateUtil.daysBetween(entrytrip.getDepartureDate(),
-//									returntrip.getDepartureDate());
-//							map.put("stayday", String.valueOf(stayday) + "天");
-//						}
-//					}
-//				}
-//			}
-//			//酒店信息
-//			/*if (!Util.isEmpty(ordertravelplan)) {
-//				TOrderTravelplanJpEntity travelplanEntity = ordertravelplan.get(0);
-//				if (!Util.isEmpty(travelplanEntity.getHotel())) {
-//					THotelEntity hotelinfo = hotelViewService.fetch(travelplanEntity.getHotel());
-//					map.put("hotelname", hotelinfo.getName());
-//					map.put("hotelphone", hotelinfo.getMobile());
-//					map.put("hoteladdress", hotelinfo.getAddress());
-//				}
-//			}*/
-//			//酒店信息
-//			map.put("hotelname", record.getString("hotelname"));
-//			map.put("hotelphone", record.getString("hotelphone"));
-//			map.put("hoteladdress", record.getString("hoteladdress"));
-//			String lastinfo = "";
-//			if (!Util.isEmpty(orderjp.getLaststartdate())) {
-//				lastinfo += dateformat.format(orderjp.getLaststartdate());
-//			}
-//			lastinfo += "~";
-//			if (!Util.isEmpty(orderjp.getLastreturndate())) {
-//				lastinfo += dateformat.format(orderjp.getLastreturndate());
-//			}
-//			lastinfo += "      " + (Util.isEmpty(orderjp.getLaststayday()) ? "" : orderjp.getLaststayday());
-//			map.put("fill_26", lastinfo+"天");
-//			//在日担保人信息
-//			map.put("danbaoname", record.getString("vouchname"));
-//			 int lastIndexOf = record.getString("vouchname").lastIndexOf("-");
-//			map.put("danbaonameen", record.getString("vouchname").substring(lastIndexOf+1,  record.getString("vouchname").length()));
-//			map.put("danbaotelephone", record.getString("vouchphone"));
-//			map.put("vouchaddress", record.getString("vouchaddress"));
-//			if ("男".equals(record.getString("vouchsex"))) {
-//				map.put("vouchnan", "0");
-//			} else if ("女".equals(record.getString("vouchsex"))) {
-//				map.put("vouchnv", "0");
-//			}
-//			if (!Util.isEmpty(record.get("vouchbirth"))) {
-//				map.put("danbaobirthday", dateformat.format((Date) record.get("vouchbirth")));
-//			}
-//			map.put("vouchmainrelation", record.getString("vouchmainrelation"));
-//			map.put("vouchjob", record.getString("vouchjob"));
-//			map.put("vouchcountry", record.getString("vouchcountry"));
-//			//在日邀请人
-//			map.put("invitename", record.getString("invitename"));
-//			map.put("invitephone", record.getString("invitephone"));
-//			map.put("inviteaddress", record.getString("inviteaddress"));
-//			if ("男".equals(record.getString("invitesex"))) {
-//				map.put("invitenan", "0");
-//			} else if ("女".equals(record.getString("invitesex"))) {
-//				map.put("invitenv", "0");
-//			}
-//			if (!Util.isEmpty(record.get("invitebirth"))) {
-//				map.put("invitebirth", dateformat.format((Date) record.get("invitebirth")));
-//			}
-//			map.put("invitejob", record.getString("invitejob"));
-//			map.put("invitemainrelation", record.getString("invitemainrelation"));
-//			map.put("invitecountry", record.getString("invitecountry"));
-//			//家庭住址
-//			map.put("homeaddress",
-//					(!Util.isEmpty(record.get("province")) ? record.getString("province") : " ")
-//							+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : " ")
-//							+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress") : " "));
-//			//家庭电话
-//			//map.put("homephone", record.getString("telephone"));
-//			map.put("homemobile", record.getString("telephone"));
-//			//电子邮箱
-//			map.put("homeEmail", record.getString("email"));
-//			//工作单位
-//			map.put("workname", record.getString("workname"));
-//			map.put("workphone", record.getString("workphone"));
-//			map.put("workaddress", record.getString("workaddress"));
-//			//目前的职位
-//			map.put("occupation", record.getString("position"));
-//			//配偶所从事的职业
-//			map.put("otheroccupation", record.getString("unitname"));
-//			//map.put("danbaoname", "参照身元保证书");
-//			//出生日期
-//			map.put("text2", "0");
-//			map.put("text3", "0");
-//			map.put("text4", "0");
-//			map.put("text5", "0");
-//			map.put("text6", "0");
-//			map.put("text7", "0");
-//			//申请日期
-//			map.put("applydate", dateformat.format(new Date()));
-//			map.put("applyname", record.getString("firstname") + record.getString("lastname"));
-//			//获取模板文件
-//			URL resource = getClass().getClassLoader().getResource("japanfile/apply.pdf");
-//			TemplateUtil templateUtil = new TemplateUtil();
-//			stream = templateUtil.pdfTemplateStream(resource, map);
-			//编写二维码
-//			document.add(table);
-			document.close();
-			IOUtils.closeQuietly(stream);
-			return stream;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return stream;
-	
-		
-		
-		
-	}
 	/***
 	 * 印章
 	 * @param address
