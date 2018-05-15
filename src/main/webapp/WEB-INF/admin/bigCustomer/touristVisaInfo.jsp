@@ -4,9 +4,6 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<meta http-equlv="proma" content="no-cache" />
-		<meta http-equlv="cache-control" content="no-cache" />
-		<meta http-equlv="expires" content="0" />
 		<title>签证信息</title>
 		<link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
@@ -14,7 +11,7 @@
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 		<!-- 本页样式 -->
-		<link rel="stylesheet" href="${base}/references/public/css/touristVisaInfo.css?v='20180509'">
+		<link rel="stylesheet" href="${base}/references/public/css/touristVisaInfo.css">
 		<style>
      		[v-cloak]{display:none;}
      	</style>
