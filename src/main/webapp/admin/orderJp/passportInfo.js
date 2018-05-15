@@ -576,23 +576,28 @@ function toSet(data){
 
 //保存
 function save(status){
-	if(tourist == 1){
+	/*if(tourist == 1){
 		$("#passportInfo").data('bootstrapValidator').destroy();
 		$("#passportInfo").data('bootstrapValidator', null);
 		passValidate();
-	}
+	}*/
 	//得到获取validator对象或实例 
 	var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 	//alert(bootstrapValidator.isValid());
-	//bootstrapValidator.validate();
-	if(tourist == 1 && status != 2){
+	bootstrapValidator.validate();
+	/*if(tourist == 1 && status != 2){
 		if($(".front").hasClass("has-error")){
 			$(".help-blockFront").attr("style","display: block;");  
 			$("#borderColor").attr("style", "border-color:#ff1a1a");
 			return;
 		}
-	}
+	}*/
 	setTimeout(function(){
+		/*if(tourist == 1){
+			$("#passportInfo").data('bootstrapValidator').destroy();
+			$("#passportInfo").data('bootstrapValidator', null);
+			passValidate();
+		}*/
 		if(bootstrapValidator.isValid()){
 			/* if (!bootstrapValidator.isValid()) {
 						return;
@@ -876,7 +881,7 @@ function save(status){
 			}else{*/
 				if(status == 2){
 					socket.onclose();
-					window.location.href = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid='+'&isTrial='+isTrail+'&orderProcessType='+orderProcessType+'&addApply='+addApply;
+					window.location.href = '/admin/orderJp/updateApplicant.html?id='+applicantId+'&orderid='+'&isTrial='+isTrail+'&orderProcessType='+orderProcessType+'&addApply='+addApply+'&tourist='+tourist;
 					$.ajax({
 						type: 'POST',
 						data : passportInfo,
@@ -886,8 +891,20 @@ function save(status){
 					});
 				}
 				if(status == 3){
+					if(tourist == 1){
+						$("#passportInfo").data('bootstrapValidator').destroy();
+						$("#passportInfo").data('bootstrapValidator', null);
+						passValidate();
+					}
+					if(tourist == 1 && status != 2){
+						if($(".front").hasClass("has-error")){
+							$(".help-blockFront").attr("style","display: block;");  
+							$("#borderColor").attr("style", "border-color:#ff1a1a");
+							return;
+						}
+					}
 					socket.onclose();
-					window.location.href = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderid+'&isOrderUpTime&isTrial='+isTrail+'&orderProcessType='+orderProcessType+'&addApply='+addApply;
+					window.location.href = '/admin/orderJp/visaInfo.html?id='+applicantId+'&orderid='+orderid+'&isOrderUpTime&isTrial='+isTrail+'&orderProcessType='+orderProcessType+'&addApply='+addApply+'&tourist='+tourist;
 					$.ajax({
 						type: 'POST',
 						data : passportInfo,
