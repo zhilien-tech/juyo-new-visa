@@ -3,6 +3,8 @@ package com.juyo.visa.forms;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.nutz.dao.entity.annotation.Comment;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -83,5 +85,8 @@ public class TCompanyAddForm extends AddForm implements Serializable {
 	
 	/**传真*/
 	private String fax;
+	
+	/**pdf类型*/
+	private Integer pdftype;
 
 }

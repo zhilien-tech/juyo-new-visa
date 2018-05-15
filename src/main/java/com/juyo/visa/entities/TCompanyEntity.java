@@ -95,5 +95,9 @@ public class TCompanyEntity implements Serializable {
 	@Column
     @Comment("传真")
 	private String fax;
+	
+	@Column
+	@Comment("pdf类型")
+	private Integer pdftype;
 
 }

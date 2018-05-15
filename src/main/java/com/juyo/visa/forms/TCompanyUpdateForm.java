@@ -83,5 +83,8 @@ public class TCompanyUpdateForm extends ModForm implements Serializable {
 	
 	/**传真*/
 	private String fax;
+	
+	/**pdf类型*/
+	private Integer pdftype;
 
 }
