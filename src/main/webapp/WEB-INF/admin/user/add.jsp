@@ -53,13 +53,13 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span></span>QQ：</label> <input id="qq" name="qq"
+								<label>QQ：</label> <input id="qq" name="qq"
 									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span></span>E-mail：</label> <input id="email"
+								<label>E-mail：</label> <input id="email"
 									name="email" type="text" class="form-control input-sm"
 									placeholder=" " />
 							</div>
@@ -169,14 +169,6 @@
 							}
 						}
 					},
-					email : {
-						validators : {
-							regexp : {
-								regexp : /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-								message : '电子邮箱格式错误'
-							}
-						}
-					},
 					departmentId : {
 						validators : {
 							notEmpty : {
@@ -278,7 +270,7 @@
 					layer.msg('mobile不能为空');
 					return;
 				}
-				var qq = $("#qq").val();
+				/* var qq = $("#qq").val();
 				if (qq == "") {
 					layer.msg('qq不能为空');
 					return;
@@ -287,7 +279,7 @@
 				if (email == "") {
 					layer.msg('email不能为空');
 					return;
-				}
+				} */
 				var departmentId = $("#departmentId").val();
 				if (departmentId == "") {
 					layer.msg('departmentId不能为空');

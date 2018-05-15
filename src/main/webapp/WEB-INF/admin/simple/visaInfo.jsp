@@ -280,7 +280,7 @@
 							<div class="row "><!-- 我的职业/单位名称/单位电话 -->
 								<div class="col-sm-4">
 									<div class="form-group">
-										<label><span>*</span>我的职业</label>
+										<label><span>*</span>类型</label>
 										<!-- <input id="occupation"  name="occupation" type="text" class="form-control input-sm" placeholder=" " /> -->
 										<select id="careerStatus" name="careerStatus" class="form-control input-sm selectHeight">
 											<option value="">--请选择--</option>
@@ -313,7 +313,7 @@
 								<!-- 父母单位名称/配偶单位名称 -->
 								<div class="col-sm-4 preSchool">
 									<div class="form-group">
-										<label><span>*</span>职位</label>
+										<label><span>*</span>职业</label>
 										<input id="position" name="position" type="text" class="form-control input-sm" value="${obj.workJp.position }"/>
 									</div>
 								</div>

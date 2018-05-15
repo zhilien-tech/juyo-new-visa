@@ -7,6 +7,8 @@ SELECT
 	tap.validEndDate passportenddate,
 	taoj.id applicatid,
 	taoj.relationRemark,
+	taoj.mainRelation,
+    taoj.isMainApplicant,
 	tavpj.type dataType,
 	tavpj. DATA DATA,
 	tawj.occupation,

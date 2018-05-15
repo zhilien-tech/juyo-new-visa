@@ -95,7 +95,7 @@
 
 						<div class="col-sm-4">
 							<div class="form-group">
-								<label><span></span>邮箱：</label> <input id="email" name="email"
+								<label>邮箱：</label> <input id="email" name="email"
 									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
