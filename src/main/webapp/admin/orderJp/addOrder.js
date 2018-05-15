@@ -244,6 +244,9 @@ function successCallBack(status,data){
 	if(status == 4){
 		saveAddOrder(3);
 	}
+	if(status == 5){
+		saveAddOrder(3);
+	}
 }
 
 function cancelCallBack(status){
