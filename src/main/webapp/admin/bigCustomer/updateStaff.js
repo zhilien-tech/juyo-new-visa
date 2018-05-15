@@ -470,6 +470,38 @@ $("#nationality").on('input',function(){
 	});
 });
 
+//国籍上下键控制
+/*var index = 0;
+
+$(document).on('keyup','#nationality',function(e){
+	
+		if(e == undefined)
+			e = window.event;
+		
+		switch(e.keyCode){
+		case 38:
+			
+			index--;
+			if(index ==0) index = 4;
+			break;
+		case 40:
+			
+			index++;
+			if(index ==5) index = 0;
+			break;
+		case 13:
+			
+			$(this).val($('#ui-id-1').find('li:eq('+index+')').children().html());
+			$("#nationality").nextAll("ul.ui-autocomplete").remove();
+			$("#nationality").blur();
+			index = 0;
+			break;
+		}
+		var li = $('#ui-id-1').find('li:eq('+index+')');
+		li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css('background','');
+});*/
+
+
 $("#nationalityen").on('input',function(){
 	$("#nationalityen").nextAll("ul.ui-autocomplete").remove();
 	$.ajax({
