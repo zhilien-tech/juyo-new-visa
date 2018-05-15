@@ -8,6 +8,7 @@ SELECT
 	c.linkman,
 	c.mobile,
 	c.email,
+	c.fax,
 	c.address,
 	c.comType,
 	(

@@ -3,6 +3,9 @@ package com.juyo.visa.forms;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.nutz.dao.entity.annotation.Column;
+import org.nutz.dao.entity.annotation.Comment;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -77,5 +80,8 @@ public class TCompanyUpdateForm extends ModForm implements Serializable {
 
 	/**删除标识*/
 	private Integer deletestatus;
+	
+	/**传真*/
+	private String fax;
 
 }

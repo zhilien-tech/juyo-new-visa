@@ -91,5 +91,9 @@ public class TCompanyEntity implements Serializable {
 	@Column
 	@Comment("删除标识")
 	private Integer deletestatus;
+	
+	@Column
+    @Comment("传真")
+	private String fax;
 
 }

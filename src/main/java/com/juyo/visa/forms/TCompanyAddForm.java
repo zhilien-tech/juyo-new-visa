@@ -80,5 +80,8 @@ public class TCompanyAddForm extends AddForm implements Serializable {
 
 	/**删除标识*/
 	private Integer deletestatus;
+	
+	/**传真*/
+	private String fax;
 
 }

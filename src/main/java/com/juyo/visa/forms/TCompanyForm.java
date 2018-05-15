@@ -85,6 +85,9 @@ public class TCompanyForm extends DataTablesParamForm {
 
 	/**检索字段*/
 	private String searchStr;
+	
+	/**传真*/
+	private String fax;
 
 	@Override
 	public Sql sql(SqlManager sqlManager) {
