@@ -10,21 +10,6 @@ $(function(){
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
-
-				firstName : {
-					validators : {
-						notEmpty : {
-							message : '姓不能为空'
-						}
-					}
-				},
-				lastName : {
-					validators : {
-						notEmpty : {
-							message : '名不能为空'
-						}
-					}
-				},
 				telephone : {
 					validators : {
 						regexp: {
@@ -174,21 +159,6 @@ function applyValidate(){
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
-
-				firstName : {
-					validators : {
-						notEmpty : {
-							message : '姓不能为空'
-						}
-					}
-				},
-				lastName : {
-					validators : {
-						notEmpty : {
-							message : '名不能为空'
-						}
-					}
-				},
 				telephone : {
 					validators : {
 						regexp: {
@@ -224,23 +194,6 @@ function applyValidate(){
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
-				
-				firstName : {
-					trigger:"change keyup",
-					validators : {
-						notEmpty : {
-							message : '姓不能为空'
-						}
-					}
-				},
-				lastName : {
-					trigger:"change keyup",
-					validators : {
-						notEmpty : {
-							message : '名不能为空'
-						}
-					}
-				},
 				telephone : {
 					trigger:"change keyup",
 					validators : {
@@ -425,7 +378,7 @@ $("#nationality").on('input',function(){
 			if(data != ""){
 				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 				$.each(data,function(index,element) { 
-					liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
 				});
 				liStr += "</ul>";
 				$("#nationality").after(liStr);
@@ -457,14 +410,13 @@ $(document).on('keyup','#nationality',function(e){
 			$(this).val($('#ui-id-1').find('li:eq('+index+')').children().html());
 			$("#nationality").nextAll("ul.ui-autocomplete").remove();
 			$("#nationality").blur();
-			translateZhToEn('#nationality','nationalityen','');
 			var nationality = $("#nationality").val();
 			setNationality(nationality);
 			index = 0;
 			break;
 		}
 		var li = $('#ui-id-1').find('li:eq('+index+')');
-		li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css('background','');
+		li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
 });
 //国籍检索下拉项
 function setNationality(nationality){
@@ -486,7 +438,7 @@ $("#province").on('input',function(){
 			if(data != ""){
 				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 				$.each(data,function(index,element) { 
-					liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
 				});
 				liStr += "</ul>";
 				$("#province").after(liStr);
@@ -522,7 +474,7 @@ $(document).on('keyup','#province',function(e){
 		break;
 	}
 	var li = $(this).next().find('li:eq('+provinceindex+')');
-	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css('background','');
+	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
 });
 //省份 检索下拉项
 function setProvince(province){
@@ -545,7 +497,7 @@ $("#city").on('input',function(){
 			if(data != ""){
 				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 				$.each(data,function(index,element) { 
-					liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+					liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
 				});
 				liStr += "</ul>";
 				$("#city").after(liStr);
@@ -582,7 +534,7 @@ $(document).on('keyup','#city',function(e){
 		break;
 	}
 	var li = $(this).next().find('li:eq('+cityindex+')');
-	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css('background','');
+	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
 });
 //市 检索下拉项
 function setCity(city){
@@ -1437,7 +1389,7 @@ function saveApplicant(status){
 	}else{*/
 		if(status == 2){
 			socket.onclose();
-			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrailOrder+'&orderProcessType='+orderProcessType+'&addApply='+addApply;
+			window.location.href = '/admin/orderJp/passportInfo.html?applicantId='+applicantId+'&orderid='+orderid+'&isTrial='+isTrailOrder+'&orderProcessType='+orderProcessType+'&addApply='+addApply+'&tourist='+tourist;
 			$.ajax({
 				type: 'POST',
 				data : applicantInfo,

@@ -212,7 +212,7 @@ function getApplys(){
 						result += '<td></td>';
 					}
 					
-					result += '<td> <a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;<a href="javascript:passportInfo('+data[i].id+');">护照信息</a>&nbsp;&nbsp;<a href="javascript:visaInfo('+data[i].id+');">签证信息</a>&nbsp;&nbsp;<a href="javascript:visaInput('+data[i].applicantjpid+','+data[i].orderid+');">签证录入</a>&nbsp;&nbsp;<a href="javascript:backmailInfo('+data[i].id+');">回邮</a>&nbsp;&nbsp;<a href="javascript:deleteApplicant('+data[i].id+');">删除</a></td>';
+					result += '<td> <a href="javascript:updateApplicant('+data[i].id+');">基本信息</a>&nbsp;&nbsp;<a href="javascript:passportInfo('+data[i].id+');">护照信息</a>&nbsp;&nbsp;<a href="javascript:visaInfo('+data[i].id+');">签证信息</a>&nbsp;&nbsp;<a href="javascript:visaInput('+data[i].applicantjpid+','+data[i].orderid+');">出境记录</a>&nbsp;&nbsp;<a href="javascript:backmailInfo('+data[i].id+');">回邮</a>&nbsp;&nbsp;<a href="javascript:deleteApplicant('+data[i].id+');">删除</a></td>';
 					
 					result += '</tr>';
 				}

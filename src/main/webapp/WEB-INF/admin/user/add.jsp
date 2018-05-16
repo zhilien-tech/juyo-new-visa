@@ -43,9 +43,9 @@
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>用户名/手机号：</label> <input id="mobile"
+								<label><span>*</span>手机号：</label> <input id="mobile"
 									name="mobile" type="text" class="form-control input-sm"
-									placeholder=" " />
+									placeholder="用户名" />
 							</div>
 						</div>
 					</div>
@@ -53,13 +53,13 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>QQ：</label> <input id="qq" name="qq"
+								<label>QQ：</label> <input id="qq" name="qq"
 									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>E-mail：</label> <input id="email"
+								<label>E-mail：</label> <input id="email"
 									name="email" type="text" class="form-control input-sm"
 									placeholder=" " />
 							</div>
@@ -141,14 +141,14 @@
 					name : {
 						validators : {
 							notEmpty : {
-								message : '用户姓名不能为空'
+								message : '员工姓名不能为空'
 							}
 						}
 					},
 					mobile : {
 						validators : {
 							notEmpty : {
-								message : '用户名/手机号码不能为空'
+								message : '手机号不能为空'
 							},
 							regexp: {
 		                	 	regexp: /^[1][34578][0-9]{9}$/,
@@ -156,7 +156,7 @@
 		                    },
 		                    remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 								url: '${base}/admin/user/checkMobile.html',
-								message: '用户名/手机号码已存在，请重新输入',//提示消息
+								message: '手机号已存在，请重新输入',//提示消息
 								delay :  2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
 								type: 'POST',//请求方式
 								//自定义提交数据，默认值提交当前input value
@@ -166,24 +166,6 @@
 										adminId:""
 									};
 								}
-							}
-						}
-					},
-					qq : {
-						validators : {
-							notEmpty : {
-								message : '联系QQ不能为空'
-							}
-						}
-					},
-					email : {
-						validators : {
-							notEmpty : {
-								message : '电子邮箱不能为空'
-							},
-							regexp : {
-								regexp : /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-								message : '电子邮箱格式错误'
 							}
 						}
 					},
@@ -271,63 +253,9 @@
 					'bootstrapValidator');
 			// 执行表单验证 
 			bootstrapValidator.validate();
+			setTimeout(function(){
 			if (bootstrapValidator.isValid()) {
 				//获取必填项信息
-				var comId = $("#comId").val();
-				if (comId == "") {
-					layer.msg('comId不能为空');
-					return;
-				}
-				var name = $("#name").val();
-				if (name == "") {
-					layer.msg('name不能为空');
-					return;
-				}
-				var mobile = $("#mobile").val();
-				if (mobile == "") {
-					layer.msg('mobile不能为空');
-					return;
-				}
-				var qq = $("#qq").val();
-				if (qq == "") {
-					layer.msg('qq不能为空');
-					return;
-				}
-				var email = $("#email").val();
-				if (email == "") {
-					layer.msg('email不能为空');
-					return;
-				}
-				var departmentId = $("#departmentId").val();
-				if (departmentId == "") {
-					layer.msg('departmentId不能为空');
-					return;
-				}
-				var jobId = $("#jobId").val();
-				if (jobId == "") {
-					layer.msg('jobId不能为空');
-					return;
-				}
-				var isDisable = $("#isDisable").val();
-				if (isDisable == "") {
-					layer.msg('isDisable不能为空');
-					return;
-				}
-				var password = $("#password").val();
-				if (password == "") {
-					layer.msg('password不能为空');
-					return;
-				}
-				var userType = $("#userType").val();
-				if (userType == "") {
-					layer.msg('userType不能为空');
-					return;
-				}
-				var lastLoginTime = $("#lastLoginTime").val();
-				if (lastLoginTime == "") {
-					layer.msg('lastLoginTime不能为空');
-					return;
-				}
 				$.ajax({
 					type : 'POST',
 					data : $("#userAddForm").serialize(),
@@ -344,6 +272,7 @@
 					}
 				});
 			}
+		},500);
 		}
 
 		//返回 

@@ -100,6 +100,16 @@
 							</div>
 						</div>
 						<div class="col-sm-6">
+							<div class="form-group">
+								<label>传真：</label> 
+								<input id="fax" name="fax" type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+						
+					</div>
+					
+					<div class="row">
+						<div class="col-sm-6">
 							<div id="scopeDiv" class="form-group" style="display:none;">
 								<label><span>*</span>经营范围：</label>
 								<!-- <input id="businessScope" name="" type="text" class="form-control input-sm" placeholder=" " /> -->
@@ -178,6 +188,12 @@
 								<input id="designatedNum" name="designatedNum" type="text" style="text-transform:uppercase" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
+					</div>
+					
+					
+					<!-- PDF模板 -->
+					<div id="pdf_div" class="row none">
+						
 					</div>
 
 				</div>

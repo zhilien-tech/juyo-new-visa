@@ -475,7 +475,7 @@
 				success : function(data) {
 					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 					$.each(data,function(index,element) { 
-						liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+						liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
 					});
 					liStr += "</ul>";
 					$("#nationality").after(liStr);
@@ -511,7 +511,7 @@
 						break;
 					}
 					var li = $('#ui-id-1').find('li:eq('+index+')');
-					li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css('background','');
+					li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
 			});
 		//国籍检索下拉项
 		function setNationality(nationality){
@@ -532,7 +532,7 @@
 				success : function(data) {
 					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 					$.each(data,function(index,element) { 
-						liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+						liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
 					});
 					liStr += "</ul>";
 					$("#province").after(liStr);
@@ -567,7 +567,7 @@
 				break;
 			}
 			var li = $(this).next().find('li:eq('+provinceindex+')');
-			li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css('background','');
+			li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
 		});
 		//省份 检索下拉项
 		function setProvince(province){
@@ -589,7 +589,7 @@
 				success : function(data) {
 					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 					$.each(data,function(index,element) { 
-						liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+						liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
 					});
 					liStr += "</ul>";
 					$("#city").after(liStr);
@@ -625,7 +625,7 @@
 				break;
 			}
 			var li = $(this).next().find('li:eq('+cityindex+')');
-			li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css('background','');
+			li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
 		});
 		//市 检索下拉项
 		function setCity(city){

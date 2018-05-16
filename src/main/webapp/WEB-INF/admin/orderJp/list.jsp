@@ -243,6 +243,9 @@
 				type : 'post',
 				success : function(data) {
 					_self.orderJpData = data.orderJp;
+					$('#pageNumber').val(1);
+					$('#pageTotal').val(data.pageTotal);
+					$('#pageListCount').val(data.pageListCount);
 				}
 			});
 		});

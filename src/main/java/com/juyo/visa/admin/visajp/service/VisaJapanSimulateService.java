@@ -133,7 +133,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	 * @param response
 	 * @return TODO签证页面文件下载
 	 */
-	public Object downloadFile(Long orderid, HttpServletResponse response, HttpSession session) {
+	public Object downloadFile(Long orderid, HttpServletResponse response, HttpSession session,HttpServletRequest request) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -145,7 +145,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			if (loginCompany.getName().startsWith("辽宁万达")) {
 				byteArray = liaoNingWanDaService.generateFile(orderjp).toByteArray();
 			} else {
-				byteArray = downLoadVisaFileService.generateFile(orderjp).toByteArray();
+				byteArray = downLoadVisaFileService.generateFile(orderjp,request).toByteArray();
 			}
 			//获取订单信息，准备文件名称
 			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());

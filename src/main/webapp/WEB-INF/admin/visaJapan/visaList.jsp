@@ -371,7 +371,10 @@
 	$(function(){
 		$(".btnList").click(function(){
 			$(this).addClass('bgColor').siblings().removeClass('bgColor');
-			clearSearchEle();
+			//clearSearchEle();
+			$("#status").val("");
+			$("#sendSignDate").val("");
+			$("#searchStr").val("");
 			search();
 		})
 		
@@ -412,6 +415,8 @@
         	type:'post',
         	success: function(data){
         		_self.visaJapanData = data.visaJapanData;
+        		$('#pageNumber').val(1);
+        		$('#pagetotal').val(data.pagetotal);
           	}
         });
 	}
