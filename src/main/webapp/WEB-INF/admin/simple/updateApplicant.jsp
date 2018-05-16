@@ -168,7 +168,7 @@
 									<input type="hidden" id="sameAddress" value=""/>
 									<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> <input id="province"
 										name="province" type="text" class="form-control input-sm"
-										placeholder="省" value="${obj.applicant.province }" />
+										placeholder="省" autocomplete="off" value="${obj.applicant.province }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -176,7 +176,7 @@
 								<div class="form-group" id="cityDiv">
 									<label>现居住地址城市</label> <input id="city"
 										name="city" type="text" class="form-control input-sm"
-										placeholder="市" value="${obj.applicant.city }" />
+										placeholder="市" autocomplete="off" value="${obj.applicant.city }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -256,7 +256,7 @@
 								<div class="col-sm-5 padding-right-0 nationalityHide">
 									<div class="form-group" id="nationalityDiv">
 										<label>国籍</label> 
-										<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
+										<input id="nationality" name="nationality" autocomplete="off" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
 									</div>
 								</div>
 							</div>
@@ -475,13 +475,44 @@
 				success : function(data) {
 					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 					$.each(data,function(index,element) { 
-						liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+						liStr += "<li onclick='setNationality("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
 					});
 					liStr += "</ul>";
 					$("#nationality").after(liStr);
 				}
 			});
 		});
+			
+			var index = 0;
+			$(document).on('keyup','#nationality',function(e){
+				var lilength = $(this).next().children().length;
+					if(e == undefined)
+						e = window.event;
+					
+					switch(e.keyCode){
+					case 38:
+						
+						index--;
+						if(index ==0) index = 0;
+						break;
+					case 40:
+						
+						index++;
+						if(index == lilength) index = 0;
+						break;
+					case 13:
+						
+						$(this).val($('#ui-id-1').find('li:eq('+index+')').children().html());
+						$("#nationality").nextAll("ul.ui-autocomplete").remove();
+						$("#nationality").blur();
+						var nationality = $("#nationality").val();
+						setNationality(nationality);
+						index = 0;
+						break;
+					}
+					var li = $('#ui-id-1').find('li:eq('+index+')');
+					li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
+			});
 		//国籍检索下拉项
 		function setNationality(nationality){
 			$("#nationality").nextAll("ul.ui-autocomplete").remove();
@@ -501,14 +532,43 @@
 				success : function(data) {
 					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 					$.each(data,function(index,element) { 
-						liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+						liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
 					});
 					liStr += "</ul>";
 					$("#province").after(liStr);
 				}
 			});
 		});
-		
+		var provinceindex = 0;
+		$(document).on('keyup','#province',function(e){
+			
+			if(e == undefined)
+				e = window.event;
+			
+			switch(e.keyCode){
+			case 38:
+				
+				provinceindex--;
+				if(provinceindex ==0) provinceindex = 0;
+				break;
+			case 40:
+				
+				provinceindex++;
+				if(provinceindex ==5) provinceindex = 0;
+				break;
+			case 13:
+				
+				$(this).val($(this).next().find('li:eq('+provinceindex+')').children().html());
+				$("#province").nextAll("ul.ui-autocomplete").remove();
+				$("#province").blur();
+				var province = $("#province").val();
+				setProvince(province);
+				provinceindex = 0;
+				break;
+			}
+			var li = $(this).next().find('li:eq('+provinceindex+')');
+			li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
+		});
 		//省份 检索下拉项
 		function setProvince(province){
 			$("#province").nextAll("ul.ui-autocomplete").remove();
@@ -529,14 +589,44 @@
 				success : function(data) {
 					var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 					$.each(data,function(index,element) { 
-						liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><a id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</a></li>";
+						liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
 					});
 					liStr += "</ul>";
 					$("#city").after(liStr);
 				}
 			});
 		});
-		
+		//市
+		var cityindex = 0;
+		$(document).on('keyup','#city',function(e){
+			
+			if(e == undefined)
+				e = window.event;
+			
+			switch(e.keyCode){
+			case 38:
+				
+				cityindex--;
+				if(cityindex ==0) cityindex = 0;
+				break;
+			case 40:
+				
+				cityindex++;
+				if(cityindex ==5) cityindex = 0;
+				break;
+			case 13:
+				
+				$(this).val($(this).next().find('li:eq('+provinceindex+')').children().html());
+				$("#city").nextAll("ul.ui-autocomplete").remove();
+				$("#city").blur();
+				var city = $("#city").val();
+				setCity(city);
+				cityindex = 0;
+				break;
+			}
+			var li = $(this).next().find('li:eq('+cityindex+')');
+			li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
+		});
 		//市 检索下拉项
 		function setCity(city){
 			$("#city").nextAll("ul.ui-autocomplete").remove();
