@@ -436,6 +436,7 @@
 			if(nation == 1){
 				$(".nationalityHide").show();
 			}else {
+				$("input[name='hasOtherNationality'][value='2']").attr("checked",'checked');
 				$(".nationalityHide").hide();
 			}
 			
@@ -443,7 +444,7 @@
 				$(".nameBeforeHide").show();
 				$(".wordSpell").show();
 			}else {
-				
+				$("input[name='hasOtherName'][value='2']").attr("checked",'checked');
 				$(".nameBeforeHide").hide();
 				$(".wordSpell").hide();
 			}
