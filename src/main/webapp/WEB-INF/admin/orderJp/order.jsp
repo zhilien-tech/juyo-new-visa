@@ -452,7 +452,7 @@
 										<a v-on:click="updateApplicant(applicant.id);">基本信息</a>&nbsp;&nbsp;
 										<a v-on:click="passport(applicant.id,orderInfo.id)">护照信息</a>&nbsp;&nbsp;
 										<a v-on:click="visa(applicant.id,orderInfo.id)">签证信息</a>&nbsp;&nbsp;
-										<a v-on:click="visaInput(applicant.applicantjpid)">签证录入</a>&nbsp;&nbsp;
+										<a v-on:click="visaInput(applicant.applicantjpid)">出境记录</a>&nbsp;&nbsp;
 										<a v-on:click="backmailInfo(applicant.id)">回邮</a>&nbsp;&nbsp;
 										<a v-on:click="deleteApplicant(applicant.id)">删除</a>
 									</td>
