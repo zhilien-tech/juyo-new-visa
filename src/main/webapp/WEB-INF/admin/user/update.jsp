@@ -271,6 +271,7 @@
 			var bootstrapValidator = $("#userUpdateForm").data(
 					'bootstrapValidator');
 			bootstrapValidator.validate();
+			setTimeout(function(){
 			if (bootstrapValidator.isValid()) {
 
 				$.ajax({
@@ -289,6 +290,7 @@
 					}
 				});
 			}
+			},500);
 		}
 
 		//返回刷新页面 
