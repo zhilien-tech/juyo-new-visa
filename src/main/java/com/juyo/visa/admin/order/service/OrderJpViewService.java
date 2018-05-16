@@ -605,11 +605,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				}
 			} else {
 				//不是直客时
-				TCustomerEntity customer = dbDao.fetch(TCustomerEntity.class,
-						Long.parseLong(orderInfo.getName().substring(0, (orderInfo.getName().length() - 1))));
-				//订单信息
-				orderEntity.setCustomerId(customer.getId());
-				orderEntity.setIsDirectCus(IsYesOrNoEnum.NO.intKey());
+				TCustomerEntity customer = new TCustomerEntity();
+				if (!Util.isEmpty(orderInfo.getName())) {
+					customer = dbDao.fetch(TCustomerEntity.class,
+							Long.parseLong(orderInfo.getName().substring(0, (orderInfo.getName().length() - 1))));
+					//订单信息
+					if (!Util.isEmpty(customer)) {
+						orderEntity.setCustomerId(customer.getId());
+					}
+					orderEntity.setIsDirectCus(IsYesOrNoEnum.NO.intKey());
+				}
 			}
 		}
 
