@@ -5,6 +5,9 @@ import lombok.EqualsAndHashCode;
 import com.uxuexi.core.web.form.AddForm;
 import java.util.Date;
 
+import org.nutz.dao.entity.annotation.Column;
+import org.nutz.dao.entity.annotation.Comment;
+
 import java.io.Serializable;
 
 @Data
@@ -14,6 +17,9 @@ public class TCompanyOfCustomerAddForm extends AddForm implements Serializable{
 		
 	/**公司id*/
 	private Integer comid;
+	
+	/**送签社公司id*/
+	private Integer sendcomid;
 		
 	/**公司名称*/
 	private String fullname;
