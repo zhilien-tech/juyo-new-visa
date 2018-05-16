@@ -472,19 +472,19 @@ $("#nationality").on('input',function(){
 //国籍上下键控制
 //写成公共方法
 var index = 0;
-$(document).on('keyup','#nationality',function(e){
+$(document).on('keydown','#nationality',function(e){
 	var lilength = $(this).next().children().length;
 		if(e == undefined)
 			e = window.event;
 		
 		switch(e.keyCode){
 		case 38:
-			
+			 e.preventDefault();
 			index--;
 			if(index == 0) index = 0;
 			break;
 		case 40:
-			
+			 e.preventDefault();
 			index++;
 			if(index ==lilength) index = 0;
 			break;
@@ -527,19 +527,19 @@ $("#nationalityen").on('input',function(){
 });
 //国籍上下键控制英文
 var indexen = 0;
-$(document).on('keyup','#nationalityen',function(e){
+$(document).on('keydown','#nationalityen',function(e){
 	var lilength = $(this).next().children().length;
 	if(e == undefined)
 		e = window.event;
 	
 	switch(e.keyCode){
 	case 38:
-		
+		e.preventDefault();
 		indexen--;
 		if(indexen == 0) indexen = 0;
 		break;
 	case 40:
-		
+		e.preventDefault();
 		indexen++;
 		if(indexen == lilength) indexen = 0;
 		break;
@@ -594,19 +594,19 @@ $("#province").on('input',function(){
 });
 //省份上下键
 var provinceindex = 0;
-$(document).on('keyup','#province',function(e){
+$(document).on('keydown','#province',function(e){
 	
 	if(e == undefined)
 		e = window.event;
 	
 	switch(e.keyCode){
 	case 38:
-		
+		e.preventDefault();
 		provinceindex--;
 		if(provinceindex ==0) provinceindex = 0;
 		break;
 	case 40:
-		
+		e.preventDefault();
 		provinceindex++;
 		if(provinceindex ==5) provinceindex = 0;
 		break;
