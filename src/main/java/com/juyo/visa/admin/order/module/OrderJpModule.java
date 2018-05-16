@@ -538,6 +538,15 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 获取国籍(英文)
+	 */
+	@At
+	@POST
+	public Object getNationalityen(@Param("searchStr") String searchStr) {
+		return saleViewService.getNationalityen(searchStr);
+	}
+
+	/**
 	 * 获取省份
 	 */
 	@At
