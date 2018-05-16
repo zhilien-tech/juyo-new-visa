@@ -113,6 +113,11 @@
 	        		}else if(_self.passportdata.validtype == 2){
 						$(".dateVal").text("5年");
 	        		}
+	        		if(data.passportdata.passporturl != ''){
+	        			$('#upload').css('opacity','0'); 
+	        		}else {
+	        			$('#upload').css('opacity','1'); 
+	        		}
 	          	}
 	        });
 	    }
