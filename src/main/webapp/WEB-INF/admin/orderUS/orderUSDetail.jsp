@@ -114,6 +114,7 @@
 								<div class="form-group">
 									<label><span>*</span>领区</label>
 									<select id="cityid" name="cityid"  class="form-control input-sm" >
+										<option value="">--请选择--</option>
 									<c:forEach var="map" items="${obj.cityidenum}">
 										<option value="${map.key}"  ${map.key==obj.orderinfo.cityid?"selected":"" } >${map.value}</option>
 									</c:forEach>

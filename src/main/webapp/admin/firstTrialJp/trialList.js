@@ -369,6 +369,8 @@ $("#searchBtn").on('click', function () {
 		type:'post',
 		success: function(data){
 			_self.trialJapanData = data.trialJapanData;
+			$('#pageTotal').val(data.pageTotal);
+			$('#pageListCount').val(data.pageListCount);
 		}
 	});
 });
@@ -413,9 +415,9 @@ $(window).scroll(function(){
 			});
 		}else{
 			//没有更多数据，底部提示语
-			if($("#card-bottom-line").length <= 0 && pageListCount>=6){
+			/*if($("#card-bottom-line").length <= 0 && pageListCount>=6){
 				$(".card-list").last().after("<div id='card-bottom-line' class='bottom-line'><span style='margin-left: 38%; color:#999'>-------  没有更多数据可以加载  -------</span></div>");
-			}
+			}*/
 		}
 	}
 });
@@ -455,6 +457,9 @@ function reloadData(){
 		type:'post',
 		success: function(data){
 			_self.trialJapanData = data.trialJapanData;
+			$('#pageNumber').val(1);
+			$('#pageTotal').val(data.pageTotal);
+			$('#pageListCount').val(data.pageListCount);
 		}
 	});
 }
