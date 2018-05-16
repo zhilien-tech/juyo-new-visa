@@ -773,6 +773,12 @@
 					$(".checkShowORHide").show();
 				} else {
 					$(".checkShowORHide").hide();
+					$("#goDepartureCity").empty();
+					$("#goArrivedCity").empty();
+					$("#goFlightNum").empty();
+					$("#returnDepartureCity").empty();
+					$("#returnArrivedCity").empty();
+					$("#returnFlightNum").empty();
 				}
 			});
 			
@@ -1058,6 +1064,8 @@
 		$("#goDepartureCity").on("select2:unselect", function(e) {
 			$(this).text('');
 			$("#returnArrivedCity").html('');
+			$('#goFlightNum').empty();
+			$('#returnFlightNum').empty();
 		});
 		//去程抵达城市
 		$("#goArrivedCity")
@@ -1092,6 +1100,8 @@
 		$("#goArrivedCity").on("select2:unselect", function(e) {
 			$(this).text('');
 			$("#returnDepartureCity").html('');
+			$('#goFlightNum').empty();
+			$('#returnFlightNum').empty();
 		});
 		//返程出发城市
 		$("#returnDepartureCity").on("select2:select", function(e) {
@@ -1111,6 +1121,11 @@
 			//查询航班接口到缓存
 			initFlightByInterface(returnDate, thisval, returnArrivedCity);
 		});
+		$("#returnDepartureCity").on("select2:unselect", function(e) {
+			$(this).text('');
+			$("#returnDepartureCity").html('');
+			$('#returnFlightNum').empty();
+		});
 		//返程抵达城市
 		$("#returnArrivedCity").on("select2:select", function(e) {
 			var thisval = $(this).val();
@@ -1128,6 +1143,11 @@
 			var returnDate = $('#returnDate').val();
 			//查询航班接口到缓存
 			initFlightByInterface(returnDate, returnDepartureCity, thisval);
+		});
+		$("#returnArrivedCity").on("select2:unselect", function(e) {
+			$(this).text('');
+			$("#returnArrivedCity").html('');
+			$('#returnFlightNum').empty();
 		});
 
 		//加载航班号到缓存并同步到数据库
