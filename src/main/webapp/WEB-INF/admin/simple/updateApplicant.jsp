@@ -168,7 +168,7 @@
 									<input type="hidden" id="sameAddress" value=""/>
 									<input class="nowProvince" type="checkbox" name="addressIsSameWithCard" value="1" /> <input id="province"
 										name="province" type="text" class="form-control input-sm"
-										placeholder="省" value="${obj.applicant.province }" />
+										placeholder="省" autocomplete="off" value="${obj.applicant.province }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -176,7 +176,7 @@
 								<div class="form-group" id="cityDiv">
 									<label>现居住地址城市</label> <input id="city"
 										name="city" type="text" class="form-control input-sm"
-										placeholder="市" value="${obj.applicant.city }" />
+										placeholder="市" autocomplete="off" value="${obj.applicant.city }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -256,7 +256,7 @@
 								<div class="col-sm-5 padding-right-0 nationalityHide">
 									<div class="form-group" id="nationalityDiv">
 										<label>国籍</label> 
-										<input id="nationality" name="nationality" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
+										<input id="nationality" name="nationality" autocomplete="off" value="${obj.applicant.nationality}" type="text" class="form-control input-sm"/>
 									</div>
 								</div>
 							</div>
