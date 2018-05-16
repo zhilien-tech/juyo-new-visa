@@ -162,13 +162,13 @@
 									<input type="hidden" name="cardcity" id="cardCity" value="${obj.applicant.cardcity }"/>
 									<input type="hidden" id="sameAddress" value=""/>
 									<input class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" /> 
-									<input id="province" name="province" onchange="translateZhToEn(this,'provinceen','')" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.applicant.province }" />
+									<input id="province" autocomplete="off" name="province" onchange="translateZhToEn(this,'provinceen','')" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.applicant.province }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
 									<label>现居住地址城市</label> 
-									<input id="city" name="city" type="text" onchange="translateZhToEn(this,'cityen','')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.city }" />
+									<input id="city" name="city" autocomplete="off" type="text" onchange="translateZhToEn(this,'cityen','')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.city }" />
 								</div>
 							</div>
 						</div>
@@ -254,7 +254,7 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1 usedNationalityTrue">
 								<div class="form-group" id="">
 									<label>国籍</label> 
-									<input id="nationality" name="nationality" onchange="translateZhToEn(this,'nationalityen','')" class="form-control input-sm" value="${obj.applicant.nationality }"/>
+									<input id="nationality" name="nationality" autocomplete="off" onchange="translateZhToEn(this,'nationalityen','')" class="form-control input-sm" value="${obj.applicant.nationality }"/>
 								</div>
 							</div>
 						</div>
@@ -405,12 +405,12 @@
 									<input type="hidden" name="cardprovince" id="cardProvince" />
 									<input type="hidden" name="cardcity" id="cardCity" />
 									<input type="hidden" id="sameAddress" value=""/>
-									<input id="provinceen" name="provinceen" type="text" class="form-control input-sm" placeholder="省" value="${obj.applicant.provinceen }" />
+									<input id="provinceen" name="provinceen" autocomplete="off" type="text" class="form-control input-sm" placeholder="省" value="${obj.applicant.provinceen }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
-									<input id="cityen" name="cityen" type="text" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.cityen }" />
+									<input id="cityen" name="cityen" autocomplete="off" type="text" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.cityen }" />
 								</div>
 							</div>
 						</div>
@@ -495,7 +495,7 @@
 							</div>
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1 usedNationalityUSTrue">
 								<div class="form-group" id="">
-									<input id="nationalityen" name="nationalityen" class="form-control input-sm" value="${obj.applicant.nationalityen }"/>
+									<input id="nationalityen" autocomplete="off" name="nationalityen" class="form-control input-sm" value="${obj.applicant.nationalityen }"/>
 								</div>
 							</div>
 						</div>
