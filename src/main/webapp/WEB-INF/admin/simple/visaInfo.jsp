@@ -231,19 +231,19 @@
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次出行时间</label>
-														<input id="laststartdate" name="laststartdate" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.laststartdate }" pattern="yyyy-MM-dd" />"/>
+														<input id="laststartdate" name="laststartdate"  style="color:#555 !important;" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.laststartdate }" pattern="yyyy-MM-dd" />"/>
 													</div>
 												</div>
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次停留天数</label>
-														<input id="laststayday" name="laststayday" type="text" class="form-control input-sm" value="${obj.jporderinfo.laststayday }"/>
+														<input id="laststayday" name="laststayday"  style="color:#555 !important;" type="text" class="form-control input-sm" value="${obj.jporderinfo.laststayday }"/>
 													</div>
 												</div>
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次返回时间</label>
-														<input id="lastreturndate" name="lastreturndate" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.lastreturndate }" pattern="yyyy-MM-dd" />"/>
+														<input id="lastreturndate" name="lastreturndate"  style="color:#555 !important;" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.lastreturndate }" pattern="yyyy-MM-dd" />"/>
 													</div>
 												</div>
 											</div>

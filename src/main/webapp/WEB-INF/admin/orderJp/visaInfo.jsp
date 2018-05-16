@@ -1279,6 +1279,24 @@
 				}
 			});
 			
+			//签证类型、过去三年是否访问处理
+			var visaType = ${obj.jporderinfo.visaType};
+			var isVisit = ${obj.jporderinfo.isVisit};
+			if(visaType != 1){
+				$('#visacounty').show();
+				$('#threefangwen').show();
+			}else{
+				$('#visacounty').hide();
+				$('#threefangwen').hide();
+			}
+			if(isVisit == 1){
+				$('#threexian').show();
+				$('.alignment').show();
+			}else{
+				$('#threexian').hide();
+				$('.alignment').hide();
+			}
+
 			//主申请人 or 副申请人
 			var applicVal = $("#applicant").val();
 			if(applicVal == "1"){//主申请人
@@ -1987,12 +2005,29 @@
 		});
 		$('#visatype').change(function(){
 			var thisval = $(this).val();
+			var isvisit = $("#isVisit").val();
 			if(thisval != 1){
 				$('#visacounty').show();
 				$('#threefangwen').show();
 			}else{
 				$('#visacounty').hide();
 				$('#threefangwen').hide();
+				$('#threexian').hide();
+				$('.alignment').hide();
+				$("#isVisit").val(0);
+				$('[name=visacounty]').each(function(){
+					if($(this).hasClass('btnState-true')){
+						$(this).removeClass('btnState-true');
+					}
+				});
+				$('#laststartdate').val("");
+				$('#laststayday').val("");
+				$('#lastreturndate').val("");
+				$('[name=threecounty]').each(function(){
+					if($(this).hasClass('btnState-true')){
+						$(this).removeClass('btnState-true');
+					}
+				});
 			}
 		});
 
@@ -2004,6 +2039,14 @@
 			}else{
 				$('#threexian').hide();
 				$('.alignment').hide();
+				$('#laststartdate').val("");
+				$('#laststayday').val("");
+				$('#lastreturndate').val("");
+				$('[name=threecounty]').each(function(){
+					if($(this).hasClass('btnState-true')){
+						$(this).removeClass('btnState-true');
+					}
+				});
 			}
 		});
 		/* 在日担保人出生日期 */
