@@ -86,15 +86,6 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
-								<label>传真：</label> 
-								<input id="fax" name="fax" value="${obj.company.fax}" type="text" class="form-control input-sm" placeholder=" " />
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
 								<label>地址：</label> 
 								<input id="address" name="address" value="${obj.company.address}" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
@@ -123,6 +114,14 @@
 							</div>
 						</div>
 						<div class="col-sm-6">
+							<div class="form-group">
+								<label>传真：</label> 
+								<input id="fax" name="fax" value="${obj.company.fax}" type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
 							<div id="scopeDiv" class="form-group">
 								<label><span>*</span>经营范围：</label> 
 								<input id="businessScopes" name="businessScopes" value="${obj.company.scopes}" type="hidden" />
@@ -136,6 +135,7 @@
 							</div>
 						</div>
 					</div>
+					
 
 					<!-- <div class="row">
 						<div class="col-sm-6">

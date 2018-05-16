@@ -23,6 +23,9 @@ public class TCompanyOfCustomerForm extends DataTablesParamForm {
 
 	/**公司id*/
 	private Integer comid;
+	
+	/**送签社公司id*/
+	private Integer sendcomid;
 
 	/**公司名称*/
 	private String fullname;

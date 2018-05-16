@@ -82,15 +82,6 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
-								<label>传真：</label> 
-								<input id="fax" name="fax" type="text" class="form-control input-sm" placeholder=" " />
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-sm-12">
-							<div class="form-group">
 								<label>地址：</label> 
 								<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
 							</div>
@@ -108,6 +99,16 @@
 								</select>
 							</div>
 						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>传真：</label> 
+								<input id="fax" name="fax" type="text" class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+						
+					</div>
+					
+					<div class="row">
 						<div class="col-sm-6">
 							<div id="scopeDiv" class="form-group" style="display:none;">
 								<label><span>*</span>经营范围：</label>
