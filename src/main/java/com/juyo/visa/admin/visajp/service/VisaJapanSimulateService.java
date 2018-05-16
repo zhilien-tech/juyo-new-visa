@@ -187,7 +187,6 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 						}
 					}
 					mainapplicantname = "  " + applicat.getFirstName() + applicat.getLastName();
-					
 				}
 			}
 			String filename = "";
