@@ -164,20 +164,25 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 							applicantjp.getApplicantId().longValue());
 					if(!Util.isEmpty(applicantjp.getOrderId())) {
 						orderJp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderid", "=", applicantjp.getOrderId()));
+					Integer type = orderjp.getVisaType();
+					System.out.println(type);
+					if(!Util.isEmpty(type)) {
+							if (type == 1) {
+								visaType = "单次";
+							}
+							if (type == 2) {
+								visaType = "冲绳东北六县三年多次";
+							}
+							if (type == 3) {
+								visaType = "普通三年多次";
+							}
+							if (type == 4) {
+								visaType = "普通五年多次";
+							}
+						}
 					}
 					mainapplicantname = "  " + applicat.getFirstName() + applicat.getLastName();
-					if (orderJp.getVisaType() == 1) {
-						visaType = "单次";
-					}
-					if (orderJp.getVisaType() == 2) {
-						visaType = "冲绳东北六县三年多次";
-					}
-					if (orderJp.getVisaType() == 3) {
-						visaType = "普通三年多次";
-					}
-					if (orderJp.getVisaType() == 4) {
-						visaType = "普通五年多次";
-					}
+					
 				}
 			}
 			String filename = "";
@@ -191,7 +196,6 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			filename += orderinfo.getOrderNum();
 			// filename += ".zip";
 			// 新需求只下载PDF文件
-			filename += mainapplicantname;
 			filename += ".pdf";
 			// 将文件进行编码
 			String fileName = URLEncoder.encode(filename, "UTF-8");
