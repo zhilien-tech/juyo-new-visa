@@ -29,7 +29,16 @@
 						<div class="form-group">
 							<label><span>*</span>送签社：</label> 
 							<select class="form-control input-sm selectHeight" id="sendsignid" name="sendsignid">
-								<option value="">请选择</option>
+							<%-- <c:set var="list" value="${obj.songqianlist}"/>
+							   <c:choose> 
+							     <c:when test=" ${list == }">    <!--如果 --> 
+									<option value="">暂无符合送签机制的公司</option>
+							 </c:when>      
+							     <c:otherwise>  <!--否则 -->  
+							     	<option value="">${obj.songqianlist}"</option>  
+							  </c:otherwise> 
+							</c:choose> --%>
+							<option value="">请选择</option>  
 								<c:forEach var="map" items="${obj.songqianlist}">
 									<c:choose>
 										<c:when test="${obj.orderjpinfo.sendsignid eq map.id }">

@@ -1408,17 +1408,21 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		List<TCompanyEntity> songqianlist = Lists.newArrayList();
 		//送签社下拉
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
-				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey()) && loginCompany.getCdesignNum() != null) {
 			songqianlist = dbDao
 					.query(TCompanyEntity.class, Cnd.where("adminId", "=", loginCompany.getAdminId()), null);
 		} else {
 			TCompanyEntity songqian = dbDao.fetch(TCompanyEntity.class, orderjp.getSendsignid().longValue());
 			songqianlist.add(songqian);
 		}
+		if(songqianlist.size() == 0) {
+			result.put("songqianlist", "请选择含有指定番号的 送签社");
+		}else {
 		result.put("songqianlist", songqianlist);
+		}
 		//地接社下拉
 		List<TCompanyEntity> dijielist = dbDao.query(TCompanyEntity.class,
-				Cnd.where("comType", "=", CompanyTypeEnum.DIJI.intKey()), null);
+				Cnd.where("comType", "=", CompanyTypeEnum.DIJI.intKey()).and("name", "like", "株式会社金通商社"), null);
 		result.put("dijielist", dijielist);
 		return result;
 	}
@@ -1466,7 +1470,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//送签社
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())) {
 			orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-			//订单负责人变更
+		//订单负责人变更
 			Integer userId = loginuser.getId();
 			changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
 		} else if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {

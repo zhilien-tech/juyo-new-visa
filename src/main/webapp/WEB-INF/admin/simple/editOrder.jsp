@@ -351,7 +351,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
-										<select id="goDepartureCity" class="form-control select2 select2City" multiple="multiple" tabindex="17" >
+										<select id="goDepartureCity" oninput="clearplan()" class="form-control select2 select2City" multiple="multiple" tabindex="17" >
 											<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
 													<c:when test="${city.id eq obj.tripinfo.goDepartureCity }">
@@ -368,7 +368,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>抵达城市：</label>
-										<select id="goArrivedCity" class="form-control input-sm select2City" multiple="multiple" tabindex="18">
+										<select id="goArrivedCity" class="form-control input-sm select2City" oninput="clearplan()" multiple="multiple" tabindex="18">
 											<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
 													<c:when test="${city.id eq obj.tripinfo.goArrivedCity }">
@@ -386,7 +386,7 @@
 								<div class="col-sm-3 paddingRight">
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
-										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="19">
+										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="19" >
 											<c:set var="isDoneAir" value="0" scope="page"></c:set>
 											<c:forEach items="${obj.flightlist }" var="flight">
 												<c:if test="${obj.tripinfo.goFlightNum eq  flight.flightnum}">
@@ -867,6 +867,9 @@
                  		}
                    	}
                  });
+			}
+			function clearplan(){
+					$( ".select2-selection__choice").val("");
 			}
 		</script>
 </body>
