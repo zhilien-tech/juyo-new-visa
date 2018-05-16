@@ -512,7 +512,7 @@ $("#nationalityen").on('input',function(){
 		data : {
 			searchStr : $("#nationalityen").val()
 		},
-		url : BASE_PATH+'/admin/orderJp/getNationality.html',
+		url : BASE_PATH+'/admin/orderJp/getNationalityen.html',
 		success : function(data) {
 			if(data != ""){
 				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
@@ -549,7 +549,7 @@ $(document).on('keyup','#nationalityen',function(e){
 		$("#nationalityen").nextAll("ul.ui-autocomplete").remove();
 		$("#nationalityen").blur();
 		var nationalityen = $("#nationalityen").val();
-		setNationality(nationalityen);
+		setNationalityen(nationalityen);
 		indexen = 0;
 		break;
 	}
