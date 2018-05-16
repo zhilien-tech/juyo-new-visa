@@ -605,11 +605,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				}
 			} else {
 				//不是直客时
-				TCustomerEntity customer = dbDao.fetch(TCustomerEntity.class,
-						Long.parseLong(orderInfo.getName().substring(0, (orderInfo.getName().length() - 1))));
-				//订单信息
-				orderEntity.setCustomerId(customer.getId());
-				orderEntity.setIsDirectCus(IsYesOrNoEnum.NO.intKey());
+				TCustomerEntity customer = new TCustomerEntity();
+				if (!Util.isEmpty(orderInfo.getName())) {
+					customer = dbDao.fetch(TCustomerEntity.class,
+							Long.parseLong(orderInfo.getName().substring(0, (orderInfo.getName().length() - 1))));
+					//订单信息
+					if (!Util.isEmpty(customer)) {
+						orderEntity.setCustomerId(customer.getId());
+					}
+					orderEntity.setIsDirectCus(IsYesOrNoEnum.NO.intKey());
+				}
 			}
 		}
 
@@ -1831,6 +1836,26 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		for (TCountryEntity tCountry : country) {
 			if (!countryList.contains(tCountry.getChinesename())) {
 				countryList.add(tCountry.getChinesename());
+			}
+		}
+		List<String> list = new ArrayList<>();
+		if (!Util.isEmpty(countryList) && countryList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(countryList.get(i));
+			}
+			return list;
+		} else {
+			return countryList;
+		}
+	}
+
+	public Object getNationalityen(String searchStr) {
+		List<String> countryList = new ArrayList<>();
+		List<TCountryEntity> country = dbDao.query(TCountryEntity.class,
+				Cnd.where("chinesename", "like", "%" + Strings.trim(searchStr) + "%"), null);
+		for (TCountryEntity tCountry : country) {
+			if (!countryList.contains(tCountry.getName())) {
+				countryList.add(tCountry.getName());
 			}
 		}
 		List<String> list = new ArrayList<>();

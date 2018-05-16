@@ -183,7 +183,7 @@
 	});
 	// 注册scroll事件并监听 
 	$(window).scroll(function(){
-	　　/* var scrollTop = $(this).scrollTop();
+	　　var scrollTop = $(this).scrollTop();
 	　　var scrollHeight = $(document).height();
 	　　var windowHeight = $(this).height();
 		// 判断是否滚动到底部  
@@ -218,13 +218,17 @@
 			      	}
 			    });
 			}
-	　　} */
+	　　}
 	});
 	
 	$(function(){
 		$(".btnList").click(function(){
 			$(this).addClass('bgColor').siblings().removeClass('bgColor');
-			clearSearchEle();
+			//clearSearchEle();
+			//检索框
+			$('#status').val("");
+			$('#signDateStr').val("");
+			$('#searchStr').val("");
 			search();
 		})
 		
@@ -265,6 +269,8 @@
         	type:'post',
         	success: function(data){
         		_self.aftermarketData = data.aftermarketData;
+        		$('#pagetotal').val(data.pagetotal);
+        		$("#pageNumber").val(1);
           	}
         });
 	}
@@ -286,6 +292,8 @@
         	type:'post',
         	success: function(data){
         		_self.aftermarketData = data.aftermarketData;
+        		$('#pagetotal').val(data.pagetotal);
+        		$("#pageNumber").val(1);
           	}
         });
 		if(status == 1){

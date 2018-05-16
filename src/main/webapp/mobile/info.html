@@ -137,6 +137,16 @@
 	        	type:'post',
 	        	success: function(data){
 	        		_self.applicatdata = data.applicatdata;
+	        		if(data.applicatdata.cardfront != ''){
+	        			$('#upload').css('opacity','0'); 
+	        		}else {
+	        			$('#upload').css('opacity','1'); 
+	        		}
+	        		if(data.applicatdata.cardback != ''){
+	        			$('#upload2').css('opacity','0'); 
+	        		}else {
+	        			$('#upload2').css('opacity','1'); 
+	        		}
 	        		if(data.applicatdata.addressissamewithcard == 1){
 	        			$("#consistent").attr('checked',true);
 		        		/* $('.isclose').each(function(){
