@@ -1844,6 +1844,26 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 	}
 
+	public Object getNationalityen(String searchStr) {
+		List<String> countryList = new ArrayList<>();
+		List<TCountryEntity> country = dbDao.query(TCountryEntity.class,
+				Cnd.where("chinesename", "like", "%" + Strings.trim(searchStr) + "%"), null);
+		for (TCountryEntity tCountry : country) {
+			if (!countryList.contains(tCountry.getName())) {
+				countryList.add(tCountry.getName());
+			}
+		}
+		List<String> list = new ArrayList<>();
+		if (!Util.isEmpty(countryList) && countryList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(countryList.get(i));
+			}
+			return list;
+		} else {
+			return countryList;
+		}
+	}
+
 	public Object getProvince(String searchStr) {
 		List<String> provinceList = new ArrayList<>();
 		List<TIdcardEntity> province = dbDao.query(

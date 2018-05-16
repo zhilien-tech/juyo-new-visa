@@ -5,9 +5,6 @@
 <html lang="en-US" id="updateHtml">
 <head>
 	<meta charset="UTF-8">
-	<meta http-equlv="proma" content="no-cache" />
-	<meta http-equlv="cache-control" content="no-cache" />
-	<meta http-equlv="expires" content="0" />
 	<title>更新基本信息</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
