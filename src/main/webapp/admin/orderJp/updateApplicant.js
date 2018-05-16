@@ -390,7 +390,7 @@ $("#nationality").on('input',function(){
 //写成公共方法
 var index = 0;
 $(document).on('keyup','#nationality',function(e){
-	
+	var lilength = $(this).next().children().length;
 		if(e == undefined)
 			e = window.event;
 		
@@ -398,12 +398,12 @@ $(document).on('keyup','#nationality',function(e){
 		case 38:
 			
 			index--;
-			if(index ==0) index = 4;
+			if(index == 0) index = 0;
 			break;
 		case 40:
 			
 			index++;
-			if(index ==5) index = 0;
+			if(index == lilength) index = 0;
 			break;
 		case 13:
 			
@@ -456,7 +456,7 @@ $(document).on('keyup','#province',function(e){
 	case 38:
 		
 		provinceindex--;
-		if(provinceindex ==0) provinceindex = 4;
+		if(provinceindex ==0) provinceindex = 0;
 		break;
 	case 40:
 		
@@ -516,7 +516,7 @@ $(document).on('keyup','#city',function(e){
 	case 38:
 		
 		cityindex--;
-		if(cityindex ==0) cityindex = 4;
+		if(cityindex ==0) cityindex = 0;
 		break;
 	case 40:
 		
