@@ -469,7 +469,71 @@ $("#nationality").on('input',function(){
 		}
 	});
 });
-
+//国籍上下键控制
+//写成公共方法
+var index = 0;
+$(document).on('keyup','#nationality',function(e){
+	
+		if(e == undefined)
+			e = window.event;
+		
+		switch(e.keyCode){
+		case 38:
+			
+			index--;
+			if(index ==0) index = 4;
+			break;
+		case 40:
+			
+			index++;
+			if(index ==5) index = 0;
+			break;
+		case 13:
+			
+			$(this).val($('#ui-id-1').find('li:eq('+index+')').children().html());
+			$("#nationality").nextAll("ul.ui-autocomplete").remove();
+			$("#nationality").blur();
+			translateZhToEn('#nationality','nationalityen','');
+			var nationality = $("#nationality").val();
+			setNationality(nationality);
+			index = 0;
+			break;
+		}
+		var li = $('#ui-id-1').find('li:eq('+index+')');
+		li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css('background','');
+})
+//国籍上下键控制英文
+var indexen = 0;
+$(document).on('keyup','#nationalityen',function(e){
+	
+	if(e == undefined)
+		e = window.event;
+	
+	switch(e.keyCode){
+	case 38:
+		
+		indexen--;
+		if(indexen ==0) indexen = 4;
+		break;
+	case 40:
+		
+		indexen++;
+		if(indexen ==5) indexen = 0;
+		break;
+	case 13:
+		
+		$(this).val($(this).next().find('li:eq('+indexen+')').children().html());
+		$("#nationalityen").nextAll("ul.ui-autocomplete").remove();
+		$("#nationalityen").blur();
+		var nationalityen = $("#nationalityen").val();
+		setNationality(nationalityen);
+		indexen = 0;
+		break;
+	}
+	var li = $(this).next().find('li:eq('+indexen+')');
+	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css('background','');
+})
+//end
 $("#nationalityen").on('input',function(){
 	$("#nationalityen").nextAll("ul.ui-autocomplete").remove();
 	$.ajax({
@@ -527,7 +591,37 @@ $("#province").on('input',function(){
 		}
 	});
 });
-
+//省份上下键
+var provinceindex = 0;
+$(document).on('keyup','#province',function(e){
+	
+	if(e == undefined)
+		e = window.event;
+	
+	switch(e.keyCode){
+	case 38:
+		
+		provinceindex--;
+		if(provinceindex ==0) provinceindex = 4;
+		break;
+	case 40:
+		
+		provinceindex++;
+		if(provinceindex ==5) provinceindex = 0;
+		break;
+	case 13:
+		
+		$(this).val($(this).next().find('li:eq('+provinceindex+')').children().html());
+		$("#province").nextAll("ul.ui-autocomplete").remove();
+		$("#province").blur();
+		var province = $("#province").val();
+		setProvince(province);
+		provinceindex = 0;
+		break;
+	}
+	var li = $(this).next().find('li:eq('+provinceindex+')');
+	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css('background','');
+})
 //省份 检索下拉项
 function setProvince(province){
 	$("#province").nextAll("ul.ui-autocomplete").remove();
@@ -560,7 +654,37 @@ $("#city").on('input',function(){
 		}
 	});
 });
-
+//市
+var cityindex = 0;
+$(document).on('keyup','#city',function(e){
+	
+	if(e == undefined)
+		e = window.event;
+	
+	switch(e.keyCode){
+	case 38:
+		
+		cityindex--;
+		if(cityindex ==0) cityindex = 4;
+		break;
+	case 40:
+		
+		cityindex++;
+		if(cityindex ==5) cityindex = 0;
+		break;
+	case 13:
+		
+		$(this).val($(this).next().find('li:eq('+provinceindex+')').children().html());
+		$("#city").nextAll("ul.ui-autocomplete").remove();
+		$("#city").blur();
+		var city = $("#city").val();
+		setCity(city);
+		cityindex = 0;
+		break;
+	}
+	var li = $(this).next().find('li:eq('+cityindex+')');
+	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css('background','');
+})
 //市 检索下拉项
 function setCity(city){
 	$("#city").nextAll("ul.ui-autocomplete").remove();
