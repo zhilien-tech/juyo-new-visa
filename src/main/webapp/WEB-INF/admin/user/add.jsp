@@ -253,63 +253,9 @@
 					'bootstrapValidator');
 			// 执行表单验证 
 			bootstrapValidator.validate();
+			setTimeout(function(){
 			if (bootstrapValidator.isValid()) {
 				//获取必填项信息
-				var comId = $("#comId").val();
-				if (comId == "") {
-					layer.msg('comId不能为空');
-					return;
-				}
-				var name = $("#name").val();
-				if (name == "") {
-					layer.msg('name不能为空');
-					return;
-				}
-				var mobile = $("#mobile").val();
-				if (mobile == "") {
-					layer.msg('mobile不能为空');
-					return;
-				}
-				/* var qq = $("#qq").val();
-				if (qq == "") {
-					layer.msg('qq不能为空');
-					return;
-				}
-				var email = $("#email").val();
-				if (email == "") {
-					layer.msg('email不能为空');
-					return;
-				} */
-				var departmentId = $("#departmentId").val();
-				if (departmentId == "") {
-					layer.msg('departmentId不能为空');
-					return;
-				}
-				var jobId = $("#jobId").val();
-				if (jobId == "") {
-					layer.msg('jobId不能为空');
-					return;
-				}
-				var isDisable = $("#isDisable").val();
-				if (isDisable == "") {
-					layer.msg('isDisable不能为空');
-					return;
-				}
-				var password = $("#password").val();
-				if (password == "") {
-					layer.msg('password不能为空');
-					return;
-				}
-				var userType = $("#userType").val();
-				if (userType == "") {
-					layer.msg('userType不能为空');
-					return;
-				}
-				var lastLoginTime = $("#lastLoginTime").val();
-				if (lastLoginTime == "") {
-					layer.msg('lastLoginTime不能为空');
-					return;
-				}
 				$.ajax({
 					type : 'POST',
 					data : $("#userAddForm").serialize(),
@@ -326,6 +272,7 @@
 					}
 				});
 			}
+		},500);
 		}
 
 		//返回 

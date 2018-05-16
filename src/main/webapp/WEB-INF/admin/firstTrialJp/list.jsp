@@ -137,7 +137,9 @@
 	$(function(){
 		$(".btnList").click(function(){
 			$(this).addClass('bgColor').siblings().removeClass('bgColor');
-			clearSearchEle();
+			//clearSearchEle();
+			$("#status").val("");
+			$("#searchStr").val("");
 			$("#searchBtn").trigger("click");
 		})
 		

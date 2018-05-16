@@ -19,6 +19,10 @@ public class TCompanyOfCustomerEntity implements Serializable {
 	private Integer comid;
 	
 	@Column
+	@Comment("送签社公司id")
+	private Integer sendcomid;
+	
+	@Column
     @Comment("公司名称")
 	private String fullname;
 	

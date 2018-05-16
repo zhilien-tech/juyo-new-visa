@@ -199,7 +199,10 @@
 	$(function(){
 		$(".btnList").click(function(){
 			$(this).addClass('bgColor').siblings().removeClass('bgColor');
-			clearSearchEle();
+			//clearSearchEle();
+			//检索框
+			$("#status").val("");
+			$("#searchStr").val("");
 			$("#searchbtn").trigger("click");
 		})
 		
@@ -236,13 +239,16 @@
         	type:'post',
         	success: function(data){
         		_self.receptionJpData = data.receptionJpData;
+        		$('#pageNumber').val(1);
+        		$('#pageTotal').val(data.pageTotal);
+				$('#pageListCount').val(data.pageListCount);
           	}
         });
 	}); 
 	
 	$("#status").change(function(){
 		$("#searchbtn").click();
-		$('#pageNumber').val(1);
+		//$('#pageNumber').val(1);
 	});
 	
 	//注册scroll事件并监听 

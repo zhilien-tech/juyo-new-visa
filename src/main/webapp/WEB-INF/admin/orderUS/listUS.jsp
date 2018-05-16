@@ -159,7 +159,12 @@ $(document).on('mouseleave','.showInfo',function(){
 $(function(){
 	$(".btnList").click(function(){
 		$(this).addClass('bgColor').siblings().removeClass('bgColor');
-		clearSearchEle();
+		//clearSearchEle();
+		//检索框
+		$("#status").val("");
+		$("#searchStr").val("");
+		$("#cityid").val("");
+		$("#ispayed").val("");
 		$("#searchBtn").trigger("click");
 	})
 	
