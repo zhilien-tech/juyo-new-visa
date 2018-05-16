@@ -566,6 +566,8 @@ $("#goDepartureCity").on("select2:unselect",function(e){
 	orderobj.travelinfo.godeparturecity = '';
 	orderobj.travelinfo.returnarrivedcity = '';
 	$("#returnArrivedCity").empty();
+	$('#goFlightNum').empty();
+	$('#returnFlightNum').empty();
 	$(this).text('');
 });
 //去程抵达城市
@@ -573,14 +575,18 @@ $("#goArrivedCity").on("select2:unselect",function(e){
 	orderobj.travelinfo.goarrivedcity = '';
 	orderobj.travelinfo.returndeparturecity = '';
 	$("#returnDepartureCity").empty();
+	$('#goFlightNum').empty();
+	$('#returnFlightNum').empty();
 	$(this).text('');
 });
 //回程出发城市
 $("#returnDepartureCity").on("select2:unselect",function(e){
 	orderobj.travelinfo.returndeparturecity = '';
+	$('#returnFlightNum').empty();
 });
 //回程抵达城市
 $("#returnArrivedCity").on("select2:unselect",function(e){
+	$('#returnFlightNum').empty();
 	orderobj.travelinfo.returnarrivedcity = '';
 });
 //出发航班
