@@ -6,12 +6,17 @@
 
 package com.juyo.visa.admin.visajp.service;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.compress.utils.Lists;
@@ -32,13 +38,25 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.AcroFields;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -103,7 +121,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 	 * @param orderjp
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public ByteArrayOutputStream generateFile(TOrderJpEntity orderjp) {
+	public ByteArrayOutputStream generateFile(TOrderJpEntity orderjp,HttpServletRequest request) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		Map<String, File> fileMap = new HashMap<String, File>();
@@ -151,7 +169,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		pdffiles.add(note);
 		//
 		for (Record record : applyinfo) {
-			ByteArrayOutputStream apply = applyinfo(record, tempdata);
+			ByteArrayOutputStream apply = applyinfo(record, tempdata,request);
 			pdffiles.add(apply);
 		}
 		//excel名称日期格式化
@@ -381,8 +399,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 	/**
 	 * 申请人信息
 	 */
-	private ByteArrayOutputStream applyinfo(Record record, Map<String, Object> tempdata) {
+	private ByteArrayOutputStream applyinfo(Record record, Map<String, Object> tempdata,HttpServletRequest request) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DateFormat dateFormat1= new SimpleDateFormat("yyyy/MM/dd");
 		TOrderTripJpEntity ordertripjp = (TOrderTripJpEntity) tempdata.get("ordertripjp");
 		//多程信息
 		List<TOrderTripMultiJpEntity> mutiltrip = (List<TOrderTripMultiJpEntity>) tempdata.get("mutiltrip");
@@ -462,11 +481,11 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				if (ordertripjp.getTripType().equals(1)) {
 					//出行时间
 					if (!Util.isEmpty(ordertripjp.getGoDate())) {
-						map.put("goDate", dateformat.format(ordertripjp.getGoDate()));
+						map.put("goDate", dateFormat1.format(ordertripjp.getGoDate()));
 					}
 					//返回时间
 					if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-						map.put("returnDate", dateformat.format(ordertripjp.getReturnDate()));
+						map.put("returnDate", dateFormat1.format(ordertripjp.getReturnDate()));
 					}
 					//逗留时间
 					if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
@@ -497,7 +516,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						//多程第一程为出发日期
 						TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
 						if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-							map.put("goDate", dateformat.format(entrytrip.getDepartureDate()));
+							map.put("goDate", dateFormat1.format(entrytrip.getDepartureDate()));
 						}
 						//入境口岸
 						TCityEntity arrivecity = dbDao.fetch(TCityEntity.class, entrytrip.getArrivedCity().longValue());
@@ -513,7 +532,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						//最后一程作为返回日期
 						TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
 						if (!Util.isEmpty(returntrip.getDepartureDate())) {
-							map.put("returnDate", dateformat.format(returntrip.getDepartureDate()));
+							map.put("returnDate", dateFormat1.format(returntrip.getDepartureDate()));
 						}
 						//停留天数
 						if (!Util.isEmpty(entrytrip.getDepartureDate()) && !Util.isEmpty(returntrip.getDepartureDate())) {
@@ -535,19 +554,22 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				}
 			}*/
 			//酒店信息
+			
 			map.put("hotelname", record.getString("hotelname"));
 			map.put("hotelphone", record.getString("hotelphone"));
 			map.put("hoteladdress", record.getString("hoteladdress"));
 			String lastinfo = "";
-			if (!Util.isEmpty(orderjp.getLaststartdate())) {
-				lastinfo += dateformat.format(orderjp.getLaststartdate());
+			if (!Util.isEmpty(orderjp.getLaststartdate()) && !Util.isEmpty(orderjp.getLastreturndate())) {
+				lastinfo += dateFormat1.format(orderjp.getLaststartdate());
+				lastinfo += "~";
+				lastinfo += dateFormat1.format(orderjp.getLastreturndate());
+				lastinfo += "      " + (Util.isEmpty(orderjp.getLaststayday()) ? "" : orderjp.getLaststayday());
 			}
-			lastinfo += "~";
-			if (!Util.isEmpty(orderjp.getLastreturndate())) {
-				lastinfo += dateformat.format(orderjp.getLastreturndate());
+			if (Util.isEmpty(lastinfo)) {
+				map.put("fill_26", "无");
+			}else {
+				map.put("fill_26", lastinfo+"天");
 			}
-			lastinfo += "      " + (Util.isEmpty(orderjp.getLaststayday()) ? "" : orderjp.getLaststayday());
-			map.put("fill_26", lastinfo+"天");
 			//在日担保人信息
 			map.put("danbaoname", record.getString("vouchname"));
 			 int lastIndexOf = record.getString("vouchname").lastIndexOf("-");
@@ -610,16 +632,121 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("applydate", dateformat.format(new Date()));
 			map.put("applyname", record.getString("firstname") + record.getString("lastname"));
 			//获取模板文件
+			//编写二维码
+			if(!Util.isEmpty(map)) {
+				insertQrCode(request,map);
+			}
 			URL resource = getClass().getClassLoader().getResource("japanfile/apply.pdf");
 			TemplateUtil templateUtil = new TemplateUtil();
 			stream = templateUtil.pdfTemplateStream(resource, map);
-			//编写二维码
+	
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return stream;
 	}
-
+	/**
+	 * 将图片写入PDF模版
+	 * @throws IOException 
+	 * @throws DocumentException 
+	 */
+	public void insertQrCode(HttpServletRequest request,Map<String, String> map) throws Exception {
+		 // 模板文件路径
+		URL resource = getClass().getClassLoader().getResource("japanfile/apply.pdf");
+		String templatePath= null ;
+		String targetPath = null;
+		if(!Util.isEmpty(resource)) {
+			 templatePath = resource.toString().replace("file:", "");
+	        // 生成的文件路径
+	         targetPath = resource.toString().replace("file:", "");
+		}
+        // 书签名
+//        String fieldName = "field";
+        // 图片路径
+        String imagePath = getImageUrl(request,map);
+        // 读取模板文件
+        InputStream input = null;
+        if(!Util.isEmpty(targetPath)) {
+        	 input = new FileInputStream(new File(templatePath));
+        }
+        PdfReader reader = null;
+        if(!Util.isEmpty(input)) {
+        	 reader = new PdfReader(input);
+        }
+        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(targetPath));
+        // 提取pdf中的表单
+        AcroFields form = stamper.getAcroFields();
+        // 通过域名获取所在页和坐标，左下角为起点
+//        int pageNo = form.getFieldPositions(fieldName).get(0).page;
+//        Rectangle signRect = form.getFieldPositions(fieldName).get(0).position;
+//        float x = signRect.getLeft();
+//        float y = signRect.getBottom();
+        // 读图片
+        Image image = null;
+        if(!Util.isEmpty(imagePath)) {
+        	 image = Image.getInstance(imagePath);
+        }
+        // 获取操作的页面
+        PdfContentByte under = stamper.getOverContent(1);
+        // 根据域的大小缩放图片
+        image.scaleToFit(75, 70);
+        // 添加图片
+        image.setAbsolutePosition(50, 670);
+        under.addImage(image);
+        stamper.close();
+        reader.close();
+		
+	}
+	/***
+	 * 生成二维码
+	 * 
+	 */
+	public String getImageUrl(HttpServletRequest request,Map<String, String> map) {
+		//姓
+		String firstNameEn =  map.get("firstNameEn");
+		//名
+		String lastNameEn =  map.get("lastNameEn");
+		//性别
+		String sex = null;
+		if(!Util.isEmpty(map.get("boy"))) {
+			if(map.get("boy") .equals("0")) {
+				sex = "F";
+			}
+		}
+		if(!Util.isEmpty(map.get("girl"))) {
+			if(map.get("gril") .equals("0")) {
+				sex = "M";
+			}
+		}
+		//出生日期
+		String birthday = null;
+		if(!Util.isEmpty(map.get("birthday"))) {
+			 birthday =  map.get("birthday");
+		}
+		//年份
+		String year = birthday.substring(6, 9);
+		String month = birthday.substring(3,5);
+		String day = birthday.substring(0,2);
+		birthday = year+month+day;
+		//护照号
+		String passport =  map.get("passport");
+		//护照有效期
+		String validEndDate = null;
+		if(!Util.isEmpty(map.get("validEndDate"))) {
+			validEndDate =  map.get("validEndDate");
+		}
+		String year1 = validEndDate.substring(6, 9);
+		String month1 = validEndDate.substring(3,5);
+		String day1 = validEndDate.substring(0,2);
+		validEndDate = year1+month1+day1;
+		//身份证号
+		String cardId =  map.get("cardId");
+		//二维码显示内容  序号，护照号，护照截止日期，姓 ，名，性别，出生日期，固定CHN，身份证号
+		String passporturl ="1,"+passport+","+validEndDate+","+firstNameEn+","+lastNameEn+","+sex+","+birthday+","+"CHN"+","+cardId+","+" "+","+" ";
+		//生成二维码
+		String qrCode = qrCodeService.encodeQrCode(request, passporturl);
+		return  qrCode;
+	}
 	/**
 	 * 酒店信息
 	 */
@@ -1737,14 +1864,13 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 	}
 
 	/***
-	 * 获取申请人数据
+	 * 印章
 	 * @param address
 	 * @param n
 	 * @return
 	 * @throws IOException
 	 * @throws BadElementException
 	 */
-	
 	public Image getSeal1(String address, int n) throws IOException, BadElementException {
 		if (!Util.isEmpty(address)) {
 

@@ -52,6 +52,7 @@ import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.util.FormatDateUtil;
+import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCompanyEntity;
@@ -161,8 +162,8 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			ByteArrayOutputStream apply = applyinfo(record, tempdata);
 			pdffiles.add(apply);
 		}
-		ByteArrayOutputStream returnhome = returnhome(tempdata);
-		pdffiles.add(returnhome);
+//		ByteArrayOutputStream returnhome = returnhome(tempdata);
+//		pdffiles.add(returnhome);
 		ByteArrayOutputStream mergePdf = templateUtil.mergePdf(pdffiles);
 		//申请人信息
 		//return stream;
@@ -214,7 +215,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			companyname = company.getName();
 		}
 		content.append("　　" + companyname).append("根据与").append(dijie).append("的合同约定组织").append(applyinfo.size())
-				.append("人赴日本旅游观光，请协助办理赴日签证。（有料√、无料）");
+				.append("人赴日本旅游观光，请协助办理赴日签证。");
 		map.put("content", content.toString());
 		map.put("companyname", company.getName());
 		if (!Util.isEmpty(ordertripjp)) {
@@ -225,7 +226,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				//入境航班
 				if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
 					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-					map.put("entryPort", goflight.getLandingName()+",");
+						map.put("entryPort", goflight.getLandingName()+",");
 				}
 				//去除*号
 				 
@@ -241,12 +242,10 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				}
 				if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
 					//出境航班
-//					TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
-//					map.put("departFlight", returnflight.getFlightnum());
 					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-					map.put("departPort", goflight.getLandingName()+",");
+						map.put("departPort", goflight.getLandingName()+",");
 				}
-				map.put("departFlight", ordertripjp.getReturnFlightNum());
+				map.put("departFlight", ordertripjp.getReturnFlightNum().replace("*", ""));
 			} else if (ordertripjp.getTripType().equals(2)) {
 				//多程处理
 				if (!Util.isEmpty(mutiltrip)) {
@@ -259,7 +258,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					if (!Util.isEmpty(entrytrip.getFlightNum())) {
 //						TFlightEntity goflight = flightViewService.fetch(entrytrip.getFlightNum().longValue());
 						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=",entrytrip.getFlightNum()));
-						map.put("entryPort", goflight.getLandingName());
+							map.put("entryPort", goflight.getLandingName()+",");
 					}
 					map.put("entryFlight", entrytrip.getFlightNum());
 					//最后一程作为返回日期
@@ -271,9 +270,9 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 						//出境航班
 //						TFlightEntity returnflight = flightViewService.fetch(returntrip.getFlightNum().longValue());
 						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-						map.put("departPort", goflight.getLandingName());
+							map.put("departPort", goflight.getLandingName()+",");
 					}
-					map.put("departFlight", returntrip.getFlightNum());
+					map.put("departFlight", returntrip.getFlightNum().replace("*",""));
 					//停留天数
 					if (!Util.isEmpty(entrytrip.getDepartureDate()) && !Util.isEmpty(returntrip.getDepartureDate())) {
 						map.put("stay",
@@ -464,15 +463,17 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			//地址
 			map.put("fill_25", record.getString("hoteladdress"));
 			String lastinfo = "";
-			if (!Util.isEmpty(orderjp.getLaststartdate())) {
+			if (!Util.isEmpty(orderjp.getLaststartdate()) && !Util.isEmpty(orderjp.getLastreturndate())) {
 				lastinfo += dateformat.format(orderjp.getLaststartdate());
-			}
-			lastinfo += "~";
-			if (!Util.isEmpty(orderjp.getLastreturndate())) {
+				lastinfo += "~";
 				lastinfo += dateformat.format(orderjp.getLastreturndate());
+				lastinfo += "      " + (Util.isEmpty(orderjp.getLaststayday()) ? "" : orderjp.getLaststayday());
 			}
-			lastinfo += "      " + (Util.isEmpty(orderjp.getLaststayday()) ? "" : orderjp.getLaststayday());
-			map.put("fill_26", lastinfo+"天");
+			if (Util.isEmpty(lastinfo)) {
+				map.put("fill_26", "无");
+			}else {
+				map.put("fill_26", lastinfo+"天");
+			}
 			//配偶职业
 			map.put("fill_1_2", record.getString("unitname"));
 			//在日担保人信息
@@ -807,7 +808,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				//英文姓名
 				cell = new PdfPCell(
 						new Paragraph((!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : "")
-								+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : ""), font));
+								+" "+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : ""), font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				if (flag) {
@@ -833,10 +834,14 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				}
 				table.addCell(cell);
 				//居住地
+//				cell = new PdfPCell(new Paragraph((!Util.isEmpty(record.get("province")) ? record.getString("province")
+//						: "")
+//						+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : "")
+//						+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress") : ""),
+//						font));
 				cell = new PdfPCell(new Paragraph((!Util.isEmpty(record.get("province")) ? record.getString("province")
 						: "")
-						+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : "")
-						+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress") : ""),
+						+ "\n"+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : ""),
 						font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -861,7 +866,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				}
 				table.addCell(cell);
 				//出境记录
-				cell = new PdfPCell(new Paragraph("无", font));
+				cell = new PdfPCell(new Paragraph("良好", font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				if (flag) {
@@ -914,14 +919,33 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					table.addCell(cell);
 				}
 				//备注
-				cell = new PdfPCell(new Paragraph(
-						(!Util.isEmpty(record.get("relationremark")) ? record.getString("relationremark") : ""), font));
-				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				if (flag) {
-					cell.setRowspan(wealthjpinfo.size());
+				if(record.get("isMainApplicant").equals(1)) {
+					cell = new PdfPCell(new Paragraph(
+							(!Util.isEmpty(record.get("relationremark")) ? record.getString("relationremark") : ""), font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					if (flag) {
+						cell.setRowspan(wealthjpinfo.size());
+					}
+					table.addCell(cell);
+				}else {
+					//主申请人姓名
+//					副申请人ID
+					TApplicantEntity applicant = new TApplicantEntity();
+					if(!Util.isEmpty(record.get("MainId"))) {
+							 applicant = dbDao.fetch(TApplicantEntity.class,Cnd.where("id", "=",record.get("MainId") ));
+					}
+					cell = new PdfPCell(new Paragraph(
+							(!Util.isEmpty(record.get("mainRelation")) ? applicant.getFirstName()+applicant.getLastName()+"("+record.getString("mainRelation")+")" : ""), font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					if (flag) {
+						cell.setRowspan(wealthjpinfo.size());
+					}
+					table.addCell(cell);
+					
 				}
-				table.addCell(cell);
+				
 				//旅行社意见
 				cell = new PdfPCell(new Paragraph(
 						(!Util.isEmpty(record.get("traveladvice")) ? record.getString("traveladvice") : ""), font));
@@ -1170,7 +1194,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				String hotel = "";
 				if (!Util.isEmpty(ordertravelplan.getHotel())) {
 					if (ordertravelplan.getHotel().equals(lasthotel)) {
-						hotel = "同上";
+						hotel = "連泊";
 					} else {
 						THotelEntity hotelentity = hotelViewService.fetch(ordertravelplan.getHotel());
 						hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
@@ -1360,7 +1384,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 	}
 
 	/**
-	 * 査 証 申 請 人 名 簿
+	 * 航班
 	 */
 	public ByteArrayOutputStream airticket(Map<String, Object> tempdata) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -1574,12 +1598,12 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				Record record = applyinfo.get(0);
 				applyname += record.getString("firstname");
 				applyname += record.getString("lastname");
-				dengsize = applyinfo.size() - 1;
+				dengsize = applyinfo.size();
 				totalsize = applyinfo.size();
 			}
 			//副标题2
 			{
-				String text = "（旅行参加者 " + applyname + " 他" + dengsize + "名、計" + totalsize + "名）";
+				String text = "（旅行参加者" + dengsize + "名、計" + totalsize + "名）";
 				Paragraph p = new Paragraph(text, font);
 				p.setSpacingAfter(15);
 				p.setIndentationRight(20);
@@ -1593,7 +1617,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			table.setTotalWidth(PageSize.A4.getWidth());
 
 			//设置表头
-			String titles[] = { "番号", "氏名（中文）", "（英文）", "性別", "居住地域", "生年月日", "旅券番号", "职业", };
+			String titles[] = { "番号", "氏名（中文）", "氏名（英文）", "性別", "居住地域", "生年月日", "旅券番号", "職業", };
 			for (int i = 0; i < titles.length; i++) {
 				String title = titles[i];
 				PdfPCell cell = new PdfPCell(new Paragraph(title, font));
