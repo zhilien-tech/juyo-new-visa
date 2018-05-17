@@ -1393,6 +1393,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			//格式化为日本的日期
 //			String pointpattren = "yy.MM.dd";
 			String pointpattren = "平成yy年MM月dd日";
+			Integer lasthotel = null;
 			int count = 0;
 			for (TOrderTravelplanJpEntity ordertravelplan : ordertravelplans) {
 				count++;
@@ -1400,35 +1401,47 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				String scenic = "";
 				if (count == 1) {
 					if (ordertripjp.getTripType().equals(1)) {
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-						scenic = goflight.getFlightnum() + "：" + goflight.getTakeOffName() + "->"
+						TFlightEntity goflight = new TFlightEntity();
+						if(!Util.isEmpty(ordertripjp.getGoFlightNum())) {
+							goflight = dbDao.fetch(TFlightEntity.class,
+									Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
+						}
+						scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
 								+ goflight.getLandingName();
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
 						if (!Util.isEmpty(mutiltrip)) {
 							//多程第一程为出发日期
 							TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
-							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-							scenic = goflight.getFlightnum() + "：" + goflight.getTakeOffName() + "->"
+							TFlightEntity goflight = new TFlightEntity();
+							if(!Util.isEmpty(entrytrip.getFlightNum())) {
+								goflight = dbDao.fetch(TFlightEntity.class,
+										Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
+							}
+							scenic = goflight.getFlightnum().replace("*","") + "：" + goflight.getTakeOffName() + "->"
 									+ goflight.getLandingName();
 						}
 					}
 				} else if (count == ordertravelplans.size()) {
 					if (ordertripjp.getTripType().equals(1)) {
-						TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-						scenic = returnflight.getFlightnum() + "：" + returnflight.getTakeOffName() + "->"
+						TFlightEntity returnflight = new TFlightEntity();
+						if(!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
+							 returnflight = dbDao.fetch(TFlightEntity.class,
+									Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
+						}
+						scenic = returnflight.getFlightnum().replace("*","") + "：" + returnflight.getTakeOffName() + "->"
 								+ returnflight.getLandingName();
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
 						if (!Util.isEmpty(mutiltrip)) {
 							//最后一程作为返回日期
 							TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
-							TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-							scenic = returnflight.getFlightnum() + "：" + returnflight.getTakeOffName() + "->"
+							TFlightEntity returnflight =  new TFlightEntity();
+							if(!Util.isEmpty(returntrip.getFlightNum())) {
+								returnflight = dbDao.fetch(TFlightEntity.class,
+										Cnd.where("flightnum", "=", returntrip.getFlightNum()));
+							}
+							scenic = returnflight.getFlightnum().replace("*","") + "：" + returnflight.getTakeOffName() + "->"
 									+ returnflight.getLandingName();
 						}
 					}
@@ -1437,10 +1450,18 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				}
 				//酒店信息
 				String hotel = "";
+//				if (!Util.isEmpty(ordertravelplan.getHotel())) {
+//					THotelEntity hotelentity = hotelViewService.fetch(ordertravelplan.getHotel());
+//					hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
+//							+ hotelentity.getMobile();
 				if (!Util.isEmpty(ordertravelplan.getHotel())) {
-					THotelEntity hotelentity = hotelViewService.fetch(ordertravelplan.getHotel());
-					hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
-							+ hotelentity.getMobile();
+					if (ordertravelplan.getHotel().equals(lasthotel)) {
+						hotel = "連泊";
+					} else {
+						THotelEntity hotelentity = hotelViewService.fetch(ordertravelplan.getHotel());
+						hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
+								+ hotelentity.getMobile();
+					}
 				} else {
 					hotel = " ";
 				}
@@ -1452,6 +1473,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table.addCell(cell);
 				}
+				lasthotel = ordertravelplan.getHotel();
 			}
 			document.add(table);
 			//底部
@@ -1503,7 +1525,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				document.add(p);
 			}
 			if (!Util.isEmpty(sealUrl)) {
-				document.add(getSeal1(sealUrl, 0));
+				document.add(getSeal1(sealUrl, ordertravelplans.size() / 2));
 			}
 			document.close();
 			IOUtils.closeQuietly(stream);
@@ -1885,10 +1907,10 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			img.setRotation(800);
 			if (n <= 1) {
 
-				img.setAbsolutePosition(350, 530);
+				img.setAbsolutePosition(400, 530);
 			} else {
 
-				img.setAbsolutePosition(350, 510 - 34 * (n - 1));
+				img.setAbsolutePosition(400, 510 - 34 * (n - 1));
 			}
 			img.setAlignment(Paragraph.ALIGN_RIGHT);
 			return img;

@@ -1401,6 +1401,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer adminId = loginCompany.getAdminId();
+
+
+
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("orderid", orderid);
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
@@ -1408,9 +1412,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		List<TCompanyEntity> songqianlist = Lists.newArrayList();
 		//送签社下拉
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
-				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey()) && loginCompany.getCdesignNum() != null) {
-			songqianlist = dbDao
-					.query(TCompanyEntity.class, Cnd.where("adminId", "=", loginCompany.getAdminId()), null);
+				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+
+			Cnd cnd = Cnd.where("adminId", "=",adminId);
+			cnd.and("cdesignNum","!=", "");
+
+			songqianlist = dbDao.query(TCompanyEntity.class,cnd, null);
 		} else {
 			TCompanyEntity songqian = dbDao.fetch(TCompanyEntity.class, orderjp.getSendsignid().longValue());
 			songqianlist.add(songqian);
@@ -1418,7 +1425,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		if(songqianlist.size() == 0) {
 			result.put("songqianlist", "请选择含有指定番号的 送签社");
 		}else {
-		result.put("songqianlist", songqianlist);
+			result.put("songqianlist", songqianlist);
 		}
 		//地接社下拉
 		List<TCompanyEntity> dijielist = dbDao.query(TCompanyEntity.class,
@@ -1470,7 +1477,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//送签社
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())) {
 			orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-		//订单负责人变更
+			//订单负责人变更
 			Integer userId = loginuser.getId();
 			changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
 		} else if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {

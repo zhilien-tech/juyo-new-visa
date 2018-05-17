@@ -37,6 +37,7 @@ import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.PdfTypeEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantVisaJpEntity;
@@ -144,9 +145,13 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
 			// 获取打包的文件
 			byte[] byteArray = null;
-			if (loginCompany.getName().startsWith("辽宁万达")) {
+			//根据PDF类型
+			Integer pdftype = loginCompany.getPdftype();
+			if (pdftype == PdfTypeEnum.LIAONINGWANDA_TYPE.intKey()) {
+				//辽宁万达模版
 				byteArray = liaoNingWanDaService.generateFile(orderjp).toByteArray();
-			} else {
+			} else if(pdftype == PdfTypeEnum.UNIVERSAL_TYPE.intKey()) {
+				//通用模版
 				byteArray = downLoadVisaFileService.generateFile(orderjp, request).toByteArray();
 			}
 			// 获取订单信息，准备文件名称
@@ -182,7 +187,6 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 						}
 					}
 					mainapplicantname = "  " + applicat.getFirstName() + applicat.getLastName();
-					
 				}
 			}
 			String filename = "";
@@ -209,9 +213,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			IOUtils.write(byteArray, response.getOutputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
-
 		}
-
 		// 变更订单负责人
 		changePrincipalViewService.ChangePrincipal(orderid.intValue(), VISA_PROCESS, userId);
 		return null;
