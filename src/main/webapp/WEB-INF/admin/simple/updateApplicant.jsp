@@ -483,20 +483,20 @@
 			});
 		});
 			
-			var index = 0;
-			$(document).on('keyup','#nationality',function(e){
+			var index = -1;
+			$(document).on('keydown','#nationality',function(e){
 				var lilength = $(this).next().children().length;
 					if(e == undefined)
 						e = window.event;
 					
 					switch(e.keyCode){
 					case 38:
-						
+						e.preventDefault();
 						index--;
 						if(index ==0) index = 0;
 						break;
 					case 40:
-						
+						e.preventDefault();
 						index++;
 						if(index == lilength) index = 0;
 						break;
@@ -507,7 +507,7 @@
 						$("#nationality").blur();
 						var nationality = $("#nationality").val();
 						setNationality(nationality);
-						index = 0;
+						index = -1;
 						break;
 					}
 					var li = $('#ui-id-1').find('li:eq('+index+')');
@@ -539,20 +539,20 @@
 				}
 			});
 		});
-		var provinceindex = 0;
-		$(document).on('keyup','#province',function(e){
+		var provinceindex = -1;
+		$(document).on('keydown','#province',function(e){
 			
 			if(e == undefined)
 				e = window.event;
 			
 			switch(e.keyCode){
 			case 38:
-				
+				e.preventDefault();
 				provinceindex--;
 				if(provinceindex ==0) provinceindex = 0;
 				break;
 			case 40:
-				
+				e.preventDefault();
 				provinceindex++;
 				if(provinceindex ==5) provinceindex = 0;
 				break;
@@ -563,7 +563,7 @@
 				$("#province").blur();
 				var province = $("#province").val();
 				setProvince(province);
-				provinceindex = 0;
+				provinceindex = -1;
 				break;
 			}
 			var li = $(this).next().find('li:eq('+provinceindex+')');
@@ -597,20 +597,20 @@
 			});
 		});
 		//市
-		var cityindex = 0;
-		$(document).on('keyup','#city',function(e){
+		var cityindex = -1;
+		$(document).on('keydown','#city',function(e){
 			
 			if(e == undefined)
 				e = window.event;
 			
 			switch(e.keyCode){
 			case 38:
-				
+				e.preventDefault();
 				cityindex--;
 				if(cityindex ==0) cityindex = 0;
 				break;
 			case 40:
-				
+				e.preventDefault();
 				cityindex++;
 				if(cityindex ==5) cityindex = 0;
 				break;
@@ -621,7 +621,7 @@
 				$("#city").blur();
 				var city = $("#city").val();
 				setCity(city);
-				cityindex = 0;
+				cityindex = -1;
 				break;
 			}
 			var li = $(this).next().find('li:eq('+cityindex+')');
