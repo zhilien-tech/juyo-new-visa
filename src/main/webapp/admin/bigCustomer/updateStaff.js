@@ -471,7 +471,7 @@ $("#nationality").on('input',function(){
 });
 //国籍上下键控制
 //写成公共方法
-var index = 0;
+var index = -1;
 $(document).on('keydown','#nationality',function(e){
 	var lilength = $(this).next().children().length;
 		if(e == undefined)
@@ -479,14 +479,16 @@ $(document).on('keydown','#nationality',function(e){
 		
 		switch(e.keyCode){
 		case 38:
-			 e.preventDefault();
+			 
 			index--;
 			if(index == 0) index = 0;
+			e.preventDefault();
 			break;
 		case 40:
-			 e.preventDefault();
+			
 			index++;
 			if(index ==lilength) index = 0;
+			e.preventDefault();
 			break;
 		case 13:
 			
@@ -496,7 +498,7 @@ $(document).on('keydown','#nationality',function(e){
 			translateZhToEn('#nationality','nationalityen','');
 			var nationality = $("#nationality").val();
 			setNationality(nationality);
-			index = 0;
+			index = -1;
 			break;
 		}
 		var li = $('#ui-id-1').find('li:eq('+index+')');
@@ -526,7 +528,7 @@ $("#nationalityen").on('input',function(){
 	});
 });
 //国籍上下键控制英文
-var indexen = 0;
+var indexen = -1;
 $(document).on('keydown','#nationalityen',function(e){
 	var lilength = $(this).next().children().length;
 	if(e == undefined)
@@ -550,7 +552,7 @@ $(document).on('keydown','#nationalityen',function(e){
 		$("#nationalityen").blur();
 		var nationalityen = $("#nationalityen").val();
 		setNationalityen(nationalityen);
-		indexen = 0;
+		indexen = -1;
 		break;
 	}
 	var li = $(this).next().find('li:eq('+indexen+')');
@@ -593,7 +595,7 @@ $("#province").on('input',function(){
 	});
 });
 //省份上下键
-var provinceindex = 0;
+var provinceindex = -1;
 $(document).on('keydown','#province',function(e){
 	
 	if(e == undefined)
@@ -617,7 +619,7 @@ $(document).on('keydown','#province',function(e){
 		$("#province").blur();
 		var province = $("#province").val();
 		setProvince(province);
-		provinceindex = 0;
+		provinceindex = -1;
 		break;
 	}
 	var li = $(this).next().find('li:eq('+provinceindex+')');
@@ -656,20 +658,20 @@ $("#city").on('input',function(){
 	});
 });
 //市
-var cityindex = 0;
-$(document).on('keyup','#city',function(e){
+var cityindex = -1;
+$(document).on('keydown','#city',function(e){
 	
 	if(e == undefined)
 		e = window.event;
 	
 	switch(e.keyCode){
 	case 38:
-		
+		e.preventDefault();
 		cityindex--;
 		if(cityindex ==0) cityindex = 0;
 		break;
 	case 40:
-		
+		e.preventDefault();
 		cityindex++;
 		if(cityindex ==5) cityindex = 0;
 		break;
@@ -680,7 +682,7 @@ $(document).on('keyup','#city',function(e){
 		$("#city").blur();
 		var city = $("#city").val();
 		setCity(city);
-		cityindex = 0;
+		cityindex = -1;
 		break;
 	}
 	var li = $(this).next().find('li:eq('+cityindex+')');

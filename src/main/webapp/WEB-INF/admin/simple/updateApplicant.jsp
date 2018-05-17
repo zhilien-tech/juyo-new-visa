@@ -483,7 +483,7 @@
 			});
 		});
 			
-			var index = 0;
+			var index = -1;
 			$(document).on('keydown','#nationality',function(e){
 				var lilength = $(this).next().children().length;
 					if(e == undefined)
@@ -507,7 +507,7 @@
 						$("#nationality").blur();
 						var nationality = $("#nationality").val();
 						setNationality(nationality);
-						index = 0;
+						index = -1;
 						break;
 					}
 					var li = $('#ui-id-1').find('li:eq('+index+')');
@@ -539,7 +539,7 @@
 				}
 			});
 		});
-		var provinceindex = 0;
+		var provinceindex = -1;
 		$(document).on('keydown','#province',function(e){
 			
 			if(e == undefined)
@@ -563,7 +563,7 @@
 				$("#province").blur();
 				var province = $("#province").val();
 				setProvince(province);
-				provinceindex = 0;
+				provinceindex = -1;
 				break;
 			}
 			var li = $(this).next().find('li:eq('+provinceindex+')');
@@ -597,7 +597,7 @@
 			});
 		});
 		//市
-		var cityindex = 0;
+		var cityindex = -1;
 		$(document).on('keydown','#city',function(e){
 			
 			if(e == undefined)
@@ -621,7 +621,7 @@
 				$("#city").blur();
 				var city = $("#city").val();
 				setCity(city);
-				cityindex = 0;
+				cityindex = -1;
 				break;
 			}
 			var li = $(this).next().find('li:eq('+cityindex+')');
