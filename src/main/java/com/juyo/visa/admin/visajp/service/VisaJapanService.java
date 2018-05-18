@@ -1453,7 +1453,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			 for (TCompanyOfCustomerEntity tCompanyOfCustomerEntity : list) {
 			     JSONObject jo = new JSONObject();
 				 Integer sendcomid = tCompanyOfCustomerEntity.getSendcomid();
+				 
 				 TCompanyEntity sendCompany = dbDao.fetch(TCompanyEntity.class, Cnd.where("id", "=",sendcomid).and("cdesignNum","!=", ""));
+				 
 				 ja.add(sendCompany);
 			}
 		}

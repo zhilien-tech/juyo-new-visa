@@ -37,12 +37,12 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>公司全称：</label> 
-							<!-- 	<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " /> -->
-							<select id="name"  name = "name"  class="form-control select2 select2Company" multiple="multiple" tabindex="22" >
-												<c:forEach items="${obj.companylist }" var="company">
-														<option value="${company.id }">${company.name }</option>
-											</c:forEach>	
-										</select>
+								<!-- 	<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " /> -->
+								<select id="name"  name = "name"  class="form-control select2 select2Company" multiple="multiple" tabindex="22" >
+										<c:forEach items="${obj.companylist }" var="company">
+												<option value="${company.id }">${company.name }</option>
+									</c:forEach>	
+								</select>
 							</div>
 						</div>
 
@@ -58,7 +58,7 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>指定番号：</label> 
-								<input id="cdesignNum" name="cdesignNum" type="text"  readonly = "true" style="text-transform:uppercase" class="form-control input-sm" placeholder="必须大写字母" />
+								<input id="cdesignNum" name="cdesignNum" type="text"  readonly = "true" style="text-transform:uppercase" class="form-control input-sm" placeholder="" />
 							</div>
 						</div>
 

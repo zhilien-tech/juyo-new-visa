@@ -14,6 +14,11 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+	<style>
+		.listNum { width:15% !important;}
+		.updateList { width:10% !important;}
+		.updateList a { vertical-align:middle;}
+	</style>
 </head>
 <body>
 	<!-- 按钮 -->
@@ -53,6 +58,11 @@
 			<div class="list listMail">
 				<label>邮箱：</label> <span>${obj.adminComInfo.email }</span>
 			</div>
+			<div class="list listFax">
+				<label>传真：</label> <span>${obj.adminComInfo.fax }</span>
+			</div>
+		</div>
+		<div class="listHover">
 			<div class="list listsAddress addressInfo">
 				<label>地址：</label> <span>${obj.adminComInfo.address }</span>
 			</div>
@@ -86,7 +96,7 @@
 					<label>公司简称：</label> <span>{{data.shortname}}</span>
 				</div>
 				<div class="list listNum">
-					<label>指定番号：</label> <span>{{data.cdesignnum}}</span>
+					<label>指定番号：</label> <span>{{data.designatednum}}</span>
 				</div>
 				<div class="list listPer">
 					<label>联系人：</label> <span>{{data.linkman}}</span>
@@ -100,6 +110,12 @@
 				</div>
 			</div>
 			<div class="listHover">
+				<div class="list listMail">
+					<label>邮箱：</label> <span>{{data.email}}</span>
+				</div>
+				<div class="list listFax">
+					<label>传真：</label> <span>{{data.fax}}</span>
+				</div>
 				<div class="list listAddress">
 					<label>&nbsp;&nbsp;地&nbsp;&nbsp;&nbsp;&nbsp;址：</label> <span>{{data.address}}</span>
 				</div>

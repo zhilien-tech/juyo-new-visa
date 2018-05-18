@@ -82,7 +82,9 @@ public class TCompanyOfCustomerForm extends DataTablesParamForm {
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
 		cnd.and("tcoc.comid", "=", comid);
-		cnd.orderBy("tc.updateTime", "DESC");
+		cnd.and("tcb.designatedNum", "!=", "");
+		cnd.groupBy("tcoc.id");
+		//cnd.orderBy("tc.updateTime", "DESC");
 		return cnd;
 	}
 }

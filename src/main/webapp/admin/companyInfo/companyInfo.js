@@ -137,9 +137,9 @@ $("#name").on('select2:select', function (evt) {
 			/*公司ID*/
 			$("#id").val(data.id);
 			/* 指定番号补全 */
-			$("#cdesignNum").val(data.cdesignNum);
+			$("#cdesignNum").val(data.designatednum);
 			/* 公司简称补全 */
-			$("#shortName").val(data.shortName);
+			$("#shortName").val(data.shortname);
 			/* 联系人补全 */
 			$("#linkman").val(data.linkman);
 			/* 电话补全 */
