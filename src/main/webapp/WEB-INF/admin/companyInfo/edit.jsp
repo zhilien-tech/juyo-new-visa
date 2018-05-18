@@ -77,7 +77,7 @@ img#sqImg {
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>公司简称：</label> <input id="shortName"
+								<label>公司简称：</label> <input id="shortName"
 									readonly="true" name="shortName" value="${obj.shortName }"
 									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
@@ -87,7 +87,7 @@ img#sqImg {
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>指定番号：</label> <input id="cdesignNum"
+								<label>指定番号：</label> <input id="cdesignNum"
 									readonly="true" name="cdesignNum" value="${obj.cdesignNum }"
 									type="text" style="text-transform: uppercase"
 									class="form-control input-sm" placeholder="" />
@@ -96,7 +96,7 @@ img#sqImg {
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>联系人：</label> <input id="linkman"
+								<label>联系人：</label> <input id="linkman"
 									readonly="true" name="linkman" value="${obj.linkman }"
 									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
@@ -106,7 +106,7 @@ img#sqImg {
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>电话：</label> <input id="mobile"
+								<label>电话：</label> <input id="mobile"
 									readonly="true" name="mobile" value="${obj.mobile }"
 									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
@@ -121,7 +121,6 @@ img#sqImg {
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-sm-6">
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>传真：</label> <input id="fax" name="fax"

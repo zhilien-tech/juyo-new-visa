@@ -48,7 +48,7 @@
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>公司简称：</label> 
+								<label>公司简称：</label> 
 								<input id="shortName" name="shortName" type="text" readonly = "true" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -57,14 +57,14 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>指定番号：</label> 
+								<label>指定番号：</label> 
 								<input id="cdesignNum" name="cdesignNum" type="text"  readonly = "true" style="text-transform:uppercase" class="form-control input-sm" placeholder="" />
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>联系人：</label> 
+								<label>联系人：</label> 
 								<input id="linkman" name="linkman" type="text" readonly = "true" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -73,7 +73,7 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>电话：</label> 
+								<label>电话：</label> 
 								<input id="mobile" name="mobile" type="text" readonly = "true" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -95,7 +95,7 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
-								<label><span>*</span>地址：</label> 
+								<label>地址：</label> 
 								<input id="address" name="address" type="text" readonly = "true" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
