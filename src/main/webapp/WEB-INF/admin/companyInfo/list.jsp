@@ -15,8 +15,8 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<style>
-		.listNum { width:15% !important;}
-		.updateList { width:10% !important;}
+		.listNum { width:17% !important;}
+		.updateList { width:8% !important;}
 		.updateList a { vertical-align:middle;}
 	</style>
 </head>
@@ -62,8 +62,8 @@
 				<label>传真：</label> <span>${obj.adminComInfo.fax }</span>
 			</div>
 		</div>
-		<div class="listHover">
-			<div class="list listsAddress addressInfo">
+		<div class="listHover firstlisthover">
+			<div class="list firstlistsAddress addressInfo">
 				<label>地址：</label> <span>${obj.adminComInfo.address }</span>
 			</div>
 		</div>
@@ -110,14 +110,14 @@
 				</div>
 			</div>
 			<div class="listHover">
-				<div class="list listMail">
+				<div class="list otherlistMail">
 					<label>邮箱：</label> <span>{{data.email}}</span>
 				</div>
-				<div class="list listFax">
+				<div class="list otherlistFax">
 					<label>传真：</label> <span>{{data.fax}}</span>
 				</div>
-				<div class="list listAddress">
-					<label>&nbsp;&nbsp;地&nbsp;&nbsp;&nbsp;&nbsp;址：</label> <span>{{data.address}}</span>
+				<div class="list otherlistAddress">
+					<label>地址：</label> <span>{{data.address}}</span>
 				</div>
 			</div>
 		</div>
