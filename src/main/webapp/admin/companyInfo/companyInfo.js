@@ -146,6 +146,8 @@ $("#name").on('select2:select', function (evt) {
 			$("#mobile").val(data.mobile);
 			/* 邮箱补全 */
 			$("#email").val(data.email);
+			/* 传真补全 */
+			$("#fax").val(data.fax);
 			/* 地址补全 */
 			$("#address").val(data.address);
 		},

@@ -120,6 +120,16 @@ img#sqImg {
 							</div>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-sm-6">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>传真：</label> <input id="fax" name="fax"
+									readonly="true" value="${obj.fax }" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
 
 					<div class="row">
 						<div class="col-sm-12">
