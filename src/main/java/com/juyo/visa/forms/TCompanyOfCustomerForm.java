@@ -73,7 +73,7 @@ public class TCompanyOfCustomerForm extends DataTablesParamForm {
 		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
 		 * 请使用sqlManager获取自定义的sql，并设置查询条件
 		 */
-		String sqlString = EntityUtil.entityCndSql(TCompanyOfCustomerEntity.class);
+		String sqlString = sqlManager.get("companyInfo_list_sendcompany");
 		Sql sql = Sqls.create(sqlString);
 		sql.setCondition(cnd());
 		return sql;
@@ -81,8 +81,8 @@ public class TCompanyOfCustomerForm extends DataTablesParamForm {
 
 	private Cnd cnd() {
 		Cnd cnd = Cnd.NEW();
-		cnd.and("comid", "=", comid);
-		cnd.orderBy("updateTime", "DESC");
+		cnd.and("tcoc.comid", "=", comid);
+		cnd.orderBy("tc.updateTime", "DESC");
 		return cnd;
 	}
 }
