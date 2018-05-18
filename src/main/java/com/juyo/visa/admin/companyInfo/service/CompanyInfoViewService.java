@@ -1,5 +1,6 @@
 package com.juyo.visa.admin.companyInfo.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,8 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.companyInfo.form.TCompanyCustomerForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
@@ -24,8 +27,11 @@ import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TCompanyOfCustomerEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TCompanyAddForm;
+import com.juyo.visa.forms.TCompanyForm;
+import com.juyo.visa.forms.TCompanyOfCustomerForm;
 import com.juyo.visa.forms.TCompanyUpdateForm;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
@@ -35,33 +41,36 @@ import com.uxuexi.core.web.base.service.BaseService;
 @IocBean
 public class CompanyInfoViewService extends BaseService<TCompanyEntity> {
 	private static final Log log = Logs.get();
+	private String name;
 
 	//公司管理中的 公司信息列表 
-	public Object getCompanyCustomerList(TCompanyCustomerForm form, HttpSession session) {
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		Integer userid = loginUser.getId();
-		form.setAdminId(userid);
-		Map<String, Object> result = Maps.newHashMap();
-		Sql sql = form.sql(sqlManager);
-		//分页
-		Integer pageNumber = form.getPageNumber();
-		Integer pageSize = form.getPageSize();
-		Pager pager = new OffsetPager((pageNumber - 1) * pageSize, pageSize);
-		pager.setRecordCount((int) Daos.queryCount(nutDao, sql.toString()));
-		sql.setPager(pager);
-		sql.setCallback(Sqls.callback.records());
-		nutDao.execute(sql);
+//	public Object getCompanyCustomerList(TCompanyCustomerForm form, HttpSession session) {
+//		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+//		Integer userid = loginUser.getId();
+//		form.setAdminId(userid);
+//		Map<String, Object> result = Maps.newHashMap();
+//		Sql sql = form.sql(sqlManager);
+//		//分页
+//		Integer pageNumber = form.getPageNumber();
+//		Integer pageSize = form.getPageSize();
+//		Pager pager = new OffsetPager((pageNumber - 1) * pageSize, pageSize);
+//		pager.setRecordCount((int) Daos.queryCount(nutDao, sql.toString()));
+//		sql.setPager(pager);
+//		sql.setCallback(Sqls.callback.records());
+//		nutDao.execute(sql);
+//
+//		List<Record> list = (List<Record>) sql.getResult();
+//		result.put("companyInfoData", list);
+//		result.put("pageTotal", pager.getPageCount());
+//		result.put("pageListCount", list.size());
+//
+//		return result;
+//	}
+	/*
+	 * 查询客户公司下所添加的送签社公司
+	 * */
 
-		List<Record> list = (List<Record>) sql.getResult();
-		result.put("companyInfoData", list);
-		result.put("pageTotal", pager.getPageCount());
-		result.put("pageListCount", list.size());
-
-		return result;
-	}
-
-	//公司信息列表
-	/*public Object getCompanyInfoList(TCompanyOfCustomerForm form, HttpSession session) {
+	public Object getCompanyInfoList(TCompanyOfCustomerForm form, HttpSession session) {
 		//获取当前公司
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		form.setComid(loginCompany.getId());
@@ -82,7 +91,7 @@ public class CompanyInfoViewService extends BaseService<TCompanyEntity> {
 		result.put("pageListCount", list.size());
 
 		return result;
-	}*/
+	}
 
 	//获取管理员公司信息
 	public Object getAdminCompany(HttpSession session) {
@@ -96,8 +105,8 @@ public class CompanyInfoViewService extends BaseService<TCompanyEntity> {
 		Cnd cnd = Cnd.NEW();
 		cnd.and("c.adminId", "=", userId.longValue());
 		cnd.and("c.isCustomer", "=", IsYesOrNoEnum.NO.intKey());
-		sql.setCondition(cnd);
-		Record adminComInfo = dbDao.fetch(sql);
+			sql.setCondition(cnd);
+			Record adminComInfo = dbDao.fetch(sql);
 		if (!Util.isEmpty(adminComInfo)) {
 			int comtype = adminComInfo.getInt("comType");
 			for (CompanyTypeEnum type : CompanyTypeEnum.values()) {
@@ -127,12 +136,12 @@ public class CompanyInfoViewService extends BaseService<TCompanyEntity> {
 		return request;
 	}
 
+	
 	//添加公司(公司管理)
 	public Object addCompany(TCompanyAddForm addForm, HttpSession session) {
 		Date nowDate = DateUtil.nowDate();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userid = loginUser.getId();
-
 		TCompanyEntity company = new TCompanyEntity();
 		company.setAdminId(userid);
 		company.setName(addForm.getName());
@@ -148,42 +157,109 @@ public class CompanyInfoViewService extends BaseService<TCompanyEntity> {
 		company.setOpId(userid);
 		company.setCreateTime(nowDate);
 		company.setUpdateTime(nowDate);
-
 		dbDao.insert(company);
 
 		return "ADD SUCCESS";
 	}
-
+	/***
+	 * 添加送签社公司
+	 * @param addForm
+	 * @param session
+	 * @return
+	 */
+	public Object addSongQian(TCompanyForm addForm, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		
+		//获取当前登陆公司ID
+		Integer loginCompanyId = loginCompany.getId();
+		//获取送签社公司ID
+		Integer sendcomid = addForm.getId();
+		
+		//更新到t_company_of_customer中
+		TCompanyOfCustomerEntity comOfCust = new TCompanyOfCustomerEntity();
+		
+		//当前登陆公司ID
+		if(!Util.isEmpty(loginCompanyId)) {
+			comOfCust.setComid(loginCompanyId);
+		}
+		
+		//送签社公司ID
+		if(!Util.isEmpty(loginCompanyId)) {
+			comOfCust.setSendcomid(sendcomid);
+		}
+		dbDao.insert(comOfCust);
+		return "ADD SUCCESS";
+	}
+	/***
+	 * 查询公司列表
+	 * @param addForm
+	 * @param session
+	 * @return
+	 */
+	public Object getCompanyList(String companyName,final HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		//获取当前登陆公司ID
+		Integer loginCompanyId = loginCompany.getId();
+		//模糊查询公司
+		 List<TCompanyEntity> comList =  new ArrayList<TCompanyEntity>();
+		 if(!Util.isEmpty(companyName)) {
+			 Cnd cnd = Cnd.NEW();
+			 cnd.and("name", "like", "%"+companyName.trim()+"%").and("id", "!=", loginCompanyId).and("cdesignNum", "!=", "");
+			 comList = dbDao.query(TCompanyEntity.class, cnd,null);
+		 }
+		//当前登陆公司ID
+		return comList;
+	}
+	
+	
 	//根据id 获取公司（公司管理）
-	public Object getCompanyById(Integer comid) {
+	public Object getSelectdCompany(Integer comid) {
 		TCompanyEntity company = new TCompanyEntity();
 		if (!Util.isEmpty(comid)) {
 			company = dbDao.fetch(TCompanyEntity.class, comid.longValue());
 		}
 		return company;
 	}
+	public Object getCompanyById(Integer cocid) {
+		String sqlString = sqlManager.get("companyInfo_list_sendcompany");
+		Sql sql = Sqls.create(sqlString);
+		sql.setCondition(Cnd.where("tcoc.id", "=", cocid));
+		Record sendComInfo = dbDao.fetch(sql);
+		List<TCompanyEntity> companylist = dbDao.query(TCompanyEntity.class, null, null);
+		sendComInfo.put("companylist", companylist);
+		return sendComInfo;
+	}
 
 	//更新公司（公司管理）
-	public Object updateCompany(TCompanyUpdateForm updateForm, HttpSession session) {
-		Date nowDate = DateUtil.nowDate();
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		Integer userid = loginUser.getId();
-
-		Long comId = updateForm.getId();
-		TCompanyEntity company = dbDao.fetch(TCompanyEntity.class, Cnd.where("id", "=", comId));
-		if (!Util.isEmpty(company)) {
-			company.setName(updateForm.getName());
-			company.setShortName(updateForm.getShortName());
-			company.setCdesignNum(updateForm.getCdesignNum());
-			company.setLinkman(updateForm.getLinkman());
-			company.setMobile(updateForm.getMobile());
-			company.setEmail(updateForm.getEmail());
-			company.setAddress(updateForm.getAddress());
-			company.setSeal(updateForm.getSeal());
-			company.setUpdateTime(nowDate);
-			dbDao.update(company);
+//	public Object updateCompany(TCompanyUpdateForm updateForm, HttpSession session) {
+//		Date nowDate = DateUtil.nowDate();
+//		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+//		Integer userid = loginUser.getId();
+//
+//		Long comId = updateForm.getId();
+//		TCompanyEntity company = dbDao.fetch(TCompanyEntity.class, Cnd.where("id", "=", comId));
+//		if (!Util.isEmpty(company)) {
+//			company.setName(updateForm.getName());
+//			company.setShortName(updateForm.getShortName());
+//			company.setCdesignNum(updateForm.getCdesignNum());
+//			company.setLinkman(updateForm.getLinkman());
+//			company.setMobile(updateForm.getMobile());
+//			company.setEmail(updateForm.getEmail());
+//			company.setAddress(updateForm.getAddress());
+//			company.setSeal(updateForm.getSeal());
+//			company.setUpdateTime(nowDate);
+//			dbDao.update(company);
+//		}
+//
+//		return "UPDATE SUCCESS";
+//	}
+	public Object updateCompany(Integer sendid, Integer cocid) {
+		TCompanyOfCustomerEntity coc = new TCompanyOfCustomerEntity();
+		if(!Util.isEmpty(cocid)) {
+			 coc = dbDao.fetch(TCompanyOfCustomerEntity.class, Cnd.where("id", "=", cocid));
 		}
-
+		coc.setSendcomid(sendid);
+		dbDao.update(coc);
 		return "UPDATE SUCCESS";
 	}
 
@@ -206,6 +282,16 @@ public class CompanyInfoViewService extends BaseService<TCompanyEntity> {
 
 		map.put("valid", count <= 0);
 		return map;
+	}
+/**
+ * 删除选中的公司
+ * */
+	public Object deleteSelectedCompany(Integer cocid) {
+		TCompanyOfCustomerEntity coc = dbDao.fetch(TCompanyOfCustomerEntity.class, Cnd.where("id","=",cocid));
+		if(!Util.isEmpty(coc)){
+			dbDao.delete(coc);
+		}
+		return "DELETE SUCCESS";
 	}
 
 	//添加公司信息

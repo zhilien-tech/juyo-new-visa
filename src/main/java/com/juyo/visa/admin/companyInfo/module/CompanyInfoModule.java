@@ -15,6 +15,8 @@ import org.nutz.mvc.annotation.Param;
 import com.juyo.visa.admin.companyInfo.form.TCompanyCustomerForm;
 import com.juyo.visa.admin.companyInfo.service.CompanyInfoViewService;
 import com.juyo.visa.forms.TCompanyAddForm;
+import com.juyo.visa.forms.TCompanyForm;
+import com.juyo.visa.forms.TCompanyOfCustomerForm;
 import com.juyo.visa.forms.TCompanyUpdateForm;
 
 @IocBean
@@ -37,14 +39,11 @@ public class CompanyInfoModule {
 
 	/**
 	 *获取列表数据
-	 * <p>
+	 * 
 	 */
 	@At
-	/*public Object companyInfoListData(@Param("..") TCompanyOfCustomerForm form, HttpSession session) {
+	public Object companyInfoListData(@Param("..") TCompanyOfCustomerForm form, HttpSession session) {
 		return companyInfoViewService.getCompanyInfoList(form, session);
-	}*/
-	public Object companyInfoListData(@Param("..") TCompanyCustomerForm form, HttpSession session) {
-		return companyInfoViewService.getCompanyCustomerList(form, session);
 	}
 
 	/**
@@ -64,24 +63,72 @@ public class CompanyInfoModule {
 	public Object add(@Param("..") TCompanyAddForm addForm, final HttpSession session) {
 		return companyInfoViewService.addCompany(addForm, session);
 	}
-
+	/**
+	 * 添加送签社
+	 */
+	@At
+	@POST
+	public Object addSongQian(@Param("..") TCompanyForm addForm, final HttpSession session) {
+		return companyInfoViewService.addSongQian(addForm, session);
+	}
+	/**
+	 * 查询公司列表
+	 */
+	@At
+	@POST
+	public Object companyList(@Param("name") String name, final HttpSession session) {
+		return companyInfoViewService.getCompanyList(name,session);
+	}
+	/***
+	 * 根据ID查询公司
+	 */
+	@At
+	@POST
+	public Object getCompanyById(@Param("id") Integer id) {
+		return companyInfoViewService.getCompanyById(id);
+	}
 	/**
 	 * 跳转到edit页面
 	 */
+//	@At
+//	@GET
+//	@Ok("jsp")
+//	public Object edit(@Param("id") Integer comId) {
+//		return companyInfoViewService.getCompanyById(comId);
+//	}
 	@At
 	@GET
 	@Ok("jsp")
-	public Object edit(@Param("id") Integer comId) {
-		return companyInfoViewService.getCompanyById(comId);
+	public Object edit(@Param("id") Integer cocid) {
+		return companyInfoViewService.getCompanyById(cocid);
 	}
-
+	/**
+	 * 查询选中的公司信息
+	 * @param id
+	 * @return
+	 */
+	@At
+	@POST
+	public Object getSelectdCompany(@Param("id") Integer id) {
+		return companyInfoViewService.getSelectdCompany(id);
+	}
+	/**删除查询选中的公司信息
+	 * @param id
+	 * @return
+	 */
+	@At
+	@POST
+	public Object deleteSelectedCompany(@Param("id")  Integer cocid) {
+		return companyInfoViewService.deleteSelectedCompany(cocid);
+	}
+	
 	/**
 	 * 编辑
 	 */
 	@At
 	@POST
-	public Object update(@Param("..") TCompanyUpdateForm updateForm, final HttpSession session) {
-		return companyInfoViewService.updateCompany(updateForm, session);
+	public Object update(@Param("sendid") Integer sendid,@Param("cocid")  Integer cocid) {
+		return companyInfoViewService.updateCompany(sendid, cocid);
 	}
 
 	/**

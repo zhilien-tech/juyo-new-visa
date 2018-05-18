@@ -95,7 +95,8 @@
 					<label>电话：</label> <span>{{data.mobile}}</span>
 				</div>
 				<div class="list updateList">
-					<a @click="updateComInfo(data.id)" class="edit-icon"></a>
+					<a @click="updateComInfo(data.cocid)" class="edit-icon"></a>
+					<a @click="deleteComInfo(data.cocid)" class="delete-icon"></a>
 				</div>
 			</div>
 			<div class="listHover">

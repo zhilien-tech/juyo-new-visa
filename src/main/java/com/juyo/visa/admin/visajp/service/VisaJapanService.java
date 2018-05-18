@@ -33,6 +33,8 @@ import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
@@ -73,6 +75,7 @@ import com.juyo.visa.entities.TApplicantVisaPaperworkJpEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TComBusinessscopeEntity;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TCompanyOfCustomerEntity;
 import com.juyo.visa.entities.TFlightEntity;
 import com.juyo.visa.entities.THotelEntity;
 import com.juyo.visa.entities.TOrderEntity;
@@ -1397,35 +1400,67 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param orderid
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
+//	public Object sendZhaoBao(HttpServletRequest request, Long orderid) {
+//		HttpSession session = request.getSession();
+//		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+//		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+//		Integer adminId = loginCompany.getAdminId();
+//
+//
+//
+//		Map<String, Object> result = new HashMap<String, Object>();
+//		result.put("orderid", orderid);
+//		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+//		result.put("orderjpinfo", orderjp);
+//		List<TCompanyEntity> songqianlist = Lists.newArrayList();
+//		//送签社下拉
+//		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
+//				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+//
+//			Cnd cnd = Cnd.where("adminId", "=",adminId);
+//			cnd.and("cdesignNum","!=", "");
+//
+//			songqianlist = dbDao.query(TCompanyEntity.class,cnd, null);
+//		} else {
+//			TCompanyEntity songqian = dbDao.fetch(TCompanyEntity.class, orderjp.getSendsignid().longValue());
+//			songqianlist.add(songqian);
+//		}
+//		if(songqianlist.size() == 0) {
+//			result.put("songqianlist", "请选择含有指定番号的 送签社");
+//		}else {
+//			result.put("songqianlist", songqianlist);
+//		}
+//		//地接社下拉
+//		List<TCompanyEntity> dijielist = dbDao.query(TCompanyEntity.class,
+//				Cnd.where("comType", "=", CompanyTypeEnum.DIJI.intKey()).and("name", "like", "株式会社金通商社"), null);
+//		result.put("dijielist", dijielist);
+//		return result;
+//	}
 	public Object sendZhaoBao(HttpServletRequest request, Long orderid) {
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		Integer adminId = loginCompany.getAdminId();
-
-
-
+		JSONArray ja = new JSONArray();
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("orderid", orderid);
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
 		result.put("orderjpinfo", orderjp);
-		List<TCompanyEntity> songqianlist = Lists.newArrayList();
 		//送签社下拉
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
 				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
-
-			Cnd cnd = Cnd.where("adminId", "=",adminId);
-			cnd.and("cdesignNum","!=", "");
-
-			songqianlist = dbDao.query(TCompanyEntity.class,cnd, null);
-		} else {
-			TCompanyEntity songqian = dbDao.fetch(TCompanyEntity.class, orderjp.getSendsignid().longValue());
-			songqianlist.add(songqian);
+			 List<TCompanyOfCustomerEntity> list = dbDao.query(TCompanyOfCustomerEntity.class, Cnd.where("comid","=", loginCompany.getId()), null);
+			 for (TCompanyOfCustomerEntity tCompanyOfCustomerEntity : list) {
+			     JSONObject jo = new JSONObject();
+				 Integer sendcomid = tCompanyOfCustomerEntity.getSendcomid();
+				 TCompanyEntity sendCompany = dbDao.fetch(TCompanyEntity.class, Cnd.where("id", "=",sendcomid).and("cdesignNum","!=", ""));
+				 ja.add(sendCompany);
+			}
 		}
-		if(songqianlist.size() == 0) {
+		if(ja.size() == 0) {
 			result.put("songqianlist", "请选择含有指定番号的 送签社");
 		}else {
-			result.put("songqianlist", songqianlist);
+			result.put("songqianlist", ja);
 		}
 		//地接社下拉
 		List<TCompanyEntity> dijielist = dbDao.query(TCompanyEntity.class,
