@@ -43,7 +43,6 @@ function twonichphoto(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
-		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
@@ -64,7 +63,6 @@ function huzhao(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
-		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
@@ -83,7 +81,6 @@ function oldhuzhao(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
-		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
@@ -92,7 +89,7 @@ function oldhuzhao(staffid, type) {
 					var url=data.query[i].url;
 					$(".beforeInfo").before('<div class="uploadPassports">'+
 							'<div>上传</div>'+
-							'<img src='+url+' class="loadImg" width="100%" height="170px;"/>'+
+							'<img src='+url+' onclick="toUpperPhoto(this)" class="loadImg" width="100%" height="170px;"/>'+
 					'</div>');
 					$(".oldpassports").css("display","none");
 				}	
@@ -109,7 +106,6 @@ function card(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
-		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
@@ -145,7 +141,6 @@ function marray(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
-		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
@@ -164,7 +159,6 @@ function jobCertificate(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
-		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
@@ -183,7 +177,6 @@ function business(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
-		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
@@ -202,7 +195,6 @@ function chuqian(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
-		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
@@ -221,7 +213,6 @@ function drive(staffid, type) {
 			staffid : staffid
 		},
 		dataType : "json",
-		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
@@ -248,7 +239,6 @@ function housecard(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
-		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
@@ -256,7 +246,7 @@ function housecard(staffid, type) {
 				for(var i = 0;i<data.query.length;i++){
 					$(".housecard").after('<div class="uploadReleases hoursecardMain housecard'+i+'" >'+
 							'<div>上传</div>'+
-							'<img src="'+data.query[i].url+'" class="longitudinal"/>'+
+							'<img onclick="toUpperPhoto(this)" src="'+data.query[i].url+'" class="longitudinal"/>'+
 					'</div>');
 				}
 				$(".1").remove();
@@ -278,7 +268,6 @@ function household(staffid, type) {
 			staffid : staffid,
 		},
 		dataType : "json",
-		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
@@ -290,7 +279,7 @@ function household(staffid, type) {
 					console.log(data.query[i].url);
 					$(".householdBack").after('<div class="uploadReleases">'+
 							'<div>户主页</div>'+
-							'<img src="'+data.query[i].url+'" class="longitudinal" />'+
+							'<img onclick="toUpperPhoto(this)" src="'+data.query[i].url+'" class="longitudinal" />'+
 					'</div>');
 				}
 			}
@@ -307,14 +296,13 @@ function bankflow(staffid, type) {
 			staffid : staffid
 		},
 		dataType : "json",
-		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=null){
 				for(var i = 0;i<data.length;i++){
 					$(".bankflow_moreImaage_WX_jssdk").after(
-							'<div class="uploadReleases bankGroup"><img src="'+data[i].url+'" class="sampleImg"/></div>'
+							'<div class="uploadReleases bankGroup"><img onclick="toUpperPhoto(this)" src="'+data[i].url+'" class="sampleImg"/></div>'
 					);
 				}
 
@@ -332,14 +320,13 @@ function oldsigned(staffid, type) {
 			staffid : staffid
 		},
 		dataType : "json",
-		async: false,
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
 			if(data!=null){
 				for(var i = 0;i<data.length;i++){
 					$(".oldsigned_moreImaage_WX_jssdk").after(
-							'<div class="uploadReleases"><img src="'+data[i].url+'" class="longitudinal"/></div>'
+							'<div class="uploadReleases"><img onclick="toUpperPhoto(this)" src="'+data[i].url+'" class="longitudinal"/></div>'
 					);
 				}
 
