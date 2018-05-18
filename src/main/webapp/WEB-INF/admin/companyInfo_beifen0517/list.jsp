@@ -14,11 +14,6 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-	<style>
-		.listNum { width:17% !important;}
-		.updateList { width:8% !important;}
-		.updateList a { vertical-align:middle;}
-	</style>
 </head>
 <body>
 	<!-- 按钮 -->
@@ -58,12 +53,7 @@
 			<div class="list listMail">
 				<label>邮箱：</label> <span>${obj.adminComInfo.email }</span>
 			</div>
-			<div class="list listFax">
-				<label>传真：</label> <span>${obj.adminComInfo.fax }</span>
-			</div>
-		</div>
-		<div class="listHover firstlisthover">
-			<div class="list firstlistsAddress addressInfo">
+			<div class="list listsAddress addressInfo">
 				<label>地址：</label> <span>${obj.adminComInfo.address }</span>
 			</div>
 		</div>
@@ -96,7 +86,7 @@
 					<label>公司简称：</label> <span>{{data.shortname}}</span>
 				</div>
 				<div class="list listNum">
-					<label>指定番号：</label> <span>{{data.designatednum}}</span>
+					<label>指定番号：</label> <span>{{data.cdesignnum}}</span>
 				</div>
 				<div class="list listPer">
 					<label>联系人：</label> <span>{{data.linkman}}</span>
@@ -105,19 +95,12 @@
 					<label>电话：</label> <span>{{data.mobile}}</span>
 				</div>
 				<div class="list updateList">
-					<a @click="updateComInfo(data.cocid)" class="edit-icon"></a>
-					<a @click="deleteComInfo(data.cocid)" class="delete-icon"></a>
+					<a @click="updateComInfo(data.id)" class="edit-icon"></a>
 				</div>
 			</div>
 			<div class="listHover">
-				<div class="list otherlistMail">
-					<label>邮箱：</label> <span>{{data.email}}</span>
-				</div>
-				<div class="list otherlistFax">
-					<label>传真：</label> <span>{{data.fax}}</span>
-				</div>
-				<div class="list otherlistAddress">
-					<label>地址：</label> <span>{{data.address}}</span>
+				<div class="list listAddress">
+					<label>&nbsp;&nbsp;地&nbsp;&nbsp;&nbsp;&nbsp;址：</label> <span>{{data.address}}</span>
 				</div>
 			</div>
 		</div>

@@ -8,6 +8,7 @@ SELECT
 	c.linkman,
 	c.mobile,
 	c.email,
+	c.fax,
 	c.address,
 	c.comType,
 	( SELECT GROUP_CONCAT( cast( tcb.countryId AS CHAR ) SEPARATOR ',' ) FROM t_com_businessscope tcb WHERE tcb.comId = c.id ) AS scopes,
@@ -27,17 +28,25 @@ FROM
 $condition
 
 /*companyInfo_list_sendcompany*/
-select
+SELECT
 	tc.*,
+	tcb.designatedNum,
 	tcoc.id cocid,
-	tcoc.sendcomid  
-	from 
-		t_company tc
-	left join 
-		t_company_of_customer tcoc 
-	on 
-	tcoc.sendcomid = tc.id 
+	tcoc.sendcomid 
+FROM
+	t_company tc
+	INNER JOIN t_com_businessscope tcb ON tcb.comId = tc.id
+	LEFT JOIN t_company_of_customer tcoc ON tcoc.sendcomid = tc.id 
 	$condition
+	
+/*companyInfo_select2_list*/	
+SELECT
+	tc.*,
+	tcb.designatedNum 
+FROM
+	t_company tc
+	INNER JOIN t_com_businessscope tcb ON tcb.comId = tc.id 
+$condition
 
 /*companyInfo_list_company_by_realx*/
 SELECT

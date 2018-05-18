@@ -23,18 +23,24 @@ body { font-family: "microsoft yahei"; font-size: 14px;}
 .listNum { width: 20%;}
 .listPer { width: 15%;}
 .listTel { width: 15%;}
+.listFax { width: 15%;}
 .updateList {width:5%; float: right !important; color: #379CD5; cursor: pointer;}
+.firstlistsAddress { width: 28%; margin-left: 2%;}
+.firstlisthover {height:40px !important;line-height:32px;}
 /**/
 .listHover { display: none; width: 100%;}
 .listHover .list { display: block; float: left;}
 .listHover .list label { color: #c3bebe;}
 .listType { width: 28%; margin-left: 2%;}
 .listScope { width: 15%;}
-.listMail { width: 20%;}
+.listMail { width: 17%;}
 .addressInfo { width:35% !important;}
 .listsAddress { width:40%;}
 .listAddress { width: 40%;margin-left: 2%;}
 .edit-icon { vertical-align:middle;}
+.otherlistMail { width:28%;margin-left:2%;}
+.otherlistFax { width:15%;}
+.otherlistAddress {width:40%;}
 /**/
 .pic { display: none; position: relative;}
 .pic img { margin-left: 2%; margin-top:5px;margin-bottom:12px; cursor: pointer; max-width:300px;max-height:300px; border:1px solid #eee; transition:all 0.6s;}
