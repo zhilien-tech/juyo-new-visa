@@ -1,5 +1,6 @@
 //异步加载的URL地址
 var url=BASE_PATH + "/admin/companyInfo/companyInfoListData.html";
+var deleteurl=BASE_PATH +"/admin/companyInfo/deleteSelectedCompany"
 //vue表格数据对象
 var _self;
 new Vue({
@@ -19,7 +20,7 @@ new Vue({
 		});
 	},
 	methods:{
-		updateComInfo:function(comInfoId){
+		updateComInfo:function(cocid){
 			layer.open({
 				type: 2,
 				title: false,
@@ -29,9 +30,31 @@ new Vue({
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '550px'],
-				content: BASE_PATH + '/admin/companyInfo/edit.html?id='+comInfoId
+				content: BASE_PATH + '/admin/companyInfo/edit.html?id='+cocid
 			});
-		}
+		},
+	deleteComInfo:function(cocid){
+//		layer.open({
+//			type: 2,
+//			title: false,
+//			closeBtn:false,
+//			fix: false,
+//			maxmin: false,
+//			shadeClose: false,
+//			scrollbar: false,
+//			area: ['900px', '550px'],
+//			content: BASE_PATH + '/admin/companyInfo/deleteSelectedCompany.html?id='+cocid
+//		});
+		$.ajax({ 
+			url: deleteurl,
+			data:{'id':cocid},
+			dataType:"json",
+			type:'post',
+			success: function(data){
+				
+			}
+		});
+	}
 	}
 });
 
