@@ -218,9 +218,9 @@ $(window).scroll(function(){
 			});
 		}else{
 			//没有更多数据，底部提示语
-			/*if($("#card-bottom-line").length <= 0 && pageListCount>=6){
-				$(".card-list").last().after("<div id='card-bottom-line' class='bottom-line'><span style='margin-left: 38%; color:#999'>-------  没有更多数据可以加载  -------</span></div>");
-			}*/
+			//if($("#card-bottom-line").length <= 0 && pageListCount>=6){
+				//$(".card-list").last().after("<div id='card-bottom-line' class='bottom-line'><span style='margin-left: 38%; color:#999'>-------  没有更多数据可以加载  -------</span></div>");
+			//}
 		}
 	}
 });
