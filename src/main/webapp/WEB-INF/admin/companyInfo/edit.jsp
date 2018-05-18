@@ -1,65 +1,86 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java"
+	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
 <c:set var="url" value="${base}/admin/company" />
 <!DOCTYPE HTML>
 <html lang="en-US" id="addHtml">
 <head>
-	<meta charset="UTF-8">
-	<meta http-equlv="proma" content="no-cache" />
-	<meta http-equlv="cache-control" content="no-cache" />
-	<meta http-equlv="expires" content="0" />
-	<title>公司信息-编辑</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
-	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/company.css?v='20180510'">
-	<style type="text/css">
-		img#sqImg {top: 0;}
-		#sgImg{top:1%}
-		.uploadP { position:relative; cursor:pointer;}
-		#uploadFileSeal { position:absolute !important;top:0 !important;left:0 !important; width:100% !important; cursor:pointer; opacity:0;}
-	</style>
+<meta charset="UTF-8">
+<meta http-equlv="proma" content="no-cache" />
+<meta http-equlv="cache-control" content="no-cache" />
+<meta http-equlv="expires" content="0" />
+<title>公司信息-编辑</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, minimum-scale=1">
+<link rel="stylesheet"
+	href="${base}/references/public/plugins/select2/select2.css">
+<link rel="stylesheet"
+	href="${base}/references/public/bootstrap/css/bootstrap.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<link rel="stylesheet"
+	href="${base}/references/public/dist/newvisacss/css/company.css?v='20180510'">
+<style type="text/css">
+img#sqImg {
+	top: 0;
+}
+
+#sgImg {
+	top: 1%
+}
+
+.uploadP {
+	position: relative;
+	cursor: pointer;
+}
+
+#uploadFileSeal {
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100% !important;
+	cursor: pointer;
+	opacity: 0;
+}
+</style>
 </head>
 <body>
 	<div class="modal-content">
 		<form id="companyInfoForm">
 			<div class="modal-header">
-				<span class="heading">编辑送签社</span> 
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-				<input id="updateBtn" type="button" onclick="update();" class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
+				<span class="heading">编辑送签社</span> <input id="backBtn" type="button"
+					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
+					data-dismiss="modal" value="取消" /> <input id="updateBtn"
+					type="button" onclick="update();"
+					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
-					<input id="id" name="id" type="hidden" value="${obj.id }">
+					<input id="id" name="id" value="${obj.id }">
+					<input id="cocid" name="cocid"  value="${obj.cocid }">
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>公司全称：</label> 
-								<input id="name" name="name" value="${obj.name }" type="text" class="form-control input-sm" placeholder=" " />
+								<select id="name" name="name" 
+									class="form-control select2 select2Company1"
+									multiple="multiple" tabindex="22">
+									<c:forEach items="${obj.companylist }" var="company">
+										<c:if test="${obj.id eq  company.id}">
+											<option selected="selected"  value="${company.id }">${company.name }</option>
+										</c:if>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>公司简称：</label> 
-								<input id="shortName" name="shortName" value="${obj.shortName }" type="text" class="form-control input-sm" placeholder=" " />
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-sm-6">
-							<div class="form-group">
-								<label><span>*</span>指定番号：</label> 
-								<input id="cdesignNum" name="cdesignNum" value="${obj.cdesignNum }" type="text" style="text-transform:uppercase" class="form-control input-sm" placeholder="必须大写字母" />
-							</div>
-						</div>
-
-						<div class="col-sm-6">
-							<div class="form-group">
-								<label><span>*</span>联系人：</label> 
-								<input id="linkman" name="linkman" value="${obj.linkman }"  type="text" class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>公司简称：</label> <input id="shortName"
+									name="shortName" value="${obj.shortName }" type="text"
+									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -67,14 +88,36 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>电话：</label> 
-								<input id="mobile" name="mobile" value="${obj.mobile }" type="text" class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>指定番号：</label> <input id="cdesignNum"
+									name="cdesignNum" value="${obj.cdesignNum }" type="text"
+									style="text-transform: uppercase" class="form-control input-sm"
+									placeholder="必须大写字母" />
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label>邮箱：</label> <input id="email" name="email" value="${obj.email }" type="text" class="form-control input-sm" placeholder=" " />
+								<label><span>*</span>联系人：</label> <input id="linkman"
+									name="linkman" value="${obj.linkman }" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label><span>*</span>电话：</label> <input id="mobile"
+									name="mobile" value="${obj.mobile }" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>邮箱：</label> <input id="email" name="email"
+									value="${obj.email }" type="text" class="form-control input-sm"
+									placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -82,14 +125,15 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
-								<label>地址：</label> 
-								<input id="address" name="address" value="${obj.address }" type="text" class="form-control input-sm" placeholder=" " />
+								<label>地址：</label> <input id="address" name="address"
+									value="${obj.address }" type="text"
+									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
-					
-						<!-- 上传公章  -->
-					<div class="row" style="margin-top: 15px;">
+
+					<!-- 上传公章  -->
+					<%-- 					<div class="row" style="margin-top: 15px;">
 						<div class="col-xs-3">
 							<div class="form-group">
 								<div class="upload-btn">
@@ -109,7 +153,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> --%>
 					<!-- end 上传公章-->
 
 				</div>
@@ -120,13 +164,18 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		var PAGE_TYPE = "EDIT";
-		var URL_INFO = BASE_PATH+"/admin/companyInfo/update.html";
+		var URL_INFO = BASE_PATH + "/admin/companyInfo/update.html";
 	</script>
-	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+	<script
+		src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script
+		src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<script
+		src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<!-- 本页面js文件 -->
 	<script src="${base}/admin/companyInfo/companyInfo.js"></script>
 	<!-- 上传图片 -->
@@ -135,15 +184,22 @@
 		/*保存页面*/
 		function update() {
 			//初始化验证插件
-			$('#companyInfoForm').bootstrapValidator('validate');
+			//$('#companyInfoForm').bootstrapValidator('validate');
 			//得到获取validator对象或实例 
-			var bootstrapValidator = $("#companyInfoForm").data('bootstrapValidator');
+			//var bootstrapValidator = $("#companyInfoForm").data(
+				//	'bootstrapValidator');
 			// 执行表单验证 
-			bootstrapValidator.validate();
-			if (bootstrapValidator.isValid()) {
+			//bootstrapValidator.validate();
+			var sendid = $("#id").val();
+			var cocid = $("#cocid").val();
+			alert(sendid);
+			alert(cocid);
+			//if (bootstrapValidator.isValid()) {
 				$.ajax({
 					type : 'POST',
-					data : $("#companyInfoForm").serialize(),
+					data : {'sendid' : sendid,
+								 'cocid' : cocid
+						},
 					url : '${base}/admin/companyInfo/update.html',
 					success : function(data) {
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -156,7 +212,7 @@
 					}
 				});
 			}
-		}
+		//}
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

@@ -15,9 +15,11 @@ import com.uxuexi.core.web.form.ModForm;
 @EqualsAndHashCode(callSuper = true)
 public class TCompanyUpdateForm extends ModForm implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	private Integer songid ;
 	/**公司名称*/
 	private String name;
+	
+	private Integer cocid;
 
 	/**公司简称*/
 	private String shortName;

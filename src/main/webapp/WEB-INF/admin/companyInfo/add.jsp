@@ -10,6 +10,7 @@
 	<meta http-equlv="expires" content="0" />
 	<title>公司信息-添加</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+	<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
@@ -36,14 +37,19 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>公司全称：</label> 
-								<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " />
+							<!-- 	<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " /> -->
+							<select id="name"  name = "name"  class="form-control select2 select2Company" multiple="multiple" tabindex="22" >
+												<c:forEach items="${obj.companylist }" var="company">
+														<option value="${company.id }">${company.name }</option>
+											</c:forEach>	
+										</select>
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>公司简称：</label> 
-								<input id="shortName" name="shortName" type="text" class="form-control input-sm" placeholder=" " />
+								<input id="shortName" name="shortName" type="text" readonly = "true" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -52,14 +58,14 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>指定番号：</label> 
-								<input id="cdesignNum" name="cdesignNum" type="text" style="text-transform:uppercase" class="form-control input-sm" placeholder="必须大写字母" />
+								<input id="cdesignNum" name="cdesignNum" type="text"  readonly = "true" style="text-transform:uppercase" class="form-control input-sm" placeholder="必须大写字母" />
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>联系人：</label> 
-								<input id="linkman" name="linkman" type="text" class="form-control input-sm" placeholder=" " />
+								<input id="linkman" name="linkman" type="text" readonly = "true" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -68,13 +74,13 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>电话：</label> 
-								<input id="mobile" name="mobile" type="text" class="form-control input-sm" placeholder=" " />
+								<input id="mobile" name="mobile" type="text" readonly = "true" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label>邮箱：</label> <input id="email" name="email" type="text" class="form-control input-sm" placeholder=" " />
+								<label>邮箱：</label> <input id="email" name="email" type="text"  readonly = "true" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -83,13 +89,13 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label><span>*</span>地址：</label> 
-								<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " />
+								<input id="address" name="address" type="text" readonly = "true" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
 					
 					<!-- 上传公章  -->
-					<div class="row" style="margin-top: 15px;">
+<!-- 					<div class="row" style="margin-top: 15px;">
 						<div class="col-xs-3">
 							<div class="form-group">
 								<div class="upload-btn">
@@ -108,7 +114,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> -->
 					<!-- end 上传营业执照 -->
 
 				</div>
@@ -124,6 +130,8 @@
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<!-- 本页面js文件 -->
 	<script src="${base}/admin/companyInfo/companyInfo.js"></script>
 	<!-- 上传图片 -->
@@ -142,7 +150,7 @@
 				$.ajax({
 					type : 'POST',
 					data : $("#companyInfoForm").serialize(),
-					url : '${base}/admin/companyInfo/add.html',
+					url : '${base}/admin/companyInfo/addSongQian.html',
 					success : function(data) {
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						layer.close(index);
@@ -161,6 +169,9 @@
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
 		}
+		function clearplan(){
+			$( ".select2-selection__choice").val("");
+	}
 	</script>
 	
 </body>
