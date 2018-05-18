@@ -65,7 +65,7 @@
 			</div>
 			<div class="uploadPassport alignment">
 				<div>上传</div>
-				<img id = "huzhao" onclick="toUpperPhoto(this)" class="transverseImg"/>
+				<img id = "huzhao" onclick="toUpperPhoto(this)" class="transverseImg" src=""/>
 			</div>
 			<input type="file" class="publicFile" name="" />
 		</div>
@@ -80,7 +80,7 @@
 				<div class="beforeInfo"></div>
 				<div class="uploadPassports oldpassports alignment" >
 					<div>上传</div>
-					<img id="oldhuzhao" onclick="toUpperPhoto(this)" class="transverseImg" />
+					<img id="oldhuzhao" onclick="toUpperPhoto(this)" class="transverseImg" src=""/>
 				</div>
 				<input type="file" class="publicFile" name="" />
 			</div>
@@ -97,14 +97,14 @@
 				<!-- <div class="beforeIDInfo"></div> -->
 				<div class="uploadPassports alignment" >
 					<div>上传</div>
-					<img id="card" onclick="toUpperPhoto(this)" src="" class="transverseImg" >
+					<img id="card" onclick="toUpperPhoto(this)" src="" class="transverseImg" src="">
 				</div>
 				<div class="samplePassportImg">
 					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-IDBack.jpg" />
 				</div>
 				<div class="uploadPassports alignment" >
 					<div>上传</div>
-					<img id="cardBack" onclick="toUpperPhoto(this)" src="" class="transverseImg" >
+					<img id="cardBack" onclick="toUpperPhoto(this)" src="" class="transverseImg" src="">
 				</div>
 			</div>	
 		</div>
@@ -119,7 +119,7 @@
 				<!-- <div class="beforeHuKouInfo"></div> -->
 				<div class="uploadReleases" >
 					<div>户主页</div>
-					<img id="household" onclick="toUpperPhoto(this)" class="longitudinal" />
+					<img id="household" onclick="toUpperPhoto(this)" class="longitudinal" src=""/>
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
 			</div>		
@@ -135,7 +135,7 @@
 				<!-- <div class="beforeHouseInfo"></div> -->
 				<div class="uploadReleases hoursecardMain housecard 1" >
 					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" id="" class="longitudinal"/>
+					<img onclick="toUpperPhoto(this)" id="" class="longitudinal" src=""/>
 				</div>
 				<div class="housecardAnother">
 					<div class="housecardInfo">
@@ -166,7 +166,7 @@
 				</div>
 				<div class="uploadReleases" >
 					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" id="marray" class="longitudinal" />
+					<img onclick="toUpperPhoto(this)" id="marray" class="longitudinal" src=""/>
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
 			</div>	
@@ -206,7 +206,7 @@
 				<!-- <div class="beforeJobInfo"></div> -->
 				<div class="uploadReleases jobwidth">
 					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" id="jobCertificate" class="sampleImg" />
+					<img onclick="toUpperPhoto(this)" id="jobCertificate" class="sampleImg" src=""/>
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
 			</div>	
@@ -222,7 +222,7 @@
 				<!-- <div class="beforeOZCardInfo"></div> -->
 				<div class="uploadReleases businesswidth" >
 					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" id="business" class="sampleImg" />
+					<img onclick="toUpperPhoto(this)" id="business" class="sampleImg" src=""/>
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
 			</div>
@@ -238,7 +238,7 @@
 				<!-- <div class="beforeIDInfo"></div> -->
 				<div class="uploadPassports driverface alignment" >
 					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" id="drive" src="" class="transverseImg" >
+					<img onclick="toUpperPhoto(this)" id="drive" src="" class="transverseImg" src="">
 				</div>
 				<!-- <div class="uploadPassports driverback alignment" >
 					<div>上传</div>
@@ -278,7 +278,7 @@
 				<!-- <div class="beforeOverdueInfo"></div> -->
 				<div class="uploadReleases" style="display:none;">
 					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" class="longitudinal" />
+					<img onclick="toUpperPhoto(this)" class="longitudinal" src="" />
 				</div>
 			</div>
 		</div>
@@ -293,7 +293,7 @@
 				<!-- <div class="beforeSignInfo"></div> -->
 				<div class="uploadReleases" >
 					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" id="chuqian" class="longitudinal" />
+					<img onclick="toUpperPhoto(this)" id="chuqian" class="longitudinal" src=""/>
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
 			</div>	
@@ -360,7 +360,9 @@
 	
 	function toUpperPhoto(photo){
 		var url = $(photo).attr("src");
-		window.open('/admin/pcVisa/toUpperPhoto.html?url='+url);
+		if(url != ""){
+			window.open('/admin/pcVisa/toUpperPhoto.html?url='+url);
+		}
 	}
 	
 	//连接websocket
