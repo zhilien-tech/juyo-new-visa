@@ -1410,6 +1410,16 @@
 				});
 			}
 		});
+		$('#isVisit').change(function(){
+			var isvisit = $('#isVisit').val();
+			
+			if(isvisit == 0 ){
+				$('#threexian input').removeClass('btnState-true');
+				$('#laststartdate').val('');
+				$('#laststayday').val('');
+				$('#lastreturndate').val('');
+			}
+		})
 	</script>
 </body>
 </html>
