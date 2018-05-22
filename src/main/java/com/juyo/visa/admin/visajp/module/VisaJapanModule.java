@@ -389,9 +389,9 @@ public class VisaJapanModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object sendZhaoBaoError(@Param("data") String data, @Param("orderid") Integer orderid, HttpSession session,
+	public Object sendZhaoBaoError(HttpServletRequest request, HttpSession session,
 			@Param("type") Integer type) {
-		return visaJapanService.sendZhaoBaoError(data, orderid, session, type);
+		return visaJapanService.sendZhaoBaoError(request, session, type);
 	}
 
 	/**
