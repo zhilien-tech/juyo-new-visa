@@ -122,7 +122,7 @@
 										<div><label>资料类型：</label><span>{{data.type}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div><a class="visaInputUS" v-on:click="visaInput(data.staffid, data.orderid)">签证录入</a></div>
+										<div><a class="visaInputUS" v-on:click="visaInput(data.staffid, data.orderid)">出境记录</a></div>
 									</span>
 								</li>
 							</ul>
@@ -130,7 +130,7 @@
 					</div>
 					<!-- end 卡片列表 -->
 				</section>
-				<input type="hidden" id="pageNumber" name="pageNumber" value="1">
+			<input type="hidden" id="pageNumber" name="pageNumber" value="1">
 			<input type="hidden" id="pageTotal" name="pageTotal">
 			<input type="hidden" id="pageListCount" name="pageListCount">
 <script type="text/javascript">
@@ -166,8 +166,8 @@ $(function(){
 		$("#cityid").val("");
 		$("#ispayed").val("");
 		$("#searchBtn").trigger("click");
-	})
-	
+	});
+	//sessionStorage.setItem('pageNumber','1');
 });
 	
 	

@@ -9,7 +9,7 @@
 		<meta http-equlv="cache-control" content="no-cache" />
 		<meta http-equlv="expires" content="0" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>签证录入</title>
+		<title>出境记录</title>
 		<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 		<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">

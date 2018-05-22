@@ -61,6 +61,15 @@ public class OrderUSModule {
 	}
 
 	/**
+	 * 点击我的或者全部后列表数据回到之前位置
+	 */
+	@At
+	@POST
+	public Object toNewListdata(@Param("..") final OrderUSListDataForm sqlParamForm, HttpSession session) {
+		return orderUSViewService.newlistData(sqlParamForm, session);
+	}
+
+	/**
 	 * 跳转到美国订单详情页/下单 共用
 	 */
 	@At
