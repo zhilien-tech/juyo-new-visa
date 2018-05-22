@@ -804,7 +804,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				String hotelname = (String) record.get("hotelname");
 				if (count > 1) {
 					if (hotelname.equals(prehotelname)) {
-						record.put("hotelname", "同上");
+						
+						record.put("hotelname", "連泊");
 					}
 				}
 				prehotelname = hotelname;
