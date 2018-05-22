@@ -266,6 +266,90 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
+	public Object newlistData(OrderUSListDataForm form, HttpSession session) {
+		Map<String, Object> result = Maps.newHashMap();
+		//获取当前公司
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		//获取当前用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		String comidsString = "";
+		List<TCompanyCustomerMapEntity> coms = dbDao.query(TCompanyCustomerMapEntity.class,
+				Cnd.where("belongComId", "=", loginCompany.getId()), null);
+		for (TCompanyCustomerMapEntity tCompanyCustomerMapEntity : coms) {
+			comidsString += tCompanyCustomerMapEntity.getBigCustomerId() + ",";
+		}
+		String comids = comidsString + "" + loginCompany.getId();
+		form.setUserid(loginUser.getId());
+		form.setComids(comids);
+		form.setCompanyid(loginCompany.getId());
+		form.setAdminId(loginCompany.getAdminId());
+		Sql sql = form.sql(sqlManager);
+
+		Integer pageNumber = form.getPageNumber();
+		Integer pageSize = form.getPageSize();
+
+		Pager pager = new OffsetPager(0, pageNumber * 10);
+		pager.setRecordCount((int) Daos.queryCount(nutDao, sql.toString()));
+		sql.setPager(pager);
+		sql.setCallback(Sqls.callback.records());
+		nutDao.execute(sql);
+
+		@SuppressWarnings("unchecked")
+		//主sql数据
+		List<Record> list = (List<Record>) sql.getResult();
+		//格式化面试时间
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
+		for (Record record : list) {
+			Integer orderid = (Integer) record.get("orderid");
+			Object payObj = record.get("ispayed");
+			Object cityObj = record.get("cityid");
+
+			//面签时间格式化
+			if (!Util.isEmpty(record.get("interviewdate"))) {
+				Date interviewdate = (Date) record.get("interviewdate");
+				record.put("interviewdate", sdf.format(interviewdate));
+			}
+			//领区
+			if (!Util.isEmpty(cityObj)) {
+				int cityid = (int) cityObj;
+				for (DistrictEnum district : DistrictEnum.values()) {
+					if (cityid == district.intKey()) {
+						record.set("cityid", district.value());
+					}
+				}
+			}
+			//是否付款
+			if (!Util.isEmpty(payObj)) {
+				int ispayed = (int) payObj;
+				for (IsPayedEnum pay : IsPayedEnum.values()) {
+					if (ispayed == pay.intKey()) {
+						record.set("ispayed", pay.value());
+					}
+				}
+			}
+			String sqlStr = sqlManager.get("orderUS_listData_staff");
+			Sql applysql = Sqls.create(sqlStr);
+			List<Record> records = dbDao.query(applysql, Cnd.where("tasou.orderid", "=", orderid), null);
+			record.put("everybodyInfo", records);
+
+			//订单状态
+			int orderStatus = (int) record.get("orderstatus");
+			for (USOrderListStatusEnum statusEnum : USOrderListStatusEnum.values()) {
+				if (!Util.isEmpty(orderStatus) && orderStatus == statusEnum.intKey()) {
+					record.set("orderstatus", statusEnum.value());
+				}
+				/*else if (orderStatus == JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.intKey()) {
+					record.set("orderstatus", JapanPrincipalChangeEnum.CHANGE_PRINCIPAL_OF_ORDER.value());
+				}*/
+			}
+
+		}
+		result.put("orderUSListData", list);
+		result.put("pageTotal", pager.getPageCount());
+		result.put("pageListCount", list.size());
+		return result;
+	}
+
 	/**
 	 * 获取美国订单详情页信息
 	 * TODO(这里用一句话描述这个方法的作用)
