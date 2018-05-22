@@ -34,7 +34,7 @@
 									<span style="cursor:pointer;"><a v-on:click="updateApplicant(data.applicantid);">基本信息</a></span>
 									<span style="cursor:pointer;"><a v-on:click="passport(data.applicantid)">护照信息</a></span>
 									<span style="cursor:pointer;"><a v-on:click="visa(data.applicantid)">签证信息</a></span>
-									<span style="cursor:pointer;"><a v-on:click="visaInput(data.userid)">签证录入</a></span>
+									<span style="cursor:pointer;"><a v-on:click="visaInput(data.userid)">出境记录</a></span>
 									<span style="cursor:pointer;"><a v-on:click="deleteApply(data.userid)">删除</a></span>
 								</div>
 							</div>
