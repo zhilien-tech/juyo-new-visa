@@ -1,6 +1,5 @@
 //异步加载的URL地址
 var url=BASE_PATH + "/admin/companyInfo/companyInfoListData.html";
-var deleteurl=BASE_PATH +"/admin/companyInfo/deleteSelectedCompany"
 //vue表格数据对象
 var _self;
 new Vue({
@@ -45,15 +44,26 @@ new Vue({
 //			area: ['900px', '550px'],
 //			content: BASE_PATH + '/admin/companyInfo/deleteSelectedCompany.html?id='+cocid
 //		});
-		$.ajax({ 
-			url: deleteurl,
-			data:{'id':cocid},
-			dataType:"json",
-			type:'post',
-			success: function(data){
-				   
-			}
+
+		layer.confirm("您确认要删除吗？", {
+			title:"删除",
+			btn: ["是","否"], //按钮
+			shade: false //不显示遮罩
+		}, function(){
+			var deleteurl=BASE_PATH +"/admin/companyInfo/deleteSelectedCompany";
+			$.ajax({ 
+				url: deleteurl,
+				data:{'id':cocid},
+				dataType:"json",
+				type:'post',
+				success: function(data){
+					successCallBack(3);
+				}
+			});
+		}, function(){
+			// 取消之后不用处理
 		});
+		
 	}
 	}
 });
@@ -135,6 +145,8 @@ function successCallBack(status){
 		layer.msg('添加成功');
 	}else if(status == 2){
 		layer.msg('修改成功');
+	}else if(status ==3){
+		layer.msg('删除成功');
 	}
 	$.ajax({ 
 		url: url,

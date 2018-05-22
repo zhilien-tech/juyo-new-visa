@@ -402,7 +402,7 @@
 				orderAuthority = $(this).attr("name");
 			}
 		});
-		
+		$(window).scrollTop(0);
 		$.ajax({ 
         	url: url,
         	data:{

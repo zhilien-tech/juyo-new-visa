@@ -58,18 +58,17 @@ img#sqImg {
 			</div>
 			<div class="modal-body">
 				<div class="tab-content">
-					<input id="id" name="id" value="${obj.id }">
-					<input id="cocid" name="cocid"  value="${obj.cocid }">
+					<input id="id" name="id" type="hidden" value="${obj.id }"> 
+					<input id="cocid" name="cocid" type="hidden" value="${obj.cocid }">
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>公司全称：</label> 
-								<select id="name" name="name" 
+								<label><span>*</span>公司全称：</label> <select id="name" name="name"
 									class="form-control select2 select2Company1"
 									multiple="multiple" tabindex="22">
 									<c:forEach items="${obj.companylist }" var="company">
 										<c:if test="${obj.id eq  company.id}">
-											<option selected="selected"  value="${company.id }">${company.name }</option>
+											<option selected="selected" value="${company.id }">${company.name }</option>
 										</c:if>
 									</c:forEach>
 								</select>
@@ -78,9 +77,9 @@ img#sqImg {
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>公司简称：</label> <input id="shortName"
-									name="shortName" value="${obj.shortName }" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label>公司简称：</label> <input id="shortName"
+									readonly="true" name="shortName" value="${obj.shortName }"
+									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -88,18 +87,18 @@ img#sqImg {
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>指定番号：</label> <input id="cdesignNum"
-									name="cdesignNum" value="${obj.cdesignNum }" type="text"
-									style="text-transform: uppercase" class="form-control input-sm"
-									placeholder="必须大写字母" />
+								<label>指定番号：</label> <input id="cdesignNum"
+									readonly="true" name="cdesignNum" value="${obj.cdesignNum }"
+									type="text" style="text-transform: uppercase"
+									class="form-control input-sm" placeholder="" />
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>联系人：</label> <input id="linkman"
-									name="linkman" value="${obj.linkman }" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label>联系人：</label> <input id="linkman"
+									readonly="true" name="linkman" value="${obj.linkman }"
+									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -107,17 +106,26 @@ img#sqImg {
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label><span>*</span>电话：</label> <input id="mobile"
-									name="mobile" value="${obj.mobile }" type="text"
-									class="form-control input-sm" placeholder=" " />
+								<label>电话：</label> <input id="mobile"
+									readonly="true" name="mobile" value="${obj.mobile }"
+									type="text" class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label>邮箱：</label> <input id="email" name="email"
-									value="${obj.email }" type="text" class="form-control input-sm"
-									placeholder=" " />
+									readonly="true" value="${obj.email }" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label>传真：</label> <input id="fax" name="fax"
+									readonly="true" value="${obj.fax }" type="text"
+									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -126,7 +134,7 @@ img#sqImg {
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label>地址：</label> <input id="address" name="address"
-									value="${obj.address }" type="text"
+									readonly="true" value="${obj.address }" type="text"
 									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
@@ -192,8 +200,6 @@ img#sqImg {
 			//bootstrapValidator.validate();
 			var sendid = $("#id").val();
 			var cocid = $("#cocid").val();
-			alert(sendid);
-			alert(cocid);
 			//if (bootstrapValidator.isValid()) {
 				$.ajax({
 					type : 'POST',

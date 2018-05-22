@@ -141,6 +141,11 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		addForm.setOpId(opId);
 		addForm.setCreateTime(nowDate);
 		addForm.setUpdateTime(nowDate);
+		String designNum = addForm.getDesignatedNum();
+		if(!Util.isEmpty(designNum)) {
+			addForm.setCdesignNum(designNum);
+		}
+		
 		TCompanyEntity company = this.add(addForm);
 
 		Integer comId = company.getId();//公司id
@@ -337,6 +342,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		String address = updateForm.getAddress();
 		String license = updateForm.getLicense();
 		String seal = updateForm.getSeal();
+		String cdesignNum = updateForm.getDesignatedNum();
 		TCompanyEntity company = dbDao.fetch(TCompanyEntity.class, Cnd.where("id", "=", compId));
 		if (!Util.isEmpty(company)) {
 			company.setComType(comType);
@@ -349,6 +355,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			company.setAddress(address);
 			company.setLicense(license);
 			company.setSeal(seal);
+			company.setCdesignNum(cdesignNum);
 			company.setIsCustomer(IsYesOrNoEnum.NO.intKey());
 			company.setUpdateTime(nowDate);
 			dbDao.update(company);

@@ -139,6 +139,16 @@ public class PcVisaModule {
 	}
 
 	/**
+	 * 图片放大
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object toUpperPhoto(@Param("url") String url) {
+		return url;
+	}
+
+	/**
 	 * 身份证正面上传、扫描
 	 */
 	@At
