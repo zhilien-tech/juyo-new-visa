@@ -315,6 +315,7 @@
                  	async:false,
                  	success: function(data){
                  		//var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
+                 		console.log(data.data);
                  		if(data.data){
                  			var url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
 			        		layer.open({
