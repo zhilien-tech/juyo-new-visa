@@ -713,7 +713,10 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
-			
+			var visatype = $('#visatype').val();
+			if(visatype == 1){
+				$('.alignment').hide();
+			}
 			$('#passportInfo').bootstrapValidator('validate');
 			
 			var remark = $("#visaRemark").val();
@@ -1275,23 +1278,40 @@
 		});
 		$('#visatype').change(function(){
 			var thisval = $(this).val();
+			var visit = $('#isVisit').val();
 			if(thisval != 1){
 				$('#visacounty').show();
 				$('#threefangwen').show();
+				$('#visacounty input').removeClass('btnState-true');
+				if(visit == 1){
+					  $('#threexian').show();
+						$('.alignment').show(); 
+				}
 			}else{
 				$('#visacounty').hide();
 				$('#threefangwen').hide();
+				$('.row body-from-input').hide();
+				$('#threexian').hide();
+				$('.alignment').hide();
+				$('#laststartdate').val('');
+				$('#laststayday').val('');
+				$('#lastreturndate').val('');
 			}
 		});
-
+		
 		$('#isVisit').change(function(){
 			var thisval = $(this).val();
 			if(thisval == 1){
 				$('#threexian').show();
 				$('.alignment').show();
 			}else{
+				$('#threexian input').removeClass('btnState-true');
+				$('#laststartdate').val('');
+				$('#laststayday').val('');
+				$('#lastreturndate').val('');
 				$('#threexian').hide();
 				$('.alignment').hide();
+				
 			}
 		});
 		/* 在日担保人出生日期 */
@@ -1410,6 +1430,19 @@
 				});
 			}
 		});
+		$('#isVisit').change(function(){
+			var isvisit = $('#isVisit').val();
+			
+			if(isvisit == 0 ){
+				$('#threexian input').removeClass('btnState-true');
+				$('#laststartdate').val('');
+				$('#laststayday').val('');
+				$('#lastreturndate').val('');
+			}
+		})
+/* 		$('#visatype').change(function(){
+				$('#threefangwen input').removeClass('btnState-true');
+		}) */
 	</script>
 </body>
 </html>
