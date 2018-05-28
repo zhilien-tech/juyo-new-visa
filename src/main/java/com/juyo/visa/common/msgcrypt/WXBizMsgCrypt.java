@@ -179,8 +179,7 @@ public class WXBizMsgCrypt {
 			int xmlLength = recoverNetworkBytesOrder(networkOrder);
 
 			xmlContent = new String(Arrays.copyOfRange(bytes, 20, 20 + xmlLength), CHARSET);
-			from_appid = new String(Arrays.copyOfRange(bytes, 20 + xmlLength, bytes.length),
-					CHARSET);
+			from_appid = new String(Arrays.copyOfRange(bytes, 20 + xmlLength, bytes.length), CHARSET);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AesException(AesException.IllegalBuffer);
@@ -212,7 +211,7 @@ public class WXBizMsgCrypt {
 	public String encryptMsg(String replyMsg, String timeStamp, String nonce) throws AesException {
 		// 加密
 		String encrypt = encrypt(getRandomStr(), replyMsg);
-		System.out.println("密文为："+encrypt);
+		System.out.println("密文为：" + encrypt);
 
 		// 生成安全签名
 		if (timeStamp == "") {
@@ -243,8 +242,7 @@ public class WXBizMsgCrypt {
 	 * @return 解密后的原文
 	 * @throws AesException 执行失败，请查看该异常的错误码和具体的错误信息
 	 */
-	public String decryptMsg(String msgSignature, String timeStamp, String nonce, String postData)
-			throws AesException {
+	public String decryptMsg(String msgSignature, String timeStamp, String nonce, String postData) throws AesException {
 
 		// 密钥，公众账号的app secret
 		// 提取密文
@@ -275,8 +273,7 @@ public class WXBizMsgCrypt {
 	 * @return 解密之后的echostr
 	 * @throws AesException 执行失败，请查看该异常的错误码和具体的错误信息
 	 */
-	public String verifyUrl(String msgSignature, String timeStamp, String nonce, String echoStr)
-			throws AesException {
+	public String verifyUrl(String msgSignature, String timeStamp, String nonce, String echoStr) throws AesException {
 		String signature = SHA1.getSHA1(token, timeStamp, nonce, echoStr);
 
 		if (!signature.equals(msgSignature)) {
