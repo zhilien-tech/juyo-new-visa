@@ -5,23 +5,15 @@ import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.juyo.visa.common.util.HttpUtil;
-import com.sun.star.util.DateTime;
 import com.uxuexi.core.common.util.DateUtil;
 
-public class MsgCrypt {
-	
-	@Test
-	public void test() {
-		
-	}
-	
+public class MsgCryptUtil {
+
 	/**
 	 * 
 	 * @param encodingAesKey 
@@ -32,14 +24,15 @@ public class MsgCrypt {
 	 * @return 加密的明文
 	 * @throws Exception
 	 */
-	public static String enCryptMsg(String encodingAesKey, String token,String appId, String nonce, String replyMsg) throws Exception{
+	public static String enCryptMsg(String encodingAesKey, String token, String appId, String nonce, String replyMsg)
+			throws Exception {
 		String timestamp = DateUtil.nowDateTimeString();
 		WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
 		String mingwen = pc.encryptMsg(replyMsg, timestamp, nonce);
 		System.out.println("加密后: " + mingwen);
 		return mingwen;
 	}
-	
+
 	/**
 	 * 
 	 * @param encodingAesKey
@@ -50,7 +43,8 @@ public class MsgCrypt {
 	 * @return 解密的明文
 	 * @throws Exception
 	 */
-	public static String deCryptMsg(String encodingAesKey, String token,String appId, String nonce, String cryptMsg) throws Exception{
+	public static String deCryptMsg(String encodingAesKey, String token, String appId, String nonce, String cryptMsg)
+			throws Exception {
 		String timestamp = DateUtil.nowDateTimeString();
 		WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
