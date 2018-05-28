@@ -5,16 +5,23 @@ import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.juyo.visa.common.util.HttpUtil;
 import com.sun.star.util.DateTime;
 import com.uxuexi.core.common.util.DateUtil;
 
 public class MsgCrypt {
-
+	
+	@Test
+	public void test() {
+		
+	}
+	
 	/**
 	 * 
 	 * @param encodingAesKey 
