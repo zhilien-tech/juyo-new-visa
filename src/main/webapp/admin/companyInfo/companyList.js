@@ -33,6 +33,18 @@ new Vue({
 			});
 		},
 	deleteComInfo:function(cocid){
+//		layer.open({
+//			type: 2,
+//			title: false,
+//			closeBtn:false,
+//			fix: false,
+//			maxmin: false,
+//			shadeClose: false,
+//			scrollbar: false,
+//			area: ['900px', '550px'],
+//			content: BASE_PATH + '/admin/companyInfo/deleteSelectedCompany.html?id='+cocid
+//		});
+
 		layer.confirm("您确认要删除吗？", {
 			title:"删除",
 			btn: ["是","否"], //按钮

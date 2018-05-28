@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -803,7 +804,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				String hotelname = (String) record.get("hotelname");
 				if (count > 1) {
 					if (hotelname.equals(prehotelname)) {
-						record.put("hotelname", "同上");
+						
+						record.put("hotelname", "連泊");
 					}
 				}
 				prehotelname = hotelname;
@@ -1481,15 +1483,25 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param orderid
 	 * @return
 	 */
-	public Object sendZhaoBaoError(String data, Integer orderid, HttpSession session, Integer type) {
+	public Object sendZhaoBaoError(HttpServletRequest request, HttpSession session, Integer type) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
 		Map<String, Object> result = Maps.newHashMap();
-		result.put("orderid", orderid);
-		result.put("data", data);
+		String data = request.getParameter("data");
+		String strPtname= "";
+		try {
+			strPtname = new String(data.getBytes("ISO-8859-1"), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String orderid = request.getParameter("orderid");
+		int orderId = Integer.valueOf(orderid).intValue();
+		result.put("orderid", request.getParameter("orderid"));
+		result.put("data", strPtname);
 		result.put("type", type);
 		//变更订单负责人
-		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderId );
 		changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
 		return result;
 	}
@@ -1847,6 +1859,30 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//出行信息
 		TOrderTripJpEntity ordertripjp = dbDao.fetch(TOrderTripJpEntity.class,
 				Cnd.where("orderId", "=", orderjp.getId()));
+		if (Util.isEmpty(ordertripjp.getGoDate())) {
+			resultstrbuf.append("出行时间、");
+		}
+		if (Util.isEmpty(ordertripjp.getReturnDate())) {
+			resultstrbuf.append("返回时间、");
+		}
+		if (Util.isEmpty(ordertripjp.getGoDepartureCity())) {
+			resultstrbuf.append("出发城市(去程)、");
+		}
+		if (Util.isEmpty(ordertripjp.getGoArrivedCity())) {
+			resultstrbuf.append("抵达城市(去程)、");
+		}
+		if (Util.isEmpty(ordertripjp.getGoFlightNum())) {
+			resultstrbuf.append("航班号(去程)、");
+		}
+		if (Util.isEmpty(ordertripjp.getReturnDepartureCity())) {
+			resultstrbuf.append("出发城市(返程)、");
+		}
+		if (Util.isEmpty(ordertripjp.getReturnArrivedCity())) {
+			resultstrbuf.append("返回城市(返程)、");
+		}
+		if (Util.isEmpty(ordertripjp.getReturnFlightNum())) {
+			resultstrbuf.append("航班号(返程)、");
+		}
 		List<TOrderTripMultiJpEntity> mutiltrip = new ArrayList<TOrderTripMultiJpEntity>();
 		if (!Util.isEmpty(ordertripjp)) {
 			mutiltrip = dbDao.query(TOrderTripMultiJpEntity.class, Cnd.where("tripid", "=", ordertripjp.getId()), null);
@@ -1903,10 +1939,17 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			count++;
 		}
 		String resultstr = resultstrbuf.toString();
+		String str = "";
 		if (!Util.isEmpty(resultstr)) {
 			resultstr = resultstr.substring(0, resultstr.length() - 1);
 			resultstr += "不能为空";
-			return JuYouResult.ok(resultstr);
+			try {
+				 str = new String(resultstr.getBytes(),"utf-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return JuYouResult.ok(str);
 		} else {
 			return JuYouResult.ok();
 		}
