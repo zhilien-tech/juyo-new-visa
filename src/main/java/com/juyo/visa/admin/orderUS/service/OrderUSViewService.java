@@ -1139,11 +1139,15 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	public Object autofill(int orderid, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		//改变订单状态
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		if (orderus.getStatus() < USOrderListStatusEnum.AUTOFILL.intKey()) {
 			orderus.setStatus(USOrderListStatusEnum.AUTOFILL.intKey());
 			dbDao.update(orderus);
 		}
+		//调用 优签易接口进行自动填表 TODO
+		
+		//记录日志
 		insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
 		return null;
 	}
