@@ -1,14 +1,7 @@
 package com.juyo.visa.common.msgcrypt;
 
-import java.io.StringReader;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
+import java.security.MessageDigest;
+import java.util.Arrays;
 
 import com.uxuexi.core.common.util.DateUtil;
 
@@ -35,37 +28,68 @@ public class MsgCryptUtil {
 
 	/**
 	 * 
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
 	 * @param encodingAesKey
 	 * @param token
 	 * @param appId
-	 * @param nonce 随机串
-	 * @param cryptMsg 需要解密的字符串
-	 * @return 解密的明文
-	 * @throws Exception
+	 * @param nonce
+	 * @param cryptMsg
+	 * @return
+	 * @throws Exception TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public static String deCryptMsg(String encodingAesKey, String token, String appId, String nonce, String cryptMsg)
 			throws Exception {
-		String timestamp = DateUtil.nowDateTimeString();
 		WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder db = dbf.newDocumentBuilder();
-		StringReader sr = new StringReader(cryptMsg);
-		InputSource is = new InputSource(sr);
-		Document document = db.parse(is);
-
-		Element root = document.getDocumentElement();
-		NodeList nodelist1 = root.getElementsByTagName("Encrypt");
-		NodeList nodelist2 = root.getElementsByTagName("MsgSignature");
-
-		String encrypt = nodelist1.item(0).getTextContent();
-		String msgSignature = nodelist2.item(0).getTextContent();
-
-		String format = "<xml><ToUserName><![CDATA[toUser]]></ToUserName><Encrypt><![CDATA[%1$s]]></Encrypt></xml>";
-		String fromXML = String.format(format, encrypt);
-
-		// 第三方收到公众号平台发送的消息
-		String decryptMsg = pc.decryptMsg(msgSignature, timestamp, nonce, fromXML);
+		String decryptMsg = pc.decrypt(cryptMsg);
 		System.out.println("解密后明文: " + decryptMsg);
 		return decryptMsg;
+	}
+
+	/**
+	 * 生成加密字符串的签名
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param token
+	 * @param timestamp
+	 * @param nonce
+	 * @param encrypt
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public static String getSignature(String token, String timestamp, String nonce, String encrypt) {
+		try {
+			String[] array = new String[] { token, timestamp, nonce, encrypt };
+			Arrays.sort(array);
+			StringBuffer sb = new StringBuffer();
+
+			for (int i = 0; i < 4; ++i) {
+				sb.append(array[i]);
+			}
+
+			String str = sb.toString();
+			MessageDigest md = MessageDigest.getInstance("SHA-1");
+			md.update(str.getBytes());
+			byte[] digest = md.digest();
+			StringBuffer hexstr = new StringBuffer();
+			String shaHex = "";
+
+			for (int i = 0; i < digest.length; ++i) {
+				shaHex = Integer.toHexString(digest[i] & 255);
+				if (shaHex.length() < 2) {
+					hexstr.append(0);
+				}
+
+				hexstr.append(shaHex);
+			}
+
+			return hexstr.toString();
+		} catch (Exception var13) {
+			System.out.println(var13);
+		}
+		return null;
 	}
 }
