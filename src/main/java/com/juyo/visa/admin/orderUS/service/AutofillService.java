@@ -21,9 +21,14 @@ import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
 import com.juyo.visa.entities.TAppStaffBeforeworkEntity;
 import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
+import com.juyo.visa.entities.TAppStaffDriverinfoEntity;
 import com.juyo.visa.entities.TAppStaffFormerspouseEntity;
+import com.juyo.visa.entities.TAppStaffGocountryEntity;
+import com.juyo.visa.entities.TAppStaffGousinfoEntity;
+import com.juyo.visa.entities.TAppStaffImmediaterelativesEntity;
 import com.juyo.visa.entities.TAppStaffLanguageEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
+import com.juyo.visa.entities.TAppStaffOrganizationEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -474,6 +479,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			WorkEducation.put("Education", educations);
 		}
 
+		InforMation.put("WorkEducation", WorkEducation);
+
 		//ExitInfo
 		Map<String, Object> ExitInfo = Maps.newHashMap();
 
@@ -494,6 +501,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(languages)) {
 			ExitInfo.put("Language", languages);
 		}
+
+		InforMation.put("ExitInfo", ExitInfo);
 
 		//TravelInfo
 		Map<String, Object> travelInfo = Maps.newHashMap();
@@ -598,47 +607,428 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		travelInfo.put("Peer", peers);
 
-		if (!Util.isEmpty(info.get("telecodelastname"))) {
-			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
+		InforMation.put("TravelInfo", travelInfo);
+
+		//AmericaInfo
+		Map<String, Object> AmericaInfo = Maps.newHashMap();
+
+		//工作电话,申请地点  没有？？？
+		ArrayList<Object> otherNationalitys = new ArrayList<>();
+		ArrayList<Object> greencards = new ArrayList<>();
+
+		Map<String, Object> nationality = Maps.newHashMap();
+		Map<String, Object> greencard = Maps.newHashMap();
+
+		if (!Util.isEmpty(info.get("nationality"))) {
+			nationality.put("country", info.get("nationality"));
 		} else {
-			NameInfo.put("given_names_code_cn", "");
+			nationality.put("country", "");
 		}
-		if (!Util.isEmpty(info.get("telecodelastname"))) {
-			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
+		nationality.put("passport", "");
+		otherNationalitys.add(nationality);
+
+		AmericaInfo.put("OtherNationality", otherNationalitys);
+
+		if (!Util.isEmpty(info.get("othercountry"))) {
+			greencard.put("country", info.get("othercountry"));
 		} else {
-			NameInfo.put("given_names_code_cn", "");
+			greencard.put("country", "");
 		}
-		if (!Util.isEmpty(info.get("telecodelastname"))) {
-			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
+		greencards.add(greencard);
+
+		AmericaInfo.put("GreenCard", greencards);
+
+		if (!Util.isEmpty(info.get("nationalidentificationnumber"))) {
+			AmericaInfo.put("national_identification_number", info.get("nationalidentificationnumber"));
 		} else {
-			NameInfo.put("given_names_code_cn", "");
+			AmericaInfo.put("national_identification_number", "");
 		}
-		if (!Util.isEmpty(info.get("telecodelastname"))) {
-			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
+		if (!Util.isEmpty(info.get("socialsecuritynumber"))) {
+			AmericaInfo.put("us_social_security_number", info.get("socialsecuritynumber"));
 		} else {
-			NameInfo.put("given_names_code_cn", "");
+			AmericaInfo.put("us_social_security_number", "");
 		}
-		if (!Util.isEmpty(info.get("telecodelastname"))) {
-			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
+		if (!Util.isEmpty(info.get("taxpayernumber"))) {
+			AmericaInfo.put("us_taxpayerid_number", info.get("taxpayernumber"));
 		} else {
-			NameInfo.put("given_names_code_cn", "");
-		}
-		if (!Util.isEmpty(info.get("telecodelastname"))) {
-			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
-		} else {
-			NameInfo.put("given_names_code_cn", "");
-		}
-		if (!Util.isEmpty(info.get("telecodelastname"))) {
-			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
-		} else {
-			NameInfo.put("given_names_code_cn", "");
-		}
-		if (!Util.isEmpty(info.get("telecodelastname"))) {
-			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
-		} else {
-			NameInfo.put("given_names_code_cn", "");
+			AmericaInfo.put("us_taxpayerid_number", "");
 		}
 
+		//RelativeUS
+		Map<String, Object> RelativeUS = Maps.newHashMap();
+
+		//father
+		Map<String, Object> father = Maps.newHashMap();
+
+		if (!Util.isEmpty(info.get("isfatherinus"))) {
+			father.put("in_the_us", info.get("isfatherinus"));
+		}
+		if (!Util.isEmpty(info.get("fatherstatus"))) {
+			father.put("status", info.get("fatherstatus"));
+		}
+
+		RelativeUS.put("Father", father);
+
+		//mother
+		Map<String, Object> mother = Maps.newHashMap();
+
+		if (!Util.isEmpty(info.get("ismotherinus"))) {
+			mother.put("in_the_us", info.get("ismotherinus"));
+		}
+		if (!Util.isEmpty(info.get("motherstatus"))) {
+			mother.put("status", info.get("motherstatus"));
+		}
+
+		RelativeUS.put("Mother", mother);
+
+		if (!Util.isEmpty(info.get("hasotherrelatives"))) {
+			RelativeUS.put("other_in_us", info.get("hasotherrelatives"));
+		}
+
+		//Immediate
+		ArrayList<Object> Immediates = new ArrayList<>();
+
+		List<TAppStaffImmediaterelativesEntity> immediaterelatives = dbDao.query(
+				TAppStaffImmediaterelativesEntity.class, Cnd.where("staffid", "=", staffid), null);
+		for (TAppStaffImmediaterelativesEntity relativesEntity : immediaterelatives) {
+			Map<String, Object> Immediate = Maps.newHashMap();
+			Map<String, Object> nameinfo = Maps.newHashMap();
+			if (!Util.isEmpty(relativesEntity.getRelativesfirstname())) {
+				nameinfo.put("surnames_cn", relativesEntity.getRelativesfirstname());
+			} else {
+				nameinfo.put("surnames_cn", "");
+			}
+			if (!Util.isEmpty(relativesEntity.getRelativesfirstnameen())) {
+				nameinfo.put("surnames_en", relativesEntity.getRelativesfirstnameen());
+			} else {
+				nameinfo.put("surnames_en", "");
+			}
+			if (!Util.isEmpty(relativesEntity.getRelativeslastname())) {
+				nameinfo.put("given_names_cn", relativesEntity.getRelativeslastname());
+			} else {
+				nameinfo.put("given_names_cn", "");
+			}
+			if (!Util.isEmpty(relativesEntity.getRelativesfirstname())) {
+				nameinfo.put("given_names_en", relativesEntity.getRelativeslastname());
+			} else {
+				nameinfo.put("given_names_en", "");
+			}
+			Immediate.put("NameInfo", nameinfo);
+
+			if (!Util.isEmpty(relativesEntity.getRelativesstatus())) {
+				Immediate.put("status", relativesEntity.getRelativesstatus());
+			}
+			if (!Util.isEmpty(relativesEntity.getRelationship())) {
+				Immediate.put("relationship", relativesEntity.getRelationship());
+			}
+
+			Immediates.add(Immediate);
+		}
+
+		RelativeUS.put("Immediate", Immediates);
+
+		AmericaInfo.put("RelativesUS", RelativeUS);
+
+		//ResidentialInfo
+		Map<String, Object> ResidentialInfo = Maps.newHashMap();
+		//在美国地址  没有？？？
+		AmericaInfo.put("ResidentialInfo", ResidentialInfo);
+
+		//Contacts
+		Map<String, Object> Contacts = Maps.newHashMap();
+
+		//contactnameinfo
+		Map<String, Object> contactnameinfo = Maps.newHashMap();
+
+		if (!Util.isEmpty(info.get("firstname"))) {
+			contactnameinfo.put("surnames_cn", info.get("firstname"));
+		} else {
+			contactnameinfo.put("surnames_cn", "");
+		}
+		if (!Util.isEmpty(info.get("firstnameen"))) {
+			contactnameinfo.put("surnames_en", info.get("firstnameen"));
+		} else {
+			contactnameinfo.put("surnames_en", "");
+		}
+		if (!Util.isEmpty(info.get("lastname"))) {
+			contactnameinfo.put("given_names_cn", info.get("lastname"));
+		} else {
+			contactnameinfo.put("given_names_cn", "");
+		}
+		if (!Util.isEmpty(info.get("lastnameen"))) {
+			contactnameinfo.put("given_names_en", info.get("lastnameen"));
+		} else {
+			contactnameinfo.put("given_names_en", "");
+		}
+
+		Contacts.put("NameInfo", contactnameinfo);
+
+		if (!Util.isEmpty(info.get("organizationname"))) {
+			Contacts.put("organization", info.get("organizationname"));
+		} else {
+			Contacts.put("organization", "");
+		}
+		if (!Util.isEmpty(info.get("ralationship"))) {
+			Contacts.put("relationship", info.get("ralationship"));
+		}
+		if (!Util.isEmpty(info.get("telephone"))) {
+			Contacts.put("phone", info.get("telephone"));
+		} else {
+			Contacts.put("phone", "");
+		}
+		if (!Util.isEmpty(info.get("email"))) {
+			Contacts.put("email", info.get("email"));
+		} else {
+			Contacts.put("email", "");
+		}
+
+		//addressinfo
+		Map<String, Object> addressinfo = Maps.newHashMap();
+
+		if (!Util.isEmpty(info.get("address"))) {
+			addressinfo.put("street", info.get("address"));
+		}
+		if (!Util.isEmpty(info.get("city"))) {
+			addressinfo.put("city", info.get("city"));
+		}
+		if (!Util.isEmpty(info.get("state"))) {
+			addressinfo.put("province", info.get("state"));
+		}
+		addressinfo.put("country", "美国");
+		if (!Util.isEmpty(info.get("zipcode"))) {
+			addressinfo.put("zip_code", info.get("zipcode"));
+		} else {
+			addressinfo.put("zip_code", "");
+		}
+
+		Contacts.put("AdderssInfo", addressinfo);
+
+		AmericaInfo.put("Contacts", Contacts);
+
+		//StayCity
+		ArrayList<Object> staycitys = new ArrayList<>();
+
+		List<TAppStaffGocountryEntity> gocountrys = dbDao.query(TAppStaffGocountryEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		for (TAppStaffGocountryEntity gocountryEntity : gocountrys) {
+			Map<String, Object> staycity = Maps.newHashMap();
+			if (!Util.isEmpty(gocountryEntity.getTraveledcountry())) {
+				staycity.put("location", gocountryEntity.getTraveledcountry());
+			} else {
+				staycity.put("location", "");
+			}
+			staycitys.add(staycity);
+		}
+
+		AmericaInfo.put("StayCity", staycitys);
+
+		//ResidenceTime
+		Map<String, Object> ResidenceTime = Maps.newHashMap();
+		//ResidenceTime 没有？？？
+		AmericaInfo.put("ResidenceTime", ResidenceTime);
+
+		//EverGoToAmerica
+		Map<String, Object> EverGoToAmerica = Maps.newHashMap();
+
+		//informationUSVisit
+		ArrayList<Object> informationUSVisits = new ArrayList<>();
+
+		List<TAppStaffGousinfoEntity> gousinfos = dbDao.query(TAppStaffGousinfoEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		for (TAppStaffGousinfoEntity gousinfoEntity : gousinfos) {
+			Map<String, Object> gousinfo = Maps.newHashMap();
+			Map<String, Object> residencetime = Maps.newHashMap();
+			if (!Util.isEmpty(gousinfoEntity.getArrivedate())) {
+				gousinfo.put("date", gousinfoEntity.getArrivedate());
+			}
+			if (!Util.isEmpty(gousinfoEntity.getStaydays())) {
+				residencetime.put("number", gousinfoEntity.getStaydays());
+			}
+			if (!Util.isEmpty(gousinfoEntity.getDateunit())) {
+				residencetime.put("date_type", gousinfoEntity.getDateunit());
+			}
+			gousinfo.put("ResidenceTime", residencetime);
+			informationUSVisits.add(gousinfo);
+		}
+
+		EverGoToAmerica.put("InformationUSVisit", informationUSVisits);
+
+		//USDriverLicens
+		ArrayList<Object> USDriverLicens = new ArrayList<>();
+
+		List<TAppStaffDriverinfoEntity> drivers = dbDao.query(TAppStaffDriverinfoEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		for (TAppStaffDriverinfoEntity driverinfoEntity : drivers) {
+			Map<String, Object> USDriverLicen = Maps.newHashMap();
+			if (!Util.isEmpty(driverinfoEntity.getDriverlicensenumber())) {
+				USDriverLicen.put("number", driverinfoEntity.getDriverlicensenumber());
+			} else {
+				USDriverLicen.put("number", "");
+			}
+			if (!Util.isEmpty(driverinfoEntity.getWitchstateofdriver())) {
+				USDriverLicen.put("state", driverinfoEntity.getWitchstateofdriver());
+			}
+			USDriverLicens.add(USDriverLicen);
+		}
+
+		EverGoToAmerica.put("USDriverLicense", USDriverLicens);
+
+		//LastUSVisa
+		Map<String, Object> LastUSVisa = Maps.newHashMap();
+
+		if (!Util.isEmpty(info.get("issueddate"))) {
+			LastUSVisa.put("date", info.get("issueddate"));
+		}
+		if (!Util.isEmpty(info.get("visanumber"))) {
+			LastUSVisa.put("number", info.get("visanumber"));
+		}
+		if (!Util.isEmpty(info.get("isapplyingsametypevisa"))) {
+			LastUSVisa.put("same_visa", info.get("isapplyingsametypevisa"));
+		}
+		if (!Util.isEmpty(info.get("issamecountry"))) {
+			LastUSVisa.put("same_place", info.get("issamecountry"));
+		}
+		if (!Util.isEmpty(info.get("istenprinted"))) {
+			LastUSVisa.put("finger_fingerprint", info.get("istenprinted"));
+		}
+
+		//LostOrStolen
+		Map<String, Object> LostOrStolen = Maps.newHashMap();
+
+		if (!Util.isEmpty(info.get("lostyear"))) {
+			LostOrStolen.put("year", info.get("lostyear"));
+		}
+		if (!Util.isEmpty(info.get("lostexplain"))) {
+			LostOrStolen.put("explain", info.get("lostexplain"));
+		}
+
+		LastUSVisa.put("LostOrStolen", LostOrStolen);
+
+		if (!Util.isEmpty(info.get("iscancelled"))) {
+			LastUSVisa.put("revoked", info.get("iscancelled"));
+		} else {
+			LastUSVisa.put("revoked", "");
+		}
+
+		EverGoToAmerica.put("LastUSVisa", LastUSVisa);
+
+		AmericaInfo.put("EverGoToAmerica", EverGoToAmerica);
+
+		if (!Util.isEmpty(info.get("isrefused"))) {
+			AmericaInfo.put("refuse_entry", info.get("isrefused"));
+		} else {
+			AmericaInfo.put("refuse_entry", "");
+		}
+		if (!Util.isEmpty(info.get("islegalpermanentresident"))) {
+			AmericaInfo.put("united_states_citizen", info.get("islegalpermanentresident"));
+		} else {
+			AmericaInfo.put("united_states_citizen", "");
+		}
+		if (!Util.isEmpty(info.get("isfiledimmigrantpetition"))) {
+			AmericaInfo.put("apply_for_emigrant", info.get("isfiledimmigrantpetition"));
+		} else {
+			AmericaInfo.put("apply_for_emigrant", "");
+		}
+		AmericaInfo.put("esta", "");
+		AmericaInfo.put("sevis_id", "");
+		AmericaInfo.put("principal_applicant_sevis_id", "");
+		AmericaInfo.put("program_number", "");
+		AmericaInfo.put("school_in_america", "");
+
+		//MailingAddress
+		Map<String, Object> MailingAddress = Maps.newHashMap();
+
+		if (!Util.isEmpty(info.get("address"))) {
+			MailingAddress.put("street", info.get("address"));
+		}
+		if (!Util.isEmpty(info.get("city"))) {
+			MailingAddress.put("city", info.get("city"));
+		}
+		if (!Util.isEmpty(info.get("province"))) {
+			MailingAddress.put("province", info.get("province"));
+		}
+		MailingAddress.put("country", "CHN");
+		MailingAddress.put("zip_code", "");
+
+		AmericaInfo.put("MailingAddress", MailingAddress);
+
+		//PayParty
+		Map<String, Object> PayParty = Maps.newHashMap();
+		//PayParty 没有？？？
+
+		AmericaInfo.put("PayParty", PayParty);
+
+		//Supplement
+		Map<String, Object> Supplement = Maps.newHashMap();
+
+		if (!Util.isEmpty(info.get("clanname"))) {
+			Supplement.put("religion", info.get("clanname"));
+		} else {
+			Supplement.put("religion", "");
+		}
+
+		//VisitedCountry
+		ArrayList<Object> VisitedCountrys = new ArrayList<>();
+
+		List<TAppStaffGocountryEntity> gos = dbDao.query(TAppStaffGocountryEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		for (TAppStaffGocountryEntity gocountryEntity : gos) {
+			Map<String, Object> VisitedCountry = Maps.newHashMap();
+			if (!Util.isEmpty(gocountryEntity.getTraveledcountry())) {
+				VisitedCountry.put("country", gocountryEntity.getTraveledcountry());
+			} else {
+				VisitedCountry.put("country", "");
+			}
+			VisitedCountrys.add(VisitedCountry);
+		}
+
+		Supplement.put("VisitedCountry", VisitedCountrys);
+
+		//Charitable
+		ArrayList<Object> Charitables = new ArrayList<>();
+
+		List<TAppStaffOrganizationEntity> organizations = dbDao.query(TAppStaffOrganizationEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		for (TAppStaffOrganizationEntity organizationEntity : organizations) {
+			Map<String, Object> Charitable = Maps.newHashMap();
+			if (!Util.isEmpty(organizationEntity.getOrganizationname())) {
+				Charitable.put("organization", organizationEntity.getOrganizationname());
+			} else {
+				Charitable.put("organization", "");
+			}
+			Charitables.add(Charitable);
+		}
+
+		Supplement.put("Charitable", Charitables);
+
+		if (!Util.isEmpty(info.get("skillexplain"))) {
+			Supplement.put("specail_skills", info.get("skillexplain"));
+		} else {
+			Supplement.put("specail_skills", "");
+		}
+
+		//MilitaryService
+		Map<String, Object> MilitaryService = Maps.newHashMap();
+		MilitaryService.put("country", "");
+		MilitaryService.put("armed_services", "");
+		MilitaryService.put("level", "");
+		MilitaryService.put("specialty", "");
+		MilitaryService.put("start_date", "");
+		MilitaryService.put("end_date", "");
+
+		Supplement.put("MilitaryService", MilitaryService);
+		Supplement.put("paramilitary", "");
+
+		AmericaInfo.put("Supplement", Supplement);
+
+		//Security
+		Map<String, Object> Security = Maps.newHashMap();
+
+		AmericaInfo.put("Security", Security);
+
+		InforMation.put("AmericaInfo", AmericaInfo);
+
+		result.put("InforMation", InforMation);
 		return result;
 	}
 }
