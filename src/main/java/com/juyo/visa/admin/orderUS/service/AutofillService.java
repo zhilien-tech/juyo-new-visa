@@ -6,6 +6,8 @@
 
 package com.juyo.visa.admin.orderUS.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.nutz.dao.Cnd;
@@ -16,7 +18,11 @@ import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.common.enums.MarryStatusEnum;
+import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
+import com.juyo.visa.entities.TAppStaffBeforeworkEntity;
+import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
 import com.juyo.visa.entities.TAppStaffFormerspouseEntity;
+import com.juyo.visa.entities.TAppStaffLanguageEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.uxuexi.core.common.util.Util;
@@ -306,31 +312,292 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		FamilyInfo.put("SpouseInfo", SpouseInfo);
 
-		if (!Util.isEmpty(info.get("telecodelastname"))) {
-			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
-		} else {
-			NameInfo.put("given_names_code_cn", "");
+		InforMation.put("FamilyInfo", FamilyInfo);
+
+		//WorkEducation
+		Map<String, Object> WorkEducation = Maps.newHashMap();
+
+		if (!Util.isEmpty(info.get("occupation"))) {
+			WorkEducation.put("current_status", info.get("occupation"));
 		}
-		if (!Util.isEmpty(info.get("telecodelastname"))) {
-			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
-		} else {
-			NameInfo.put("given_names_code_cn", "");
+		//请说明  没有
+
+		//Works
+		ArrayList<Object> works = new ArrayList<>();
+
+		//以前的工作
+		List<TAppStaffBeforeworkEntity> beforeWorks = dbDao.query(TAppStaffBeforeworkEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		for (TAppStaffBeforeworkEntity workEntity : beforeWorks) {
+			Map<String, Object> work = Maps.newHashMap();
+			if (!Util.isEmpty(workEntity.getEmployername())) {
+				work.put("unit_name_cn", workEntity.getEmployername());
+			}
+			if (!Util.isEmpty(workEntity.getEmployernameen())) {
+				work.put("unit_name_en", workEntity.getEmployernameen());
+			}
+			if (!Util.isEmpty(workEntity.getEmployertelephone())) {
+				work.put("phone", workEntity.getEmployertelephone());
+			}
+			if (!Util.isEmpty(workEntity.getEmployertelephone())) {
+				work.put("job_title", workEntity.getJobtitle());
+			}
+			if (!Util.isEmpty(workEntity.getPreviousduty())) {
+				work.put("job_description", workEntity.getPreviousduty());
+			}
+			//月收入 没有
+			if (!Util.isEmpty(workEntity.getEmploystartdate())) {
+				work.put("start_date", workEntity.getEmploystartdate());
+			}
+			if (!Util.isEmpty(workEntity.getEmployenddate())) {
+				work.put("end_date", workEntity.getEmployenddate());
+			} else {
+				work.put("end_date", "");
+			}
+
+			//AddressInfo
+			Map<String, Object> addressinfo = Maps.newHashMap();
+			if (!Util.isEmpty(workEntity.getEmployeraddress())) {
+				addressinfo.put("street", workEntity.getEmployeraddress());
+			}
+			if (!Util.isEmpty(workEntity.getEmployeraddress())) {
+				addressinfo.put("city", workEntity.getEmployercity());
+			}
+			if (!Util.isEmpty(workEntity.getEmployeraddress())) {
+				addressinfo.put("province", workEntity.getEmployerprovince());
+			} else {
+				addressinfo.put("province", "");
+			}
+			if (!Util.isEmpty(workEntity.getEmployeraddress())) {
+				addressinfo.put("country", workEntity.getEmployercountry());
+			} else {
+				addressinfo.put("country", "");
+			}
+			if (!Util.isEmpty(workEntity.getEmployeraddress())) {
+				addressinfo.put("zip_code", workEntity.getEmployerzipcode());
+			} else {
+				addressinfo.put("zip_code", "");
+			}
+
+			if (!Util.isEmpty(addressinfo)) {
+				work.put("AdderssInfo", addressinfo);
+			}
+
+			//directorsname
+			Map<String, Object> directorsname = Maps.newHashMap();
+
+			if (!Util.isEmpty(workEntity.getSupervisorfirstname())) {
+				directorsname.put("surnames_cn", workEntity.getSupervisorfirstname());
+			} else {
+				directorsname.put("surnames_cn", "");
+			}
+			if (!Util.isEmpty(workEntity.getSupervisorfirstnameen())) {
+				directorsname.put("surnames_en", workEntity.getSupervisorfirstnameen());
+			} else {
+				directorsname.put("surnames_en", "");
+			}
+			if (!Util.isEmpty(workEntity.getSupervisorlastname())) {
+				directorsname.put("given_names_cn", workEntity.getSupervisorlastname());
+			} else {
+				directorsname.put("given_names_cn", "");
+			}
+			if (!Util.isEmpty(workEntity.getSupervisorlastnameen())) {
+				directorsname.put("given_names_en", workEntity.getSupervisorlastnameen());
+			} else {
+				directorsname.put("given_names_en", "");
+			}
+
+			if (!Util.isEmpty(directorsname)) {
+				work.put("DirectorsName", directorsname);
+			}
+			works.add(work);
 		}
-		if (!Util.isEmpty(info.get("telecodelastname"))) {
-			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
-		} else {
-			NameInfo.put("given_names_code_cn", "");
+
+		if (!Util.isEmpty(works)) {
+			WorkEducation.put("Works", works);
 		}
-		if (!Util.isEmpty(info.get("telecodelastname"))) {
-			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
-		} else {
-			NameInfo.put("given_names_code_cn", "");
+
+		//Educations
+		ArrayList<Object> educations = new ArrayList<>();
+
+		//以前的教育信息
+		List<TAppStaffBeforeeducationEntity> beforeeducations = dbDao.query(TAppStaffBeforeeducationEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		for (TAppStaffBeforeeducationEntity educationEntity : beforeeducations) {
+			Map<String, Object> education = Maps.newHashMap();
+			if (!Util.isEmpty(educationEntity.getInstitution())) {
+				education.put("unit_name_cn", educationEntity.getInstitution());
+			}
+			if (!Util.isEmpty(educationEntity.getInstitutionen())) {
+				education.put("unit_name_en", educationEntity.getInstitutionen());
+			}
+			if (!Util.isEmpty(educationEntity.getCourse())) {
+				education.put("major", educationEntity.getCourse());
+			}
+			if (!Util.isEmpty(educationEntity.getCoursestartdate())) {
+				education.put("start_date", educationEntity.getCoursestartdate());
+			}
+			if (!Util.isEmpty(educationEntity.getCourseenddate())) {
+				education.put("end_date", educationEntity.getCourseenddate());
+			}
+
+			//addressinfo
+			Map<String, Object> addressinfo = Maps.newHashMap();
+			if (!Util.isEmpty(educationEntity.getInstitutionaddress())) {
+				addressinfo.put("street", educationEntity.getInstitutionaddress());
+			}
+			if (!Util.isEmpty(educationEntity.getInstitutioncity())) {
+				addressinfo.put("city", educationEntity.getInstitutioncity());
+			}
+			if (!Util.isEmpty(educationEntity.getInstitutionprovince())) {
+				addressinfo.put("province", educationEntity.getInstitutionprovince());
+			} else {
+				addressinfo.put("province", "");
+			}
+			if (!Util.isEmpty(educationEntity.getInstitutioncountry())) {
+				addressinfo.put("country", educationEntity.getInstitutioncountry());
+			}
+			if (!Util.isEmpty(educationEntity.getInstitutionzipcode())) {
+				addressinfo.put("zip_code", educationEntity.getInstitutionzipcode());
+			} else {
+				addressinfo.put("zip_code", "");
+			}
+
+			if (!Util.isEmpty(addressinfo)) {
+				education.put("AdderssInfo", addressinfo);
+			}
+
+			educations.add(education);
 		}
-		if (!Util.isEmpty(info.get("telecodelastname"))) {
-			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
-		} else {
-			NameInfo.put("given_names_code_cn", "");
+
+		if (!Util.isEmpty(educations)) {
+			WorkEducation.put("Education", educations);
 		}
+
+		//ExitInfo
+		Map<String, Object> ExitInfo = Maps.newHashMap();
+
+		//oldpassport 没有
+
+		//langeuages
+		ArrayList<Object> languages = new ArrayList<>();
+		List<TAppStaffLanguageEntity> beforelanguages = dbDao.query(TAppStaffLanguageEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		for (TAppStaffLanguageEntity languageEntity : beforelanguages) {
+			Map<String, Object> language = Maps.newHashMap();
+			if (!Util.isEmpty(languageEntity.getLanguagename())) {
+				language.put("name", languageEntity.getLanguagename());
+			}
+			languages.add(language);
+		}
+
+		if (!Util.isEmpty(languages)) {
+			ExitInfo.put("Language", languages);
+		}
+
+		//TravelInfo
+		Map<String, Object> travelInfo = Maps.newHashMap();
+		if (!Util.isEmpty(info.get("goFlightNum"))) {
+			travelInfo.put("airways", info.get("goFlightNum"));
+		} else {
+			travelInfo.put("airways", "");
+		}
+		if (!Util.isEmpty(info.get("travelpurpose"))) {
+			travelInfo.put("purpose", info.get("travelpurpose"));
+		}
+		//目的说明  没有？？？
+		travelInfo.put("go_country", "美国");
+		if (!Util.isEmpty(info.get("goArrivedCity"))) {
+			travelInfo.put("in_street", info.get("goArrivedCity"));
+		}
+		if (!Util.isEmpty(info.get("returnDepartureCity"))) {
+			travelInfo.put("leave_street", info.get("returnDepartureCity"));
+		}
+		travelInfo.put("first_country", "美国");
+		if (!Util.isEmpty(info.get("arrivedate"))) {
+			travelInfo.put("arrival_date", info.get("arrivedate"));
+		}
+		if (!Util.isEmpty(info.get("leavedate"))) {
+			travelInfo.put("leave_date", info.get("leavedate"));
+		} else {
+			travelInfo.put("leave_date", "");
+		}
+		if (!Util.isEmpty(info.get("returnFlightNum"))) {
+			travelInfo.put("leave_airways", info.get("returnFlightNum"));
+		} else {
+			travelInfo.put("leave_airways", "");
+		}
+		if (!Util.isEmpty(info.get("groupname"))) {
+			travelInfo.put("travel_agency", info.get("groupname"));
+		}
+
+		//passport
+		Map<String, Object> passport = Maps.newHashMap();
+
+		if (!Util.isEmpty(info.get("issuedplace"))) {//签发机构？？？
+			passport.put("country", info.get("issuedplace"));
+		}
+		if (!Util.isEmpty(info.get("type"))) {
+			passport.put("passport_type", info.get("type"));
+		}
+		if (!Util.isEmpty(info.get("passport"))) {
+			passport.put("passport_no", info.get("passport"));
+		}
+		if (!Util.isEmpty(info.get("issueddate"))) {
+			passport.put("issuance_date", info.get("issueddate"));
+		}
+		if (!Util.isEmpty(info.get("validenddate"))) {
+			passport.put("expiration_date", info.get("validenddate"));
+		}
+
+		//passportissuance
+		Map<String, Object> passportissuance = Maps.newHashMap();//没有 ???
+
+		passport.put("PassportIssuance", passportissuance);
+
+		travelInfo.put("Passport", passport);
+
+		//peer
+		ArrayList<Object> peers = new ArrayList<>();
+
+		List<TAppStaffCompanioninfoEntity> companions = dbDao.query(TAppStaffCompanioninfoEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		for (TAppStaffCompanioninfoEntity companioninfoEntity : companions) {
+			Map<String, Object> peer = Maps.newHashMap();
+			Map<String, Object> nameinfo = Maps.newHashMap();
+			if (!Util.isEmpty(companioninfoEntity.getRelationship())) {
+				peer.put("relationship", companioninfoEntity.getRelationship());
+			}
+			peer.put("date_of_birth", "");
+			if (!Util.isEmpty(companioninfoEntity.getFirstname())) {
+				nameinfo.put("surnames_cn", companioninfoEntity.getFirstname());
+			} else {
+				nameinfo.put("surnames_cn", "");
+			}
+			if (!Util.isEmpty(companioninfoEntity.getFirstnameen())) {
+				nameinfo.put("surnames_en", companioninfoEntity.getFirstnameen());
+			} else {
+				nameinfo.put("surnames_en", "");
+			}
+			if (!Util.isEmpty(companioninfoEntity.getLastname())) {
+				nameinfo.put("given_names_cn", companioninfoEntity.getLastname());
+			} else {
+				nameinfo.put("given_names_cn", "");
+			}
+			if (!Util.isEmpty(companioninfoEntity.getLastnameen())) {
+				nameinfo.put("given_names_en", companioninfoEntity.getLastnameen());
+			} else {
+				nameinfo.put("given_names_en", "");
+			}
+
+			peer.put("NameInfo", nameinfo);
+
+			peers.add(peer);
+
+		}
+
+		travelInfo.put("Peer", peers);
+
 		if (!Util.isEmpty(info.get("telecodelastname"))) {
 			NameInfo.put("given_names_code_cn", info.get("telecodelastname"));
 		} else {
