@@ -6,6 +6,7 @@
 
 package com.juyo.visa.admin.orderUS.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,6 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Maps;
-import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
 import com.juyo.visa.entities.TAppStaffBeforeworkEntity;
 import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
@@ -29,6 +29,7 @@ import com.juyo.visa.entities.TAppStaffImmediaterelativesEntity;
 import com.juyo.visa.entities.TAppStaffLanguageEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffOrganizationEntity;
+import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -36,8 +37,10 @@ import com.uxuexi.core.web.base.service.BaseService;
 @IocBean
 public class AutofillService extends BaseService<TOrderUsEntity> {
 
-	public Object getData(int orderid) {
+	public Map<String, Object> getData(int orderid) {
 		Map<String, Object> result = Maps.newHashMap();
+		String errorMsg = "";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		TAppStaffOrderUsEntity stafforderus = dbDao.fetch(TAppStaffOrderUsEntity.class,
 				Cnd.where("orderid", "=", orderid));
 		Integer staffid = stafforderus.getStaffid();
@@ -54,28 +57,54 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//BaseInfo
 		Map<String, Object> BaseInfo = Maps.newHashMap();
 		if (!Util.isEmpty(info.get("sex"))) {
-			BaseInfo.put("sex", info.get("sex"));
+			if (Util.eq("男", info.get("sex"))) {
+				BaseInfo.put("sex", 0);
+			} else {
+				BaseInfo.put("sex", 1);
+			}
 		}
 		if (!Util.isEmpty(info.get("birthday"))) {
-			BaseInfo.put("data_of_birth", info.get("birthday"));
+			BaseInfo.put("data_of_birth", sdf.format(info.get("birthday")));
+		} else {
+			errorMsg += "出生日期,";
 		}
-		BaseInfo.put("nationality", "CHN");
+		BaseInfo.put("nationality", "CHIN");
 		if (!Util.isEmpty(info.get("cardId"))) {
 			BaseInfo.put("ic", info.get("cardId"));
+		} else {
+			errorMsg += "身份证号,";
 		}
 		if (!Util.isEmpty(info.get("telephone"))) {
 			BaseInfo.put("phone", info.get("telephone"));
+		} else {
+			errorMsg += "手机号,";
 		}
 		if (!Util.isEmpty(info.get("email"))) {
 			BaseInfo.put("email", info.get("email"));
+		} else {
+			errorMsg += "电子邮箱,";
 		}
 		if (!Util.isEmpty(info.get("marrystatus"))) {
 			int status = (int) info.get("marrystatus");
-			for (MarryStatusEnum marrystatus : MarryStatusEnum.values()) {
+			if (status == 1) {
+				BaseInfo.put("Marriage", "M");
+			}
+			if (status == 2) {
+				BaseInfo.put("Marriage", "D");
+			}
+			if (status == 3) {
+				BaseInfo.put("Marriage", "W");
+			}
+			if (status == 4) {
+				BaseInfo.put("Marriage", "S");
+			}
+			/*for (MarryStatusEnum marrystatus : MarryStatusEnum.values()) {
 				if (status == marrystatus.intKey()) {
 					BaseInfo.put("Marriage", marrystatus.value());
 				}
-			}
+			}*/
+		} else {
+			errorMsg += "婚姻状况,";
 		}
 
 		//NameInfo
@@ -92,15 +121,23 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		}
 		if (!Util.isEmpty(info.get("firstname"))) {
 			NameInfo.put("surnames_cn", info.get("firstname"));
+		} else {
+			errorMsg += "姓中文,";
 		}
 		if (!Util.isEmpty(info.get("firstnameen"))) {
 			NameInfo.put("surnames_en", info.get("firstnameen"));
+		} else {
+			errorMsg += "姓英文,";
 		}
 		if (!Util.isEmpty(info.get("lastname"))) {
 			NameInfo.put("given_names_cn", info.get("lastname"));
+		} else {
+			errorMsg += "名中文";
 		}
 		if (!Util.isEmpty(info.get("lastnameen"))) {
 			NameInfo.put("given_names_en", info.get("lastnameen"));
+		} else {
+			errorMsg += "名英文";
 		}
 		if (!Util.isEmpty(info.get("otherfirstname"))) {
 			NameInfo.put("old_surnames_cn", info.get("otherfirstname"));
@@ -129,11 +166,15 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> BirthplaceInfo = Maps.newHashMap();
 		if (!Util.isEmpty(info.get("cardcity"))) {
 			BirthplaceInfo.put("city", info.get("cardcity"));
+		} else {
+			errorMsg += "出生城市,";
 		}
 		if (!Util.isEmpty(info.get("cardprovince"))) {
 			BirthplaceInfo.put("province", info.get("cardprovince"));
+		} else {
+			errorMsg += "出生省份,";
 		}
-		BirthplaceInfo.put("country", "CHN");
+		BirthplaceInfo.put("country", "CHIN");
 
 		BaseInfo.put("BirthplaceInfo", BirthplaceInfo);
 
@@ -142,20 +183,27 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//FamilyInfo
 		Map<String, Object> FamilyInfo = Maps.newHashMap();
 		//备用电话  不清楚
-
+		FamilyInfo.put("family_phone", "");
 		//AddressInfo
 		Map<String, Object> AddressInfo = Maps.newHashMap();
 		if (!Util.isEmpty(info.get("address"))) {
 			AddressInfo.put("street", info.get("address"));
+		} else {
+			errorMsg += "街道,";
 		}
 		if (!Util.isEmpty(info.get("city"))) {
 			AddressInfo.put("city", info.get("city"));
+		} else {
+			errorMsg += "城市,";
 		}
 		if (!Util.isEmpty(info.get("province"))) {
 			AddressInfo.put("province", info.get("province"));
+		} else {
+			errorMsg += "省份,";
 		}
-		AddressInfo.put("country", "CHN");
+		AddressInfo.put("country", "CHIN");
 		//邮政编码  没有
+		AddressInfo.put("zip_code", "");
 		FamilyInfo.put("AdderssInfo", AddressInfo);
 
 		//FatherInfo
@@ -187,7 +235,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		FatherInfo.put("NameInfo", FatherNameInfo);
 
 		if (!Util.isEmpty(info.get("fatherbirthday"))) {
-			FatherInfo.put("date_of_birth", info.get("fatherbirthday"));
+			FatherInfo.put("date_of_birth", sdf.format(info.get("fatherbirthday")));
 		} else {
 			FatherInfo.put("date_of_birth", "");
 		}
@@ -223,7 +271,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		MotherInfo.put("NameInfo", MotherNameInfo);
 
 		if (!Util.isEmpty(info.get("motherbirthday"))) {
-			MotherInfo.put("date_of_birth", info.get("motherbirthday"));
+			MotherInfo.put("date_of_birth", sdf.format(info.get("motherbirthday")));
 		} else {
 			MotherInfo.put("date_of_birth", "");
 		}
@@ -237,56 +285,74 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> SpouseNameInfo = Maps.newHashMap();
 		if (!Util.isEmpty(info.get("spousefirstname"))) {
 			SpouseNameInfo.put("surnames_cn", info.get("spousefirstname"));
+		} else {
+			errorMsg += "配偶姓中文,";
 		}
 		if (!Util.isEmpty(info.get("spousefirstnameen"))) {
 			SpouseNameInfo.put("surnames_en", info.get("spousefirstnameen"));
+		} else {
+			errorMsg += "配偶姓英文,";
 		}
 		if (!Util.isEmpty(info.get("spouselastname"))) {
 			SpouseNameInfo.put("given_names_cn", info.get("spouselastname"));
+		} else {
+			errorMsg += "配偶名中文,";
 		}
 		if (!Util.isEmpty(info.get("spouselastnameen"))) {
 			SpouseNameInfo.put("given_names_en", info.get("spouselastnameen"));
+		} else {
+			errorMsg += "配偶名英文,";
 		}
 
 		SpouseInfo.put("NameInfo", SpouseNameInfo);
 
 		//BirthplaceInfo
 		Map<String, Object> SpouseBirthplaceInfo = Maps.newHashMap();
+
 		if (!Util.isEmpty(info.get("spousecity"))) {
 			SpouseBirthplaceInfo.put("city", info.get("spousecity"));
 		} else {
 			SpouseBirthplaceInfo.put("city", "");
 		}
 		//省份  没有
+		SpouseBirthplaceInfo.put("province", "");
 		if (!Util.isEmpty(info.get("spousecountry"))) {
-			SpouseBirthplaceInfo.put("country", info.get("spousecountry"));
+			String country = getCountry((int) info.get("spousecountry"));
+			SpouseBirthplaceInfo.put("country", country);
 		} else {
-			SpouseBirthplaceInfo.put("country", "");
+			errorMsg += "配偶出生国家,";
 		}
 
 		SpouseInfo.put("BirthplaceInfo", SpouseBirthplaceInfo);
 
 		if (!Util.isEmpty(info.get("spousebirthday"))) {
-			SpouseInfo.put("date_of_birth", info.get("spousebirthday"));
+			SpouseInfo.put("date_of_birth", sdf.format(info.get("spousebirthday")));
+		} else {
+			errorMsg += "配偶出生日期,";
 		}
 		if (!Util.isEmpty(info.get("spousenationality"))) {
-			SpouseInfo.put("nationality", info.get("spousenationality"));
+			String country = getCountry((int) info.get("spousenationality"));
+			SpouseInfo.put("nationality", country);
+		} else {
+			errorMsg += "配偶国籍,";
 		}
 		//查询前妻数据
 		TAppStaffFormerspouseEntity formerspouse = dbDao.fetch(TAppStaffFormerspouseEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		if (!Util.isEmpty(formerspouse) && !Util.isEmpty(formerspouse.getMarrieddate())) {
-			SpouseInfo.put("start_date", formerspouse.getMarrieddate());
+			SpouseInfo.put("start_date", sdf.format(formerspouse.getMarrieddate()));
 		} else {
 			SpouseInfo.put("start_date", "");
 		}
 		if (!Util.isEmpty(formerspouse) && !Util.isEmpty(formerspouse.getDivorcedate())) {
-			SpouseInfo.put("end_date", formerspouse.getDivorcedate());
+			SpouseInfo.put("end_date", sdf.format(formerspouse.getDivorcedate()));
 		} else {
 			SpouseInfo.put("end_date", "");
 		}
 		if (!Util.isEmpty(formerspouse) && !Util.isEmpty(formerspouse.getDivorce())) {
 			SpouseInfo.put("divorced_country", formerspouse.getDivorce());
+		} else {
+
 		}
 		if (!Util.isEmpty(formerspouse) && !Util.isEmpty(formerspouse.getDivorceexplain())) {
 			SpouseInfo.put("divorced_reason", formerspouse.getDivorceexplain());
@@ -1030,5 +1096,10 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		result.put("InforMation", InforMation);
 		return result;
+	}
+
+	public String getCountry(int id) {
+		TCountryRegionEntity countryRegion = dbDao.fetch(TCountryRegionEntity.class, id);
+		return countryRegion.getInternationalcode();
 	}
 }

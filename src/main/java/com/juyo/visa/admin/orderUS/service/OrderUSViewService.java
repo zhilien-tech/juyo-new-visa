@@ -73,6 +73,9 @@ import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
+import com.juyo.visa.common.msgcrypt.AesException;
+import com.juyo.visa.common.msgcrypt.MsgCryptUtil;
+import com.juyo.visa.common.msgcrypt.WXBizMsgCrypt;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.ocr.Input;
 import com.juyo.visa.common.ocr.RecognizeData;
@@ -107,6 +110,7 @@ import com.juyo.visa.forms.TAppStaffVisaUsUpdateForm;
 import com.juyo.visa.websocket.USListWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.page.OffsetPager;
@@ -128,6 +132,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	@Inject
 	private RedisDao redisDao;
+
+	@Inject
+	private AutofillService autofillService;
 
 	@Inject
 	private MailService mailService;
@@ -1146,10 +1153,91 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			dbDao.update(orderus);
 		}
 		//调用 优签易接口进行自动填表 TODO
-		
+		Map<String, Object> result = autofillService.getData(orderid);
+		String aacode = toGetAAcode(result);
 		//记录日志
 		insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
 		return null;
+	}
+
+	public String toGetAAcode(Object result) {
+		String encodingAesKey = "jllZTM3ZWEzZGI1NGQ5NGI3MTc4NDNhNzAzODE5NTYt";
+		String token = "ODBiOGIxNDY4NjdlMzc2Yg==";
+		String timestamp = getTimeStamp();
+		String nonce = "378224ea";
+		String appId = "jhhMThiZjM1ZGQ2Y";
+
+		String jsonResult = JsonUtil.toJson(result);
+
+		//获取签名
+		String signature = MsgCryptUtil.getSignature(token, timestamp, nonce, jsonResult);
+		System.out.println("签名：" + signature);
+
+		//加密
+		WXBizMsgCrypt pc;
+		String mingwen = "";
+		String aacode = "";
+		try {
+			pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
+			mingwen = pc.encryptMsg(jsonResult, timestamp, nonce);
+			System.out.println("加密后: " + mingwen);
+
+			Map<String, String> prams = new HashMap<String, String>();
+			prams.put("nonce", nonce);
+			prams.put("timeStamp", timestamp);
+			prams.put("msg_signature", signature);
+			prams.put("encrypt", mingwen);
+			String json = JsonUtil.toJson(prams);
+			String returnResult = toPostRequest(json);
+
+			JSONObject resultObj = new JSONObject(returnResult);
+			String encrypt = (String) resultObj.get("encrypt");
+			System.out.println(encrypt);
+
+			aacode = pc.decrypt(encrypt);
+			System.out.println("解密后明文: " + aacode);
+		} catch (AesException e) {
+			e.printStackTrace();
+		}
+
+		return aacode;
+	}
+
+	/**
+	 * 获取时间戳方法
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public String getTimeStamp() {
+		Date date = new Date();
+		//样式：yyyy年MM月dd日HH时mm分ss秒SSS毫秒
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMddHHmmss");
+		String timeStampStr = simpleDateFormat.format(date);
+		return timeStampStr;
+	}
+
+	public String toPostRequest(String json) {
+		String host = "https://open.visae.net";
+		String path = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
+		String method = "POST";
+		String entityStr = "";
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Content-Type", "application/json; charset=UTF-8");
+		Map<String, String> querys = new HashMap<String, String>();
+		HttpResponse response;
+		try {
+			response = HttpUtils.doPost(host, path, method, headers, querys, json);
+			entityStr = EntityUtils.toString(response.getEntity());
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		return entityStr;
 	}
 
 	/**
