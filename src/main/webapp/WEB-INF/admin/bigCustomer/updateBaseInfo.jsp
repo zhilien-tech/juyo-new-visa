@@ -399,8 +399,8 @@
 							</label>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="provinceDiv">
-									<input type="hidden" name="cardprovince" id="cardProvince" />
-									<input type="hidden" name="cardcity" id="cardCity" />
+									<input type="hidden" name="cardprovinceen" id="cardProvinceen" />
+									<input type="hidden" name="cardcityen" id="cardCityen" />
 									<input type="hidden" id="sameAddress" value=""/>
 									<input id="provinceen" name="provinceen" autocomplete="off" type="text" class="form-control input-sm" placeholder="省" value="${obj.applicant.provinceen }" />
 								</div>

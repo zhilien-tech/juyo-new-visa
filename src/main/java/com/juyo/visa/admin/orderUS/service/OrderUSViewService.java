@@ -1154,7 +1154,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 		//调用 优签易接口进行自动填表 TODO
 		Map<String, Object> result = autofillService.getData(orderid);
-		String aacode = toGetAAcode(result);
+		if (!Util.isEmpty(result)) {
+			String aacode = toGetAAcode(result.get("resultData"));
+		}
 		//记录日志
 		insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
 		return null;
