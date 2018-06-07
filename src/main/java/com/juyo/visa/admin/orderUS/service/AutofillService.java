@@ -18,7 +18,6 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Maps;
-import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
 import com.juyo.visa.entities.TAppStaffBeforeworkEntity;
 import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
@@ -30,8 +29,10 @@ import com.juyo.visa.entities.TAppStaffImmediaterelativesEntity;
 import com.juyo.visa.entities.TAppStaffLanguageEntity;
 import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffOrganizationEntity;
+import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
+import com.juyo.visa.entities.TUsStateEntity;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -466,10 +467,10 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> WorkEducation = Maps.newHashMap();
 
 		//职业(签证信息)
-		if (!Util.isEmpty(info.get("occupation"))) {
-			WorkEducation.put("current_status", info.get("occupation"));
+		if (!Util.isEmpty(info.get("occupation")) && !Util.eq(0, info.get("occupation"))) {
+			int status = (int) info.get("occupation");
+			WorkEducation.put("current_status", getOccupation(status));
 		}
-		//????????????????
 		//请说明  没有
 		WorkEducation.put("describe", "");
 		//Works
@@ -708,7 +709,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		}
 		//出行目的(订单详情)
 		if (!Util.isEmpty(info.get("travelpurpose"))) {
-			travelInfo.put("purpose", info.get("travelpurpose"));
+			String purpose = (String) info.get("travelpurpose");
+			travelInfo.put("purpose", getPurpose(purpose));
 		} else {
 			errorMsg += "出行目的,";
 		}
@@ -717,13 +719,15 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		travelInfo.put("go_country", "USA");
 		//抵达城市(订单详情)
 		if (!Util.isEmpty(info.get("goArrivedCity"))) {
-			travelInfo.put("in_street", info.get("goArrivedCity"));
+			int cityid = (int) info.get("goArrivedCity");
+			travelInfo.put("in_street", getCityName(cityid));
 		} else {
 			errorMsg += "抵达城市,";
 		}
 		//出发城市，第二行(订单详情)
 		if (!Util.isEmpty(info.get("returnDepartureCity"))) {
-			travelInfo.put("leave_street", info.get("returnDepartureCity"));
+			int cityid = (int) info.get("returnDepartureCity");
+			travelInfo.put("leave_street", getCityName(cityid));
 		} else {
 			errorMsg += "离开城市,";
 		}
@@ -949,9 +953,12 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		//父亲是否在美国(签证信息)
 		if (!Util.isEmpty(info.get("isfatherinus"))) {
-			father.put("in_the_us", info.get("isfatherinus"));
-		} else {
-			errorMsg += "父亲是否在美国,";
+			int status = (int) info.get("isfatherinus");
+			if (status == 1) {
+				father.put("in_the_us", 1);
+			} else {
+				father.put("in_the_us", 0);
+			}
 		}
 		//父亲在美国的身份(基本信息)
 		if (!Util.isEmpty(info.get("fatherstatus"))) {
@@ -979,9 +986,12 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		//母亲是否在美国(签证信息)
 		if (!Util.isEmpty(info.get("ismotherinus"))) {
-			mother.put("in_the_us", info.get("ismotherinus"));
-		} else {
-			errorMsg += "母亲是否在美国,";
+			int status = (int) info.get("ismotherinus");
+			if (status == 1) {
+				mother.put("in_the_us", 1);
+			} else {
+				mother.put("in_the_us", 0);
+			}
 		}
 		//母亲在美国的身份(签证信息)
 		if (!Util.isEmpty(info.get("motherstatus"))) {
@@ -1006,7 +1016,12 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		//是否有其他在美亲属(签证信息)
 		if (!Util.isEmpty(info.get("hasotherrelatives"))) {
-			RelativeUS.put("other_in_us", info.get("hasotherrelatives"));
+			int status = (int) info.get("hasotherrelatives");
+			if (status == 1) {
+				RelativeUS.put("other_in_us", true);
+			} else {
+				RelativeUS.put("other_in_us", false);
+			}
 		} else {
 			errorMsg += "是否有其他在美亲属,";
 		}
@@ -1197,18 +1212,11 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			errorMsg += "城市,";
 		}
 		//省份(签证信息)
-		if (!Util.isEmpty(info.get("tascstate"))) {
+		if (!Util.isEmpty(info.get("tascstate")) && !Util.eq(0, info.get("tascstate"))) {
 			int state = (int) info.get("tascstate");
-			String stateStr = "";
-			for (VisaUSStatesEnum USstate : VisaUSStatesEnum.values()) {
-				if (state == USstate.intKey()) {
-					stateStr = USstate.value();
-				}
-			}
-			addressinfo.put("province", stateStr);
-			//==========
+			addressinfo.put("province", getStatecode(state));
 		} else {
-			errorMsg += "省份,";
+			addressinfo.put("province", "");
 		}
 		addressinfo.put("country", "USA");
 		//邮编(签证信息)
@@ -1261,7 +1269,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			Map<String, Object> residencetime = Maps.newHashMap();
 			//抵达日期(签证信息)
 			if (!Util.isEmpty(gousinfoEntity.getArrivedate())) {
-				gousinfo.put("date", gousinfoEntity.getArrivedate());
+				gousinfo.put("date", sdf.format(gousinfoEntity.getArrivedate()));
 			} else {
 				errorMsg += "抵达日期,";
 			}
@@ -1313,10 +1321,11 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				USDriverLicen.put("number", "");
 			}
 			//哪个州的驾照(签证信息)
-			if (!Util.isEmpty(driverinfoEntity.getWitchstateofdriver())) {
-				USDriverLicen.put("state", driverinfoEntity.getWitchstateofdriver());
+			if (!Util.isEmpty(driverinfoEntity.getWitchstateofdriver())
+					&& (driverinfoEntity.getWitchstateofdriver() != 0)) {
+				USDriverLicen.put("state", getStatecode(driverinfoEntity.getWitchstateofdriver()));
 			} else {
-				errorMsg += "驾照所在州,";
+				USDriverLicen.put("state", "");
 			}
 			//缺少美国每个州的表==========
 			USDriverLicens.add(USDriverLicen);
@@ -1358,7 +1367,6 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		} else {
 			LastUSVisa.put("finger_fingerprint", 0);
 		}
-		//=========1是采集过，2是没采集过
 
 		//LostOrStolen
 		Map<String, Object> LostOrStolen = Maps.newHashMap();
@@ -1416,7 +1424,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//MailingAddress
 		Map<String, Object> MailingAddress = Maps.newHashMap();
 
-		if (!Util.isEmpty(info.get("address"))) {
+		/*if (!Util.isEmpty(info.get("address"))) {
 			MailingAddress.put("street", info.get("address"));
 		}
 		if (!Util.isEmpty(info.get("city"))) {
@@ -1424,7 +1432,10 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		}
 		if (!Util.isEmpty(info.get("province"))) {
 			MailingAddress.put("province", info.get("province"));
-		}
+		}*/
+		MailingAddress.put("street", "CHN");
+		MailingAddress.put("city", "CHN");
+		MailingAddress.put("province", "CHN");
 		MailingAddress.put("country", "CHN");
 		MailingAddress.put("zip_code", "");
 
@@ -1486,9 +1497,9 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		//特殊技能说明(签证信息)
 		if (!Util.isEmpty(info.get("skillexplain"))) {
-			Supplement.put("specail_skills", info.get("skillexplain"));
+			Supplement.put("special_skills", info.get("skillexplain"));
 		} else {
-			Supplement.put("specail_skills", "");
+			Supplement.put("special_skills", "");
 		}
 
 		//MilitaryService
@@ -1528,5 +1539,103 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 	public String getCountry(int id) {
 		TCountryRegionEntity countryRegion = dbDao.fetch(TCountryRegionEntity.class, id);
 		return countryRegion.getInternationalcode();
+	}
+
+	//出行信息  根据城市id查询城市名
+	public String getCityName(int id) {
+		TCityEntity gocity = dbDao.fetch(TCityEntity.class, Cnd.where("id", "=", id));
+		return gocity.getCity();
+	}
+
+	//根据id查询美国所在州的代码
+	public String getStatecode(int id) {
+		TUsStateEntity stateEntity = dbDao.fetch(TUsStateEntity.class, id);
+		return stateEntity.getCode();
+	}
+
+	public String getOccupation(int status) {
+		String result = "";
+		if (status == 1) {
+			result = "A";
+		}
+		if (status == 2) {
+			result = "AP";
+		}
+		if (status == 3) {
+			result = "B";
+		}
+		if (status == 4) {
+			result = "CM";
+		}
+		if (status == 5) {
+			result = "CS";
+		}
+		if (status == 6) {
+			result = "C";
+		}
+		if (status == 7) {
+			result = "ED";
+		}
+		if (status == 8) {
+			result = "EN";
+		}
+		if (status == 9) {
+			result = "G";
+		}
+		if (status == 10) {
+			result = "H";
+		}
+		if (status == 11) {
+			result = "LP";
+		}
+		if (status == 12) {
+			result = "MH";
+		}
+		if (status == 13) {
+			result = "M";
+		}
+		if (status == 14) {
+			result = "NS";
+		}
+		if (status == 15) {
+			result = "N";
+		}
+		if (status == 16) {
+			result = "PS";
+		}
+		if (status == 17) {
+			result = "RV";
+		}
+		if (status == 18) {
+			result = "R";
+		}
+		if (status == 19) {
+			result = "RT";
+		}
+		if (status == 20) {
+			result = "SS";
+		}
+		if (status == 21) {
+			result = "S";
+		}
+		if (status == 22) {
+			result = "O";
+		}
+		return result;
+	}
+
+	//出行目的
+	public String getPurpose(String type) {
+		String result = "";
+		if (Util.eq("商务旅游游客(B)", type)) {
+			result = "B";
+		}
+		if (Util.eq("交流访问者", type)) {
+			result = "J";
+		}
+		if (Util.eq("学术或语言学生(F)", type)) {
+			result = "F";
+		}
+		return result;
 	}
 }

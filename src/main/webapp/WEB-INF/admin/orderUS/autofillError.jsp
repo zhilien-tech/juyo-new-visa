@@ -40,7 +40,7 @@
 						${obj.errMsg }
 	     			</div>
 					<div style="margin-top:10%;">
-						<input type="button" class="selectBtn selectMargin"  value="马上补充" onclick="fillIn();"/>  <input  id="cancel" class="selectBtn" type="button" value="以后再说" onclick="cancelBtn();"/>
+						<input  id="cancel" class="selectBtn" type="button" value="以后再说" onclick="cancelBtn();"/>
 					</div>
 		 		</div>
 			</div>

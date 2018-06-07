@@ -141,6 +141,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		addForm.setOpId(opId);
 		addForm.setCreateTime(nowDate);
 		addForm.setUpdateTime(nowDate);
+		addForm.setPdftype(IsYesOrNoEnum.YES.intKey());
 		String designNum = addForm.getDesignatedNum();
 		if (!Util.isEmpty(designNum)) {
 			addForm.setCdesignNum(designNum);

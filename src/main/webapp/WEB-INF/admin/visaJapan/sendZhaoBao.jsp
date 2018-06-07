@@ -39,16 +39,23 @@
 							  </c:otherwise> 
 							</c:choose> --%>
 							<option value="">请选择</option>  
-								<c:forEach var="map" items="${obj.songqianlist}">
-									<c:choose>
-										<c:when test="${obj.orderjpinfo.sendsignid eq map.id }">
-											<option value="${map.id}" selected="selected">${map.name}</option>
-										</c:when>
-										<c:otherwise>
-											<option value="${map.id}">${map.name}</option>
-										</c:otherwise>
-									</c:choose>
-								</c:forEach>
+								<c:choose>
+									<c:when test="${obj.songqianlist ne '请选择含有指定番号的 送签社' }">
+										<c:forEach var="map" items="${obj.songqianlist}">
+											<c:choose>
+												<c:when test="${obj.orderjpinfo.sendsignid eq map.id }">
+													<option value="${map.id}" selected="selected">${map.name}</option>
+												</c:when>
+												<c:otherwise>
+													<option value="${map.id}">${map.name}</option>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</c:when>
+									<c:otherwise>
+										
+									</c:otherwise>
+								</c:choose>
 							</select>
 						</div>
 					</div>
@@ -57,16 +64,22 @@
 							<label><span>*</span>地接社：</label> 
 							<select class="form-control input-sm selectHeight" id="groundconnectid" name="groundconnectid">
 								<option value="">请选择</option>
-								<c:forEach var="map" items="${obj.dijielist}">
-									<c:choose>
-										<c:when test="${obj.orderjpinfo.groundconnectid eq map.id }">
-											<option value="${map.id}" selected="selected">${map.name}</option>
-										</c:when>
-										<c:otherwise>
-											<option value="${map.id}">${map.name}</option>
-										</c:otherwise>
-									</c:choose>
-								</c:forEach>
+								<c:choose>
+									<c:when test="${!empty obj.dijielist }">
+										<c:forEach var="map" items="${obj.dijielist}">
+											<c:choose>
+												<c:when test="${obj.orderjpinfo.groundconnectid eq map.id }">
+													<option value="${map.id}" selected="selected">${map.name}</option>
+												</c:when>
+												<c:otherwise>
+													<option value="${map.id}">${map.name}</option>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</c:when>
+									<c:otherwise>
+									</c:otherwise>
+								</c:choose>
 							</select>
 						</div>
 					</div>
