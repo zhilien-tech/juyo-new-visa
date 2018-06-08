@@ -218,11 +218,14 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			fileName = fileName.replace("+", " ");
 			// 设置下载的响应头
 			// response.setContentType("application/zip");
+			//通过response.reset()刷新可能存在一些未关闭的getWriter(),避免可能出现未关闭的getWriter()
+			response.reset();
 			response.setContentType("application/octet-stream");
 			response.setHeader("Set-Cookie", "fileDownload=true; path=/");
 			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
 			// 将字节流相应到浏览器（下载）
 			IOUtils.write(byteArray, response.getOutputStream());
+			response.flushBuffer();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
