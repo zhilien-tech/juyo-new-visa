@@ -98,7 +98,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 	@Inject
 	private QrCodeService qrCodeService;
 
-	private static DateFormat dateformat = new SimpleDateFormat("yyyy/MM/dd");
+	private static DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
 
 	/**
 	 * 准备下载文件并打包为ZIP文件字节流
@@ -430,7 +430,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 					TFlightEntity goflightentity = dbDao.fetch(TFlightEntity.class,
 							Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
 					if (!Util.isEmpty(goflightentity)) {
-						map.put("goFlightNum", goflightentity.getAirlinecomp());
+						map.put("goFlightNum", ordertripjp.getGoFlightNum());
 					}
 					//					if (!Util.isEmpty(entrytrip.getFlightNum())) {
 					//						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
@@ -454,7 +454,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 						if (!Util.isEmpty(entrytrip.getFlightNum())) {
 							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-							map.put("goFlightNum", goflight.getFlightnum());
+							map.put("goFlightNum", entrytrip.getFlightNum());
 						}
 						//最后一程作为返回日期
 						TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
@@ -500,8 +500,10 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 			//在日担保人信息
 			map.put("danbaoname", record.getString("vouchname"));
 			int lastIndexOf = record.getString("vouchname").lastIndexOf("-");
-			map.put("danbaonameen",
-					record.getString("vouchname").substring(lastIndexOf + 1, record.getString("vouchname").length()));
+			/*map.put("danbaonameen",
+					record.getString("vouchname").substring(lastIndexOf + 1, record.getString("vouchname").length()));*/
+			//因为没有处理，暂时先空着
+			map.put("danbaonameen", "");
 			map.put("danbaotelephone", record.getString("vouchphone"));
 			map.put("vouchaddress", record.getString("vouchaddress"));
 			if ("男".equals(record.getString("vouchsex"))) {
@@ -643,7 +645,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 				sex = "F";
 			}
 		}
-		if (!Util.isEmpty(map.get("girl"))) {
+		if (!Util.isEmpty(map.get("gril"))) {
 			if (map.get("gril").equals("0")) {
 				sex = "M";
 			}
@@ -1320,6 +1322,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 			font.setSize(7.98f);
 			//日期格式化
 			String pattern = "yy年MM月dd日";
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			//表格
 			float[] columns = { 3, 5, 5 };
 			PdfPTable table = new PdfPTable(columns);
@@ -1396,7 +1399,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 				} else {
 					hotel = " ";
 				}
-				String[] datas = { format(ordertravelplan.getOutDate(), pointpattren), scenic, hotel };
+				String[] datas = { sdf.format(ordertravelplan.getOutDate()), scenic, hotel };
 				for (String title : datas) {
 					PdfPCell cell = new PdfPCell(new Paragraph(title, font));
 					if (Util.eq(datas[1], title)) {

@@ -321,8 +321,8 @@
 							<div class="row">
 								<div class="col-sm-4">
 									<div class="form-group">
-										<label id="unitNameLabel"><span>*</span>配偶职业</label>
-										<input id="unitName" name="unitName" type="text" class="form-control input-sm" value="${obj.workJp.unitName }"/>
+										<label id="unitNameLabel"><span></span>配偶职业</label>
+										<input id="unitName" name="unitName" type="text" class="form-control input-sm" placeholder="如无职业，不必填写" value="${obj.unitName }"/>
 									</div>
 								</div>
 							</div>
@@ -735,28 +735,28 @@
 			var marryStatus = $("#marryStatus").val();
 			if(marryStatus == 3 || marryStatus == 4 || !marryStatus){
 				$(".info-imgUpload").hide();
-				$("#unitNameLabel").html("<span>*</span>父母职业");
+				$("#unitNameLabel").html("<span></span>父母职业");
 			}else{
 				$(".info-imgUpload").show();
 				if(marryStatus == 1){
-					$("#unitNameLabel").html("<span>*</span>配偶职业");
+					$("#unitNameLabel").html("<span></span>配偶职业");
 				}else{
-					$("#unitNameLabel").html("<span>*</span>父母职业");
+					$("#unitNameLabel").html("<span></span>父母职业");
 				}
 			}
 			$("#marryStatus").change(function(){
 				var status = $(this).val();
 				if(status == 3 || status == 4 || !status){
-					$("#unitNameLabel").html("<span>*</span>父母职业");
+					$("#unitNameLabel").html("<span></span>父母职业");
 					$(".info-imgUpload").hide();
 					$('#marryUrl').val("");
 					$('#sqImg').attr('src', "");
 					$("#uploadFile").siblings("i").css("display","none");
 				}else{
 					if(status == 1){
-						$("#unitNameLabel").html("<span>*</span>配偶职业");
+						$("#unitNameLabel").html("<span></span>配偶职业");
 					}else{
-						$("#unitNameLabel").html("<span>*</span>父母职业");
+						$("#unitNameLabel").html("<span></span>父母职业");
 					}
 					$(".info-imgUpload").show();
 				}
@@ -1096,10 +1096,10 @@
 				return;
 			}
 			var unitName = $('#unitName').val();
-			if(!unitName){
+			/* if(!unitName){
 				layer.msg('父母（配偶）职业不能为空');
 				return;
-			}
+			} */
 			//绑定财产类型
 			var wealthType = "";
 			$('[name=wealthType]').each(function(){

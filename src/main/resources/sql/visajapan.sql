@@ -12,6 +12,8 @@ SELECT
 	DATE_FORMAT(tr.sendVisaDate, '%Y-%m-%d') sendingTime,
 	DATE_FORMAT(tr.outVisaDate, '%Y-%m-%d') signingTime,
 	tr.STATUS japanState,
+	tr.isDisabled,
+	tr.zhaobaocomplete,
 	toj.visastatus visastatus,
 	tr.id orderid,
 	(

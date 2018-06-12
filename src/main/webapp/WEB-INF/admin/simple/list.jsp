@@ -79,22 +79,25 @@
 										  <div class="bounce3"></div>
 										</div>
 									</span>
+									<span v-else-if="data.isdisabled == 1">
+										作废
+									</span>
 									<span v-else>
 										{{data.visastatus}}
 									</span>
 								
 								</span></div>	
-								<div v-if="data.visastatus != '作废'">
+								<div v-if="data.isdisabled != 1">
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<span v-if="data.japanstate !=17 && data.japanstate!=19 && data.japanstate !=20 && data.japanstate !=34 && data.japanstate !=35 && data.japanstate !=22">
+									<span v-if="data.zhaobaocomplete == 0">
 										<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
 									</span>
 									<span v-else>
 										<i class="theTrial1"> </i>
 									</span>
-									<span v-if="data.japanstate ==17 || data.japanstate ==20">
+									<span v-if="data.zhaobaocomplete ==1">
 										<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
 										<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
 									</span>
@@ -121,7 +124,7 @@
 										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn" v-if="data.visastatus != '作废'"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
+										<div class="visaBtn" v-if="data.isdisabled != 1"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
 									</span>
 									<span v-else class="visaListSpan">
 										<div><label style="width:48px;">      </label><span>{{item.applicant}}</span></div>
@@ -129,7 +132,7 @@
 										<div><label style="width:60px;">　　　　　</label><span>{{item.datatype}}</span></div>
 										<div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div class="visaBtn" v-if="data.visastatus != '作废'"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
+										<div class="visaBtn" v-if="data.isdisabled != 1"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
 									</span>
 								</li>
 							</ul> 

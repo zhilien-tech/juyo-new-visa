@@ -35,6 +35,7 @@ import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.PdfTypeEnum;
@@ -92,7 +93,13 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	public Object sendInsurance(Integer orderid, Integer visastatus, HttpSession session) {
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
-		orderinfo.setStatus(visastatus);
+		if (visastatus == 26) {
+			orderinfo.setIsDisabled(IsYesOrNoEnum.YES.intKey());
+		} else if (visastatus == 1) {
+			orderinfo.setIsDisabled(IsYesOrNoEnum.NO.intKey());
+		} else {
+			orderinfo.setStatus(visastatus);
+		}
 		if (!Util.isEmpty(visastatus) && visastatus.equals(JPOrderStatusEnum.BIANGENGZHONG.intKey())) {
 			// orderjp.setVisastatus(visastatus);
 			// 生成excel
@@ -150,8 +157,23 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
 			// 获取打包的文件
 			byte[] byteArray = null;
+			int pdftype = 0;
 			//根据PDF类型
-			Integer pdftype = loginCompany.getPdftype();
+			//先查询发招宝有没有选择地接社
+			//如果有，则使用该公司的pdfType,如果没有则查询该登录公司有没有资质，有资质用自己的，否则用通用模板
+			if (!Util.isEmpty(orderjp.getSendsignid())) {
+				Integer sendsignid = orderjp.getSendsignid();
+				TCompanyEntity pdfCom = dbDao.fetch(TCompanyEntity.class, sendsignid.longValue());
+				//Integer pdftype = loginCompany.getPdftype();
+				pdftype = pdfCom.getPdftype();
+
+			} else {
+				if (!Util.isEmpty(loginCompany.getCdesignNum())) {
+					pdftype = loginCompany.getPdftype();
+				} else {
+					pdftype = PdfTypeEnum.UNIVERSAL_TYPE.intKey();
+				}
+			}
 
 			if (pdftype == PdfTypeEnum.LIAONINGWANDA_TYPE.intKey()) {
 				//辽宁万达模版
