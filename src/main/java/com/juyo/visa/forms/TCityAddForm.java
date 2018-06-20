@@ -19,6 +19,8 @@ public class TCityAddForm extends AddForm implements Serializable {
 	/**省/州/县*/
 	private String province;
 
+	private String relationcity;
+
 	/**城市*/
 	private String city;
 

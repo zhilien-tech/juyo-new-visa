@@ -58,6 +58,14 @@ public class TFlightEntity implements Serializable {
 	private String landingTime;
 
 	@Column
+	@Comment("飞行时间")
+	private String flytime;
+
+	@Column
+	@Comment("转机的关联航班")
+	private Integer relationflight;
+
+	@Column
 	@Comment("起飞航站楼")
 	private String takeOffTerminal;
 

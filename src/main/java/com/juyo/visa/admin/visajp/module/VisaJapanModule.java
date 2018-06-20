@@ -283,19 +283,21 @@ public class VisaJapanModule {
 	 */
 	@At
 	@GET
-	public Object downloadFile(@Param("orderid") Long orderid, HttpServletResponse response, HttpSession session,HttpServletRequest request) {
-		return visaJapanSimulateService.downloadFile(orderid, response, session,request);
+	public Object downloadFile(@Param("orderid") Long orderid, HttpServletResponse response, HttpSession session,
+			HttpServletRequest request) {
+		return visaJapanSimulateService.downloadFile(orderid, response, session, request);
 	}
-//	@At
-//	@GET
-//	@Ok("jsp")
-//	public Object applyInfo(@Param("id") Integer id, @Param("orderid") Integer orderid,
-//			@Param("isOrderUpTime") Integer isOrderUpTime, @Param("isTrial") Integer isTrial,
-//			@Param("orderProcessType") Integer orderProcessType, @Param("addApply") int addApply,
-//			@Param("tourist") int tourist, HttpServletRequest request) {
-//		return visaJapanSimulateService.getUserInfo(id, orderid, isOrderUpTime, isTrial, orderProcessType, addApply, tourist,
-//				request);
-//	}
+
+	//	@At
+	//	@GET
+	//	@Ok("jsp")
+	//	public Object applyInfo(@Param("id") Integer id, @Param("orderid") Integer orderid,
+	//			@Param("isOrderUpTime") Integer isOrderUpTime, @Param("isTrial") Integer isTrial,
+	//			@Param("orderProcessType") Integer orderProcessType, @Param("addApply") int addApply,
+	//			@Param("tourist") int tourist, HttpServletRequest request) {
+	//		return visaJapanSimulateService.getUserInfo(id, orderid, isOrderUpTime, isTrial, orderProcessType, addApply, tourist,
+	//				request);
+	//	}
 	/**
 	 * 上传签证文件
 	 */
@@ -349,7 +351,7 @@ public class VisaJapanModule {
 	}
 
 	/**
-	 * 保存招宝信息
+	 * 保存招宝信息，并发招宝
 	 */
 	@At
 	@POST
@@ -389,8 +391,7 @@ public class VisaJapanModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object sendZhaoBaoError(HttpServletRequest request, HttpSession session,
-			@Param("type") Integer type) {
+	public Object sendZhaoBaoError(HttpServletRequest request, HttpSession session, @Param("type") Integer type) {
 		return visaJapanService.sendZhaoBaoError(request, session, type);
 	}
 

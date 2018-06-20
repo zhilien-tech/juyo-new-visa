@@ -134,9 +134,14 @@
            	         	dataType:"json",
            	         	type:'post',
            	         	success: function(data){
-           	           		window.parent.successCallBack(1);
-           	           		//window.parent.reloaddata();
-           	           		closeWindow();
+           	         		if(data != "ok"){
+           	         			layer.msg(data);
+           	         			layer.closeAll('loading');
+           	         		}else{
+	           	           		window.parent.successCallBack(1);
+	           	           		//window.parent.reloaddata();
+	           	           		closeWindow();
+           	         		}
            	           	}
            	         });
            		}

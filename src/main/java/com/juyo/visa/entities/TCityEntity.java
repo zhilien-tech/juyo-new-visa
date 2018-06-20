@@ -34,6 +34,10 @@ public class TCityEntity implements Serializable {
 	private String code;
 
 	@Column
+	@Comment("关联城市")
+	private String relationcity;
+
+	@Column
 	@Comment("创建时间")
 	private Date createTime;
 

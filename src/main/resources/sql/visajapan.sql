@@ -15,6 +15,7 @@ SELECT
 	tr.isDisabled,
 	tr.zhaobaocomplete,
 	toj.visastatus visastatus,
+	toj.visaType,
 	tr.id orderid,
 	(
 		SELECT

@@ -28,6 +28,8 @@ public class TCityForm extends DataTablesParamForm {
 
 	private String code;
 
+	private String relationcity;
+
 	/**省/州/县*/
 	private String province;
 

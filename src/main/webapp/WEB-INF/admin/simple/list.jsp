@@ -91,7 +91,7 @@
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<span v-if="data.zhaobaocomplete == 0">
+									<span v-if="data.zhaobaocomplete == 0 && data.visatype != 4">
 										<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
 									</span>
 									<span v-else>

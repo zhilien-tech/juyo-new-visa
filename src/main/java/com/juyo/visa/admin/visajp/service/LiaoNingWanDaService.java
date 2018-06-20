@@ -224,11 +224,14 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
 					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 							Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-					map.put("entryPort", goflight.getLandingName() + ",");
+					String goFlightNum = ordertripjp.getGoFlightNum();
+					//map.put("entryPort", goflight.getLandingName() + ",");
+					map.put("entryPort", goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
+					map.put("entryFlight",
+							goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 				}
-				//去除*号
 
-				map.put("entryFlight", ordertripjp.getGoFlightNum().replace("*", ""));
 				if (!Util.isEmpty(ordertripjp.getReturnDate())) {
 					map.put("departDate", dateFormat.format(ordertripjp.getReturnDate()));
 				}
@@ -243,9 +246,16 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					//出境航班
 					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 							Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-					map.put("departPort", goflight.getLandingName() + ",");
+					String goFlightNum = ordertripjp.getReturnFlightNum();
+					//map.put("departPort", goflight.getTakeOffName() + ",");
+					//map.put("departFlight", ordertripjp.getReturnFlightNum().replace("*", ""));
+					map.put("departPort",
+							goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + ",");
+					map.put("departFlight",
+							goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 				}
-				map.put("departFlight", ordertripjp.getReturnFlightNum().replace("*", ""));
 			} else if (ordertripjp.getTripType().equals(2)) {
 				//多程处理
 				if (!Util.isEmpty(mutiltrip)) {
@@ -272,7 +282,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 						//						TFlightEntity returnflight = flightViewService.fetch(returntrip.getFlightNum().longValue());
 						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-						map.put("departPort", goflight.getLandingName() + ",");
+						map.put("departPort", goflight.getTakeOffName() + ",");
 					}
 					map.put("departFlight", returntrip.getFlightNum().replace("*", ""));
 					//停留天数
@@ -345,7 +355,12 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				map.put("fill_7", dateformat.format((Date) record.get("birthday")));
 			}
 			//出生地
-			map.put("fill_8", record.getString("address"));
+			String province = (String) record.getString("province");
+			if (province.endsWith("省") || province.endsWith("市")) {
+				province = province.substring(0, province.length() - 1);
+			}
+			map.put("fill_8", province);
+			//map.put("fill_8", record.getString("address"));
 			//婚姻状况
 			if (!Util.isEmpty(record.get("marrystatus"))) {
 				Integer marrystatus = record.getInt("marrystatus");
@@ -364,7 +379,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				}
 			}
 			//国籍
-			map.put("fill_9", "中国");
+			map.put("fill_9", "CHINA");
 			//曾有的或另有的国际
 			map.put("fill_10", record.getString("nationality"));
 			//身份证号
@@ -1164,8 +1179,16 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					if (ordertripjp.getTripType().equals(1)) {
 						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-						scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
-								+ goflight.getLandingName();
+						String goFlightNum = ordertripjp.getGoFlightNum();
+						/*scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
+								+ goflight.getLandingName();*/
+						scenic = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+								+ "："
+								+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+								+ "->"
+								+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
 						if (!Util.isEmpty(mutiltrip)) {
@@ -1173,16 +1196,32 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 							TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
 							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-							scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
-									+ goflight.getLandingName();
+							String goFlightNum = entrytrip.getFlightNum();
+							/*scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
+									+ goflight.getLandingName();*/
+							scenic = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+									+ "："
+									+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+									+ "->"
+									+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
 						}
 					}
 				} else if (count == ordertravelplans.size()) {
 					if (ordertripjp.getTripType().equals(1)) {
 						TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-						scenic = returnflight.getFlightnum().replace("*", "") + "：" + returnflight.getTakeOffName()
-								+ "->" + returnflight.getLandingName();
+						String goFlightNum = ordertripjp.getReturnFlightNum();
+						/*scenic = returnflight.getFlightnum().replace("*", "") + "：" + returnflight.getTakeOffName()
+								+ "->" + returnflight.getLandingName();*/
+						scenic = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+								+ "："
+								+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+								+ "->"
+								+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
 						if (!Util.isEmpty(mutiltrip)) {
@@ -1190,8 +1229,16 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 							TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
 							TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
 									Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-							scenic = returnflight.getFlightnum().replace("*", "") + "：" + returnflight.getTakeOffName()
-									+ "->" + returnflight.getLandingName();
+							String goFlightNum = returntrip.getFlightNum();
+							/*scenic = returnflight.getFlightnum().replace("*", "") + "：" + returnflight.getTakeOffName()
+									+ "->" + returnflight.getLandingName();*/
+							scenic = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+									+ "："
+									+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+									+ "->"
+									+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
 						}
 					}
 				} else {

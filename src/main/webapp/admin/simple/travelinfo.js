@@ -81,8 +81,14 @@ $('#goFlightNum').select2({
 			params.page = params.page || 1;
 			var selectdata = $.map(data, function (obj) {
 				//obj.id = obj.id; // replace pk with your identifier
-				obj.id = obj.flightnum; // replace pk with your identifier
-				obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime;
+				if(obj.zhuanflightnum != undefined){
+					obj.id = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+					obj.text = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+				}else{
+					//obj.id = obj.flightnum; // replace pk with your identifier
+					obj.id = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+					obj.text = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+				}
 				/*obj.text = obj.dictCode;*/
 				return obj;
 			});
@@ -140,10 +146,23 @@ $('#returnFlightNum').select2({
 		},
 		processResults : function(data, params) {
 			params.page = params.page || 1;
+			/*data.sort(function(a,b){
+				if(a.zhuanflightnum() != undefined){
+					return 1;
+				}
+	            });*/
 			var selectdata = $.map(data, function (obj) {
 				//obj.id = obj.id; // replace pk with your identifier
-				obj.id = obj.flightnum; // replace pk with your identifier
-				obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime;
+				//obj.id = obj.flightnum; // replace pk with your identifier
+				//obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime;
+				if(obj.zhuanflightnum != undefined){
+					obj.id = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+					obj.text = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+				}else{
+					//obj.id = obj.flightnum; // replace pk with your identifier
+					obj.id = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+					obj.text = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+				}
 				/*obj.text = obj.dictCode;*/
 				return obj;
 			});
@@ -185,8 +204,8 @@ $("#goDepartureCity").on("select2:select",function(e){
 	var goDate = $('#goDate').val();
 	var returnDate = $('#returnDate').val();
 	//查询航班接口到缓存
-	initFlightByInterface(goDate,thisval,goArrivedCity);
-	initFlightByInterface(returnDate,goArrivedCity,thisval);
+	//initFlightByInterface(goDate,thisval,goArrivedCity);
+	//initFlightByInterface(returnDate,goArrivedCity,thisval);
 });
 $("#goDepartureCity").on("select2:unselect",function(e){
 	$(this).text('');
@@ -239,7 +258,7 @@ $("#returnDepartureCity").on("select2:select",function(e){
 	}
 	var returnDate = $('#returnDate').val();
 	//查询航班接口到缓存
-	initFlightByInterface(returnDate,thisval,returnArrivedCity);
+	//initFlightByInterface(returnDate,thisval,returnArrivedCity);
 });
 $("#returnDepartureCity").on("select2:unselect", function(e) {
 	$(this).text('');
@@ -262,7 +281,7 @@ $("#returnArrivedCity").on("select2:select",function(e){
 	}
 	var returnDate = $('#returnDate').val();
 	//查询航班接口到缓存
-	initFlightByInterface(returnDate,returnDepartureCity,thisval);
+	//initFlightByInterface(returnDate,returnDepartureCity,thisval);
 });
 $("#returnArrivedCity").on("select2:unselect", function(e) {
 	$(this).text('');
@@ -395,7 +414,13 @@ $("#sendVisaDate").datetimepicker({
 }).on("click",function(){  
     $("#sendVisaDate").datetimepicker("setEndDate",$("#goDate").val()); 
 }).on('changeDate', function(ev){
-	var stayday = 7;
+	var stayday;
+	console.log(cityidstr);
+	if(cityidstr == 1 || cityidstr == ""){
+		stayday = 6;
+	}else{
+		stayday = 7;
+	}
 	var startDate = $("#sendVisaDate").val();
 	$.ajax({ 
 		url: '/admin/visaJapan/autoCalculateBackDate.html',

@@ -123,4 +123,12 @@ public class SimulateModule {
 	public Object updateYifa(@Param("..") JapanSimulatorForm form) {
 		return simulateJapanService.updateYifa(form);
 	}
+
+	/**
+	 * 点击招宝变更后，先删掉受付番号
+	 */
+	@At
+	public Object deleteAcceptDesign(@Param("..") JapanSimulatorForm form) {
+		return simulateJapanService.deleteAcceptDesign(form);
+	}
 }

@@ -372,6 +372,7 @@
 	</div>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var cityidstr = '${obj.orderinfo.cityId}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
@@ -393,6 +394,12 @@
 	<script src="${base}/admin/simple/addsimpleorder.js?v=0.0.1"></script><!-- 本页面js文件 -->
 
 	<script type="text/javascript">
+		$("#cityid").change(function(){
+			var cityid = $(this).val();
+			$("#cityid").val(cityid);
+			cityidstr = cityid;
+		});
+	
 		$(function(){
 			
 			$('#urgentType').change(function(){

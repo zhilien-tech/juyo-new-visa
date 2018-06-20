@@ -158,11 +158,11 @@
 									</div>
 								</div>
 								<c:choose>
-									<c:when test="${obj.jporderinfo.visaType != 1 }">
-										<div class="col-sm-9" id="visacounty">
+									<c:when test="${obj.jporderinfo.visaType != 2 }">
+										<div class="col-sm-9 none" id="visacounty">
 									</c:when>
 									<c:otherwise>
-										<div class="col-sm-9 none" id="visacounty">
+										<div class="col-sm-9" id="visacounty">
 									</c:otherwise>
 								</c:choose>
 											<div class="form-group viseType-btn">
@@ -178,11 +178,11 @@
 										</div>
 							</div><!-- end 签证类型 -->
 							<c:choose>
-								<c:when test="${obj.jporderinfo.visaType != 1 }">
-									<div class="row body-from-input" id="threefangwen"><!-- 过去三年是否访问过 -->
+								<c:when test="${obj.jporderinfo.visaType != 2 }">
+									<div class="row body-from-input none" id="threefangwen"><!-- 过去三年是否访问过 -->
 								</c:when>
 								<c:otherwise>
-									<div class="row body-from-input none" id="threefangwen"><!-- 过去三年是否访问过 -->
+									<div class="row body-from-input" id="threefangwen"><!-- 过去三年是否访问过 -->
 								</c:otherwise>
 							</c:choose>
 										<div class="col-sm-3" style="padding-right:0px !important;">
@@ -714,7 +714,7 @@
 		var base = "${base}";
 		$(function() {
 			var visatype = $('#visatype').val();
-			if(visatype == 1){
+			if(visatype != 2){
 				$('.alignment').hide();
 			}
 			$('#passportInfo').bootstrapValidator('validate');
@@ -1083,18 +1083,19 @@
 				if (!bootstrapValidator.isValid()) {
 					return;
 				}
+				var applicant = $('#applicant').val();
+				var relationRemark = $('#relationRemark').val();
+				if(applicant == 1 && !relationRemark){
+					layer.msg('主申请人备注不能为空');
+					return;
+				}
+				var position = $('#position').val();
+				if(!position){
+					layer.msg('职位不能为空');
+					return;
+				}
 			}
-			var relationRemark = $('#relationRemark').val();
-			var applicant = $('#applicant').val();
-			if(applicant == 1 && !relationRemark){
-				layer.msg('主申请人备注不能为空');
-				return;
-			}
-			var position = $('#position').val();
-			if(!position){
-				layer.msg('职位不能为空');
-				return;
-			}
+			
 			var unitName = $('#unitName').val();
 			/* if(!unitName){
 				layer.msg('父母（配偶）职业不能为空');
@@ -1279,7 +1280,7 @@
 		$('#visatype').change(function(){
 			var thisval = $(this).val();
 			var visit = $('#isVisit').val();
-			if(thisval != 1){
+			if(thisval == 2){
 				$('#visacounty').show();
 				$('#threefangwen').show();
 				$('#visacounty input').removeClass('btnState-true');

@@ -35,7 +35,6 @@ import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
 import com.juyo.visa.common.comstants.CommonConstants;
-import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.PdfTypeEnum;
@@ -93,13 +92,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	public Object sendInsurance(Integer orderid, Integer visastatus, HttpSession session) {
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
-		if (visastatus == 26) {
-			orderinfo.setIsDisabled(IsYesOrNoEnum.YES.intKey());
-		} else if (visastatus == 1) {
-			orderinfo.setIsDisabled(IsYesOrNoEnum.NO.intKey());
-		} else {
-			orderinfo.setStatus(visastatus);
-		}
+		orderinfo.setStatus(visastatus);
 		if (!Util.isEmpty(visastatus) && visastatus.equals(JPOrderStatusEnum.BIANGENGZHONG.intKey())) {
 			// orderjp.setVisastatus(visastatus);
 			// 生成excel

@@ -41,6 +41,7 @@ import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
+import com.juyo.visa.admin.visajp.service.TripAirlineService;
 import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.ApplicantJpWealthEnum;
@@ -67,6 +68,7 @@ import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.newairline.ResultflyEntity;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
@@ -117,6 +119,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 	@Inject
 	private QrCodeService qrCodeService;
+	@Inject
+	private TripAirlineService tripAirlineService;
 	@Inject
 	private UserViewService userViewService;
 	@Inject
@@ -724,7 +728,22 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TOrderTripJpEntity tripinfo = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderid", "=", orderid));
 		List<TCityEntity> citylist = Lists.newArrayList();
 		List<TFlightEntity> flightlist = Lists.newArrayList();
+		List<ResultflyEntity> gotripAirlineSelect = Lists.newArrayList();
+		List<ResultflyEntity> returntripAirlineSelect = Lists.newArrayList();
+
 		if (!Util.isEmpty(tripinfo)) {
+			/*FlightSelectParam param = new FlightSelectParam();
+			param.setGocity(tripinfo.getGoDepartureCity().longValue());
+			param.setArrivecity(tripinfo.getGoArrivedCity().longValue());
+			param.setDate("2018-06-19");
+			param.setFlight("");
+			gotripAirlineSelect = tripAirlineService.getTripAirlineSelect(param);
+
+			param.setGocity(tripinfo.getReturnDepartureCity().longValue());
+			param.setArrivecity(tripinfo.getReturnArrivedCity().longValue());
+			param.setDate("2018-06-19");
+			param.setFlight("");
+			returntripAirlineSelect = tripAirlineService.getTripAirlineSelect(param);*/
 			Integer[] cityids = { tripinfo.getGoDepartureCity(), tripinfo.getGoArrivedCity(),
 					tripinfo.getReturnDepartureCity(), tripinfo.getReturnArrivedCity() };
 			citylist = dbDao.query(TCityEntity.class, Cnd.where("id", "in", cityids), null);
@@ -778,6 +797,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("orderinfo", orderinfo);
 		result.put("tripinfo", tripinfo);
 		result.put("customerinfo", customerinfo);
+
+		result.put("returntripAirlineSelect", returntripAirlineSelect);
+		result.put("gotripAirlineSelect", gotripAirlineSelect);
 
 		return result;
 	}

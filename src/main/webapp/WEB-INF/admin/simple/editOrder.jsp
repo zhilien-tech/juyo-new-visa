@@ -387,15 +387,16 @@
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
 										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="19" >
-											<c:set var="isDoneAir" value="0" scope="page"></c:set>
-											<c:forEach items="${obj.flightlist }" var="flight">
+										<option selected="selected" value="${obj.tripinfo.goFlightNum }">${obj.tripinfo.goFlightNum}</option>
+											<%-- <c:set var="isDoneAir" value="0" scope="page"></c:set>
+											<c:forEach items="${obj.gotripAirlineSelect }" var="flight">
 												<c:if test="${obj.tripinfo.goFlightNum eq  flight.flightnum}">
 													<c:if test="${isDoneAir != 1 }">
 														<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
 													</c:if>
 													<c:set var="isDoneAir" value="1" scope="page"></c:set>
 												</c:if>
-											</c:forEach>
+											</c:forEach> --%>
 										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
@@ -442,10 +443,11 @@
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
 										<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="22">
+										<option selected="selected" value="${obj.tripinfo.returnFlightNum }">${obj.tripinfo.returnFlightNum}</option>
 											<%-- <c:if test="${!empty obj.tripinfo.returnFlightNum }">
 												<option value="${obj.tripinfo.returnFlightNum }" selected="selected">${obj.tripinfo.returnFlightNum }</option>
 											</c:if> --%>
-											<c:set var="isDone" value="0" scope="page"></c:set>
+											<%-- <c:set var="isDone" value="0" scope="page"></c:set>
 											<c:forEach items="${obj.flightlist }" var="flight">
 												<c:if test="${obj.tripinfo.returnFlightNum eq  flight.flightnum}">
 													<c:if test="${isDone != 1 }">
@@ -453,7 +455,7 @@
 													</c:if>
 													<c:set var="isDone" value="1" scope="page"></c:set>
 												</c:if>
-											</c:forEach>
+											</c:forEach> --%>
 										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
@@ -531,6 +533,7 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		var orderid = '${obj.orderjpinfo.id}';
+		var cityidstr = '${obj.orderinfo.cityId}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
@@ -548,7 +551,7 @@
 	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/admin/simple/customerInfo.js?v=0.0.1"></script>
-	<script src="${base}/admin/simple/travelinfo.js?v=0.0.4"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/travelinfo.js?v=0.0.6"></script><!-- 本页面js文件 -->
 	<script src="${base}/admin/simple/initpagedata.js?v=0.0.2"></script><!-- 本页面js文件 -->
 	<script src="${base}/admin/simple/addsimpleorder.js?v=0.0.1"></script><!-- 本页面js文件 -->
 
@@ -557,6 +560,13 @@
 		initApplicantTable();
 		//加载行程安排表格数据
 		initTravelPlanTable();
+		
+		$("#cityid").change(function(){
+			var cityid = $(this).val();
+			$("#cityid").val(cityid);
+			cityidstr = cityid;
+		});
+		
 		$(function(){
 			$('#urgentType').change(function(){
 				var urgentType = $(this).val();

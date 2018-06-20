@@ -229,8 +229,10 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(company.getName())) {
 			companyname = company.getName();
 		}
+		//受理号为送签编号
+		String sendVisaNum = orderinfo.getSendVisaNum();
 		content.append("　　" + companyname).append("根据与日本").append(dijie).append("的合同约定，组织").append(applyinfo.size())
-				.append("人访日个人旅游（受理号为X741802338），请协助办理赴日个人单次往返签证。");
+				.append("人访日个人旅游（受理号为").append(sendVisaNum).append("），请协助办理赴日个人单次往返签证。");
 
 		map.put("Text2", "1");
 		map.put("Text1", content.toString());
@@ -243,9 +245,12 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 				}
 				//入境航班
 				if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
-					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-							Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-					map.put("Text5", goflight.getLandingName() + "、 " + ordertripjp.getGoFlightNum().replace("*", ""));
+					String goFlightNum = ordertripjp.getGoFlightNum();
+					map.put("Text5",
+							goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+									+ "、 "
+									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 				}
 				//天数
 				if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
@@ -268,10 +273,13 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 				}*/
 				if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
 					//出境航班
-					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-							Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
+					String goFlightNum = ordertripjp.getReturnFlightNum();
 					map.put("Text8",
-							goflight.getLandingName() + "、 " + ordertripjp.getReturnFlightNum().replace("*", ""));
+							goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")))
+									+ "、 "
+									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 				}
 				//map.put("Text14", ordertripjp.getReturnFlightNum().replace("*", ""));
 			} else if (ordertripjp.getTripType().equals(2)) {
@@ -300,7 +308,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 						//						TFlightEntity returnflight = flightViewService.fetch(returntrip.getFlightNum().longValue());
 						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-						map.put("Text8", goflight.getLandingName() + "、 " + returntrip.getFlightNum().replace("*", ""));
+						map.put("Text8", goflight.getTakeOffName() + "、 " + returntrip.getFlightNum().replace("*", ""));
 					}
 					//map.put("Text14", returntrip.getFlightNum().replace("*", ""));
 					//停留天数
@@ -315,7 +323,12 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 		}
 		map.put("Text9", company.getLinkman());
 		map.put("Text10", company.getMobile());
-		map.put("Text12", dateFormat1.format(new Date()));
+		Date sendVisaDate = orderinfo.getSendVisaDate();
+		if (!Util.isEmpty(sendVisaDate)) {
+			map.put("Text12", dateFormat1.format(sendVisaDate));
+		} else {
+			map.put("Text12", "");
+		}
 		//获取模板文件
 		URL resource = getClass().getClassLoader().getResource("japanfile/jinqiao/note.pdf");
 		TemplateUtil templateUtil = new TemplateUtil();
@@ -363,7 +376,12 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 				map.put("birthday", dateformat.format((Date) record.get("birthday")));
 			}
 			//出生地
-			map.put("address", record.getString("address"));
+			String province = (String) record.getString("province");
+			if (province.endsWith("省") || province.endsWith("市")) {
+				province = province.substring(0, province.length() - 1);
+			}
+			map.put("address", province);
+			//map.put("address", record.getString("address"));
 			//婚姻状况
 			if (!Util.isEmpty(record.get("marrystatus"))) {
 				Integer marrystatus = record.getInt("marrystatus");
@@ -378,7 +396,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 				}
 			}
 			//国籍
-			map.put("country", "中国");
+			map.put("country", "CHINA");
 			//曾有的或另有的国际
 			//			if(Util.isEmpty(record.getString("nationality"))) {
 			//				map.put("othernationality", "无");
@@ -620,9 +638,9 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 		// 获取操作的页面
 		PdfContentByte under = stamper.getOverContent(1);
 		// 根据域的大小缩放图片
-		image.scaleToFit(75, 70);
+		image.scaleToFit(65, 60);
 		// 添加图片
-		image.setAbsolutePosition(50, 670);
+		image.setAbsolutePosition(70, 670);
 		under.addImage(image);
 		stamper.close();
 		reader.close();
@@ -784,6 +802,8 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 		DateFormat applydateformat = new SimpleDateFormat("yyyy-MM-dd");
 		//公司信息
 		TCompanyEntity company = (TCompanyEntity) tempdata.get("company");
+		//订单信息
+		TOrderEntity orderinfo = (TOrderEntity) tempdata.get("orderinfo");
 		try {
 			Document document = new Document(PageSize.A4.rotate(), 0, 0, 36, 36);
 			TtfClassLoader ttf = new TtfClassLoader();
@@ -1117,9 +1137,15 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 			table2.addCell(cell2);
 			//日期
 			PdfPCell cell3 = new PdfPCell();
+			Paragraph paragraph3 = null;
 			//日期格式化
-			DateFormat exceldateformat = new SimpleDateFormat("yyyy年MM月dd");
-			Paragraph paragraph3 = new Paragraph(exceldateformat.format(new Date()), font);
+			DateFormat exceldateformat = new SimpleDateFormat("yyyy年MM月dd日");
+			Date sendVisaDate = orderinfo.getSendVisaDate();
+			if (!Util.isEmpty(sendVisaDate)) {
+				paragraph3 = new Paragraph(exceldateformat.format(sendVisaDate), font);
+			} else {
+				paragraph3 = new Paragraph("", font);
+			}
 			paragraph3.setAlignment(Element.ALIGN_RIGHT);
 			cell3.addElement(paragraph3);
 			cell3.setBorder(0);
@@ -1174,43 +1200,48 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 			map.put("Text18", "OK");
 			map.put("Text17", "OK");
 			//行李
-			map.put("Text19", "3PC");
-			map.put("Text20", "3PC");
+			map.put("Text19", applyinfo.size() + "PC");
+			map.put("Text20", applyinfo.size() + "PC");
 
 			if (!Util.isEmpty(ordertripjp)) {
 				if (ordertripjp.getTripType().equals(1)) {
 					//入境航班
 					if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
+						/*TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));*/
+						String goFlightNum = ordertripjp.getGoFlightNum();
+						String substring = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1);
 						//起飞机场
-						map.put("Text2", goflight.getTakeOffName());
+						map.put("Text2", goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
 						//起飞时间 
-						map.put("Text11", goflight.getTakeOffTime().substring(0, 2) + ":"
-								+ goflight.getTakeOffTime().substring(2, 4));
+						map.put("Text11", substring.substring(0, 2) + ":" + substring.substring(2, 4));
 						//降落时间
-						map.put("Text13", goflight.getLandingTime().substring(0, 2) + ":"
-								+ goflight.getLandingTime().substring(2, 4));
+						map.put("Text13", substring.substring(substring.lastIndexOf("/") + 1).substring(0, 2) + ":"
+								+ substring.substring(substring.lastIndexOf("/") + 1).substring(2, 4));
+						//起飞航班号
+						map.put("Text5", goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 					}
-					//起飞航班号
-					map.put("Text5", ordertripjp.getGoFlightNum().replace("*", ""));
 
 					//出境航班
 					if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
+						/*TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));*/
+						String goFlightNum = ordertripjp.getReturnFlightNum();
+						String substring = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1);
 						//返回机场
-						map.put("Text3", goflight.getTakeOffName());
+						map.put("Text3", goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
 						//起飞时间 
-						map.put("Text12", goflight.getTakeOffTime().substring(0, 2) + ":"
-								+ goflight.getTakeOffTime().substring(2, 4));
+						map.put("Text12", substring.substring(0, 2) + ":" + substring.substring(2, 4));
 						//降落时间
-						map.put("Text14", goflight.getLandingTime().substring(0, 2) + ":"
-								+ goflight.getLandingTime().substring(2, 4));
-						map.put("Text4", goflight.getLandingName());
+						map.put("Text14", substring.substring(substring.lastIndexOf("/") + 1).substring(0, 2) + ":"
+								+ substring.substring(substring.lastIndexOf("/") + 1).substring(2, 4));
+						map.put("Text4",
+								goFlightNum.substring(goFlightNum.lastIndexOf("-") + 1, goFlightNum.indexOf(" ")));
+						//航班号
+						map.put("Text6", goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 					}
-					//航班号
-					map.put("Text6", ordertripjp.getReturnFlightNum().replace("*", ""));
 					//出发航班日期
 					map.put("Text9", df.format(ordertripjp.getGoDate()).toUpperCase());
 					//有效期（出发日期+8天）
@@ -1357,8 +1388,16 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 					if (ordertripjp.getTripType().equals(1)) {
 						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-						scenic = " " + province + "から" + goflight.getFlightnum().replace("*", "") + "便にて"
-								+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";
+						String goFlightNum = ordertripjp.getGoFlightNum();
+						/*scenic = " " + province + "から" + goflight.getFlightnum().replace("*", "") + "便にて"
+								+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";*/
+						scenic = " "
+								+ province
+								+ "から"
+								+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて"
+								+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))) + "へ"
+								+ "\n 到着後、ホテルへ";
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
 						if (!Util.isEmpty(mutiltrip)) {
@@ -1366,16 +1405,30 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 							TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
 							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-							scenic = " " + province + goflight.getFlightnum().replace("*", "") + "便にて"
-									+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";
+							String goFlightNum = entrytrip.getFlightNum();
+							/*scenic = " " + province + goflight.getFlightnum().replace("*", "") + "便にて"
+									+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";*/
+							scenic = " "
+									+ province
+									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて"
+									+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+									+ "へ" + "\n 到着後、ホテルへ";
 						}
 					}
 				} else if (count == ordertravelplans.size()) {
 					if (ordertripjp.getTripType().equals(1)) {
 						TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-						scenic = " " + returnflight.getTakeOffName() + "から"
-								+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";
+						String goFlightNum = ordertripjp.getReturnFlightNum();
+						/*scenic = " " + returnflight.getTakeOffName() + "から"
+								+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";*/
+						scenic = " "
+								+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")))
+								+ "から"
+								+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて帰国";
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
 						if (!Util.isEmpty(mutiltrip)) {
@@ -1383,8 +1436,15 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 							TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
 							TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
 									Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-							scenic = " " + returnflight.getTakeOffName() + "から"
-									+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";
+							String goFlightNum = returntrip.getFlightNum();
+							/*scenic = " " + returnflight.getTakeOffName() + "から"
+									+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";*/
+							scenic = " "
+									+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")))
+									+ "から"
+									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて帰国";
 						}
 					}
 				} else {

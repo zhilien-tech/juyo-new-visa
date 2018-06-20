@@ -51,6 +51,10 @@ public class TFlightForm extends DataTablesParamForm {
 	/**降落时间*/
 	private String landingTime;
 
+	private String flytime;
+
+	private Integer relationflight;
+
 	/**起飞航站楼*/
 	private String takeOffTerminal;
 

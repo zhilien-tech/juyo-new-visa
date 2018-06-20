@@ -34,7 +34,6 @@ import org.nutz.lang.Files;
 import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Maps;
-import com.juyo.visa.admin.simulate.enums.ErrorCodeEnum;
 import com.juyo.visa.admin.simulate.form.JapanSimulateErrorForm;
 import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
 import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
@@ -208,6 +207,37 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					map.put("VISA_STAY_PREF_47", false);
 				}
 				map.put("acceptdesign", orderjp.getAcceptDesign());
+
+				//过去三年是否访问过,1访问过,0没有
+				Integer isVisit = orderjp.getIsVisit();
+				if (isVisit == 1) {
+					map.put("visaVisitType1", 1);
+				} else {
+					map.put("visaVisitType1", 0);
+				}
+
+				String threeCounty = orderjp.getThreeCounty();
+				if (!Util.isEmpty(threeCounty)) {
+					if (threeCounty.indexOf("岩手") != -1) {
+						map.put("VISA_VISIT_PREF_3", true);
+					} else {
+						map.put("VISA_VISIT_PREF_3", false);
+					}
+					if (threeCounty.indexOf("宫城") != -1) {
+						map.put("VISA_VISIT_PREF_4", true);
+					} else {
+						map.put("VISA_VISIT_PREF_4", false);
+					}
+					if (threeCounty.indexOf("福岛") != -1) {
+						map.put("VISA_VISIT_PREF_7", true);
+					} else {
+						map.put("VISA_VISIT_PREF_7", false);
+					}
+				} else {
+					map.put("VISA_VISIT_PREF_3", false);
+					map.put("VISA_VISIT_PREF_4", false);
+					map.put("VISA_VISIT_PREF_7", false);
+				}
 			}
 			map.put("agentNo", agentNo);
 			map.put("visaType1", record.get("visatype"));
@@ -343,24 +373,43 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(cid) && cid > 0) {
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, cid);
 			int errorCode = form.getErrorCode();
+			int orderstatus = form.getOrderstatus();
 			String errorMsg = form.getErrorMsg();
 			orderjp.setErrorcode(errorCode);
 			orderjp.setErrormsg(errorMsg);
 			dbDao.update(orderjp);
 			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 			//提交失败
-			if (errorCode == ErrorCodeEnum.completedNumberFail.intKey()) {
+			/*if (errorCode == ErrorCodeEnum.completedNumberFail.intKey()) {
 				//orderinfo.setStatus(JPOrderStatusEnum.COMMINGFAIL.intKey());
-				//1为作为，0为正常，2为提交失败
-				orderinfo.setIsDisabled(2);
 			} else if (errorCode == ErrorCodeEnum.persionNameList.intKey()) {
 				//个人名簿生成失败
 				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
 			} else if (errorCode == ErrorCodeEnum.comeReport.intKey()) {
 				//归国报告上传失败
-				orderinfo.setStatus(JPOrderStatusEnum.JAPANREPORTFAIL.intKey());
+				//orderinfo.setStatus(JPOrderStatusEnum.JAPANREPORTFAIL.intKey());
 			} else {
+				//orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
+			}*/
+
+			if (orderstatus == JPOrderStatusEnum.READYCOMMING.intKey()) {//发招宝失败 18
 				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
+				if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
+					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+				} else {
+					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+				}
+			}
+			if (orderstatus == JPOrderStatusEnum.BIANGENGZHONG.intKey()) {//招宝变更失败 21
+				orderinfo.setStatus(JPOrderStatusEnum.BIANGENGSHIBAI.intKey());
+				if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
+					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+				} else {
+					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+				}
+			}
+			if (orderstatus == JPOrderStatusEnum.QUXIAOZHONG.intKey()) {//招宝取消失败 24
+				orderinfo.setStatus(JPOrderStatusEnum.QUXIAOSHIBAI.intKey());
 			}
 			orderinfo.setUpdateTime(new Date());
 			//更新订单状态为发招保失败
@@ -547,6 +596,13 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
+
+	public Object deleteAcceptDesign(JapanSimulatorForm form) {
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, form.getCid());
+		orderjp.setAcceptDesign(null);
+		dbDao.update(orderjp);
 		return null;
 	}
 
