@@ -151,6 +151,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	private final static Integer EVENTID = 1;
 	private final static Integer DEFAULT_IS_NO = YesOrNoEnum.NO.intKey();
 	private final static Integer DEFAULT_SELECT = IsYesOrNoEnum.NO.intKey();
+
+	//美国接口相关
+	private final static String ENCODINGAESKEY = "jllZTM3ZWEzZGI1NGQ5NGI3MTc4NDNhNzAzODE5NTYt";
+	private final static String TOKEN = "ODBiOGIxNDY4NjdlMzc2Yg==";
+	private final static String APPID = "jhhMThiZjM1ZGQ2Y";
+
 	//订单列表页连接websocket的地址
 	private static final String USLIST_WEBSPCKET_ADDR = "uslistwebsocket";
 
@@ -1163,11 +1169,11 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	public String toGetAAcode(Object result) {
-		String encodingAesKey = "jllZTM3ZWEzZGI1NGQ5NGI3MTc4NDNhNzAzODE5NTYt";
-		String token = "ODBiOGIxNDY4NjdlMzc2Yg==";
+		String encodingAesKey = ENCODINGAESKEY;
+		String token = TOKEN;
 		String timestamp = getTimeStamp();
 		String nonce = getRandomString();
-		String appId = "jhhMThiZjM1ZGQ2Y";
+		String appId = APPID;
 
 		String jsonResult = JsonUtil.toJson(result);
 

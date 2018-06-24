@@ -109,11 +109,15 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setFlightnum((String) record.get("flightnum"));
-					resultflyEntity.setArrflightname((String) record.get("landingname"));
-					resultflyEntity.setGoflightname((String) record.get("takeoffname"));
-					resultflyEntity.setTakeofftime((String) record.get("takeofftime"));
-					resultflyEntity.setLandingofftime((String) record.get("landingtime"));
+					resultflyEntity.setFlightnum(((String) record.get("flightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setArrflightname(((String) record.get("landingname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setGoflightname(((String) record.get("takeoffname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setTakeofftime(((String) record.get("takeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setLandingofftime(((String) record.get("landingtime")).replace(" ", "").replace(
+							"*", ""));
 					resultflyEntity.setZhuanflightname("a");
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
@@ -131,76 +135,29 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 
 				for (Record record : arrcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setArrflightname((String) record.get("tflandingname"));
-					resultflyEntity.setFlightnum((String) record.get("tfflightnum"));
-					resultflyEntity.setGoflightname((String) record.get("tftakeoffname"));
-					resultflyEntity.setLandingofftime((String) record.get("tflandingtime"));
-					resultflyEntity.setTakeofftime((String) record.get("tftakeofftime"));
-					resultflyEntity.setZhuanflightname((String) record.get("tflandingname2"));
-					resultflyEntity.setZhuanflightnum((String) record.get("tfflightnum2"));
-					resultflyEntity.setZhuanlandingofftime((String) record.get("tflandingtime2"));
-					resultflyEntity.setZhuantakeofftime((String) record.get("tftakeofftime2"));
+					resultflyEntity.setArrflightname(((String) record.get("tflandingname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity
+							.setFlightnum(((String) record.get("tfflightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setGoflightname(((String) record.get("tftakeoffname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setLandingofftime(((String) record.get("tflandingtime")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setTakeofftime(((String) record.get("tftakeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setZhuanflightname(((String) record.get("tflandingname2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuanflightnum(((String) record.get("tfflightnum2")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setZhuanlandingofftime(((String) record.get("tflandingtime2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuantakeofftime(((String) record.get("tftakeofftime2")).replace(" ", "")
+							.replace("*", ""));
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
 					}
 				}
 				newairLineResult.setResultflyEntity(arrayList);
-
-				/*//航班分直飞和转机
-				List<TFlightEntity> zhiflyList = dbDao.query(TFlightEntity.class, Cnd.where("takeOffCode", "=", dep)
-						.and("landingCode", "=", arr), null);
-				//直飞航班
-				if (!Util.isEmpty(zhiflyList)) {
-					for (TFlightEntity tFlightEntity : zhiflyList) {
-						ResultflyEntity resultflyEntity = new ResultflyEntity();
-						resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-						resultflyEntity.setArrflightname(tFlightEntity.getLandingName());
-						resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-						resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-						resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-						if (!arrayList.contains(resultflyEntity)) {
-							arrayList.add(resultflyEntity);
-						}
-					}
-					//newairLineResult.setResultflyEntity(arrayList);
-				}
-
-				//转机航班
-				List<TFlightEntity> flights = dbDao
-						.query(TFlightEntity.class, Cnd.where("takeOffCode", "=", dep), null);
-				if (!Util.isEmpty(flights)) {
-					for (TFlightEntity tFlightEntity : flights) {
-						if (!Util.isEmpty(tFlightEntity.getRelationflight())) {
-							TFlightEntity fetch = dbDao.fetch(TFlightEntity.class, tFlightEntity.getRelationflight()
-									.longValue());
-							if (Util.eq(fetch.getLandingCode(), arr)) {
-								ResultflyEntity resultflyEntity = new ResultflyEntity();
-								resultflyEntity.setArrflightname(fetch.getLandingName());
-								resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-								resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-								resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-								resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-								resultflyEntity.setZhuanflightname(fetch.getTakeOffName());
-								resultflyEntity.setZhuanflightnum(fetch.getFlightnum());
-								resultflyEntity.setZhuanlandingofftime(fetch.getLandingTime());
-								resultflyEntity.setZhuantakeofftime(fetch.getTakeOffTime());
-								if (!arrayList.contains(resultflyEntity)) {
-									arrayList.add(resultflyEntity);
-								}
-							}
-						}
-					}
-				}*/
-				/*Collections.sort(arrayList, new Comparator<ResultflyEntity>() {
-					public int compare(ResultflyEntity o1, ResultflyEntity o2) {
-						if (Util.isEmpty(o1.getZhuanflightname())) {
-							return -1;
-						}
-						return 0;
-					}
-				});*/
-				//newairLineResult.setResultflyEntity(arrayList);
-
 			} else {
 				//转换为list
 				arrayList = JsonUtil.fromJsonAsList(ResultflyEntity.class, flightinfo);
@@ -209,12 +166,13 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				searchstr = searchstr.toUpperCase();
 				List<ResultflyEntity> resultlist = Lists.newArrayList();
 				for (ResultflyEntity flight : arrayList) {
-					if (flight.getFlightnum().indexOf(searchstr) > 0) {
+					if (flight.getFlightnum().indexOf(searchstr) != -1) {
 						if (!resultlist.contains(flight)) {
 							resultlist.add(flight);
 						}
 					}
-					if (!Util.isEmpty(flight.getZhuanflightnum()) && flight.getZhuanflightnum().indexOf(searchstr) > 0) {
+					if (!Util.isEmpty(flight.getZhuanflightnum())
+							&& flight.getZhuanflightnum().indexOf(searchstr) != -1) {
 						if (!resultlist.contains(flight)) {
 							resultlist.add(flight);
 						}
@@ -241,11 +199,15 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setFlightnum((String) record.get("flightnum"));
-					resultflyEntity.setArrflightname((String) record.get("landingname"));
-					resultflyEntity.setGoflightname((String) record.get("takeoffname"));
-					resultflyEntity.setTakeofftime((String) record.get("takeofftime"));
-					resultflyEntity.setLandingofftime((String) record.get("landingtime"));
+					resultflyEntity.setFlightnum(((String) record.get("flightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setArrflightname(((String) record.get("landingname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setGoflightname(((String) record.get("takeoffname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setTakeofftime(((String) record.get("takeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setLandingofftime(((String) record.get("landingtime")).replace(" ", "").replace(
+							"*", ""));
 					resultflyEntity.setZhuanflightname("a");
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
@@ -263,80 +225,29 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 
 				for (Record record : arrcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setArrflightname((String) record.get("tflandingname"));
-					resultflyEntity.setFlightnum((String) record.get("tfflightnum"));
-					resultflyEntity.setGoflightname((String) record.get("tftakeoffname"));
-					resultflyEntity.setLandingofftime((String) record.get("tflandingtime"));
-					resultflyEntity.setTakeofftime((String) record.get("tftakeofftime"));
-					resultflyEntity.setZhuanflightname((String) record.get("tflandingname2"));
-					resultflyEntity.setZhuanflightnum((String) record.get("tfflightnum2"));
-					resultflyEntity.setZhuanlandingofftime((String) record.get("tflandingtime2"));
-					resultflyEntity.setZhuantakeofftime((String) record.get("tftakeofftime2"));
+					resultflyEntity.setArrflightname(((String) record.get("tflandingname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity
+							.setFlightnum(((String) record.get("tfflightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setGoflightname(((String) record.get("tftakeoffname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setLandingofftime(((String) record.get("tflandingtime")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setTakeofftime(((String) record.get("tftakeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setZhuanflightname(((String) record.get("tflandingname2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuanflightnum(((String) record.get("tfflightnum2")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setZhuanlandingofftime(((String) record.get("tflandingtime2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuantakeofftime(((String) record.get("tftakeofftime2")).replace(" ", "")
+							.replace("*", ""));
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
 					}
 				}
 				newairLineResult.setResultflyEntity(arrayList);
-
-				/*String[] strings = arr.split(",");
-				for (String string : strings) {
-					TCityEntity city = dbDao.fetch(TCityEntity.class, Long.valueOf(string));
-					//如果缓存中不存在数据则查询数据库
-					//航班分直飞和转机
-					List<TFlightEntity> zhiflyList = dbDao.query(TFlightEntity.class, Cnd
-							.where("takeOffCode", "=", dep).and("landingCode", "=", city.getCode()), null);
-
-					if (!Util.isEmpty(zhiflyList)) {
-						for (TFlightEntity tFlightEntity : zhiflyList) {
-							ResultflyEntity resultflyEntity = new ResultflyEntity();
-							resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-							resultflyEntity.setArrflightname(tFlightEntity.getLandingName());
-							resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-							resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-							resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-							if (!arrayList.contains(resultflyEntity)) {
-								arrayList.add(resultflyEntity);
-							}
-						}
-						//newairLineResult.setResultflyEntity(arrayList);
-					}
-					//转机航班
-					List<TFlightEntity> flights = dbDao.query(TFlightEntity.class, Cnd.where("takeOffCode", "=", dep),
-							null);
-					if (!Util.isEmpty(flights)) {
-						for (TFlightEntity tFlightEntity : flights) {
-							if (!Util.isEmpty(tFlightEntity.getRelationflight())) {
-								TFlightEntity fetch = dbDao.fetch(TFlightEntity.class, tFlightEntity
-										.getRelationflight().longValue());
-								if (Util.eq(fetch.getLandingCode(), city.getCode())) {
-									ResultflyEntity resultflyEntity = new ResultflyEntity();
-									resultflyEntity.setArrflightname(fetch.getLandingName());
-									resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-									resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-									resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-									resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-									resultflyEntity.setZhuanflightname(fetch.getTakeOffName());
-									resultflyEntity.setZhuanflightnum(fetch.getFlightnum());
-									resultflyEntity.setZhuanlandingofftime(fetch.getLandingTime());
-									resultflyEntity.setZhuantakeofftime(fetch.getTakeOffTime());
-									if (!arrayList.contains(resultflyEntity)) {
-										arrayList.add(resultflyEntity);
-									}
-								}
-							}
-						}
-					}
-				}*/
-				/*Collections.sort(arrayList, new Comparator<ResultflyEntity>() {
-					public int compare(ResultflyEntity o1, ResultflyEntity o2) {
-						if (Util.isEmpty(o1.getZhuanflightname())) {
-							return -1;
-						}
-						return 0;
-					}
-				});*/
-				//newairLineResult.setResultflyEntity(arrayList);
-
 			} else {
 				//转换为list
 				arrayList = JsonUtil.fromJsonAsList(ResultflyEntity.class, flightinfo);
@@ -345,12 +256,13 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				searchstr = searchstr.toUpperCase();
 				List<ResultflyEntity> resultlist = Lists.newArrayList();
 				for (ResultflyEntity flight : arrayList) {
-					if (flight.getFlightnum().indexOf(searchstr) > 0) {
+					if (flight.getFlightnum().indexOf(searchstr) != -1) {
 						if (!resultlist.contains(flight)) {
 							resultlist.add(flight);
 						}
 					}
-					if (!Util.isEmpty(flight.getZhuanflightnum()) && flight.getZhuanflightnum().indexOf(searchstr) > 0) {
+					if (!Util.isEmpty(flight.getZhuanflightnum())
+							&& flight.getZhuanflightnum().indexOf(searchstr) != -1) {
 						if (!resultlist.contains(flight)) {
 							resultlist.add(flight);
 						}
@@ -376,11 +288,15 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setFlightnum((String) record.get("flightnum"));
-					resultflyEntity.setArrflightname((String) record.get("landingname"));
-					resultflyEntity.setGoflightname((String) record.get("takeoffname"));
-					resultflyEntity.setTakeofftime((String) record.get("takeofftime"));
-					resultflyEntity.setLandingofftime((String) record.get("landingtime"));
+					resultflyEntity.setFlightnum(((String) record.get("flightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setArrflightname(((String) record.get("landingname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setGoflightname(((String) record.get("takeoffname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setTakeofftime(((String) record.get("takeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setLandingofftime(((String) record.get("landingtime")).replace(" ", "").replace(
+							"*", ""));
 					resultflyEntity.setZhuanflightname("a");
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
@@ -398,81 +314,29 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 
 				for (Record record : arrcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setArrflightname((String) record.get("tflandingname"));
-					resultflyEntity.setFlightnum((String) record.get("tfflightnum"));
-					resultflyEntity.setGoflightname((String) record.get("tftakeoffname"));
-					resultflyEntity.setLandingofftime((String) record.get("tflandingtime"));
-					resultflyEntity.setTakeofftime((String) record.get("tftakeofftime"));
-					resultflyEntity.setZhuanflightname((String) record.get("tflandingname2"));
-					resultflyEntity.setZhuanflightnum((String) record.get("tfflightnum2"));
-					resultflyEntity.setZhuanlandingofftime((String) record.get("tflandingtime2"));
-					resultflyEntity.setZhuantakeofftime((String) record.get("tftakeofftime2"));
+					resultflyEntity.setArrflightname(((String) record.get("tflandingname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity
+							.setFlightnum(((String) record.get("tfflightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setGoflightname(((String) record.get("tftakeoffname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setLandingofftime(((String) record.get("tflandingtime")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setTakeofftime(((String) record.get("tftakeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setZhuanflightname(((String) record.get("tflandingname2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuanflightnum(((String) record.get("tfflightnum2")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setZhuanlandingofftime(((String) record.get("tflandingtime2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuantakeofftime(((String) record.get("tftakeofftime2")).replace(" ", "")
+							.replace("*", ""));
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
 					}
 				}
 				newairLineResult.setResultflyEntity(arrayList);
-
-				/*String[] strings = dep.split(",");
-				for (String string : strings) {
-					TCityEntity city = dbDao.fetch(TCityEntity.class, Long.valueOf(string));
-					//如果缓存中不存在数据则查询数据库
-					//航班分直飞和转机
-					//直飞航班
-					List<TFlightEntity> zhiflyList = dbDao.query(TFlightEntity.class,
-							Cnd.where("takeOffCode", "=", city.getCode()).and("landingCode", "=", arr), null);
-
-					if (!Util.isEmpty(zhiflyList)) {
-						for (TFlightEntity tFlightEntity : zhiflyList) {
-							ResultflyEntity resultflyEntity = new ResultflyEntity();
-							resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-							resultflyEntity.setArrflightname(tFlightEntity.getLandingName());
-							resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-							resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-							resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-							if (!arrayList.contains(resultflyEntity)) {
-								arrayList.add(resultflyEntity);
-							}
-						}
-						//newairLineResult.setResultflyEntity(arrayList);
-					}
-					//转机航班
-					List<TFlightEntity> flights = dbDao.query(TFlightEntity.class,
-							Cnd.where("takeOffCode", "=", city.getCode()), null);
-					if (!Util.isEmpty(flights)) {
-						for (TFlightEntity tFlightEntity : flights) {
-							if (!Util.isEmpty(tFlightEntity.getRelationflight())) {
-								TFlightEntity fetch = dbDao.fetch(TFlightEntity.class, tFlightEntity
-										.getRelationflight().longValue());
-								if (Util.eq(fetch.getLandingCode(), arr)) {
-									ResultflyEntity resultflyEntity = new ResultflyEntity();
-									resultflyEntity.setArrflightname(fetch.getLandingName());
-									resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-									resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-									resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-									resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-									resultflyEntity.setZhuanflightname(fetch.getTakeOffName());
-									resultflyEntity.setZhuanflightnum(fetch.getFlightnum());
-									resultflyEntity.setZhuanlandingofftime(fetch.getLandingTime());
-									resultflyEntity.setZhuantakeofftime(fetch.getTakeOffTime());
-									if (!arrayList.contains(resultflyEntity)) {
-										arrayList.add(resultflyEntity);
-									}
-								}
-							}
-						}
-					}
-				}*/
-				/*Collections.sort(arrayList, new Comparator<ResultflyEntity>() {
-					public int compare(ResultflyEntity o1, ResultflyEntity o2) {
-						if (Util.isEmpty(o1.getZhuanflightname())) {
-							return -1;
-						}
-						return 0;
-					}
-				});*/
-				//newairLineResult.setResultflyEntity(arrayList);
-
 			} else {
 				//转换为list
 				arrayList = JsonUtil.fromJsonAsList(ResultflyEntity.class, flightinfo);
@@ -481,12 +345,13 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				searchstr = searchstr.toUpperCase();
 				List<ResultflyEntity> resultlist = Lists.newArrayList();
 				for (ResultflyEntity flight : arrayList) {
-					if (flight.getFlightnum().indexOf(searchstr) > 0) {
+					if (flight.getFlightnum().indexOf(searchstr) != -1) {
 						if (!resultlist.contains(flight)) {
 							resultlist.add(flight);
 						}
 					}
-					if (!Util.isEmpty(flight.getZhuanflightnum()) && flight.getZhuanflightnum().indexOf(searchstr) > 0) {
+					if (!Util.isEmpty(flight.getZhuanflightnum())
+							&& flight.getZhuanflightnum().indexOf(searchstr) != -1) {
 						if (!resultlist.contains(flight)) {
 							resultlist.add(flight);
 						}
@@ -513,11 +378,15 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setFlightnum((String) record.get("flightnum"));
-					resultflyEntity.setArrflightname((String) record.get("landingname"));
-					resultflyEntity.setGoflightname((String) record.get("takeoffname"));
-					resultflyEntity.setTakeofftime((String) record.get("takeofftime"));
-					resultflyEntity.setLandingofftime((String) record.get("landingtime"));
+					resultflyEntity.setFlightnum(((String) record.get("flightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setArrflightname(((String) record.get("landingname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setGoflightname(((String) record.get("takeoffname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setTakeofftime(((String) record.get("takeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setLandingofftime(((String) record.get("landingtime")).replace(" ", "").replace(
+							"*", ""));
 					resultflyEntity.setZhuanflightname("a");
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
@@ -535,15 +404,24 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 
 				for (Record record : arrcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setArrflightname((String) record.get("tflandingname"));
-					resultflyEntity.setFlightnum((String) record.get("tfflightnum"));
-					resultflyEntity.setGoflightname((String) record.get("tftakeoffname"));
-					resultflyEntity.setLandingofftime((String) record.get("tflandingtime"));
-					resultflyEntity.setTakeofftime((String) record.get("tftakeofftime"));
-					resultflyEntity.setZhuanflightname((String) record.get("tflandingname2"));
-					resultflyEntity.setZhuanflightnum((String) record.get("tfflightnum2"));
-					resultflyEntity.setZhuanlandingofftime((String) record.get("tflandingtime2"));
-					resultflyEntity.setZhuantakeofftime((String) record.get("tftakeofftime2"));
+					resultflyEntity.setArrflightname(((String) record.get("tflandingname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity
+							.setFlightnum(((String) record.get("tfflightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setGoflightname(((String) record.get("tftakeoffname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setLandingofftime(((String) record.get("tflandingtime")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setTakeofftime(((String) record.get("tftakeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setZhuanflightname(((String) record.get("tflandingname2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuanflightnum(((String) record.get("tfflightnum2")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setZhuanlandingofftime(((String) record.get("tflandingtime2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuantakeofftime(((String) record.get("tftakeofftime2")).replace(" ", "")
+							.replace("*", ""));
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
 					}
@@ -555,81 +433,17 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				arrayList = JsonUtil.fromJsonAsList(ResultflyEntity.class, flightinfo);
 			}
 
-			/*if (Util.isEmpty(flightinfo)) {
-				String[] deps = dep.split(",");
-				String[] arrs = arr.split(",");
-				for (int i = 0; i < deps.length; i++) {
-					for (int j = 0; j < arrs.length; j++) {
-						TCityEntity depcity = dbDao.fetch(TCityEntity.class, Long.valueOf(deps[i]));
-						TCityEntity arrcity = dbDao.fetch(TCityEntity.class, Long.valueOf(arrs[j]));
-
-						//如果缓存中不存在数据则查询数据库
-						//航班分直飞和转机
-						List<TFlightEntity> zhiflyList = dbDao.query(
-								TFlightEntity.class,
-								Cnd.where("takeOffCode", "=", depcity.getCode()).and("landingCode", "=",
-										arrcity.getCode()), null);
-						//直飞航班
-						if (!Util.isEmpty(zhiflyList)) {
-							for (TFlightEntity tFlightEntity : zhiflyList) {
-								ResultflyEntity resultflyEntity2 = new ResultflyEntity();
-								resultflyEntity2.setFlightnum(tFlightEntity.getFlightnum());
-								resultflyEntity2.setArrflightname(tFlightEntity.getLandingName());
-								resultflyEntity2.setGoflightname(tFlightEntity.getTakeOffName());
-								resultflyEntity2.setTakeofftime(tFlightEntity.getTakeOffTime());
-								resultflyEntity2.setLandingofftime(tFlightEntity.getLandingTime());
-								resultflyEntity2.setZhuanflightname("a");
-								if (!arrayList.contains(resultflyEntity2)) {
-									arrayList.add(resultflyEntity2);
-								}
-							}
-						}
-						//转机航班
-						List<TFlightEntity> flights = dbDao.query(TFlightEntity.class,
-								Cnd.where("takeOffCode", "=", depcity.getCode()), null);
-						if (!Util.isEmpty(flights)) {
-							for (TFlightEntity tFlightEntity : flights) {
-								if (!Util.isEmpty(tFlightEntity.getRelationflight())) {
-									TFlightEntity fetch = dbDao.fetch(TFlightEntity.class, tFlightEntity
-											.getRelationflight().longValue());
-									if (Util.eq(fetch.getLandingCode(), arrcity.getCode())) {
-										ResultflyEntity resultflyEntity = new ResultflyEntity();
-										resultflyEntity.setArrflightname(fetch.getLandingName());
-										resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-										resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-										resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-										resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-										resultflyEntity.setZhuanflightname(fetch.getTakeOffName());
-										resultflyEntity.setZhuanflightnum(fetch.getFlightnum());
-										resultflyEntity.setZhuanlandingofftime(fetch.getLandingTime());
-										resultflyEntity.setZhuantakeofftime(fetch.getTakeOffTime());
-										if (!arrayList.contains(resultflyEntity)) {
-											arrayList.add(resultflyEntity);
-										}
-									}
-								}
-							}
-						}
-
-					}
-				}
-
-				newairLineResult.setResultflyEntity(arrayList);
-
-			} else {
-				//转换为list
-				arrayList = JsonUtil.fromJsonAsList(ResultflyEntity.class, flightinfo);
-			}*/
 			if (!Util.isEmpty(searchstr)) {
 				searchstr = searchstr.toUpperCase();
 				List<ResultflyEntity> resultlist = Lists.newArrayList();
 				for (ResultflyEntity flight : arrayList) {
-					if (flight.getFlightnum().indexOf(searchstr) > 0) {
+					if (flight.getFlightnum().indexOf(searchstr) != -1) {
 						if (!resultlist.contains(flight)) {
 							resultlist.add(flight);
 						}
 					}
-					if (!Util.isEmpty(flight.getZhuanflightnum()) && flight.getZhuanflightnum().indexOf(searchstr) > 0) {
+					if (!Util.isEmpty(flight.getZhuanflightnum())
+							&& flight.getZhuanflightnum().indexOf(searchstr) != -1) {
 						if (!resultlist.contains(flight)) {
 							resultlist.add(flight);
 						}
@@ -642,19 +456,8 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 
 		}
 
-		/*Collections.sort(newairLineResult.getResultflyEntity(), new Comparator<ResultflyEntity>() {
-			public int compare(ResultflyEntity o1, ResultflyEntity o2) {
-				return o1.getZhuanflightname().compareTo(o2.getZhuanflightname());
-			}
-		});*/
-
 		//放入缓存
 		if (!Util.isEmpty(newairLineResult.getResultflyEntity())) {
-			/*Collections.sort(newairLineResult.getResultflyEntity(), new Comparator<ResultflyEntity>() {
-				public int compare(ResultflyEntity o1, ResultflyEntity o2) {
-					return o1.getZhuanflightname().compareTo(o2.getZhuanflightname());
-				}
-			});*/
 			Collections.sort(newairLineResult.getResultflyEntity(), new Comparator<ResultflyEntity>() {
 				public int compare(ResultflyEntity o1, ResultflyEntity o2) {
 					if (Util.eq("a", o1.getZhuanflightname())) {
@@ -664,9 +467,9 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				}
 			});
 
-			redisDao.hset(CommonConstants.AIRLINE_INFO_KEY,
+			/*redisDao.hset(CommonConstants.AIRLINE_INFO_KEY,
 					String.valueOf(param.getGocity()) + String.valueOf(param.getArrivecity()),
-					JsonUtil.toJson(newairLineResult.getResultflyEntity()));
+					JsonUtil.toJson(newairLineResult.getResultflyEntity()));*/
 		}
 
 		long endTime = System.currentTimeMillis();
@@ -799,11 +602,15 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setFlightnum((String) record.get("flightnum"));
-					resultflyEntity.setArrflightname((String) record.get("landingname"));
-					resultflyEntity.setGoflightname((String) record.get("takeoffname"));
-					resultflyEntity.setTakeofftime((String) record.get("takeofftime"));
-					resultflyEntity.setLandingofftime((String) record.get("landingtime"));
+					resultflyEntity.setFlightnum(((String) record.get("flightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setArrflightname(((String) record.get("landingname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setGoflightname(((String) record.get("takeoffname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setTakeofftime(((String) record.get("takeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setLandingofftime(((String) record.get("landingtime")).replace(" ", "").replace(
+							"*", ""));
 					resultflyEntity.setZhuanflightname("a");
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
@@ -821,15 +628,24 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 
 				for (Record record : arrcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setArrflightname((String) record.get("tflandingname"));
-					resultflyEntity.setFlightnum((String) record.get("tfflightnum"));
-					resultflyEntity.setGoflightname((String) record.get("tftakeoffname"));
-					resultflyEntity.setLandingofftime((String) record.get("tflandingtime"));
-					resultflyEntity.setTakeofftime((String) record.get("tftakeofftime"));
-					resultflyEntity.setZhuanflightname((String) record.get("tflandingname2"));
-					resultflyEntity.setZhuanflightnum((String) record.get("tfflightnum2"));
-					resultflyEntity.setZhuanlandingofftime((String) record.get("tflandingtime2"));
-					resultflyEntity.setZhuantakeofftime((String) record.get("tftakeofftime2"));
+					resultflyEntity.setArrflightname(((String) record.get("tflandingname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity
+							.setFlightnum(((String) record.get("tfflightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setGoflightname(((String) record.get("tftakeoffname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setLandingofftime(((String) record.get("tflandingtime")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setTakeofftime(((String) record.get("tftakeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setZhuanflightname(((String) record.get("tflandingname2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuanflightnum(((String) record.get("tfflightnum2")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setZhuanlandingofftime(((String) record.get("tflandingtime2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuantakeofftime(((String) record.get("tftakeofftime2")).replace(" ", "")
+							.replace("*", ""));
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
 					}
@@ -905,11 +721,15 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setFlightnum((String) record.get("flightnum"));
-					resultflyEntity.setArrflightname((String) record.get("landingname"));
-					resultflyEntity.setGoflightname((String) record.get("takeoffname"));
-					resultflyEntity.setTakeofftime((String) record.get("takeofftime"));
-					resultflyEntity.setLandingofftime((String) record.get("landingtime"));
+					resultflyEntity.setFlightnum(((String) record.get("flightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setArrflightname(((String) record.get("landingname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setGoflightname(((String) record.get("takeoffname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setTakeofftime(((String) record.get("takeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setLandingofftime(((String) record.get("landingtime")).replace(" ", "").replace(
+							"*", ""));
 					resultflyEntity.setZhuanflightname("a");
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
@@ -927,15 +747,24 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 
 				for (Record record : arrcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setArrflightname((String) record.get("tflandingname"));
-					resultflyEntity.setFlightnum((String) record.get("tfflightnum"));
-					resultflyEntity.setGoflightname((String) record.get("tftakeoffname"));
-					resultflyEntity.setLandingofftime((String) record.get("tflandingtime"));
-					resultflyEntity.setTakeofftime((String) record.get("tftakeofftime"));
-					resultflyEntity.setZhuanflightname((String) record.get("tflandingname2"));
-					resultflyEntity.setZhuanflightnum((String) record.get("tfflightnum2"));
-					resultflyEntity.setZhuanlandingofftime((String) record.get("tflandingtime2"));
-					resultflyEntity.setZhuantakeofftime((String) record.get("tftakeofftime2"));
+					resultflyEntity.setArrflightname(((String) record.get("tflandingname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity
+							.setFlightnum(((String) record.get("tfflightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setGoflightname(((String) record.get("tftakeoffname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setLandingofftime(((String) record.get("tflandingtime")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setTakeofftime(((String) record.get("tftakeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setZhuanflightname(((String) record.get("tflandingname2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuanflightnum(((String) record.get("tfflightnum2")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setZhuanlandingofftime(((String) record.get("tflandingtime2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuantakeofftime(((String) record.get("tftakeofftime2")).replace(" ", "")
+							.replace("*", ""));
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
 					}
@@ -1015,11 +844,15 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setFlightnum((String) record.get("flightnum"));
-					resultflyEntity.setArrflightname((String) record.get("landingname"));
-					resultflyEntity.setGoflightname((String) record.get("takeoffname"));
-					resultflyEntity.setTakeofftime((String) record.get("takeofftime"));
-					resultflyEntity.setLandingofftime((String) record.get("landingtime"));
+					resultflyEntity.setFlightnum(((String) record.get("flightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setArrflightname(((String) record.get("landingname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setGoflightname(((String) record.get("takeoffname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setTakeofftime(((String) record.get("takeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setLandingofftime(((String) record.get("landingtime")).replace(" ", "").replace(
+							"*", ""));
 					resultflyEntity.setZhuanflightname("a");
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
@@ -1037,15 +870,24 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 
 				for (Record record : arrcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setArrflightname((String) record.get("tflandingname"));
-					resultflyEntity.setFlightnum((String) record.get("tfflightnum"));
-					resultflyEntity.setGoflightname((String) record.get("tftakeoffname"));
-					resultflyEntity.setLandingofftime((String) record.get("tflandingtime"));
-					resultflyEntity.setTakeofftime((String) record.get("tftakeofftime"));
-					resultflyEntity.setZhuanflightname((String) record.get("tflandingname2"));
-					resultflyEntity.setZhuanflightnum((String) record.get("tfflightnum2"));
-					resultflyEntity.setZhuanlandingofftime((String) record.get("tflandingtime2"));
-					resultflyEntity.setZhuantakeofftime((String) record.get("tftakeofftime2"));
+					resultflyEntity.setArrflightname(((String) record.get("tflandingname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity
+							.setFlightnum(((String) record.get("tfflightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setGoflightname(((String) record.get("tftakeoffname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setLandingofftime(((String) record.get("tflandingtime")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setTakeofftime(((String) record.get("tftakeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setZhuanflightname(((String) record.get("tflandingname2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuanflightnum(((String) record.get("tfflightnum2")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setZhuanlandingofftime(((String) record.get("tflandingtime2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuantakeofftime(((String) record.get("tftakeofftime2")).replace(" ", "")
+							.replace("*", ""));
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
 					}
@@ -1119,11 +961,15 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setFlightnum((String) record.get("flightnum"));
-					resultflyEntity.setArrflightname((String) record.get("landingname"));
-					resultflyEntity.setGoflightname((String) record.get("takeoffname"));
-					resultflyEntity.setTakeofftime((String) record.get("takeofftime"));
-					resultflyEntity.setLandingofftime((String) record.get("landingtime"));
+					resultflyEntity.setFlightnum(((String) record.get("flightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setArrflightname(((String) record.get("landingname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setGoflightname(((String) record.get("takeoffname")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setTakeofftime(((String) record.get("takeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setLandingofftime(((String) record.get("landingtime")).replace(" ", "").replace(
+							"*", ""));
 					resultflyEntity.setZhuanflightname("a");
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
@@ -1141,15 +987,24 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 
 				for (Record record : arrcitys) {
 					ResultflyEntity resultflyEntity = new ResultflyEntity();
-					resultflyEntity.setArrflightname((String) record.get("tflandingname"));
-					resultflyEntity.setFlightnum((String) record.get("tfflightnum"));
-					resultflyEntity.setGoflightname((String) record.get("tftakeoffname"));
-					resultflyEntity.setLandingofftime((String) record.get("tflandingtime"));
-					resultflyEntity.setTakeofftime((String) record.get("tftakeofftime"));
-					resultflyEntity.setZhuanflightname((String) record.get("tflandingname2"));
-					resultflyEntity.setZhuanflightnum((String) record.get("tfflightnum2"));
-					resultflyEntity.setZhuanlandingofftime((String) record.get("tflandingtime2"));
-					resultflyEntity.setZhuantakeofftime((String) record.get("tftakeofftime2"));
+					resultflyEntity.setArrflightname(((String) record.get("tflandingname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity
+							.setFlightnum(((String) record.get("tfflightnum")).replace(" ", "").replace("*", ""));
+					resultflyEntity.setGoflightname(((String) record.get("tftakeoffname")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setLandingofftime(((String) record.get("tflandingtime")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setTakeofftime(((String) record.get("tftakeofftime")).replace(" ", "").replace("*",
+							""));
+					resultflyEntity.setZhuanflightname(((String) record.get("tflandingname2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuanflightnum(((String) record.get("tfflightnum2")).replace(" ", "").replace(
+							"*", ""));
+					resultflyEntity.setZhuanlandingofftime(((String) record.get("tflandingtime2")).replace(" ", "")
+							.replace("*", ""));
+					resultflyEntity.setZhuantakeofftime(((String) record.get("tftakeofftime2")).replace(" ", "")
+							.replace("*", ""));
 					if (!arrayList.contains(resultflyEntity)) {
 						arrayList.add(resultflyEntity);
 					}

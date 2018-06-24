@@ -2861,11 +2861,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			jsonEntity.setRequest_id(out.getString("request_id"));
 			jsonEntity.setSex(out.getString("sex"));
 			jsonEntity.setSuccess(out.getBoolean("success"));
-			String cardId = jsonEntity.getNum().substring(0, 6);
-			TIdcardEntity IDcardEntity = dbDao.fetch(TIdcardEntity.class, Cnd.where("code", "=", cardId));
-			if (!Util.isEmpty(IDcardEntity)) {
-				jsonEntity.setProvince(IDcardEntity.getProvince());
-				jsonEntity.setCity(IDcardEntity.getCity());
+			if (!Util.isEmpty(jsonEntity.getNum())) {
+				String cardId = jsonEntity.getNum().substring(0, 6);
+				TIdcardEntity IDcardEntity = dbDao.fetch(TIdcardEntity.class, Cnd.where("code", "=", cardId));
+				if (!Util.isEmpty(IDcardEntity)) {
+					jsonEntity.setProvince(IDcardEntity.getProvince());
+					jsonEntity.setCity(IDcardEntity.getCity());
+				}
 			}
 		}
 		return jsonEntity;

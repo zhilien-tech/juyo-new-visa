@@ -226,7 +226,9 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 							Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
 					String goFlightNum = ordertripjp.getGoFlightNum();
 					//map.put("entryPort", goflight.getLandingName() + ",");
-					map.put("entryPort", goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
+					map.put("entryPort", goFlightNum.substring(
+							goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+							goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))));
 					map.put("entryFlight",
 							goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
@@ -249,9 +251,8 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					String goFlightNum = ordertripjp.getReturnFlightNum();
 					//map.put("departPort", goflight.getTakeOffName() + ",");
 					//map.put("departFlight", ordertripjp.getReturnFlightNum().replace("*", ""));
-					map.put("departPort",
-							goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-									goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + ",");
+					map.put("departPort", goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+							+ ",");
 					map.put("departFlight",
 							goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));

@@ -1672,11 +1672,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		if (Util.isEmpty(orderjp.getVisaType())) {
 			resultstrbuf.append("签证类型、");
 		} else {
-			if (!orderjp.getVisaType().equals(MainSaleVisaTypeEnum.SINGLE.intKey())) {
+			/*if (!orderjp.getVisaType().equals(MainSaleVisaTypeEnum.SINGLE.intKey())) {
 				if (Util.isEmpty(orderjp.getVisaCounty())) {
 					resultstrbuf.append("签证县、");
 				}
-			}
+			}*/
 		}
 		if (Util.isEmpty(orderinfo.getGoTripDate())) {
 			resultstrbuf.append("出发日期、");

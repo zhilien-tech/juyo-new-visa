@@ -175,6 +175,7 @@ $("#searchBtn").on('click', function () {
 	datatable.ajax.reload();
 });
 
+
 //清空按钮
 $("#emptyBtn").on('click', function () {
 	$("#searchStr").val("");

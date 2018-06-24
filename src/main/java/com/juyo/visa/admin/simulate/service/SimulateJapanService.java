@@ -208,14 +208,6 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 				}
 				map.put("acceptdesign", orderjp.getAcceptDesign());
 
-				//过去三年是否访问过,1访问过,0没有
-				Integer isVisit = orderjp.getIsVisit();
-				if (isVisit == 1) {
-					map.put("visaVisitType1", 1);
-				} else {
-					map.put("visaVisitType1", 0);
-				}
-
 				String threeCounty = orderjp.getThreeCounty();
 				if (!Util.isEmpty(threeCounty)) {
 					if (threeCounty.indexOf("岩手") != -1) {
@@ -241,6 +233,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			}
 			map.put("agentNo", agentNo);
 			map.put("visaType1", record.get("visatype"));
+			map.put("visaVisitType1", record.get("isvisit"));
 
 			String applysqlstr = sqlManager.get("get_applicantinfo_simulate_from_order");
 			Sql applysql = Sqls.create(applysqlstr);

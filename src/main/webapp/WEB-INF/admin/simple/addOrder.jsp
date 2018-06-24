@@ -122,7 +122,7 @@
 										<label><span>*</span>签证类型：</label> <select id="visatype"
 											name="visatype" type="text" class="form-control input-sm"
 											placeholder=" " >
-												<option value=0>请选择</option>
+												<option value="">请选择</option>
 												<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 													<option value="${map.key}">${map.value}</option>
 												</c:forEach>
@@ -399,6 +399,25 @@
 			$("#cityid").val(cityid);
 			cityidstr = cityid;
 		});
+		
+		$("#visatype").change(function(){
+			var visatype = $(this).val();
+			var orderid = $('#orderid').val();
+			if(orderid != ""){
+				$.ajax({ 
+			    	url: '${base}/admin/simple/changeVisatype.html',
+			    	dataType:"json",
+			    	data:{
+			    		orderid:orderid,
+			    		visatype:visatype
+			    		},
+			    	type:'post',
+			    	success: function(data){
+			      	}
+			    });
+			}
+		});
+		
 	
 		$(function(){
 			

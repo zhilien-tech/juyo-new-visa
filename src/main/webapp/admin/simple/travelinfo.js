@@ -307,6 +307,8 @@ $('.schedulingBtn').click(function(){
 	var triptype = $('#triptype').val();
 	var goDate = $('#goDate').val();
 	var returnDate = $('#returnDate').val();
+	var visatype = $('#visatype').val();
+	console.log(visatype);
 	var goDepartureCity = $('#goDepartureCity').val();
 	if (goDepartureCity) {
 		goDepartureCity = goDepartureCity.join(',');
@@ -358,6 +360,7 @@ $('.schedulingBtn').click(function(){
 				returnDepartureCity:returnDepartureCity,
 				returnArrivedCity:returnArrivedCity,
 				returnFlightNum:returnFlightNum,
+				visatype:visatype
 			},
 		type:'post',
 		success: function(data){
