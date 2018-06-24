@@ -89,6 +89,7 @@ public class VisaEditDataForm implements Serializable {
 	private Integer orderProcessType;
 
 	private String visacounty;
+	private String visacountys;
 
 	private String threecounty;
 

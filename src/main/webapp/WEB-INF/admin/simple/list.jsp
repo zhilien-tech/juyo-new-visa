@@ -91,7 +91,7 @@
 									<label>操作：</label>
 									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<span v-if="data.zhaobaocomplete == 0 && data.visatype != 4">
+									<span v-if="data.zhaobaocomplete == 0 && data.visatype != 14">
 										<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
 									</span>
 									<span v-else>
@@ -212,7 +212,7 @@
         				title = '确定要作废吗？';
         			}
         			layer.confirm(title, {
-    					title:title,
+    					title:"提示",
     					btn: ["是","否"], //按钮
     					shade: false //不显示遮罩
     				}, function(index){

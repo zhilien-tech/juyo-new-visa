@@ -247,7 +247,8 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 							Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
 					map.put("Text6",
-							goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+							goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")))
 									+ "、 "
 									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
@@ -270,8 +271,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 							Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
 					map.put("Text8",
-							goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")))
+							goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
 									+ "、 "
 									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
@@ -432,7 +432,25 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 						int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
 						map.put("stayday", String.valueOf(stayday) + "天");
 					}
-					//入境口岸
+					if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
+						String goFlightNum = ordertripjp.getGoFlightNum();
+						if (goFlightNum.contains("//")) {//转机
+							//入境口岸
+							map.put("goArrivedCity",
+									goFlightNum.substring(goFlightNum.lastIndexOf("-") + 1, goFlightNum.indexOf(" ")));
+							//航空公司
+							map.put("goFlightNum",
+									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
+						} else {//直飞
+							//入境口岸
+							map.put("goArrivedCity",
+									goFlightNum.substring(goFlightNum.indexOf("-") + 1, goFlightNum.indexOf(" ")));
+							//航空公司
+							map.put("goFlightNum",
+									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
+						}
+					}
+					/*//入境口岸
 					if (!Util.isEmpty(ordertripjp.getGoArrivedCity())) {
 						TCityEntity goarrivecirtentity = cityViewService.fetch(ordertripjp.getGoArrivedCity());
 						if (!Util.isEmpty(goarrivecirtentity)) {
@@ -444,7 +462,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 							Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
 					if (!Util.isEmpty(goflightentity)) {
 						map.put("goFlightNum", ordertripjp.getGoFlightNum());
-					}
+					}*/
 					//					if (!Util.isEmpty(entrytrip.getFlightNum())) {
 					//						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 					//								Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
@@ -1193,9 +1211,11 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 			//座位等级
 			map.put("Text7", "Y");
 			map.put("Text8", "A");
+
 			//客票状态
 			map.put("Text18", "OK");
 			map.put("Text17", "OK");
+
 			//行李
 			map.put("Text19", applyinfo.size() + "PC");
 			map.put("Text20", applyinfo.size() + "PC");
@@ -1204,52 +1224,178 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 				if (ordertripjp.getTripType().equals(1)) {
 					//入境航班
 					if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
 						String goFlightNum = ordertripjp.getGoFlightNum();
-						String substring = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1);
-						//起飞机场
-						map.put("Text2", goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
-						//起飞时间 
-						map.put("Text11", substring.substring(0, 2) + ":" + substring.substring(2, 4));
-						//降落时间
-						map.put("Text13", substring.substring(substring.lastIndexOf("/") + 1).substring(0, 2) + ":"
-								+ substring.substring(substring.lastIndexOf("/") + 1).substring(2, 4));
-						//起飞航班号
-						map.put("Text5", goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
+						//分直飞和转机
+						if (goFlightNum.contains("//")) {//转机
+							//第一行，共2行
+							//机场
+							map.put("Text2",
+									goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
+							//航班
+							map.put("Text5",
+									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.indexOf("//")));
+							//日期
+							map.put("Text9", df.format(ordertripjp.getGoDate()).toUpperCase());
+							//起飞时间
+							map.put("Text11",
+									goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
+											goFlightNum.lastIndexOf(" ") + 5).substring(0, 2)
+											+ ":"
+											+ goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
+													goFlightNum.lastIndexOf(" ") + 5).substring(2, 4));
+							//到达时间
+							map.put("Text13",
+									goFlightNum.substring(goFlightNum.lastIndexOf("//") - 4,
+											goFlightNum.lastIndexOf("//")).substring(0, 2)
+											+ ":"
+											+ goFlightNum.substring(goFlightNum.lastIndexOf("//") - 4,
+													goFlightNum.lastIndexOf("//")).substring(2, 4));
+							//有效期
+							Date addDay = DateUtil.addDay(ordertripjp.getGoDate(), 8);
+							map.put("Text15", df.format(addDay).toUpperCase());
+
+							//第二行
+							//机场
+							map.put("Text3",
+									goFlightNum.substring(goFlightNum.indexOf("-") + 1, goFlightNum.lastIndexOf("-")));
+							//航班
+							map.put("Text6",
+									goFlightNum.substring(goFlightNum.indexOf("//") + 2, goFlightNum.lastIndexOf(" ")));
+							//日期
+							map.put("Text10", df.format(ordertripjp.getGoDate()).toUpperCase());
+							//起飞时间
+							map.put("Text12",
+									goFlightNum.substring(goFlightNum.lastIndexOf("//") + 2,
+											goFlightNum.lastIndexOf("/")).substring(0, 2)
+											+ ":"
+											+ goFlightNum.substring(goFlightNum.lastIndexOf("//") + 2,
+													goFlightNum.lastIndexOf("/")).substring(2, 4));
+							//到达时间
+							map.put("Text14", goFlightNum.substring(goFlightNum.lastIndexOf("/") + 1).substring(0, 2)
+									+ ":" + goFlightNum.substring(goFlightNum.lastIndexOf("/") + 1).substring(2, 4));
+							//有效期
+							map.put("Text16", df.format(addDay).toUpperCase());
+
+							map.put("Text22", "A");
+							map.put("Text31", "Y");
+							map.put("Text27", "OK");
+							map.put("Text36", "OK");
+							map.put("Text28", applyinfo.size() + "PC");
+							map.put("Text37", applyinfo.size() + "PC");
+
+						} else {//直飞
+							//起飞时间
+							String takeofftime = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
+									goFlightNum.indexOf("/"));
+							//降落时间
+							String landingtime = goFlightNum.substring(goFlightNum.indexOf("/") + 1);
+							//起飞机场
+							map.put("Text2",
+									goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
+							//起飞航班号
+							map.put("Text5",
+									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
+							//起飞机场
+							map.put("Text2",
+									goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
+							//起飞时间 
+							map.put("Text11", takeofftime.substring(0, 2) + ":" + takeofftime.substring(2, 4));
+							//降落时间
+							map.put("Text13", landingtime.substring(0, 2) + ":" + landingtime.substring(2, 4));
+
+							//出发航班日期
+							map.put("Text9", df.format(ordertripjp.getGoDate()).toUpperCase());
+							//有效期（出发日期+8天）
+							Date addDay = DateUtil.addDay(ordertripjp.getGoDate(), 8);
+							map.put("Text15", df.format(addDay).toUpperCase());
+
+						}
 					}
 
 					//出境航班
 					if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
 						String goFlightNum = ordertripjp.getReturnFlightNum();
-						String substring = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1);
-						//返回机场
-						map.put("Text3", goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
-						//起飞时间 
-						map.put("Text12", substring.substring(0, 2) + ":" + substring.substring(2, 4));
-						//降落时间
-						map.put("Text14", substring.substring(substring.lastIndexOf("/") + 1).substring(0, 2) + ":"
-								+ substring.substring(substring.lastIndexOf("/") + 1).substring(2, 4));
-						map.put("Text4",
-								goFlightNum.substring(goFlightNum.lastIndexOf("-") + 1, goFlightNum.indexOf(" ")));
-						//航班号
-						map.put("Text6", goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
-					}
-					//出发航班日期
-					map.put("Text9", df.format(ordertripjp.getGoDate()).toUpperCase());
-					//有效期（出发日期+8天）
-					Date addDay = DateUtil.addDay(ordertripjp.getGoDate(), 8);
-					map.put("Text15", df.format(addDay).toUpperCase());
-					//有效期（返回日期+6天）
-					Date addDay2 = DateUtil.addDay(ordertripjp.getGoDate(), 8);
-					map.put("Text16", df.format(addDay2).toUpperCase());
+						if (goFlightNum.contains("//")) {//转机
+							//第一行 共3行
+							//机场
+							map.put("Text4",
+									goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
+							//航班
+							map.put("Text21",
+									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.indexOf("//")));
+							//日期
+							map.put("Text23", df.format(ordertripjp.getReturnDate()).toUpperCase());
+							//起飞时间
+							map.put("Text24",
+									goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
+											goFlightNum.lastIndexOf(" ") + 5).substring(0, 2)
+											+ ":"
+											+ goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
+													goFlightNum.lastIndexOf(" ") + 5).substring(2, 4));
+							//到达时间
+							map.put("Text25",
+									goFlightNum.substring(goFlightNum.lastIndexOf("//") - 4,
+											goFlightNum.lastIndexOf("//")).substring(0, 2)
+											+ ":"
+											+ goFlightNum.substring(goFlightNum.lastIndexOf("//") - 4,
+													goFlightNum.lastIndexOf("//")).substring(2, 4));
+							//有效期
+							Date addDay = DateUtil.addDay(ordertripjp.getReturnDate(), 8);
+							map.put("Text26", df.format(addDay).toUpperCase());
 
-					//返回航班日期
-					map.put("Text10", df.format(ordertripjp.getReturnDate()).toUpperCase());
+							//第二行
+							//机场
+							map.put("Text29",
+									goFlightNum.substring(goFlightNum.indexOf("-") + 1, goFlightNum.lastIndexOf("-")));
+							//航班
+							map.put("Text30",
+									goFlightNum.substring(goFlightNum.indexOf("//") + 2, goFlightNum.lastIndexOf(" ")));
+							//日期
+							map.put("Text32", df.format(ordertripjp.getReturnDate()).toUpperCase());
+							//起飞时间
+							map.put("Text33",
+									goFlightNum.substring(goFlightNum.lastIndexOf("//") + 2,
+											goFlightNum.lastIndexOf("/")).substring(0, 2)
+											+ ":"
+											+ goFlightNum.substring(goFlightNum.lastIndexOf("//") + 2,
+													goFlightNum.lastIndexOf("/")).substring(2, 4));
+							//到达时间
+							map.put("Text34", goFlightNum.substring(goFlightNum.lastIndexOf("/") + 1).substring(0, 2)
+									+ ":" + goFlightNum.substring(goFlightNum.lastIndexOf("/") + 1).substring(2, 4));
+							//有效期
+							map.put("Text35", df.format(addDay).toUpperCase());
+							//第三行
+							map.put("Text38",
+									goFlightNum.substring(goFlightNum.lastIndexOf("-") + 1, goFlightNum.indexOf(" ")));
+
+						} else {//直飞
+								//返回机场
+							map.put("Text3",
+									goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
+							//起飞时间 
+							map.put("Text12",
+									goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1, goFlightNum.indexOf("/"))
+											.substring(0, 2)
+											+ ":"
+											+ goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
+													goFlightNum.indexOf("/")).substring(2, 4));
+							//降落时间
+							map.put("Text14", goFlightNum.substring(goFlightNum.indexOf("/") + 1).substring(0, 2) + ":"
+									+ goFlightNum.substring(goFlightNum.indexOf("/") + 1).substring(2, 4));
+							map.put("Text4",
+									goFlightNum.substring(goFlightNum.indexOf("-") + 1, goFlightNum.indexOf(" ")));
+							//航班号
+							map.put("Text6",
+									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
+
+							//返回航班日期
+							map.put("Text10", df.format(ordertripjp.getReturnDate()).toUpperCase());
+							//有效期（返回日期+6天）
+							Date addDay2 = DateUtil.addDay(ordertripjp.getReturnDate(), 6);
+							map.put("Text16", df.format(addDay2).toUpperCase());
+						}
+
+					}
 				} else if (ordertripjp.getTripType().equals(2)) {
 					//多程处理
 					if (!Util.isEmpty(mutiltrip)) {
@@ -1392,9 +1538,10 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 								+ province
 								+ "から"
 								+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて"
-								+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))) + "へ"
-								+ "\n 到着後、ホテルへ";
+										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+								+ "便にて"
+								+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+										goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
 						if (!Util.isEmpty(mutiltrip)) {
@@ -1408,9 +1555,10 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 							scenic = " "
 									+ province
 									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて"
-									+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
-									+ "へ" + "\n 到着後、ホテルへ";
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+									+ "便にて"
+									+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
 						}
 					}
 				} else if (count == ordertravelplans.size()) {
@@ -1421,8 +1569,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 						/*scenic = " " + returnflight.getTakeOffName() + "から"
 								+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";*/
 						scenic = " "
-								+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")))
+								+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
 								+ "から"
 								+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて帰国";
@@ -1437,8 +1584,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 							/*scenic = " " + returnflight.getTakeOffName() + "から"
 									+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";*/
 							scenic = " "
-									+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")))
+									+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
 									+ "から"
 									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて帰国";

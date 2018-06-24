@@ -186,6 +186,7 @@
 									<div class="form-group">
 										<label><span>*</span>签证类型：</label> <select id="visatype"
 											name="visatype" type="text" class="form-control input-sm" tabindex="5">
+											<option value="">请选择</option>
 												<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 													<c:choose>
 														<c:when test="${map.key eq obj.orderjpinfo.visaType }">
@@ -567,6 +568,22 @@
 			cityidstr = cityid;
 		});
 		
+		$("#visatype").change(function(){
+			var visatype = $(this).val();
+			var orderid = $('#orderid').val();
+			$.ajax({ 
+		    	url: '${base}/admin/simple/changeVisatype.html',
+		    	dataType:"json",
+		    	data:{
+		    		orderid:orderid,
+		    		visatype:visatype
+		    		},
+		    	type:'post',
+		    	success: function(data){
+		      	}
+		    });
+		});
+		
 		$(function(){
 			$('#urgentType').change(function(){
 				var urgentType = $(this).val();
@@ -753,7 +770,7 @@
         				title = '确定要作废吗？';
         			}
         			layer.confirm(title, {
-    					title:title,
+    					title:"提示",
     					btn: ["是","否"], //按钮
     					shade: false //不显示遮罩
     				}, function(index){

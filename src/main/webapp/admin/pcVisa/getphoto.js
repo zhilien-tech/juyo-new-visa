@@ -84,6 +84,7 @@ function oldhuzhao(staffid, type) {
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
+			if(data != null && data.query != null){
 			if (data.query.length > 0) {
 				for(var i=0;i<data.query.length;i++){
 					var url=data.query[i].url;
@@ -93,6 +94,7 @@ function oldhuzhao(staffid, type) {
 					'</div>');
 					$(".oldpassports").css("display","none");
 				}	
+			}
 			}
 		}
 	});
@@ -108,7 +110,9 @@ function card(staffid, type) {
 		dataType : "json",
 		type : 'post',
 		success : function(data) {
+			console.log(data);
 			/* _self.passportdata = data.passportdata; */
+			if(data != null && data.query != null){
 			if(data.query.length == 1){
 				var url=data.query[0].url;
 				if(data.query[0].status == 1){
@@ -129,6 +133,7 @@ function card(staffid, type) {
 					$("#card").attr('src',data.query[1].url);
 				}
 			}
+		}
 		}
 	});
 };
@@ -216,6 +221,7 @@ function drive(staffid, type) {
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
+			if(data != null && data.query != null){
 			if(data.query.length > 0){
 				var url=data.query[0].url;
 				if(data.query.length == 1){
@@ -227,6 +233,7 @@ function drive(staffid, type) {
 				}
 
 			}
+		}
 		}
 	});
 };
@@ -242,6 +249,7 @@ function housecard(staffid, type) {
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
+			if(data != null && data.query != null){
 			if(data.query.length > 0){
 				for(var i = 0;i<data.query.length;i++){
 					$(".housecard").after('<div class="uploadReleases hoursecardMain housecard'+i+'" >'+
@@ -257,6 +265,7 @@ function housecard(staffid, type) {
 				$("#address").val(data.explain.address);
 			}
 		}
+		}
 	});
 };
 //户口回显
@@ -271,6 +280,7 @@ function household(staffid, type) {
 		type : 'post',
 		success : function(data) {
 			/* _self.passportdata = data.passportdata; */
+			if(data != null && data.query != null){
 			if(data.query.length > 0){
 				//	console.log(data);
 				//$("#household").attr("src",data.url);
@@ -283,6 +293,7 @@ function household(staffid, type) {
 					'</div>');
 				}
 			}
+		}
 		}
 	});
 };

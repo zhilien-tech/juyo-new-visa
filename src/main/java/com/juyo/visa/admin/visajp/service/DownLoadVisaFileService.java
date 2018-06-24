@@ -303,7 +303,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 							Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
 					//map.put("entryPort", goflight.getLandingName() + ":");
 					String goFlightNum = ordertripjp.getGoFlightNum();
-					map.put("entryPort", goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
+					map.put("entryPort",
+							goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + ",");
 					map.put("entryFlight",
 							goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
@@ -332,9 +334,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 							Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
 					String goFlightNum = ordertripjp.getReturnFlightNum();
 					//map.put("departPort", goflight.getTakeOffName() + ":");
-					map.put("departPort",
-							goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-									goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + ",");
+					map.put("departPort", goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+							+ ",");
 					map.put("departFlight",
 							goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
@@ -502,7 +503,25 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
 						map.put("stayday", String.valueOf(stayday) + "天");
 					}
-					//入境口岸
+					if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
+						String goFlightNum = ordertripjp.getGoFlightNum();
+						if (goFlightNum.contains("//")) {//转机
+							//入境口岸
+							map.put("goArrivedCity",
+									goFlightNum.substring(goFlightNum.lastIndexOf("-") + 1, goFlightNum.indexOf(" ")));
+							//航空公司
+							map.put("goFlightNum",
+									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
+						} else {//直飞
+							//入境口岸
+							map.put("goArrivedCity",
+									goFlightNum.substring(goFlightNum.indexOf("-") + 1, goFlightNum.indexOf(" ")));
+							//航空公司
+							map.put("goFlightNum",
+									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
+						}
+					}
+					/*//入境口岸
 					if (!Util.isEmpty(ordertripjp.getGoArrivedCity())) {
 						TCityEntity goarrivecirtentity = cityViewService.fetch(ordertripjp.getGoArrivedCity());
 						if (!Util.isEmpty(goarrivecirtentity)) {
@@ -514,7 +533,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 							Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
 					if (!Util.isEmpty(goflightentity)) {
 						map.put("goFlightNum", ordertripjp.getGoFlightNum());
-					}
+					}*/
 					//					if (!Util.isEmpty(entrytrip.getFlightNum())) {
 					//						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 					//								Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
