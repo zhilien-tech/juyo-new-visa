@@ -110,7 +110,7 @@
 										<!-- <i class="return" > </i> -->
 										<i class="toVoid1" v-on:click="undisabled(data.orderid)"> </i>
 									</div>
-									<div v-else>
+									<div v-else-if="data.isdisabled==0">
 										<i class="edit"  v-on:click="order(data.orderid)"> </i>
 										<i class="share" v-on:click="share(data.orderid)"> </i>
 										<i class="theTrial" v-on:click="theTrial(data.orderid)"> </i>

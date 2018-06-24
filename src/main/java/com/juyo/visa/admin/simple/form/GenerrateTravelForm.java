@@ -40,4 +40,6 @@ public class GenerrateTravelForm {
 	private Integer returnArrivedCity;
 
 	private String returnFlightNum;
+
+	private Integer visatype;
 }

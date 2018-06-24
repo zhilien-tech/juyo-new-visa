@@ -23,6 +23,7 @@ import org.nutz.mvc.annotation.Param;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
+import com.juyo.visa.admin.orderUS.service.AutofillService;
 import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.forms.OrderUpdateForm;
 import com.juyo.visa.forms.TAppStaffVisaUsAddForm;
@@ -40,6 +41,9 @@ public class OrderUSModule {
 
 	@Inject
 	private OrderUSViewService orderUSViewService;
+
+	@Inject
+	private AutofillService autofillService;
 
 	/**
 	 * 跳转到美国订单list页面
@@ -257,6 +261,24 @@ public class OrderUSModule {
 	public Object sendShareMsg(@Param("staffId") Integer staffId, @Param("orderid") Integer orderid,
 			@Param("sendType") String sendType, HttpServletRequest request) {
 		return orderUSViewService.sendShareMsg(staffId, orderid, sendType, request);
+	}
+
+	/**
+	 * 验证信息是否完整
+	 */
+	@At
+	@POST
+	public Object validateInfoIsFull(@Param("orderid") int orderid, HttpSession session) {
+		return autofillService.getData(orderid);
+	}
+
+	@At
+	@GET
+	@Ok("jsp")
+	public Object autofillError(@Param("errData") String errData) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("errMsg", errData);
+		return result;
 	}
 
 	/*

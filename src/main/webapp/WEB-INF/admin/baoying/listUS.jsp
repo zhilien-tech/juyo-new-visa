@@ -105,6 +105,9 @@
 			$(function () {
 			    initDatatable();
 			});
+			function successCallback(){
+				$("#searchBtn").click();
+			}
 		</script>
 	</body>
 </html>

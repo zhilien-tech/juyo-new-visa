@@ -21,4 +21,5 @@ public class JapanSimulateErrorForm {
 
 	private int errorCode;
 	private String errorMsg;
+	private int orderstatus;
 }

@@ -157,4 +157,8 @@ public class TOrderEntity implements Serializable {
 	@Comment("出签截止日期")
 	private Date outvisaenddate;
 
+	@Column
+	@Comment("发招宝是否成功")
+	private Integer zhaobaocomplete;
+
 }

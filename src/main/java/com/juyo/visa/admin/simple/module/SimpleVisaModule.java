@@ -24,7 +24,6 @@ import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
 import com.juyo.visa.admin.simple.service.SimpleVisaService;
 import com.juyo.visa.common.enums.JpOrderSimpleEnum;
-import com.juyo.visa.common.util.PublicIpUtil;
 import com.juyo.visa.forms.TApplicantForm;
 import com.juyo.visa.forms.TApplicantPassportForm;
 import com.uxuexi.core.common.util.EnumUtil;
@@ -208,5 +207,14 @@ public class SimpleVisaModule {
 	@Ok("jsp")
 	public Object addPassport(@Param("orderid") Integer orderid, HttpServletRequest request) {
 		return simpleVisaService.addPassport(orderid, request);
+	}
+
+	/**
+	 * 改变签证类型
+	 */
+	@At
+	@POST
+	public Object changeVisatype(@Param("orderid") int orderid, @Param("visatype") int visatype) {
+		return simpleVisaService.changeVisatype(orderid, visatype);
 	}
 }

@@ -1335,19 +1335,44 @@
 		function autofill(){
 			var orderid = '${obj.orderid}';
 			$.ajax({
-				url : '/admin/orderUS/autofill.html',
+				url : '/admin/orderUS/validateInfoIsFull.html',
 				data : {
 					orderid : orderid
 				},
 				dataType : "json",
 				type : 'POST',
 				success : function(data) {
-					layer.msg("操作成功", {
-						time: 500,
-						end: function () {
-							dataReload(addorder);
-						}
-					});
+					if(data.errMsg){
+						layer.open({
+		        		    type: 2,
+		        		    title: false,
+		        		    closeBtn:false,
+		        		    fix: false,
+		        		    maxmin: false,
+		        		    shadeClose: false,
+		        		    scrollbar: false,
+		        		    area: ['400px', '300px'],
+		        		    content: '${base}/admin/orderUS/autofillError.html?errData='+data.errMsg
+		        		  });
+					}else{
+						$.ajax({
+							url : '/admin/orderUS/autofill.html',
+							data : {
+								orderid : orderid
+							},
+							dataType : "json",
+							type : 'POST',
+							success : function(data) {
+								
+							}
+						});
+						/* layer.msg("操作成功", {
+							time: 500,
+							end: function () {
+								dataReload(addorder);
+							}
+						}); */
+					}
 				}
 			});
 		}

@@ -41,6 +41,7 @@ import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
+import com.juyo.visa.admin.visajp.service.TripAirlineService;
 import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.ApplicantJpWealthEnum;
@@ -66,7 +67,9 @@ import com.juyo.visa.common.enums.MainSaleUrgentTimeEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
+import com.juyo.visa.common.enums.SimpleVisaTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.newairline.ResultflyEntity;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
@@ -87,7 +90,6 @@ import com.juyo.visa.entities.THotelEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderLogsEntity;
-import com.juyo.visa.entities.TOrderTravelplanHisJpEntity;
 import com.juyo.visa.entities.TOrderTravelplanJpEntity;
 import com.juyo.visa.entities.TOrderTripJpEntity;
 import com.juyo.visa.entities.TScenicEntity;
@@ -118,6 +120,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 	@Inject
 	private QrCodeService qrCodeService;
+	@Inject
+	private TripAirlineService tripAirlineService;
 	@Inject
 	private UserViewService userViewService;
 	@Inject
@@ -224,8 +228,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("mainSaleUrgentTimeEnum", EnumUtil.enum2(MainSaleUrgentTimeEnum.class));
 		result.put("mainSaleTripTypeEnum", EnumUtil.enum2(MainSaleTripTypeEnum.class));
 		result.put("mainSalePayTypeEnum", EnumUtil.enum2(MainSalePayTypeEnum.class));
-		result.put("mainSaleVisaTypeEnum", EnumUtil.enum2(MainSaleVisaTypeEnum.class));
-		
+		result.put("mainSaleVisaTypeEnum", EnumUtil.enum2(SimpleVisaTypeEnum.class));
+
 		return result;
 	}
 
@@ -263,7 +267,48 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			result.put("message", "请选择返回航班号");
 			return result;
 		}
+		if (Util.isEmpty(form.getVisatype())) {
+			result.put("message", "请选择签证类型");
+			return result;
+		}
 		int daysBetween = DateUtil.daysBetween(form.getGoDate(), form.getReturnDate());
+		//根据签证类型来决定前两天的城市
+		Integer visatype = form.getVisatype();
+		TCityEntity firstcity = new TCityEntity();
+		if (visatype == 2 || visatype == 7) {//冲绳
+			firstcity = dbDao.fetch(TCityEntity.class, Cnd.where("city", "like", "%冲绳%"));
+		}
+		if (visatype == 3 || visatype == 8) {//宫城
+			firstcity = dbDao.fetch(TCityEntity.class, Cnd.where("city", "like", "%宫城%"));
+		}
+		if (visatype == 4 || visatype == 10) {//岩手
+			firstcity = dbDao.fetch(TCityEntity.class, Cnd.where("city", "like", "%岩手%"));
+		}
+		if (visatype == 5 || visatype == 9) {//福岛
+			firstcity = dbDao.fetch(TCityEntity.class, Cnd.where("city", "like", "%福岛%"));
+		}
+		if (visatype == 11) {//青森
+			firstcity = dbDao.fetch(TCityEntity.class, Cnd.where("city", "like", "%青森%"));
+		}
+		if (visatype == 12) {//秋田
+			firstcity = dbDao.fetch(TCityEntity.class, Cnd.where("city", "like", "%秋田%"));
+		}
+		if (visatype == 13) {//山形
+			firstcity = dbDao.fetch(TCityEntity.class, Cnd.where("city", "like", "%山形%"));
+		}
+		List<TScenicEntity> firstscenic = null;
+		List<THotelEntity> firsthotel = null;
+		if (!Util.isEmpty(firstcity)) {
+			//获取前两天的景区
+			firstscenic = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", firstcity.getId()), null);
+			//获取前两天的酒店
+			firsthotel = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", firstcity.getId()), null);
+			if (firstscenic.size() < daysBetween) {
+				result.put("message", "没有更多的景区");
+				return result;
+			}
+		}
+
 		//获取城市
 		TCityEntity city = dbDao.fetch(TCityEntity.class, form.getGoArrivedCity().longValue());
 		//获取城市所有的酒店
@@ -279,6 +324,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Integer orderjpid = form.getOrderid();
 		Integer orderid = null;
 		if (Util.isEmpty(orderjpid)) {
+			//如果订单不存在，创建订单
 			Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
 			orderid = generrateorder.get("orderid");
 			orderjpid = generrateorder.get("orderjpid");
@@ -289,58 +335,134 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//需要生成的travelplan
 		List<TOrderTravelplanJpEntity> travelplans = Lists.newArrayList();
 		//生成行程安排历史信息
-//		List<TOrderTravelplanHisJpEntity> travelplansHis = Lists.newArrayList();
-		Random random = new Random();
+		//		List<TOrderTravelplanHisJpEntity> travelplansHis = Lists.newArrayList();
+
 		//在一个城市只住一家酒店
+		Random random = new Random();
 		int hotelindex = random.nextInt(hotels.size());
+		int firsthotelindex = 0;
+		if (!Util.isEmpty(firsthotel)) {
+			firsthotelindex = random.nextInt(firsthotel.size());
+		}
 
 		//为什么要<=，因为最后一天也要玩
-		for (int i = 0; i <= daysBetween; i++) {
-			TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-//			TOrderTravelplanHisJpEntity travelPlanHis = new TOrderTravelplanHisJpEntity();
-			travelplan.setCityId(form.getGoArrivedCity());
-			travelplan.setDay(String.valueOf(i + 1));
-			travelplan.setOrderId(orderjpid);
-			travelplan.setOutDate(DateUtil.addDay(form.getGoDate(), i));
-			travelplan.setCityName(city.getCity());
-			travelplan.setCreateTime(new Date());
+		if (visatype == 1 || visatype == 6 || visatype == 14) {
+			for (int i = 0; i <= daysBetween; i++) {
+				TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
+				//			TOrderTravelplanHisJpEntity travelPlanHis = new TOrderTravelplanHisJpEntity();
+				travelplan.setCityId(form.getGoArrivedCity());
+				travelplan.setDay(String.valueOf(i + 1));
+				travelplan.setOrderId(orderjpid);
+				travelplan.setOutDate(DateUtil.addDay(form.getGoDate(), i));
+				travelplan.setCityName(city.getCity());
+				travelplan.setCreateTime(new Date());
 
-			//订单Id
-//			if (!Util.isEmpty(orderid)) {
-//				travelPlanHis.setOrderId(orderid);
-//			}
-			//天数
-//			travelPlanHis.setDay(String.valueOf(i + 1));
-//			//日期
-//			travelPlanHis.setOutDate(DateUtil.addDay(form.getGoDate(), i));
-//			//城市Id
-//			travelPlanHis.setCityId(form.getGoArrivedCity());
-//			//城市名字
-//			travelPlanHis.setCityName(city.getCity());
-			//酒店
-			if (i != daysBetween) {
-				THotelEntity hotel = hotels.get(hotelindex);
-				travelplan.setHotel(hotel.getId());
-				//酒店历史信息
-//				travelPlanHis.setHotel(hotel.getName());
+				//订单Id
+				//			if (!Util.isEmpty(orderid)) {
+				//				travelPlanHis.setOrderId(orderid);
+				//			}
+				//天数
+				//			travelPlanHis.setDay(String.valueOf(i + 1));
+				//			//日期
+				//			travelPlanHis.setOutDate(DateUtil.addDay(form.getGoDate(), i));
+				//			//城市Id
+				//			travelPlanHis.setCityId(form.getGoArrivedCity());
+				//			//城市名字
+				//			travelPlanHis.setCityName(city.getCity());
+				//酒店
+				if (i != daysBetween) {
+					THotelEntity hotel = hotels.get(hotelindex);
+					travelplan.setHotel(hotel.getId());
+					//酒店历史信息
+					//				travelPlanHis.setHotel(hotel.getName());
+				}
+				if (i > 0 && i != daysBetween) {
+					//景区
+					int scenicindex = random.nextInt(scenics.size());
+					TScenicEntity scenic = scenics.get(scenicindex);
+					scenics.remove(scenic);
+					travelplan.setScenic(scenic.getName());
+					//景点 历史信息
+					//				travelPlanHis.setScenic(scenic.getName());
+				}
+				travelplans.add(travelplan);
+				//			travelplansHis.add(travelPlanHis);
 			}
-			if (i > 0 && i != daysBetween) {
-				//景区
-				int scenicindex = random.nextInt(scenics.size());
-				TScenicEntity scenic = scenics.get(scenicindex);
-				scenics.remove(scenic);
-				travelplan.setScenic(scenic.getName());
-				//景点 历史信息
-//				travelPlanHis.setScenic(scenic.getName());
+		} else {
+			//前两天
+			for (int i = 0; i < 2; i++) {
+				TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
+				//			TOrderTravelplanHisJpEntity travelPlanHis = new TOrderTravelplanHisJpEntity();
+				travelplan.setCityId(firstcity.getId());
+				travelplan.setDay(String.valueOf(i + 1));
+				travelplan.setOrderId(orderjpid);
+				travelplan.setOutDate(DateUtil.addDay(form.getGoDate(), i));
+				travelplan.setCityName(firstcity.getCity());
+				travelplan.setCreateTime(new Date());
+
+				if (i != daysBetween) {
+					if (firsthotelindex != 0) {
+						THotelEntity hotel = firsthotel.get(firsthotelindex);
+						travelplan.setHotel(hotel.getId());
+					}
+				}
+				if (i > 0 && i != daysBetween) {
+					//景区
+					int scenicindex = random.nextInt(firstscenic.size());
+					TScenicEntity scenic = firstscenic.get(scenicindex);
+					firstscenic.remove(scenic);
+					travelplan.setScenic(scenic.getName());
+				}
+				travelplans.add(travelplan);
 			}
-			travelplans.add(travelplan);
-			//			travelplansHis.add(travelPlanHis);
+			for (int i = 2; i <= daysBetween; i++) {
+				TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
+				//			TOrderTravelplanHisJpEntity travelPlanHis = new TOrderTravelplanHisJpEntity();
+				travelplan.setCityId(form.getGoArrivedCity());
+				travelplan.setDay(String.valueOf(i + 1));
+				travelplan.setOrderId(orderjpid);
+				travelplan.setOutDate(DateUtil.addDay(form.getGoDate(), i));
+				travelplan.setCityName(city.getCity());
+				travelplan.setCreateTime(new Date());
+
+				//订单Id
+				//			if (!Util.isEmpty(orderid)) {
+				//				travelPlanHis.setOrderId(orderid);
+				//			}
+				//天数
+				//			travelPlanHis.setDay(String.valueOf(i + 1));
+				//			//日期
+				//			travelPlanHis.setOutDate(DateUtil.addDay(form.getGoDate(), i));
+				//			//城市Id
+				//			travelPlanHis.setCityId(form.getGoArrivedCity());
+				//			//城市名字
+				//			travelPlanHis.setCityName(city.getCity());
+				//酒店
+				if (i != daysBetween) {
+					THotelEntity hotel = hotels.get(hotelindex);
+					travelplan.setHotel(hotel.getId());
+					//酒店历史信息
+					//				travelPlanHis.setHotel(hotel.getName());
+				}
+				if (i > 0 && i != daysBetween) {
+					//景区
+					int scenicindex = random.nextInt(scenics.size());
+					TScenicEntity scenic = scenics.get(scenicindex);
+					scenics.remove(scenic);
+					travelplan.setScenic(scenic.getName());
+					//景点 历史信息
+					//				travelPlanHis.setScenic(scenic.getName());
+				}
+				travelplans.add(travelplan);
+				//			travelplansHis.add(travelPlanHis);
+			}
+
 		}
 
 		List<TOrderTravelplanJpEntity> before = dbDao.query(TOrderTravelplanJpEntity.class,
 				Cnd.where("orderid", "=", orderjpid), null);
-//		List<TOrderTravelplanHisJpEntity> beforeHis = dbDao.query(TOrderTravelplanHisJpEntity.class,
-//				Cnd.where("orderid", "=", orderid), null);
+		//		List<TOrderTravelplanHisJpEntity> beforeHis = dbDao.query(TOrderTravelplanHisJpEntity.class,
+		//				Cnd.where("orderid", "=", orderid), null);
 		//更新行程安排
 		dbDao.updateRelations(before, travelplans);
 		//更新历史行程安排
@@ -498,11 +620,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
 			orderid = orderjp.getOrderId();
 			//根据订单ID查询
-			TOrderLogsEntity logs = dbDao.fetch(TOrderLogsEntity.class,Cnd.where("orderid", "=", orderid.longValue()));
-			if(Util.isEmpty(logs)) {
+			TOrderLogsEntity logs = dbDao.fetch(TOrderLogsEntity.class, Cnd.where("orderid", "=", orderid.longValue()));
+			if (Util.isEmpty(logs)) {
 				orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
 			}
-			if(JpOrderSimpleEnum.PLACE_ORDER.intKey() != 1) {
+			if (JpOrderSimpleEnum.PLACE_ORDER.intKey() != 1) {
 				orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
 			}
 		}
@@ -570,6 +692,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderinfo.setStayDay(form.getStayday());
 		orderinfo.setBackTripDate(form.getReturnDate());
 		orderinfo.setSendVisaNum(form.getSendvisanum());
+		orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+		orderinfo.setIsDisabled(IsYesOrNoEnum.NO.intKey());
 		orderinfo.setUpdateTime(new Date());
 
 		dbDao.update(orderinfo);
@@ -723,7 +847,22 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TOrderTripJpEntity tripinfo = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderid", "=", orderid));
 		List<TCityEntity> citylist = Lists.newArrayList();
 		List<TFlightEntity> flightlist = Lists.newArrayList();
+		List<ResultflyEntity> gotripAirlineSelect = Lists.newArrayList();
+		List<ResultflyEntity> returntripAirlineSelect = Lists.newArrayList();
+
 		if (!Util.isEmpty(tripinfo)) {
+			/*FlightSelectParam param = new FlightSelectParam();
+			param.setGocity(tripinfo.getGoDepartureCity().longValue());
+			param.setArrivecity(tripinfo.getGoArrivedCity().longValue());
+			param.setDate("2018-06-19");
+			param.setFlight("");
+			gotripAirlineSelect = tripAirlineService.getTripAirlineSelect(param);
+
+			param.setGocity(tripinfo.getReturnDepartureCity().longValue());
+			param.setArrivecity(tripinfo.getReturnArrivedCity().longValue());
+			param.setDate("2018-06-19");
+			param.setFlight("");
+			returntripAirlineSelect = tripAirlineService.getTripAirlineSelect(param);*/
 			Integer[] cityids = { tripinfo.getGoDepartureCity(), tripinfo.getGoArrivedCity(),
 					tripinfo.getReturnDepartureCity(), tripinfo.getReturnArrivedCity() };
 			citylist = dbDao.query(TCityEntity.class, Cnd.where("id", "in", cityids), null);
@@ -771,12 +910,15 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("mainSaleUrgentTimeEnum", EnumUtil.enum2(MainSaleUrgentTimeEnum.class));
 		result.put("mainSaleTripTypeEnum", EnumUtil.enum2(MainSaleTripTypeEnum.class));
 		result.put("mainSalePayTypeEnum", EnumUtil.enum2(MainSalePayTypeEnum.class));
-		result.put("mainSaleVisaTypeEnum", EnumUtil.enum2(MainSaleVisaTypeEnum.class));
+		result.put("mainSaleVisaTypeEnum", EnumUtil.enum2(SimpleVisaTypeEnum.class));
 		result.put("citylist", citylist);
 		result.put("orderjpinfo", orderjpinfo);
 		result.put("orderinfo", orderinfo);
 		result.put("tripinfo", tripinfo);
 		result.put("customerinfo", customerinfo);
+
+		result.put("returntripAirlineSelect", returntripAirlineSelect);
+		result.put("gotripAirlineSelect", gotripAirlineSelect);
 
 		return result;
 	}
@@ -901,7 +1043,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			dbDao.update(applicant);
 
 		} else {
-			
+
 			TApplicantEntity insertapplicant = dbDao.insert(applicant);
 			applicantid = insertapplicant.getId();
 			result.put("applicantid", applicantid);
@@ -917,7 +1059,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 			//新增日本订单基本信息
 			applicantjp.setMainRelation(form.getMainRelation());
-			 dbDao.insert(applicantjp);
+			dbDao.insert(applicantjp);
 			applicantjp.setOrderId(orderjpid);
 			applicantjp.setApplicantId(applicantid);
 			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
@@ -1147,7 +1289,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			visaother.setApplicantid(insertappjp.getId());
 			visaother.setHotelname("参照'赴日予定表'");
 			visaother.setVouchname("参照'身元保证书'");
-			visaother.setInvitename("参照'身元保证书'");
+			visaother.setInvitename("同上");
 			visaother.setTraveladvice("推荐");
 			dbDao.insert(visaother);
 			result.put("applicantjpid", applicantjp.getApplicantId());
@@ -1262,7 +1404,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantid.longValue());
 		result.put("applicant", applicant);
-		TApplicantOrderJpEntity orderjp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", applicantid));
+		TApplicantOrderJpEntity orderjp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
 		result.put("orderjp", orderjp);
 		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		if (!Util.isEmpty(applicant.getBirthday())) {
@@ -1613,6 +1756,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//获取工作信息
 		TApplicantWorkJpEntity applicantWorkJpEntity = dbDao.fetch(TApplicantWorkJpEntity.class,
 				Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()));
+		if (Util.isEmpty(applicantWorkJpEntity.getUnitName())) {
+			result.put("unitName", "无");
+		} else {
+			result.put("unitName", applicantWorkJpEntity.getUnitName());
+		}
 		result.put("workJp", applicantWorkJpEntity);
 		result.put("mainApply", records);
 		result.put("visaInfo", visaInfo);
@@ -2738,5 +2886,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("sessionid", session.getId());
 		return result;
 
+	}
+
+	public Object changeVisatype(int orderid, int visatype) {
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+		orderjp.setVisaType(visatype);
+		dbDao.update(orderjp);
+		return null;
 	}
 }

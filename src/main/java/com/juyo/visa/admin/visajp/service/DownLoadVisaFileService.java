@@ -6,17 +6,14 @@
 
 package com.juyo.visa.admin.visajp.service;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,7 +22,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.compress.utils.Lists;
@@ -38,29 +34,21 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.URL;
 
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.AcroFields;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.BadElementException;
-import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.AcroFields;
+import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.juyo.visa.admin.city.service.CityViewService;
 import com.juyo.visa.admin.flight.service.FlightViewService;
@@ -121,7 +109,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 	 * @param orderjp
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public ByteArrayOutputStream generateFile(TOrderJpEntity orderjp,HttpServletRequest request) {
+	public ByteArrayOutputStream generateFile(TOrderJpEntity orderjp, HttpServletRequest request) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		Map<String, File> fileMap = new HashMap<String, File>();
@@ -169,7 +157,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		pdffiles.add(note);
 		//
 		for (Record record : applyinfo) {
-			ByteArrayOutputStream apply = applyinfo(record, tempdata,request);
+			ByteArrayOutputStream apply = applyinfo(record, tempdata, request);
 			pdffiles.add(apply);
 		}
 		//excel名称日期格式化
@@ -263,7 +251,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		//多程信息
 		List<TOrderTripMultiJpEntity> mutiltrip = (List<TOrderTripMultiJpEntity>) tempdata.get("mutiltrip");
 		//订单信息
-		TOrderEntity order = dbDao.fetch(TOrderEntity.class,Cnd.where("id", "=", orderjp.getOrderId()));
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, Cnd.where("id", "=", orderjp.getOrderId()));
 		String visatypestr = "";
 		Integer visaType = orderjp.getVisaType();
 		if (!Util.isEmpty(visaType)) {
@@ -311,18 +299,27 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				}*/
 				//入境航班
 				if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
-					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-					map.put("entryPort", goflight.getLandingName()+":");
+					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+							Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
+					//map.put("entryPort", goflight.getLandingName() + ":");
+					String goFlightNum = ordertripjp.getGoFlightNum();
+					map.put("entryPort",
+							goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + ",");
+					map.put("entryFlight",
+							goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 				}
-				map.put("entryFlight", ordertripjp.getGoFlightNum().replace("*",""));
+				//map.put("entryFlight", ordertripjp.getGoFlightNum().replace("*", ""));
 				if (!Util.isEmpty(ordertripjp.getReturnDate())) {
 					map.put("departDate", dateFormat.format(ordertripjp.getReturnDate()));
 				}
 				//天数
 				if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
 
-					map.put("stay", String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(),
-							ordertripjp.getReturnDate()) + 1)+"天");
+					map.put("stay",
+							String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate()) + 1)
+									+ "天");
 				}
 				/*if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
 					//出境航班
@@ -331,12 +328,19 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				}*/
 				if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
 					//出境航班
-//					TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
-//					map.put("departFlight", returnflight.getFlightnum());
-					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-					map.put("departPort", goflight.getLandingName()+":");
+					//					TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
+					//					map.put("departFlight", returnflight.getFlightnum());
+					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+							Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
+					String goFlightNum = ordertripjp.getReturnFlightNum();
+					//map.put("departPort", goflight.getTakeOffName() + ":");
+					map.put("departPort", goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+							+ ",");
+					map.put("departFlight",
+							goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 				}
-				map.put("departFlight", ordertripjp.getReturnFlightNum().replace("*", ""));
+				//map.put("departFlight", ordertripjp.getReturnFlightNum().replace("*", ""));
 			} else if (ordertripjp.getTripType().equals(2)) {
 				//多程处理
 				if (!Util.isEmpty(mutiltrip)) {
@@ -351,8 +355,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 					}*/
 					//入境航班
 					if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-						map.put("entryPort", goflight.getLandingName()+":");
+						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
+						map.put("entryPort", goflight.getLandingName() + ":");
 					}
 					map.put("entryFlight", entrytrip.getFlightNum().replaceAll("*", ""));
 					//最后一程作为返回日期
@@ -367,10 +372,11 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 					}*/
 					if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
 						//出境航班
-//						TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
-//						map.put("departFlight", returnflight.getFlightnum());
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-						map.put("departPort", goflight.getLandingName()+":");
+						//						TFlightEntity returnflight = flightViewService.fetch(ordertripjp.getReturnFlightNum().longValue());
+						//						map.put("departFlight", returnflight.getFlightnum());
+						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
+						map.put("departPort", goflight.getTakeOffName() + ":");
 					}
 					map.put("departFlight", returntrip.getFlightNum());
 					//停留天数
@@ -399,16 +405,16 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 	/**
 	 * 申请人信息
 	 */
-	private ByteArrayOutputStream applyinfo(Record record, Map<String, Object> tempdata,HttpServletRequest request) {
+	private ByteArrayOutputStream applyinfo(Record record, Map<String, Object> tempdata, HttpServletRequest request) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		DateFormat dateFormat1= new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat dateFormat1 = new SimpleDateFormat("yyyy/MM/dd");
 		TOrderTripJpEntity ordertripjp = (TOrderTripJpEntity) tempdata.get("ordertripjp");
 		//多程信息
 		List<TOrderTripMultiJpEntity> mutiltrip = (List<TOrderTripMultiJpEntity>) tempdata.get("mutiltrip");
 		List<TOrderTravelplanJpEntity> ordertravelplan = (List<TOrderTravelplanJpEntity>) tempdata
 				.get("ordertravelplan");
 		TOrderJpEntity orderjp = (TOrderJpEntity) tempdata.get("orderjp");
-		
+
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("firstName", record.getString("firstname"));
@@ -436,7 +442,12 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				map.put("birthday", dateformat.format((Date) record.get("birthday")));
 			}
 			//出生地
-			map.put("address", record.getString("address"));
+			String province = (String) record.getString("province");
+			if (province.endsWith("省") || province.endsWith("市")) {
+				province = province.substring(0, province.length() - 1);
+			}
+			map.put("address", province);
+			//map.put("address", record.getString("address"));
 			//婚姻状况
 			if (!Util.isEmpty(record.get("marrystatus"))) {
 				Integer marrystatus = record.getInt("marrystatus");
@@ -451,11 +462,11 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				}
 			}
 			//国籍
-			map.put("country", "中国");
+			map.put("country", "CHINA");
 			//曾有的或另有的国际
-//			if(Util.isEmpty(record.getString("nationality"))) {
-//				map.put("othernationality", "无");
-//			}
+			//			if(Util.isEmpty(record.getString("nationality"))) {
+			//				map.put("othernationality", "无");
+			//			}
 			map.put("othernationality", record.getString("nationality"));
 			//身份证号
 			map.put("cardId", record.getString("cardid"));
@@ -492,24 +503,42 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
 						map.put("stayday", String.valueOf(stayday) + "天");
 					}
-					//入境口岸
+					if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
+						String goFlightNum = ordertripjp.getGoFlightNum();
+						if (goFlightNum.contains("//")) {//转机
+							//入境口岸
+							map.put("goArrivedCity",
+									goFlightNum.substring(goFlightNum.lastIndexOf("-") + 1, goFlightNum.indexOf(" ")));
+							//航空公司
+							map.put("goFlightNum",
+									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
+						} else {//直飞
+							//入境口岸
+							map.put("goArrivedCity",
+									goFlightNum.substring(goFlightNum.indexOf("-") + 1, goFlightNum.indexOf(" ")));
+							//航空公司
+							map.put("goFlightNum",
+									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
+						}
+					}
+					/*//入境口岸
 					if (!Util.isEmpty(ordertripjp.getGoArrivedCity())) {
 						TCityEntity goarrivecirtentity = cityViewService.fetch(ordertripjp.getGoArrivedCity());
 						if (!Util.isEmpty(goarrivecirtentity)) {
 							map.put("goArrivedCity", goarrivecirtentity.getCity());
 						}
 					}
-					//航空公司.0
+					//航空公司.(其实是去程的航班号)
 					TFlightEntity goflightentity = dbDao.fetch(TFlightEntity.class,
 							Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
 					if (!Util.isEmpty(goflightentity)) {
-						map.put("goFlightNum", goflightentity.getAirlinecomp());
-					}
-//					if (!Util.isEmpty(entrytrip.getFlightNum())) {
-//						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-//								Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-//						map.put("fill_22", goflight.getFlightnum());
-//					}
+						map.put("goFlightNum", ordertripjp.getGoFlightNum());
+					}*/
+					//					if (!Util.isEmpty(entrytrip.getFlightNum())) {
+					//						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+					//								Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
+					//						map.put("fill_22", goflight.getFlightnum());
+					//					}
 				} else if (ordertripjp.getTripType().equals(2)) {
 					//多程处理
 					if (!Util.isEmpty(mutiltrip)) {
@@ -527,7 +556,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						if (!Util.isEmpty(entrytrip.getFlightNum())) {
 							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-							map.put("goFlightNum", goflight.getFlightnum());
+							map.put("goFlightNum", entrytrip.getFlightNum());
 						}
 						//最后一程作为返回日期
 						TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
@@ -554,7 +583,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				}
 			}*/
 			//酒店信息
-			
+
 			map.put("hotelname", record.getString("hotelname"));
 			map.put("hotelphone", record.getString("hotelphone"));
 			map.put("hoteladdress", record.getString("hoteladdress"));
@@ -567,13 +596,14 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			}
 			if (Util.isEmpty(lastinfo)) {
 				map.put("fill_26", "无");
-			}else {
-				map.put("fill_26", lastinfo+"天");
+			} else {
+				map.put("fill_26", lastinfo + "天");
 			}
 			//在日担保人信息
 			map.put("danbaoname", record.getString("vouchname"));
-			 int lastIndexOf = record.getString("vouchname").lastIndexOf("-");
-			map.put("danbaonameen", record.getString("vouchname").substring(lastIndexOf+1,  record.getString("vouchname").length()));
+			int lastIndexOf = record.getString("vouchname").lastIndexOf("-");
+			map.put("danbaonameen",
+					record.getString("vouchname").substring(lastIndexOf + 1, record.getString("vouchname").length()));
 			map.put("danbaotelephone", record.getString("vouchphone"));
 			map.put("vouchaddress", record.getString("vouchaddress"));
 			if ("男".equals(record.getString("vouchsex"))) {
@@ -633,120 +663,124 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("applyname", record.getString("firstname") + record.getString("lastname"));
 			//获取模板文件
 			//编写二维码
-			if(!Util.isEmpty(map)) {
-				insertQrCode(request,map);
+			if (!Util.isEmpty(map)) {
+				insertQrCode(request, map);
 			}
 			URL resource = getClass().getClassLoader().getResource("japanfile/apply.pdf");
 			TemplateUtil templateUtil = new TemplateUtil();
 			stream = templateUtil.pdfTemplateStream(resource, map);
-	
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return stream;
 	}
+
 	/**
 	 * 将图片写入PDF模版
 	 * @throws IOException 
 	 * @throws DocumentException 
 	 */
-	public void insertQrCode(HttpServletRequest request,Map<String, String> map) throws Exception {
-		 // 模板文件路径
+	public void insertQrCode(HttpServletRequest request, Map<String, String> map) throws Exception {
+		// 模板文件路径
 		URL resource = getClass().getClassLoader().getResource("japanfile/apply.pdf");
-		String templatePath= null ;
+		String templatePath = null;
 		String targetPath = null;
-		if(!Util.isEmpty(resource)) {
-			 templatePath = resource.toString().replace("file:", "");
-	        // 生成的文件路径
-	         targetPath = resource.toString().replace("file:", "");
+		if (!Util.isEmpty(resource)) {
+			templatePath = resource.toString().replace("file:", "");
+			// 生成的文件路径
+			targetPath = resource.toString().replace("file:", "");
 		}
-        // 书签名
-//        String fieldName = "field";
-        // 图片路径
-        String imagePath = getImageUrl(request,map);
-        // 读取模板文件
-        InputStream input = null;
-        if(!Util.isEmpty(targetPath)) {
-        	 input = new FileInputStream(new File(templatePath));
-        }
-        PdfReader reader = null;
-        if(!Util.isEmpty(input)) {
-        	 reader = new PdfReader(input);
-        }
-        PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(targetPath));
-        // 提取pdf中的表单
-        AcroFields form = stamper.getAcroFields();
-        // 通过域名获取所在页和坐标，左下角为起点
-//        int pageNo = form.getFieldPositions(fieldName).get(0).page;
-//        Rectangle signRect = form.getFieldPositions(fieldName).get(0).position;
-//        float x = signRect.getLeft();
-//        float y = signRect.getBottom();
-        // 读图片
-        Image image = null;
-        if(!Util.isEmpty(imagePath)) {
-        	 image = Image.getInstance(imagePath);
-        }
-        // 获取操作的页面
-        PdfContentByte under = stamper.getOverContent(1);
-        // 根据域的大小缩放图片
-        image.scaleToFit(75, 70);
-        // 添加图片
-        image.setAbsolutePosition(50, 670);
-        under.addImage(image);
-        stamper.close();
-        reader.close();
-		
+		// 书签名
+		//        String fieldName = "field";
+		// 图片路径
+		String imagePath = getImageUrl(request, map);
+		// 读取模板文件
+		InputStream input = null;
+		if (!Util.isEmpty(targetPath)) {
+			input = new FileInputStream(new File(templatePath));
+		}
+		PdfReader reader = null;
+		if (!Util.isEmpty(input)) {
+			reader = new PdfReader(input);
+		}
+		PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(targetPath));
+		// 提取pdf中的表单
+		AcroFields form = stamper.getAcroFields();
+		// 通过域名获取所在页和坐标，左下角为起点
+		//        int pageNo = form.getFieldPositions(fieldName).get(0).page;
+		//        Rectangle signRect = form.getFieldPositions(fieldName).get(0).position;
+		//        float x = signRect.getLeft();
+		//        float y = signRect.getBottom();
+		// 读图片
+		Image image = null;
+		if (!Util.isEmpty(imagePath)) {
+			image = Image.getInstance(imagePath);
+		}
+		// 获取操作的页面
+		PdfContentByte under = stamper.getOverContent(1);
+		// 根据域的大小缩放图片
+		image.scaleToFit(65, 60);
+		// 添加图片
+		image.setAbsolutePosition(70, 670);
+		under.addImage(image);
+		stamper.close();
+		reader.close();
+
 	}
+
 	/***
 	 * 生成二维码
 	 * 
 	 */
-	public String getImageUrl(HttpServletRequest request,Map<String, String> map) {
+	public String getImageUrl(HttpServletRequest request, Map<String, String> map) {
 		//姓
-		String firstNameEn =  map.get("firstNameEn");
+		String firstNameEn = map.get("firstNameEn");
 		//名
-		String lastNameEn =  map.get("lastNameEn");
+		String lastNameEn = map.get("lastNameEn");
 		//性别
 		String sex = null;
-		if(!Util.isEmpty(map.get("boy"))) {
-			if(map.get("boy") .equals("0")) {
+		if (!Util.isEmpty(map.get("boy"))) {
+			if (map.get("boy").equals("0")) {
 				sex = "F";
 			}
 		}
-		if(!Util.isEmpty(map.get("girl"))) {
-			if(map.get("gril") .equals("0")) {
+		if (!Util.isEmpty(map.get("gril"))) {
+			if (map.get("gril").equals("0")) {
 				sex = "M";
 			}
 		}
 		//出生日期
 		String birthday = null;
-		if(!Util.isEmpty(map.get("birthday"))) {
-			 birthday =  map.get("birthday");
+		if (!Util.isEmpty(map.get("birthday"))) {
+			birthday = map.get("birthday");
 		}
 		//年份
 		String year = birthday.substring(6, 9);
-		String month = birthday.substring(3,5);
-		String day = birthday.substring(0,2);
-		birthday = year+month+day;
+		String month = birthday.substring(3, 5);
+		String day = birthday.substring(0, 2);
+		birthday = year + month + day;
 		//护照号
-		String passport =  map.get("passport");
+		String passport = map.get("passport");
 		//护照有效期
 		String validEndDate = null;
-		if(!Util.isEmpty(map.get("validEndDate"))) {
-			validEndDate =  map.get("validEndDate");
+		if (!Util.isEmpty(map.get("validEndDate"))) {
+			validEndDate = map.get("validEndDate");
 		}
 		String year1 = validEndDate.substring(6, 9);
-		String month1 = validEndDate.substring(3,5);
-		String day1 = validEndDate.substring(0,2);
-		validEndDate = year1+month1+day1;
+		String month1 = validEndDate.substring(3, 5);
+		String day1 = validEndDate.substring(0, 2);
+		validEndDate = year1 + month1 + day1;
 		//身份证号
-		String cardId =  map.get("cardId");
+		String cardId = map.get("cardId");
 		//二维码显示内容  序号，护照号，护照截止日期，姓 ，名，性别，出生日期，固定CHN，身份证号
-		String passporturl ="1,"+passport+","+validEndDate+","+firstNameEn+","+lastNameEn+","+sex+","+birthday+","+"CHN"+","+cardId+","+" "+","+" ";
+		String passporturl = "1," + passport + "," + validEndDate + "," + firstNameEn + "," + lastNameEn + "," + sex
+				+ "," + birthday + "," + "CHN" + "," + cardId + "," + " " + "," + " ";
 		//生成二维码
 		String qrCode = qrCodeService.encodeQrCode(request, passporturl);
-		return  qrCode;
+		return qrCode;
 	}
+
 	/**
 	 * 酒店信息
 	 */
@@ -818,17 +852,17 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			}
 			map.put("guest", strb.toString().toUpperCase());
 			String room = null;
-			if(applyinfo.size()>0){
-				if(applyinfo.size()%2 ==1) {
-				
-				int c = applyinfo.size()/2+1;
-			   room = "TWN "+c+" 室";
+			if (applyinfo.size() > 0) {
+				if (applyinfo.size() % 2 == 1) {
+
+					int c = applyinfo.size() / 2 + 1;
+					room = "TWN " + c + " 室";
 					map.put("room", room);
-			}else {
-				int c = applyinfo.size()/2;
-				   room = "TWN "+c+" 室";
-						map.put("room", room);
-			}
+				} else {
+					int c = applyinfo.size() / 2;
+					room = "TWN " + c + " 室";
+					map.put("room", room);
+				}
 			}
 			//酒店信息
 			if (!Util.isEmpty(ordertravelplan)) {
@@ -840,7 +874,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			}
 			map.put("breakfast", "無");
 			map.put("dinner", "無");
-			
+
 			//获取模板文件
 			URL resource = getClass().getClassLoader().getResource("japanfile/hotel.pdf");
 			TemplateUtil templateUtil = new TemplateUtil();
@@ -860,19 +894,19 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 		//公司信息
 		TCompanyEntity company = (TCompanyEntity) tempdata.get("company");
 		try {
-//			Document document = new Document(PageSize.A4.rotate(), 0, 0, 36, 36);
-//			TtfClassLoader ttf = new TtfClassLoader();
-//			PdfWriter.getInstance(document, stream);
-//			document.open();
-//
-//			Font font = ttf.getFont();
-//
-//			Paragraph p = new Paragraph("签证申请人名单", font);
-//			p.setSpacingBefore(5);
-//			p.setSpacingAfter(5);
-//			p.setIndentationLeft(50);
-//			p.setIndentationRight(50);
-//			document.add(p);
+			//			Document document = new Document(PageSize.A4.rotate(), 0, 0, 36, 36);
+			//			TtfClassLoader ttf = new TtfClassLoader();
+			//			PdfWriter.getInstance(document, stream);
+			//			document.open();
+			//
+			//			Font font = ttf.getFont();
+			//
+			//			Paragraph p = new Paragraph("签证申请人名单", font);
+			//			p.setSpacingBefore(5);
+			//			p.setSpacingAfter(5);
+			//			p.setIndentationLeft(50);
+			//			p.setIndentationRight(50);
+			//			document.add(p);
 			Document document = new Document(PageSize.A4.rotate(), 0, 0, 36, 36);
 			TtfClassLoader ttf = new TtfClassLoader();
 			PdfWriter.getInstance(document, stream);
@@ -882,27 +916,27 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			Font font1 = ttf.getFont();
 			font1.setFamily("宋体");
 			font1.setSize(17);
-//			Paragraph p = new Paragraph();
-//			Chunk chunk1 = new Chunk("签证申请人名单", font1);
-//			Chunk chunk3 = new Chunk("                                                                                            ", font);
-//			Chunk chunk2= new Chunk(company.getName(), font1);
-//			p.add(chunk1);
-//			p.add(chunk3);
-//			p.add(chunk2);
-//			p.setSpacingBefore(5);
-//			p.setSpacingAfter(5);
-//			p.setIndentationLeft(20);
-//			p.setIndentationRight(20);
-//			document.add(p);
-			 PdfPTable table1 = new PdfPTable(2); //表格两列
-			 table1.setWidthPercentage(95);
+			//			Paragraph p = new Paragraph();
+			//			Chunk chunk1 = new Chunk("签证申请人名单", font1);
+			//			Chunk chunk3 = new Chunk("                                                                                            ", font);
+			//			Chunk chunk2= new Chunk(company.getName(), font1);
+			//			p.add(chunk1);
+			//			p.add(chunk3);
+			//			p.add(chunk2);
+			//			p.setSpacingBefore(5);
+			//			p.setSpacingAfter(5);
+			//			p.setIndentationLeft(20);
+			//			p.setIndentationRight(20);
+			//			document.add(p);
+			PdfPTable table1 = new PdfPTable(2); //表格两列
+			table1.setWidthPercentage(95);
 			table1.setHorizontalAlignment(Element.ALIGN_CENTER); //垂直居中
 			table1.setTotalWidth(PageSize.A4.rotate().getWidth());
-			float[] wid1 ={0.5f,0.5f}; //两列宽度的比例
-			table1.setWidths(wid1); 
-			PdfPCell cell11 = new PdfPCell(); 
-			PdfPCell cell12 = new PdfPCell(); 
-			Paragraph paragraph = new Paragraph("签证申请人名单",font1);
+			float[] wid1 = { 0.5f, 0.5f }; //两列宽度的比例
+			table1.setWidths(wid1);
+			PdfPCell cell11 = new PdfPCell();
+			PdfPCell cell12 = new PdfPCell();
+			Paragraph paragraph = new Paragraph("签证申请人名单", font1);
 			Paragraph paragraph2 = new Paragraph(company.getName(), font1);
 			paragraph2.setAlignment(Element.ALIGN_RIGHT);
 			paragraph.setAlignment(Element.ALIGN_LEFT);
@@ -910,10 +944,10 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			cell11.setBorder(0);
 			cell12.addElement(paragraph2);
 			cell12.setBorder(0);
-			 table1.addCell(cell11);
-			 table1.addCell(cell12);
-			 table1.getDefaultCell().setBorderWidth(0);
-			 document.add(table1);
+			table1.addCell(cell11);
+			table1.addCell(cell12);
+			table1.getDefaultCell().setBorderWidth(0);
+			document.add(table1);
 
 			float[] columns = { 2, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 4, 3, 2, 4, };
 			PdfPTable table = new PdfPTable(columns);
@@ -954,34 +988,33 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						}
 					}
 				}
-//				String[] datas = {
-//						"1-" + count,
-//						(!Util.isEmpty(record.get("firstname")) ? record.getString("firstname") : "")
-//								+ (!Util.isEmpty(record.get("lastname")) ? record.getString("lastname") : ""),
-//						(!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : "")
-//								+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : ""),
-//						(!Util.isEmpty(record.get("sex")) ? record.getString("sex") : ""),
-//						birthdaystr,
-//						(!Util.isEmpty(record.get("issuedorganization")) ? record.getString("issuedorganization") : ""),
-//						careerstatus,
-//						(!Util.isEmpty(record.get("province")) ? record.getString("province") : "")
-//								+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : "")
-//								+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress")
-//										: ""), "无", marryStatus, "身份证\n户口本",
-//						(!Util.isEmpty(record.get("wealthtype")) ? record.getString("wealthtype") : ""),
-//						(!Util.isEmpty(record.get("wealthcontent")) ? record.getString("wealthcontent") : ""),
-//						(!Util.isEmpty(record.get("relationremark")) ? record.getString("relationremark") : ""),
-//						(!Util.isEmpty(record.get("traveladvice")) ? record.getString("traveladvice") : "") };
-//				for (String data : datas) {
-//					PdfPCell cell = new PdfPCell(new Paragraph(data, font));
-//					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-//					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-//					table.addCell(cell);
-//				}
+				//				String[] datas = {
+				//						"1-" + count,
+				//						(!Util.isEmpty(record.get("firstname")) ? record.getString("firstname") : "")
+				//								+ (!Util.isEmpty(record.get("lastname")) ? record.getString("lastname") : ""),
+				//						(!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : "")
+				//								+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : ""),
+				//						(!Util.isEmpty(record.get("sex")) ? record.getString("sex") : ""),
+				//						birthdaystr,
+				//						(!Util.isEmpty(record.get("issuedorganization")) ? record.getString("issuedorganization") : ""),
+				//						careerstatus,
+				//						(!Util.isEmpty(record.get("province")) ? record.getString("province") : "")
+				//								+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : "")
+				//								+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress")
+				//										: ""), "无", marryStatus, "身份证\n户口本",
+				//						(!Util.isEmpty(record.get("wealthtype")) ? record.getString("wealthtype") : ""),
+				//						(!Util.isEmpty(record.get("wealthcontent")) ? record.getString("wealthcontent") : ""),
+				//						(!Util.isEmpty(record.get("relationremark")) ? record.getString("relationremark") : ""),
+				//						(!Util.isEmpty(record.get("traveladvice")) ? record.getString("traveladvice") : "") };
+				//				for (String data : datas) {
+				//					PdfPCell cell = new PdfPCell(new Paragraph(data, font));
+				//					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				//					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				//					table.addCell(cell);
+				//				}
 				List<TApplicantWealthJpEntity> wealthjpinfo = new ArrayList<TApplicantWealthJpEntity>();
-				if(!Util.isEmpty(record.get("wealthjpinfo"))) {
-				 wealthjpinfo = (List<TApplicantWealthJpEntity>) record
-							.get("wealthjpinfo");
+				if (!Util.isEmpty(record.get("wealthjpinfo"))) {
+					wealthjpinfo = (List<TApplicantWealthJpEntity>) record.get("wealthjpinfo");
 				}
 				boolean flag = false;
 				if (wealthjpinfo.size() > 0) {
@@ -1186,7 +1219,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			DateFormat df = new SimpleDateFormat("dd MMMMM, yyyy", Locale.ENGLISH);
 			Map<String, String> map = new HashMap<String, String>();
 			StringBuffer strb = new StringBuffer("");
-			
+
 			for (Record record : applyinfo) {
 				if (!Util.isEmpty(record.get("firstnameen"))) {
 					strb.append(record.getString("firstnameen"));
@@ -1201,33 +1234,46 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				if (ordertripjp.getTripType().equals(1)) {
 					//入境航班
 					if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
+						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
+						String goFlightNum = ordertripjp.getGoFlightNum();
+						String substring = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1);
 						//起飞机场
-						map.put("takeOffName", goflight.getTakeOffName());
+						map.put("takeOffName",
+								goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
 						//起飞时间 
-						map.put("file_7", goflight.getTakeOffTime());
+						map.put("file_7", substring.substring(0, 2) + ":" + substring.substring(2, 4));
 						//降落时间
-						map.put("file_9", goflight.getLandingTime());
-					}
+						map.put("file_9", substring.substring(substring.lastIndexOf("/") + 1).substring(0, 2) + ":"
+								+ substring.substring(substring.lastIndexOf("/") + 1).substring(2, 4));
 						//起飞航班号
-					map.put("file_3", ordertripjp.getGoFlightNum().replace("*",""));
-					
+						map.put("file_3", goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
+					}
+
 					//出境航班
 					if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
+						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
+						String goFlightNum = ordertripjp.getReturnFlightNum();
+						String substring = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1);
 						//返回机场
-						map.put("takeOffName1", goflight.getTakeOffName());
+						map.put("takeOffName1",
+								goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
 						//起飞时间 
-						map.put("file_8", goflight.getTakeOffTime());
+						map.put("file_8", substring.substring(0, 2) + ":" + substring.substring(2, 4));
 						//降落时间
-						map.put("file_10", goflight.getLandingTime());
-						map.put("LandingName", goflight.getLandingName());
-					}
+						map.put("file_10", substring.substring(substring.lastIndexOf("/") + 1).substring(0, 2) + ":"
+								+ substring.substring(substring.lastIndexOf("/") + 1).substring(2, 4));
+						map.put("LandingName",
+								goFlightNum.substring(goFlightNum.lastIndexOf("-") + 1, goFlightNum.indexOf(" ")));
 						//航班号
-					map.put("file_4", ordertripjp.getReturnFlightNum().replace("*", ""));
-						//出发航班日期
+						map.put("file_4", goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
+					}
+					//出发航班日期
 					map.put("file_5", df.format(ordertripjp.getGoDate()));
-						//返回航班日期
+					//返回航班日期
 					map.put("file_6", df.format(ordertripjp.getReturnDate()));
 				} else if (ordertripjp.getTripType().equals(2)) {
 					//多程处理
@@ -1239,8 +1285,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						}
 						//入境航班
 						if (!Util.isEmpty(entrytrip.getFlightNum())) {
-//							TFlightEntity goflight = flightViewService.fetch(entrytrip.getFlightNum().longValue());
-							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=",entrytrip.getFlightNum()));
+							//							TFlightEntity goflight = flightViewService.fetch(entrytrip.getFlightNum().longValue());
+							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
 							//起飞机场
 							map.put("file_1", goflight.getTakeOffName());
 							//起飞时间 
@@ -1256,7 +1303,8 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						}
 						if (!Util.isEmpty(returntrip.getFlightNum())) {
 							//出境航班
-							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", returntrip.getFlightNum()));
+							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+									Cnd.where("flightnum", "=", returntrip.getFlightNum()));
 							//返回机场
 							map.put("file_2", goflight.getTakeOffName());
 							//起飞时间 
@@ -1269,7 +1317,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 					}
 				}
 			}
-			
+
 			//获取模板文件
 			URL resource = getClass().getClassLoader().getResource("japanfile/flight.pdf");
 			TemplateUtil templateUtil = new TemplateUtil();
@@ -1345,10 +1393,10 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				}
 			}
 			{
-//				String subtitle = "（平成" + godatestr + "から平成" + returndatestr + "）";
+				//				String subtitle = "（平成" + godatestr + "から平成" + returndatestr + "）";
 				String subtitle = "(平成" + godatestr + "～" + returndatestr.substring(3, 8) + ")";
 				Paragraph p = new Paragraph(subtitle, font);
-//				p.setSpacingBefore(5);
+				//				p.setSpacingBefore(5);
 				p.setIndentationRight(13);
 				p.setSpacingAfter(5);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
@@ -1388,11 +1436,12 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table.addCell(cell);
-			} 
+			}
 			font.setSize(10);
 			//格式化为日本的日期
-//			String pointpattren = "yy.MM.dd";
+			//			String pointpattren = "yy.MM.dd";
 			String pointpattren = "平成yy年MM月dd日";
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Integer lasthotel = null;
 			int count = 0;
 			for (TOrderTravelplanJpEntity ordertravelplan : ordertravelplans) {
@@ -1401,48 +1450,68 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				String scenic = "";
 				if (count == 1) {
 					if (ordertripjp.getTripType().equals(1)) {
-						TFlightEntity goflight = new TFlightEntity();
-						if(!Util.isEmpty(ordertripjp.getGoFlightNum())) {
-							goflight = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-						}
-						scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
-								+ goflight.getLandingName();
+						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
+						String goFlightNum = ordertripjp.getGoFlightNum();
+						/*scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
+								+ goflight.getLandingName();*/
+						scenic = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+								+ "："
+								+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+								+ "->"
+								+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
 						if (!Util.isEmpty(mutiltrip)) {
 							//多程第一程为出发日期
 							TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
-							TFlightEntity goflight = new TFlightEntity();
-							if(!Util.isEmpty(entrytrip.getFlightNum())) {
-								goflight = dbDao.fetch(TFlightEntity.class,
-										Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-							}
-							scenic = goflight.getFlightnum().replace("*","") + "：" + goflight.getTakeOffName() + "->"
-									+ goflight.getLandingName();
+							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
+							String goFlightNum = entrytrip.getFlightNum();
+							/*scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
+									+ goflight.getLandingName();*/
+							scenic = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+									+ "："
+									+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+									+ "->"
+									+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
 						}
 					}
 				} else if (count == ordertravelplans.size()) {
 					if (ordertripjp.getTripType().equals(1)) {
-						TFlightEntity returnflight = new TFlightEntity();
-						if(!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
-							 returnflight = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-						}
-						scenic = returnflight.getFlightnum().replace("*","") + "：" + returnflight.getTakeOffName() + "->"
-								+ returnflight.getLandingName();
+						TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
+						String goFlightNum = ordertripjp.getReturnFlightNum();
+						/*scenic = returnflight.getFlightnum().replace("*", "") + "：" + returnflight.getTakeOffName()
+								+ "->" + returnflight.getLandingName();*/
+						scenic = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+								+ "："
+								+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+								+ "->"
+								+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
 						if (!Util.isEmpty(mutiltrip)) {
 							//最后一程作为返回日期
 							TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
-							TFlightEntity returnflight =  new TFlightEntity();
-							if(!Util.isEmpty(returntrip.getFlightNum())) {
-								returnflight = dbDao.fetch(TFlightEntity.class,
-										Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-							}
-							scenic = returnflight.getFlightnum().replace("*","") + "：" + returnflight.getTakeOffName() + "->"
-									+ returnflight.getLandingName();
+							TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
+									Cnd.where("flightnum", "=", returntrip.getFlightNum()));
+							String goFlightNum = returntrip.getFlightNum();
+							/*scenic = returnflight.getFlightnum().replace("*", "") + "：" + returnflight.getTakeOffName()
+									+ "->" + returnflight.getLandingName();*/
+							scenic = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+									+ "："
+									+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+									+ "->"
+									+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
 						}
 					}
 				} else {
@@ -1450,10 +1519,10 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				}
 				//酒店信息
 				String hotel = "";
-//				if (!Util.isEmpty(ordertravelplan.getHotel())) {
-//					THotelEntity hotelentity = hotelViewService.fetch(ordertravelplan.getHotel());
-//					hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
-//							+ hotelentity.getMobile();
+				//				if (!Util.isEmpty(ordertravelplan.getHotel())) {
+				//					THotelEntity hotelentity = hotelViewService.fetch(ordertravelplan.getHotel());
+				//					hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
+				//							+ hotelentity.getMobile();
 				if (!Util.isEmpty(ordertravelplan.getHotel())) {
 					if (ordertravelplan.getHotel().equals(lasthotel)) {
 						hotel = "連泊";
@@ -1465,8 +1534,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				} else {
 					hotel = " ";
 				}
-				String[] datas = { String.valueOf(count), format(ordertravelplan.getOutDate(), pointpattren), scenic,
-						hotel };
+				String[] datas = { String.valueOf(count), sdf.format(ordertravelplan.getOutDate()), scenic, hotel };
 				for (String title : datas) {
 					PdfPCell cell = new PdfPCell(new Paragraph(title, font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);

@@ -40,11 +40,19 @@ public class MsgCryptUtil {
 	 * @return
 	 * @throws Exception TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public static String deCryptMsg(String encodingAesKey, String token, String appId, String nonce, String cryptMsg)
-			throws Exception {
-		WXBizMsgCrypt pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
-		String decryptMsg = pc.decrypt(cryptMsg);
-		System.out.println("解密后明文: " + decryptMsg);
+	public static String deCryptMsg(String encodingAesKey, String token, String appId, String nonce, String cryptMsg) {
+		WXBizMsgCrypt pc;
+		String decryptMsg = "";
+		try {
+			pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
+			decryptMsg = pc.decrypt(cryptMsg);
+			System.out.println("解密后明文: " + decryptMsg);
+		} catch (AesException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
 		return decryptMsg;
 	}
 

@@ -804,7 +804,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				String hotelname = (String) record.get("hotelname");
 				if (count > 1) {
 					if (hotelname.equals(prehotelname)) {
-						
+
 						record.put("hotelname", "連泊");
 					}
 				}
@@ -1402,42 +1402,42 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param orderid
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-//	public Object sendZhaoBao(HttpServletRequest request, Long orderid) {
-//		HttpSession session = request.getSession();
-//		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-//		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-//		Integer adminId = loginCompany.getAdminId();
-//
-//
-//
-//		Map<String, Object> result = new HashMap<String, Object>();
-//		result.put("orderid", orderid);
-//		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
-//		result.put("orderjpinfo", orderjp);
-//		List<TCompanyEntity> songqianlist = Lists.newArrayList();
-//		//送签社下拉
-//		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
-//				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
-//
-//			Cnd cnd = Cnd.where("adminId", "=",adminId);
-//			cnd.and("cdesignNum","!=", "");
-//
-//			songqianlist = dbDao.query(TCompanyEntity.class,cnd, null);
-//		} else {
-//			TCompanyEntity songqian = dbDao.fetch(TCompanyEntity.class, orderjp.getSendsignid().longValue());
-//			songqianlist.add(songqian);
-//		}
-//		if(songqianlist.size() == 0) {
-//			result.put("songqianlist", "请选择含有指定番号的 送签社");
-//		}else {
-//			result.put("songqianlist", songqianlist);
-//		}
-//		//地接社下拉
-//		List<TCompanyEntity> dijielist = dbDao.query(TCompanyEntity.class,
-//				Cnd.where("comType", "=", CompanyTypeEnum.DIJI.intKey()).and("name", "like", "株式会社金通商社"), null);
-//		result.put("dijielist", dijielist);
-//		return result;
-//	}
+	//	public Object sendZhaoBao(HttpServletRequest request, Long orderid) {
+	//		HttpSession session = request.getSession();
+	//		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+	//		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+	//		Integer adminId = loginCompany.getAdminId();
+	//
+	//
+	//
+	//		Map<String, Object> result = new HashMap<String, Object>();
+	//		result.put("orderid", orderid);
+	//		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+	//		result.put("orderjpinfo", orderjp);
+	//		List<TCompanyEntity> songqianlist = Lists.newArrayList();
+	//		//送签社下拉
+	//		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
+	//				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+	//
+	//			Cnd cnd = Cnd.where("adminId", "=",adminId);
+	//			cnd.and("cdesignNum","!=", "");
+	//
+	//			songqianlist = dbDao.query(TCompanyEntity.class,cnd, null);
+	//		} else {
+	//			TCompanyEntity songqian = dbDao.fetch(TCompanyEntity.class, orderjp.getSendsignid().longValue());
+	//			songqianlist.add(songqian);
+	//		}
+	//		if(songqianlist.size() == 0) {
+	//			result.put("songqianlist", "请选择含有指定番号的 送签社");
+	//		}else {
+	//			result.put("songqianlist", songqianlist);
+	//		}
+	//		//地接社下拉
+	//		List<TCompanyEntity> dijielist = dbDao.query(TCompanyEntity.class,
+	//				Cnd.where("comType", "=", CompanyTypeEnum.DIJI.intKey()).and("name", "like", "株式会社金通商社"), null);
+	//		result.put("dijielist", dijielist);
+	//		return result;
+	//	}
 	public Object sendZhaoBao(HttpServletRequest request, Long orderid) {
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -1451,24 +1451,32 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//送签社下拉
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
 				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
-			 List<TCompanyOfCustomerEntity> list = dbDao.query(TCompanyOfCustomerEntity.class, Cnd.where("comid","=", loginCompany.getId()), null);
-			 for (TCompanyOfCustomerEntity tCompanyOfCustomerEntity : list) {
-			     JSONObject jo = new JSONObject();
-				 Integer sendcomid = tCompanyOfCustomerEntity.getSendcomid();
-				 
-				 TCompanyEntity sendCompany = dbDao.fetch(TCompanyEntity.class, Cnd.where("id", "=",sendcomid).and("cdesignNum","!=", ""));
-				 
-				 ja.add(sendCompany);
+			//如果公司自己有指定番号，说明有送签资质，也需要出现在下拉中
+			if (!Util.isEmpty(loginCompany.getCdesignNum())) {
+				ja.add(loginCompany);
+			}
+			List<TCompanyOfCustomerEntity> list = dbDao.query(TCompanyOfCustomerEntity.class,
+					Cnd.where("comid", "=", loginCompany.getId()), null);
+			for (TCompanyOfCustomerEntity tCompanyOfCustomerEntity : list) {
+				JSONObject jo = new JSONObject();
+				Integer sendcomid = tCompanyOfCustomerEntity.getSendcomid();
+
+				TCompanyEntity sendCompany = dbDao.fetch(TCompanyEntity.class,
+						Cnd.where("id", "=", sendcomid).and("cdesignNum", "!=", ""));
+
+				ja.add(sendCompany);
 			}
 		}
-		if(ja.size() == 0) {
+		if (ja.size() == 0) {
 			result.put("songqianlist", "请选择含有指定番号的 送签社");
-		}else {
+		} else {
 			result.put("songqianlist", ja);
 		}
 		//地接社下拉
+		/*List<TCompanyEntity> dijielist = dbDao.query(TCompanyEntity.class,
+				Cnd.where("comType", "=", CompanyTypeEnum.DIJI.intKey()).and("name", "like", "株式会社金通商社"), null);*/
 		List<TCompanyEntity> dijielist = dbDao.query(TCompanyEntity.class,
-				Cnd.where("comType", "=", CompanyTypeEnum.DIJI.intKey()).and("name", "like", "株式会社金通商社"), null);
+				Cnd.where("comType", "=", CompanyTypeEnum.DIJI.intKey()), null);
 		result.put("dijielist", dijielist);
 		return result;
 	}
@@ -1488,7 +1496,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		Integer userId = loginUser.getId();
 		Map<String, Object> result = Maps.newHashMap();
 		String data = request.getParameter("data");
-		String strPtname= "";
+		String strPtname = "";
 		try {
 			strPtname = new String(data.getBytes("ISO-8859-1"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -1501,7 +1509,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		result.put("data", strPtname);
 		result.put("type", type);
 		//变更订单负责人
-		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderId );
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderId);
 		changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
 		return result;
 	}
@@ -1516,6 +1524,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveZhaoBao(TOrderJpEntity orderJpEntity, HttpServletRequest request) {
+		String errMsg = "ok";
 		HttpSession session = request.getSession();
 		TUserEntity loginuser = LoginUtil.getLoginUser(session);
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -1523,52 +1532,67 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderJpEntity.getOrderId().longValue());
 		//查询订单表信息
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
-		//送签社
-		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())) {
-			orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-			//订单负责人变更
-			Integer userId = loginuser.getId();
-			changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
-		} else if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
-			orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-		} else {
-			//地接社为准备提交大使馆
-			orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-		}
-		//更新订单状态为发招保中或准备提交大使馆
-		dbDao.update(orderinfo);
-		//生成excel
-		//申请人信息
-		Map<String, Object> tempdata = new HashMap<String, Object>();
-		String applysqlstr = sqlManager.get("get_applyinfo_from_filedown_by_orderid_jp");
-		Sql applysql = Sqls.create(applysqlstr);
-		Cnd cnd = Cnd.NEW();
-		cnd.and("taoj.orderId", "=", orderjp.getId());
-		List<Record> applyinfo = dbDao.query(applysql, cnd, null);
-		tempdata.put("applyinfo", applyinfo);
-		//excel导出
-		ByteArrayOutputStream excelExport = downLoadVisaFileService.excelExport(tempdata);
-		//生成excel临时文件
-		TemplateUtil templateUtil = new TemplateUtil();
-		File excelfile = templateUtil.createTempFile(excelExport);
-		FileInputStream fileInputStream = null;
-		try {
-			fileInputStream = new FileInputStream(excelfile);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		String qiniuurl = qiniuUpService.uploadImage(fileInputStream, "xlsx", null);
-		//返回上传后七牛云的路径
-		String fileqiniupath = CommonConstants.IMAGES_SERVER_ADDR + qiniuurl;
-		orderjp.setSendsignid(orderJpEntity.getSendsignid());
-		orderjp.setGroundconnectid(orderJpEntity.getGroundconnectid());
-		orderjp.setZhaobaotime(new Date());
-		//保存生成的七牛excel路径
-		orderjp.setExcelurl(fileqiniupath);
-		dbDao.update(orderjp);
-		orderJpViewService.insertLogs(orderinfo.getId(), JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey(), session);
 
-		return null;
+		//发招宝
+		//为了保证跟日本服务器状态同步，发招宝前需获取日本服务器本订单的真实状态
+		if (orderinfo.getStatus() == JPOrderStatusEnum.READYCOMMING.intKey()) {
+			errMsg = "正在发招宝中，请等待发招宝结束后再试";
+		} else {
+			//zhaobaocomplete为1时分两种情况：发招宝成功 和 发招宝失败但返回了受付番号，此时的真实操作应该是招宝变更，把订单的状态变更为 招宝变更中
+			if (orderinfo.getZhaobaocomplete() == IsYesOrNoEnum.YES.intKey()) {
+				orderinfo.setStatus(JPOrderStatusEnum.BIANGENGZHONG.intKey());
+			} else {
+				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
+			}
+
+			//送签社
+			/*if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())) {
+				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
+				//订单负责人变更
+				Integer userId = loginuser.getId();
+				changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
+			} else if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
+			} else {
+				//地接社为准备提交大使馆
+				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
+			}*/
+			//更新订单状态为发招保中或准备提交大使馆
+			dbDao.update(orderinfo);
+
+			//生成excel
+			//申请人信息
+			Map<String, Object> tempdata = new HashMap<String, Object>();
+			String applysqlstr = sqlManager.get("get_applyinfo_from_filedown_by_orderid_jp");
+			Sql applysql = Sqls.create(applysqlstr);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("taoj.orderId", "=", orderjp.getId());
+			List<Record> applyinfo = dbDao.query(applysql, cnd, null);
+			tempdata.put("applyinfo", applyinfo);
+			//excel导出
+			ByteArrayOutputStream excelExport = downLoadVisaFileService.excelExport(tempdata);
+			//生成excel临时文件
+			TemplateUtil templateUtil = new TemplateUtil();
+			File excelfile = templateUtil.createTempFile(excelExport);
+			FileInputStream fileInputStream = null;
+			try {
+				fileInputStream = new FileInputStream(excelfile);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			String qiniuurl = qiniuUpService.uploadImage(fileInputStream, "xlsx", null);
+			//返回上传后七牛云的路径
+			String fileqiniupath = CommonConstants.IMAGES_SERVER_ADDR + qiniuurl;
+			orderjp.setSendsignid(orderJpEntity.getSendsignid());
+			orderjp.setGroundconnectid(orderJpEntity.getGroundconnectid());
+			orderjp.setZhaobaotime(new Date());
+			//保存生成的七牛excel路径
+			orderjp.setExcelurl(fileqiniupath);
+			dbDao.update(orderjp);
+			//orderJpViewService.insertLogs(orderinfo.getId(), JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey(), session);
+			orderJpViewService.insertLogs(orderinfo.getId(), orderinfo.getStatus(), session);
+		}
+		return errMsg;
 	}
 
 	/**
@@ -1648,11 +1672,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		if (Util.isEmpty(orderjp.getVisaType())) {
 			resultstrbuf.append("签证类型、");
 		} else {
-			if (!orderjp.getVisaType().equals(MainSaleVisaTypeEnum.SINGLE.intKey())) {
+			/*if (!orderjp.getVisaType().equals(MainSaleVisaTypeEnum.SINGLE.intKey())) {
 				if (Util.isEmpty(orderjp.getVisaCounty())) {
 					resultstrbuf.append("签证县、");
 				}
-			}
+			}*/
 		}
 		if (Util.isEmpty(orderinfo.getGoTripDate())) {
 			resultstrbuf.append("出发日期、");
@@ -1944,7 +1968,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			resultstr = resultstr.substring(0, resultstr.length() - 1);
 			resultstr += "不能为空";
 			try {
-				 str = new String(resultstr.getBytes(),"utf-8");
+				str = new String(resultstr.getBytes(), "utf-8");
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

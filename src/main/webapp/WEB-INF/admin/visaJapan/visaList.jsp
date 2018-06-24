@@ -214,6 +214,7 @@
                  });
         	},
         	sendzhaobao:function(orderid){
+        		console.log(orderid);
         		$.ajax({
                  	url: '${base}/admin/visaJapan/validateInfoIsFull.html',
                  	data:{orderjpid:orderid},

@@ -4,6 +4,7 @@ SELECT
 	toj.visaType,
 	toj.sendsignid,
 	toj.groundconnectid,
+	toj.isVisit,
 	toj.excelurl
 FROM
 	t_order tr

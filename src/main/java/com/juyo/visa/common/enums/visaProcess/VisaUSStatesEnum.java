@@ -17,7 +17,7 @@ public enum VisaUSStatesEnum implements IEnum {
 			30, "新泽西州"),
 
 	NEW_MEXICO(31, "新墨西哥州"), NEW_YORK(32, "纽约州"), NORTH_CAROLINA(33, "北卡罗来纳州"), NORTH_DAKOTA(34, "北达科他州"), OHIO(35,
-			"俄亥俄州"), OKLAHOMA(36, "俄克拉荷马州"), OREGON(37, "新泽西州"), PENNSYLVANIA(38, "宾夕法尼亚州"), RHODE_ISLAND(39, "罗得岛州"), SOUTH_CAROLINA(
+			"俄亥俄州"), OKLAHOMA(36, "俄克拉荷马州"), OREGON(37, "俄勒冈州"), PENNSYLVANIA(38, "宾夕法尼亚州"), RHODE_ISLAND(39, "罗得岛州"), SOUTH_CAROLINA(
 			40, "南卡罗来纳州"),
 
 	SOUTH_DAKOTA(41, "南达科他州"), TENNESSEE(42, "田纳西州"), TEXAS(43, "德克萨斯州"), UTAH(44, "犹他州"), VERMONT(45, "佛蒙特州"), VIRGINIA(

@@ -15,6 +15,8 @@ package com.juyo.visa.common.msgcrypt;
 
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.crypto.Cipher;
@@ -22,6 +24,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+
+import com.uxuexi.core.common.util.JsonUtil;
 
 /**
  * 提供接收和推送给公众平台消息的加解密接口(UTF8编码的字符串).
@@ -209,21 +213,22 @@ public class WXBizMsgCrypt {
 	 * @throws AesException 执行失败，请查看该异常的错误码和具体的错误信息
 	 */
 	public String encryptMsg(String replyMsg, String timeStamp, String nonce) throws AesException {
+		Map<String, String> result = new HashMap<String, String>();
 		// 加密
 		String encrypt = encrypt(getRandomStr(), replyMsg);
 		System.out.println("密文为：" + encrypt);
 
 		// 生成安全签名
-		if (timeStamp == "") {
-			timeStamp = Long.toString(System.currentTimeMillis());
-		}
+		String signature = MsgCryptUtil.getSignature(token, timeStamp, nonce, encrypt);
+		System.out.println("签名为：" + signature);
 
-		String signature = SHA1.getSHA1(token, timeStamp, nonce, encrypt);
+		//封装body数据，并转成json字符串返回
+		result.put("msg_signature", signature);
+		result.put("encrypt", encrypt);
+		result.put("timeStamp", timeStamp);
+		result.put("nonce", nonce);
 
-		//System.out.println("发送给平台的签名是: " + signature[1].toString());
-		// 生成发送的xml
-		String result = XMLParse.generate(encrypt, signature, timeStamp, nonce);
-		return result;
+		return JsonUtil.toJson(result);
 	}
 
 	/**
