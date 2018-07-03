@@ -17,6 +17,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +55,7 @@ import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.admin.order.entity.PassportJsonEntity;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
+import com.juyo.visa.admin.orderUS.entity.AutofillSearchJsonEntity;
 import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
@@ -1158,17 +1160,24 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			orderus.setStatus(USOrderListStatusEnum.AUTOFILL.intKey());
 			dbDao.update(orderus);
 		}
+
+		//code=99fee3e5
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("search", "E72073527");
+		List<AutofillSearchJsonEntity> searchInterface = searchInterface(jsonObject);
+
 		//调用 优签易接口进行自动填表 TODO
-		Map<String, Object> result = autofillService.getData(orderid);
+		/*Map<String, Object> result = autofillService.getData(orderid);
 		if (!Util.isEmpty(result)) {
 			String aacode = toGetAAcode(result.get("resultData"));
 		}
 		//记录日志
-		insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
+		insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());*/
 		return null;
 	}
 
-	public String toGetAAcode(Object result) {
+	//将数据加密
+	public String encrypt(Object result) {
 		String encodingAesKey = ENCODINGAESKEY;
 		String token = TOKEN;
 		String timestamp = getTimeStamp();
@@ -1180,17 +1189,67 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//加密
 		WXBizMsgCrypt pc;
 		String json = "";
-		String aacode = "";
 		try {
 			pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
 			json = pc.encryptMsg(jsonResult, timestamp, nonce);
 			System.out.println("body:" + json);
 
+		} catch (AesException e) {
+			e.printStackTrace();
+		}
+
+		return json;
+	}
+
+	//查询接口
+	public List<AutofillSearchJsonEntity> searchInterface(Object result) {
+		List<AutofillSearchJsonEntity> searchList = new ArrayList<AutofillSearchJsonEntity>();
+		//先加密，获取加密之后的数据
+		String encrypt = encrypt(result);
+		JSONObject encryptObj = new JSONObject(encrypt);
+		String timestamp = (String) encryptObj.get("timeStamp");
+		String signature = (String) encryptObj.get("msg_signature");
+		String nonce = (String) encryptObj.get("nonce");
+		encrypt = (String) encryptObj.get("encrypt");
+		encrypt = com.alibaba.dubbo.common.URL.encode(encrypt);
+		//GET请求拼凑URL
+		String url = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&timeStamp=" + timestamp
+				+ "&msg_signature=" + signature + "&nonce=" + nonce + "&encrypt=" + encrypt;
+		//发送请求，并对返回的结果解密
+		String getRequest = toGetRequest(url);
+		JSONObject jsonObject = new JSONObject(getRequest);
+		encrypt = (String) jsonObject.getString("encrypt");
+		//解密
+		WXBizMsgCrypt pc;
+		try {
+			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
+			String resultStr = pc.decrypt(encrypt);
+			System.out.println("解密后明文: " + resultStr);
+			//从解密之后的数据中获取所查询的数据，并最终转化成list
+			JSONObject searchObj = new JSONObject(resultStr);
+			JSONArray array = (JSONArray) searchObj.get("data");
+			//将JSONArray转成list集合
+			searchList = com.alibaba.fastjson.JSONObject.parseArray(array.toString(), AutofillSearchJsonEntity.class);
+			//List<?> list2 = JSONArray.toList(array, new AutofillSearchJsonEntity(), new JsonConfig());
+		} catch (AesException e) {
+			e.printStackTrace();
+		}
+		return searchList;
+	}
+
+	//创建申请人数据接口
+	public String toGetAAcode(Object result) {
+
+		WXBizMsgCrypt pc;
+		String aacode = "";
+		String json = encrypt(result);
+		try {
 			//发送POST请求
 			String returnResult = toPostRequest(json);
 			JSONObject resultObj = new JSONObject(returnResult);
 			String encrypt = (String) resultObj.get("encrypt");
 			//对请求返回来的encrypt解密
+			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
 			String resultStr = pc.decrypt(encrypt);
 			System.out.println("解密后明文: " + resultStr);
 
@@ -1244,6 +1303,29 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return sb.toString();
 	}
 
+	//发送GET请求
+	public String toGetRequest(String path) {
+		String entityStr = "";
+		String host = "https://open.visae.net";
+		String method = "GET";
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Content-Type", "application/json; charset=UTF-8");
+		Map<String, String> querys = new HashMap<String, String>();
+		HttpResponse response;
+		try {
+			response = HttpUtils.doGet(host, path, method, headers, querys);
+			entityStr = EntityUtils.toString(response.getEntity());
+			System.out.println("GET请求返回的数据：" + entityStr);
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		return entityStr;
+	}
+
+	//发送POST请求
 	public String toPostRequest(String json) {
 		String host = "https://open.visae.net";
 		String path = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";

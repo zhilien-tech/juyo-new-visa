@@ -75,6 +75,18 @@ public class VisaEditDataForm implements Serializable {
 
 	private String deposit;
 
+	private String certificate;
+
+	private String bankflow;
+
+	private String taxbill;
+
+	private String taxproof;
+
+	private String readstudent;
+
+	private String graduate;
+
 	private String details;
 
 	private Integer sameMainTrip;

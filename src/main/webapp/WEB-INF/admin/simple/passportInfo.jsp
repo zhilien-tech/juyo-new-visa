@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 	<!-- 本页css -->
-	<link rel="stylesheet" href="${base}/references/common/css/simplePassportInfo.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/common/css/simplePassportInfo.css?v='20180703'">
 </head>
 <body>
 	<div class="modal-content">

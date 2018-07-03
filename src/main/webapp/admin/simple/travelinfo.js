@@ -234,7 +234,7 @@ $("#goArrivedCity").on("select2:select",function(e){
 	var returnDate = $('#returnDate').val();
 	//查询航班接口到缓存
 	initFlightByInterface(goDate,goDepartureCity,thisval);
-	initFlightByInterface(returnDate,thisval,goDepartureCity);
+	//initFlightByInterface(returnDate,thisval,goDepartureCity);
 });
 $("#goArrivedCity").on("select2:unselect",function(e){
 	$(this).text('');
@@ -292,7 +292,7 @@ $("#returnArrivedCity").on("select2:unselect", function(e) {
 //加载航班号到缓存并同步到数据库
 function initFlightByInterface(departuredate,departurecity,arrivedcity){
 	$.ajax({ 
-		url: '/admin/tripairline/getAirLineByInterfate.html',
+		url: '/admin/tripairline/getAirlines.html',
 		dataType:"json",
 		data:{date:departuredate,gocity:departurecity,arrivecity:arrivedcity},
 		type:'post',
@@ -398,9 +398,15 @@ function initTravalPlanTable(data){
 		if(value.hotelname != undefined){
 			html += '<td>'+value.hotelname+'</td>';
 		}else{
-			html += '<td></td>';
+			if(index != data.length -1){
+				html += '<td>連泊</td>';
+			}else{
+				html += '<td></td>';
+			}
 		}
-		html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i></td>';
+		if(index != data.length - 1 && index != 0){
+			html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i></td>';
+		}
 		html += '</tr>';
 	});
 	$('#travelplantbody').html(html);
@@ -420,9 +426,9 @@ $("#sendVisaDate").datetimepicker({
 	var stayday;
 	console.log(cityidstr);
 	if(cityidstr == 1 || cityidstr == ""){
-		stayday = 6;
-	}else{
 		stayday = 7;
+	}else{
+		stayday = 6;
 	}
 	var startDate = $("#sendVisaDate").val();
 	$.ajax({ 

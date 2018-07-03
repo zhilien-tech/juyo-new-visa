@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 	<!-- 本页css -->
-	<link rel="stylesheet" href="${base}/references/common/css/simpleAddPassport.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/common/css/simpleAddPassport.css?v='20180703'">
 </head>
 <body>
 	<div class="modal-content">
@@ -30,6 +30,7 @@
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 			</div>
+			<div class="modal-main"></div>
 			<div class="modal-body">
 			<div class="ipt-info">
 				</div>
@@ -425,7 +426,6 @@
 		function save(status){
 			//得到获取validator对象或实例 
 			$("#addBtn").attr('disabled', true);
-			layer.load(1);
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();
 			if (!bootstrapValidator.isValid()) {
@@ -434,6 +434,7 @@
 				return;
 			}
 			var passportInfo = $("#passportInfo").serialize();
+			layer.load(1);
 			$.ajax({
 				type: 'POST',
 				async : false,

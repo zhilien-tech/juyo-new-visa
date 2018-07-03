@@ -135,13 +135,13 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 		List<Record> applyinfo = dbDao.query(applysql, cnd, null);
 		for (Record record : applyinfo) {
 			List<TApplicantWealthJpEntity> query = dbDao.query(TApplicantWealthJpEntity.class,
-					Cnd.where("applicantId", "=", record.get("applicatid")), null);
+					Cnd.where("applicantId", "=", record.get("applicatid")).orderBy("sequence", "ASC"), null);
 			record.put("wealthjpinfo", query);
 		}
 		Map<String, Object> tempdata = new HashMap<String, Object>();
 		//行程安排
 		List<TOrderTravelplanJpEntity> ordertravelplan = dbDao.query(TOrderTravelplanJpEntity.class,
-				Cnd.where("orderId", "=", orderjp.getId()), null);
+				Cnd.where("orderId", "=", orderjp.getId()).orderBy("outDate", "ASC"), null);
 		tempdata.put("orderinfo", orderinfo);
 		tempdata.put("orderjp", orderjp);
 		tempdata.put("company", company);
@@ -173,9 +173,11 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 		ByteArrayOutputStream hotelInfo = hotelInfo(tempdata);
 		pdffiles.add(hotelInfo);
 		//申请人信息（赴日签证申请表）
+		int count = 1;
 		for (Record record : applyinfo) {
-			ByteArrayOutputStream apply = applyinfo(record, tempdata, request);
+			ByteArrayOutputStream apply = applyinfo(record, tempdata, request, count);
 			pdffiles.add(apply);
+			count++;
 		}
 		//		ByteArrayOutputStream returnhome = returnhome(tempdata);
 		//		pdffiles.add(returnhome);
@@ -334,7 +336,8 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 	/**
 	 * 申请人信息
 	 */
-	private ByteArrayOutputStream applyinfo(Record record, Map<String, Object> tempdata, HttpServletRequest request) {
+	private ByteArrayOutputStream applyinfo(Record record, Map<String, Object> tempdata, HttpServletRequest request,
+			int count) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DateFormat dateFormat1 = new SimpleDateFormat("yyyy/MM/dd");
 		TOrderTripJpEntity ordertripjp = (TOrderTripJpEntity) tempdata.get("ordertripjp");
@@ -358,8 +361,18 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 			String otherfirstname = !Util.isEmpty(record.get("otherfirstname")) ? record.getString("otherfirstname")
 					: "";
 			String otherlastname = !Util.isEmpty(record.get("otherlastname")) ? record.getString("otherlastname") : "";
-			map.put("othernameen", otherfirstnameen + otherlastnameen);
-			map.put("othername", otherfirstname + otherlastname);
+			String othername = otherfirstname + otherlastname;
+			if (!Util.isEmpty(othername)) {
+				map.put("othername", otherfirstname + otherlastname);
+			} else {
+				map.put("othername", "无");
+			}
+			String othernameen = otherfirstnameen + otherlastnameen;
+			if (!Util.isEmpty(othernameen)) {
+				map.put("othernameen", otherfirstnameen + otherlastnameen);
+			} else {
+				map.put("othernameen", "无");
+			}
 			//性别
 			if ("男".equals(record.getString("sex"))) {
 				map.put("boy", "0");
@@ -371,11 +384,13 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 				map.put("birthday", dateformat.format((Date) record.get("birthday")));
 			}
 			//出生地
-			String province = (String) record.getString("province");
+			String address = (String) record.get("birthaddress");
+			map.put("address", address);
+			/*String province = (String) record.getString("province");
 			if (province.endsWith("省") || province.endsWith("市")) {
 				province = province.substring(0, province.length() - 1);
 			}
-			map.put("address", province);
+			map.put("address", province);*/
 			//map.put("address", record.getString("address"));
 			//婚姻状况
 			if (!Util.isEmpty(record.get("marrystatus"))) {
@@ -393,10 +408,11 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 			//国籍
 			map.put("country", "CHINA");
 			//曾有的或另有的国际
-			//			if(Util.isEmpty(record.getString("nationality"))) {
-			//				map.put("othernationality", "无");
-			//			}
-			map.put("othernationality", record.getString("nationality"));
+			if (Util.isEmpty(record.getString("nationality"))) {
+				map.put("othernationality", "无");
+			} else {
+				map.put("othernationality", record.getString("nationality"));
+			}
 			//身份证号
 			map.put("cardId", record.getString("cardid"));
 			//护照类别:普通
@@ -440,7 +456,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 									goFlightNum.substring(goFlightNum.lastIndexOf("-") + 1, goFlightNum.indexOf(" ")));
 							//航空公司
 							map.put("goFlightNum",
-									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
+									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.indexOf("//")));
 						} else {//直飞
 							//入境口岸
 							map.put("goArrivedCity",
@@ -569,10 +585,11 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 							+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : " ")
 							+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress") : " "));
 			//家庭电话
-			//map.put("homephone", record.getString("telephone"));
+			map.put("homephone", "无");
+			//手机
 			map.put("homemobile", record.getString("telephone"));
 			//电子邮箱
-			map.put("homeEmail", record.getString("email"));
+			map.put("homeEmail", "无");
 			//工作单位
 			map.put("workname", record.getString("workname"));
 			map.put("workphone", record.getString("workphone"));
@@ -595,7 +612,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 			//获取模板文件
 			//编写二维码
 			if (!Util.isEmpty(map)) {
-				insertQrCode(request, map);
+				insertQrCode(request, map, count);
 			}
 			URL resource = getClass().getClassLoader().getResource("japanfile/apply.pdf");
 			TemplateUtil templateUtil = new TemplateUtil();
@@ -612,7 +629,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 	 * @throws IOException 
 	 * @throws DocumentException 
 	 */
-	public void insertQrCode(HttpServletRequest request, Map<String, String> map) throws Exception {
+	public void insertQrCode(HttpServletRequest request, Map<String, String> map, int count) throws Exception {
 		// 模板文件路径
 		URL resource = getClass().getClassLoader().getResource("japanfile/apply.pdf");
 		String templatePath = null;
@@ -625,7 +642,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 		// 书签名
 		//        String fieldName = "field";
 		// 图片路径
-		String imagePath = getImageUrl(request, map);
+		String imagePath = getImageUrl(request, map, count);
 		// 读取模板文件
 		InputStream input = null;
 		if (!Util.isEmpty(targetPath)) {
@@ -664,7 +681,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 	 * 生成二维码
 	 * 
 	 */
-	public String getImageUrl(HttpServletRequest request, Map<String, String> map) {
+	public String getImageUrl(HttpServletRequest request, Map<String, String> map, int count) {
 		//姓
 		String firstNameEn = map.get("firstNameEn");
 		//名
@@ -673,12 +690,12 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 		String sex = null;
 		if (!Util.isEmpty(map.get("boy"))) {
 			if (map.get("boy").equals("0")) {
-				sex = "F";
+				sex = "M";
 			}
 		}
 		if (!Util.isEmpty(map.get("gril"))) {
 			if (map.get("gril").equals("0")) {
-				sex = "M";
+				sex = "F";
 			}
 		}
 		//出生日期
@@ -687,7 +704,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 			birthday = map.get("birthday");
 		}
 		//年份
-		String year = birthday.substring(6, 9);
+		String year = birthday.substring(6, 10);
 		String month = birthday.substring(3, 5);
 		String day = birthday.substring(0, 2);
 		birthday = year + month + day;
@@ -698,15 +715,15 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(map.get("validEndDate"))) {
 			validEndDate = map.get("validEndDate");
 		}
-		String year1 = validEndDate.substring(6, 9);
+		String year1 = validEndDate.substring(6, 10);
 		String month1 = validEndDate.substring(3, 5);
 		String day1 = validEndDate.substring(0, 2);
 		validEndDate = year1 + month1 + day1;
 		//身份证号
 		String cardId = map.get("cardId");
 		//二维码显示内容  序号，护照号，护照截止日期，姓 ，名，性别，出生日期，固定CHN，身份证号
-		String passporturl = "1," + passport + "," + validEndDate + "," + firstNameEn + "," + lastNameEn + "," + sex
-				+ "," + birthday + "," + "CHN" + "," + cardId + "," + " " + "," + " ";
+		String passporturl = count + "," + passport + "," + validEndDate + "," + firstNameEn + "," + lastNameEn + ","
+				+ sex + "," + birthday + "," + "CHN" + "," + cardId + "," + " " + "," + " ";
 		//生成二维码
 		String qrCode = qrCodeService.encodeQrCode(request, passporturl);
 		return qrCode;
@@ -731,33 +748,60 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 			List<TOrderTravelplanJpEntity> ordertravelplan = (List<TOrderTravelplanJpEntity>) tempdata
 					.get("ordertravelplan");
 
-			Map<String, String> map = new HashMap<String, String>();
-			if (!Util.isEmpty(ordertripjp)) {
-				if (ordertripjp.getTripType().equals(1)) {
-					if (!Util.isEmpty(ordertripjp.getGoDate())) {
-						map.put("Text22", hoteldateformat.format(ordertripjp.getGoDate()));
-					}
-					//逗留时间
-					if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
-						int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
-						map.put("Text24", String.valueOf(stayday) + "泊朝食");
-					}
-				} else if (ordertripjp.getTripType().equals(2)) {
-					if (!Util.isEmpty(mutiltrip)) {
-						//逗留时间
-						if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
-							int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
-							map.put("Text24", String.valueOf(stayday) + "泊朝食");
-						}
-						//多程第一程为出发日期
-						TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
-						//入住日期（出发日期）
-						if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-							map.put("Text22", hoteldateformat.format(entrytrip.getDepartureDate()));
-						}
-					}
-				}
-			}
+			//PDF操作开始
+			//五个表格组成
+			Document document = new Document(PageSize.A4, 0, 0, 36, 36);
+			PdfWriter.getInstance(document, stream);
+			document.open();
+			TtfClassLoader ttf = new TtfClassLoader();
+			Font font = ttf.getFont();
+			font.setSize(23.88f);
+			font.setFamily("宋体");
+
+			//第一个表格
+			float[] firstcolumns = { 13 };
+			PdfPTable titletable = new PdfPTable(firstcolumns);
+			titletable.setWidthPercentage(95);
+			titletable.setTotalWidth(PageSize.A4.getWidth());
+
+			PdfPCell titlecell = new PdfPCell(new Paragraph("手配確認書", font));
+			titlecell.setFixedHeight(50);
+			titlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			titlecell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			titletable.addCell(titlecell);
+
+			document.add(titletable);
+
+			//第二个表格，空表格
+			float[] kongcolumns = { 13 };
+			PdfPTable kongtable = new PdfPTable(kongcolumns);
+			kongtable.setWidthPercentage(95);
+			kongtable.setTotalWidth(PageSize.A4.getWidth());
+			font.setSize(8);
+
+			PdfPCell kongcell = new PdfPCell(new Paragraph("", font));
+			kongcell.setFixedHeight(20);
+			kongcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			kongcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			kongcell.setBorder(0);
+			kongtable.addCell(kongcell);
+
+			document.add(kongtable);
+
+			//第三个表格
+			float[] secondcolumns = { 5, 8 };
+
+			PdfPTable secondtable = new PdfPTable(secondcolumns);
+			secondtable.setWidthPercentage(95);
+			secondtable.setTotalWidth(PageSize.A4.getWidth());
+			font.setSize(14.33f);
+
+			PdfPCell secondcell = new PdfPCell(new Paragraph("宿泊者（氏名）", font));
+			secondcell.setFixedHeight(30);
+			secondcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			secondcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			secondtable.addCell(secondcell);
+
 			StringBuffer strb = new StringBuffer("");
 			Collections.reverse(applyinfo);
 
@@ -774,33 +818,240 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 			}
 			int applysize = applyinfo.size() - 1;
 			strb.append(" 他 ").append(applysize).append(" 名");
-			map.put("Text21", strb.toString());
-			String room = null;
-			if (applyinfo.size() > 0) {
-				if (applyinfo.size() % 2 == 1) {
 
-					int c = applyinfo.size() / 2 + 1;
-					map.put("Text25", c + "");
-				} else {
-					int c = applyinfo.size() / 2;
-					room = "TWN " + c + " 室";
-					map.put("Text25", c + "");
-				}
+			secondcell = new PdfPCell(new Paragraph(strb.toString(), font));
+			secondcell.setFixedHeight(30);
+			secondcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			secondcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			secondtable.addCell(secondcell);
+
+			document.add(secondtable);
+
+			//第四个表格，最主要数据
+			float[] maincolumns = { 2, 3, 4, 2, 1, 1 };
+			PdfPTable maintable = new PdfPTable(maincolumns);
+			maintable.setWidthPercentage(95);
+			maintable.setTotalWidth(PageSize.A4.getWidth());
+
+			//设置表头
+			String titles[] = { "项目", "日時", "ホテル名", "部屋タイプ", "部屋數", "回答", };
+			font.setSize(7.96f);
+			for (String title : titles) {
+				PdfPCell cell = new PdfPCell(new Paragraph(title, font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setFixedHeight(30);
+				maintable.addCell(cell);
 			}
-			//酒店信息
-			if (!Util.isEmpty(ordertravelplan)) {
-				TOrderTravelplanJpEntity travelplanEntity = ordertravelplan.get(0);
-				if (!Util.isEmpty(travelplanEntity.getHotel())) {
+
+			//数据处理
+			if (!Util.isEmpty(ordertripjp)) {
+				List<TOrderTravelplanJpEntity> ordertravelplanList = dbDao.query(TOrderTravelplanJpEntity.class, Cnd
+						.where("orderId", "=", orderjp.getId()).orderBy("outDate", "ASC"), null);
+				if (ordertravelplanList.get(1).getCityId() != ordertravelplanList.get(2).getCityId()) {//中间会随机别的城市
+
+					int dayscount = 0;
+					if (ordertravelplanList.size() % 2 == 0) {
+						dayscount = (ordertravelplanList.size() - 6) / 2;
+					} else {
+						dayscount = (ordertravelplanList.size() - 5) / 2;
+					}
+					for (int i = 0; i < dayscount + 2; i++) {
+
+						PdfPCell cell;
+						//第一列，宿泊
+						cell = new PdfPCell(new Paragraph("宿泊", font));
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setFixedHeight(50);
+						maintable.addCell(cell);
+
+						//第二列，时间
+						Date outDate = ordertravelplanList.get(2 * i).getOutDate();
+						SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+						String timeStampStr = simpleDateFormat.format(outDate);
+						cell = new PdfPCell(new Paragraph(timeStampStr, font));
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setFixedHeight(50);
+						maintable.addCell(cell);
+
+						//第三列，酒店信息
+						String hotel = "";
+						TOrderTravelplanJpEntity travelplanEntity = ordertravelplanList.get(2 * i);
+						THotelEntity hotelinfo = hotelViewService.fetch(travelplanEntity.getHotel());
+						hotel = hotelinfo.getNamejp() + "\n" + hotelinfo.getAddressjp() + "\n" + hotelinfo.getMobile()
+								+ "\n";
+						cell = new PdfPCell(new Paragraph(hotel, font));
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setFixedHeight(50);
+						maintable.addCell(cell);
+
+						//第四列，停留几晚
+						if (i == dayscount + 1) {
+							if (ordertravelplanList.size() % 2 == 0) {
+								cell = new PdfPCell(new Paragraph("3泊朝食", font));
+								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+								cell.setFixedHeight(50);
+								maintable.addCell(cell);
+							} else {
+								cell = new PdfPCell(new Paragraph("2泊朝食", font));
+								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+								cell.setFixedHeight(50);
+								maintable.addCell(cell);
+							}
+						} else {
+							cell = new PdfPCell(new Paragraph("2泊朝食", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(50);
+							maintable.addCell(cell);
+						}
+
+						//第五列，需要几间房子
+						String room = "";
+						if (applyinfo.size() > 0) {
+							if (applyinfo.size() % 2 == 1) {
+								room = String.valueOf(applyinfo.size() / 2 + 1);
+							} else {
+								room = String.valueOf(applyinfo.size() / 2);
+							}
+						}
+						cell = new PdfPCell(new Paragraph(room, font));
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setFixedHeight(50);
+						maintable.addCell(cell);
+
+						//第六列，回答
+						cell = new PdfPCell(new Paragraph("手配 OK", font));
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setFixedHeight(50);
+						maintable.addCell(cell);
+
+					}
+				} else {//中间不随机城市
+					PdfPCell cell;
+					//第一列，宿泊
+					cell = new PdfPCell(new Paragraph("宿泊", font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setFixedHeight(50);
+					maintable.addCell(cell);
+
+					//第二列，时间
+					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+					String timeStampStr = simpleDateFormat.format(ordertripjp.getGoDate());
+					cell = new PdfPCell(new Paragraph(timeStampStr, font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setFixedHeight(50);
+					maintable.addCell(cell);
+
+					//第三列，酒店信息
+					String hotel = "";
+					TOrderTravelplanJpEntity travelplanEntity = ordertravelplanList.get(0);
 					THotelEntity hotelinfo = hotelViewService.fetch(travelplanEntity.getHotel());
-					map.put("Text23",
-							"\n" + hotelinfo.getNamejp() + "\n" + hotelinfo.getAddressjp() + "\n"
-									+ hotelinfo.getMobile());
+					hotel = hotelinfo.getNamejp() + "\n" + hotelinfo.getAddressjp() + "\n" + hotelinfo.getMobile()
+							+ "\n";
+					cell = new PdfPCell(new Paragraph(hotel, font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setFixedHeight(50);
+					maintable.addCell(cell);
+
+					//第四列，停留几晚
+					int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
+					cell = new PdfPCell(new Paragraph(String.valueOf(stayday) + "泊朝食", font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setFixedHeight(50);
+					maintable.addCell(cell);
+
+					//第五列，需要几间房子
+					String room = "";
+					if (applyinfo.size() > 0) {
+						if (applyinfo.size() % 2 == 1) {
+							room = String.valueOf(applyinfo.size() / 2 + 1);
+						} else {
+							room = String.valueOf(applyinfo.size() / 2);
+						}
+					}
+					cell = new PdfPCell(new Paragraph(room, font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setFixedHeight(50);
+					maintable.addCell(cell);
+
+					//第六列，回答
+					cell = new PdfPCell(new Paragraph("手配 OK", font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setFixedHeight(50);
+					maintable.addCell(cell);
 				}
 			}
-			//获取模板文件
-			URL resource = getClass().getClassLoader().getResource("japanfile/huanyu/hotel.pdf");
-			TemplateUtil templateUtil = new TemplateUtil();
-			stream = templateUtil.pdfTemplateStream(resource, map);
+
+			document.add(maintable);
+
+			//第五个表格
+			float[] lastcolumns = { 2, 11 };
+			PdfPTable lasttable = new PdfPTable(lastcolumns);
+			lasttable.setWidthPercentage(95);
+			lasttable.setTotalWidth(PageSize.A4.getWidth());
+
+			String lasttitles[] = { "備考", "", };
+			font.setSize(7.96f);
+			for (String title : lasttitles) {
+				PdfPCell cell = new PdfPCell(new Paragraph(title, font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setFixedHeight(30);
+				lasttable.addCell(cell);
+			}
+
+			document.add(lasttable);
+
+			//表格的高度
+			float totalHeight = titletable.getTotalHeight() + kongtable.getTotalHeight() + secondtable.getTotalHeight()
+					+ maintable.getTotalHeight() + lasttable.getTotalHeight();
+			//PDF的高度
+			float height = document.getPageSize().getHeight();
+			//底部
+			//公章地址
+			String sealUrl = "";
+			if (!Util.isEmpty(orderjp.getGroundconnectid())) {
+				TCompanyEntity dijiecompany = dbDao.fetch(TCompanyEntity.class, orderjp.getGroundconnectid()
+						.longValue());
+				sealUrl = dijiecompany.getSeal();
+			}
+			if (!Util.isEmpty(sealUrl)) {
+				URL url = new URL(sealUrl);
+				//添加盖章
+				//Image img = Image.getInstance(getClass().getClassLoader().getResource(getPrefix() + "sealnew.jpg"));
+				Image img = Image.getInstance(url);
+				img.setAlignment(Image.RIGHT);
+				//		img.scaleToFit(400, 200);//大小
+				img.scaleToFit(280, 180);//大小
+				//img.setIndentationRight(200);
+				img.setRotation(800);
+
+				img.setAbsolutePosition(350, height - totalHeight - 250);
+				img.setAlignment(Paragraph.ALIGN_RIGHT);
+
+				document.add(img);
+
+				//document.add(getSeal1(sealUrl, 4));
+				//				document.add(getSeal1(sealUrl, ordertravelplans.size()));
+			}
+
+			document.close();
+			IOUtils.closeQuietly(stream);
+			return stream;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -877,12 +1128,15 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 					birthdaystr = applydateformat.format((Date) record.get("birthday"));
 				}
 				String careerstatus = "";
-				if (!Util.isEmpty(record.get("careerstatus"))) {
+				/*if (!Util.isEmpty(record.get("careerstatus"))) {
 					for (JobStatusEnum jobstatusenum : JobStatusEnum.values()) {
 						if (record.getInt("careerstatus") == jobstatusenum.intKey()) {
 							careerstatus = jobstatusenum.value();
 						}
 					}
+				}*/
+				if (!Util.isEmpty(record.get("position"))) {
+					careerstatus = (String) record.get("position");
 				}
 				String marryStatus = "";
 				if (!Util.isEmpty(record.get("marrystatus"))) {
@@ -1032,13 +1286,25 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 						wealthType += tApplicantWealthJpEntity.getType() + "\n";
 
 						detail += tApplicantWealthJpEntity.getDetails();
-						if ("银行存款".equals(tApplicantWealthJpEntity.getType())) {
+						if ("银行流水".equals(tApplicantWealthJpEntity.getType())) {
 							detail += "万\n";
 						} else if ("理财".equals(tApplicantWealthJpEntity.getType())) {
 							detail += "万\n";
 						} else if ("房产".equals(tApplicantWealthJpEntity.getType())) {
 							detail += "平米\n";
-						} else {
+						} else if ("车产".equals(tApplicantWealthJpEntity.getType())) {
+							detail += "\n";
+						} else if ("在职证明".equals(tApplicantWealthJpEntity.getType())) {
+							detail += "万\n";
+						} else if ("银行存款".equals(tApplicantWealthJpEntity.getType())) {
+							detail += "万\n";
+						} else if ("税单".equals(tApplicantWealthJpEntity.getType())) {
+							detail += "万\n";
+						} else if ("完税证明".equals(tApplicantWealthJpEntity.getType())) {
+							detail += "元\n";
+						} else if ("特定高校在读生".equals(tApplicantWealthJpEntity.getType())) {
+							detail += "\n";
+						} else if ("特定高校毕业生".equals(tApplicantWealthJpEntity.getType())) {
 							detail += "\n";
 						}
 
@@ -1070,7 +1336,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table.addCell(cell);
 					String detail = tApplicantWealthJpEntity.getDetails();
-					if ("银行存款".equals(tApplicantWealthJpEntity.getType())) {
+					if ("银行流水".equals(tApplicantWealthJpEntity.getType())) {
 						detail += "万\n";
 					} else if ("理财".equals(tApplicantWealthJpEntity.getType())) {
 						detail += "万\n";
@@ -1210,7 +1476,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 			map.put("Text1", strb.toString().toUpperCase());
 			//座位等级
 			map.put("Text7", "Y");
-			map.put("Text8", "A");
+			map.put("Text8", "Y");
 
 			//客票状态
 			map.put("Text18", "OK");
@@ -1229,8 +1495,26 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 						if (goFlightNum.contains("//")) {//转机
 							//第一行，共2行
 							//机场
-							map.put("Text2",
-									goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
+							//第一个机场名 
+							String firstflight = goFlightNum.substring(0,
+									goFlightNum.indexOf("-", goFlightNum.indexOf("-")));
+
+							//第二个机场 
+							String secondflight = goFlightNum.substring(goFlightNum.indexOf("-") + 1,
+									goFlightNum.lastIndexOf("-"));
+
+							//最后一个机场名 
+							String lastflight = goFlightNum.substring(goFlightNum.lastIndexOf("-") + 1,
+									goFlightNum.indexOf(" "));
+
+							TFlightEntity firstname = dbDao.fetch(TFlightEntity.class,
+									Cnd.where("takeOffName", "=", firstflight));
+							TFlightEntity secondname = dbDao.fetch(TFlightEntity.class,
+									Cnd.where("landingName", "=", secondflight));
+							TFlightEntity lastname = dbDao.fetch(TFlightEntity.class,
+									Cnd.where("landingName", "=", lastflight));
+
+							map.put("Text2", firstname.getTakeOffCode() + "/" + secondname.getLandingCode());
 							//航班
 							map.put("Text5",
 									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.indexOf("//")));
@@ -1256,8 +1540,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 
 							//第二行
 							//机场
-							map.put("Text3",
-									goFlightNum.substring(goFlightNum.indexOf("-") + 1, goFlightNum.lastIndexOf("-")));
+							map.put("Text3", secondname.getLandingCode() + "/" + lastname.getLandingCode());
 							//航班
 							map.put("Text6",
 									goFlightNum.substring(goFlightNum.indexOf("//") + 2, goFlightNum.lastIndexOf(" ")));
@@ -1276,28 +1559,29 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 							//有效期
 							map.put("Text16", df.format(addDay).toUpperCase());
 
-							map.put("Text22", "A");
-							map.put("Text31", "Y");
-							map.put("Text27", "OK");
-							map.put("Text36", "OK");
-							map.put("Text28", applyinfo.size() + "PC");
-							map.put("Text37", applyinfo.size() + "PC");
-
 						} else {//直飞
+							//第一个机场
+							String firstflight = goFlightNum.substring(0,
+									goFlightNum.indexOf("-", goFlightNum.indexOf("-")));
+							//第二个机场 
+							String secondflight = goFlightNum.substring(goFlightNum.indexOf("-") + 1,
+									goFlightNum.indexOf(" "));
+
+							TFlightEntity firstname = dbDao.fetch(TFlightEntity.class,
+									Cnd.where("takeOffName", "=", firstflight));
+							TFlightEntity secondname = dbDao.fetch(TFlightEntity.class,
+									Cnd.where("landingName", "=", secondflight));
+
 							//起飞时间
 							String takeofftime = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
 									goFlightNum.indexOf("/"));
 							//降落时间
 							String landingtime = goFlightNum.substring(goFlightNum.indexOf("/") + 1);
 							//起飞机场
-							map.put("Text2",
-									goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
+							map.put("Text2", firstname.getTakeOffCode() + "/" + secondname.getLandingCode());
 							//起飞航班号
 							map.put("Text5",
 									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
-							//起飞机场
-							map.put("Text2",
-									goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
 							//起飞时间 
 							map.put("Text11", takeofftime.substring(0, 2) + ":" + takeofftime.substring(2, 4));
 							//降落时间
@@ -1314,85 +1598,247 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 
 					//出境航班
 					if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
-						String goFlightNum = ordertripjp.getReturnFlightNum();
-						if (goFlightNum.contains("//")) {//转机
-							//第一行 共3行
-							//机场
-							map.put("Text4",
-									goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
-							//航班
-							map.put("Text21",
-									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.indexOf("//")));
-							//日期
-							map.put("Text23", df.format(ordertripjp.getReturnDate()).toUpperCase());
-							//起飞时间
-							map.put("Text24",
-									goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
-											goFlightNum.lastIndexOf(" ") + 5).substring(0, 2)
-											+ ":"
-											+ goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
-													goFlightNum.lastIndexOf(" ") + 5).substring(2, 4));
-							//到达时间
-							map.put("Text25",
-									goFlightNum.substring(goFlightNum.lastIndexOf("//") - 4,
-											goFlightNum.lastIndexOf("//")).substring(0, 2)
-											+ ":"
-											+ goFlightNum.substring(goFlightNum.lastIndexOf("//") - 4,
-													goFlightNum.lastIndexOf("//")).substring(2, 4));
-							//有效期
-							Date addDay = DateUtil.addDay(ordertripjp.getReturnDate(), 8);
-							map.put("Text26", df.format(addDay).toUpperCase());
+						//需要根据入境航班是转机还是直飞来区分
+						String goFlightNum = ordertripjp.getGoFlightNum();
+						String returnFlightNum = ordertripjp.getReturnFlightNum();
+						//如果去程是转机，则返程从模板第三行开始，否则从第二行开始
+						if (!goFlightNum.contains("//")) {//直飞，从第二行开始
+							if (returnFlightNum.contains("//")) {//转机
+								//第一个机场名 
+								String firstflight = returnFlightNum.substring(0,
+										returnFlightNum.indexOf("-", returnFlightNum.indexOf("-")));
 
-							//第二行
-							//机场
-							map.put("Text29",
-									goFlightNum.substring(goFlightNum.indexOf("-") + 1, goFlightNum.lastIndexOf("-")));
-							//航班
-							map.put("Text30",
-									goFlightNum.substring(goFlightNum.indexOf("//") + 2, goFlightNum.lastIndexOf(" ")));
-							//日期
-							map.put("Text32", df.format(ordertripjp.getReturnDate()).toUpperCase());
-							//起飞时间
-							map.put("Text33",
-									goFlightNum.substring(goFlightNum.lastIndexOf("//") + 2,
-											goFlightNum.lastIndexOf("/")).substring(0, 2)
-											+ ":"
-											+ goFlightNum.substring(goFlightNum.lastIndexOf("//") + 2,
-													goFlightNum.lastIndexOf("/")).substring(2, 4));
-							//到达时间
-							map.put("Text34", goFlightNum.substring(goFlightNum.lastIndexOf("/") + 1).substring(0, 2)
-									+ ":" + goFlightNum.substring(goFlightNum.lastIndexOf("/") + 1).substring(2, 4));
-							//有效期
-							map.put("Text35", df.format(addDay).toUpperCase());
-							//第三行
-							map.put("Text38",
-									goFlightNum.substring(goFlightNum.lastIndexOf("-") + 1, goFlightNum.indexOf(" ")));
+								//第二个机场 
+								String secondflight = returnFlightNum.substring(returnFlightNum.indexOf("-") + 1,
+										returnFlightNum.lastIndexOf("-"));
 
-						} else {//直飞
+								//最后一个机场名 
+								String lastflight = returnFlightNum.substring(returnFlightNum.lastIndexOf("-") + 1,
+										returnFlightNum.indexOf(" "));
+
+								TFlightEntity firstname = dbDao.fetch(TFlightEntity.class,
+										Cnd.where("takeOffName", "=", firstflight));
+								TFlightEntity secondname = dbDao.fetch(TFlightEntity.class,
+										Cnd.where("landingName", "=", secondflight));
+								TFlightEntity lastname = dbDao.fetch(TFlightEntity.class,
+										Cnd.where("landingName", "=", lastflight));
+								//第一行 共3行
+								//机场
+								map.put("Text3", firstname.getTakeOffCode() + "/" + secondname.getLandingCode());
+								//航班
+								map.put("Text6",
+										returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
+												returnFlightNum.indexOf("//")));
+								//日期
+								map.put("Text10", df.format(ordertripjp.getReturnDate()).toUpperCase());
+								//起飞时间
+								map.put("Text12",
+										returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
+												returnFlightNum.lastIndexOf(" ") + 5).substring(0, 2)
+												+ ":"
+												+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
+														returnFlightNum.lastIndexOf(" ") + 5).substring(2, 4));
+								//到达时间
+								map.put("Text14",
+										returnFlightNum.substring(returnFlightNum.lastIndexOf("//") - 4,
+												returnFlightNum.lastIndexOf("//")).substring(0, 2)
+												+ ":"
+												+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") - 4,
+														returnFlightNum.lastIndexOf("//")).substring(2, 4));
+								//有效期
+								Date addDay = DateUtil.addDay(ordertripjp.getReturnDate(), 8);
+								map.put("Text16", df.format(addDay).toUpperCase());
+
+								//第二行
+								//机场
+								map.put("Text4", secondname.getLandingCode() + "/" + lastname.getLandingCode());
+								//航班
+								map.put("Text21",
+										returnFlightNum.substring(returnFlightNum.indexOf("//") + 2,
+												returnFlightNum.lastIndexOf(" ")));
+								//日期
+								map.put("Text23", df.format(ordertripjp.getReturnDate()).toUpperCase());
+								//起飞时间
+								map.put("Text24",
+										returnFlightNum.substring(returnFlightNum.lastIndexOf("//") + 2,
+												returnFlightNum.lastIndexOf("/")).substring(0, 2)
+												+ ":"
+												+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") + 2,
+														returnFlightNum.lastIndexOf("/")).substring(2, 4));
+								//到达时间
+								map.put("Text25",
+										returnFlightNum.substring(returnFlightNum.lastIndexOf("/") + 1).substring(0, 2)
+												+ ":"
+												+ returnFlightNum.substring(returnFlightNum.lastIndexOf("/") + 1)
+														.substring(2, 4));
+								//有效期
+								map.put("Text26", df.format(addDay).toUpperCase());
+
+								map.put("Text22", "Y");
+								map.put("Text27", "OK");
+								map.put("Text28", applyinfo.size() + "PC");
+
+							} else {//直飞
+								//第一个机场
+								String firstflight = returnFlightNum.substring(0,
+										returnFlightNum.indexOf("-", returnFlightNum.indexOf("-")));
+								//第二个机场 
+								String secondflight = returnFlightNum.substring(returnFlightNum.indexOf("-") + 1,
+										returnFlightNum.indexOf(" "));
+
+								TFlightEntity firstname = dbDao.fetch(TFlightEntity.class,
+										Cnd.where("takeOffName", "=", firstflight));
+								TFlightEntity secondname = dbDao.fetch(TFlightEntity.class,
+										Cnd.where("landingName", "=", secondflight));
 								//返回机场
-							map.put("Text3",
-									goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-"))));
-							//起飞时间 
-							map.put("Text12",
-									goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1, goFlightNum.indexOf("/"))
-											.substring(0, 2)
-											+ ":"
-											+ goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
-													goFlightNum.indexOf("/")).substring(2, 4));
-							//降落时间
-							map.put("Text14", goFlightNum.substring(goFlightNum.indexOf("/") + 1).substring(0, 2) + ":"
-									+ goFlightNum.substring(goFlightNum.indexOf("/") + 1).substring(2, 4));
-							map.put("Text4",
-									goFlightNum.substring(goFlightNum.indexOf("-") + 1, goFlightNum.indexOf(" ")));
-							//航班号
-							map.put("Text6",
-									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
+								map.put("Text3", firstname.getTakeOffCode() + "/" + secondname.getLandingCode());
+								//起飞时间 
+								map.put("Text12",
+										returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
+												returnFlightNum.indexOf("/")).substring(0, 2)
+												+ ":"
+												+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
+														returnFlightNum.indexOf("/")).substring(2, 4));
+								//降落时间
+								map.put("Text14",
+										returnFlightNum.substring(returnFlightNum.indexOf("/") + 1).substring(0, 2)
+												+ ":"
+												+ returnFlightNum.substring(returnFlightNum.indexOf("/") + 1)
+														.substring(2, 4));
+								//航班号
+								map.put("Text6",
+										returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
+												returnFlightNum.lastIndexOf(" ")));
 
-							//返回航班日期
-							map.put("Text10", df.format(ordertripjp.getReturnDate()).toUpperCase());
-							//有效期（返回日期+6天）
-							Date addDay2 = DateUtil.addDay(ordertripjp.getReturnDate(), 6);
-							map.put("Text16", df.format(addDay2).toUpperCase());
+								//返回航班日期
+								map.put("Text10", df.format(ordertripjp.getReturnDate()).toUpperCase());
+								//有效期（返回日期+6天）
+								Date addDay2 = DateUtil.addDay(ordertripjp.getReturnDate(), 6);
+								map.put("Text16", df.format(addDay2).toUpperCase());
+							}
+
+						} else {//转机，从第三行开始
+							if (returnFlightNum.contains("//")) {//转机
+								//第一个机场名 
+								String firstflight = returnFlightNum.substring(0,
+										returnFlightNum.indexOf("-", returnFlightNum.indexOf("-")));
+
+								//第二个机场 
+								String secondflight = returnFlightNum.substring(returnFlightNum.indexOf("-") + 1,
+										returnFlightNum.lastIndexOf("-"));
+
+								//最后一个机场名 
+								String lastflight = returnFlightNum.substring(returnFlightNum.lastIndexOf("-") + 1,
+										returnFlightNum.indexOf(" "));
+
+								TFlightEntity firstname = dbDao.fetch(TFlightEntity.class,
+										Cnd.where("takeOffName", "=", firstflight));
+								TFlightEntity secondname = dbDao.fetch(TFlightEntity.class,
+										Cnd.where("landingName", "=", secondflight));
+								TFlightEntity lastname = dbDao.fetch(TFlightEntity.class,
+										Cnd.where("landingName", "=", lastflight));
+								//第一行 共3行
+								//机场
+								map.put("Text4", firstname.getTakeOffCode() + "/" + secondname.getLandingCode());
+								//航班
+								map.put("Text21",
+										returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
+												returnFlightNum.indexOf("//")));
+								//日期
+								map.put("Text23", df.format(ordertripjp.getReturnDate()).toUpperCase());
+								//起飞时间
+								map.put("Text24",
+										returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
+												returnFlightNum.lastIndexOf(" ") + 5).substring(0, 2)
+												+ ":"
+												+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
+														returnFlightNum.lastIndexOf(" ") + 5).substring(2, 4));
+								//到达时间
+								map.put("Text25",
+										returnFlightNum.substring(returnFlightNum.lastIndexOf("//") - 4,
+												returnFlightNum.lastIndexOf("//")).substring(0, 2)
+												+ ":"
+												+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") - 4,
+														returnFlightNum.lastIndexOf("//")).substring(2, 4));
+								//有效期
+								Date addDay = DateUtil.addDay(ordertripjp.getReturnDate(), 8);
+								map.put("Text26", df.format(addDay).toUpperCase());
+
+								//第二行
+								//机场
+								map.put("Text29", secondname.getLandingCode() + "/" + lastname.getLandingCode());
+								//航班
+								map.put("Text30",
+										returnFlightNum.substring(returnFlightNum.indexOf("//") + 2,
+												returnFlightNum.lastIndexOf(" ")));
+								//日期
+								map.put("Text32", df.format(ordertripjp.getReturnDate()).toUpperCase());
+								//起飞时间
+								map.put("Text33",
+										returnFlightNum.substring(returnFlightNum.lastIndexOf("//") + 2,
+												returnFlightNum.lastIndexOf("/")).substring(0, 2)
+												+ ":"
+												+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") + 2,
+														returnFlightNum.lastIndexOf("/")).substring(2, 4));
+								//到达时间
+								map.put("Text34",
+										returnFlightNum.substring(returnFlightNum.lastIndexOf("/") + 1).substring(0, 2)
+												+ ":"
+												+ returnFlightNum.substring(returnFlightNum.lastIndexOf("/") + 1)
+														.substring(2, 4));
+								//有效期
+								map.put("Text35", df.format(addDay).toUpperCase());
+
+								map.put("Text22", "Y");
+								map.put("Text31", "Y");
+								map.put("Text27", "OK");
+								map.put("Text36", "OK");
+								map.put("Text28", applyinfo.size() + "PC");
+								map.put("Text37", applyinfo.size() + "PC");
+
+							} else {//直飞
+								//第一个机场
+								String firstflight = returnFlightNum.substring(0,
+										returnFlightNum.indexOf("-", returnFlightNum.indexOf("-")));
+								//第二个机场 
+								String secondflight = returnFlightNum.substring(returnFlightNum.indexOf("-") + 1,
+										returnFlightNum.indexOf(" "));
+
+								TFlightEntity firstname = dbDao.fetch(TFlightEntity.class,
+										Cnd.where("takeOffName", "=", firstflight));
+								TFlightEntity secondname = dbDao.fetch(TFlightEntity.class,
+										Cnd.where("landingName", "=", secondflight));
+								//返回机场
+								map.put("Text4", firstname.getTakeOffCode() + "/" + secondname.getLandingCode());
+								//起飞时间 
+								map.put("Text24",
+										returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
+												returnFlightNum.indexOf("/")).substring(0, 2)
+												+ ":"
+												+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
+														returnFlightNum.indexOf("/")).substring(2, 4));
+								//降落时间
+								map.put("Text25",
+										returnFlightNum.substring(returnFlightNum.indexOf("/") + 1).substring(0, 2)
+												+ ":"
+												+ returnFlightNum.substring(returnFlightNum.indexOf("/") + 1)
+														.substring(2, 4));
+								//航班号
+								map.put("Text21",
+										returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
+												returnFlightNum.lastIndexOf(" ")));
+
+								//返回航班日期
+								map.put("Text23", df.format(ordertripjp.getReturnDate()).toUpperCase());
+								//有效期（返回日期+6天）
+								Date addDay2 = DateUtil.addDay(ordertripjp.getReturnDate(), 6);
+								map.put("Text26", df.format(addDay2).toUpperCase());
+
+								map.put("Text22", "Y");
+								map.put("Text27", "OK");
+								map.put("Text28", applyinfo.size() + "PC");
+							}
+
 						}
 
 					}
@@ -1534,14 +1980,13 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 						String goFlightNum = ordertripjp.getGoFlightNum();
 						/*scenic = " " + province + "から" + goflight.getFlightnum().replace("*", "") + "便にて"
 								+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";*/
-						scenic = " "
-								+ province
+						scenic = province
 								+ "から"
 								+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
 								+ "便にて"
 								+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-										goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+										goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n到着後、ホテルへ";
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
 						if (!Util.isEmpty(mutiltrip)) {
@@ -1552,13 +1997,12 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 							String goFlightNum = entrytrip.getFlightNum();
 							/*scenic = " " + province + goflight.getFlightnum().replace("*", "") + "便にて"
 									+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";*/
-							scenic = " "
-									+ province
+							scenic = province
 									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
 									+ "便にて"
 									+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-											goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n到着後、ホテルへ";
 						}
 					}
 				} else if (count == ordertravelplans.size()) {
@@ -1568,8 +2012,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 						String goFlightNum = ordertripjp.getReturnFlightNum();
 						/*scenic = " " + returnflight.getTakeOffName() + "から"
 								+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";*/
-						scenic = " "
-								+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+						scenic = goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
 								+ "から"
 								+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて帰国";
@@ -1583,8 +2026,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 							String goFlightNum = returntrip.getFlightNum();
 							/*scenic = " " + returnflight.getTakeOffName() + "から"
 									+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";*/
-							scenic = " "
-									+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+							scenic = goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
 									+ "から"
 									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて帰国";
@@ -1600,7 +2042,18 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 					hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
 							+ hotelentity.getMobile();
 				} else {
-					hotel = " ";
+					String day = ordertravelplan.getDay();
+					if (Integer.valueOf(day) != ordertravelplans.size()) {//不是最后一天
+						TOrderTravelplanJpEntity fetch = dbDao.fetch(
+								TOrderTravelplanJpEntity.class,
+								Cnd.where("orderId", "=", ordertravelplan.getOrderId()).and("day", "=",
+										Integer.valueOf(day) - 1));
+						THotelEntity hotelentity = hotelViewService.fetch(fetch.getHotel());
+						hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
+								+ hotelentity.getMobile();
+					} else {
+						hotel = " ";
+					}
 				}
 				String[] datas = { sdf.format(ordertravelplan.getOutDate()), scenic, hotel };
 				for (String title : datas) {
@@ -1608,6 +2061,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 					if (Util.eq(datas[1], title)) {
 						cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setPaddingLeft(4);
 					} else {
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1617,6 +2071,10 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 				lasthotel = ordertravelplan.getHotel();
 			}
 			document.add(table);
+			//表格的高度
+			float totalHeight = table.getTotalHeight();
+			//PDF的高度
+			float height = document.getPageSize().getHeight();
 			//底部
 			//公章地址
 			String sealUrl = "";
@@ -1626,7 +2084,22 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 				sealUrl = dijiecompany.getSeal();
 			}
 			if (!Util.isEmpty(sealUrl)) {
-				document.add(getSeal1(sealUrl, 4));
+				URL url = new URL(sealUrl);
+				//添加盖章
+				//Image img = Image.getInstance(getClass().getClassLoader().getResource(getPrefix() + "sealnew.jpg"));
+				Image img = Image.getInstance(url);
+				img.setAlignment(Image.RIGHT);
+				//		img.scaleToFit(400, 200);//大小
+				img.scaleToFit(280, 180);//大小
+				//img.setIndentationRight(200);
+				img.setRotation(800);
+
+				img.setAbsolutePosition(350, height - totalHeight - 250);
+				img.setAlignment(Paragraph.ALIGN_RIGHT);
+
+				document.add(img);
+
+				//document.add(getSeal1(sealUrl, 4));
 				//				document.add(getSeal1(sealUrl, ordertravelplans.size()));
 			}
 			document.close();
@@ -1929,12 +2402,15 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 			for (Record record : applyinfo) {
 				//职业
 				String careerstatus = "";
-				if (!Util.isEmpty(record.get("careerstatus"))) {
+				/*if (!Util.isEmpty(record.get("careerstatus"))) {
 					for (JobStatusEnum jobstatusenum : JobStatusEnum.values()) {
 						if (record.getInt("careerstatus") == jobstatusenum.intKey()) {
 							careerstatus = jobstatusenum.value();
 						}
 					}
+				}*/
+				if (!Util.isEmpty(record.get("position"))) {
+					careerstatus = (String) record.get("position");
 				}
 				count++;
 				String province = "";
@@ -1966,6 +2442,11 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 			}
 			document.add(table);
 			//底部*********************************************
+			//表格的高度
+			float totalHeight = table.getTotalHeight();
+			//PDF的高度
+			float height = document.getPageSize().getHeight();
+			//底部
 			//公章地址
 			String sealUrl = "";
 			if (!Util.isEmpty(orderjp.getGroundconnectid())) {
@@ -1974,8 +2455,34 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 				sealUrl = dijiecompany.getSeal();
 			}
 			if (!Util.isEmpty(sealUrl)) {
-				document.add(getSeal1(sealUrl, 1));
+				URL url = new URL(sealUrl);
+				//添加盖章
+				//Image img = Image.getInstance(getClass().getClassLoader().getResource(getPrefix() + "sealnew.jpg"));
+				Image img = Image.getInstance(url);
+				img.setAlignment(Image.RIGHT);
+				//		img.scaleToFit(400, 200);//大小
+				img.scaleToFit(280, 180);//大小
+				//img.setIndentationRight(200);
+				img.setRotation(800);
+
+				img.setAbsolutePosition(350, height - totalHeight - 250);
+				img.setAlignment(Paragraph.ALIGN_RIGHT);
+
+				document.add(img);
+
+				//document.add(getSeal1(sealUrl, 4));
+				//				document.add(getSeal1(sealUrl, ordertravelplans.size()));
 			}
+			/*//公章地址
+			String sealUrl = "";
+			if (!Util.isEmpty(orderjp.getGroundconnectid())) {
+				TCompanyEntity dijiecompany = dbDao.fetch(TCompanyEntity.class, orderjp.getGroundconnectid()
+						.longValue());
+				sealUrl = dijiecompany.getSeal();
+			}
+			if (!Util.isEmpty(sealUrl)) {
+				document.add(getSeal1(sealUrl, 1));
+			}*/
 			document.close();
 			IOUtils.closeQuietly(stream);
 		} catch (Exception e) {

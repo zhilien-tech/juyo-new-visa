@@ -22,6 +22,8 @@ public class TApplicantWealthJpAddForm extends AddForm implements Serializable {
 	/**财产明细*/
 	private String details;
 
+	private Integer sequence;
+
 	/**操作人*/
 	private Integer opId;
 

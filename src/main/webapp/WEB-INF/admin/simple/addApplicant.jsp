@@ -445,6 +445,7 @@
 		}
 		
 		function saveApplicant(status){
+			
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#applicantInfo").data(
 					'bootstrapValidator');
@@ -468,6 +469,7 @@
 			    });     
 				var applicantInfo = getFormJson('#applicantInfo');
 				console.log(applicantInfo); 
+				layer.load(1);
 				$.ajax({
 					type : 'POST',
 					data : applicantInfo,

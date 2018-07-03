@@ -1,6 +1,7 @@
 function initApplicantTable(){
 	var orderid = $('#orderid').val();
 	if(orderid){
+		layer.load(1);
 		$.ajax({ 
 			url: '/admin/visaJapan/getVisaDetailApply.html',
 			async : false,
@@ -8,6 +9,7 @@ function initApplicantTable(){
 			data:{orderid:orderid},
 			type:'post',
 			success: function(data){
+				layer.closeAll("loading");
 				var html = '';
 				$.each(data.applyinfo,function(index,value){
 					html += '<tr>';
@@ -74,6 +76,7 @@ function initApplicantTable(){
 function initTravelPlanTable(){
 	var orderid = $('#orderid').val();
 	if(orderid){
+		layer.load(1);
 		$.ajax({ 
 			url: '/admin/visaJapan/getTrvalPlanData.html',
 			async : false,
@@ -81,6 +84,7 @@ function initTravelPlanTable(){
 			data:{orderid:orderid},
 			type:'post',
 			success: function(data){
+				layer.closeAll("loading");
 				var html = '';
 				console.log(data);
 				$.each(data,function(index,value){
@@ -96,9 +100,15 @@ function initTravelPlanTable(){
 					if(value.hotelname != undefined ){
 						html += '<td>'+value.hotelname+'</td>';
 					}else{
-						html += '<td></td>';
+						if(index != data.length -1){
+							html += '<td>連泊</td>';
+						}else{
+							html += '<td></td>';
+						}
 					}
-					html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i></td>';
+					if(index != data.length - 1 && index != 0){
+						html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i></td>';
+					}
 					html += '</tr>';
 				});
 				$('#travelplantbody').html(html);
@@ -117,7 +127,7 @@ function schedulingEdit(planid){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['800px', '400px'],
-		content: '/admin/visaJapan/schedulingEdit.html?planid='+planid
+		content: '/admin/visaJapan/schedulingEdit.html?planid='+planid+'&visatype='+visatype
 	});
 }
 function resetPlan(planid){
@@ -125,7 +135,7 @@ function resetPlan(planid){
 	$.ajax({ 
 		url: '/admin/visaJapan/resetPlan.html',
 		dataType:"json",
-		data:{planid:planid,orderid:orderid},
+		data:{planid:planid,orderid:orderid,visatype:visatype},
 		type:'post',
 		success: function(data){
 			initTravelPlanTable();

@@ -4,6 +4,7 @@ SELECT
 	tap.issuedPlace,
 	tap.issuedDate,
 	tap.issuedOrganization,
+	tap.birthAddress,
 	tap.validEndDate passportenddate,
 	taoj.id applicatid,
 	taoj.relationRemark,

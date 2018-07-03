@@ -89,6 +89,25 @@ public class SimpleVisaModule {
 	}
 
 	/**
+	 * 获取景点
+	 */
+	@At
+	@POST
+	public Object getScenicSelect(@Param("scenicname") String scenicname, @Param("cityId") int cityId,
+			@Param("planid") int planid, @Param("visatype") int visatype) {
+		return simpleVisaService.getScenicSelect(scenicname, cityId, planid, visatype);
+	}
+
+	/**
+	 * 获取酒店
+	 */
+	@At
+	@POST
+	public Object getHotelSelect(@Param("hotelname") String hotelname, @Param("cityId") int cityId) {
+		return simpleVisaService.getHotelSelect(hotelname, cityId);
+	}
+
+	/**
 	 * 跳转到添加申请人页面
 	 * 
 	 */
@@ -123,6 +142,24 @@ public class SimpleVisaModule {
 	@POST
 	public Object getCustomerinfoById(@Param("customerid") Long customerid) {
 		return simpleVisaService.getCustomerinfoById(customerid);
+	}
+
+	/**
+	 * 作废按钮
+	 */
+	@At
+	@POST
+	public Object disabled(@Param("orderId") int orderid) {
+		return simpleVisaService.disabled(orderid);
+	}
+
+	/**
+	 * 还原按钮
+	 */
+	@At
+	@POST
+	public Object undisabled(@Param("orderId") int orderid) {
+		return simpleVisaService.undisabled(orderid);
 	}
 
 	/**

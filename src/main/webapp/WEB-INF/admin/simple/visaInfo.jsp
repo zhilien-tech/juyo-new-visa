@@ -18,7 +18,7 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<link rel="stylesheet" href="${base}/references/public/css/style.css?v='20180510'">
 	<!-- 本页css -->
-	<link rel="stylesheet" href="${base}/references/common/css/simpleVisaInfo.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/common/css/simpleVisaInfo.css?v='20180703'">
 </head>
 <body>
 	<div class="modal-content">
@@ -179,7 +179,7 @@
 										</div>
 							</div><!-- end 签证类型 -->
 							<c:choose>
-								<c:when test="${obj.jporderinfo.visaType > 5 && obj.jporderinfo.visaType < 14 }">
+								<c:when test="${obj.jporderinfo.visaType > 6 && obj.jporderinfo.visaType < 14 }">
 									<div class="row body-from-input" id="threefangwen"><!-- 过去三年是否访问过 -->
 								</c:when>
 								<c:otherwise>
@@ -224,7 +224,7 @@
 												<div class="alignment cf viseType-btn">
 											</c:when>
 											<c:otherwise>
-												<div class="alignment cf viseType-btn none">
+												<div class="alignment cf viseType-btn">
 											</c:otherwise>
 										</c:choose>
 										
@@ -348,45 +348,52 @@
 								</div>
 						</div>
 						<div class="info-body-from finance-btn wealthmain">
-							<input id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState btnBank" />
+							<input id="bankflowType" name="wealthType" value="银行流水" type="button" class="btn btn-sm btnState btnBank" />
 							<input id="vehicleType" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
 							<input id="housePropertyType" name="wealthType" value="房产" type="button" class="btn btn-sm btnState" />
 							<input id="financialType" name="wealthType" value="理财" type="button" class="btn btn-sm btnState" />
+							<input id="certificateType" name="wealthType" value="在职证明" type="button" class="btn btn-sm btnState btnBank" />
+							<input id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState btnBank" />
+							<input id="taxbillType" name="wealthType" value="税单" type="button" class="btn btn-sm btnState" />
+							<input id="taxproofType" name="wealthType" value="完税证明" type="button" class="btn btn-sm btnState btnBank" />
+							<input id="readstudentType" name="wealthType" value="特定高校在读生" type="button" class="btn btn-sm btnState btnReadstudent" />
+							<input id="graduateType" name="wealthType" value="特定高校毕业生" type="button" class="btn btn-sm btnState btnGraduate" />
+							<!-- <input id="financialType" name="wealthType" value="其他" type="button" class="btn btn-sm btnState" /> -->
 						</div>
-						<div class="info-body-from  clone-module cf deposit">
-							<div class="row body-from-input"><!-- 银行存款 -->
-								<div class="col-sm-6">
+						<div class="info-body-from  clone-module cf bankflow">
+							<div class="row body-from-input"><!-- 银行流水 -->
+								<div class="col-sm-5">
 									<div class="form-group">
-										<label><span>*</span>银行存款</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="银行存款" disabled />
+										<label><span>*</span>银行流水</label>
+										<input id="" name="" type="text" class="form-control input-sm" value="银行流水" disabled />
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder=""  />
+										<input id="bankflow" name="bankflow" type="text" class="form-control input-sm" placeholder="工资对账单收入"  />
 									</div>
 								</div>
-								<div style="float:left; margin:40px 0 0 -23px;">
+								<div style="float:left; margin:40px 0 0 -10px;">
 								万
 								</div>
-							</div><!-- end 银行存款 -->
+							</div><!-- end 银行流水 -->
 							<i class="remove-btn delete-icon"></i>
 						</div>
 						<!-- 提示 -->
-						<div class="col-xs-6 deposits" style="display: none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
-							<small class="help-blockdeposit" data-bv-validator="notEmpty" data-bv-for="deposit" data-bv-result="IVVALID" >银行存款不能为空</small>
+						<div class="col-xs-5 bankflows" style="display: none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+							<small class="help-blockbankflow" data-bv-validator="notEmpty" data-bv-for="bankflow" data-bv-result="IVVALID" >银行流水不能为空</small>
 						</div>
 						<!-- 提示End -->
 						<div class="info-body-from clone-module cf vehicle">
 							<div class="row body-from-input"><!-- 车产 -->
-								<div class="col-sm-6">
+								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>车产</label>
 										<input id="" name=""  type="text" class="form-control input-sm" value="车产" disabled />
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
 										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder="例如:大众速腾"/>
@@ -399,60 +406,211 @@
 							<i class="remove-btn delete-icon"></i>
 						</div>
 						<!-- 提示 -->
-						<div class="col-xs-6 vehicles" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+						<div class="col-xs-5 vehicles" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
 							<small class="help-blockvehicle" data-bv-validator="notEmpty" data-bv-for="vehicle" data-bv-result="IVVALID" >车产不能为空</small>
 						</div>
 						<!-- 提示End -->
 						<div class="info-body-from clone-module cf houseProperty">
 							<div class="row body-from-input"><!-- 房产 -->
-								<div class="col-sm-6">
+								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>房产</label>
 										<input id="" name="" type="text" class="form-control input-sm" value="房产" disabled/>
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
 										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
-								<div style="float:left;  margin:40px 0 0 -23px;">
+								<div style="float:left;  margin:40px 0 0 -10px;">
 								平米
 								</div>
 							</div><!-- end 房产 -->
 							<i class="remove-btn delete-icon"></i>
 						</div>
 						<!-- 提示 -->
-						<div class="col-xs-6 housePropertys" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+						<div class="col-xs-5 housePropertys" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
 							<small class="help-blockhouseProperty" data-bv-validator="notEmpty" data-bv-for="houseProperty" data-bv-result="IVVALID" >房产不能为空</small>
 						</div>
 						<!-- 提示End -->
 						<div class="info-body-from clone-module cf financial">
-							<div class="row body-from-input"><!-- 房产 -->
-								<div class="col-sm-6">
+							<div class="row body-from-input"><!-- 理财 -->
+								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>理财</label>
 										<input id="" name="" type="text" class="form-control input-sm" value="理财" disabled/>
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
 										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
-								<div style="float:left;  margin:40px 0 0 -23px;">
+								<div style="float:left;  margin:40px 0 0 -10px;">
 								万
+								</div>
+							</div><!-- end 理财 -->
+							<i class="remove-btn delete-icon"></i>
+						</div>
+						<!-- 提示 -->
+						<div class="col-xs-5 financials" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+							<small class="help-blockfinancial" data-bv-validator="notEmpty" data-bv-for="financial" data-bv-result="IVVALID" >理财不能为空</small>
+						</div>
+						<!-- 提示End -->
+						<!-- 在职证明 -->
+						<div class="info-body-from clone-module cf certificate">
+							<div class="row body-from-input"><!-- 在职证明 -->
+								<div class="col-sm-5">
+									<div class="form-group">
+										<label><span>*</span>在职证明</label>
+										<input id="" name="" type="text" class="form-control input-sm" value="在职证明" disabled/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="certificate" name="certificate" type="text" class="form-control input-sm" placeholder="年收入"  />
+									</div>
+								</div>
+								<div style="float:left;  margin:40px 0 0 -10px;">
+								万
+								</div>
+							</div><!-- end 在职证明 -->
+							<i class="remove-btn delete-icon"></i>
+						</div>
+						<!-- 提示 -->
+						<div class="col-xs-5 certificates" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+							<small class="help-blockcertificate" data-bv-validator="notEmpty" data-bv-for="certificate" data-bv-result="IVVALID" >在职证明不能为空</small>
+						</div>
+						<!-- 提示End -->
+						<!-- 银行存款 -->
+						<div class="info-body-from clone-module cf deposit">
+							<div class="row body-from-input"><!-- 银行存款 -->
+								<div class="col-sm-5">
+									<div class="form-group">
+										<label><span>*</span>银行存款</label>
+										<input id="" name="" type="text" class="form-control input-sm" value="银行存款" disabled/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder=""  />
+									</div>
+								</div>
+								<div style="float:left;  margin:40px 0 0 -10px;">
+								万
+								</div>
+							</div><!-- end 银行存款 -->
+							<i class="remove-btn delete-icon"></i>
+						</div>
+						<!-- 提示 -->
+						<div class="col-xs-5 deposits" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+							<small class="help-blockdeposit" data-bv-validator="notEmpty" data-bv-for="deposit" data-bv-result="IVVALID" >银行存款不能为空</small>
+						</div>
+						<!-- 提示End -->
+						<!-- 税单 -->
+						<div class="info-body-from clone-module cf taxbill">
+							<div class="row body-from-input"><!-- 税单 -->
+								<div class="col-sm-5">
+									<div class="form-group">
+										<label><span>*</span>税单</label>
+										<input id="" name="" type="text" class="form-control input-sm" value="税单" disabled/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="taxbill" name=taxbill type="text" class="form-control input-sm" placeholder="年收入"  />
+									</div>
+								</div>
+								<div style="float:left;  margin:40px 0 0 -10px;">
+								万
+								</div>
+							</div><!-- end 税单 -->
+							<i class="remove-btn delete-icon"></i>
+						</div>
+						<!-- 提示 -->
+						<div class="col-xs-5 taxbills" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+							<small class="help-blocktaxbill" data-bv-validator="notEmpty" data-bv-for="taxbill" data-bv-result="IVVALID" >税单不能为空</small>
+						</div>
+						<!-- 提示End -->
+						<!-- 完税证明 -->
+						<div class="info-body-from clone-module cf taxproof">
+							<div class="row body-from-input"><!-- 完税证明 -->
+								<div class="col-sm-5">
+									<div class="form-group">
+										<label><span>*</span>完税证明</label>
+										<input id="" name="" type="text" class="form-control input-sm" value="完税证明" disabled/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="taxproof" name="taxproof" type="text" class="form-control input-sm" placeholder="年缴税"  />
+									</div>
+								</div>
+								<div style="float:left;  margin:40px 0 0 -10px;">
+								元
+								</div>
+							</div><!-- end 完税证明 -->
+							<i class="remove-btn delete-icon"></i>
+						</div>
+						<!-- 提示 -->
+						<div class="col-xs-5 taxproofs" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+							<small class="help-blocktaxproof" data-bv-validator="notEmpty" data-bv-for="taxproof" data-bv-result="IVVALID" >完税证明不能为空</small>
+						</div>
+						<!-- 提示End -->
+						<!-- 特定高校在读生 -->
+						<div class="info-body-from clone-module cf readstudent">
+							<div class="row body-from-input"><!-- 特定高校在读生 -->
+								<div class="col-sm-5">
+									<div class="form-group">
+										<label><span>*</span>特定高校在读生</label>
+										<input id="" name="" type="text" class="form-control input-sm" value="特定高校在读生" disabled/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="readstudent" name="readstudent" type="text" class="form-control input-sm" placeholder=""  />
+									</div>
+								</div>
+							</div><!-- end 特定高校在读生 -->
+							<i class="remove-btn delete-icon"></i>
+						</div>
+						<!-- 提示 -->
+						<div class="col-xs-5 readstudents" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+							<small class="help-blockreadstudent" data-bv-validator="notEmpty" data-bv-for="readstudent" data-bv-result="IVVALID" >特定高校在读生不能为空</small>
+						</div>
+						<!-- 提示End -->
+						<!-- 特定高校毕业生 -->
+						<div class="info-body-from clone-module cf graduate">
+							<div class="row body-from-input"><!-- 特定高校毕业生 -->
+								<div class="col-sm-5">
+									<div class="form-group">
+										<label><span>*</span>特定高校毕业生</label>
+										<input id="" name="" type="text" class="form-control input-sm" value="特定高校毕业生" disabled/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="graduate" name="graduate" type="text" class="form-control input-sm" placeholder=""  />
+									</div>
 								</div>
 							</div><!-- end 房产 -->
 							<i class="remove-btn delete-icon"></i>
 						</div>
 						<!-- 提示 -->
-						<div class="col-xs-6 financials" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
-							<small class="help-blockfinancial" data-bv-validator="notEmpty" data-bv-for="financial" data-bv-result="IVVALID" >理财不能为空</small>
+						<div class="col-xs-5 graduates" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+							<small class="help-blockgraduate" data-bv-validator="notEmpty" data-bv-for="graduate" data-bv-result="IVVALID" >特定高校毕业生不能为空</small>
 						</div>
 						<!-- 提示End -->
+						
 					</div>
 					<!-- end 财产信息 -->
 					<!-- 在日拟入住九点名称或友人姓名及地址 -->
@@ -879,6 +1037,12 @@
 					$(".vehicle").css("display","none");
 					$(".houseProperty").css("display","none");
 					$(".financial").css("display","none");
+					$(".bankflow").css("display","none");
+					$(".certificate").css("display","none");
+					$(".taxbill").css("display","none");
+					$(".taxproof").css("display","none");
+					$(".readstudent").css("display","none");
+					$(".graduate").css("display","none");
 				}
 			});
 			
@@ -889,10 +1053,10 @@
 					var wealth = $(this);
 					$.each(JSON.parse(wealthType), function(i, item){     
 						if(item.type == wealth.val()){
-							if(wealth.val() == "银行存款"){
-								$(".deposit").css("display","block");
+							if(wealth.val() == "银行流水"){
+								$(".bankflow").css("display","block");
 								wealth.addClass("btnState-true");
-								$("#deposit").val(item.details);
+								$("#bankflow").val(item.details);
 							}
 							if(wealth.val() == "车产"){
 								$(".vehicle").css("display","block");
@@ -909,6 +1073,37 @@
 								wealth.addClass("btnState-true");
 								$("#financial").val(item.details);
 							}
+							if(wealth.val() == "银行存款"){
+								$(".deposit").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#deposit").val(item.details);
+							}
+							if(wealth.val() == "在职证明"){
+								$(".certificate").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#certificate").val(item.details);
+							}
+							if(wealth.val() == "税单"){
+								$(".taxbill").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#taxbill").val(item.details);
+							}
+							if(wealth.val() == "完税证明"){
+								$(".taxproof").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#taxproof").val(item.details);
+							}
+							if(wealth.val() == "特定高校在读生"){
+								$(".readstudent").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#readstudent").val(item.details);
+							}
+							if(wealth.val() == "特定高校毕业生"){
+								$(".graduate").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#graduate").val(item.details);
+							}
+							
 						}
 						});
 					});
@@ -927,6 +1122,12 @@
 					$(".vehicle").css("display","none");
 					$(".houseProperty").css("display","none");
 					$(".financial").css("display","none");
+					$(".bankflow").css("display","none");
+					$(".certificate").css("display","none");
+					$(".taxbill").css("display","none");
+					$(".taxproof").css("display","none");
+					$(".readstudent").css("display","none");
+					$(".graduate").css("display","none");
 				}
 			}
 			$("#wealth").change(function(){
@@ -936,6 +1137,12 @@
 					$(".vehicle").css("display","none");
 					$(".houseProperty").css("display","none");
 					$(".financial").css("display","none");
+					$(".bankflow").css("display","none");
+					$(".certificate").css("display","none");
+					$(".taxbill").css("display","none");
+					$(".taxproof").css("display","none");
+					$(".readstudent").css("display","none");
+					$(".graduate").css("display","none");
 				}else{
 					$(".wealthmain").show();
 					$('[name=wealthType]').each(function(){
@@ -1027,6 +1234,84 @@
 						} */
 						//$("#financial").placeholder("万");
 					}
+				}else if(financeBtnInfo == "在职证明"){
+					if($(this).hasClass("btnState-true")){
+						$(".certificate").css("display","none");
+						$(this).removeClass("btnState-true");
+						$("#certificate").val("");
+						$(".certificates").css({"display":"none"});
+						$(".certificates").attr("class", "col-xs-6 certificates has-success");
+						$("#certificate").attr("style", null);
+					}else{
+						$(".certificate").css("display","block");
+						$(this).addClass("btnState-true");
+						$("#certificate").val("");
+					}
+				}else if(financeBtnInfo == "银行流水"){
+					if($(this).hasClass("btnState-true")){
+						$(".bankflow").css("display","none");
+						$(this).removeClass("btnState-true");
+						$("#bankflow").val("");
+						$(".bankflows").css({"display":"none"});
+						$(".bankflows").attr("class", "col-xs-6 bankflows has-success");
+						$("#bankflow").attr("style", null);
+					}else{
+						$(".bankflow").css("display","block");
+						$(this).addClass("btnState-true");
+						$("#bankflow").val("");
+					}
+				}else if(financeBtnInfo == "税单"){
+					if($(this).hasClass("btnState-true")){
+						$(".taxbill").css("display","none");
+						$(this).removeClass("btnState-true");
+						$("#taxbill").val("");
+						$(".taxbills").css({"display":"none"});
+						$(".taxbills").attr("class", "col-xs-6 taxbills has-success");
+						$("#taxbill").attr("style", null);
+					}else{
+						$(".taxbill").css("display","block");
+						$(this).addClass("btnState-true");
+						$("#taxbill").val("");
+					}
+				}else if(financeBtnInfo == "完税证明"){
+					if($(this).hasClass("btnState-true")){
+						$(".taxproof").css("display","none");
+						$(this).removeClass("btnState-true");
+						$("#taxproof").val("");
+						$(".taxproofs").css({"display":"none"});
+						$(".taxproofs").attr("class", "col-xs-6 taxproofs has-success");
+						$("#taxproof").attr("style", null);
+					}else{
+						$(".taxproof").css("display","block");
+						$(this).addClass("btnState-true");
+						$("#taxproof").val("");
+					}
+				}else if(financeBtnInfo == "特定高校在读生"){
+					if($(this).hasClass("btnState-true")){
+						$(".readstudent").css("display","none");
+						$(this).removeClass("btnState-true");
+						$("#readstudent").val("");
+						$(".readstudents").css({"display":"none"});
+						$(".readstudents").attr("class", "col-xs-6 readstudents has-success");
+						$("#readstudent").attr("style", null);
+					}else{
+						$(".readstudent").css("display","block");
+						$(this).addClass("btnState-true");
+						$("#readstudent").val("学信网学籍在线验证报告");
+					}
+				}else if(financeBtnInfo == "特定高校毕业生"){
+					if($(this).hasClass("btnState-true")){
+						$(".graduate").css("display","none");
+						$(this).removeClass("btnState-true");
+						$("#graduate").val("");
+						$(".graduates").css({"display":"none"});
+						$(".graduates").attr("class", "col-xs-6 graduates has-success");
+						$("#graduate").attr("style", null);
+					}else{
+						$(".graduate").css("display","block");
+						$(this).addClass("btnState-true");
+						$("#graduate").val("学信网电子学历认证书");
+					}
 				}
 			});
 			
@@ -1039,6 +1324,14 @@
 					$(".deposits").css({"display":"none"});
 					$(".deposits").attr("class", "col-xs-6 deposits has-success");
 					$("#deposite").attr("style", null);
+				}
+				if($(this).parent().is(".bankflow")){
+					$(".bankflow").css("display","none");
+					$("#bankflowType").removeClass("btnState-true");
+					$("#bankflow").val("");
+					$(".bankflows").css({"display":"none"});
+					$(".bankflows").attr("class", "col-xs-6 bankflows has-success");
+					$("#bankflow").attr("style", null);
 				}
 				if($(this).parent().is(".vehicle")){
 					$(".vehicle").css("display","none");
@@ -1063,6 +1356,46 @@
 					$(".financials").css({"display":"none"});
 					$(".financials").attr("class", "col-xs-6 financials has-success");
 					$("#financial").attr("style", null);
+				}
+				if($(this).parent().is(".certificate")){
+					$(".certificate").css("display","none");
+					$("#certificateType").removeClass("btnState-true");
+					$("#certificate").val("");
+					$(".certificates").css({"display":"none"});
+					$(".certificates").attr("class", "col-xs-6 certificates has-success");
+					$("#certificate").attr("style", null);
+				}
+				if($(this).parent().is(".taxbill")){
+					$(".taxbill").css("display","none");
+					$("#taxbillType").removeClass("btnState-true");
+					$("#taxbill").val("");
+					$(".taxbills").css({"display":"none"});
+					$(".taxbills").attr("class", "col-xs-6 taxbills has-success");
+					$("#taxbill").attr("style", null);
+				}
+				if($(this).parent().is(".taxproof")){
+					$(".taxproof").css("display","none");
+					$("#taxproofType").removeClass("btnState-true");
+					$("#taxproof").val("");
+					$(".taxproofs").css({"display":"none"});
+					$(".taxproofs").attr("class", "col-xs-6 taxproofs has-success");
+					$("#taxproof").attr("style", null);
+				}
+				if($(this).parent().is(".readstudent")){
+					$(".readstudent").css("display","none");
+					$("#readstudentType").removeClass("btnState-true");
+					$("#readstudent").val("");
+					$(".readstudents").css({"display":"none"});
+					$(".readstudents").attr("class", "col-xs-6 readstudents has-success");
+					$("#readstudent").attr("style", null);
+				}
+				if($(this).parent().is(".graduate")){
+					$(".graduate").css("display","none");
+					$("#graduateType").removeClass("btnState-true");
+					$("#graduate").val("");
+					$(".graduates").css({"display":"none"});
+					$(".graduates").attr("class", "col-xs-6 graduates has-success");
+					$("#graduate").attr("style", null);
 				}
 			});
 			
@@ -1111,6 +1444,7 @@
 		
 		//保存
 		function save(status){
+			layer.load(1);
 			var applicantid = '${obj.applicant.id}';
 			var orderid = '${obj.orderid}';
 			//得到获取validator对象或实例 
@@ -1118,17 +1452,19 @@
 			bootstrapValidator.validate();
 			if(status == 1){
 				if (!bootstrapValidator.isValid()) {
+					layer.closeAll("loading");
 					return;
 				}
 				var applicant = $('#applicant').val();
-				var relationRemark = $('#relationRemark').val();
+				/* var relationRemark = $('#relationRemark').val();
 				if(applicant == 1 && !relationRemark){
 					layer.msg('主申请人备注不能为空');
 					return;
-				}
+				} */
 				var position = $('#position').val();
 				if(!position){
 					layer.msg('职位不能为空');
+					layer.closeAll("loading");
 					return;
 				}
 			}
@@ -1145,6 +1481,7 @@
 					wealthType += $(this).val() + ',';
 				}
 			});
+			
 			if(wealthType){
 				wealthType = wealthType.substr(0,wealthType.length-1);
 			}
@@ -1190,7 +1527,7 @@
 			}
 			
 			var passportInfo = $.param({"wealthType":wealthType,'visatype':visatype,'visacounty':visacounty,'isVisit':isVisit,'threecounty':threecounty,'isname':isname,'isyaoqing':isyaoqing}) + "&" +  $("#passportInfo").serialize();
-			layer.load(1);
+			
 			$.ajax({
 				type: 'POST',
 				async: false,
@@ -1341,14 +1678,14 @@
 			var thisval = $(this).val();
 			if(thisval == 1){
 				$('#threexian').show();
-				$('.alignment').show();
+				//$('.alignment').show();
 			}else{
 				$('#threexian input').removeClass('btnState-true');
-				$('#laststartdate').val('');
-				$('#laststayday').val('');
-				$('#lastreturndate').val('');
+				//$('#laststartdate').val('');
+				//$('#laststayday').val('');
+				//$('#lastreturndate').val('');
 				$('#threexian').hide();
-				$('.alignment').hide();
+				//$('.alignment').hide();
 				
 			}
 		});

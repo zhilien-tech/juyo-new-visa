@@ -951,6 +951,7 @@
 			saveApplicant(3);
 		}
 		function saveApplicant(status){
+				
 				var str="";
 				$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
 				    str=$(this).val();     
@@ -966,7 +967,6 @@
 			// 执行表单验证 
 			bootstrapValidator.validate();
 			if (bootstrapValidator.isValid()){
-				
 				layer.load(1);
 				$.ajax({
 					async: false,

@@ -10,7 +10,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * @Date	 2017年10月20日
  */
 public enum ApplicantJpWealthEnum implements IEnum {
-	BANK(1, "银行存款"), CAR(2, "车产"), HOME(3, "房产"), LICAI(4, "理财");
+	BANK(1, "银行流水"), CAR(2, "车产"), HOME(3, "房产"), LICAI(4, "理财");
 	private int key;
 	private String value;
 

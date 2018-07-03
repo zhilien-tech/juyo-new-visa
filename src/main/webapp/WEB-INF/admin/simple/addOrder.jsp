@@ -373,6 +373,7 @@
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 		var cityidstr = '${obj.orderinfo.cityId}';
+		var visatype = '';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
@@ -401,7 +402,63 @@
 		});
 		
 		$("#visatype").change(function(){
-			var visatype = $(this).val();
+			var vtype = $(this).val();
+			visatype = vtype;
+			var goArrivedCity = $("#goArrivedCity").val();
+			var returnDepartureCity = $("#returnDepartureCity").val();
+			//冲绳
+			if(vtype == 2 || vtype == 7){
+				$("#goArrivedCity").html('<option selected="selected" value="'+77+'">'+'冲绳'+'</option>');
+				$("#returnDepartureCity").html('<option selected="selected" value="'+77+'">'+'冲绳'+'</option>');
+				if(goArrivedCity != 77){
+					$('#goFlightNum').empty();
+				}
+				if(returnDepartureCity != 77){
+					$('#returnFlightNum').empty();
+				}
+			}
+			//宫城
+			if(vtype == 3 || vtype == 8){
+				$("#goArrivedCity").html('<option selected="selected" value="'+91+'">'+'宫城'+'</option>');
+				if(goArrivedCity != 91){
+					$('#goFlightNum').empty();
+				}
+			}
+			//岩手
+			if(vtype == 4 || vtype == 10){
+				$("#goArrivedCity").html('<option selected="selected" value="'+92+'">'+'岩手'+'</option>');
+				if(goArrivedCity != 92){
+					$('#goFlightNum').empty();
+				}
+			}
+			//福岛
+			if(vtype == 5 || vtype == 9){
+				$("#goArrivedCity").html('<option selected="selected" value="'+30+'">'+'福岛'+'</option>');
+				if(goArrivedCity != 30){
+					$('#goFlightNum').empty();
+				}
+			}
+			//青森
+			if(vtype == 11){
+				$("#goArrivedCity").html('<option selected="selected" value="'+25+'">'+'青森'+'</option>');
+				if(goArrivedCity != 25){
+					$('#goFlightNum').empty();
+				}
+			}
+			//秋田
+			if(vtype == 12){
+				$("#goArrivedCity").html('<option selected="selected" value="'+612+'">'+'秋田'+'</option>');
+				if(goArrivedCity != 612){
+					$('#goFlightNum').empty();
+				}
+			}
+			//山形
+			if(vtype == 13){
+				$("#goArrivedCity").html('<option selected="selected" value="'+613+'">'+'山形'+'</option>');
+				if(goArrivedCity != 613){
+					$('#goFlightNum').empty();
+				}
+			}
 			var orderid = $('#orderid').val();
 			if(orderid != ""){
 				$.ajax({ 
@@ -479,7 +536,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '80%'],
-					content:'/admin/orderJp/updateApplicant.html?applicantid='+id+'&orderid='+orderid
+					content:'/admin/simple/updateApplicant.html?applicantid='+id+'&orderid='+orderid
 				});
 			}
 				
@@ -512,7 +569,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['900px', '80%'],
-					content:'/admin/orderJp/visaInfo.html?applicantid='+id+'&orderid='+orderid
+					content:'/admin/simple/visaInfo.html?applicantid='+id+'&orderid='+orderid
 				});
 			}
 			

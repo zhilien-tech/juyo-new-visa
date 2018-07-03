@@ -19,6 +19,8 @@ public class TApplicantWealthJpUpdateForm extends ModForm implements Serializabl
 	/**财产类型*/
 	private String type;
 
+	private Integer sequence;
+
 	/**财产明细*/
 	private String details;
 

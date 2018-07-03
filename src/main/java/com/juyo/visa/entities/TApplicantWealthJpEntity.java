@@ -26,6 +26,10 @@ public class TApplicantWealthJpEntity implements Serializable {
 	private String type;
 
 	@Column
+	@Comment("财产顺序")
+	private Integer sequence;
+
+	@Column
 	@Comment("财产明细")
 	private String details;
 

@@ -132,8 +132,9 @@ public class VisaJapanModule {
 	 */
 	@At
 	@POST
-	public Object resetPlan(@Param("orderid") Integer orderid, @Param("planid") Integer planid, HttpSession session) {
-		return visaJapanService.resetPlan(orderid, planid, session);
+	public Object resetPlan(@Param("orderid") Integer orderid, @Param("planid") Integer planid,
+			@Param("visatype") int visatype, HttpSession session) {
+		return visaJapanService.resetPlan(orderid, planid, visatype, session);
 	}
 
 	/**
@@ -150,8 +151,8 @@ public class VisaJapanModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object schedulingEdit(@Param("planid") Integer planid) {
-		return visaJapanService.schedulingEdit(planid);
+	public Object schedulingEdit(@Param("planid") Integer planid, @Param("visatype") int visatype) {
+		return visaJapanService.schedulingEdit(planid, visatype);
 	}
 
 	/**
