@@ -958,6 +958,18 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				}
 				prehotelname = hotelname;
 			}
+
+			//hotelid
+			if (Util.isEmpty(record.get("hotel"))) {
+				record.get("day");
+				TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
+						Cnd.where("orderId", "=", orderid)
+								.and("day", "=", Long.valueOf((String) record.get("day")) - 1));
+				TOrderTravelplanJpEntity plan = dbDao.fetch(TOrderTravelplanJpEntity.class,
+						Cnd.where("orderId", "=", orderid).and("day", "=", Long.valueOf((String) record.get("day"))));
+				plan.setHotel(fetch.getHotel());
+				dbDao.update(plan);
+			}
 			count++;
 		}
 		return travelplans;

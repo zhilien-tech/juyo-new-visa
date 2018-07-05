@@ -858,54 +858,63 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(ordertripjp)) {
 				List<TOrderTravelplanJpEntity> ordertravelplanList = dbDao.query(TOrderTravelplanJpEntity.class, Cnd
 						.where("orderId", "=", orderjp.getId()).orderBy("outDate", "ASC"), null);
+				Integer visaType = orderjp.getVisaType();
 				if (ordertravelplanList.get(1).getCityId() != ordertravelplanList.get(2).getCityId()) {//中间会随机别的城市
-
 					int dayscount = 0;
-					if (ordertravelplanList.size() % 2 == 0) {
-						dayscount = (ordertravelplanList.size() - 6) / 2;
-					} else {
-						dayscount = (ordertravelplanList.size() - 5) / 2;
-					}
-					for (int i = 0; i < dayscount + 2; i++) {
+					if (visaType == 1 || visaType == 2 || visaType == 6 || visaType == 7 || visaType == 14) {
 
-						PdfPCell cell;
-						//第一列，宿泊
-						cell = new PdfPCell(new Paragraph("宿泊", font));
-						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable.addCell(cell);
+						if (ordertravelplanList.size() % 2 == 0) {
+							dayscount = (ordertravelplanList.size() - 6) / 2;
+						} else {
+							dayscount = (ordertravelplanList.size() - 5) / 2;
+						}
+						for (int i = 0; i < dayscount + 2; i++) {
 
-						//第二列，时间
-						Date outDate = ordertravelplanList.get(2 * i).getOutDate();
-						SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-						String timeStampStr = simpleDateFormat.format(outDate);
-						cell = new PdfPCell(new Paragraph(timeStampStr, font));
-						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable.addCell(cell);
+							PdfPCell cell;
+							//第一列，宿泊
+							cell = new PdfPCell(new Paragraph("宿泊", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(50);
+							maintable.addCell(cell);
 
-						//第三列，酒店信息
-						String hotel = "";
-						TOrderTravelplanJpEntity travelplanEntity = ordertravelplanList.get(2 * i);
-						THotelEntity hotelinfo = hotelViewService.fetch(travelplanEntity.getHotel());
-						hotel = hotelinfo.getNamejp() + "\n" + hotelinfo.getAddressjp() + "\n" + hotelinfo.getMobile()
-								+ "\n";
-						cell = new PdfPCell(new Paragraph(hotel, font));
-						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable.addCell(cell);
+							//第二列，时间
+							Date outDate = ordertravelplanList.get(2 * i).getOutDate();
+							SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+							String timeStampStr = simpleDateFormat.format(outDate);
+							cell = new PdfPCell(new Paragraph(timeStampStr, font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(50);
+							maintable.addCell(cell);
 
-						//第四列，停留几晚
-						if (i == dayscount + 1) {
-							if (ordertravelplanList.size() % 2 == 0) {
-								cell = new PdfPCell(new Paragraph("3泊朝食", font));
-								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(50);
-								maintable.addCell(cell);
+							//第三列，酒店信息
+							String hotel = "";
+							TOrderTravelplanJpEntity travelplanEntity = ordertravelplanList.get(2 * i);
+							THotelEntity hotelinfo = hotelViewService.fetch(travelplanEntity.getHotel());
+							hotel = hotelinfo.getNamejp() + "\n" + hotelinfo.getAddressjp() + "\n"
+									+ hotelinfo.getMobile() + "\n";
+							cell = new PdfPCell(new Paragraph(hotel, font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(50);
+							maintable.addCell(cell);
+
+							//第四列，停留几晚
+							if (i == dayscount + 1) {
+								if (ordertravelplanList.size() % 2 == 0) {
+									cell = new PdfPCell(new Paragraph("3泊朝食", font));
+									cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+									cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+									cell.setFixedHeight(50);
+									maintable.addCell(cell);
+								} else {
+									cell = new PdfPCell(new Paragraph("2泊朝食", font));
+									cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+									cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+									cell.setFixedHeight(50);
+									maintable.addCell(cell);
+								}
 							} else {
 								cell = new PdfPCell(new Paragraph("2泊朝食", font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -913,36 +922,134 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 								cell.setFixedHeight(50);
 								maintable.addCell(cell);
 							}
-						} else {
-							cell = new PdfPCell(new Paragraph("2泊朝食", font));
+
+							//第五列，需要几间房子
+							String room = "";
+							if (applyinfo.size() > 0) {
+								if (applyinfo.size() % 2 == 1) {
+									room = String.valueOf(applyinfo.size() / 2 + 1);
+								} else {
+									room = String.valueOf(applyinfo.size() / 2);
+								}
+							}
+							cell = new PdfPCell(new Paragraph(room, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 							cell.setFixedHeight(50);
 							maintable.addCell(cell);
+
+							//第六列，回答
+							cell = new PdfPCell(new Paragraph("手配 OK", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(50);
+							maintable.addCell(cell);
+
+						}
+					} else {
+						if (ordertravelplanList.size() % 2 == 0) {
+							dayscount = (ordertravelplanList.size() - 4) / 2;
+						} else {
+							dayscount = (ordertravelplanList.size() - 3) / 2;
 						}
 
-						//第五列，需要几间房子
-						String room = "";
-						if (applyinfo.size() > 0) {
-							if (applyinfo.size() % 2 == 1) {
-								room = String.valueOf(applyinfo.size() / 2 + 1);
+						for (int i = 0; i < dayscount + 2; i++) {
+							PdfPCell cell;
+							//第一列，宿泊
+							cell = new PdfPCell(new Paragraph("宿泊", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(50);
+							maintable.addCell(cell);
+
+							//第二列，时间
+							SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+							String timeStampStr = "";
+							if (i <= 1) {
+								Date outDate = ordertravelplanList.get(2 * i).getOutDate();
+								timeStampStr = simpleDateFormat.format(outDate);
 							} else {
-								room = String.valueOf(applyinfo.size() / 2);
+								Date outDate = ordertravelplanList.get(2 * i - 1).getOutDate();
+								timeStampStr = simpleDateFormat.format(outDate);
+
 							}
+							cell = new PdfPCell(new Paragraph(timeStampStr, font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(50);
+							maintable.addCell(cell);
+
+							//第三列，酒店信息
+							String hotel = "";
+							TOrderTravelplanJpEntity travelplanEntity = null;
+							if (i <= 1) {
+								travelplanEntity = ordertravelplanList.get(2 * i);
+
+							} else {
+								travelplanEntity = ordertravelplanList.get(2 * i - 1);
+
+							}
+							THotelEntity hotelinfo = hotelViewService.fetch(travelplanEntity.getHotel());
+							hotel = hotelinfo.getNamejp() + "\n" + hotelinfo.getAddressjp() + "\n"
+									+ hotelinfo.getMobile() + "\n";
+							cell = new PdfPCell(new Paragraph(hotel, font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(50);
+							maintable.addCell(cell);
+
+							//第四列，停留几晚
+							if (i == 1) {
+								cell = new PdfPCell(new Paragraph("1泊朝食", font));
+								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+								cell.setFixedHeight(50);
+								maintable.addCell(cell);
+							} else if (i == dayscount + 1) {
+								if (ordertravelplanList.size() % 2 == 0) {
+									cell = new PdfPCell(new Paragraph("2泊朝食", font));
+									cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+									cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+									cell.setFixedHeight(50);
+									maintable.addCell(cell);
+								} else {
+									cell = new PdfPCell(new Paragraph("1泊朝食", font));
+									cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+									cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+									cell.setFixedHeight(50);
+									maintable.addCell(cell);
+								}
+							} else {
+								cell = new PdfPCell(new Paragraph("2泊朝食", font));
+								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+								cell.setFixedHeight(50);
+								maintable.addCell(cell);
+							}
+
+							//第五列，需要几间房子
+							String room = "";
+							if (applyinfo.size() > 0) {
+								if (applyinfo.size() % 2 == 1) {
+									room = String.valueOf(applyinfo.size() / 2 + 1);
+								} else {
+									room = String.valueOf(applyinfo.size() / 2);
+								}
+							}
+							cell = new PdfPCell(new Paragraph(room, font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(50);
+							maintable.addCell(cell);
+
+							//第六列，回答
+							cell = new PdfPCell(new Paragraph("手配 OK", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(50);
+							maintable.addCell(cell);
+
 						}
-						cell = new PdfPCell(new Paragraph(room, font));
-						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable.addCell(cell);
-
-						//第六列，回答
-						cell = new PdfPCell(new Paragraph("手配 OK", font));
-						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable.addCell(cell);
-
 					}
 				} else {//中间不随机城市
 					PdfPCell cell;
