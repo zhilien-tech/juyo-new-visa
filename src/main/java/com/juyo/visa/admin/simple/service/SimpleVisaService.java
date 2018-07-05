@@ -1274,24 +1274,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					randomArray = getRandomArray(intArray, totalstyle);
 				}
 
-				//去程时抵达城市为冲绳时数据处理
-				/*int[] csArray = { 51, 22, 85, 58, 66 };
-				int[] csrandomArray = getRandomArray(csArray, 1);
-				int cscityid = csrandomArray[0];
-				TCityEntity cscity = dbDao.fetch(TCityEntity.class, cscityid);
-				List<TScenicEntity> csScenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", cscityid),
-						null);
-				if (csScenics.size() < 1) {
-					result.put("message", "没有更多的景点");
-					return result;
-				}
-				List<THotelEntity> csHotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", cscityid), null);
-				if (csHotels.size() < 1) {
-					result.put("message", "没有更多的酒店");
-					return result;
-				}
-				int cshotel = random.nextInt(csHotels.size());*/
-
 				for (int i = 2; i < daysBetween - 2; i++) {
 
 					int firstcityid = randomArray[((i - 2) / 2)];
@@ -1328,8 +1310,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							travelplan.setCityName(threeCity.getCity());
 						}
 						//酒店和航班取返程即第二行的出发城市
-						//酒店
 						if (i == 2) {
+							//酒店
 							if (threeCityid == form.getGoArrivedCity()) {
 								THotelEntity hotel = fhotels.get(fhotelindex);
 								travelplan.setHotel(hotel.getId());
@@ -1337,10 +1319,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 								THotelEntity hotel = threeHotels.get(threehotel);
 								travelplan.setHotel(hotel.getId());
 							}
-							//酒店历史信息
-							//				travelPlanHis.setHotel(hotel.getName());
-						}
-						if (i == 2) {
+
+							//景区
 							if (form.getGoArrivedCity() != threeCityid) {
 								String countryAirline = countryAirline(form.getGoArrivedCity(), threeCityid, 2);
 								travelplan.setScenic(countryAirline);
@@ -1352,16 +1332,22 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (i == 3) {
 							//景区
 							if (form.getGoArrivedCity() != threeCityid) {
-								int scenicindex = random.nextInt(threeScenics.size());
+								/*int scenicindex = random.nextInt(threeScenics.size());
 								TScenicEntity scenic = threeScenics.get(scenicindex);
 								threeScenics.remove(scenic);
-								travelplan.setScenic(scenic.getName());
+								travelplan.setScenic(scenic.getName());*/
+
+								String countryAirline = countryAirline(threeCityid, firstcityid, 2);
+								travelplan.setScenic(countryAirline);
+
 							} else {
 								int scenicindex = random.nextInt(fscenics.size());
 								TScenicEntity scenic = fscenics.get(scenicindex);
 								fscenics.remove(scenic);
 								travelplan.setScenic(scenic.getName());
 							}
+
+							//
 						}
 
 						travelplan.setDay(String.valueOf(i + 1));
