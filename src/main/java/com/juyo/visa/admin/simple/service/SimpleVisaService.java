@@ -256,10 +256,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		List<TOrderTravelplanJpEntity> planlist = dbDao.query(TOrderTravelplanJpEntity.class,
 				Cnd.where("orderId", "=", orderid).orderBy("outDate", "ASC"), null);
 		int days = 0;
-		if (planlist.size() % 2 == 0) {//为2的倍数，则最后是四天，否则为三天
-			days = planlist.size() - 4;
-		} else {
+		if (planlist.size() % 2 == 0) {//为2的倍数，则最后是三天，否则为两天
 			days = planlist.size() - 3;
+		} else {
+			days = planlist.size() - 2;
 		}
 
 		String contains = isContains(visatype);
@@ -283,61 +283,25 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 				scenics = dbDao.query(TScenicEntity.class, cnd, null);
 			} else {
-				if (Integer.valueOf(plan.getDay()) % 2 == 0 && Integer.valueOf(plan.getDay()) <= days) {//偶数行景点确实是景点
-					//获取城市所有的景区
-					Cnd cnd = Cnd.NEW();
-					cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
-					if (!Util.isEmpty(cityid)) {
-						cnd.and("cityId", "=", cityid);
-					}
-					scenics = dbDao.query(TScenicEntity.class, cnd, null);
+				if (Util.eq("false", contains)) {
+					if (Integer.valueOf(plan.getDay()) % 2 == 0 && Integer.valueOf(plan.getDay()) <= days) {//偶数行景点确实是景点
+						//获取城市所有的景区
+						Cnd cnd = Cnd.NEW();
+						cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
+						if (!Util.isEmpty(cityid)) {
+							cnd.and("cityId", "=", cityid);
+						}
+						scenics = dbDao.query(TScenicEntity.class, cnd, null);
 
-				} else if (Integer.valueOf(plan.getDay()) % 2 == 1 && Integer.valueOf(plan.getDay()) <= days + 1) {//奇数行为国内航班或新干线
-					int arrcityid = plan.getCityId();
-					TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
-							Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
-					int gocityid = fetch.getCityId();
-					if (planlist.get(0).getCityId() == 77 && Util.eq("false", contains)) {
-						scenics = visaJapanService.countryAirline(gocityid, arrcityid, 1);
-					} else {
-						scenics = visaJapanService.countryAirline(gocityid, arrcityid, 2);
-					}
-				} else {
-					//获取城市所有的景区
-					Cnd cnd = Cnd.NEW();
-					cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
-					if (!Util.isEmpty(cityid)) {
-						cnd.and("cityId", "=", cityid);
-					}
-					scenics = dbDao.query(TScenicEntity.class, cnd, null);
-				}
-			}
-			/*} else {
-				if (plan.getIsupdatecity() == IsYesOrNoEnum.YES.intKey()) {//手动改过，则刷新城市
-					//获取城市所有的景区
-					Cnd cnd = Cnd.NEW();
-					cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
-					if (!Util.isEmpty(cityid)) {
-						cnd.and("cityId", "=", cityid);
-					}
-					scenics = dbDao.query(TScenicEntity.class, cnd, null);
-				} else {
-					if (Util.eq(plan.getDay(), 3)) {//第三天如果和第二天的城市一样，刷新景点，否则刷新航班或新干线
+					} else if (Integer.valueOf(plan.getDay()) % 2 == 1 && Integer.valueOf(plan.getDay()) <= days + 1) {//奇数行为国内航班或新干线
 						int arrcityid = plan.getCityId();
 						TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
-								Cnd.where("orderId", "=", orderid).and("day", "=", 2));
+								Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
 						int gocityid = fetch.getCityId();
-						if (gocityid == arrcityid) {
-							//获取城市所有的景区
-							Cnd cnd = Cnd.NEW();
-							cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
-							if (!Util.isEmpty(cityid)) {
-								cnd.and("cityId", "=", cityid);
-							}
-							scenics = dbDao.query(TScenicEntity.class, cnd, null);
+						if (planlist.get(0).getCityId() == 77 && Util.eq("false", contains)) {
+							scenics = visaJapanService.countryAirline(gocityid, arrcityid, 1);
 						} else {
-							List<TScenicEntity> countryAirline = visaJapanService.countryAirline(gocityid, arrcityid);
-							scenics = countryAirline;
+							scenics = visaJapanService.countryAirline(gocityid, arrcityid, 2);
 						}
 					} else {
 						//获取城市所有的景区
@@ -348,8 +312,54 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						}
 						scenics = dbDao.query(TScenicEntity.class, cnd, null);
 					}
+				} else {
+					//第二天刷新景点
+					if (Integer.valueOf(plan.getDay()) == 2) {
+						//获取城市所有的景区
+						Cnd cnd = Cnd.NEW();
+						cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
+						if (!Util.isEmpty(cityid)) {
+							cnd.and("cityId", "=", cityid);
+						}
+						scenics = dbDao.query(TScenicEntity.class, cnd, null);
+					}
+					//第三天刷新新干线
+					else if (Integer.valueOf(plan.getDay()) == 3) {
+						int arrcityid = plan.getCityId();
+						TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
+								Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
+						int gocityid = fetch.getCityId();
+						scenics = visaJapanService.countryAirline(gocityid, arrcityid, 1);
+					}
+
+					else if (Integer.valueOf(plan.getDay()) > 3 && Integer.valueOf(plan.getDay()) % 2 == 1
+							&& Integer.valueOf(plan.getDay()) <= days) {//奇数行只刷新景点
+						//获取城市所有的景区
+						Cnd cnd = Cnd.NEW();
+						cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
+						if (!Util.isEmpty(cityid)) {
+							cnd.and("cityId", "=", cityid);
+						}
+						scenics = dbDao.query(TScenicEntity.class, cnd, null);
+
+					} else if (Integer.valueOf(plan.getDay()) > 3 && Integer.valueOf(plan.getDay()) % 2 == 0
+							&& Integer.valueOf(plan.getDay()) <= days + 1) {//偶数行为国内航班或新干线
+						int arrcityid = plan.getCityId();
+						TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
+								Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
+						int gocityid = fetch.getCityId();
+						scenics = visaJapanService.countryAirline(gocityid, arrcityid, 2);
+					} else {//最后几天
+						//获取城市所有的景区
+						Cnd cnd = Cnd.NEW();
+						cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
+						if (!Util.isEmpty(cityid)) {
+							cnd.and("cityId", "=", cityid);
+						}
+						scenics = dbDao.query(TScenicEntity.class, cnd, null);
+					}
 				}
-			}*/
+			}
 		}
 
 		return scenics;
@@ -1222,7 +1232,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				travelplans.add(travelplan);
 			}
 			//除去开始的前两天和最后四天，如果天数为2的倍数，则中间多2的倍数个随机城市，有余数则最后变为4天
-			int subday = daysBetween - 4;
+			int subday = daysBetween - 3;
 			int[] randomArray = new int[20];
 
 			//第三天去的城市签证类型城市
@@ -1271,31 +1281,54 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					result.put("message", "没有更多的城市");
 					return result;
 				} else {
+					if (totalstyle == 0) {
+						totalstyle = 1;
+					}
 					randomArray = getRandomArray(intArray, totalstyle);
 				}
 
 				for (int i = 2; i < daysBetween - 2; i++) {
 
-					int firstcityid = randomArray[((i - 2) / 2)];
+					/*int firstcityid = randomArray[((i - 2) / 2)];
 					int lastcityid = 0;
 					if (i >= 4) {
 						lastcityid = randomArray[((i - 4) / 2)];
+					}*/
+
+					int firstcityid = 0;
+					int lastcityid = 0;
+					if (threeCityid == form.getGoArrivedCity()) {
+						firstcityid = randomArray[((i - 2) / 2)];
+						if (i >= 4) {
+							lastcityid = randomArray[((i - 4) / 2)];
+						}
+					} else {
+						if (i >= 3) {
+							firstcityid = randomArray[((i - 3) / 2)];
+						}
+						if (i >= 5) {
+							lastcityid = randomArray[((i - 5) / 2)];
+						}
 					}
-					TCityEntity fcity = dbDao.fetch(TCityEntity.class, firstcityid);
+
+					TCityEntity fcity = null;
+					List<THotelEntity> fhotels = null;
+					List<TScenicEntity> fscenics = null;
+					int fhotelindex = 0;
+					if (firstcityid != 0) {
+						fcity = dbDao.fetch(TCityEntity.class, firstcityid);
+						fhotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", firstcityid), null);
+						if (fhotels.size() == 0) {
+							result.put("message", "没有更多的酒店");
+							return result;
+						}
+						fscenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", firstcityid), null);
+						fhotelindex = random.nextInt(fhotels.size());
+					}
 					TCityEntity lcity = null;
 					if (lastcityid != 0) {
 						lcity = dbDao.fetch(TCityEntity.class, lastcityid);
 					}
-
-					List<THotelEntity> fhotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", firstcityid),
-							null);
-					if (fhotels.size() == 0) {
-						result.put("message", "没有更多的酒店");
-						return result;
-					}
-					List<TScenicEntity> fscenics = dbDao.query(TScenicEntity.class,
-							Cnd.where("cityId", "=", firstcityid), null);
-					int fhotelindex = random.nextInt(fhotels.size());
 
 					//tripAirlineService.getTripAirlineSelect(param);
 
@@ -1306,8 +1339,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							travelplan.setCityId(firstcityid);
 							travelplan.setCityName(fcity.getCity());
 						} else {
-							travelplan.setCityId(threeCityid);
-							travelplan.setCityName(threeCity.getCity());
+							if (i == 2) {
+								travelplan.setCityId(threeCityid);
+								travelplan.setCityName(threeCity.getCity());
+							} else {
+								travelplan.setCityId(firstcityid);
+								travelplan.setCityName(fcity.getCity());
+							}
 						}
 						//酒店和航班取返程即第二行的出发城市
 						if (i == 2) {
@@ -1332,11 +1370,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (i == 3) {
 							//景区
 							if (form.getGoArrivedCity() != threeCityid) {
-								/*int scenicindex = random.nextInt(threeScenics.size());
-								TScenicEntity scenic = threeScenics.get(scenicindex);
-								threeScenics.remove(scenic);
-								travelplan.setScenic(scenic.getName());*/
-
 								String countryAirline = countryAirline(threeCityid, firstcityid, 2);
 								travelplan.setScenic(countryAirline);
 
@@ -1347,7 +1380,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 								travelplan.setScenic(scenic.getName());
 							}
 
-							//
+							//酒店
+							if (form.getGoArrivedCity() != threeCityid) {
+								THotelEntity hotel = fhotels.get(fhotelindex);
+								travelplan.setHotel(hotel.getId());
+							} else {
+								THotelEntity hotel = fhotels.get(fhotelindex);
+								travelplan.setHotel(hotel.getId());
+							}
 						}
 
 						travelplan.setDay(String.valueOf(i + 1));
@@ -1367,15 +1407,18 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						travelplan.setCreateTime(new Date());
 						//酒店和航班取返程即第二行的出发城市
 						//酒店
-						if (i % 2 == 0) {
+						if (i % 2 == 1) {
 							THotelEntity hotel = fhotels.get(fhotelindex);
 							travelplan.setHotel(hotel.getId());
 							//酒店历史信息
 							//				travelPlanHis.setHotel(hotel.getName());
 						}
-						if (i % 2 == 0) {
-							if (i == 4) {
+						if (i % 2 == 1) {
+							if (i == 3) {
 								String countryAirline = countryAirline(threeCityid, firstcityid, 2);
+								travelplan.setScenic(countryAirline);
+							} else {
+								String countryAirline = countryAirline(lastcityid, firstcityid, 2);
 								travelplan.setScenic(countryAirline);
 							}
 						} else {
@@ -1393,7 +1436,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					}
 				}
 
-				//最后四天
+				//最后三天
 				for (int i = daysBetween - 2; i <= daysBetween; i++) {
 					TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
 					travelplan.setCityId(form.getReturnDepartureCity());
@@ -1414,23 +1457,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					if (i == daysBetween) {
 						travelplan.setScenic(lastday);
 					} else if (i == daysBetween - 2) {
-						if (daysBetween == 4) {//如果是4则说明中间没有随机城市
-							if (form.getGoArrivedCity() == form.getReturnDepartureCity()) {
-								if (scenics.size() == 0) {
-									scenics = dbDao.query(TScenicEntity.class,
-											Cnd.where("cityId", "=", form.getGoArrivedCity()), null);
-								}
-								int scenicindex = random.nextInt(scenics.size());
-								TScenicEntity scenic = scenics.get(scenicindex);
-								scenics.remove(scenic);
-								travelplan.setScenic(scenic.getName());
-							} else {
-								String countryAirline = countryAirline(form.getGoArrivedCity(),
-										form.getReturnDepartureCity(), 2);
-								travelplan.setScenic(countryAirline);
-							}
+						if (daysBetween == 5) {//如果是5则说明中间只有签证类型城市没有随机城市
+							String countryAirline = countryAirline(threeCityid, form.getReturnDepartureCity(), 2);
+							travelplan.setScenic(countryAirline);
 						} else {
-							String countryAirline = countryAirline(randomArray[totalstyle - 1],
+							String countryAirline = countryAirline(randomArray[totalstyle - 2],
 									form.getReturnDepartureCity(), 2);
 							travelplan.setScenic(countryAirline);
 						}
@@ -1457,47 +1488,48 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					result.put("message", "没有更多的城市");
 					return result;
 				} else {
+					if (totalstyle == 0) {
+						totalstyle = 1;
+					}
 					randomArray = getRandomArray(intArray, totalstyle);
 				}
-				//去程时抵达城市为冲绳时数据处理
-				/*int[] csArray = { 51, 22, 85, 58, 66 };
-				int[] csrandomArray = getRandomArray(csArray, 1);
-				int cscityid = csrandomArray[0];
-				TCityEntity cscity = dbDao.fetch(TCityEntity.class, cscityid);
-				List<TScenicEntity> csScenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", cscityid),
-						null);
-				if (csScenics.size() < 1) {
-					result.put("message", "没有更多的景点");
-					return result;
-				}
-				List<THotelEntity> csHotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", cscityid), null);
-				if (csHotels.size() < 1) {
-					result.put("message", "没有更多的酒店");
-					return result;
-				}
-				int cshotel = random.nextInt(csHotels.size());*/
 
-				for (int i = 2; i < daysBetween - 3; i++) {
+				for (int i = 2; i < daysBetween - 1; i++) {
 
-					int firstcityid = randomArray[((i - 2) / 2)];
+					int firstcityid = 0;
+					int lastcityid = 0;
+					if (threeCityid == form.getGoArrivedCity()) {
+						firstcityid = randomArray[((i - 2) / 2)];
+						if (i >= 4) {
+							lastcityid = randomArray[((i - 4) / 2)];
+						}
+					} else {
+						if (i >= 3) {
+							firstcityid = randomArray[((i - 3) / 2)];
+						}
+						if (i >= 5) {
+							lastcityid = randomArray[((i - 5) / 2)];
+						}
+					}
+
+					TCityEntity fcity = null;
+					List<THotelEntity> fhotels = null;
+					List<TScenicEntity> fscenics = null;
+					int fhotelindex = 0;
+					if (firstcityid != 0) {
+						fcity = dbDao.fetch(TCityEntity.class, firstcityid);
+						fhotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", firstcityid), null);
+						if (fhotels.size() == 0) {
+							result.put("message", "没有更多的酒店");
+							return result;
+						}
+						fscenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", firstcityid), null);
+						fhotelindex = random.nextInt(fhotels.size());
+					}
 					TCityEntity lcity = null;
-					if (i > 3) {
-						int lastcityid = randomArray[((i - 4) / 2)];
+					if (lastcityid != 0) {
 						lcity = dbDao.fetch(TCityEntity.class, lastcityid);
 					}
-					TCityEntity fcity = dbDao.fetch(TCityEntity.class, firstcityid);
-
-					List<THotelEntity> fhotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", firstcityid),
-							null);
-					if (fhotels.size() == 0) {
-						result.put("message", "没有更多的酒店");
-						return result;
-					}
-					List<TScenicEntity> fscenics = dbDao.query(TScenicEntity.class,
-							Cnd.where("cityId", "=", firstcityid), null);
-					int fhotelindex = random.nextInt(fhotels.size());
-
-					//tripAirlineService.getTripAirlineSelect(param);
 
 					//第三天
 					if (i < 4) {
@@ -1506,12 +1538,17 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							travelplan.setCityId(firstcityid);
 							travelplan.setCityName(fcity.getCity());
 						} else {
-							travelplan.setCityId(threeCityid);
-							travelplan.setCityName(threeCity.getCity());
+							if (i == 2) {
+								travelplan.setCityId(threeCityid);
+								travelplan.setCityName(threeCity.getCity());
+							} else {
+								travelplan.setCityId(firstcityid);
+								travelplan.setCityName(fcity.getCity());
+							}
 						}
 						//酒店和航班取返程即第二行的出发城市
-						//酒店
 						if (i == 2) {
+							//酒店
 							if (threeCityid == form.getGoArrivedCity()) {
 								THotelEntity hotel = fhotels.get(fhotelindex);
 								travelplan.setHotel(hotel.getId());
@@ -1519,10 +1556,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 								THotelEntity hotel = threeHotels.get(threehotel);
 								travelplan.setHotel(hotel.getId());
 							}
-							//酒店历史信息
-							//				travelPlanHis.setHotel(hotel.getName());
-						}
-						if (i == 2) {
+
+							//景区
 							if (form.getGoArrivedCity() != threeCityid) {
 								String countryAirline = countryAirline(form.getGoArrivedCity(), threeCityid, 2);
 								travelplan.setScenic(countryAirline);
@@ -1534,15 +1569,23 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (i == 3) {
 							//景区
 							if (form.getGoArrivedCity() != threeCityid) {
-								int scenicindex = random.nextInt(threeScenics.size());
-								TScenicEntity scenic = threeScenics.get(scenicindex);
-								threeScenics.remove(scenic);
-								travelplan.setScenic(scenic.getName());
+								String countryAirline = countryAirline(threeCityid, firstcityid, 2);
+								travelplan.setScenic(countryAirline);
+
 							} else {
 								int scenicindex = random.nextInt(fscenics.size());
 								TScenicEntity scenic = fscenics.get(scenicindex);
 								fscenics.remove(scenic);
 								travelplan.setScenic(scenic.getName());
+							}
+
+							//酒店
+							if (form.getGoArrivedCity() != threeCityid) {
+								THotelEntity hotel = fhotels.get(fhotelindex);
+								travelplan.setHotel(hotel.getId());
+							} else {
+								THotelEntity hotel = fhotels.get(fhotelindex);
+								travelplan.setHotel(hotel.getId());
 							}
 						}
 
@@ -1563,20 +1606,23 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						travelplan.setCreateTime(new Date());
 						//酒店和航班取返程即第二行的出发城市
 						//酒店
-						if (i % 2 == 0) {
+						if (i % 2 == 1) {
 							THotelEntity hotel = fhotels.get(fhotelindex);
 							travelplan.setHotel(hotel.getId());
 							//酒店历史信息
 							//				travelPlanHis.setHotel(hotel.getName());
 						}
-						if (i % 2 == 0) {
-							if (i == 4) {
+						if (i % 2 == 1) {
+							if (i == 3) {
 								String countryAirline = countryAirline(threeCityid, firstcityid, 2);
+								travelplan.setScenic(countryAirline);
+							} else {
+								String countryAirline = countryAirline(lastcityid, firstcityid, 2);
 								travelplan.setScenic(countryAirline);
 							}
 						} else {
 							//景区
-							if (fscenics.size() == 0) {
+							if (fscenics.size() == 0) {//如果随机完所有的，则重新查一次
 								fscenics = dbDao
 										.query(TScenicEntity.class, Cnd.where("cityId", "=", firstcityid), null);
 							}
@@ -1589,8 +1635,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					}
 				}
 
-				//最后三天
-				for (int i = daysBetween - 3; i <= daysBetween; i++) {
+				//最后两天
+				for (int i = daysBetween - 1; i <= daysBetween; i++) {
 					TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
 					//			TOrderTravelplanHisJpEntity travelPlanHis = new TOrderTravelplanHisJpEntity();
 					travelplan.setCityId(form.getReturnDepartureCity());
@@ -1633,11 +1679,18 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							travelplan.setScenic(countryAirline);
 						}
 					} else {
-						//景区
-						int scenicindex = random.nextInt(scenics.size());
-						TScenicEntity scenic = scenics.get(scenicindex);
-						scenics.remove(scenic);
-						travelplan.setScenic(scenic.getName());
+						if (daysBetween == 4) {
+							if (i == 3) {
+								String countryAirline = countryAirline(threeCityid, form.getReturnDepartureCity(), 2);
+								travelplan.setScenic(countryAirline);
+							}
+						} else {
+							//景区
+							String countryAirline = countryAirline(randomArray[totalstyle - 1],
+									form.getReturnDepartureCity(), 2);
+							travelplan.setScenic(countryAirline);
+
+						}
 					}
 					travelplans.add(travelplan);
 				}
@@ -1662,7 +1715,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		FlightSelectParam param = new FlightSelectParam();
 		TCityEntity gocity = dbDao.fetch(TCityEntity.class, gocityid);
 		TCityEntity arrcity = dbDao.fetch(TCityEntity.class, arrcityid);
-		param.setGocity((long) gocityid);
+		String firstday = gocity.getCity() + "から" + arrcity.getCity() + "まで新幹線で";
+		/*param.setGocity((long) gocityid);
 		param.setArrivecity((long) arrcityid);
 		param.setDate("");
 		param.setFlight("");
@@ -1682,7 +1736,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//随机获取一个
 		String[] airlines = firstday.split(",");
 		int num = (int) (Math.random() * airlines.length);
-		return airlines[num];
+		return airlines[num];*/
+		return firstday;
 	}
 
 	public Map<String, Integer> generrateorder(TUserEntity user, TCompanyEntity company) {
@@ -1821,6 +1876,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				if (count > 1) {
 					if (hotelname.equals(prehotelname)) {
 						record.put("hotelname", "連泊");
+						record.put("hoteladdress", "");
+						record.put("hotelmobile", "");
 					}
 				}
 				prehotelname = hotelname;

@@ -158,7 +158,7 @@ where taoj.orderId = @orderid
 
 /*get_travel_plan_by_orderid*/
 SELECT
-	totj.*, th.namejp hotelname
+	totj.*, th.namejp hotelname,th.addressjp hoteladdress,th.mobile hotelmobile
 FROM
 	t_order_travelplan_jp totj
 left JOIN t_hotel th ON totj.hotel = th.id

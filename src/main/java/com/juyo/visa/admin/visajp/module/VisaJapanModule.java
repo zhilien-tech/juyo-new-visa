@@ -310,6 +310,15 @@ public class VisaJapanModule {
 	}
 
 	/**
+	 * 自动计算返回日期(预计送签、出签专用)
+	 */
+	@At
+	@POST
+	public Object autoCalculateBackDateSpecial(@Param("gotripdate") Date gotripdate, @Param("stayday") Integer stayday) {
+		return visaJapanService.autoCalculateBackDateSpecial(gotripdate, stayday);
+	}
+
+	/**
 	 * 自动计算返回日期
 	 */
 	@At

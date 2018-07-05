@@ -235,7 +235,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 		}
 		//受理号为送签编号
 		String sendVisaNum = orderinfo.getSendVisaNum();
-		content.append("　　" + companyname).append("根据与日本").append(dijie).append("的合同约定，组织").append(applyinfo.size())
+		content.append("　　" + companyname).append("根据与").append(dijie).append("的合同约定，组织").append(applyinfo.size())
 				.append("人访日个人旅游（受理号为").append(sendVisaNum).append("），请协助办理赴日").append(visatypestr).append("签证。");
 
 		map.put("Text2", "1");

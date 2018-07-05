@@ -233,7 +233,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(company.getName())) {
 			companyname = company.getName();
 		}
-		content.append("　　" + companyname).append("根据与株式会社").append(dijie).append("的合同约定组织")
+		content.append("　　" + companyname).append("根据与").append(dijie).append("的合同约定组织")
 				.append(" " + applyinfo.size() + " ").append("人访日旅游团，请协助办理赴日").append(visatypestr).append("签证。");
 
 		map.put("Text1", "1-" + applyinfo.size() + " 号");

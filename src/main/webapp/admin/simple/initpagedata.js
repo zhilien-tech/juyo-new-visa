@@ -98,7 +98,8 @@ function initTravelPlanTable(){
 						html += '<td></td>';
 					}
 					if(value.hotelname != undefined ){
-						html += '<td>'+value.hotelname+'</td>';
+						//html += '<td>'+value.hotelname+'</td>';
+						html += '<td><table style="width:100%;"><tr><td style="text-align:center;">'+value.hotelname+'</td></tr><tr><td style="text-align:center;">'+value.hoteladdress+'</td></tr><tr><td style="text-align:center;">'+value.hotelmobile+'</td></tr></table></td>';
 					}else{
 						if(index != data.length -1){
 							html += '<td>連泊</td>';
