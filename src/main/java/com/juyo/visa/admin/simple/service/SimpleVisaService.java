@@ -1798,7 +1798,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	//获取城市id数组
-	public int[] generrateCityArray() {
+	/*public int[] generrateCityArray() {
 		String sixCityid = "";
 		ArrayList<String> cityList = new ArrayList<>();
 		cityList.add("冲绳");
@@ -1818,6 +1818,29 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		for (int i = 0; i < scenics.size(); i++) {
 			cityArray[i] = scenics.get(i).getCityId();
 		}
+		return cityArray;
+	}*/
+	public int[] generrateCityArray() {
+		int[] cityArray = { 22, 51, 38, 50, 85, 53, 37 };
+		/*String sixCityid = "";
+		ArrayList<String> cityList = new ArrayList<>();
+		cityList.add("冲绳");
+		cityList.add("宫城");
+		cityList.add("福岛");
+		cityList.add("岩手");
+		cityList.add("青森");
+		cityList.add("秋田");
+		cityList.add("山形");
+		for (String string : cityList) {
+			TCityEntity city = dbDao.fetch(TCityEntity.class, Cnd.where("city", "like", "%" + string + "%"));
+			sixCityid += city.getId() + ",";
+		}
+		List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class,
+				Cnd.where("cityId", "not in", sixCityid.substring(0, sixCityid.length() - 1)).groupBy("cityId"), null);
+		int[] cityArray = new int[scenics.size()];
+		for (int i = 0; i < scenics.size(); i++) {
+			cityArray[i] = scenics.get(i).getCityId();
+		}*/
 		return cityArray;
 	}
 

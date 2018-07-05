@@ -94,6 +94,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 		/*else {
 			return result;
 		}*/
+		String contains = "ABCDEFGHIGKLMNOPQRSTUVWXYZ";
 
 		//查询缓存
 		String flightinfo = redisDao.hget(CommonConstants.AIRLINE_INFO_KEY,

@@ -8,9 +8,23 @@ public class TestChinest {
 
 	public static void main(String[] args) {
 
-		String date = "06/09/1985";
+		String someStr = "ABCDEFG";
+		String search = "AOJOIHGRJIOTH";
+		CharSequence seq = new String(someStr);
+		for (int i = 0; i < seq.length(); i++) {
+			char charAt = seq.charAt(i);
+		}
+		char[] charArray = someStr.toCharArray();
+
+		for (int i = 0; i < charArray.length; i++) {
+			char c = charArray[i];
+
+			System.out.println(charArray[i]);
+		}
+
+		/*String date = "06/09/1985";
 		String substring = date.substring(3, 5);
-		System.out.println(substring);
+		System.out.println(substring);*/
 
 		/*int[] paramArray = { 7, 9, 13, 14, 15 };
 		for (int i = 0; i < paramArray.length; i++) {
