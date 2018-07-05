@@ -244,7 +244,7 @@
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次返回时间</label>
-														<input id="lastreturndate" name="lastreturndate"  style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.lastreturndate }" pattern="yyyy-MM-dd" />"/>
+														<input id="lastreturndate" name="lastreturndate"  style="left:605.328px !important; color:#555 !important;border-color:#d2d6de !important;" type="text" class="lastreturndate form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.lastreturndate }" pattern="yyyy-MM-dd" />"/>
 													</div>
 												</div>
 											</div>
@@ -1450,6 +1450,11 @@
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();
+			var applicVal = $("#applicant").val();
+			//主申请人时，是否同主申请人设置为空，不然默认为1
+			if(applicVal == 1){
+				$("#wealth").val(0);
+			}
 			if(status == 1){
 				if (!bootstrapValidator.isValid()) {
 					layer.closeAll("loading");
@@ -1461,11 +1466,13 @@
 					layer.msg('主申请人备注不能为空');
 					return;
 				} */
-				var position = $('#position').val();
-				if(!position){
-					layer.msg('职位不能为空');
-					layer.closeAll("loading");
-					return;
+				if(applicVal == 1){
+					var position = $('#position').val();
+					if(!position){
+						layer.msg('职位不能为空');
+						layer.closeAll("loading");
+						return;
+					}
 				}
 			}
 			
@@ -1485,11 +1492,7 @@
 			if(wealthType){
 				wealthType = wealthType.substr(0,wealthType.length-1);
 			}
-			var applicVal = $("#applicant").val();
-			//主申请人时，是否同主申请人设置为空，不然默认为1
-			if(applicVal == 1){
-				$("#wealth").val(0);
-			}
+			
 			//绑定签证城市
 			var visacounty = "";
 			$('[name=visacountys]').each(function(){
@@ -1527,10 +1530,9 @@
 			}
 			
 			var passportInfo = $.param({"wealthType":wealthType,'visatype':visatype,'visacounty':visacounty,'isVisit':isVisit,'threecounty':threecounty,'isname':isname,'isyaoqing':isyaoqing}) + "&" +  $("#passportInfo").serialize();
-			
 			$.ajax({
 				type: 'POST',
-				async: false,
+				//async: false,
 				data : passportInfo,
 				url: '${base}/admin/simple/saveEditVisa.html',
 				success :function(data) {

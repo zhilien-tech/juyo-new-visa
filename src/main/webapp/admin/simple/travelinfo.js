@@ -233,7 +233,7 @@ $("#goArrivedCity").on("select2:select",function(e){
 	var goDate = $('#goDate').val();
 	var returnDate = $('#returnDate').val();
 	//查询航班接口到缓存
-	initFlightByInterface(goDate,goDepartureCity,thisval);
+	//initFlightByInterface(goDate,goDepartureCity,thisval);
 	//initFlightByInterface(returnDate,thisval,goDepartureCity);
 });
 $("#goArrivedCity").on("select2:unselect",function(e){

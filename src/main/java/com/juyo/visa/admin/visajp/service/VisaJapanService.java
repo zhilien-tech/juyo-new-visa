@@ -597,6 +597,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		} else {
 			days = planlist.size() - 3;
 		}
+		String contains = isContains(visatype);
+
 		if (planlist.get(1).getCityId() == planlist.get(2).getCityId()) {//第二天和第三天是同一个城市，说明出行抵达城市和返回出发城市一致，这时只刷新景点
 			String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
 			Sql sql = Sqls.create(sqlString);
@@ -642,7 +644,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 					TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
 							Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
 					int gocityid = fetch.getCityId();
-					if (planlist.get(0).getCityId() == 77) {
+					if (planlist.get(0).getCityId() == 77 && Util.eq("false", contains)) {
 						String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid, 1);
 						plan.setScenic(countryAirline);
 					} else {
@@ -663,59 +665,30 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 					dbDao.update(plan);
 				}
 			}
-			/*} else {
-				if (plan.getIsupdatecity() == IsYesOrNoEnum.YES.intKey()) {//手动改过，则刷新景点
-					//获取城市所有的景区
-					String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-					Sql sql = Sqls.create(sqlString);
-					sql.setParam("orderid", orderid);
-					sql.setParam("cityid", plan.getCityId());
-					sql.setParam("scenicname", plan.getScenic());
-					List<Record> scenics = dbDao.query(sql, null, null);
-					Random random = new Random();
-					plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-					dbDao.update(plan);
-				} else {
-					if (Util.eq(plan.getDay(), 3)) {//第三天如果和第二天城市一样，刷新景点，否则刷新航班或新干线
-						int arrcityid = plan.getCityId();
-						TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
-								Cnd.where("orderId", "=", orderid).and("day", "=", 2));
-						int gocityid = fetch.getCityId();
-						if (gocityid == arrcityid) {
-							//获取城市所有的景区
-							String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-							Sql sql = Sqls.create(sqlString);
-							sql.setParam("orderid", orderid);
-							sql.setParam("cityid", plan.getCityId());
-							sql.setParam("scenicname", plan.getScenic());
-							List<Record> scenics = dbDao.query(sql, null, null);
-							Random random = new Random();
-							plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-							dbDao.update(plan);
-						} else {
-							String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid);
-							plan.setScenic(countryAirline);
-							dbDao.update(plan);
-						}
-					} else {//其余的都是刷新景点
-							//获取城市所有的景区
-						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-						Sql sql = Sqls.create(sqlString);
-						sql.setParam("orderid", orderid);
-						sql.setParam("cityid", plan.getCityId());
-						sql.setParam("scenicname", plan.getScenic());
-						List<Record> scenics = dbDao.query(sql, null, null);
-						Random random = new Random();
-						plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-						dbDao.update(plan);
-					}
-				}
-			}*/
-
 		}
 		//行程安排
 		return getTravelPlanByOrderId(orderid);
 
+	}
+
+	public String isContains(int visatype) {
+		String result = "";
+		ArrayList<Integer> visatypeList = new ArrayList<>();
+		visatypeList.add(3);
+		visatypeList.add(4);
+		visatypeList.add(5);
+		visatypeList.add(8);
+		visatypeList.add(9);
+		visatypeList.add(10);
+		visatypeList.add(11);
+		visatypeList.add(12);
+		visatypeList.add(13);
+		if (visatypeList.contains(visatype)) {
+			result = "true";
+		} else {
+			result = "false";
+		}
+		return result;
 	}
 
 	/**
@@ -1875,23 +1848,26 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		int count = 1;
 		int passportflag = 0;
 		for (Record record : applyinfo) {
-			if (Util.isEmpty(record.get("firstname")) && Util.isEmpty(record.get("lastname"))) {
-				resultstrbuf.append("申请人" + count + "的姓名、");
-			}
-			if (Util.isEmpty(record.get("firstnameen")) && Util.isEmpty(record.get("lastnameen"))) {
-				resultstrbuf.append("申请人" + count + "的姓名英文、");
-			}
-			if (Util.isEmpty(record.get("sex"))) {
-				resultstrbuf.append("申请人" + count + "的性别、");
-			}
-			if (Util.isEmpty(record.get("passportno"))) {
-				resultstrbuf.append("申请人" + count + "的护照号、");
-			}
-			if (Util.isEmpty(record.get("position"))) {
-				resultstrbuf.append("申请人" + count + "的职位、");
-			}
-			if (Util.isEmpty(record.get("unitName"))) {
-				resultstrbuf.append("申请人" + count + "的父母（配偶）职业、");
+			if (count == 1) {
+
+				if (Util.isEmpty(record.get("firstname")) && Util.isEmpty(record.get("lastname"))) {
+					resultstrbuf.append("申请人" + count + "的姓名、");
+				}
+				if (Util.isEmpty(record.get("firstnameen")) && Util.isEmpty(record.get("lastnameen"))) {
+					resultstrbuf.append("申请人" + count + "的姓名英文、");
+				}
+				if (Util.isEmpty(record.get("sex"))) {
+					resultstrbuf.append("申请人" + count + "的性别、");
+				}
+				if (Util.isEmpty(record.get("passportno"))) {
+					resultstrbuf.append("申请人" + count + "的护照号、");
+				}
+				if (Util.isEmpty(record.get("position"))) {
+					resultstrbuf.append("申请人" + count + "的职位、");
+				}
+				if (Util.isEmpty(record.get("unitName"))) {
+					resultstrbuf.append("申请人" + count + "的父母（配偶）职业、");
+				}
 			}
 			count++;
 		}

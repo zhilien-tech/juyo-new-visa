@@ -393,6 +393,7 @@
 	<script src="${base}/admin/simple/travelinfo.js?v=0.0.2"></script><!-- 本页面js文件 -->
 	<script src="${base}/admin/simple/initpagedata.js?v=0.0.2"></script><!-- 本页面js文件 -->
 	<script src="${base}/admin/simple/addsimpleorder.js?v=0.0.1"></script><!-- 本页面js文件 -->
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 
 	<script type="text/javascript">
 		$("#cityid").change(function(){
@@ -417,7 +418,7 @@
 					$('#returnFlightNum').empty();
 				}
 			}
-			//宫城
+			/* //宫城
 			if(vtype == 3 || vtype == 8){
 				$("#goArrivedCity").html('<option selected="selected" value="'+91+'">'+'宫城'+'</option>');
 				if(goArrivedCity != 91){
@@ -458,7 +459,7 @@
 				if(goArrivedCity != 613){
 					$('#goFlightNum').empty();
 				}
-			}
+			} */
 			var orderid = $('#orderid').val();
 			if(orderid != ""){
 				$.ajax({ 

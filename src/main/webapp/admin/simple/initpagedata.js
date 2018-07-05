@@ -1,7 +1,7 @@
 function initApplicantTable(){
 	var orderid = $('#orderid').val();
 	if(orderid){
-		layer.load(1);
+		//layer.load(1);
 		$.ajax({ 
 			url: '/admin/visaJapan/getVisaDetailApply.html',
 			async : false,
@@ -76,7 +76,7 @@ function initApplicantTable(){
 function initTravelPlanTable(){
 	var orderid = $('#orderid').val();
 	if(orderid){
-		layer.load(1);
+		//layer.load(1);
 		$.ajax({ 
 			url: '/admin/visaJapan/getTrvalPlanData.html',
 			async : false,

@@ -389,6 +389,170 @@ $(document).on("input","#birthday",function(){
 	}
 });
 
+$(document).on("input","#laststartdate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if(temp.indexOf("-") > 0){
+		if(temp.length == 10){
+			var tmd = temp.split("-");
+			var result = "";
+			for(var i = 0;i < tmd.length;i++){
+				result += tmd[i].toString();
+			}
+			$(this).val(getNewDate(result));
+		}
+	}else{
+		if($(this).val().length == 8){
+			$(this).val(getNewDate(temp));
+		}
+	}
+});
+
+$(document).on("input","#lastreturndate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if(temp.indexOf("-") > 0){
+		if(temp.length == 10){
+			var tmd = temp.split("-");
+			var result = "";
+			for(var i = 0;i < tmd.length;i++){
+				result += tmd[i].toString();
+			}
+			$(this).val(getNewDate(result));
+		}
+	}else{
+		if($(this).val().length == 8){
+			$(this).val(getNewDate(temp));
+		}
+	}
+});
+
+$(document).on("input","#vouchbirth",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if(temp.indexOf("-") > 0){
+		if(temp.length == 10){
+			var tmd = temp.split("-");
+			var result = "";
+			for(var i = 0;i < tmd.length;i++){
+				result += tmd[i].toString();
+			}
+			$(this).val(getNewDate(result));
+		}
+	}else{
+		if($(this).val().length == 8){
+			$(this).val(getNewDate(temp));
+		}
+	}
+});
+
+$(document).on("input","#invitebirth",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if(temp.indexOf("-") > 0){
+		if(temp.length == 10){
+			var tmd = temp.split("-");
+			var result = "";
+			for(var i = 0;i < tmd.length;i++){
+				result += tmd[i].toString();
+			}
+			$(this).val(getNewDate(result));
+		}
+	}else{
+		if($(this).val().length == 8){
+			$(this).val(getNewDate(temp));
+		}
+	}
+});
+$(document).on("input","#sendVisaDate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if(temp.indexOf("-") > 0){
+		if(temp.length == 10){
+			var tmd = temp.split("-");
+			var result = "";
+			for(var i = 0;i < tmd.length;i++){
+				result += tmd[i].toString();
+			}
+			$(this).val(getNewDate(result));
+		}
+	}else{
+		if($(this).val().length == 8){
+			$(this).val(getNewDate(temp));
+		}
+	}
+});
+$(document).on("input","#outVisaDate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if(temp.indexOf("-") > 0){
+		if(temp.length == 10){
+			var tmd = temp.split("-");
+			var result = "";
+			for(var i = 0;i < tmd.length;i++){
+				result += tmd[i].toString();
+			}
+			$(this).val(getNewDate(result));
+		}
+	}else{
+		if($(this).val().length == 8){
+			$(this).val(getNewDate(temp));
+		}
+	}
+});
+$(document).on("input","#goDate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if(temp.indexOf("-") > 0){
+		if(temp.length == 10){
+			var tmd = temp.split("-");
+			var result = "";
+			for(var i = 0;i < tmd.length;i++){
+				result += tmd[i].toString();
+			}
+			$(this).val(getNewDate(result));
+		}
+	}else{
+		if($(this).val().length == 8){
+			$(this).val(getNewDate(temp));
+		}
+	}
+});
+$(document).on("input","#returnDate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if(temp.indexOf("-") > 0){
+		if(temp.length == 10){
+			var tmd = temp.split("-");
+			var result = "";
+			for(var i = 0;i < tmd.length;i++){
+				result += tmd[i].toString();
+			}
+			$(this).val(getNewDate(result));
+		}
+	}else{
+		if($(this).val().length == 8){
+			$(this).val(getNewDate(temp));
+		}
+	}
+});
+
 $(document).on("input","#issuedDate",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
