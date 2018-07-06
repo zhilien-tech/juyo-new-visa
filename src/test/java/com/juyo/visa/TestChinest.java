@@ -7,20 +7,76 @@ import java.util.Random;
 public class TestChinest {
 
 	public static void main(String[] args) {
+		/*
+				String someStr = "ABCDEFG";
+				String search = "AOJOIHGRJIOTH";
+				CharSequence seq = new String(someStr);
+				for (int i = 0; i < seq.length(); i++) {
+					char charAt = seq.charAt(i);
+				}
+				char[] charArray = someStr.toCharArray();
 
-		String someStr = "ABCDEFG";
-		String search = "AOJOIHGRJIOTH";
-		CharSequence seq = new String(someStr);
-		for (int i = 0; i < seq.length(); i++) {
-			char charAt = seq.charAt(i);
+				for (int i = 0; i < charArray.length; i++) {
+					char c = charArray[i];
+
+					System.out.println(charArray[i]);
+				}*/
+
+		/*int max = 8;
+		int min = 1;
+		Random random = new Random();
+		int s = random.nextInt(max) % (max - min + 1) + min;
+
+		System.out.println(s);*/
+
+		/*int[] paramArray = { 1, 2, 3, 4, 5, 6 };
+
+		int count = 4;
+		int[] newArray = new int[count];
+		Random random = new Random();
+		int min = 2;
+		count = random.nextInt(count) % (count - min + 1) + min;
+		System.out.println("count:" + count);
+
+		int temp = 0;//接收产生的随机数
+		List<Integer> list = new ArrayList<Integer>();
+		for (int i = 1; i <= count; i++) {
+			temp = random.nextInt(paramArray.length);//将产生的随机数作为被抽数组的索引
+			if (!(list.contains(temp))) {
+				newArray[i - 1] = paramArray[temp];
+				list.add(temp);
+			} else {
+				i--;
+			}
 		}
-		char[] charArray = someStr.toCharArray();
+		for (int i = 0; i < newArray.length; i++) {
+			System.out.println(newArray[i]);
+		}*/
 
-		for (int i = 0; i < charArray.length; i++) {
-			char c = charArray[i];
+		Random random = new Random();
+		int days = 9;
+		int[] paramArray = { 1, 2, 3 };
 
-			System.out.println(charArray[i]);
+		List<Integer> numbers = new ArrayList<Integer>();
+		int sum = 0;
+
+		while (true) {
+			int n = random.nextInt(days - 2) + 2;
+			System.out.println(n);
+			sum += n;
+			numbers.add(n);
+
+			if (numbers.size() > paramArray.length || sum > days) {
+				numbers.clear();
+				sum = 0;
+			}
+
+			if (numbers.size() == paramArray.length && sum == days) {
+				break;
+				//System.out.println(numbers);
+			}
 		}
+		System.out.println(numbers);
 
 		/*String date = "06/09/1985";
 		String substring = date.substring(3, 5);
