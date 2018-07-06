@@ -1373,7 +1373,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 								String countryAirline = countryAirline(form.getGoArrivedCity(), threeCityid, 2);
 								int nextInt = random.nextInt(threeScenics.size());
 								TScenicEntity scenic = threeScenics.get(nextInt);
-								countryAirline = countryAirline + " " + scenic.getName();
+								countryAirline = countryAirline + "。" + scenic.getName();
 								travelplan.setScenic(countryAirline);
 							} else {
 								String countryAirline = countryAirline(form.getGoArrivedCity(), firstcityid, 2);
@@ -1472,6 +1472,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					} else if (i == daysBetween - 2) {
 						if (daysBetween == 5) {//如果是5则说明中间只有签证类型城市没有随机城市
 							String countryAirline = countryAirline(threeCityid, form.getReturnDepartureCity(), 2);
+							int nextInt = random.nextInt(threeScenics.size());
+							TScenicEntity scenic = threeScenics.get(nextInt);
+							countryAirline = countryAirline + "。" + scenic.getName();
 							travelplan.setScenic(countryAirline);
 						} else if (daysBetween == 3) {
 							String countryAirline = countryAirline(form.getGoArrivedCity(),
@@ -1577,6 +1580,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							//景区
 							if (form.getGoArrivedCity() != threeCityid) {
 								String countryAirline = countryAirline(form.getGoArrivedCity(), threeCityid, 2);
+								int nextInt = random.nextInt(threeScenics.size());
+								TScenicEntity scenic = threeScenics.get(nextInt);
+								countryAirline = countryAirline + "。" + scenic.getName();
 								travelplan.setScenic(countryAirline);
 							} else {
 								String countryAirline = countryAirline(form.getGoArrivedCity(), firstcityid, 2);
@@ -1699,12 +1705,18 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (daysBetween == 4) {
 							if (i == 3) {
 								String countryAirline = countryAirline(threeCityid, form.getReturnDepartureCity(), 2);
+								int nextInt = random.nextInt(lastscenics.size());
+								TScenicEntity scenic = lastscenics.get(nextInt);
+								countryAirline = countryAirline + "。" + scenic.getName();
 								travelplan.setScenic(countryAirline);
 							}
 						} else {
 							//景区
 							String countryAirline = countryAirline(randomArray[totalstyle - 1],
 									form.getReturnDepartureCity(), 2);
+							int nextInt = random.nextInt(lastscenics.size());
+							TScenicEntity scenic = lastscenics.get(nextInt);
+							countryAirline = countryAirline + "。" + scenic.getName();
 							travelplan.setScenic(countryAirline);
 
 						}
