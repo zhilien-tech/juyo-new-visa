@@ -1371,6 +1371,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							//景区
 							if (form.getGoArrivedCity() != threeCityid) {
 								String countryAirline = countryAirline(form.getGoArrivedCity(), threeCityid, 2);
+								int nextInt = random.nextInt(threeScenics.size());
+								TScenicEntity scenic = threeScenics.get(nextInt);
+								countryAirline = countryAirline + " " + scenic.getName();
 								travelplan.setScenic(countryAirline);
 							} else {
 								String countryAirline = countryAirline(form.getGoArrivedCity(), firstcityid, 2);
