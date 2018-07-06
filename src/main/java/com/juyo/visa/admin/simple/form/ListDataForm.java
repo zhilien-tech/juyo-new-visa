@@ -97,7 +97,7 @@ public class ListDataForm implements SQLParamForm {
 			cnd.and("tr.comId", "=", companyid);
 		} else {
 			//普通的操作员
-			cnd.and("tr.userId", "=", userid);
+			cnd.and("tr.salesOpid", "=", userid);
 		}
 		cnd.orderBy("tr.updatetime", "desc");
 		return cnd;

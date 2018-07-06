@@ -1,7 +1,48 @@
 //加载城市的select2
-$('.select2City').select2({
+/*$('.select2City').select2({
 	ajax : {
 		url : "/admin/city/getCustomerCitySelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}
+			return {
+				//exname : cArrivalcity,
+				cityname : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				obj.text = obj.dictCode;
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});*/
+$('#goDepartureCity').select2({
+	ajax : {
+		url : "/admin/simple/getCustomerCitySelect.html",
 		dataType : 'json',
 		delay : 250,
 		type : 'post',
@@ -13,6 +54,133 @@ $('.select2City').select2({
 			return {
 				//exname : cArrivalcity,
 				cityname : params.term, // search term
+				citytype : 'goDepartureCity',
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+$('#goArrivedCity').select2({
+	ajax : {
+		url : "/admin/simple/getCustomerCitySelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				cityname : params.term, // search term
+				citytype : 'goArrivedCity',
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+$('#returnDepartureCity').select2({
+	ajax : {
+		url : "/admin/simple/getCustomerCitySelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				cityname : params.term, // search term
+				citytype : 'returnDepartureCity',
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+$('#returnArrivedCity').select2({
+	ajax : {
+		url : "/admin/simple/getCustomerCitySelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				cityname : params.term, // search term
+				citytype : 'returnArrivedCity',
 				page : params.page
 			};
 		},

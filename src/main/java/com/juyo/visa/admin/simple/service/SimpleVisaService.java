@@ -28,12 +28,14 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
@@ -52,6 +54,7 @@ import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JobStatusEnum;
 import com.juyo.visa.common.enums.JobStatusFreeEnum;
@@ -131,6 +134,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	private OrderJpViewService orderJpViewService;
 	@Inject
 	private VisaJapanService visaJapanService;
+	@Inject
+	private ChangePrincipalViewService changePrincipalViewService;
 
 	private VisaInfoWSHandler visaInfoWSHandler = (VisaInfoWSHandler) SpringContextUtil.getBean("myVisaInfoHander",
 			VisaInfoWSHandler.class);
@@ -1780,6 +1785,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderinfo.setCreateTime(new Date());
 		orderinfo.setUpdateTime(new Date());
 		TOrderEntity orderinsert = dbDao.insert(orderinfo);
+		changePrincipalViewService.ChangePrincipal(orderinsert.getId(), JPOrderProcessTypeEnum.SALES_PROCESS.intKey(),
+				user.getId());
 		result.put("orderid", orderinsert.getId());
 		TOrderJpEntity orderjp = new TOrderJpEntity();
 		orderjp.setOrderId(orderinsert.getId());
@@ -4617,4 +4624,59 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		dbDao.update(orderjp);
 		return null;
 	}
+
+	public Object getCustomerCitySelect(String cityname, String citytype, String exname, HttpSession session) {
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer comid = loginCompany.getId();
+
+		String sqlStr = "";
+
+		if (Util.isEmpty(cityname)) {
+			if (Util.eq("goDepartureCity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBygodeparturecity");
+			}
+			if (Util.eq("goArrivedCity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBygoarrivedcity");
+			}
+			if (Util.eq("returnDepartureCity", citytype)) {
+				sqlStr = sqlManager.get("cityselectByreturndeparturecity");
+			}
+			if (Util.eq("returnArrivedCity", citytype)) {
+				sqlStr = sqlManager.get("cityselectByreturnarrivedcity");
+			}
+			Sql applysql = Sqls.create(sqlStr);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("tr.comId", "=", comid);
+			cnd.groupBy("tc.city");
+			cnd.orderBy("count", "DESC");
+			List<Record> infoList = dbDao.query(applysql, cnd, null);
+			if (infoList.size() > 4) {
+				infoList = infoList.subList(0, 5);
+			}
+			return infoList;
+		} else {
+			List<TCityEntity> citySelect = new ArrayList<TCityEntity>();
+			try {
+				citySelect = dbDao.query(TCityEntity.class, Cnd.where("city", "like", Strings.trim(cityname) + "%"),
+						null);
+				//移除的城市
+				TCityEntity exinfo = new TCityEntity();
+				for (TCityEntity tCityEntity : citySelect) {
+					if (!Util.isEmpty(exname) && tCityEntity.getCity().equals(exname)) {
+						exinfo = tCityEntity;
+					}
+				}
+				citySelect.remove(exinfo);
+				if (citySelect.size() > 5) {
+					citySelect = citySelect.subList(0, 5);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return citySelect;
+
+		}
+
+	}
+
 }

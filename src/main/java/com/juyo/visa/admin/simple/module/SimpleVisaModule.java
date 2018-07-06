@@ -9,6 +9,7 @@ package com.juyo.visa.admin.simple.module;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -253,5 +254,15 @@ public class SimpleVisaModule {
 	@POST
 	public Object changeVisatype(@Param("orderid") int orderid, @Param("visatype") int visatype) {
 		return simpleVisaService.changeVisatype(orderid, visatype);
+	}
+
+	/**
+	 * 获取城市下拉列表
+	 */
+	@At
+	@POST
+	public Object getCustomerCitySelect(@Param("cityname") String cityname, @Param("citytype") String citytype,
+			@Param("exname") String exname, HttpSession session) {
+		return simpleVisaService.getCustomerCitySelect(cityname, citytype, exname, session);
 	}
 }

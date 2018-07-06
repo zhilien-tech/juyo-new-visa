@@ -811,7 +811,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['700px', '80%'],
-					content:'/admin/orderJp/log.html?id='+orderinfoid
+					content:'/admin/orderJp/log.html?id='+orderinfoid+'&orderProcessType=1'
 				});
 			}
 			//招宝变更、招宝取消、拒签
