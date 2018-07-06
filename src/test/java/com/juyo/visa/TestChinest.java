@@ -53,6 +53,17 @@ public class TestChinest {
 			System.out.println(newArray[i]);
 		}*/
 
+		/*int num = 0;
+		ArrayList<Integer> datesList = new ArrayList<>();
+		datesList.add(1);
+		datesList.add(3);
+		datesList.add(6);
+		datesList.add(9);
+		datesList.add(13);
+		for (int i = 0; i < 2; i++) {
+			num += datesList.get(i);
+		}
+		System.out.println(num);*/
 		Random random = new Random();
 		int days = 9;
 		int[] paramArray = { 1, 2, 3 };
@@ -61,7 +72,7 @@ public class TestChinest {
 		int sum = 0;
 
 		while (true) {
-			int n = random.nextInt(days - 2) + 2;
+			int n = random.nextInt(days - 1) + 2;
 			System.out.println(n);
 			sum += n;
 			numbers.add(n);
