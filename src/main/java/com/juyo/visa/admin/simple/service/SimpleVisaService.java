@@ -3772,7 +3772,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				if (Util.eq(form.getSameMainWealth(), IsYesOrNoEnum.YES.intKey())) {
 					List<TApplicantWealthJpEntity> beforeList = dbDao.query(TApplicantWealthJpEntity.class,
 							Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()), null);
-					dbDao.delete(beforeList);
+					if (beforeList.size() > 0) {
+						dbDao.delete(beforeList);
+					}
 					/*if (!Util.isEmpty(applicantEntity.getMainId())) {
 						TApplicantEntity mainApplicant = dbDao.fetch(TApplicantEntity.class,
 								new Long(applicantEntity.getMainId()).intValue());

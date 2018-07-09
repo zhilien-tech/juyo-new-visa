@@ -1510,7 +1510,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table.addCell(cell);
 				} else {
-					cell = new PdfPCell(new Paragraph("", font));
+					cell = new PdfPCell(new Paragraph("银行流水", font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table.addCell(cell);
@@ -1567,9 +1567,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 						applicant = dbDao.fetch(TApplicantEntity.class, Cnd.where("id", "=", record.get("MainId")));
 					}
 					cell = new PdfPCell(new Paragraph(
-							(!Util.isEmpty(record.get("mainRelation")) ? applicant.getFirstName()
-									+ applicant.getLastName() + "(" + record.getString("mainRelation") + ")" : ""),
-							font));
+							(!Util.isEmpty(record.get("mainRelation")) ? record.getString("mainRelation") : ""), font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					/*if (flag) {

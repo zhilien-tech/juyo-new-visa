@@ -48,6 +48,7 @@ import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderFillformLogEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
+import com.juyo.visa.entities.TOrderLogsEntity;
 import com.juyo.visa.entities.TOrderTripJpEntity;
 import com.juyo.visa.entities.TOrderTripMultiJpEntity;
 import com.juyo.visa.websocket.VisaInfoWSHandler;
@@ -537,6 +538,18 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			order.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
 		}
 		dbDao.update(order);
+		Integer visaOpid = order.getVisaOpid();
+		if (!Util.isEmpty(visaOpid)) {
+			//添加日志
+			TOrderLogsEntity logs = new TOrderLogsEntity();
+			logs.setCreateTime(new Date());
+			logs.setOpId(visaOpid);
+			logs.setOrderId(order.getId());
+			logs.setOrderStatus(order.getStatus());
+			logs.setUpdateTime(new Date());
+			dbDao.insert(logs);
+		}
+
 		//消息通知
 		try {
 			visaInfoWSHandler.broadcast(new TextMessage(""));

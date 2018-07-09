@@ -1429,7 +1429,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table.addCell(cell);
 				} else {
-					cell = new PdfPCell(new Paragraph("", font));
+					cell = new PdfPCell(new Paragraph("银行流水", font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					table.addCell(cell);
@@ -1485,10 +1485,12 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 					if (!Util.isEmpty(record.get("MainId"))) {
 						applicant = dbDao.fetch(TApplicantEntity.class, Cnd.where("id", "=", record.get("MainId")));
 					}
-					cell = new PdfPCell(new Paragraph(
+					/*cell = new PdfPCell(new Paragraph(
 							(!Util.isEmpty(record.get("mainRelation")) ? applicant.getFirstName()
 									+ applicant.getLastName() + "(" + record.getString("mainRelation") + ")" : ""),
-							font));
+							font));*/
+					cell = new PdfPCell(new Paragraph(
+							(!Util.isEmpty(record.get("mainRelation")) ? record.getString("mainRelation") : ""), font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					/*if (flag) {

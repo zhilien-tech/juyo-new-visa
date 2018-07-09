@@ -123,12 +123,16 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			dbDao.update(orderjp);
 		}
 		// 添加日志
-		orderJpViewService.insertLogs(orderinfo.getId(), visastatus, session);
+		//orderJpViewService.insertLogs(orderinfo.getId(), visastatus, session);
 		// 订单负责人变更
+		//TUserEntity loginuser = LoginUtil.getLoginUser(session);
+		//Integer userId = loginuser.getId();
+		//changePrincipalViewService.ChangePrincipal(orderid, JPOrderProcessTypeEnum.SALES_PROCESS.intKey(), userId);
 		TUserEntity loginuser = LoginUtil.getLoginUser(session);
 		Integer userId = loginuser.getId();
-		changePrincipalViewService.ChangePrincipal(orderid, VISA_PROCESS, userId);
-		return dbDao.update(orderinfo);
+		orderinfo.setVisaOpid(userId);
+		dbDao.update(orderinfo);
+		return null;
 	}
 
 	/**
@@ -245,7 +249,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			e.printStackTrace();
 		}
 		// 变更订单负责人
-		changePrincipalViewService.ChangePrincipal(orderid.intValue(), VISA_PROCESS, userId);
+		//changePrincipalViewService.ChangePrincipal(orderid.intValue(), VISA_PROCESS, userId);
 		return null;
 	}
 
