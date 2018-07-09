@@ -2278,9 +2278,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		for (int i = 0; i < cityidList.size(); i++) {
 			List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", cityidList.get(i)),
 					null);
-			if (randomDates.get(i) > scenics.size()) {
-				randomDates.clear();
-				getRandomCity(paramArray, count, days);
+			System.out.println(scenics.size());
+			System.out.println(randomDates.size() + "======");
+			if (randomDates.size() > 0) {
+				if (randomDates.get(i) > scenics.size()) {
+					randomDates.clear();
+					getRandomCity(paramArray, count, days);
+				}
 			}
 		}
 		result.put("citys", cityidList);
