@@ -2269,12 +2269,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
+		System.out.println(newArray.length + "----");
 		List<Integer> randomDates = getRandomDates(newArray, days);
+		System.out.println(randomDates.size() + "!!!!");
 
 		List<Integer> cityidList = Ints.asList(newArray);
-		for (Integer cityid : cityidList) {
-			List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", cityid), null);
-		}
+		System.out.println(cityidList.size() + "++++++");
 
 		for (int i = 0; i < cityidList.size(); i++) {
 			List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", cityidList.get(i)),
@@ -2284,7 +2284,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			if (randomDates.size() > 0) {
 				if (randomDates.get(i) > scenics.size()) {
 					randomDates.clear();
-					getRandomCity(paramArray, count, days);
+					return getRandomCity(paramArray, count, days);
 				}
 			}
 		}
