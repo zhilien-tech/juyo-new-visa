@@ -69,7 +69,7 @@
 								<label><span>*</span>酒店：</label> 
 								<select id="hotel" name="hotel" class="form-control input-sm" multiple="multiple">
 									<c:if test="${!empty obj.hotel.id }">
-										<option value="${obj.hotel.id }" selected="selected">${obj.hotel.name }</option>
+										<option value="${obj.hotel.id }" selected="selected">${obj.hotel.namejp }</option>
 									</c:if>
 								</select>
 							</div>

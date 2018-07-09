@@ -65,7 +65,7 @@ public class TestChinest {
 		}
 		System.out.println(num);*/
 		Random random = new Random();
-		int days = 8;
+		int days = 31;
 		int[] paramArray = { 1, 2, 3 };
 
 		List<Integer> numbers = new ArrayList<Integer>();

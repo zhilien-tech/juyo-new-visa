@@ -279,14 +279,39 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			cnd.and("cityId", "=", cityid);
 			scenics = dbDao.query(TScenicEntity.class, cnd, null);
 		} else {
-			//if (visatype == 1 || visatype == 6 || visatype == 14) {//单次，普通三年多次，普通五年多次
-			if (plan.getIsupdatecity() == IsYesOrNoEnum.YES.intKey()) {//如果手动改过城市，则只刷新景点
+
+			TOrderTravelplanJpEntity formerPlan = dbDao.fetch(TOrderTravelplanJpEntity.class,
+					Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
+			if (plan.getCityId() == formerPlan.getCityId()) {//如果城市一样，说明没去别的地方，刷新景点
 				//获取城市所有的景区
 				Cnd cnd = Cnd.NEW();
-				/*cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
-				if (!Util.isEmpty(cityid)) {
-					cnd.and("cityId", "=", cityid);
-				}*/
+				cnd.and("cityId", "=", cityid);
+				scenics = dbDao.query(TScenicEntity.class, cnd, null);
+			} else {
+				List<TOrderTravelplanJpEntity> nowplanList = dbDao.query(TOrderTravelplanJpEntity.class,
+						Cnd.where("orderId", "=", orderid).and("cityId", "=", plan.getCityId()), null);
+				List<TOrderTravelplanJpEntity> lastplanList = dbDao.query(
+						TOrderTravelplanJpEntity.class,
+						Cnd.where("orderId", "=", orderid).and("cityId", "=",
+								planlist.get(planlist.size() - 1).getCityId()), null);
+
+				if (nowplanList.size() == 1) {
+					scenics = visaJapanService.countryAirline(formerPlan.getCityId(), plan.getCityId(), 1);
+
+				} else if (lastplanList.size() == 2 && Integer.valueOf(plan.getDay()) == planlist.size() - 1) {
+					scenics = visaJapanService.countryAirline(formerPlan.getCityId(), plan.getCityId(), 1);
+
+				} else {
+					scenics = visaJapanService.countryAirline(formerPlan.getCityId(), plan.getCityId(), 2);
+
+				}
+
+			}
+
+			//if (visatype == 1 || visatype == 6 || visatype == 14) {//单次，普通三年多次，普通五年多次
+			/*if (plan.getIsupdatecity() == IsYesOrNoEnum.YES.intKey()) {//如果手动改过城市，则只刷新景点
+				//获取城市所有的景区
+				Cnd cnd = Cnd.NEW();
 				cnd.and("cityId", "=", cityid);
 				scenics = dbDao.query(TScenicEntity.class, cnd, null);
 			} else {
@@ -294,10 +319,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					if (Integer.valueOf(plan.getDay()) % 2 == 0 && Integer.valueOf(plan.getDay()) <= days) {//偶数行景点确实是景点
 						//获取城市所有的景区
 						Cnd cnd = Cnd.NEW();
-						/*cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
-						if (!Util.isEmpty(cityid)) {
-							cnd.and("cityId", "=", cityid);
-						}*/
 						cnd.and("cityId", "=", cityid);
 						scenics = dbDao.query(TScenicEntity.class, cnd, null);
 
@@ -314,10 +335,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					} else {
 						//获取城市所有的景区
 						Cnd cnd = Cnd.NEW();
-						/*cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
-						if (!Util.isEmpty(cityid)) {
-							cnd.and("cityId", "=", cityid);
-						}*/
 						cnd.and("cityId", "=", cityid);
 						scenics = dbDao.query(TScenicEntity.class, cnd, null);
 					}
@@ -326,10 +343,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					if (Integer.valueOf(plan.getDay()) == 2) {
 						//获取城市所有的景区
 						Cnd cnd = Cnd.NEW();
-						/*cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
-						if (!Util.isEmpty(cityid)) {
-							cnd.and("cityId", "=", cityid);
-						}*/
 						cnd.and("cityId", "=", cityid);
 						scenics = dbDao.query(TScenicEntity.class, cnd, null);
 					}
@@ -346,10 +359,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							&& Integer.valueOf(plan.getDay()) <= days) {//奇数行只刷新景点
 						//获取城市所有的景区
 						Cnd cnd = Cnd.NEW();
-						/*cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
+						cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
 						if (!Util.isEmpty(cityid)) {
 							cnd.and("cityId", "=", cityid);
-						}*/
+						}
 						cnd.and("cityId", "=", cityid);
 						scenics = dbDao.query(TScenicEntity.class, cnd, null);
 
@@ -363,15 +376,15 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					} else {//最后几天
 						//获取城市所有的景区
 						Cnd cnd = Cnd.NEW();
-						/*cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
+						cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
 						if (!Util.isEmpty(cityid)) {
 							cnd.and("cityId", "=", cityid);
-						}*/
+						}
 						cnd.and("cityId", "=", cityid);
 						scenics = dbDao.query(TScenicEntity.class, cnd, null);
 					}
 				}
-			}
+			}*/
 		}
 
 		return scenics;
@@ -2235,7 +2248,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		if (count == 0) {
 			count = 1;
 		}
-		count = random.nextInt(count) + 1;
+		if (count <= paramArray.length) {
+			count = random.nextInt(count) + 1;
+		} else {
+			count = random.nextInt(paramArray.length) + 1;
+
+		}
 		int[] newArray = new int[count];
 
 		int temp = 0;//接收产生的随机数
@@ -2287,17 +2305,19 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 			if (numbers.size() == paramArray.length && sum == days) {
 				break;
-				//System.out.println(numbers);
 			}
 		}
+		System.out.println(numbers);
 
 		return numbers;
 	}
 
 	public int getNum(List<Integer> datesList, int n) {
 		int num = 0;
-		for (int i = 0; i < n; i++) {
-			num += datesList.get(i);
+		if (datesList.size() >= 1) {
+			for (int i = 0; i < n; i++) {
+				num += datesList.get(i);
+			}
 		}
 		return num;
 	}

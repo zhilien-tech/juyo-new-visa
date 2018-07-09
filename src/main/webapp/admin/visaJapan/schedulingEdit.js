@@ -109,7 +109,7 @@ $('#hotel').select2({
 			params.page = params.page || 1;
 			var selectdata = $.map(data, function (obj) {
 				obj.id = obj.id; // replace pk with your identifier
-				obj.text = obj.name; // replace pk with your identifier
+				obj.text = obj.namejp; // replace pk with your identifier
 				/*obj.text = obj.dictCode;*/
 				return obj;
 			});

@@ -585,18 +585,18 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object resetPlan(Integer orderid, Integer planid, int visatype, HttpSession session) {
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		Integer userId = loginUser.getId();
+		//TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		//Integer userId = loginUser.getId();
 		TOrderTravelplanJpEntity plan = dbDao.fetch(TOrderTravelplanJpEntity.class, planid.longValue());
 		List<TOrderTravelplanJpEntity> planlist = dbDao.query(TOrderTravelplanJpEntity.class,
 				Cnd.where("orderId", "=", orderid).orderBy("outDate", "ASC"), null);
-		int days = 0;
+		/*int days = 0;
 		if (planlist.size() % 2 == 0) {//为2的倍数，则最后是三天，否则为两天
 			days = planlist.size() - 3;
 		} else {
 			days = planlist.size() - 2;
 		}
-		String contains = isContains(visatype);
+		String contains = isContains(visatype);*/
 
 		if (planlist.get(1).getCityId() == planlist.get(2).getCityId()) {//第二天和第三天是同一个城市，说明出行抵达城市和返回出发城市一致，这时只刷新景点
 			String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
@@ -623,117 +623,164 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				dbDao.update(plan);
 			} else {
 
-				if (Util.eq("false", contains)) {//不是东北六县
-					TOrderTravelplanJpEntity formerPlan = dbDao.fetch(TOrderTravelplanJpEntity.class,
-							Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
-					if (plan.getCityId() == formerPlan.getCityId()) {//如果城市一样，说明没去别的地方，刷新景点
+				//if (Util.eq("false", contains)) {//不是东北六县
+				TOrderTravelplanJpEntity formerPlan = dbDao.fetch(TOrderTravelplanJpEntity.class,
+						Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
+				if (plan.getCityId() == formerPlan.getCityId()) {//如果城市一样，说明没去别的地方，刷新景点
+					//获取城市所有的景区
+					String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
+					Sql sql = Sqls.create(sqlString);
+					sql.setParam("orderid", orderid);
+					sql.setParam("cityid", plan.getCityId());
+					sql.setParam("scenicname", plan.getScenic());
+					List<Record> scenics = dbDao.query(sql, null, null);
+					Random random = new Random();
+					plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
+					dbDao.update(plan);
+				} else {
+					List<TOrderTravelplanJpEntity> nowplanList = dbDao.query(TOrderTravelplanJpEntity.class,
+							Cnd.where("orderId", "=", orderid).and("cityId", "=", plan.getCityId()), null);
+					List<TOrderTravelplanJpEntity> lastplanList = dbDao.query(
+							TOrderTravelplanJpEntity.class,
+							Cnd.where("orderId", "=", orderid).and("cityId", "=",
+									planlist.get(planlist.size() - 1).getCityId()), null);
+
+					if (nowplanList.size() == 1) {
+						String countryAirline = simpleVisaService.countryAirline(formerPlan.getCityId(),
+								plan.getCityId(), 1);
+						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
+						Sql sql = Sqls.create(sqlString);
+						sql.setParam("orderid", orderid);
+						sql.setParam("cityid", plan.getCityId());
+						sql.setParam("scenicname", plan.getScenic());
+						List<Record> scenics = dbDao.query(sql, null, null);
+						Random random = new Random();
+						plan.setScenic(countryAirline + "。"
+								+ scenics.get(random.nextInt(scenics.size())).getString("name"));
+						dbDao.update(plan);
+
+					} else if (lastplanList.size() == 2 && Integer.valueOf(plan.getDay()) == planlist.size() - 1) {
+						String countryAirline = simpleVisaService.countryAirline(formerPlan.getCityId(),
+								plan.getCityId(), 1);
+						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
+						Sql sql = Sqls.create(sqlString);
+						sql.setParam("orderid", orderid);
+						sql.setParam("cityid", plan.getCityId());
+						sql.setParam("scenicname", plan.getScenic());
+						List<Record> scenics = dbDao.query(sql, null, null);
+						Random random = new Random();
+						plan.setScenic(countryAirline + "。"
+								+ scenics.get(random.nextInt(scenics.size())).getString("name"));
+						dbDao.update(plan);
 
 					} else {
-
-					}
-
-					//除去最后几天
-					if (Integer.valueOf(plan.getDay()) % 2 == 0 && Integer.valueOf(plan.getDay()) <= days) {//偶数行只刷新景点
-						//获取城市所有的景区
-						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-						Sql sql = Sqls.create(sqlString);
-						sql.setParam("orderid", orderid);
-						sql.setParam("cityid", plan.getCityId());
-						sql.setParam("scenicname", plan.getScenic());
-						List<Record> scenics = dbDao.query(sql, null, null);
-						Random random = new Random();
-						plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-						dbDao.update(plan);
-						TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
-						//订单负责人变更
-						changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
-
-					} else if (Integer.valueOf(plan.getDay()) % 2 == 1 && Integer.valueOf(plan.getDay()) <= days + 1) {//奇数行为国内航班或新干线
-						int arrcityid = plan.getCityId();
-						TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
-								Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
-						int gocityid = fetch.getCityId();
-						if (planlist.get(0).getCityId() == 77 && Util.eq("false", contains)) {
-							String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid, 1);
-							plan.setScenic(countryAirline);
-						} else {
-							String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid, 2);
-							plan.setScenic(countryAirline);
-						}
-						dbDao.update(plan);
-					} else {//最后几天
-						//获取城市所有的景区
-						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-						Sql sql = Sqls.create(sqlString);
-						sql.setParam("orderid", orderid);
-						sql.setParam("cityid", plan.getCityId());
-						sql.setParam("scenicname", plan.getScenic());
-						List<Record> scenics = dbDao.query(sql, null, null);
-						Random random = new Random();
-						plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-						dbDao.update(plan);
-					}
-				} else {
-					//第二天刷新景点
-					if (Integer.valueOf(plan.getDay()) == 2) {
-						//获取城市所有的景区
-						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-						Sql sql = Sqls.create(sqlString);
-						sql.setParam("orderid", orderid);
-						sql.setParam("cityid", plan.getCityId());
-						sql.setParam("scenicname", plan.getScenic());
-						List<Record> scenics = dbDao.query(sql, null, null);
-						Random random = new Random();
-						plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-						dbDao.update(plan);
-					}
-					//第三天刷新新干线
-					else if (Integer.valueOf(plan.getDay()) == 3) {
-						int arrcityid = plan.getCityId();
-						TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
-								Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
-						int gocityid = fetch.getCityId();
-						String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid, 1);
-						plan.setScenic(countryAirline);
-						dbDao.update(plan);
-					}
-
-					else if (Integer.valueOf(plan.getDay()) > 3 && Integer.valueOf(plan.getDay()) % 2 == 1
-							&& Integer.valueOf(plan.getDay()) <= days) {//奇数行只刷新景点
-						//获取城市所有的景区
-						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-						Sql sql = Sqls.create(sqlString);
-						sql.setParam("orderid", orderid);
-						sql.setParam("cityid", plan.getCityId());
-						sql.setParam("scenicname", plan.getScenic());
-						List<Record> scenics = dbDao.query(sql, null, null);
-						Random random = new Random();
-						plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-						dbDao.update(plan);
-
-					} else if (Integer.valueOf(plan.getDay()) > 3 && Integer.valueOf(plan.getDay()) % 2 == 0
-							&& Integer.valueOf(plan.getDay()) <= days + 1) {//偶数行为国内航班或新干线
-						int arrcityid = plan.getCityId();
-						TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
-								Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
-						int gocityid = fetch.getCityId();
-						String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid, 2);
-						plan.setScenic(countryAirline);
-						dbDao.update(plan);
-					} else {//最后几天
-						//获取城市所有的景区
-						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-						Sql sql = Sqls.create(sqlString);
-						sql.setParam("orderid", orderid);
-						sql.setParam("cityid", plan.getCityId());
-						sql.setParam("scenicname", plan.getScenic());
-						List<Record> scenics = dbDao.query(sql, null, null);
-						Random random = new Random();
-						plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-						dbDao.update(plan);
+						//无需操作
 					}
 
 				}
+
+				//除去最后几天
+				/*if (Integer.valueOf(plan.getDay()) % 2 == 0 && Integer.valueOf(plan.getDay()) <= days) {//偶数行只刷新景点
+					//获取城市所有的景区
+					String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
+					Sql sql = Sqls.create(sqlString);
+					sql.setParam("orderid", orderid);
+					sql.setParam("cityid", plan.getCityId());
+					sql.setParam("scenicname", plan.getScenic());
+					List<Record> scenics = dbDao.query(sql, null, null);
+					Random random = new Random();
+					plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
+					dbDao.update(plan);
+					TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
+					//订单负责人变更
+					changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
+
+				} else if (Integer.valueOf(plan.getDay()) % 2 == 1 && Integer.valueOf(plan.getDay()) <= days + 1) {//奇数行为国内航班或新干线
+					int arrcityid = plan.getCityId();
+					TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
+							Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
+					int gocityid = fetch.getCityId();
+					if (planlist.get(0).getCityId() == 77 && Util.eq("false", contains)) {
+						String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid, 1);
+						plan.setScenic(countryAirline);
+					} else {
+						String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid, 2);
+						plan.setScenic(countryAirline);
+					}
+					dbDao.update(plan);
+				} else {//最后几天
+					//获取城市所有的景区
+					String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
+					Sql sql = Sqls.create(sqlString);
+					sql.setParam("orderid", orderid);
+					sql.setParam("cityid", plan.getCityId());
+					sql.setParam("scenicname", plan.getScenic());
+					List<Record> scenics = dbDao.query(sql, null, null);
+					Random random = new Random();
+					plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
+					dbDao.update(plan);
+				}
+				} else {
+				//第二天刷新景点
+				if (Integer.valueOf(plan.getDay()) == 2) {
+					//获取城市所有的景区
+					String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
+					Sql sql = Sqls.create(sqlString);
+					sql.setParam("orderid", orderid);
+					sql.setParam("cityid", plan.getCityId());
+					sql.setParam("scenicname", plan.getScenic());
+					List<Record> scenics = dbDao.query(sql, null, null);
+					Random random = new Random();
+					plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
+					dbDao.update(plan);
+				}
+				//第三天刷新新干线
+				else if (Integer.valueOf(plan.getDay()) == 3) {
+					int arrcityid = plan.getCityId();
+					TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
+							Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
+					int gocityid = fetch.getCityId();
+					String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid, 1);
+					plan.setScenic(countryAirline);
+					dbDao.update(plan);
+				}
+
+				else if (Integer.valueOf(plan.getDay()) > 3 && Integer.valueOf(plan.getDay()) % 2 == 1
+						&& Integer.valueOf(plan.getDay()) <= days) {//奇数行只刷新景点
+					//获取城市所有的景区
+					String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
+					Sql sql = Sqls.create(sqlString);
+					sql.setParam("orderid", orderid);
+					sql.setParam("cityid", plan.getCityId());
+					sql.setParam("scenicname", plan.getScenic());
+					List<Record> scenics = dbDao.query(sql, null, null);
+					Random random = new Random();
+					plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
+					dbDao.update(plan);
+
+				} else if (Integer.valueOf(plan.getDay()) > 3 && Integer.valueOf(plan.getDay()) % 2 == 0
+						&& Integer.valueOf(plan.getDay()) <= days + 1) {//偶数行为国内航班或新干线
+					int arrcityid = plan.getCityId();
+					TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
+							Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
+					int gocityid = fetch.getCityId();
+					String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid, 2);
+					plan.setScenic(countryAirline);
+					dbDao.update(plan);
+				} else {//最后几天
+					//获取城市所有的景区
+					String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
+					Sql sql = Sqls.create(sqlString);
+					sql.setParam("orderid", orderid);
+					sql.setParam("cityid", plan.getCityId());
+					sql.setParam("scenicname", plan.getScenic());
+					List<Record> scenics = dbDao.query(sql, null, null);
+					Random random = new Random();
+					plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
+					dbDao.update(plan);
+				}
+
+				}*/
 
 			}
 		}
@@ -995,7 +1042,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		TOrderTravelplanJpEntity plan = dbDao.fetch(TOrderTravelplanJpEntity.class, planid.longValue());
 		result.put("travelplan", plan);
-		Integer orderid = plan.getOrderId();
+		/*Integer orderid = plan.getOrderId();
 		List<TOrderTravelplanJpEntity> planlist = dbDao.query(TOrderTravelplanJpEntity.class,
 				Cnd.where("orderId", "=", orderid), null);
 		for (int i = 3; i < planlist.size() - 1; i++) {
@@ -1003,7 +1050,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				planlist.get(i).setHotel(planlist.get(i - 1).getHotel());
 				dbDao.update(planlist.get(i));
 			}
-		}
+		}*/
 		TOrderTravelplanJpEntity newplan = dbDao.fetch(TOrderTravelplanJpEntity.class, planid.longValue());
 		THotelEntity hotel = new THotelEntity();
 		if (!Util.isEmpty(newplan.getHotel())) {
@@ -1029,6 +1076,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		FlightSelectParam param = new FlightSelectParam();
 		TCityEntity gocity = dbDao.fetch(TCityEntity.class, gocityid);
 		TCityEntity arrcity = dbDao.fetch(TCityEntity.class, arrcityid);
+		Random random = new Random();
+		List<TScenicEntity> arrScenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", arrcityid), null);
+
 		/*param.setGocity((long) gocityid);
 		param.setArrivecity((long) arrcityid);
 		param.setDate("");
@@ -1047,6 +1097,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		if (flag == 2) {*/
 		TScenicEntity scenic = new TScenicEntity();
 		String firstday = gocity.getCity() + "から" + arrcity.getCity() + "まで新幹線で";
+		if (flag == 1) {
+			int nextInt = random.nextInt(arrScenics.size());
+			TScenicEntity tScenicEntity = arrScenics.get(nextInt);
+			firstday = firstday + "。" + tScenicEntity.getName();
+		}
+
 		scenic.setName(firstday);
 		scenics.add(scenic);
 		//}
