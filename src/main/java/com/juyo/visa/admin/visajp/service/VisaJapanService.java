@@ -623,7 +623,15 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				dbDao.update(plan);
 			} else {
 
-				if (Util.eq("false", contains)) {
+				if (Util.eq("false", contains)) {//不是东北六县
+					TOrderTravelplanJpEntity formerPlan = dbDao.fetch(TOrderTravelplanJpEntity.class,
+							Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
+					if (plan.getCityId() == formerPlan.getCityId()) {//如果城市一样，说明没去别的地方，刷新景点
+
+					} else {
+
+					}
+
 					//除去最后几天
 					if (Integer.valueOf(plan.getDay()) % 2 == 0 && Integer.valueOf(plan.getDay()) <= days) {//偶数行只刷新景点
 						//获取城市所有的景区
