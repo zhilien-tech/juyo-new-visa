@@ -2248,17 +2248,18 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		if (count == 0) {
 			count = 1;
 		}
+		int newCount = 0;
 		if (count <= paramArray.length) {
-			count = random.nextInt(count) + 1;
+			newCount = random.nextInt(count) + 1;
 		} else {
-			count = random.nextInt(paramArray.length) + 1;
+			newCount = random.nextInt(paramArray.length) + 1;
 
 		}
-		int[] newArray = new int[count];
+		int[] newArray = new int[newCount];
 
 		int temp = 0;//接收产生的随机数
 		List<Integer> list = new ArrayList<Integer>();
-		for (int i = 1; i <= count; i++) {
+		for (int i = 1; i <= newCount; i++) {
 			temp = random.nextInt(paramArray.length);//将产生的随机数作为被抽数组的索引
 			if (!(list.contains(temp))) {
 				newArray[i - 1] = paramArray[temp];
