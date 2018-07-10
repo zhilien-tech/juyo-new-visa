@@ -1418,6 +1418,13 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 							detail += "\n";
 						}
 
+						if (!record.get("isMainApplicant").equals(1)) {//副申请人
+							if (wealthType.indexOf("银行流水") == -1) {
+								wealthType = "银行流水\n" + wealthType;
+								detail = "\n" + detail;
+							}
+						}
+
 					}
 					cell = new PdfPCell(new Paragraph(wealthType, font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -2150,9 +2157,14 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 				//酒店信息
 				String hotel = "";
 				if (!Util.isEmpty(ordertravelplan.getHotel())) {
-					THotelEntity hotelentity = hotelViewService.fetch(ordertravelplan.getHotel());
-					hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
-							+ hotelentity.getMobile();
+					String day = ordertravelplan.getDay();
+					if (Integer.valueOf(day) != ordertravelplans.size()) {//不是最后一天
+						THotelEntity hotelentity = hotelViewService.fetch(ordertravelplan.getHotel());
+						hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
+								+ hotelentity.getMobile();
+					} else {
+						hotel = " ";
+					}
 				} else {
 					String day = ordertravelplan.getDay();
 					if (Integer.valueOf(day) != ordertravelplans.size()) {//不是最后一天

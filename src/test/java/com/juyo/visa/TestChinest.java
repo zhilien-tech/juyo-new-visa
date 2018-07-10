@@ -7,6 +7,12 @@ import java.util.Random;
 public class TestChinest {
 
 	public static void main(String[] args) {
+
+		String a = "asdb";
+		StringBuffer sb = new StringBuffer("34243");
+		sb.insert(0, a);
+		System.out.println(sb);
+
 		/*
 				String someStr = "ABCDEFG";
 				String search = "AOJOIHGRJIOTH";
@@ -64,7 +70,8 @@ public class TestChinest {
 			num += datesList.get(i);
 		}
 		System.out.println(num);*/
-		Random random = new Random();
+
+		/*Random random = new Random();
 		int days = 80;
 		int[] paramArray = { 1, 2, 3 };
 
@@ -87,7 +94,7 @@ public class TestChinest {
 				//System.out.println(numbers);
 			}
 		}
-		System.out.println(numbers);
+		System.out.println(numbers);*/
 
 		/*String date = "06/09/1985";
 		String substring = date.substring(3, 5);
