@@ -348,6 +348,8 @@
 				var blob = dataURLtoBlob(dataUrl);
 				var formData = new FormData();
 				formData.append("image", blob, file.name);
+				var dt = new Date();  
+				var tm = dt.getTime();
 				$.ajax({
 					type : "POST",//提交类型  
 					//dataType : "json",//返回结果格式  
@@ -396,6 +398,10 @@
 						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
+						var dt2 = new Date();  
+						var tm2 = dt2.getTime();
+						var tm3 = tm2 - tm;
+						console.log(tm3);
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
 						layer.close(layerIndex);
@@ -403,6 +409,7 @@
 						$("#updateBtn").attr('disabled', false);
 					}
 				}); // end of ajaxSubmit
+				
 			};
 			reader.readAsDataURL(file);
 		});

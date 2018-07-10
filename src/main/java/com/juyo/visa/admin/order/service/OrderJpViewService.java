@@ -8,6 +8,7 @@ package com.juyo.visa.admin.order.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -2806,6 +2807,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object IDCardRecognition(File file, HttpServletRequest request, HttpServletResponse response) {
+
+		long startTime = System.currentTimeMillis();//获取当前时间
 		//将图片进行旋转处理
 		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
 				"jpeg");
@@ -2815,21 +2818,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		//上传
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
-		file.delete();
-		if (!Util.isEmpty(spin)) {
-			spin.delete();
-		}
-		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
-		//从服务器上获取图片的流，读取扫描
-		byte[] bytes = saveImageToDisk(url);
-		String imageDataValue = Base64.encodeBase64String(bytes);
+
+		String imageDataValue = saveDiskImageToDisk(spin);
 		Input input = new Input(imageDataValue, "face");
 		RecognizeData rd = new RecognizeData();
 		rd.getInputs().add(input);
 		String content = Json.toJson(rd);
 		String info = (String) appCodeCall(content);//扫描完毕
+		long endTime = System.currentTimeMillis();
+		System.out.println("扫描运行时间：" + (endTime - startTime) + "ms");
 		System.out.println("info:" + info);
 		//解析扫描的结果，结构化成标准json格式
 		ApplicantJsonEntity jsonEntity = new ApplicantJsonEntity();
@@ -2838,6 +2835,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
 		JSONObject out = new JSONObject(output);
 		if (out.getBoolean("success")) {
+			//上传
+			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
+			file.delete();
+			if (!Util.isEmpty(spin)) {
+				spin.delete();
+			}
+			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+
 			String addr = out.getString("address"); // 获取地址
 			String name = out.getString("name"); // 获取名字
 			String num = out.getString("num"); // 获取身份证号
@@ -2870,10 +2875,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				}
 			}
 		}
+		long endTime1 = System.currentTimeMillis();
+		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
 		return jsonEntity;
 	}
 
 	public Object IDCardRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {
+
+		long startTime = System.currentTimeMillis();//获取当前时间
 		//将图片进行旋转处理
 		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
 				"jpeg");
@@ -2883,21 +2892,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		//上传
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
-		file.delete();
-		if (!Util.isEmpty(spin)) {
-			spin.delete();
-		}
-		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
-		//从服务器上获取图片的流，读取扫描
-		byte[] bytes = saveImageToDisk(url);
-		String imageDataValue = Base64.encodeBase64String(bytes);
+
+		String imageDataValue = saveDiskImageToDisk(spin);
 		Input input = new Input(imageDataValue, "back");
 		RecognizeData rd = new RecognizeData();
 		rd.getInputs().add(input);
 		String content = Json.toJson(rd);
 		String info = (String) appCodeCall(content);//扫描完毕
+		long endTime = System.currentTimeMillis();
+		System.out.println("扫描运行时间：" + (endTime - startTime) + "ms");
+		System.out.println("info:" + info);
 		//解析扫描的结果，结构化成标准json格式
 		ApplicantJsonEntity jsonEntity = new ApplicantJsonEntity();
 		JSONObject resultObj = new JSONObject(info);
@@ -2905,6 +2909,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
 		JSONObject out = new JSONObject(output);
 		if (out.getBoolean("success")) {
+
+			//上传
+			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
+			file.delete();
+			if (!Util.isEmpty(spin)) {
+				spin.delete();
+			}
+			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+
 			String issue = out.getString("issue");
 			jsonEntity.setIssue(issue);
 			jsonEntity.setUrl(url);
@@ -2926,6 +2939,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 			jsonEntity.setSuccess(out.getBoolean("success"));
 		}
+		long endTime1 = System.currentTimeMillis();
+		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
 		return jsonEntity;
 	}
 
@@ -2937,6 +2952,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object passportRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {
+
+		long startTime = System.currentTimeMillis();//获取当前时间
 		//将图片进行旋转处理
 		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
 				"jpeg");
@@ -2946,24 +2963,33 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		//上传
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
-		file.delete();
-		if (!Util.isEmpty(spin)) {
-			spin.delete();
-		}
-		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
-		//从服务器上获取图片的流，读取扫描
-		byte[] bytes = saveImageToDisk(url);
+		String imageDataB64 = saveDiskImageToDisk(spin);
 
-		String imageDataB64 = Base64.encodeBase64String(bytes);
+		long startTime4 = System.currentTimeMillis();//获取当前时间
+		System.out.println("将图片转成流运行时间：" + (startTime4 - startTime) + "ms");
+
+		//上传
+		//Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
+		//file.delete();
+		/*if (!Util.isEmpty(spin)) {
+			spin.delete();
+		}*/
+		//String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+		//从服务器上获取图片的流，读取扫描
+		//byte[] bytes = saveImageToDisk(url);
+
+		//String imageDataB64 = Base64.encodeBase64String(bytes);
 		Input input = new Input(imageDataB64);
 
 		RecognizeData rd = new RecognizeData();
 		rd.getInputs().add(input);
 
 		String content = Json.toJson(rd);
+		long endTime3 = System.currentTimeMillis();
+		System.out.println("扫描准备时间：" + (endTime3 - startTime4) + "ms");
 		String info = (String) aliPassportOcrAppCodeCall(content);
+		long endTime = System.currentTimeMillis();
+		System.out.println("扫描运行时间：" + (endTime - endTime3) + "ms");
 		System.out.println("info:" + info);
 
 		//解析扫描的结果，结构化成标准json格式
@@ -3011,6 +3037,18 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					e1.printStackTrace();
 				}
 			}
+
+			long startTime2 = System.currentTimeMillis();//获取当前时间
+			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
+			file.delete();
+			if (!Util.isEmpty(spin)) {
+				spin.delete();
+			}
+			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+
+			long startTime3 = System.currentTimeMillis();//获取当前时间
+			System.out.println("将图片上传运行时间：" + (startTime3 - startTime2) + "ms");
+
 			jsonEntity.setUrl(url);
 			jsonEntity.setOCRline1(out.getString("line0"));
 			jsonEntity.setOCRline2(out.getString("line1"));
@@ -3044,6 +3082,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 			jsonEntity.setSuccess(out.getBoolean("success"));
 		}
+
+		long endTime1 = System.currentTimeMillis();
+		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
 		return jsonEntity;
 	}
 
@@ -3112,6 +3153,43 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			e.printStackTrace();
 		}
 		return entityStr;
+	}
+
+	//这个函数负责读取本地图片并转化成流。  
+	public static String saveDiskImageToDisk(File filePath) {
+
+		InputStream inputStream = null;
+		byte[] data = new byte[1024];
+		byte[] result = new byte[1024];
+		int len = -1;
+		ByteArrayOutputStream fileOutputStream = new ByteArrayOutputStream();
+		try {
+			inputStream = new FileInputStream(filePath);
+			while ((len = inputStream.read(data)) != -1) {//循环读取inputStream流中的数据，存入文件流fileOutputStream  
+				fileOutputStream.write(data, 0, len);
+			}
+			result = fileOutputStream.toByteArray();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {//finally函数，不管有没有异常发生，都要调用这个函数下的代码  
+			if (fileOutputStream != null) {
+				try {
+					fileOutputStream.close();//记得及时关闭文件流  
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (inputStream != null) {
+				try {
+					inputStream.close();//关闭输入流  
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return Base64.encodeBase64String(result);
 	}
 
 	//这个函数负责把获取到的InputStream流保存到本地。  
