@@ -106,7 +106,7 @@
 								</div>
 								
 								<div class="applyvice">
-									<div class="col-sm-4">
+									<%-- <div class="col-sm-4">
 										<div class="form-group">
 											<label><span>*</span>主申请人</label>
 											<!-- <input id="mainApplicant" name="mainApplicant" type="text" class="form-control input-sm" placeholder=" " /> -->
@@ -116,7 +116,7 @@
 											</c:forEach>
 										</select>
 										</div>
-									</div>
+									</div> --%>
 									<div class="col-sm-4">
 										<div class="form-group">
 											<label><span>*</span>与主申请人关系</label>
@@ -138,6 +138,18 @@
 										</div>
 									</div>
 								</div>
+								
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label><span>*</span>出境记录</label>
+										</br>
+										<select id="outboundrecord" name="outboundrecord" class="form-control input-sm selectHeight">
+											<option value="良好" ${obj.outboundrecord=="良好"?'selected':''}>良好</option>
+											<option value="无" ${obj.outboundrecord=="无"?'selected':''}>无</option>
+										</select>
+									</div>
+								</div>
+								
 							</div><!-- end 申请人/备注-->
 							<div class="row body-from-input applymain"><!-- 签证类型 -->
 								<input type="hidden" id="visatype" value="${obj.jporderinfo.visaType}">

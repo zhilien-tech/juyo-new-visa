@@ -302,21 +302,30 @@
 				layer.closeAll('loading');
 				if (true === obj.success) {
 					_self.passportdata.firstname = obj.xingCn;
+					if(obj.xingCn != undefined){
 					_self.passportdata.firstnameen = getPinYinStr(obj.xingCn);
+					}
 					_self.passportdata.lastname = obj.mingCn;
+					if(obj.mingCn != undefined){
 					_self.passportdata.lastnameen = getPinYinStr(obj.mingCn);
+					}
 					_self.passportdata.passporturl = obj.url;
 					_self.passportdata.type = obj.type;
 					_self.passportdata.passport = obj.num;
 					_self.passportdata.sex = obj.sex;
 					_self.passportdata.sexen = obj.sexEn;
 					_self.passportdata.birthaddress = obj.birthCountry;
+					if(obj.birthCountry != undefined){
 					_self.passportdata.birthaddressen = getPinYinStr(obj.birthCountry).toUpperCase();
+					}
 					_self.passportdata.birthday = obj.birth;
 					_self.passportdata.issuedplace = obj.visaCountry;
+					if(obj.visaCountry != undefined){
 					_self.passportdata.issuedplaceen = getPinYinStr(obj.visaCountry).toUpperCase();
+					}
 					_self.passportdata.issueddate = obj.issueDate;
 					_self.passportdata.validenddate = obj.expiryDay;
+					if(obj.issueDate != undefined && obj.expiryDay != undefined){
 					var years = getDateYearSub(obj.issueDate,obj.expiryDay);
 					if(years == 5){
 						_self.passportdata.validtype = 2;
@@ -325,7 +334,10 @@
 						_self.passportdata.validtype = 1;
 						$(".dateVal").text("10年");
 					}
+					}
 					console.log(JSON.stringify(_self.passportdata));
+				}else{
+					layer.msg("识别失败");
 				}
 				/* 关闭upload */
 				$('#upload').css('opacity','0');

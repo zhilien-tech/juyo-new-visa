@@ -3621,6 +3621,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("jporderinfo", jporderinfo);
 		result.put("marryStatus", apply.getMarryStatus());
 		result.put("marryUrl", apply.getMarryUrl());
+		result.put("outboundrecord", apply.getOutboundrecord());
 		TOrderJpEntity orderJpEntity = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
 				.longValue());
 		TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class, orderJpEntity.getOrderId().longValue());
@@ -3736,6 +3737,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			applicantEntity.setMarryStatus(form.getMarryStatus());
 			applicantEntity.setMarryUrl(form.getMarryUrl());
 			applicantEntity.setMarryurltype(form.getMarryStatus());
+			applicantEntity.setOutboundrecord(form.getOutboundrecord());
 			if (!Util.isEmpty(form.getAddApply())) {
 				if (Util.eq(form.getAddApply(), 2)) {
 					applicantEntity.setStatus(TrialApplicantStatusEnum.FillCompleted.intKey());
@@ -3753,6 +3755,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			} else {
 				if (!Util.isEmpty(form.getMainApplicant())) {
 					applicantEntity.setMainId(form.getMainApplicant());
+					dbDao.update(applicantEntity);
+				} else {
 					dbDao.update(applicantEntity);
 				}
 			}

@@ -2830,7 +2830,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		System.out.println("info:" + info);
 		//解析扫描的结果，结构化成标准json格式
 		ApplicantJsonEntity jsonEntity = new ApplicantJsonEntity();
-		JSONObject resultObj = new JSONObject(info);
+		JSONObject resultObj = null;
+		try {
+			resultObj = new JSONObject(info);
+		} catch (JSONException e) {
+			jsonEntity.setSuccess(false);
+			return jsonEntity;
+		}
 		JSONArray outputArray = resultObj.getJSONArray("outputs");
 		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
 		JSONObject out = new JSONObject(output);
@@ -2903,8 +2909,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		System.out.println("扫描运行时间：" + (endTime - startTime) + "ms");
 		System.out.println("info:" + info);
 		//解析扫描的结果，结构化成标准json格式
+
 		ApplicantJsonEntity jsonEntity = new ApplicantJsonEntity();
-		JSONObject resultObj = new JSONObject(info);
+		JSONObject resultObj = null;
+		try {
+			resultObj = new JSONObject(info);
+		} catch (JSONException e) {
+			jsonEntity.setSuccess(false);
+			return jsonEntity;
+		}
 		JSONArray outputArray = resultObj.getJSONArray("outputs");
 		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
 		JSONObject out = new JSONObject(output);
@@ -2994,7 +3007,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		//解析扫描的结果，结构化成标准json格式
 		PassportJsonEntity jsonEntity = new PassportJsonEntity();
-		JSONObject resultObj = new JSONObject(info);
+		JSONObject resultObj = null;
+		try {
+			resultObj = new JSONObject(info);
+		} catch (JSONException e) {
+			jsonEntity.setSuccess(false);
+			return jsonEntity;
+		}
 		JSONArray outputArray = resultObj.getJSONArray("outputs");
 		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
 		JSONObject out = new JSONObject(output);
@@ -3052,6 +3071,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			jsonEntity.setUrl(url);
 			jsonEntity.setOCRline1(out.getString("line0"));
 			jsonEntity.setOCRline2(out.getString("line1"));
+
 			jsonEntity.setBirthCountry(out.getString("birth_place"));
 			jsonEntity.setVisaCountry(out.getString("issue_place"));
 			Date birthDay;
@@ -3076,8 +3096,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				}
 			} catch (JSONException | ParseException e) {
 
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				jsonEntity.setSuccess(false);
+				return jsonEntity;
 
 			}
 			jsonEntity.setSuccess(out.getBoolean("success"));
@@ -3144,7 +3165,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			 * 相应的依赖请参照
 			 * https://github.com/aliyun/api-gateway-demo-sign-java/blob/master/pom.xml
 			 */
+			long startTime = System.currentTimeMillis();
 			HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, content);
+			long endTime = System.currentTimeMillis();
+			System.out.println("扫描请求所用的时间：" + (endTime - startTime) + "ms");
 			//System.out.println(response.toString());
 			//获取response的body
 			//System.out.println(EntityUtils.toString(response.getEntity()));

@@ -27,12 +27,13 @@ public class TApplicantForm extends DataTablesParamForm {
 	/**申请人状态*/
 	private Integer status;
 
+	private String outboundrecord;
+
 	/**用户id（登录用户id）*/
 	private Integer userId;
 
 	/**姓*/
 	private String firstName;
-	
 
 	/**与主申请人的关系*/
 	private String mainRelation;

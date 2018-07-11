@@ -564,6 +564,8 @@
 					_self.applicatdata.cardcity = obj.city;
 					_self.applicatdata.birthday = obj.birth;
 					_self.applicatdata.sex = obj.sex;
+				}else{
+					layer.msg("识别失败");
 				}
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {

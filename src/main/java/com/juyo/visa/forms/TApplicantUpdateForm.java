@@ -22,6 +22,8 @@ public class TApplicantUpdateForm extends ModForm implements Serializable {
 	/**用户id（登录用户id）*/
 	private Integer userId;
 
+	private String outboundrecord;
+
 	/**姓*/
 	private String firstName;
 

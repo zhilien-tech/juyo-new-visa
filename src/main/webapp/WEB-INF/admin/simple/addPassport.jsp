@@ -365,10 +365,17 @@
 						layer.close(layerIndex);
 						if (true === obj.success) {
 							layer.msg("识别成功");
+						}else{
+							layer.msg("识别失败");
+						}
 							$('#firstName').val(obj.xingCn).change();
+							if(obj.xingCn != undefined){
 							$('#firstNameEn').val("/"+getPinYinStr(obj.xingCn));
+							}
 							$('#lastName').val(obj.mingCn).change();
+							if(obj.mingCn != undefined){
 							$('#lastNameEn').val("/"+getPinYinStr(obj.mingCn));
+							}
 							$('#passportUrl').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
 							$("#uploadFile").siblings("i").css("display","block");
@@ -380,10 +387,14 @@
 							$('#sex').val(obj.sex);
 							$('#sexEn').val(obj.sexEn);
 							$('#birthAddress').val(obj.birthCountry).change();
+							if(obj.birthCountry != undefined){
 							$('#birthAddressEn').val("/"+getPinYinStr(obj.birthCountry));
+							}
 							$('#birthday').val(obj.birth).change();
 							$('#issuedPlace').val(obj.visaCountry).change();
+							if(obj.visaCountry != undefined){
 							$('#issuedPlaceEn').val("/"+getPinYinStr(obj.visaCountry));
+							}
 							$('#issuedDate').val(obj.issueDate).change();
 							$('#validEndDate').val(obj.expiryDay).change();
 							$('#OCRline1').val(obj.OCRline1);
@@ -396,7 +407,6 @@
 								$("#validType").val(1);
 							}
 							
-						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
 					},

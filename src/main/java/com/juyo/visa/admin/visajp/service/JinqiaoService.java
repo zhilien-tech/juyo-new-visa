@@ -1486,7 +1486,11 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 				}*/
 				table.addCell(cell);
 				//出境记录
-				cell = new PdfPCell(new Paragraph("良好", font));
+				String outboundrecord = "良好";
+				if (!Util.isEmpty(record.get("outboundrecord"))) {
+					outboundrecord = (String) record.get("outboundrecord");
+				}
+				cell = new PdfPCell(new Paragraph(outboundrecord, font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				/*if (flag) {

@@ -59,7 +59,7 @@ function initApplicantTable(){
 					html += '<td><a onclick="passportInfo('+value.id+')">护照信息</a>&nbsp;';
 					html += '<a onclick="updateApplicant('+value.id+')">基本信息</a>&nbsp;';
 					html += '<a onclick="visaInfo('+value.id+')">签证信息</a>&nbsp;<br />';
-					html += '<a onclick="visaInput('+value.applyid+')">出境记录</a>&nbsp;';
+					//html += '<a onclick="visaInput('+value.applyid+')">出境记录</a>&nbsp;';
 					html += '<a onclick="deleteApplicant('+value.id+')">删除</a>&nbsp;';
 					html += '</td>';
 					html += '</tr>';

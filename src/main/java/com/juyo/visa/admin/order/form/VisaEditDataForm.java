@@ -33,6 +33,8 @@ public class VisaEditDataForm implements Serializable {
 
 	private Integer orderid;
 
+	private String outboundrecord;
+
 	private Integer marryStatus;
 
 	private String marryUrl;

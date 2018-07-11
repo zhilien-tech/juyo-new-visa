@@ -22,6 +22,10 @@ public class TApplicantEntity implements Serializable {
 	private Integer mainId;
 
 	@Column
+	@Comment("出境记录")
+	private String outboundrecord;
+
+	@Column
 	@Comment("申请人状态")
 	private Integer status;
 

@@ -742,6 +742,8 @@
 							$('#cardCity').val(obj.city).change();
 							$('#birthday').val(obj.birth).change();
 							$('#sex').val(obj.sex);
+						}else{
+							layer.msg("识别失败");
 						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
