@@ -291,6 +291,35 @@ public class OrderUSModule {
 	}
 
 	/**
+	 * 打开验证码页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object testUS() {
+		return null;
+	}
+
+	@At
+	@GET
+	@Ok("jsp")
+	public Object writeVcode() {
+		return null;
+	}
+
+	@At
+	@POST
+	public Object returnVcode(@Param("vcode") String vcode, HttpSession session) {
+		return orderUSViewService.returnVcode(vcode, session);
+	}
+
+	@At
+	@POST
+	public Object getVcode() {
+		return orderUSViewService.getVcode();
+	}
+
+	/**
 	 * 通过
 	 */
 	@At

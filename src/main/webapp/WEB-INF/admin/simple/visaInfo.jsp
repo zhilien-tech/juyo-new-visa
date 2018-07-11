@@ -324,7 +324,7 @@
 									</div>
 								</div>
 								<!-- 父母单位名称/配偶单位名称 -->
-								<div class="col-sm-4 preSchool">
+								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>职业</label>
 										<input id="position" name="position" type="text" class="form-control input-sm" value="${obj.workJp.position }"/>

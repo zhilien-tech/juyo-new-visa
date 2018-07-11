@@ -94,6 +94,7 @@ import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
+import com.juyo.visa.entities.TAppStaffVcodeEntity;
 import com.juyo.visa.entities.TAppStaffVisaUsEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCityEntity;
@@ -1367,6 +1368,21 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		dbDao.update(orderus);
 		insertLogs(orderid, USOrderListStatusEnum.TONGGUO.intKey(), userid);
 		return null;
+	}
+
+	public Object returnVcode(String vcode, HttpSession session) {
+		List<TAppStaffVcodeEntity> query = dbDao.query(TAppStaffVcodeEntity.class, null, null);
+		TAppStaffVcodeEntity tAppStaffVcodeEntity = query.get(0);
+		tAppStaffVcodeEntity.setVcode(vcode);
+		dbDao.update(tAppStaffVcodeEntity);
+		return null;
+	}
+
+	public Object getVcode() {
+		List<TAppStaffVcodeEntity> query = dbDao.query(TAppStaffVcodeEntity.class, null, null);
+		TAppStaffVcodeEntity tAppStaffVcodeEntity = query.get(0);
+		String vcode = tAppStaffVcodeEntity.getVcode();
+		return vcode;
 	}
 
 	/**

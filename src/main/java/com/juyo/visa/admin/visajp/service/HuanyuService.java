@@ -1279,7 +1279,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 				if (!Util.isEmpty(record.get("birthday"))) {
 					birthdaystr = applydateformat.format((Date) record.get("birthday"));
 				}
-				String careerstatus = "";
+				String position = "";
 				/*if (!Util.isEmpty(record.get("careerstatus"))) {
 					for (JobStatusEnum jobstatusenum : JobStatusEnum.values()) {
 						if (record.getInt("careerstatus") == jobstatusenum.intKey()) {
@@ -1288,7 +1288,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 					}
 				}*/
 				if (!Util.isEmpty(record.get("position"))) {
-					careerstatus = (String) record.get("position");
+					position = (String) record.get("position");
 				}
 				String marryStatus = "";
 				if (!Util.isEmpty(record.get("marrystatus"))) {
@@ -1397,7 +1397,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 				}*/
 				table.addCell(cell);
 				//职业
-				cell = new PdfPCell(new Paragraph(careerstatus, font));
+				cell = new PdfPCell(new Paragraph(position, font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				/*if (flag) {
@@ -1425,6 +1425,30 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 				}*/
 				table.addCell(cell);
 				//身份确认
+
+				String careerstatus = "";
+				int career = 0;
+				if (!Util.isEmpty(record.get("careerstatus"))) {
+					career = (int) record.get("careerstatus");
+				}
+
+				if (career == 1) {
+					careerstatus = "身份证\n户口本";
+				}
+				if (career == 2) {
+					careerstatus = "身份证\n户口本\n退休证";
+				}
+				if (career == 3) {
+					careerstatus = "身份证\n户口本";
+				}
+				if (career == 4) {
+					careerstatus = "身份证\n户口本\n学生卡";
+				}
+				if (career == 5) {
+					careerstatus = "户口本\n出生证明";
+				}
+
+				cell = new PdfPCell(new Paragraph(careerstatus, font));
 				cell = new PdfPCell(new Paragraph("身份证\n户口本", font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);

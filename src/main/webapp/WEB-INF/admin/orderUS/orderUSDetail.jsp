@@ -1355,6 +1355,44 @@
 		        		    content: '${base}/admin/orderUS/autofillError.html?errData='+data.errMsg
 		        		  });
 					}else{
+						layer.open({
+		        		    type: 2,
+		        		    title: false,
+		        		    closeBtn:false,
+		        		    fix: false,
+		        		    maxmin: false,
+		        		    shadeClose: false,
+		        		    scrollbar: false,
+		        		    area: ['100%', '100%'],
+		        		    content: '${base}/admin/orderUS/testUS.html'
+		        		  });
+					}
+				}
+			});
+		}
+/* 		function autofill(){
+			var orderid = '${obj.orderid}';
+			$.ajax({
+				url : '/admin/orderUS/validateInfoIsFull.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					if(data.errMsg){
+						layer.open({
+		        		    type: 2,
+		        		    title: false,
+		        		    closeBtn:false,
+		        		    fix: false,
+		        		    maxmin: false,
+		        		    shadeClose: false,
+		        		    scrollbar: false,
+		        		    area: ['400px', '300px'],
+		        		    content: '${base}/admin/orderUS/autofillError.html?errData='+data.errMsg
+		        		  });
+					}else{
 						$.ajax({
 							url : '/admin/orderUS/autofill.html',
 							data : {
@@ -1366,16 +1404,10 @@
 								
 							}
 						});
-						/* layer.msg("操作成功", {
-							time: 500,
-							end: function () {
-								dataReload(addorder);
-							}
-						}); */
 					}
 				}
 			});
-		}
+		} */
 		
 		//通过
 		function pass(){

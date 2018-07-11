@@ -3756,7 +3756,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				if (!Util.isEmpty(form.getMainApplicant())) {
 					applicantEntity.setMainId(form.getMainApplicant());
 					dbDao.update(applicantEntity);
-				} else {
+				}else{
 					dbDao.update(applicantEntity);
 				}
 			}

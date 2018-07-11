@@ -77,6 +77,9 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	//金桥文件下载
 	@Inject
 	private JinqiaoService jinqiaoService;
+	//神州文件下载
+	@Inject
+	private ShenzhouService shenzhouService;
 
 	private static final Integer VISA_PROCESS = JPOrderProcessTypeEnum.VISA_PROCESS.intKey();
 
@@ -177,13 +180,17 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 				byteArray = liaoNingWanDaService.generateFile(orderjp).toByteArray();
 			} else if (pdftype == PdfTypeEnum.UNIVERSAL_TYPE.intKey()) {
 				//通用模版
-				byteArray = downLoadVisaFileService.generateFile(orderjp, request).toByteArray();
+				//byteArray = downLoadVisaFileService.generateFile(orderjp, request).toByteArray();
+				byteArray = huanyuService.generateFile(orderjp, request).toByteArray();
 				//byteArray = jinQiaoService.generateFile(orderjp).toByteArray();
 			} else if (pdftype == PdfTypeEnum.HUANYU_TYPE.intKey()) {
 				byteArray = huanyuService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.JINQIAO_TYPE.intKey()) {
 				byteArray = jinqiaoService.generateFile(orderjp, request).toByteArray();
+			} else if (pdftype == PdfTypeEnum.SHENZHOU_TYPE.intKey()) {
+				byteArray = shenzhouService.generateFile(orderjp, request).toByteArray();
 			}
+
 			// 获取订单信息，准备文件名称
 			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 			// 主申请人姓名

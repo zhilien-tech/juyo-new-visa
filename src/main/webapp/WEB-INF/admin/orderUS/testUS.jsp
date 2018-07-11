@@ -43,7 +43,7 @@ connectWebSocket();
 function connectWebSocket(){
 	 if ('WebSocket' in window){  
         console.log('Websocket supported');  
-        socket = new WebSocket('ws://192.168.1.20:8080/vcodewebsocket');   
+        socket = new WebSocket('ws://192.168.2.198:8080/vcodewebsocket');   
 
         console.log('Connection attempted');  
 
