@@ -377,7 +377,7 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>银行流水</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="银行流水" disabled />
+										<input id="bankflowfree" name="bankflowfree" type="text" class="form-control input-sm" value="银行流水"  />
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -402,7 +402,7 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>车产</label>
-										<input id="" name=""  type="text" class="form-control input-sm" value="车产" disabled />
+										<input id="vehiclefree" name="vehiclefree"  type="text" class="form-control input-sm" value="车产"  />
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -427,7 +427,7 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>房产</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="房产" disabled/>
+										<input id="housePropertyfree" name="housePropertyfree" type="text" class="form-control input-sm" value="房产" />
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -452,7 +452,7 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>理财</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="理财" disabled/>
+										<input id="financialfree" name="financialfree" type="text" class="form-control input-sm" value="理财" />
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -478,7 +478,7 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>在职证明</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="在职证明" disabled/>
+										<input id="certificatefree" name="certificatefree" type="text" class="form-control input-sm" value="在职证明" />
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -504,7 +504,7 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>银行存款</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="银行存款" disabled/>
+										<input id="depositfree" name="depositfree" type="text" class="form-control input-sm" value="银行存款"/>
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -530,7 +530,7 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>税单</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="税单" disabled/>
+										<input id="taxbillfree" name="taxbillfree" type="text" class="form-control input-sm" value="税单"/>
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -556,7 +556,7 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>完税证明</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="完税证明" disabled/>
+										<input id="taxprooffree" name="taxprooffree" type="text" class="form-control input-sm" value="完税证明"/>
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -582,7 +582,7 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>特定高校在读生</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="特定高校在读生" disabled/>
+										<input id="readstudentfree" name="readstudentfree" type="text" class="form-control input-sm" value="特定高校在读生" />
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -605,7 +605,7 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>特定高校毕业生</label>
-										<input id="" name="" type="text" class="form-control input-sm" value="特定高校毕业生" disabled/>
+										<input id="graduatefree" name="graduatefree" type="text" class="form-control input-sm" value="特定高校毕业生" />
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -1069,51 +1069,69 @@
 								$(".bankflow").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#bankflow").val(item.details);
+								if(item.bankflowfree != ""){
+									$("#bankflowfree").val(item.bankflowfree);
+								}else{
+									$("#bankflowfree").val(item.type);
+								}
 							}
 							if(wealth.val() == "车产"){
 								$(".vehicle").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#vehicle").val(item.details);
+								if(item.vehiclefree != ""){
+									$("#vehiclefree").val(item.vehiclefree);
+								}else{
+									$("#vehiclefree").val(item.type);
+								}
 							}
 							if(wealth.val() == "房产"){
 								$(".houseProperty").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#houseProperty").val(item.details);
+								$("#housePropertyfree").val(item.housepropertyfree);
 							}
 							if(wealth.val() == "理财"){
 								$(".financial").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#financial").val(item.details);
+								$("#financialfree").val(item.financialfree);
 							}
 							if(wealth.val() == "银行存款"){
 								$(".deposit").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#deposit").val(item.details);
+								$("#depositfree").val(item.depositfree);
 							}
 							if(wealth.val() == "在职证明"){
 								$(".certificate").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#certificate").val(item.details);
+								$("#certificatefree").val(item.certificatefree);
 							}
 							if(wealth.val() == "税单"){
 								$(".taxbill").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#taxbill").val(item.details);
+								$("#taxbillfree").val(item.taxbillfree);
 							}
 							if(wealth.val() == "完税证明"){
 								$(".taxproof").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#taxproof").val(item.details);
+								$("#taxprooffree").val(item.taxprooffree);
 							}
 							if(wealth.val() == "特定高校在读生"){
 								$(".readstudent").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#readstudent").val(item.details);
+								$("#readstudentfree").val(item.readstudentfree);
 							}
 							if(wealth.val() == "特定高校毕业生"){
 								$(".graduate").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#graduate").val(item.details);
+								$("#graduatefree").val(item.graduatefree);
 							}
 							
 						}
@@ -1179,6 +1197,7 @@
 						$(".deposit").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#deposit").val("");
+						$("#depositfree").val("银行存款");
 						/* if(userType == 2){
 							$(".help-blockdeposit").attr("data-bv-result","INVALID");  
 						    $(".deposits").css({"display":"block"});
@@ -1199,6 +1218,7 @@
 						$(".vehicle").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#vehicle").val("");
+						$("#vehiclefree").val("车产");
 						/* if(userType == 2){
 					        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
 					        $(".vehicles").css({"display":"block"});
@@ -1218,6 +1238,7 @@
 						$(".houseProperty").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#houseProperty").val("");
+						$("#housePropertyfree").val("房产");
 						/* if(userType == 2){
 							$(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
 						    $(".housePropertys").css({"display":"block"});
@@ -1238,6 +1259,7 @@
 						$(".financial").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#financial").val("");
+						$("#financialfree").val("理财");
 						/* if(userType == 2){
 							$(".help-blockfinancial").attr("data-bv-result","INVALID");  
 						    $(".financials").css({"display":"block"});
@@ -1258,6 +1280,7 @@
 						$(".certificate").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#certificate").val("");
+						$("#certificatefree").val("在职证明");
 					}
 				}else if(financeBtnInfo == "银行流水"){
 					if($(this).hasClass("btnState-true")){
@@ -1271,6 +1294,7 @@
 						$(".bankflow").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#bankflow").val("");
+						$("#bankflowfree").val("银行流水");
 					}
 				}else if(financeBtnInfo == "税单"){
 					if($(this).hasClass("btnState-true")){
@@ -1284,6 +1308,7 @@
 						$(".taxbill").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#taxbill").val("");
+						$("#taxbillfree").val("税单");
 					}
 				}else if(financeBtnInfo == "完税证明"){
 					if($(this).hasClass("btnState-true")){
@@ -1297,6 +1322,7 @@
 						$(".taxproof").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#taxproof").val("");
+						$("#taxprooffree").val("完税证明");
 					}
 				}else if(financeBtnInfo == "特定高校在读生"){
 					if($(this).hasClass("btnState-true")){
@@ -1310,6 +1336,7 @@
 						$(".readstudent").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#readstudent").val("学信网学籍在线验证报告");
+						$("#readstudentfree").val("特定高校在读生");
 					}
 				}else if(financeBtnInfo == "特定高校毕业生"){
 					if($(this).hasClass("btnState-true")){
@@ -1323,6 +1350,7 @@
 						$(".graduate").css("display","block");
 						$(this).addClass("btnState-true");
 						$("#graduate").val("学信网电子学历认证书");
+						$("#graduatefree").val("特定高校毕业生");
 					}
 				}
 			});

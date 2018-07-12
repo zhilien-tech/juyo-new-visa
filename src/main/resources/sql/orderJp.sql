@@ -186,7 +186,17 @@ tawj.id,
 tawj.applicantId,
 tawj.type,
 tawj.details,
-tawj.opId
+tawj.opId,
+tawj.bankflowfree,
+tawj.vehiclefree,
+tawj.housePropertyfree,
+tawj.financialfree,
+tawj.certificatefree,
+tawj.depositfree,
+tawj.taxbillfree,
+tawj.taxprooffree,
+tawj.readstudentfree,
+tawj.graduatefree
 FROM
 t_applicant_wealth_jp tawj
 LEFT JOIN

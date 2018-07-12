@@ -2205,6 +2205,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderinfo.setUserId(user.getId());
 		orderinfo.setOrderNum(generrateOrdernum());
 		orderinfo.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
+		orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
 		orderinfo.setCreateTime(new Date());
 		orderinfo.setUpdateTime(new Date());
 		TOrderEntity orderinsert = dbDao.insert(orderinfo);
@@ -2598,7 +2599,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderinfo.setStayDay(form.getStayday());
 		orderinfo.setBackTripDate(form.getReturnDate());
 		orderinfo.setSendVisaNum(form.getSendvisanum());
-		orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+
 		orderinfo.setIsDisabled(IsYesOrNoEnum.NO.intKey());
 		orderinfo.setUpdateTime(new Date());
 
@@ -3756,7 +3757,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				if (!Util.isEmpty(form.getMainApplicant())) {
 					applicantEntity.setMainId(form.getMainApplicant());
 					dbDao.update(applicantEntity);
-				}else{
+				} else {
 					dbDao.update(applicantEntity);
 				}
 			}
@@ -4076,9 +4077,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=", "银行流水"));
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getBankflow());
+							applicantWealthJpEntity.setBankflowfree(form.getBankflowfree());
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getBankflow());
+							wealthJp.setBankflowfree(form.getBankflowfree());
 							wealthJp.setType("银行流水");
 							wealthJp.setSequence(1);
 							wealthJp.setCreateTime(new Date());
@@ -4100,9 +4103,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 										ApplicantJpWealthEnum.CAR.value()));
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getVehicle());
+							applicantWealthJpEntity.setVehiclefree(form.getVehiclefree());
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getVehicle());
+							wealthJp.setVehiclefree(form.getVehiclefree());
 							wealthJp.setType(ApplicantJpWealthEnum.CAR.value());
 							wealthJp.setCreateTime(new Date());
 							wealthJp.setSequence(2);
@@ -4126,9 +4131,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 										ApplicantJpWealthEnum.HOME.value()));
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getHouseProperty());
+							applicantWealthJpEntity.setHousePropertyfree(form.getHousePropertyfree());
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getHouseProperty());
+							wealthJp.setHousePropertyfree(form.getHousePropertyfree());
 							wealthJp.setType(ApplicantJpWealthEnum.HOME.value());
 							wealthJp.setCreateTime(new Date());
 							wealthJp.setSequence(3);
@@ -4152,9 +4159,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 										ApplicantJpWealthEnum.LICAI.value()));
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getFinancial());
+							applicantWealthJpEntity.setFinancialfree(form.getFinancialfree());
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getFinancial());
+							wealthJp.setFinancialfree(form.getFinancialfree());
 							wealthJp.setType(ApplicantJpWealthEnum.LICAI.value());
 							wealthJp.setCreateTime(new Date());
 							wealthJp.setSequence(4);
@@ -4177,9 +4186,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=", "在职证明"));
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getCertificate());
+							applicantWealthJpEntity.setCertificatefree(form.getCertificatefree());
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getCertificate());
+							wealthJp.setCertificatefree(form.getCertificatefree());
 							wealthJp.setType("在职证明");
 							wealthJp.setCreateTime(new Date());
 							wealthJp.setSequence(5);
@@ -4200,9 +4211,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=", "银行存款"));
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getDeposit());
+							applicantWealthJpEntity.setDepositfree(form.getDepositfree());
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getDeposit());
+							wealthJp.setDepositfree(form.getDepositfree());
 							wealthJp.setType("银行存款");
 							wealthJp.setSequence(6);
 							wealthJp.setCreateTime(new Date());
@@ -4223,9 +4236,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=", "税单"));
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getTaxbill());
+							applicantWealthJpEntity.setTaxbillfree(form.getTaxbillfree());
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getTaxbill());
+							wealthJp.setTaxbillfree(form.getTaxbillfree());
 							wealthJp.setType("税单");
 							wealthJp.setSequence(7);
 							wealthJp.setCreateTime(new Date());
@@ -4246,9 +4261,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=", "完税证明"));
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getTaxproof());
+							applicantWealthJpEntity.setTaxprooffree(form.getTaxprooffree());
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getTaxproof());
+							wealthJp.setTaxprooffree(form.getTaxprooffree());
 							wealthJp.setType("完税证明");
 							wealthJp.setSequence(8);
 							wealthJp.setCreateTime(new Date());
@@ -4271,9 +4288,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 										"特定高校在读生"));
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getReadstudent());
+							applicantWealthJpEntity.setReadstudentfree(form.getReadstudentfree());
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getReadstudent());
+							wealthJp.setReadstudentfree(form.getReadstudentfree());
 							wealthJp.setType("特定高校在读生");
 							wealthJp.setSequence(9);
 							wealthJp.setCreateTime(new Date());
@@ -4298,9 +4317,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 										"特定高校毕业生"));
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getGraduate());
+							applicantWealthJpEntity.setGraduatefree(form.getGraduatefree());
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getGraduate());
+							wealthJp.setGraduatefree(form.getGraduatefree());
 							wealthJp.setType("特定高校毕业生");
 							wealthJp.setSequence(10);
 							wealthJp.setCreateTime(new Date());

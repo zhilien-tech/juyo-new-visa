@@ -1463,28 +1463,78 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 				if (wealthjpinfo.size() > 0) {
 					for (int i = 0; i < wealthjpinfo.size(); i++) {
 						TApplicantWealthJpEntity tApplicantWealthJpEntity = wealthjpinfo.get(i);
-						wealthType += tApplicantWealthJpEntity.getType() + "\n";
+						//wealthType += tApplicantWealthJpEntity.getType() + "\n";
 
 						detail += tApplicantWealthJpEntity.getDetails();
 						if ("银行流水".equals(tApplicantWealthJpEntity.getType())) {
+							if (!Util.isEmpty(tApplicantWealthJpEntity.getBankflowfree())) {
+								wealthType += tApplicantWealthJpEntity.getBankflowfree() + "\n";
+							} else {
+								wealthType += tApplicantWealthJpEntity.getType() + "\n";
+							}
 							detail += "万\n";
 						} else if ("理财".equals(tApplicantWealthJpEntity.getType())) {
+							if (!Util.isEmpty(tApplicantWealthJpEntity.getFinancialfree())) {
+								wealthType += tApplicantWealthJpEntity.getFinancialfree() + "\n";
+							} else {
+								wealthType += tApplicantWealthJpEntity.getType() + "\n";
+							}
 							detail += "万\n";
 						} else if ("房产".equals(tApplicantWealthJpEntity.getType())) {
+							if (!Util.isEmpty(tApplicantWealthJpEntity.getHousePropertyfree())) {
+								wealthType += tApplicantWealthJpEntity.getHousePropertyfree() + "\n";
+							} else {
+								wealthType += tApplicantWealthJpEntity.getType() + "\n";
+							}
 							detail += "平米\n";
 						} else if ("车产".equals(tApplicantWealthJpEntity.getType())) {
+							if (!Util.isEmpty(tApplicantWealthJpEntity.getVehiclefree())) {
+								wealthType += tApplicantWealthJpEntity.getVehiclefree() + "\n";
+							} else {
+								wealthType += tApplicantWealthJpEntity.getType() + "\n";
+							}
 							detail += "\n";
 						} else if ("在职证明".equals(tApplicantWealthJpEntity.getType())) {
+							if (!Util.isEmpty(tApplicantWealthJpEntity.getCertificatefree())) {
+								wealthType += tApplicantWealthJpEntity.getCertificatefree() + "\n";
+							} else {
+								wealthType += tApplicantWealthJpEntity.getType() + "\n";
+							}
 							detail += "万\n";
 						} else if ("银行存款".equals(tApplicantWealthJpEntity.getType())) {
+							if (!Util.isEmpty(tApplicantWealthJpEntity.getDepositfree())) {
+								wealthType += tApplicantWealthJpEntity.getDepositfree() + "\n";
+							} else {
+								wealthType += tApplicantWealthJpEntity.getType() + "\n";
+							}
 							detail += "万\n";
 						} else if ("税单".equals(tApplicantWealthJpEntity.getType())) {
+							if (!Util.isEmpty(tApplicantWealthJpEntity.getTaxbillfree())) {
+								wealthType += tApplicantWealthJpEntity.getTaxbillfree() + "\n";
+							} else {
+								wealthType += tApplicantWealthJpEntity.getType() + "\n";
+							}
 							detail += "万\n";
 						} else if ("完税证明".equals(tApplicantWealthJpEntity.getType())) {
+							if (!Util.isEmpty(tApplicantWealthJpEntity.getTaxprooffree())) {
+								wealthType += tApplicantWealthJpEntity.getTaxprooffree() + "\n";
+							} else {
+								wealthType += tApplicantWealthJpEntity.getType() + "\n";
+							}
 							detail += "元\n";
 						} else if ("特定高校在读生".equals(tApplicantWealthJpEntity.getType())) {
+							if (!Util.isEmpty(tApplicantWealthJpEntity.getReadstudentfree())) {
+								wealthType += tApplicantWealthJpEntity.getReadstudentfree() + "\n";
+							} else {
+								wealthType += tApplicantWealthJpEntity.getType() + "\n";
+							}
 							detail += "\n";
 						} else if ("特定高校毕业生".equals(tApplicantWealthJpEntity.getType())) {
+							if (!Util.isEmpty(tApplicantWealthJpEntity.getGraduatefree())) {
+								wealthType += tApplicantWealthJpEntity.getGraduatefree() + "\n";
+							} else {
+								wealthType += tApplicantWealthJpEntity.getType() + "\n";
+							}
 							detail += "\n";
 						}
 

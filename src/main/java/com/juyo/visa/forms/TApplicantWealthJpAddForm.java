@@ -19,6 +19,26 @@ public class TApplicantWealthJpAddForm extends AddForm implements Serializable {
 	/**财产类型*/
 	private String type;
 
+	private String bankflowfree;
+
+	private String vehiclefree;
+
+	private String housePropertyfree;
+
+	private String financialfree;
+
+	private String certificatefree;
+
+	private String depositfree;
+
+	private String taxbillfree;
+
+	private String taxprooffree;
+
+	private String readstudentfree;
+
+	private String graduatefree;
+
 	/**财产明细*/
 	private String details;
 

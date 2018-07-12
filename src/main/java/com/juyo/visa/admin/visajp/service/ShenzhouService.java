@@ -85,7 +85,7 @@ import com.uxuexi.core.web.base.service.BaseService;
  * @Date	 2018年3月14日 	 
  */
 @IocBean
-public class JinqiaoService extends BaseService<TOrderJpEntity> {
+public class ShenzhouService extends BaseService<TOrderJpEntity> {
 
 	@Inject
 	private FlightViewService flightViewService;
@@ -236,9 +236,9 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 		//受理号为送签编号
 		String sendVisaNum = orderinfo.getSendVisaNum();
 		content.append("　　" + companyname).append("根据与").append(dijie).append("的合同约定，组织").append(applyinfo.size())
-				.append("人访日个人旅游（受理号为").append(sendVisaNum).append("），请协助办理赴日").append(visatypestr).append("签证。");
+				.append("人访日个人旅游，请协助办理赴日").append(visatypestr).append("签证。");
 
-		map.put("Text2", "1");
+		map.put("Text2", "1-" + applyinfo.size() + " 号");
 		map.put("Text1", content.toString());
 		map.put("Text11", company.getName());
 		map.put("Text3", company.getName());
@@ -335,7 +335,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 			map.put("Text12", "");
 		}
 		//获取模板文件
-		URL resource = getClass().getClassLoader().getResource("japanfile/jinqiao/note.pdf");
+		URL resource = getClass().getClassLoader().getResource("japanfile/shenzhou/note.pdf");
 		TemplateUtil templateUtil = new TemplateUtil();
 		stream = templateUtil.pdfTemplateStream(resource, map);
 		return stream;
@@ -1360,7 +1360,6 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 				if (!Util.isEmpty(record.get("birthday"))) {
 					birthdaystr = applydateformat.format((Date) record.get("birthday"));
 				}
-				//职业
 				String position = "";
 				if (!Util.isEmpty(record.get("position"))) {
 					position = (String) record.get("position");
