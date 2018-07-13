@@ -74,10 +74,14 @@
     <script src="js/lrz.bundle.js"></script>
     <script type="text/javascript" src="js/lCalendar.min.js"></script><!-- 日历插件 .js -->
     <script src="/references/common/js/vue/vue.min.js"></script>
+    
+    <script language=javascript src="/references/common/js/pinyin.js"></script>
+    <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 	<script src="/references/common/js/layer/layer.js"></script>
 	<script type="text/javascript" src="/admin/common/commonjs.js"></script>
     <script>
     
+    var applicantid = GetQueryString('applicantid');
   //异步加载的URL地址
 	var url="/admin/mobile/passportinfo.html";
 	var _self;
@@ -109,41 +113,217 @@
 	        });
 	    }
 	});
+	
+	$(function(){
+		$.ajax({
+			type : "post",
+			url : "/admin/weixinToken/getJsApiTicket",
+			dataType : "json",
+			async : false,
+			success : function(data) {
+				var jsApiTicket = data.ticket;
+				var url = location.href.split('#').toString();//url不能写死
+
+				$.ajax({
+					type : "post",
+					url : "/admin/weixinToken/makeWXTicket",
+					dataType : "json",
+					async : false,
+					data:{
+						jsApiTicket:jsApiTicket,
+						url:url
+					},
+					success : function(data) {
+						wx.config({
+							debug: false,//生产环境需要关闭debug模式
+							appId: data.appid,//appId通过微信服务号后台查看
+							timestamp: data.timestamp,//生成签名的时间戳
+							nonceStr: data.nonceStr,//生成签名的随机字符串
+							signature: data.signature,//签名
+							jsApiList: [//需要调用的JS接口列表
+								'chooseImage',
+								'previewImage',
+								'uploadImage'
+								]
+						});
+					},
+					error: function(xhr, status, error) {
+						//alert(status);
+						//alert(xhr.responseText);
+					}
+				});
+			},
+			error: function(xhr, status, error) {
+
+			}
+		})
+	});
+	
+	
+	wx.ready(function(){
+		//页面加载时就调用相关接口
+	});
+
+	var images = {
+			localId : [],
+			serverId : []
+	};
+	
         $(function () {
             $('#upload').click(function () {
             	 $(".backgroundGray").show();
             });
             
             $(".closed").click(function(){
+            	$('#upload').css('opacity','0');
             	$(".backgroundGray").hide();
-            	$('#image').click();
-                $('#image').change(function(){
-                	layer.load(1, {
+            	//$('#image').click();
+                //$('#image').click(function(){
+                	images.serverId = [];//清空serverid集合
+                	wx.chooseImage({
+                		count : 1, // 默认9   
+                		sizeType : [ 'compressed' ], // 压缩图
+                		sourceType : [ 'album', 'camera' ], // 可以指定来源是相册还是相机，默认二者都有   
+                		success : function(res) {
+                			$('.wxChooseImages ').remove();
+                			var localIds = res.localIds;
+                			if(localIds != ""){
+                				for(var i = 0;i<localIds.length;i++){
+                					//YEMIAN HUIXIAN
+                					_self.passportdata.passporturl = localIds[i];
+                					//$(".uploadImgReady").attr("src",localIds[i]);
+                				}
+                			}
+
+                			images.localId = res.localIds;
+                			uploadImage(res.localIds);
+
+                		}
+                	});
+                	/* layer.load(1, {
             			shade : "#000"
             		});
                 	var that = this;
                     lrz(this.files[0])
                         .then(function (rst) {
-                           /*  $('.bacimg').attr('src',rst.base64); */
                             $('#upload').css('opacity','0');
                             sourceSize = (that.files[0].size / 1024).toFixed(2);
                             resultSize = (rst.fileLen / 1024).toFixed(2);
                             scale = parseInt(100 - (resultSize / sourceSize * 100));
                             rst.formData.append('image',rst.file);
-                            /* alert(rst);
-                            alert(JSON.stringify(rst.formData));
-                            alert(rst.file);
-                            alert('sourceSize:'+sourceSize+' resultSize:'+resultSize+' scale:'+scale);  */
-                            //alert('压缩后大小为：'+resultSize+'K  压缩率：'+scale+'%');
                             uploadPassport(rst,rst.formData);  
                             // 处理成功会执行
                         })
                         .catch(function (err) {
                             console.log(err);
-                        });
-                });
+                        }); */
+                //});
             })
         });
+        
+        
+        var uploadImage = function(localIds) {
+        	var localId = localIds.pop();
+        	wx.uploadImage({
+        		localId : localId,
+        		isShowProgressTips : 1,
+        		success : function(res) {
+        			var serverId = res.serverId; // 返回图片的服务器端ID
+        			
+        			images.serverId.push(serverId);
+
+        			//其他对serverId做处理的代码
+        			if (localIds.length > 0) {
+        				uploadImage(localIds);
+
+        			}else if(localIds.length == 0 && images.serverId != ""){
+        				var serverId = images.serverId;
+        				var serverIdStr = "";
+        				for(var i = 0;i<serverId.length;i++){
+        					serverIdStr += serverId[i]+",";
+        				}
+        				
+        				uploadToQiniu(serverIdStr);
+
+        			}
+        		}
+        	});
+        };
+        
+        function getPinYinStr(hanzi){
+    		var onehanzi = hanzi.split('');
+    		var pinyinchar = '';
+    		for(var i=0;i<onehanzi.length;i++){
+    			pinyinchar += PinYin.getPinYin(onehanzi[i]);
+    		}
+    		return pinyinchar.toUpperCase();
+    	}
+        
+        function uploadToQiniu(serverIds){
+
+        	layer.load(1);
+        	$.ajax({
+        		type : "post",
+        		url : "/admin/weixinToken/wechatJsSDKToPassportScan",
+        		dataType : "json",
+        		//async : false,
+        		data:{
+        			applicantid:applicantid,
+        			mediaIds:serverIds
+        		},
+        		success : function(obj) {
+        			layer.closeAll("loading");
+        			if (true === obj.success) {
+        				layer.msg("识别成功");
+        			}else{
+        				layer.msg("识别失败");
+        			}
+        			
+        			if("xingCn" in obj){
+    					_self.passportdata.firstname = obj.xingCn;
+    					_self.passportdata.firstnameen = getPinYinStr(obj.xingCn);
+        			}
+        			
+        			if("mingCn" in obj){
+    					_self.passportdata.lastname = obj.mingCn;
+    					_self.passportdata.lastnameen = getPinYinStr(obj.mingCn);
+        			}
+    					_self.passportdata.passporturl = obj.url;
+    					_self.passportdata.type = obj.type;
+    					_self.passportdata.passport = obj.num;
+    					_self.passportdata.sex = obj.sex;
+    					_self.passportdata.sexen = obj.sexEn;
+    					_self.passportdata.birthaddress = obj.birthCountry;
+    					if(obj.birthCountry != undefined){
+    					_self.passportdata.birthaddressen = getPinYinStr(obj.birthCountry);
+    					}
+    					_self.passportdata.birthday = obj.birth;
+    					_self.passportdata.issuedplace = obj.visaCountry;
+    					if(obj.visaCountry != undefined){
+    					_self.passportdata.issuedplaceen = getPinYinStr(obj.visaCountry);
+    					}
+    					_self.passportdata.issueddate = obj.issueDate;
+    					_self.passportdata.validenddate = obj.expiryDay;
+    					if(obj.issueDate != undefined && obj.expiryDay != undefined){
+    					var years = getDateYearSub(obj.issueDate,obj.expiryDay);
+    					if(years == 5){
+    						_self.passportdata.validtype = 2;
+    						$(".dateVal").text("5年");
+    					}else{
+    						_self.passportdata.validtype = 1;
+    						$(".dateVal").text("10年");
+    					}
+    					}
+    				/* 关闭upload */
+    				$('#upload').css('opacity','0');
+        		},
+        		error: function(xhr, status, error) {
+
+        		}
+        	});
+        }
+
+        
 
         //
         $(".validitySelect").change(function(){
@@ -400,6 +580,8 @@
 		reader.readAsDataURL(file);
 	}); */
       
+	
+	
 	function getDateYearSub(startDateStr, endDateStr) {
         var day = 24 * 60 * 60 *1000; 
 

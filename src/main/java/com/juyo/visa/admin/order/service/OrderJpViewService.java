@@ -2886,6 +2886,124 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return jsonEntity;
 	}
 
+	public ApplicantJsonEntity wechatJsSDKToCard(String url, HttpServletRequest request, HttpServletResponse response) {
+
+		long startTime = System.currentTimeMillis();//获取当前时间
+		byte[] bytes = saveImageToDisk(url);
+		String imageDataValue = Base64.encodeBase64String(bytes);
+		Input input = new Input(imageDataValue, "face");
+		RecognizeData rd = new RecognizeData();
+		rd.getInputs().add(input);
+		String content = Json.toJson(rd);
+		String info = (String) appCodeCall(content);//扫描完毕
+		long endTime = System.currentTimeMillis();
+		System.out.println("扫描运行时间：" + (endTime - startTime) + "ms");
+		System.out.println("info:" + info);
+		//解析扫描的结果，结构化成标准json格式
+		ApplicantJsonEntity jsonEntity = new ApplicantJsonEntity();
+		JSONObject resultObj = null;
+		try {
+			resultObj = new JSONObject(info);
+		} catch (JSONException e) {
+			jsonEntity.setSuccess(false);
+			return jsonEntity;
+		}
+		JSONArray outputArray = resultObj.getJSONArray("outputs");
+		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
+		JSONObject out = new JSONObject(output);
+		if (out.getBoolean("success")) {
+			String addr = out.getString("address"); // 获取地址
+			String name = out.getString("name"); // 获取名字
+			String num = out.getString("num"); // 获取身份证号
+			jsonEntity.setUrl(url);
+			jsonEntity.setAddress(addr);
+			Date date;
+			try {
+				date = new SimpleDateFormat("yyyyMMdd").parse(out.getString("birth"));
+				String dateStr = new SimpleDateFormat("yyyy-MM-dd").format(date);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				jsonEntity.setBirth(sdf.format(sdf.parse(dateStr)));
+			} catch (JSONException | ParseException e) {
+
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+			}
+			jsonEntity.setName(name);
+			jsonEntity.setNationality(out.getString("nationality"));
+			jsonEntity.setNum(num);
+			jsonEntity.setRequest_id(out.getString("request_id"));
+			jsonEntity.setSex(out.getString("sex"));
+			jsonEntity.setSuccess(out.getBoolean("success"));
+			if (!Util.isEmpty(jsonEntity.getNum())) {
+				String cardId = jsonEntity.getNum().substring(0, 6);
+				TIdcardEntity IDcardEntity = dbDao.fetch(TIdcardEntity.class, Cnd.where("code", "=", cardId));
+				if (!Util.isEmpty(IDcardEntity)) {
+					jsonEntity.setProvince(IDcardEntity.getProvince());
+					jsonEntity.setCity(IDcardEntity.getCity());
+				}
+			}
+		}
+		long endTime1 = System.currentTimeMillis();
+		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
+		return jsonEntity;
+	}
+
+	public ApplicantJsonEntity wechatJsSDKToCardBack(String url, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		long startTime = System.currentTimeMillis();//获取当前时间
+		byte[] bytes = saveImageToDisk(url);
+		String imageDataValue = Base64.encodeBase64String(bytes);
+		Input input = new Input(imageDataValue, "back");
+		RecognizeData rd = new RecognizeData();
+		rd.getInputs().add(input);
+		String content = Json.toJson(rd);
+		String info = (String) appCodeCall(content);//扫描完毕
+		long endTime = System.currentTimeMillis();
+		System.out.println("扫描运行时间：" + (endTime - startTime) + "ms");
+		System.out.println("info:" + info);
+		//解析扫描的结果，结构化成标准json格式
+
+		ApplicantJsonEntity jsonEntity = new ApplicantJsonEntity();
+		JSONObject resultObj = null;
+		try {
+			resultObj = new JSONObject(info);
+		} catch (JSONException e) {
+			jsonEntity.setSuccess(false);
+			return jsonEntity;
+		}
+		JSONArray outputArray = resultObj.getJSONArray("outputs");
+		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
+		JSONObject out = new JSONObject(output);
+		if (out.getBoolean("success")) {
+
+			String issue = out.getString("issue");
+			jsonEntity.setIssue(issue);
+			jsonEntity.setUrl(url);
+			Date startDate;
+			Date endDate;
+			try {
+				startDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("start_date"));
+				endDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("end_date"));
+				String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(startDate);
+				String endDateStr = new SimpleDateFormat("yyyy-MM-dd").format(endDate);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				jsonEntity.setStarttime(sdf.format(sdf.parse(startDateStr)));
+				jsonEntity.setEndtime(sdf.format(sdf.parse(endDateStr)));
+			} catch (JSONException | ParseException e) {
+
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+			}
+			jsonEntity.setSuccess(out.getBoolean("success"));
+		}
+		long endTime1 = System.currentTimeMillis();
+		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
+		return jsonEntity;
+	}
+
 	public Object IDCardRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {
 
 		long startTime = System.currentTimeMillis();//获取当前时间
@@ -2964,10 +3082,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return map;
 	}
 
-	public Object passportRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {
+	//public Object passportRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {
+	public PassportJsonEntity passportRecognition(String url, HttpServletRequest request, HttpServletResponse response) {
 
 		long startTime = System.currentTimeMillis();//获取当前时间
-		//将图片进行旋转处理
+		/*//将图片进行旋转处理
 		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
 				"jpeg");
 		File spin = null;
@@ -2976,10 +3095,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		String imageDataB64 = saveDiskImageToDisk(spin);
+		String imageDataB64 = saveDiskImageToDisk(spin);*/
 
-		long startTime4 = System.currentTimeMillis();//获取当前时间
-		System.out.println("将图片转成流运行时间：" + (startTime4 - startTime) + "ms");
+		//long startTime4 = System.currentTimeMillis();//获取当前时间
+		//System.out.println("将图片转成流运行时间：" + (startTime4 - startTime) + "ms");
 
 		//上传
 		//Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
@@ -2989,9 +3108,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}*/
 		//String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 		//从服务器上获取图片的流，读取扫描
-		//byte[] bytes = saveImageToDisk(url);
+		byte[] bytes = saveImageToDisk(url);
 
-		//String imageDataB64 = Base64.encodeBase64String(bytes);
+		String imageDataB64 = Base64.encodeBase64String(bytes);
+		//System.out.println("imageDataB64:" + imageDataB64);
 		Input input = new Input(imageDataB64);
 
 		RecognizeData rd = new RecognizeData();
@@ -2999,7 +3119,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		String content = Json.toJson(rd);
 		long endTime3 = System.currentTimeMillis();
-		System.out.println("扫描准备时间：" + (endTime3 - startTime4) + "ms");
+		System.out.println("扫描准备时间：" + (endTime3 - startTime) + "ms");
 		String info = (String) aliPassportOcrAppCodeCall(content);
 		long endTime = System.currentTimeMillis();
 		System.out.println("扫描运行时间：" + (endTime - endTime3) + "ms");
@@ -3058,7 +3178,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 
 			long startTime2 = System.currentTimeMillis();//获取当前时间
-			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
+			/*Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
 			file.delete();
 			if (!Util.isEmpty(spin)) {
 				spin.delete();
@@ -3066,9 +3186,162 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 
 			long startTime3 = System.currentTimeMillis();//获取当前时间
-			System.out.println("将图片上传运行时间：" + (startTime3 - startTime2) + "ms");
+			System.out.println("将图片上传运行时间：" + (startTime3 - startTime2) + "ms");*/
 
 			jsonEntity.setUrl(url);
+			jsonEntity.setOCRline1(out.getString("line0"));
+			jsonEntity.setOCRline2(out.getString("line1"));
+
+			jsonEntity.setBirthCountry(out.getString("birth_place"));
+			jsonEntity.setVisaCountry(out.getString("issue_place"));
+			Date birthDay;
+			Date expiryDate;
+			Date issueDate;
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				if (!Util.isEmpty(out.getString("birth_date"))) {
+					birthDay = new SimpleDateFormat("yyyyMMdd").parse(out.getString("birth_date"));
+					String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(birthDay);
+					jsonEntity.setBirth(sdf.format(sdf.parse(startDateStr)));
+				}
+				if (!Util.isEmpty(out.getString("expiry_date"))) {
+					expiryDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("expiry_date"));
+					String endDateStr = new SimpleDateFormat("yyyy-MM-dd").format(expiryDate);
+					jsonEntity.setExpiryDay(sdf.format(sdf.parse(endDateStr)));
+				}
+				if (!Util.isEmpty(out.getString("issue_date"))) {
+					issueDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("issue_date"));
+					String issueDateStr = new SimpleDateFormat("yyyy-MM-dd").format(issueDate);
+					jsonEntity.setIssueDate(sdf.format(sdf.parse(issueDateStr)));
+				}
+			} catch (JSONException | ParseException e) {
+
+				e.printStackTrace();
+				jsonEntity.setSuccess(false);
+				return jsonEntity;
+
+			}
+
+			if (Util.isEmpty(jsonEntity.getMingCn()) || Util.isEmpty(jsonEntity.getBirthCountry())
+					|| Util.isEmpty(jsonEntity.getBirth()) || Util.isEmpty(jsonEntity.getNum())
+					|| Util.isEmpty(jsonEntity.getXingCn()) || Util.isEmpty(jsonEntity.getType())) {
+				jsonEntity.setSuccess(false);
+			} else {
+				jsonEntity.setSuccess(out.getBoolean("success"));
+			}
+
+		}
+
+		long endTime1 = System.currentTimeMillis();
+		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
+		return jsonEntity;
+	}
+
+	public Object passportRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {
+
+		long startTime = System.currentTimeMillis();//获取当前时间
+		//将图片进行旋转处理
+		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
+				"jpeg");
+		File spin = null;
+		try {
+			spin = imageDeal.spin(-90);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		String imageDataB64 = saveDiskImageToDisk(spin);
+
+		long startTime4 = System.currentTimeMillis();//获取当前时间
+		System.out.println("将图片转成流运行时间：" + (startTime4 - startTime) + "ms");
+
+		//上传
+		//Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
+		//file.delete();
+		/*if (!Util.isEmpty(spin)) {
+			spin.delete();
+		}*/
+		//String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+		//从服务器上获取图片的流，读取扫描
+		//byte[] bytes = saveImageToDisk(url);
+
+		//String imageDataB64 = Base64.encodeBase64String(bytes);
+		Input input = new Input(imageDataB64);
+
+		RecognizeData rd = new RecognizeData();
+		rd.getInputs().add(input);
+
+		String content = Json.toJson(rd);
+		long endTime3 = System.currentTimeMillis();
+		System.out.println("扫描准备时间：" + (endTime3 - startTime) + "ms");
+		String info = (String) aliPassportOcrAppCodeCall(content);
+		long endTime = System.currentTimeMillis();
+		System.out.println("扫描运行时间：" + (endTime - endTime3) + "ms");
+		System.out.println("info:" + info);
+
+		//解析扫描的结果，结构化成标准json格式
+		PassportJsonEntity jsonEntity = new PassportJsonEntity();
+		JSONObject resultObj = null;
+		try {
+			resultObj = new JSONObject(info);
+		} catch (JSONException e) {
+			jsonEntity.setSuccess(false);
+			return jsonEntity;
+		}
+		JSONArray outputArray = resultObj.getJSONArray("outputs");
+		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
+		JSONObject out = new JSONObject(output);
+		String substring = "";
+		if (out.getBoolean("success")) {
+			String type = out.getString("type");
+			if (!Util.isEmpty(type)) {
+				substring = type.substring(0, 1);
+			}
+			jsonEntity.setType(substring);
+			jsonEntity.setNum(out.getString("passport_no"));
+			if (out.getString("sex").equals("F")) {
+				jsonEntity.setSex("女");
+				jsonEntity.setSexEn("F");
+			} else {
+				jsonEntity.setSex("男");
+				jsonEntity.setSexEn("M");
+			}
+			//姓和名分开
+			String nameEn = out.getString("name");//姓名拼音
+			String nameAll = out.getString("name_cn");//姓名汉字
+			char[] nameCnCharArray = nameAll.toCharArray();
+			if (nameEn.contains(".")) {
+				String[] nameEnSplit = nameEn.split("\\.");
+				int lengthEn = nameEnSplit[0].length();
+				int count = 0;
+				int xingLength = 0;
+				PinyinTool tool = new PinyinTool();
+				try {
+					for (int i = 0; i < nameCnCharArray.length; i++) {
+						int length = tool.toPinYin(String.valueOf(nameCnCharArray[i]), "", Type.UPPERCASE).length();
+						count += length;
+						if (Util.eq(count, lengthEn)) {
+							xingLength = i + 1;
+						}
+					}
+					jsonEntity.setXingCn(nameAll.substring(0, xingLength));
+					jsonEntity.setMingCn(nameAll.substring(xingLength));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+			long startTime2 = System.currentTimeMillis();//获取当前时间
+			/*Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
+			file.delete();
+			if (!Util.isEmpty(spin)) {
+				spin.delete();
+			}
+			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+
+			long startTime3 = System.currentTimeMillis();//获取当前时间
+			System.out.println("将图片上传运行时间：" + (startTime3 - startTime2) + "ms");*/
+
+			//jsonEntity.setUrl(url);
 			jsonEntity.setOCRline1(out.getString("line0"));
 			jsonEntity.setOCRline2(out.getString("line1"));
 
