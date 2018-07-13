@@ -1069,69 +1069,101 @@
 								$(".bankflow").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#bankflow").val(item.details);
-								if(item.bankflowfree != ""){
-									$("#bankflowfree").val(item.bankflowfree);
-								}else{
+								if(item.bankflowfree == "" || item.bankflowfree == null){
 									$("#bankflowfree").val(item.type);
+								}else{
+									$("#bankflowfree").val(item.bankflowfree);
 								}
 							}
 							if(wealth.val() == "车产"){
 								$(".vehicle").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#vehicle").val(item.details);
-								if(item.vehiclefree != ""){
-									$("#vehiclefree").val(item.vehiclefree);
-								}else{
+								if(item.vehiclefree == "" || item.vehiclefree == null){
 									$("#vehiclefree").val(item.type);
+								}else{
+									$("#vehiclefree").val(item.vehiclefree);
 								}
 							}
 							if(wealth.val() == "房产"){
 								$(".houseProperty").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#houseProperty").val(item.details);
-								$("#housePropertyfree").val(item.housepropertyfree);
+								if(item.housepropertyfree == "" || item.housepropertyfree == null){
+									$("#housePropertyfree").val(item.type);
+								}else{
+									$("#housePropertyfree").val(item.housepropertyfree);
+								}
 							}
 							if(wealth.val() == "理财"){
 								$(".financial").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#financial").val(item.details);
-								$("#financialfree").val(item.financialfree);
+								if(item.financialfree == "" || item.financialfree == null){
+									$("#financialfree").val(item.type);
+								}else{
+									$("#financialfree").val(item.financialfree);
+								}
 							}
 							if(wealth.val() == "银行存款"){
 								$(".deposit").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#deposit").val(item.details);
-								$("#depositfree").val(item.depositfree);
+								if(item.depositfree == "" || item.depositfree == null){
+									$("#depositfree").val(item.type);
+								}else{
+									$("#depositfree").val(item.depositfree);
+								}
 							}
 							if(wealth.val() == "在职证明"){
 								$(".certificate").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#certificate").val(item.details);
-								$("#certificatefree").val(item.certificatefree);
+								if(item.certificatefree == "" || item.certificatefree == null){
+									$("#certificatefree").val(item.type);
+								}else{
+									$("#certificatefree").val(item.certificatefree);
+								}
 							}
 							if(wealth.val() == "税单"){
 								$(".taxbill").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#taxbill").val(item.details);
-								$("#taxbillfree").val(item.taxbillfree);
+								if(item.taxbillfree == "" || item.taxbillfree == null){
+									$("#taxbillfree").val(item.type);
+								}else{
+									$("#taxbillfree").val(item.taxbillfree);
+								}
 							}
 							if(wealth.val() == "完税证明"){
 								$(".taxproof").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#taxproof").val(item.details);
-								$("#taxprooffree").val(item.taxprooffree);
+								if(item.taxprooffree == "" || item.taxprooffree == null){
+									$("#taxprooffree").val(item.type);
+								}else{
+									$("#taxprooffree").val(item.taxprooffree);
+								}
 							}
 							if(wealth.val() == "特定高校在读生"){
 								$(".readstudent").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#readstudent").val(item.details);
-								$("#readstudentfree").val(item.readstudentfree);
+								if(item.readstudentfree == "" || item.readstudentfree == null){
+									$("#readstudentfree").val(item.type);
+								}else{
+									$("#readstudentfree").val(item.readstudentfree);
+								}
 							}
 							if(wealth.val() == "特定高校毕业生"){
 								$(".graduate").css("display","block");
 								wealth.addClass("btnState-true");
 								$("#graduate").val(item.details);
-								$("#graduatefree").val(item.graduatefree);
+								if(item.graduatefree == "" || item.graduatefree == null){
+									$("#graduatefree").val(item.type);
+								}else{
+									$("#graduatefree").val(item.graduatefree);
+								}
 							}
 							
 						}

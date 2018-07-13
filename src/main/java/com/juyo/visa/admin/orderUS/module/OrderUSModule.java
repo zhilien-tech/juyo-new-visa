@@ -25,6 +25,7 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.admin.orderUS.service.AutofillService;
 import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
+import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
 import com.juyo.visa.forms.OrderUpdateForm;
 import com.juyo.visa.forms.TAppStaffVisaUsAddForm;
 import com.juyo.visa.forms.TAppStaffVisaUsUpdateForm;
@@ -314,9 +315,8 @@ public class OrderUSModule {
 	}
 
 	@At
-	@POST
-	public Object getVcode() {
-		return orderUSViewService.getVcode();
+	public Object toRenturnVcode(@Param("..") JapanSimulatorForm form) {
+		return orderUSViewService.toRenturnVcode(form);
 	}
 
 	/**

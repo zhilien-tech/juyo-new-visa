@@ -1,14 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
-<%@include file="/WEB-INF/common/tld.jsp"%>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
 	<meta charset="utf-8">
-	<meta http-equlv="proma" content="no-cache" />
-	<meta http-equlv="cache-control" content="no-cache" />
-	<meta http-equlv="expires" content="0" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>销售-日本</title>
+	<title></title>
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
     <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">

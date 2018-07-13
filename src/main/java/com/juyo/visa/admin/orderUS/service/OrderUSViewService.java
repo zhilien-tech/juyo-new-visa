@@ -58,6 +58,7 @@ import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.orderUS.entity.AutofillSearchJsonEntity;
 import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
+import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
@@ -1378,7 +1379,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return null;
 	}
 
-	public Object getVcode() {
+	public Object toRenturnVcode(JapanSimulatorForm form) {
 		List<TAppStaffVcodeEntity> query = dbDao.query(TAppStaffVcodeEntity.class, null, null);
 		TAppStaffVcodeEntity tAppStaffVcodeEntity = query.get(0);
 		String vcode = tAppStaffVcodeEntity.getVcode();

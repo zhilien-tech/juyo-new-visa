@@ -42,6 +42,11 @@ public class AutoFillUSModule {
 		return autoFillUSViewService.fetchUSOrder();
 	}
 
+	@At
+	public Object getVcode() {
+		return autoFillUSViewService.getVcode();
+	}
+
 	/**
 	 * 上传验证码图片
 	 */
