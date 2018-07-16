@@ -44,7 +44,7 @@ $('#cityId').select2({
 //景区select2
 $('#scenic').select2({
 	ajax : {
-		url : BASE_PATH + "/admin/scenic/getScenicSelect.html",
+		url : BASE_PATH + "/admin/simple/getScenicSelect.html",
 		dataType : 'json',
 		delay : 250,
 		type : 'post',
@@ -55,6 +55,8 @@ $('#scenic').select2({
 			}*/
 			return {
 				cityId:cityId,
+				planid:planid,
+				visatype:visatype,
 				scenicname : params.term, // search term
 				page : params.page
 			};
@@ -88,7 +90,7 @@ $('#scenic').select2({
 //酒店select2 
 $('#hotel').select2({
 	ajax : {
-		url : BASE_PATH + "/admin/hotel/getHotelSelect.html",
+		url : BASE_PATH + "/admin/simple/getHotelSelect.html",
 		dataType : 'json',
 		delay : 250,
 		type : 'post',
@@ -107,7 +109,7 @@ $('#hotel').select2({
 			params.page = params.page || 1;
 			var selectdata = $.map(data, function (obj) {
 				obj.id = obj.id; // replace pk with your identifier
-				obj.text = obj.name; // replace pk with your identifier
+				obj.text = obj.namejp; // replace pk with your identifier
 				/*obj.text = obj.dictCode;*/
 				return obj;
 			});

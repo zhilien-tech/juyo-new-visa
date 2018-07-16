@@ -4,26 +4,22 @@
 <!DOCTYPE HTML>
 <html lang="en-US" id="addHtml">
 <head>
-	<meta charset="UTF-8">
-	<meta http-equlv="proma" content="no-cache" />
-	<meta http-equlv="cache-control" content="no-cache" />
-	<meta http-equlv="expires" content="0" />
 	<title>US</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-	<style type="text/css">
-	[v-cloak]{display:none;}
-    .modal-header { position:fixed; top:0;left:0; width:100%; height:50px; line-height:50px; background:#FFF; z-index:9999; padding:0px 15px;}
-    .btn-margin { margin-top:10px;}
-    .modal-body { background-color:#FFF !important; margin-top:50px; height:100%; } 	
-    .modal-content { box-shadow:0 2px 3px rgba(255, 255, 255, 0.125); -webkit-box-shadow:0 2px 3px rgba(255, 255, 255, 0.125);-moz-box-shadow:0 2px 3px rgba(255, 255, 255, 0.125);}
-	</style>
 </head>
 <body>
 	
-	<img id="vcode" alt="" src="">
+	<img id="vcode" alt="" src="http://oyu1xyxxk.bkt.clouddn.com/9ee3d197-8c26-4ca5-a768-77959e0f5be0.jpg">
+	<form id="vcodeForm">
+		<div class="col-sm-4" style="margin-top:20px;margin-left:20px;">
+					<input type="text" id="vcode" name="vcode">	
+					<input id="backBtn" type="button"
+					onclick="closeWindow()"  value="确定" />	
+					</div>
+				</form>	
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
@@ -39,11 +35,32 @@
 	</script>
 </body>
 <script>
+function closeWindow(){
+	var vcodeForm = $("#vcodeForm").serialize();
+	$.ajax({
+		async: false,
+		type: 'POST',
+		data : vcodeForm,
+		url: '/admin/orderUS/returnVcode.html',
+		success :function(data) {
+			
+		}
+	})
+}
+
+//回车事件
+function onkeyEnter(){
+    var e = window.event || arguments.callee.caller.arguments[0];
+    if(e && e.keyCode == 13){
+    	closeWindow();
+	 }
+}
+
 connectWebSocket();
 function connectWebSocket(){
 	 if ('WebSocket' in window){  
         console.log('Websocket supported');  
-        socket = new WebSocket('ws://192.168.1.20:8080/vcodewebsocket');   
+        socket = new WebSocket('ws://192.168.2.198:8080/vcodewebsocket');   
 
         console.log('Connection attempted');  
 
@@ -60,7 +77,7 @@ function connectWebSocket(){
               var received_msg = evt.data;  
               if(received_msg){
             	  document.getElementById("vcode").src=received_msg;
-            	  layer.open({
+            	  /* layer.open({
 						type: 2,
 						title: false,
 						closeBtn:false,
@@ -68,9 +85,9 @@ function connectWebSocket(){
 						maxmin: false,
 						shadeClose: false,
 						scrollbar: false,
-						area: ['900px', '100%'],
+						area: ['300px', '200px'],
 						content:'/admin/orderUS/writeVcode.html'
-					});
+					}); */
               }
               console.log('message received!');  
               //showMessage(received_msg);  

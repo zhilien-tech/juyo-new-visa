@@ -68,7 +68,7 @@
     	if(deposit != ""){
     		$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");  
  	        $(".housePropertys").css({"display":"none"});
- 	       $("#houseProperty").attr("style", null);
+ 	        $("#houseProperty").attr("style", null);
     	}
     });
     $(document).on("input","#financial",function(){
@@ -79,6 +79,72 @@
     	if(deposit != ""){
     		$(".financials").attr("class", "col-xs-6 financials has-success");
     		$(".financials").css({"display":"none"});
-    		 $("#financial").attr("style", null);
+    		$("#financial").attr("style", null);
+    	}
+    });
+    $(document).on("input","#bankflow",function(){
+    	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+    		return;
+    	}
+    	var bankflow = $(this).val();
+    	if(bankflow != ""){
+    		$(".bankflows").attr("class", "col-xs-6 bankflows has-success");
+    		$(".bankflows").css({"display":"none"});
+    		$("#bankflow").attr("style", null);
+    	}
+    });
+    $(document).on("input","#certificate",function(){
+    	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+    		return;
+    	}
+    	var certificate = $(this).val();
+    	if(certificate != ""){
+    		$(".certificates").attr("class", "col-xs-6 certificates has-success");
+    		$(".certificates").css({"display":"none"});
+    		$("#certificate").attr("style", null);
+    	}
+    });
+    $(document).on("input","#taxbill",function(){
+    	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+    		return;
+    	}
+    	var taxbill = $(this).val();
+    	if(taxbill != ""){
+    		$(".taxbills").attr("class", "col-xs-6 taxbills has-success");
+    		$(".taxbills").css({"display":"none"});
+    		$("#taxbill").attr("style", null);
+    	}
+    });
+    $(document).on("input","#taxproof",function(){
+    	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+    		return;
+    	}
+    	var taxproof = $(this).val();
+    	if(taxproof != ""){
+    		$(".taxproofs").attr("class", "col-xs-6 taxproofs has-success");
+    		$(".taxproofs").css({"display":"none"});
+    		$("#taxproof").attr("style", null);
+    	}
+    });
+    $(document).on("input","#readstudent",function(){
+    	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+    		return;
+    	}
+    	var readstudent = $(this).val();
+    	if(readstudent != ""){
+    		$(".readstudents").attr("class", "col-xs-6 readstudents has-success");
+    		$(".readstudents").css({"display":"none"});
+    		$("#readstudent").attr("style", null);
+    	}
+    });
+    $(document).on("input","#graduate",function(){
+    	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+    		return;
+    	}
+    	var readstudent = $(this).val();
+    	if(readstudent != ""){
+    		$(".graduates").attr("class", "col-xs-6 graduates has-success");
+    		$(".graduates").css({"display":"none"});
+    		$("#graduate").attr("style", null);
     	}
     });

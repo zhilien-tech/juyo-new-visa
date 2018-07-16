@@ -132,8 +132,9 @@ public class VisaJapanModule {
 	 */
 	@At
 	@POST
-	public Object resetPlan(@Param("orderid") Integer orderid, @Param("planid") Integer planid, HttpSession session) {
-		return visaJapanService.resetPlan(orderid, planid, session);
+	public Object resetPlan(@Param("orderid") Integer orderid, @Param("planid") Integer planid,
+			@Param("visatype") int visatype, HttpSession session) {
+		return visaJapanService.resetPlan(orderid, planid, visatype, session);
 	}
 
 	/**
@@ -150,8 +151,8 @@ public class VisaJapanModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object schedulingEdit(@Param("planid") Integer planid) {
-		return visaJapanService.schedulingEdit(planid);
+	public Object schedulingEdit(@Param("planid") Integer planid, @Param("visatype") int visatype) {
+		return visaJapanService.schedulingEdit(planid, visatype);
 	}
 
 	/**
@@ -306,6 +307,15 @@ public class VisaJapanModule {
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object uploadVisaPic(@Param("uploadfile") File file, HttpServletRequest request) {
 		return visaJapanSimulateService.uploadVisaPic(file, request);
+	}
+
+	/**
+	 * 自动计算返回日期(预计送签、出签专用)
+	 */
+	@At
+	@POST
+	public Object autoCalculateBackDateSpecial(@Param("gotripdate") Date gotripdate, @Param("stayday") Integer stayday) {
+		return visaJapanService.autoCalculateBackDateSpecial(gotripdate, stayday);
 	}
 
 	/**

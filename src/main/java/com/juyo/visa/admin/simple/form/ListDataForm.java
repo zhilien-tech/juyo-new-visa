@@ -66,7 +66,8 @@ public class ListDataForm implements SQLParamForm {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("tr.orderNum", "like", "%" + searchStr + "%").or("tc.linkman", "like", "%" + searchStr + "%")
 					.or("tc.mobile", "like", "%" + searchStr + "%").or("tc.email", "like", "%" + searchStr + "%")
-					.or("taj.applyname", "like", "%" + searchStr + "%");
+					.or("taj.applyname", "like", "%" + searchStr + "%")
+					.or("toj.acceptDesign", "like", "%" + searchStr + "%");
 			cnd.and(exp);
 		}
 
@@ -96,9 +97,9 @@ public class ListDataForm implements SQLParamForm {
 			cnd.and("tr.comId", "=", companyid);
 		} else {
 			//普通的操作员
-			cnd.and("tr.userId", "=", userid);
+			cnd.and("tr.salesOpid", "=", userid);
 		}
-		cnd.orderBy("orderstatus", "desc").orderBy("tr.updatetime", "desc");
+		cnd.orderBy("tr.updatetime", "desc");
 		return cnd;
 	}
 

@@ -1,7 +1,9 @@
 package com.juyo.visa.admin.weixinToken.service;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.codec.binary.Base64;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.springframework.web.socket.TextMessage;
@@ -25,6 +31,9 @@ import org.springframework.web.socket.TextMessage;
 import com.alibaba.druid.support.logging.Log;
 import com.alibaba.druid.support.logging.LogFactory;
 import com.alibaba.fastjson.JSONObject;
+import com.juyo.visa.admin.order.entity.ApplicantJsonEntity;
+import com.juyo.visa.admin.order.entity.PassportJsonEntity;
+import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.admin.weixinToken.module.WeiXinTokenModule;
 import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
@@ -34,6 +43,8 @@ import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
+import com.juyo.visa.entities.TApplicantEntity;
+import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TConfWxEntity;
 import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
@@ -50,6 +61,9 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 
 	@Inject
 	private UploadService qiniuUploadService;//文件上传
+
+	@Inject
+	private OrderJpViewService orderJpViewService;//护照扫描
 
 	private SimpleSendInfoWSHandler simpleSendInfoWSHandler = (SimpleSendInfoWSHandler) SpringContextUtil.getBean(
 			"mySimpleSendInfoWSHandler", SimpleSendInfoWSHandler.class);
@@ -94,12 +108,14 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		String T_APP_STAFF_Fenroll_WX_URL = (String) kvConfigProperties.get("T_APP_STAFF_Fenroll_WX_URL");
 		return T_APP_STAFF_Fenroll_WX_URL;
 	}
+
 	//获取 进度访问路径
 	public String getProgressUrl() {
 		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
 		String T_APP_STAFF_Progress_WX_URL = (String) kvConfigProperties.get("T_APP_STAFF_Progress_WX_URL");
 		return T_APP_STAFF_Progress_WX_URL;
 	}
+
 	//获取ticket
 	public JSONObject getJsApiTicket() {
 		String accessToken = (String) getAccessToken();
@@ -202,6 +218,128 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		}
 
 		return JsonResult.success("SUCCESS");
+	}
+
+	public Object wechatJsSDKToPassportScan(final int applicantid, String mediaIds, HttpServletRequest request,
+			HttpServletResponse response) {
+		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+
+		String[] split = mediaIds.split(",");
+		PassportJsonEntity passportRecognitionBack = null;
+		String mediaId = split[0];
+		System.out.println("mediaId:" + mediaId);
+		String accessToken = (String) getAccessToken();
+		String extName = getExtName(accessToken, mediaId);//获取扩展名
+		InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
+
+		String url = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, extName, mediaId); //参数必须是final类型的
+		passport.setPassportUrl(url);
+		dbDao.update(passport);
+
+		passportRecognitionBack = orderJpViewService.passportRecognition(url, request, response);
+		passportRecognitionBack.setUrl(url);
+
+		/*Thread childrenThread = new Thread(new Runnable() {
+			public void run() {
+				try {
+					Thread.sleep(1000);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				System.out.println("子线程执行！");
+
+			}
+		});
+		*/
+		//开启新的线程进行照片上传到青牛云
+		/*new Thread(new Runnable() {
+			@Override
+			public void run() {
+				String url = CommonConstants.IMAGES_SERVER_ADDR
+						+ qiniuUploadService.uploadImage(inputStream, extName, mediaId); //参数必须是final类型的
+				passport.setPassportUrl(url);
+				dbDao.update(passport);
+			}
+		}).start();*/
+
+		return passportRecognitionBack;
+	}
+
+	public Object wechatJsSDKToCardScan(final int applicantid, String mediaIds, HttpServletRequest request,
+			HttpServletResponse response) {
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid);
+
+		String[] split = mediaIds.split(",");
+		String mediaId = split[0];
+		System.out.println("mediaId:" + mediaId);
+		String accessToken = (String) getAccessToken();
+		String extName = getExtName(accessToken, mediaId);//获取扩展名
+		InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
+
+		String url = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, extName, mediaId); //参数必须是final类型的
+		apply.setCardFront(url);
+		dbDao.update(apply);
+
+		ApplicantJsonEntity ApplicantJsonEntity = orderJpViewService.wechatJsSDKToCard(url, request, response);
+		ApplicantJsonEntity.setUrl(url);
+
+		return ApplicantJsonEntity;
+	}
+
+	public Object wechatJsSDKToCardBackScan(final int applicantid, String mediaIds, HttpServletRequest request,
+			HttpServletResponse response) {
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid);
+		String[] split = mediaIds.split(",");
+		String mediaId = split[0];
+		System.out.println("mediaId:" + mediaId);
+		String accessToken = (String) getAccessToken();
+		String extName = getExtName(accessToken, mediaId);//获取扩展名
+		InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
+
+		String url = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, extName, mediaId); //参数必须是final类型的
+		apply.setCardBack(url);
+		dbDao.update(apply);
+
+		ApplicantJsonEntity ApplicantJsonEntity = orderJpViewService.wechatJsSDKToCardBack(url, request, response);
+
+		return ApplicantJsonEntity;
+	}
+
+	//这个函数负责读取输入流并转为输出流  
+	public String saveDiskImageToPrint(InputStream inputStream) {
+
+		byte[] data = new byte[1024];
+		byte[] result = new byte[1024];
+		int len = -1;
+		ByteArrayOutputStream fileOutputStream = new ByteArrayOutputStream();
+		try {
+			while ((len = inputStream.read(data)) != -1) {//循环读取inputStream流中的数据，存入文件流fileOutputStream  
+				fileOutputStream.write(data, 0, len);
+			}
+			result = fileOutputStream.toByteArray();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {//finally函数，不管有没有异常发生，都要调用这个函数下的代码  
+			if (fileOutputStream != null) {
+				try {
+					fileOutputStream.close();//记得及时关闭文件流  
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (inputStream != null) {
+				try {
+					inputStream.close();//关闭输入流  
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return Base64.encodeBase64String(result);
 	}
 
 	public Object wechatJsSDKNewuploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type,

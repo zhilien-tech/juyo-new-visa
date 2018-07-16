@@ -57,9 +57,7 @@
 								<label><span>*</span>景区：</label> 
 								<select id="scenic" name="scenic" class="form-control input-sm" multiple="multiple">
 									<%-- <option value="${obj.travelplan.scenic }" selected="selected">${obj.travelplan.scenic }</option> --%>
-									<c:forEach items="${obj.scenics }" var="scenic">
-										<option selected="selected" value="${scenic.name }">${scenic.name }</option>
-									</c:forEach>
+										<option selected="selected" value="${obj.scenic.name }">${obj.scenic.name }</option>
 								</select>
 							</div>
 						</div>
@@ -71,7 +69,7 @@
 								<label><span>*</span>酒店：</label> 
 								<select id="hotel" name="hotel" class="form-control input-sm" multiple="multiple">
 									<c:if test="${!empty obj.hotel.id }">
-										<option value="${obj.hotel.id }" selected="selected">${obj.hotel.name }</option>
+										<option value="${obj.hotel.id }" selected="selected">${obj.hotel.namejp }</option>
 									</c:if>
 								</select>
 							</div>
@@ -84,7 +82,9 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var planid = '${obj.travelplan.id}';
 		var cityId = '${obj.travelplan.cityId }';
+		var visatype = '${obj.visatype}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>

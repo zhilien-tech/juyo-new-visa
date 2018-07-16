@@ -9,6 +9,7 @@ package com.juyo.visa.admin.simple.module;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -89,6 +90,25 @@ public class SimpleVisaModule {
 	}
 
 	/**
+	 * 获取景点
+	 */
+	@At
+	@POST
+	public Object getScenicSelect(@Param("scenicname") String scenicname, @Param("cityId") int cityId,
+			@Param("planid") int planid, @Param("visatype") int visatype) {
+		return simpleVisaService.getScenicSelect(scenicname, cityId, planid, visatype);
+	}
+
+	/**
+	 * 获取酒店
+	 */
+	@At
+	@POST
+	public Object getHotelSelect(@Param("hotelname") String hotelname, @Param("cityId") int cityId) {
+		return simpleVisaService.getHotelSelect(hotelname, cityId);
+	}
+
+	/**
 	 * 跳转到添加申请人页面
 	 * 
 	 */
@@ -123,6 +143,24 @@ public class SimpleVisaModule {
 	@POST
 	public Object getCustomerinfoById(@Param("customerid") Long customerid) {
 		return simpleVisaService.getCustomerinfoById(customerid);
+	}
+
+	/**
+	 * 作废按钮
+	 */
+	@At
+	@POST
+	public Object disabled(@Param("orderId") int orderid) {
+		return simpleVisaService.disabled(orderid);
+	}
+
+	/**
+	 * 还原按钮
+	 */
+	@At
+	@POST
+	public Object undisabled(@Param("orderId") int orderid) {
+		return simpleVisaService.undisabled(orderid);
 	}
 
 	/**
@@ -216,5 +254,15 @@ public class SimpleVisaModule {
 	@POST
 	public Object changeVisatype(@Param("orderid") int orderid, @Param("visatype") int visatype) {
 		return simpleVisaService.changeVisatype(orderid, visatype);
+	}
+
+	/**
+	 * 获取城市下拉列表
+	 */
+	@At
+	@POST
+	public Object getCustomerCitySelect(@Param("cityname") String cityname, @Param("citytype") String citytype,
+			@Param("exname") String exname, HttpSession session) {
+		return simpleVisaService.getCustomerCitySelect(cityname, citytype, exname, session);
 	}
 }

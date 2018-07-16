@@ -2,8 +2,10 @@
 SELECT
 	ta.*, tap.passport passportNo,
 	tap.issuedPlace,
+	toj.visaType,
 	tap.issuedDate,
 	tap.issuedOrganization,
+	tap.birthAddress,
 	tap.validEndDate passportenddate,
 	taoj.id applicatid,
 	taoj.relationRemark,
@@ -44,6 +46,7 @@ SELECT
 	tawj.unitName
 FROM
 	t_applicant_order_jp taoj
+LEFT JOIN t_order_jp toj ON taoj.orderId = toj.id
 INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
 LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
 LEFT JOIN (

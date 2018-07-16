@@ -2,6 +2,9 @@ package com.juyo.visa.admin.weixinToken.module;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
@@ -29,10 +32,7 @@ public class WeiXinTokenModule {
 	public Object getAccessToken() {
 		return weXinTokenViewService.getAccessToken();
 	}
-	
-	
-	
-	
+
 	/**
 	 *获取 九宫格访问路径
 	 * <p>
@@ -52,7 +52,7 @@ public class WeiXinTokenModule {
 	public String getProgressUrl() {
 		return weXinTokenViewService.getProgressUrl();
 	}
- 
+
 	//获取ticket
 	@At
 	@POST
@@ -73,6 +73,30 @@ public class WeiXinTokenModule {
 	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String mediaIds,
 			@Param("sessionid") String sessionid, @Param("type") Integer type) {
 		return weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
+	}
+
+	//扫描护照
+	@At
+	@POST
+	public Object wechatJsSDKToPassportScan(@Param("applicantid") final int applicantid,
+			@Param("mediaIds") String mediaIds, HttpServletRequest request, HttpServletResponse response) {
+		return weXinTokenViewService.wechatJsSDKToPassportScan(applicantid, mediaIds, request, response);
+	}
+
+	//扫描身份证正面
+	@At
+	@POST
+	public Object wechatJsSDKToCardScan(@Param("applicantid") final int applicantid,
+			@Param("mediaIds") String mediaIds, HttpServletRequest request, HttpServletResponse response) {
+		return weXinTokenViewService.wechatJsSDKToCardScan(applicantid, mediaIds, request, response);
+	}
+
+	//扫描身份证背面
+	@At
+	@POST
+	public Object wechatJsSDKToCardBackScan(@Param("applicantid") final int applicantid,
+			@Param("mediaIds") String mediaIds, HttpServletRequest request, HttpServletResponse response) {
+		return weXinTokenViewService.wechatJsSDKToCardBackScan(applicantid, mediaIds, request, response);
 	}
 
 	//微信JSSDK上传的文件需要重新下载后上传到七牛云(多参数)

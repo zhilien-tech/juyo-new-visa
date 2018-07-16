@@ -136,6 +136,12 @@ input[type="file"] {
 .btnBank {
 	width: 70px !important;
 }
+.btnReadstudent {
+	width: 100px !important;
+}
+.btnGraduate {
+	width: 100px !important;
+}
 /*弹框头部固定*/
 .modal-header {
 	position: fixed;
@@ -212,13 +218,17 @@ body {
 	background-color: #f9f9f9;
 }
 
-.houseProperty, .vehicle, .deposit, .financial, .vice {
+.houseProperty, .vehicle, .deposit, .financial, .vice, .certificate, .bankflow, .taxbill, .taxproof, .readstudent, .graduate {
 	display: none;
 }
 .dropdown-menu {
 	width:234px;
-	left:75.328px !important;
+	
 }
+/* .lastreturndate{
+	width:234px;
+	left:605.328px !important;
+} */
 .table-condensed {
 	width:100%;
 }

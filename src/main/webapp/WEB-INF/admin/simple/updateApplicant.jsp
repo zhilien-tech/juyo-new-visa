@@ -135,7 +135,7 @@
 							</div>
 						</div>
 						<!-- end 公民身份证 -->
-						<div class="row">
+						<%-- <div class="row">
 							<!-- 民族 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
@@ -144,8 +144,30 @@
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
-						</div>
+						</div> --%>
 						<div class="row">
+							<!-- 民族 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>现居住地</label> <input
+							id="province" name="province" type="text"
+							class="form-control input-sm" placeholder="省" autocomplete="off"
+							value="${obj.applicant.province }" />
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div>
+
+						<input id="address" name="address" type="hidden"
+							class="form-control input-sm" value="${obj.applicant.address }" />
+						<input type="hidden" name="cardProvince" id="cardProvince"
+							value="${obj.applicant.cardProvince }" /> <input type="hidden"
+							name="cardCity" id="cardCity" value="${obj.applicant.cardCity }" />
+						<input type="hidden" id="sameAddress" value="" />  <input id="city"
+							name="city" type="hidden" class="form-control input-sm"
+							placeholder="市" autocomplete="off" value="${obj.applicant.city }" />
+
+						<%-- <div class="row">
 							<!-- 住宅 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
@@ -155,7 +177,7 @@
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
-						</div>
+						</div> --%>
 						<!-- end 住宅 -->
 						<%-- <div class="row">
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
@@ -171,7 +193,7 @@
 								</div>
 							</div> 
 						</div> --%>
-						<div class="row">
+						<%-- <div class="row">
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="provinceDiv">
@@ -196,7 +218,7 @@
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
-						</div>
+						</div> --%>
 						<!-- end 现居住地址省份/现居住地址城市 -->
 						<div class="row">
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
@@ -703,8 +725,11 @@
 					        $(".help-blockFront").attr("style","display: none;");
 					        $("#borderColorFront").attr("style", null);
 							$('#address').val(obj.address).change();
+							$('#detailedAddress').val(obj.address).change();
 							$('#nation').val(obj.nationality).change();
 							$('#cardId').val(obj.num).change();
+							$("#province").val(obj.province).change();
+							$("#city").val(obj.city).change();
 							var str="";  
 							//是否同身份证相同
 							$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
@@ -717,6 +742,8 @@
 							$('#cardCity').val(obj.city).change();
 							$('#birthday').val(obj.birth).change();
 							$('#sex').val(obj.sex);
+						}else{
+							layer.msg("识别失败");
 						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
@@ -807,24 +834,24 @@
 			$('#cardFront').val("");
 			$('#sqImg').attr('src', "");
 			$("#uploadFile").siblings("i").css("display","none");
-			if(userType == 2){
+			/* if(userType == 2){
 				$(".front").attr("class", "info-imgUpload front has-error");  
 		        $(".help-blockFront").attr("data-bv-result","INVALID");  
 		        $(".help-blockFront").attr("style","display: block;");
 		        $("#borderColorFront").attr("style", "border-color:#ff1a1a");
-			}
+			} */
 			
 		}
 		function deleteApplicantBackImg(id){
 			$('#cardBack').val("");
 			$('#sqImgBack').attr('src', "");
 			$("#uploadFileBack").siblings("i").css("display","none");
-			if(userType == 2){
+			/* if(userType == 2){
 				$(".back").attr("class", "info-imgUpload back has-error");  
 		        $(".help-blockBack").attr("data-bv-result","INVALID");  
 		        $(".help-blockBack").attr("style","display: block;");
 		        $("#borderColorBack").attr("style", "border-color:#ff1a1a");
-			}
+			} */
 		}
 		
 		$(function(){
@@ -951,6 +978,7 @@
 			saveApplicant(3);
 		}
 		function saveApplicant(status){
+				
 				var str="";
 				$("input:checkbox[name='addressIsSameWithCard']:checked").each(function(){     
 				    str=$(this).val();     
@@ -966,7 +994,6 @@
 			// 执行表单验证 
 			bootstrapValidator.validate();
 			if (bootstrapValidator.isValid()){
-				
 				layer.load(1);
 				$.ajax({
 					async: false,

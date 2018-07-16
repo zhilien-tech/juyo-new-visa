@@ -8,9 +8,11 @@ package com.juyo.visa.admin.visajp.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -26,12 +28,15 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import com.google.common.collect.Lists;
 import com.juyo.visa.admin.visajp.form.FlightSelectParam;
 import com.juyo.visa.common.comstants.CommonConstants;
+import com.juyo.visa.common.haoservice.AirLineParam;
 import com.juyo.visa.common.haoservice.AirLineResult;
+import com.juyo.visa.common.haoservice.AirlineData;
 import com.juyo.visa.common.newairline.NewAirLineResult;
 import com.juyo.visa.common.newairline.ResultflyEntity;
 import com.juyo.visa.entities.TAirportInfoEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TFlightEntity;
+import com.juyo.visa.entities.TFlightHisEntity;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
@@ -89,12 +94,13 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 		/*else {
 			return result;
 		}*/
+		String contains = "ABCDEFGHIGKLMNOPQRSTUVWXYZ";
 
 		//查询缓存
 		String flightinfo = redisDao.hget(CommonConstants.AIRLINE_INFO_KEY,
 				String.valueOf(param.getGocity()) + String.valueOf(param.getArrivecity()));
 		//查询相关航班
-		if (!arr.contains(",") && !dep.contains(",")) {
+		if (!Util.isEmpty(arr) && !arr.contains(",") && !Util.isEmpty(dep) && !dep.contains(",")) {
 			String searchstr = param.getFlight().trim();
 			List<ResultflyEntity> arrayList = Lists.newArrayList();
 			if (Util.isEmpty(flightinfo)) {
@@ -103,8 +109,8 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString = sqlManager.get("tripairline_airlines");
 				Sql sql = Sqls.create(sqlString);
 				Cnd appcnd = Cnd.NEW();
-				appcnd.and("tf.takeOffCityId", "=", dep);
-				appcnd.and("tf.landingCityId", "=", arr);
+				appcnd.and("tf.takeOffCode", "=", dep);
+				appcnd.and("tf.landingCode", "=", arr);
 				sql.setCondition(appcnd);
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
@@ -128,8 +134,8 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString2 = sqlManager.get("tripairline_airlines_zhuan");
 				Sql sql2 = Sqls.create(sqlString2);
 				Cnd appcnd2 = Cnd.NEW();
-				appcnd2.and("tf.takeOffCityId", "=", dep);
-				appcnd2.and("tf2.landingCityId", "=", arr);
+				appcnd2.and("tf.takeOffCode", "=", dep);
+				appcnd2.and("tf2.landingCode", "=", arr);
 				sql2.setCondition(appcnd2);
 				List<Record> arrcitys = dbDao.query(sql2, null, null);
 
@@ -183,7 +189,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				newairLineResult.setResultflyEntity(arrayList);
 			}
 		}
-		if (arr.contains(",") && !dep.contains(",")) {
+		if (!Util.isEmpty(arr) && arr.contains(",") && !Util.isEmpty(dep) && !dep.contains(",")) {
 			//抵达有关联航班,这时arr是由多个id组成的字符串
 			List<ResultflyEntity> arrayList = Lists.newArrayList();
 			String searchstr = param.getFlight().trim();
@@ -193,7 +199,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString = sqlManager.get("tripairline_airlines");
 				Sql sql = Sqls.create(sqlString);
 				Cnd appcnd = Cnd.NEW();
-				appcnd.and("tf.takeOffCityId", "=", dep);
+				appcnd.and("tf.takeOffCode", "=", dep);
 				appcnd.and("tf.landingCityId", "in", arr);
 				sql.setCondition(appcnd);
 				List<Record> depcitys = dbDao.query(sql, null, null);
@@ -218,7 +224,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString2 = sqlManager.get("tripairline_airlines_zhuan");
 				Sql sql2 = Sqls.create(sqlString2);
 				Cnd appcnd2 = Cnd.NEW();
-				appcnd2.and("tf.takeOffCityId", "=", dep);
+				appcnd2.and("tf.takeOffCode", "=", dep);
 				appcnd2.and("tf2.landingCityId", "in", arr);
 				sql2.setCondition(appcnd2);
 				List<Record> arrcitys = dbDao.query(sql2, null, null);
@@ -273,7 +279,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				newairLineResult.setResultflyEntity(arrayList);
 			}
 		}
-		if (!arr.contains(",") && dep.contains(",")) {
+		if (!Util.isEmpty(arr) && !arr.contains(",") && !Util.isEmpty(dep) && dep.contains(",")) {
 			List<ResultflyEntity> arrayList = Lists.newArrayList();
 			String searchstr = param.getFlight().trim();
 			if (Util.isEmpty(flightinfo)) {
@@ -283,7 +289,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				Sql sql = Sqls.create(sqlString);
 				Cnd appcnd = Cnd.NEW();
 				appcnd.and("tf.takeOffCityId", "in", dep);
-				appcnd.and("tf.landingCityId", "=", arr);
+				appcnd.and("tf.landingCode", "=", arr);
 				sql.setCondition(appcnd);
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
@@ -308,7 +314,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				Sql sql2 = Sqls.create(sqlString2);
 				Cnd appcnd2 = Cnd.NEW();
 				appcnd2.and("tf.takeOffCityId", "in", dep);
-				appcnd2.and("tf2.landingCityId", "=", arr);
+				appcnd2.and("tf2.landingCode", "=", arr);
 				sql2.setCondition(appcnd2);
 				List<Record> arrcitys = dbDao.query(sql2, null, null);
 
@@ -363,7 +369,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 			}
 		}
 
-		if (arr.contains(",") && dep.contains(",")) {
+		if (!Util.isEmpty(arr) && arr.contains(",") && !Util.isEmpty(dep) && dep.contains(",")) {
 			List<ResultflyEntity> arrayList = Lists.newArrayList();
 			String searchstr = param.getFlight().trim();
 			//缓存中没有，查库
@@ -501,6 +507,11 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 		return result;
 	}
 
+	private int getCityId(String aircode) {
+		TCityEntity airportinfo = dbDao.fetch(TCityEntity.class, Cnd.where("code", "=", aircode));
+		return airportinfo.getId();
+	}
+
 	//清除缓存的航班
 	public void deleteAielineCache() {
 		Map<String, String> hgetAll = redisDao.hgetAll(CommonConstants.AIRLINE_INFO_KEY);
@@ -589,15 +600,15 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String.valueOf(param.getGocity()) + String.valueOf(param.getArrivecity()));
 		if (Util.isEmpty(flightinfo)) {
 			//查询相关航班
-			if (!arr.contains(",") && !dep.contains(",")) {
+			if (!Util.isEmpty(arr) && !arr.contains(",") && !Util.isEmpty(dep) && !dep.contains(",")) {
 				List<ResultflyEntity> arrayList = Lists.newArrayList();
 
 				//直飞航班
 				String sqlString = sqlManager.get("tripairline_airlines");
 				Sql sql = Sqls.create(sqlString);
 				Cnd appcnd = Cnd.NEW();
-				appcnd.and("tf.takeOffCityId", "=", dep);
-				appcnd.and("tf.landingCityId", "=", arr);
+				appcnd.and("tf.takeOffCode", "=", dep);
+				appcnd.and("tf.landingCode", "=", arr);
 				sql.setCondition(appcnd);
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
@@ -621,8 +632,8 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString2 = sqlManager.get("tripairline_airlines_zhuan");
 				Sql sql2 = Sqls.create(sqlString2);
 				Cnd appcnd2 = Cnd.NEW();
-				appcnd2.and("tf.takeOffCityId", "=", dep);
-				appcnd2.and("tf2.landingCityId", "=", arr);
+				appcnd2.and("tf.takeOffCode", "=", dep);
+				appcnd2.and("tf2.landingCode", "=", arr);
 				sql2.setCondition(appcnd2);
 				List<Record> arrcitys = dbDao.query(sql2, null, null);
 
@@ -708,14 +719,14 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				//newairLineResult.setResultflyEntity(arrayList);
 			}
 
-			if (arr.contains(",") && !dep.contains(",")) {
+			if (!Util.isEmpty(arr) && arr.contains(",") && !Util.isEmpty(dep) && !dep.contains(",")) {
 				//抵达有关联航班,这时arr是由多个id组成的字符串
 				List<ResultflyEntity> arrayList = Lists.newArrayList();
 				//直飞航班
 				String sqlString = sqlManager.get("tripairline_airlines");
 				Sql sql = Sqls.create(sqlString);
 				Cnd appcnd = Cnd.NEW();
-				appcnd.and("tf.takeOffCityId", "=", dep);
+				appcnd.and("tf.takeOffCode", "=", dep);
 				appcnd.and("tf.landingCityId", "in", arr);
 				sql.setCondition(appcnd);
 				List<Record> depcitys = dbDao.query(sql, null, null);
@@ -740,7 +751,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString2 = sqlManager.get("tripairline_airlines_zhuan");
 				Sql sql2 = Sqls.create(sqlString2);
 				Cnd appcnd2 = Cnd.NEW();
-				appcnd2.and("tf.takeOffCityId", "=", dep);
+				appcnd2.and("tf.takeOffCode", "=", dep);
 				appcnd2.and("tf2.landingCityId", "in", arr);
 				sql2.setCondition(appcnd2);
 				List<Record> arrcitys = dbDao.query(sql2, null, null);
@@ -832,14 +843,14 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				//newairLineResult.setResultflyEntity(arrayList);
 			}
 
-			if (!arr.contains(",") && dep.contains(",")) {
+			if (!Util.isEmpty(arr) && !arr.contains(",") && !Util.isEmpty(dep) && dep.contains(",")) {
 				List<ResultflyEntity> arrayList = Lists.newArrayList();
 				//直飞航班
 				String sqlString = sqlManager.get("tripairline_airlines");
 				Sql sql = Sqls.create(sqlString);
 				Cnd appcnd = Cnd.NEW();
 				appcnd.and("tf.takeOffCityId", "in", dep);
-				appcnd.and("tf.landingCityId", "=", arr);
+				appcnd.and("tf.landingCode", "=", arr);
 				sql.setCondition(appcnd);
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
@@ -864,7 +875,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				Sql sql2 = Sqls.create(sqlString2);
 				Cnd appcnd2 = Cnd.NEW();
 				appcnd2.and("tf.takeOffCityId", "in", dep);
-				appcnd2.and("tf2.landingCityId", "=", arr);
+				appcnd2.and("tf2.landingCode", "=", arr);
 				sql2.setCondition(appcnd2);
 				List<Record> arrcitys = dbDao.query(sql2, null, null);
 
@@ -948,7 +959,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				newairLineResult.setResultflyEntity(arrayList);*/
 			}
 
-			if (arr.contains(",") && dep.contains(",")) {
+			if (!Util.isEmpty(arr) && arr.contains(",") && !Util.isEmpty(dep) && dep.contains(",")) {
 				List<ResultflyEntity> arrayList = Lists.newArrayList();
 
 				//直飞航班
@@ -1135,6 +1146,147 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 		}
 		//设置参数
 		return null;
+	}
+
+	public Object getAirlines(FlightSelectParam param) {
+		AirLineResult airLineResult = new AirLineResult();
+		//查询接口
+		AirLineParam airLineParam = new AirLineParam();
+		String dep = "";
+		if (!Util.isEmpty(param.getGocity())) {
+			TCityEntity gocity = dbDao.fetch(TCityEntity.class, param.getGocity());
+			dep = gocity.getCode();
+		}
+		String arr = "";
+		if (!Util.isEmpty(param.getArrivecity())) {
+			TCityEntity arrivecity = dbDao.fetch(TCityEntity.class, param.getArrivecity());
+			arr = arrivecity.getCode();
+		}
+		String date = "";
+		if (!Util.isEmpty(param.getDate())) {
+			Date string2Date = DateUtil.string2Date(param.getDate(), DateUtil.FORMAT_YYYY_MM_DD);
+			DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYYMMDD);
+			date = format.format(string2Date);
+		}
+
+		ArrayList<String> depList = new ArrayList<>();
+		depList.add("TSN");
+		depList.add("XIY");
+		depList.add("TYN");
+		depList.add("LHW");
+		depList.add("CGO");
+		depList.add("SJW");
+		depList.add("HET");
+		depList.add("LXA");
+		depList.add("INC");
+		depList.add("URC");
+		depList.add("XNN");
+		depList.add("CSX");
+		depList.add("WUH");
+		/*depList.add("OKA");
+		depList.add("ITM");
+		depList.add("KIX");
+		depList.add("UKB");
+		depList.add("HND");
+		depList.add("NRT");
+		depList.add("NGO");
+		depList.add("SPK");
+		depList.add("HIJ");
+		depList.add("NGS");
+		depList.add("KOJ");
+		depList.add("AOJ");
+		depList.add("HNA");
+		depList.add("SDJ");
+		depList.add("FKS");
+		depList.add("GAJ");
+		depList.add("AXT");*/
+		ArrayList<String> depList2 = new ArrayList<>();
+		/*depList2.add("TSN");
+		depList2.add("SIA");
+		depList2.add("TYN");
+		depList2.add("LHW");
+		depList2.add("CGO");
+		depList2.add("SJW");
+		depList2.add("HET");
+		depList2.add("LXA");
+		depList2.add("INC");
+		depList2.add("URC");
+		depList2.add("XNN");
+		depList2.add("CSX");
+		depList2.add("WUH");*/
+		depList2.add("OKA");
+		depList2.add("ITM");
+		depList2.add("KIX");
+		depList2.add("UKB");
+		depList2.add("HND");
+		depList2.add("NRT");
+		depList2.add("NGO");
+		depList2.add("SPK");
+		depList2.add("HIJ");
+		depList2.add("NGS");
+		depList2.add("KOJ");
+		depList2.add("AOJ");
+		depList2.add("HNA");
+		depList2.add("SDJ");
+		depList2.add("FKS");
+		depList2.add("GAJ");
+		depList2.add("AXT");
+
+		airLineParam.setDate("20180728");
+
+		String airLinejson = "";
+		for (int i = 0; i < depList2.size(); i++) {
+			for (int j = 0; j < depList.size(); j++) {
+				if (!Util.eq(depList.get(j), depList2.get(i))) {
+					airLineResult.getAiliLineInFos().clear();
+					airLineParam.setDep(depList2.get(i));
+					airLineParam.setArr(depList.get(j));
+					airLinejson = AirlineData.getAirLineInfo(airLineParam);
+					Map<String, Object> map = JsonUtil.fromJson(airLinejson, Map.class);
+					//返回代码
+					airLineResult.setError_code(map.get("error_code").toString());
+					//返回错误信息
+					airLineResult.setReason((String) map.get("reason"));
+					List<LinkedHashMap<String, String>> fromJsonAsList = (List) map.get("result");
+					DateFormat dateFormat = new SimpleDateFormat("HHmm");
+					if (!Util.isEmpty(fromJsonAsList) && fromJsonAsList.size() > 0) {
+						for (LinkedHashMap<String, String> airmap : fromJsonAsList) {
+							TFlightEntity flightEntity = new TFlightEntity();
+							//flightEntity.setAirlinecomp(airmap.get("airmode"));
+							flightEntity.setFlightnum(airmap.get("flightNo"));
+							//起飞机场三字代码
+							String OrgCity = airmap.get("OrgCity");
+							flightEntity.setTakeOffName(getAirportName(OrgCity));
+							flightEntity.setTakeOffCityId(getCityId(OrgCity));
+							flightEntity.setTakeOffCode(OrgCity);
+							//降落机场三字代码
+							String Dstcity = airmap.get("Dstcity");
+							flightEntity.setLandingName(getAirportName(Dstcity));
+							flightEntity.setLandingCityId(getCityId(Dstcity));
+							flightEntity.setLandingCode(Dstcity);
+							//起飞城市
+							flightEntity.setTakeOffCityId(param.getGocity().intValue());
+							//降落城市
+							flightEntity.setLandingCityId(param.getArrivecity().intValue());
+							flightEntity.setTakeOffTime(airmap.get("DepTime"));
+							flightEntity.setLandingTime(airmap.get("ArrTime")
+									+ (Util.isEmpty(airmap.get("arrTimeModify")) ? "" : airmap.get("arrTimeModify")));
+							airLineResult.getAiliLineInFos().add(flightEntity);
+						}
+					}
+					List<TFlightHisEntity> before = dbDao.query(TFlightHisEntity.class,
+							Cnd.where("takeOffCode", "=", depList2.get(i)).and("landingCode", "=", depList.get(j)),
+							null);
+					List<TFlightHisEntity> flightlist = JsonUtil.fromJsonAsList(TFlightHisEntity.class,
+							JsonUtil.toJson(airLineResult.getAiliLineInFos()));
+					if (!Util.isEmpty(flightlist) && flightlist.size() > 0) {
+						dbDao.updateRelations(before, flightlist);
+					}
+				}
+			}
+		}
+
+		return airLineResult.getAiliLineInFos();
 	}
 
 }

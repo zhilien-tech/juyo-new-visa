@@ -25,6 +25,7 @@ import com.google.common.collect.Maps;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.admin.orderUS.service.AutofillService;
 import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
+import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
 import com.juyo.visa.forms.OrderUpdateForm;
 import com.juyo.visa.forms.TAppStaffVisaUsAddForm;
 import com.juyo.visa.forms.TAppStaffVisaUsUpdateForm;
@@ -288,6 +289,34 @@ public class OrderUSModule {
 	@POST
 	public Object autofill(@Param("orderid") int orderid, HttpSession session) {
 		return orderUSViewService.autofill(orderid, session);
+	}
+
+	/**
+	 * 打开验证码页面
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object testUS() {
+		return null;
+	}
+
+	@At
+	@GET
+	@Ok("jsp")
+	public Object writeVcode() {
+		return null;
+	}
+
+	@At
+	@POST
+	public Object returnVcode(@Param("vcode") String vcode, HttpSession session) {
+		return orderUSViewService.returnVcode(vcode, session);
+	}
+
+	@At
+	public Object toRenturnVcode(@Param("..") JapanSimulatorForm form) {
+		return orderUSViewService.toRenturnVcode(form);
 	}
 
 	/**

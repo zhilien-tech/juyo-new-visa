@@ -26,6 +26,50 @@ public class TApplicantWealthJpEntity implements Serializable {
 	private String type;
 
 	@Column
+	@Comment("银行流水")
+	private String bankflowfree;
+
+	@Column
+	@Comment("车产")
+	private String vehiclefree;
+
+	@Column
+	@Comment("房产")
+	private String housePropertyfree;
+
+	@Column
+	@Comment("理财")
+	private String financialfree;
+
+	@Column
+	@Comment("在职证明")
+	private String certificatefree;
+
+	@Column
+	@Comment("银行存款")
+	private String depositfree;
+
+	@Column
+	@Comment("税单")
+	private String taxbillfree;
+
+	@Column
+	@Comment("完税证明")
+	private String taxprooffree;
+
+	@Column
+	@Comment("特定高校在读生")
+	private String readstudentfree;
+
+	@Column
+	@Comment("特定高校毕业生")
+	private String graduatefree;
+
+	@Column
+	@Comment("财产顺序")
+	private Integer sequence;
+
+	@Column
 	@Comment("财产明细")
 	private String details;
 

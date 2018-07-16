@@ -38,6 +38,10 @@ public class TOrderTravelplanJpEntity implements Serializable {
 	private Integer hotel;
 
 	@Column
+	@Comment("城市是否手动改过")
+	private Integer isupdatecity;
+
+	@Column
 	@Comment("城市id")
 	private Integer cityId;
 

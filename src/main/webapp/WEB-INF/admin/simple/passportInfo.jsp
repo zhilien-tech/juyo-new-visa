@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 	<!-- 本页css -->
-	<link rel="stylesheet" href="${base}/references/common/css/simplePassportInfo.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/common/css/simplePassportInfo.css?v='20180703'">
 </head>
 <body>
 	<div class="modal-content">
@@ -348,6 +348,8 @@
 				var blob = dataURLtoBlob(dataUrl);
 				var formData = new FormData();
 				formData.append("image", blob, file.name);
+				var dt = new Date();  
+				var tm = dt.getTime();
 				$.ajax({
 					type : "POST",//提交类型  
 					//dataType : "json",//返回结果格式  
@@ -362,10 +364,17 @@
 						layer.close(layerIndex);
 						if (true === obj.success) {
 							layer.msg("识别成功");
+						}else{
+							layer.msg("识别失败");
+						}
 							$('#firstName').val(obj.xingCn).change();
+							if(obj.xingCn != undefined){
 							$('#firstNameEn').val("/"+getPinYinStr(obj.xingCn));
+							}
 							$('#lastName').val(obj.mingCn).change();
+							if(obj.mingCn != undefined){
 							$('#lastNameEn').val("/"+getPinYinStr(obj.mingCn));
+							}
 							$('#passportUrl').val(obj.url);
 							$('#sqImg').attr('src', obj.url);
 							$("#uploadFile").siblings("i").css("display","block");
@@ -377,10 +386,14 @@
 							$('#sex').val(obj.sex);
 							$('#sexEn').val(obj.sexEn);
 							$('#birthAddress').val(obj.birthCountry).change();
+							if(obj.birthCountry != undefined){
 							$('#birthAddressEn').val("/"+getPinYinStr(obj.birthCountry));
+							}
 							$('#birthday').val(obj.birth).change();
 							$('#issuedPlace').val(obj.visaCountry).change();
+							if(obj.visaCountry != undefined){
 							$('#issuedPlaceEn').val("/"+getPinYinStr(obj.visaCountry));
+							}
 							$('#issuedDate').val(obj.issueDate).change();
 							$('#validEndDate').val(obj.expiryDay).change();
 							$('#OCRline1').val(obj.OCRline1);
@@ -393,9 +406,12 @@
 								$("#validType").val(1);
 							}
 							
-						}
 						$("#addBtn").attr('disabled', false);
 						$("#updateBtn").attr('disabled', false);
+						var dt2 = new Date();  
+						var tm2 = dt2.getTime();
+						var tm3 = tm2 - tm;
+						console.log(tm3);
 					},
 					error : function(XMLHttpRequest, textStatus, errorThrown) {
 						layer.close(layerIndex);
@@ -403,6 +419,7 @@
 						$("#updateBtn").attr('disabled', false);
 					}
 				}); // end of ajaxSubmit
+				
 			};
 			reader.readAsDataURL(file);
 		});

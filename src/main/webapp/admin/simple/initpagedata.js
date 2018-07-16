@@ -1,6 +1,7 @@
 function initApplicantTable(){
 	var orderid = $('#orderid').val();
 	if(orderid){
+		//layer.load(1);
 		$.ajax({ 
 			url: '/admin/visaJapan/getVisaDetailApply.html',
 			async : false,
@@ -8,6 +9,7 @@ function initApplicantTable(){
 			data:{orderid:orderid},
 			type:'post',
 			success: function(data){
+				layer.closeAll("loading");
 				var html = '';
 				$.each(data.applyinfo,function(index,value){
 					html += '<tr>';
@@ -57,7 +59,7 @@ function initApplicantTable(){
 					html += '<td><a onclick="passportInfo('+value.id+')">护照信息</a>&nbsp;';
 					html += '<a onclick="updateApplicant('+value.id+')">基本信息</a>&nbsp;';
 					html += '<a onclick="visaInfo('+value.id+')">签证信息</a>&nbsp;<br />';
-					html += '<a onclick="visaInput('+value.applyid+')">出境记录</a>&nbsp;';
+					//html += '<a onclick="visaInput('+value.applyid+')">出境记录</a>&nbsp;';
 					html += '<a onclick="deleteApplicant('+value.id+')">删除</a>&nbsp;';
 					html += '</td>';
 					html += '</tr>';
@@ -74,6 +76,7 @@ function initApplicantTable(){
 function initTravelPlanTable(){
 	var orderid = $('#orderid').val();
 	if(orderid){
+		//layer.load(1);
 		$.ajax({ 
 			url: '/admin/visaJapan/getTrvalPlanData.html',
 			async : false,
@@ -81,6 +84,7 @@ function initTravelPlanTable(){
 			data:{orderid:orderid},
 			type:'post',
 			success: function(data){
+				layer.closeAll("loading");
 				var html = '';
 				console.log(data);
 				$.each(data,function(index,value){
@@ -94,11 +98,18 @@ function initTravelPlanTable(){
 						html += '<td></td>';
 					}
 					if(value.hotelname != undefined ){
-						html += '<td>'+value.hotelname+'</td>';
+						//html += '<td>'+value.hotelname+'</td>';
+						html += '<td><table style="width:100%;"><tr><td style="text-align:center;">'+value.hotelname+'</td></tr><tr><td style="text-align:center;">'+value.hoteladdress+'</td></tr><tr><td style="text-align:center;">'+value.hotelmobile+'</td></tr></table></td>';
 					}else{
-						html += '<td></td>';
+						if(index != data.length -1){
+							html += '<td>連泊</td>';
+						}else{
+							html += '<td></td>';
+						}
 					}
-					html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i></td>';
+					if(index != data.length - 1 && index != 0){
+						html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i></td>';
+					}
 					html += '</tr>';
 				});
 				$('#travelplantbody').html(html);
@@ -117,7 +128,7 @@ function schedulingEdit(planid){
 		shadeClose: false,
 		scrollbar: false,
 		area: ['800px', '400px'],
-		content: '/admin/visaJapan/schedulingEdit.html?planid='+planid
+		content: '/admin/visaJapan/schedulingEdit.html?planid='+planid+'&visatype='+visatype
 	});
 }
 function resetPlan(planid){
@@ -125,7 +136,7 @@ function resetPlan(planid){
 	$.ajax({ 
 		url: '/admin/visaJapan/resetPlan.html',
 		dataType:"json",
-		data:{planid:planid,orderid:orderid},
+		data:{planid:planid,orderid:orderid,visatype:visatype},
 		type:'post',
 		success: function(data){
 			initTravelPlanTable();

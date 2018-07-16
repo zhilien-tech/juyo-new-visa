@@ -44,11 +44,11 @@
 									</c:forEach>
 								</select>
 							</div>
-							<div class="col-md-2 left-5px right-0px marginLR">
+							<!-- <div class="col-md-2 left-5px right-0px marginLR">
 								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间 - 出签时间" onkeypress="onkeyEnter()"/>
-							</div>
+							</div> -->
 							<div class="col-md-3 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/联系人/电话/邮箱/申请人" onkeypress="onkeyEnter()"/>
+								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/联系人/电话/邮箱/申请人/受付番号" onkeypress="onkeyEnter()"/>
 							</div>
 							<div class="col-md-1 left-5px btnSearch">
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
@@ -109,11 +109,11 @@
 									<i class="download" v-on:click="downLoadFile(data.id)"> </i>
 									<i class="handoverTable"> </i>
 									<!-- 作废按钮 -->
-									<i class="toVoid" v-on:click="sendInsurance(data.id,26)"> </i>
+									<i class="toVoid" v-on:click="disabled(data.id)"> </i>
 								</div>
 								<div v-else>
 									<label>操作：</label>
-									<i class="toVoid1" v-on:click="sendInsurance(data.id,1)"> </i>
+									<i class="toVoid1" v-on:click="undisabled(data.id)"> </i>
 								</div>
 							</div>
 							<ul class="card-content cf">
@@ -309,6 +309,58 @@
                    	}
                  });
         	},
+        	disabled:function(orderid){//作废
+        		layer.confirm("您确认要<font color='red'>作废</font>吗？", {
+    				title:"作废",
+    				btn: ["是","否"], //按钮
+    				shade: false //不显示遮罩
+    			}, function(){
+    				layer.load(1);
+    				$.ajax({
+    					url : '/admin/simple/disabled',
+    					dataType : "json",
+    					data : {
+    						orderId : orderid
+    					},
+    					type : 'post',
+    					success : function(data) {
+    						layer.closeAll("loading");
+    						layer.msg("操作成功", {
+    							time: 500,
+    							end: function () {
+    								successCallBack(12);
+    							}
+    						});
+    					}
+    				});
+    			});
+        	},
+        	undisabled:function(orderid){//还原
+        		layer.confirm("您确认要<font color='red'>还原</font>吗？", {
+    				title:"还原",
+    				btn: ["是","否"], //按钮
+    				shade: false //不显示遮罩
+    			}, function(){
+    				layer.load(1);
+    				$.ajax({
+    					url : '/admin/simple/undisabled',
+    					dataType : "json",
+    					data : {
+    						orderId : orderid,
+    					},
+    					type : 'post',
+    					success : function(data) {
+    						layer.closeAll("loading");
+    						layer.msg("操作成功", {
+    							time: 1000,
+    							end: function () {
+    								successCallBack(12);
+    							}
+    						});
+    					}
+    				});
+    			});
+        	},
         	downLoadFile:function(orderid){
         		$.ajax({
                  	url: '${base}/admin/visaJapan/validateDownLoadInfoIsFull.html',
@@ -498,7 +550,7 @@
 				orderAuthority = $(this).attr("name");
 			}
 		});
-		$.ajax({ 
+		$.ajax({
         	url: url,
         	data:{orderAuthority:orderAuthority},
         	dataType:"json",
@@ -510,6 +562,8 @@
 		if(status == 1){
 			//layer.msg('发招宝');
 			parent.successCallBack(4);
+		}else if(status == 12){
+			
 		}else{
 			//layer.msg('保存成功');
 			parent.successCallBack(2);

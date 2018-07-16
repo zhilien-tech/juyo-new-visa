@@ -535,6 +535,7 @@
 		var BASE_PATH = '${base}';
 		var orderid = '${obj.orderjpinfo.id}';
 		var cityidstr = '${obj.orderinfo.cityId}';
+		var visatype = '${obj.orderjpinfo.visaType}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
@@ -553,8 +554,9 @@
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<script src="${base}/admin/simple/customerInfo.js?v=0.0.1"></script>
 	<script src="${base}/admin/simple/travelinfo.js?v=0.0.6"></script><!-- 本页面js文件 -->
-	<script src="${base}/admin/simple/initpagedata.js?v=0.0.2"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/initpagedata.js?v=0.0.3"></script><!-- 本页面js文件 -->
 	<script src="${base}/admin/simple/addsimpleorder.js?v=0.0.1"></script><!-- 本页面js文件 -->
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 
 	<script type="text/javascript">
 		//加载申请人表格数据
@@ -569,14 +571,70 @@
 		});
 		
 		$("#visatype").change(function(){
-			var visatype = $(this).val();
+			var vtype = $(this).val();
+			visatype = vtype;
+			var goArrivedCity = $("#goArrivedCity").val();
+			var returnDepartureCity = $("#returnDepartureCity").val();
+			//冲绳
+			if(vtype == 2 || vtype == 7){
+				$("#goArrivedCity").html('<option selected="selected" value="'+77+'">'+'冲绳'+'</option>');
+				$("#returnDepartureCity").html('<option selected="selected" value="'+77+'">'+'冲绳'+'</option>');
+				if(goArrivedCity != 77){
+					$('#goFlightNum').empty();
+				}
+				if(returnDepartureCity != 77){
+					$('#returnFlightNum').empty();
+				}
+			}
+			/* //宫城
+			if(vtype == 3 || vtype == 8){
+				$("#goArrivedCity").html('<option selected="selected" value="'+91+'">'+'宫城'+'</option>');
+				if(goArrivedCity != 91){
+					$('#goFlightNum').empty();
+				}
+			}
+			//岩手
+			if(vtype == 4 || vtype == 10){
+				$("#goArrivedCity").html('<option selected="selected" value="'+92+'">'+'岩手'+'</option>');
+				if(goArrivedCity != 92){
+					$('#goFlightNum').empty();
+				}
+			}
+			//福岛
+			if(vtype == 5 || vtype == 9){
+				$("#goArrivedCity").html('<option selected="selected" value="'+30+'">'+'福岛'+'</option>');
+				if(goArrivedCity != 30){
+					$('#goFlightNum').empty();
+				}
+			}
+			//青森
+			if(vtype == 11){
+				$("#goArrivedCity").html('<option selected="selected" value="'+25+'">'+'青森'+'</option>');
+				if(goArrivedCity != 25){
+					$('#goFlightNum').empty();
+				}
+			}
+			//秋田
+			if(vtype == 12){
+				$("#goArrivedCity").html('<option selected="selected" value="'+612+'">'+'秋田'+'</option>');
+				if(goArrivedCity != 612){
+					$('#goFlightNum').empty();
+				}
+			}
+			//山形
+			if(vtype == 13){
+				$("#goArrivedCity").html('<option selected="selected" value="'+613+'">'+'山形'+'</option>');
+				if(goArrivedCity != 613){
+					$('#goFlightNum').empty();
+				}
+			} */
 			var orderid = $('#orderid').val();
 			$.ajax({ 
 		    	url: '${base}/admin/simple/changeVisatype.html',
 		    	dataType:"json",
 		    	data:{
 		    		orderid:orderid,
-		    		visatype:visatype
+		    		visatype:vtype
 		    		},
 		    	type:'post',
 		    	success: function(data){
@@ -753,7 +811,7 @@
 					shadeClose: false,
 					scrollbar: false,
 					area: ['700px', '80%'],
-					content:'/admin/orderJp/log.html?id='+orderinfoid
+					content:'/admin/orderJp/log.html?id='+orderinfoid+'&orderProcessType=1'
 				});
 			}
 			//招宝变更、招宝取消、拒签
@@ -766,8 +824,6 @@
         				title = '确定要招宝取消吗？';
         			}else if(visastatus == 27){
         				title = '确定要拒签吗？';
-        			}else if(visastatus == 26){
-        				title = '确定要作废吗？';
         			}
         			layer.confirm(title, {
     					title:"提示",
@@ -807,8 +863,6 @@
 		                 		layer.msg('招宝取消');
 	                 		}else if(visastatus == 27){
 		                 		layer.msg('报告拒签');
-	                 		}else if(visastatus == 26){
-		                 		layer.msg('已作废');
 	                 		}
 	                 		initOrderstatus();
 	                 		layer.close(index);

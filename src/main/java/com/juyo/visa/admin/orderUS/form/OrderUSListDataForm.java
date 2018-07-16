@@ -15,7 +15,6 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
-import com.juyo.visa.common.enums.UserLoginEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
@@ -113,8 +112,9 @@ public class OrderUSListDataForm implements SQLParamForm {
 				//cnd.and("tou.comId", "=", companyid);
 			} else {
 				//普通的操作员
-				cnd.and("tu.usertype", "=", UserLoginEnum.BIG_TOURIST_IDENTITY.intKey());
 				//cnd.and("tou.comId", "=", companyid);
+				//cnd.and("tu.usertype", "=", UserLoginEnum.BIG_TOURIST_IDENTITY.intKey());
+				cnd.and("tou.opid", "is", null);
 			}
 		} else {
 			//我的

@@ -106,6 +106,7 @@ function saveAddOrder(status){
 	orderinfo.customerid = customerid;
 	var zhikecustomid = $('#zhikecustomid').val();
 	orderinfo.zhikecustomid = zhikecustomid;
+	layer.load(1);
 	$.ajax({
 		type : 'POST',
 		data : orderinfo ,
@@ -113,6 +114,7 @@ function saveAddOrder(status){
 		url : '/admin/simple/saveAddOrderinfo.html',
 		success : function(data) {
 			console.log(JSON.stringify(data));
+			layer.closeAll("loading");
 			if(status == 1){
 				window.location.href = '/admin/simple/list.html';
 			}else if(status == 2){

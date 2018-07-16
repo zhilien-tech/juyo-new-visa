@@ -44,4 +44,13 @@ public class TripAirlineModule {
 	public Object getAirLineByInterfate(@Param("..") FlightSelectParam param) {
 		return tripAirlineService.getAirLineByInterfate(param);
 	}
+
+	/**
+	 * 查询航班接口
+	 */
+	@At
+	@POST
+	public Object getAirlines(@Param("..") FlightSelectParam param) {
+		return tripAirlineService.getAirlines(param);
+	}
 }

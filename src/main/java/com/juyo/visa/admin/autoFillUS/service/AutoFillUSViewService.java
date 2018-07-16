@@ -322,6 +322,13 @@ public class AutoFillUSViewService extends BaseService<TOrderJpEntity> {
 		return ResultObject.fail("暂无可执行的任务");
 	}
 
+	public Object getVcode() {
+		List<TAppStaffVcodeEntity> query = dbDao.query(TAppStaffVcodeEntity.class, null, null);
+		TAppStaffVcodeEntity tAppStaffVcodeEntity = query.get(0);
+		String vcode = tAppStaffVcodeEntity.getVcode();
+		return vcode;
+	}
+
 	public Object vcodeUpload(File file) {
 		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
 		file.delete();
