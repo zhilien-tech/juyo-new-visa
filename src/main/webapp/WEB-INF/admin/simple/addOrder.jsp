@@ -122,7 +122,7 @@
 										<label><span>*</span>签证类型：</label> <select id="visatype"
 											name="visatype" type="text" class="form-control input-sm"
 											placeholder=" " >
-												<option value=0>请选择</option>
+												<option value="">请选择</option>
 												<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 													<option value="${map.key}">${map.value}</option>
 												</c:forEach>
@@ -372,6 +372,7 @@
 	</div>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var cityidstr = '${obj.orderinfo.cityId}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
@@ -393,6 +394,31 @@
 	<script src="${base}/admin/simple/addsimpleorder.js?v=0.0.1"></script><!-- 本页面js文件 -->
 
 	<script type="text/javascript">
+		$("#cityid").change(function(){
+			var cityid = $(this).val();
+			$("#cityid").val(cityid);
+			cityidstr = cityid;
+		});
+		
+		$("#visatype").change(function(){
+			var visatype = $(this).val();
+			var orderid = $('#orderid').val();
+			if(orderid != ""){
+				$.ajax({ 
+			    	url: '${base}/admin/simple/changeVisatype.html',
+			    	dataType:"json",
+			    	data:{
+			    		orderid:orderid,
+			    		visatype:visatype
+			    		},
+			    	type:'post',
+			    	success: function(data){
+			      	}
+			    });
+			}
+		});
+		
+	
 		$(function(){
 			
 			$('#urgentType').change(function(){

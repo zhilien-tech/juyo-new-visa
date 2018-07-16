@@ -16,6 +16,8 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
@@ -80,7 +82,13 @@ public class ListDataForm implements SQLParamForm {
 			cnd.and("sendVisaDate", ">=", sendSignDate).and("outVisaDate", "<=", outSignDate);
 		}
 		if (!Util.isEmpty(status)) {
-			cnd.and("tr.status", "=", status);
+			if (Util.eq(status, JPOrderStatusEnum.DISABLED.intKey())) {
+				cnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
+			} else {
+				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", status).and("tr.isDisabled", "=",
+						IsYesOrNoEnum.NO.intKey());
+				cnd.and(e1);
+			}
 		}
 
 		if (userid.equals(adminId)) {

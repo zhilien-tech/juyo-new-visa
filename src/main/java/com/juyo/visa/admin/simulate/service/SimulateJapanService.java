@@ -34,7 +34,6 @@ import org.nutz.lang.Files;
 import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Maps;
-import com.juyo.visa.admin.simulate.enums.ErrorCodeEnum;
 import com.juyo.visa.admin.simulate.form.JapanSimulateErrorForm;
 import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
 import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
@@ -208,9 +207,33 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					map.put("VISA_STAY_PREF_47", false);
 				}
 				map.put("acceptdesign", orderjp.getAcceptDesign());
+
+				String threeCounty = orderjp.getThreeCounty();
+				if (!Util.isEmpty(threeCounty)) {
+					if (threeCounty.indexOf("岩手") != -1) {
+						map.put("VISA_VISIT_PREF_3", true);
+					} else {
+						map.put("VISA_VISIT_PREF_3", false);
+					}
+					if (threeCounty.indexOf("宫城") != -1) {
+						map.put("VISA_VISIT_PREF_4", true);
+					} else {
+						map.put("VISA_VISIT_PREF_4", false);
+					}
+					if (threeCounty.indexOf("福岛") != -1) {
+						map.put("VISA_VISIT_PREF_7", true);
+					} else {
+						map.put("VISA_VISIT_PREF_7", false);
+					}
+				} else {
+					map.put("VISA_VISIT_PREF_3", false);
+					map.put("VISA_VISIT_PREF_4", false);
+					map.put("VISA_VISIT_PREF_7", false);
+				}
 			}
 			map.put("agentNo", agentNo);
 			map.put("visaType1", record.get("visatype"));
+			map.put("visaVisitType1", record.get("isvisit"));
 
 			String applysqlstr = sqlManager.get("get_applicantinfo_simulate_from_order");
 			Sql applysql = Sqls.create(applysqlstr);
@@ -321,6 +344,8 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 
 			//为客户设置文件地址，签证状态改为'已提交'
 			orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
+			//记录发招宝成功状态
+			orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
 			dbDao.update(orderinfo);
 			order.setReturnHomeFileUrl(visaFile);
 			dbDao.update(order);
@@ -341,22 +366,43 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(cid) && cid > 0) {
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, cid);
 			int errorCode = form.getErrorCode();
+			int orderstatus = form.getOrderstatus();
 			String errorMsg = form.getErrorMsg();
 			orderjp.setErrorcode(errorCode);
 			orderjp.setErrormsg(errorMsg);
 			dbDao.update(orderjp);
 			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 			//提交失败
-			if (errorCode == ErrorCodeEnum.completedNumberFail.intKey()) {
-				orderinfo.setStatus(JPOrderStatusEnum.COMMINGFAIL.intKey());
+			/*if (errorCode == ErrorCodeEnum.completedNumberFail.intKey()) {
+				//orderinfo.setStatus(JPOrderStatusEnum.COMMINGFAIL.intKey());
 			} else if (errorCode == ErrorCodeEnum.persionNameList.intKey()) {
 				//个人名簿生成失败
 				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
 			} else if (errorCode == ErrorCodeEnum.comeReport.intKey()) {
 				//归国报告上传失败
-				orderinfo.setStatus(JPOrderStatusEnum.JAPANREPORTFAIL.intKey());
+				//orderinfo.setStatus(JPOrderStatusEnum.JAPANREPORTFAIL.intKey());
 			} else {
+				//orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
+			}*/
+
+			if (orderstatus == JPOrderStatusEnum.READYCOMMING.intKey()) {//发招宝失败 18
 				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
+				if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
+					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+				} else {
+					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+				}
+			}
+			if (orderstatus == JPOrderStatusEnum.BIANGENGZHONG.intKey()) {//招宝变更失败 21
+				orderinfo.setStatus(JPOrderStatusEnum.BIANGENGSHIBAI.intKey());
+				if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
+					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+				} else {
+					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+				}
+			}
+			if (orderstatus == JPOrderStatusEnum.QUXIAOZHONG.intKey()) {//招宝取消失败 24
+				orderinfo.setStatus(JPOrderStatusEnum.QUXIAOSHIBAI.intKey());
 			}
 			orderinfo.setUpdateTime(new Date());
 			//更新订单状态为发招保失败
@@ -481,10 +527,14 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		//order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
 		if (JPOrderStatusEnum.READYCOMMING.intKey() == form.getOrderstatus()) {
 			order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
+			//记录发招宝成功状态
+			order.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
 		} else if (JPOrderStatusEnum.BIANGENGZHONG.intKey() == form.getOrderstatus()) {
 			order.setStatus(JPOrderStatusEnum.YIBIANGENG.intKey());
 		} else if (JPOrderStatusEnum.QUXIAOZHONG.intKey() == form.getOrderstatus()) {
 			order.setStatus(JPOrderStatusEnum.YIQUXIAO.intKey());
+			//记录招宝取消状态
+			order.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
 		}
 		dbDao.update(order);
 		//消息通知
@@ -493,6 +543,59 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
+
+	/**
+	 * 招宝变更失败
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateZhaobao(JapanSimulatorForm form) {
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, form.getCid());
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		order.setStatus(JPOrderStatusEnum.BIANGENGSHIBAI.intKey());
+		dbDao.update(order);
+		//消息通知
+		try {
+			visaInfoWSHandler.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 招宝取消失败
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object cancelZhaobao(JapanSimulatorForm form) {
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, form.getCid());
+		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		order.setStatus(JPOrderStatusEnum.QUXIAOSHIBAI.intKey());
+		dbDao.update(order);
+		//消息通知
+		try {
+			visaInfoWSHandler.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public Object deleteAcceptDesign(JapanSimulatorForm form) {
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, form.getCid());
+		orderjp.setAcceptDesign(null);
+		dbDao.update(orderjp);
 		return null;
 	}
 

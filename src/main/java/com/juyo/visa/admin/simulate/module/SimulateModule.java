@@ -75,6 +75,24 @@ public class SimulateModule {
 	}
 
 	/**
+	 * 招宝变更失败状态获取
+	 */
+	@At
+	@POST
+	public Object updateZhaobao(@Param("..") JapanSimulatorForm form) {
+		return simulateJapanService.updateZhaobao(form);
+	}
+
+	/**
+	 * 招宝取消失败状态获取
+	 */
+	@At
+	@POST
+	public Object cancelZhaobao(@Param("..") JapanSimulatorForm form) {
+		return simulateJapanService.cancelZhaobao(form);
+	}
+
+	/**
 	 * 代理下载excel
 	 */
 	@At
@@ -104,5 +122,13 @@ public class SimulateModule {
 	@At
 	public Object updateYifa(@Param("..") JapanSimulatorForm form) {
 		return simulateJapanService.updateYifa(form);
+	}
+
+	/**
+	 * 点击招宝变更后，先删掉受付番号
+	 */
+	@At
+	public Object deleteAcceptDesign(@Param("..") JapanSimulatorForm form) {
+		return simulateJapanService.deleteAcceptDesign(form);
 	}
 }

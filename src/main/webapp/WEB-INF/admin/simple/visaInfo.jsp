@@ -140,7 +140,8 @@
 								</div>
 							</div><!-- end 申请人/备注-->
 							<div class="row body-from-input applymain"><!-- 签证类型 -->
-								<div class="col-sm-3" style="padding-right:0px !important;">
+								<input type="hidden" id="visatype" value="${obj.jporderinfo.visaType}">
+								<%-- <div class="col-sm-3 none" style="padding-right:0px !important;">
 									<div class="form-group">
 										<label><span>*</span>签证类型：</label>
 										<select id="visatype" class="form-control input-sm">
@@ -156,10 +157,10 @@
 											</c:forEach>
 										</select>
 									</div>
-								</div>
+								</div> --%>
 								<c:choose>
-									<c:when test="${obj.jporderinfo.visaType != 1 }">
-										<div class="col-sm-9" id="visacounty">
+									<c:when test="${obj.jporderinfo.visaType != 2 }">
+										<div class="col-sm-9 none" id="visacounty">
 									</c:when>
 									<c:otherwise>
 										<div class="col-sm-9 none" id="visacounty">
@@ -167,18 +168,18 @@
 								</c:choose>
 											<div class="form-group viseType-btn">
 												<label style="display:block;">&nbsp;</label>
-												<input name="visacounty" type="button" value="冲绳县" class="btn btn-sm btnState">
-												<input name="visacounty" type="button" value="青森县" class="btn btn-sm btnState">
-												<input name="visacounty" type="button" value="岩手县" class="btn btn-sm btnState">
-												<input name="visacounty" type="button" value="宫城县" class="btn btn-sm btnState">
-												<input name="visacounty" type="button" value="秋田县" class="btn btn-sm btnState">
-												<input name="visacounty" type="button" value="山形县" class="btn btn-sm btnState">
-												<input name="visacounty" type="button" value="福岛县" class="btn btn-sm btnState">
+												<input id="csvisacounty" name="visacountys" type="text" value="冲绳县" class="btn btn-sm btnState">
+												<input id="qsvisacounty" name="visacountys" type="text" value="青森县" class="btn btn-sm btnState">
+												<input id="ysvisacounty" name="visacountys" type="text" value="岩手县" class="btn btn-sm btnState">
+												<input id="gcvisacounty" name="visacountys" type="text" value="宫城县" class="btn btn-sm btnState">
+												<input id="qtvisacounty" name="visacountys" type="text" value="秋田县" class="btn btn-sm btnState">
+												<input id="sxvisacounty" name="visacountys" type="text" value="山形县" class="btn btn-sm btnState">
+												<input id="fdvisacounty" name="visacountys" type="text" value="福岛县" class="btn btn-sm btnState">
 											</div>
 										</div>
 							</div><!-- end 签证类型 -->
 							<c:choose>
-								<c:when test="${obj.jporderinfo.visaType != 1 }">
+								<c:when test="${obj.jporderinfo.visaType > 5 && obj.jporderinfo.visaType < 14 }">
 									<div class="row body-from-input" id="threefangwen"><!-- 过去三年是否访问过 -->
 								</c:when>
 								<c:otherwise>
@@ -321,8 +322,8 @@
 							<div class="row">
 								<div class="col-sm-4">
 									<div class="form-group">
-										<label id="unitNameLabel"><span>*</span>配偶职业</label>
-										<input id="unitName" name="unitName" type="text" class="form-control input-sm" value="${obj.workJp.unitName }"/>
+										<label id="unitNameLabel"><span></span>配偶职业</label>
+										<input id="unitName" name="unitName" type="text" class="form-control input-sm" placeholder="如无职业，不必填写" value="${obj.unitName }"/>
 									</div>
 								</div>
 							</div>
@@ -714,9 +715,45 @@
 		var base = "${base}";
 		$(function() {
 			var visatype = $('#visatype').val();
-			if(visatype == 1){
-				$('.alignment').hide();
+			
+			if(visatype == 7){//冲绳
+				if(!$("#csvisacounty").hasClass('btnState-true')){
+					$("#csvisacounty").addClass('btnState-true');
+				}
 			}
+			if(visatype == 8){//宫城
+				if(!$("#gcvisacounty").hasClass('btnState-true')){
+					$("#gcvisacounty").addClass('btnState-true');
+				}
+			}
+			if(visatype == 9){//福岛
+				if(!$("#fdvisacounty").hasClass('btnState-true')){
+					$("#fdvisacounty").addClass('btnState-true');
+				}
+			}
+			if(visatype == 10){//岩手
+				if(!$("#ysvisacounty").hasClass('btnState-true')){
+					$("#ysvisacounty").addClass('btnState-true');
+				}
+			}
+			if(visatype == 11){//青森
+				if(!$("#qsvisacounty").hasClass('btnState-true')){
+					$("#qsvisacounty").addClass('btnState-true');
+				}
+			}
+			if(visatype == 12){//秋田
+				if(!$("#qtvisacounty").hasClass('btnState-true')){
+					$("#qtvisacounty").addClass('btnState-true');
+				}
+			}
+			if(visatype == 13){//山形
+				if(!$("#sxvisacounty").addClass('btnState-true')){
+					$("#sxvisacounty").addClass('btnState-true');
+				}
+			}
+			
+			
+			
 			$('#passportInfo').bootstrapValidator('validate');
 			
 			var remark = $("#visaRemark").val();
@@ -735,28 +772,28 @@
 			var marryStatus = $("#marryStatus").val();
 			if(marryStatus == 3 || marryStatus == 4 || !marryStatus){
 				$(".info-imgUpload").hide();
-				$("#unitNameLabel").html("<span>*</span>父母职业");
+				$("#unitNameLabel").html("<span></span>父母职业");
 			}else{
 				$(".info-imgUpload").show();
 				if(marryStatus == 1){
-					$("#unitNameLabel").html("<span>*</span>配偶职业");
+					$("#unitNameLabel").html("<span></span>配偶职业");
 				}else{
-					$("#unitNameLabel").html("<span>*</span>父母职业");
+					$("#unitNameLabel").html("<span></span>父母职业");
 				}
 			}
 			$("#marryStatus").change(function(){
 				var status = $(this).val();
 				if(status == 3 || status == 4 || !status){
-					$("#unitNameLabel").html("<span>*</span>父母职业");
+					$("#unitNameLabel").html("<span></span>父母职业");
 					$(".info-imgUpload").hide();
 					$('#marryUrl').val("");
 					$('#sqImg').attr('src', "");
 					$("#uploadFile").siblings("i").css("display","none");
 				}else{
 					if(status == 1){
-						$("#unitNameLabel").html("<span>*</span>配偶职业");
+						$("#unitNameLabel").html("<span></span>配偶职业");
 					}else{
-						$("#unitNameLabel").html("<span>*</span>父母职业");
+						$("#unitNameLabel").html("<span></span>父母职业");
 					}
 					$(".info-imgUpload").show();
 				}
@@ -1083,23 +1120,24 @@
 				if (!bootstrapValidator.isValid()) {
 					return;
 				}
+				var applicant = $('#applicant').val();
+				var relationRemark = $('#relationRemark').val();
+				if(applicant == 1 && !relationRemark){
+					layer.msg('主申请人备注不能为空');
+					return;
+				}
+				var position = $('#position').val();
+				if(!position){
+					layer.msg('职位不能为空');
+					return;
+				}
 			}
-			var relationRemark = $('#relationRemark').val();
-			var applicant = $('#applicant').val();
-			if(applicant == 1 && !relationRemark){
-				layer.msg('主申请人备注不能为空');
-				return;
-			}
-			var position = $('#position').val();
-			if(!position){
-				layer.msg('职位不能为空');
-				return;
-			}
+			
 			var unitName = $('#unitName').val();
-			if(!unitName){
+			/* if(!unitName){
 				layer.msg('父母（配偶）职业不能为空');
 				return;
-			}
+			} */
 			//绑定财产类型
 			var wealthType = "";
 			$('[name=wealthType]').each(function(){
@@ -1117,7 +1155,7 @@
 			}
 			//绑定签证城市
 			var visacounty = "";
-			$('[name=visacounty]').each(function(){
+			$('[name=visacountys]').each(function(){
 				if($(this).hasClass('btnState-true')){
 					visacounty += $(this).val() + ',';
 				}
@@ -1243,7 +1281,7 @@
 			save(2);
 		}
 		//签证类型
-		var threecounty = '${obj.jporderinfo.visaCounty}';
+		/* var threecounty = '${obj.jporderinfo.visaCounty}';
 		if(threecounty){
 			var threecountys = threecounty.split(",");
 			for (var i = 0; i < threecountys.length; i++) {
@@ -1253,7 +1291,7 @@
 					}
 				});
 			}
-		}
+		} */
 		var threecounty = '${obj.jporderinfo.threeCounty}';
 		if(threecounty){
 			var threecountys = threecounty.split(",");
@@ -1276,11 +1314,11 @@
 				console.log(btnInfo);
 			}
 		});
-		$('#visatype').change(function(){
+		/* $('#visatype').change(function(){
 			var thisval = $(this).val();
 			var visit = $('#isVisit').val();
-			if(thisval != 1){
-				$('#visacounty').show();
+			if(thisval == 2){
+				//$('#visacounty').show();
 				$('#threefangwen').show();
 				$('#visacounty input').removeClass('btnState-true');
 				if(visit == 1){
@@ -1297,7 +1335,7 @@
 				$('#laststayday').val('');
 				$('#lastreturndate').val('');
 			}
-		});
+		}); */
 		
 		$('#isVisit').change(function(){
 			var thisval = $(this).val();

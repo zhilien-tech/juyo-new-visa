@@ -40,7 +40,6 @@ import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.PdfTypeEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
-import com.juyo.visa.entities.TApplicantVisaJpEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
@@ -72,6 +71,12 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	/** 辽宁万达下载文件 */
 	@Inject
 	private LiaoNingWanDaService liaoNingWanDaService;
+	//寰宇文件下载
+	@Inject
+	private HuanyuService huanyuService;
+	//金桥文件下载
+	@Inject
+	private JinqiaoService jinqiaoService;
 
 	private static final Integer VISA_PROCESS = JPOrderProcessTypeEnum.VISA_PROCESS.intKey();
 
@@ -145,14 +150,35 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
 			// 获取打包的文件
 			byte[] byteArray = null;
+			int pdftype = 0;
 			//根据PDF类型
-			Integer pdftype = loginCompany.getPdftype();
+			//先查询发招宝有没有选择地接社
+			//如果有，则使用该公司的pdfType,如果没有则查询该登录公司有没有资质，有资质用自己的，否则用通用模板
+			if (!Util.isEmpty(orderjp.getSendsignid())) {
+				Integer sendsignid = orderjp.getSendsignid();
+				TCompanyEntity pdfCom = dbDao.fetch(TCompanyEntity.class, sendsignid.longValue());
+				//Integer pdftype = loginCompany.getPdftype();
+				pdftype = pdfCom.getPdftype();
+
+			} else {
+				if (!Util.isEmpty(loginCompany.getCdesignNum())) {
+					pdftype = loginCompany.getPdftype();
+				} else {
+					pdftype = PdfTypeEnum.UNIVERSAL_TYPE.intKey();
+				}
+			}
+
 			if (pdftype == PdfTypeEnum.LIAONINGWANDA_TYPE.intKey()) {
 				//辽宁万达模版
 				byteArray = liaoNingWanDaService.generateFile(orderjp).toByteArray();
-			} else if(pdftype == PdfTypeEnum.UNIVERSAL_TYPE.intKey()) {
+			} else if (pdftype == PdfTypeEnum.UNIVERSAL_TYPE.intKey()) {
 				//通用模版
 				byteArray = downLoadVisaFileService.generateFile(orderjp, request).toByteArray();
+				//byteArray = jinQiaoService.generateFile(orderjp).toByteArray();
+			} else if (pdftype == PdfTypeEnum.HUANYU_TYPE.intKey()) {
+				byteArray = huanyuService.generateFile(orderjp, request).toByteArray();
+			} else if (pdftype == PdfTypeEnum.JINQIAO_TYPE.intKey()) {
+				byteArray = jinqiaoService.generateFile(orderjp, request).toByteArray();
 			}
 			// 获取订单信息，准备文件名称
 			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
@@ -164,14 +190,15 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 					Cnd.where("orderId", "=", orderid), null);
 			for (TApplicantOrderJpEntity applicantjp : jpapplicants) {
 				if (!Util.isEmpty(applicantjp.getIsMainApplicant()) && applicantjp.getIsMainApplicant().equals(1)) {
-					TOrderJpEntity orderJp  = new TOrderJpEntity();
-					TApplicantEntity applicat = dbDao.fetch(TApplicantEntity.class,
-							applicantjp.getApplicantId().longValue());
-					if(!Util.isEmpty(applicantjp.getOrderId())) {
-						orderJp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderid", "=", applicantjp.getOrderId()));
-					Integer type = orderjp.getVisaType();
-					System.out.println(type);
-					if(!Util.isEmpty(type)) {
+					TOrderJpEntity orderJp = new TOrderJpEntity();
+					TApplicantEntity applicat = dbDao.fetch(TApplicantEntity.class, applicantjp.getApplicantId()
+							.longValue());
+					if (!Util.isEmpty(applicantjp.getOrderId())) {
+						orderJp = dbDao
+								.fetch(TOrderJpEntity.class, Cnd.where("orderid", "=", applicantjp.getOrderId()));
+						Integer type = orderjp.getVisaType();
+						System.out.println(type);
+						if (!Util.isEmpty(type)) {
 							if (type == 1) {
 								visaType = "单次";
 							}
@@ -206,11 +233,14 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			fileName = fileName.replace("+", " ");
 			// 设置下载的响应头
 			// response.setContentType("application/zip");
+			//通过response.reset()刷新可能存在一些未关闭的getWriter(),避免可能出现未关闭的getWriter()
+			response.reset();
 			response.setContentType("application/octet-stream");
 			response.setHeader("Set-Cookie", "fileDownload=true; path=/");
 			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
 			// 将字节流相应到浏览器（下载）
 			IOUtils.write(byteArray, response.getOutputStream());
+			response.flushBuffer();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -14,7 +14,6 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +30,6 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.itextpdf.text.BadElementException;
-import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -41,7 +39,6 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.tool.xml.html.table.Table;
 import com.juyo.visa.admin.city.service.CityViewService;
 import com.juyo.visa.admin.flight.service.FlightViewService;
 import com.juyo.visa.admin.hotel.service.HotelViewService;
@@ -162,8 +159,8 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			ByteArrayOutputStream apply = applyinfo(record, tempdata);
 			pdffiles.add(apply);
 		}
-//		ByteArrayOutputStream returnhome = returnhome(tempdata);
-//		pdffiles.add(returnhome);
+		//		ByteArrayOutputStream returnhome = returnhome(tempdata);
+		//		pdffiles.add(returnhome);
 		ByteArrayOutputStream mergePdf = templateUtil.mergePdf(pdffiles);
 		//申请人信息
 		//return stream;
@@ -225,27 +222,41 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				}
 				//入境航班
 				if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
-					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-						map.put("entryPort", goflight.getLandingName()+",");
+					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+							Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
+					String goFlightNum = ordertripjp.getGoFlightNum();
+					//map.put("entryPort", goflight.getLandingName() + ",");
+					map.put("entryPort", goFlightNum.substring(
+							goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+							goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))));
+					map.put("entryFlight",
+							goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 				}
-				//去除*号
-				 
-				map.put("entryFlight", ordertripjp.getGoFlightNum().replace("*", ""));
+
 				if (!Util.isEmpty(ordertripjp.getReturnDate())) {
 					map.put("departDate", dateFormat.format(ordertripjp.getReturnDate()));
 				}
 				//天数
 				if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
 
-					map.put("stay", String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(),
-							ordertripjp.getReturnDate()) + 1)+"天");
+					map.put("stay",
+							String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate()) + 1)
+									+ "天");
 				}
 				if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
 					//出境航班
-					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-						map.put("departPort", goflight.getLandingName()+",");
+					TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+							Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
+					String goFlightNum = ordertripjp.getReturnFlightNum();
+					//map.put("departPort", goflight.getTakeOffName() + ",");
+					//map.put("departFlight", ordertripjp.getReturnFlightNum().replace("*", ""));
+					map.put("departPort", goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+							+ ",");
+					map.put("departFlight",
+							goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 				}
-				map.put("departFlight", ordertripjp.getReturnFlightNum().replace("*", ""));
 			} else if (ordertripjp.getTripType().equals(2)) {
 				//多程处理
 				if (!Util.isEmpty(mutiltrip)) {
@@ -256,9 +267,10 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					}
 					//入境航班
 					if (!Util.isEmpty(entrytrip.getFlightNum())) {
-//						TFlightEntity goflight = flightViewService.fetch(entrytrip.getFlightNum().longValue());
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=",entrytrip.getFlightNum()));
-							map.put("entryPort", goflight.getLandingName()+",");
+						//						TFlightEntity goflight = flightViewService.fetch(entrytrip.getFlightNum().longValue());
+						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
+						map.put("entryPort", goflight.getLandingName() + ",");
 					}
 					map.put("entryFlight", entrytrip.getFlightNum());
 					//最后一程作为返回日期
@@ -268,11 +280,12 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					}
 					if (!Util.isEmpty(returntrip.getFlightNum())) {
 						//出境航班
-//						TFlightEntity returnflight = flightViewService.fetch(returntrip.getFlightNum().longValue());
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-							map.put("departPort", goflight.getLandingName()+",");
+						//						TFlightEntity returnflight = flightViewService.fetch(returntrip.getFlightNum().longValue());
+						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("flightnum", "=", returntrip.getFlightNum()));
+						map.put("departPort", goflight.getTakeOffName() + ",");
 					}
-					map.put("departFlight", returntrip.getFlightNum().replace("*",""));
+					map.put("departFlight", returntrip.getFlightNum().replace("*", ""));
 					//停留天数
 					if (!Util.isEmpty(entrytrip.getDepartureDate()) && !Util.isEmpty(returntrip.getDepartureDate())) {
 						map.put("stay",
@@ -343,7 +356,12 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				map.put("fill_7", dateformat.format((Date) record.get("birthday")));
 			}
 			//出生地
-			map.put("fill_8", record.getString("address"));
+			String province = (String) record.getString("province");
+			if (province.endsWith("省") || province.endsWith("市")) {
+				province = province.substring(0, province.length() - 1);
+			}
+			map.put("fill_8", province);
+			//map.put("fill_8", record.getString("address"));
 			//婚姻状况
 			if (!Util.isEmpty(record.get("marrystatus"))) {
 				Integer marrystatus = record.getInt("marrystatus");
@@ -362,7 +380,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				}
 			}
 			//国籍
-			map.put("fill_9", "中国");
+			map.put("fill_9", "CHINA");
 			//曾有的或另有的国际
 			map.put("fill_10", record.getString("nationality"));
 			//身份证号
@@ -411,7 +429,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					TFlightEntity goflightentity = dbDao.fetch(TFlightEntity.class,
 							Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
 					if (!Util.isEmpty(goflightentity)) {
-						map.put("fill_22", goflightentity.getAirlinecomp());
+						map.put("fill_22", ordertripjp.getGoFlightNum());
 					}
 				} else if (ordertripjp.getTripType().equals(2)) {
 					//多程处理
@@ -430,7 +448,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 						if (!Util.isEmpty(entrytrip.getFlightNum())) {
 							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-							map.put("fill_22", goflight.getFlightnum());
+							map.put("fill_22", entrytrip.getFlightNum());
 						}
 						//最后一程作为返回日期
 						TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
@@ -471,8 +489,8 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			}
 			if (Util.isEmpty(lastinfo)) {
 				map.put("fill_26", "无");
-			}else {
-				map.put("fill_26", lastinfo+"天");
+			} else {
+				map.put("fill_26", lastinfo + "天");
 			}
 			//配偶职业
 			map.put("fill_1_2", record.getString("unitname"));
@@ -582,7 +600,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("comNameBig", company.getName());
-//			map.put("comNameSmall", company.getName());
+			//			map.put("comNameSmall", company.getName());
 			map.put("address", company.getAddress());
 			map.put("telephone", company.getMobile());
 			map.put("linkman", company.getLinkman());
@@ -630,17 +648,17 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			}
 			map.put("guest", strb.toString().toUpperCase());
 			String room = null;
-			if(applyinfo.size()>0){
-				if(applyinfo.size()%2 ==1) {
-				
-				int c = applyinfo.size()/2+1;
-			   room = "TWN "+c+" 室";
+			if (applyinfo.size() > 0) {
+				if (applyinfo.size() % 2 == 1) {
+
+					int c = applyinfo.size() / 2 + 1;
+					room = "TWN " + c + " 室";
 					map.put("room", room);
-			}else {
-				int c = applyinfo.size()/2;
-				   room = "TWN "+c+" 室";
-						map.put("room", room);
-			}
+				} else {
+					int c = applyinfo.size() / 2;
+					room = "TWN " + c + " 室";
+					map.put("room", room);
+				}
 			}
 			//酒店信息
 			if (!Util.isEmpty(ordertravelplan)) {
@@ -678,16 +696,16 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			Font font1 = ttf.getFont();
 			font1.setFamily("宋体");
 			font1.setSize(17);
-			 PdfPTable table1 = new PdfPTable(2); //表格两列
-			 table1.setWidthPercentage(95);
+			PdfPTable table1 = new PdfPTable(2); //表格两列
+			table1.setWidthPercentage(95);
 			table1.setHorizontalAlignment(Element.ALIGN_CENTER); //垂直居中
 			table1.setTotalWidth(PageSize.A4.rotate().getWidth());
-			float[] wid1 ={0.5f,0.5f}; //两列宽度的比例
-			table1.setWidths(wid1); 
-//			table1.getDefaultCell().setBorderWidth(0); //不显示边框
-			PdfPCell cell11 = new PdfPCell(); 
-			PdfPCell cell12 = new PdfPCell(); 
-			Paragraph paragraph = new Paragraph("签证申请人名单",font1);
+			float[] wid1 = { 0.5f, 0.5f }; //两列宽度的比例
+			table1.setWidths(wid1);
+			//			table1.getDefaultCell().setBorderWidth(0); //不显示边框
+			PdfPCell cell11 = new PdfPCell();
+			PdfPCell cell12 = new PdfPCell();
+			Paragraph paragraph = new Paragraph("签证申请人名单", font1);
 			Paragraph paragraph2 = new Paragraph(company.getName(), font1);
 			paragraph2.setAlignment(Element.ALIGN_RIGHT);
 			paragraph.setAlignment(Element.ALIGN_LEFT);
@@ -695,28 +713,28 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			cell11.setBorder(0);
 			cell12.addElement(paragraph2);
 			cell12.setBorder(0);
-//			paragraph.setSpacingBefore(30);
-//			paragraph.setIndentationLeft(50);
-//			paragraph2.setSpacingAfter(200);
-			 table1.addCell(cell11);
-			 table1.addCell(cell12);
-			 table1.getDefaultCell().setBorderWidth(0);
-			 document.add(table1);
-//			Paragraph p = new Paragraph();
-//			Chunk chunk1 = new Chunk("签证申请人名单", font1);
-//			Chunk chunk3 = new Chunk("                                                                                            ", font);
-//			Chunk chunk2 = null;
-//			if(!Util.isEmpty(company.getName())) {
-//				chunk2= new Chunk(company.getName(), font1);
-//			}
-//			p.add(chunk1);
-//			p.add(chunk3);
-//			p.add(chunk2);
-//			p.setSpacingBefore(5);
-//			p.setSpacingAfter(5);
-//			p.setIndentationLeft(20);
-//			p.setIndentationRight(20);
-//			document.add(p);
+			//			paragraph.setSpacingBefore(30);
+			//			paragraph.setIndentationLeft(50);
+			//			paragraph2.setSpacingAfter(200);
+			table1.addCell(cell11);
+			table1.addCell(cell12);
+			table1.getDefaultCell().setBorderWidth(0);
+			document.add(table1);
+			//			Paragraph p = new Paragraph();
+			//			Chunk chunk1 = new Chunk("签证申请人名单", font1);
+			//			Chunk chunk3 = new Chunk("                                                                                            ", font);
+			//			Chunk chunk2 = null;
+			//			if(!Util.isEmpty(company.getName())) {
+			//				chunk2= new Chunk(company.getName(), font1);
+			//			}
+			//			p.add(chunk1);
+			//			p.add(chunk3);
+			//			p.add(chunk2);
+			//			p.setSpacingBefore(5);
+			//			p.setSpacingAfter(5);
+			//			p.setIndentationLeft(20);
+			//			p.setIndentationRight(20);
+			//			document.add(p);
 
 			float[] columns = { 2, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 4, 3, 2, 4, };
 			PdfPTable table = new PdfPTable(columns);
@@ -807,8 +825,11 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				table.addCell(cell);
 				//英文姓名
 				cell = new PdfPCell(
-						new Paragraph((!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : "")
-								+" "+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : ""), font));
+						new Paragraph(
+								(!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : "")
+										+ " "
+										+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen")
+												: ""), font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				if (flag) {
@@ -834,15 +855,13 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				}
 				table.addCell(cell);
 				//居住地
-//				cell = new PdfPCell(new Paragraph((!Util.isEmpty(record.get("province")) ? record.getString("province")
-//						: "")
-//						+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : "")
-//						+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress") : ""),
-//						font));
+				//				cell = new PdfPCell(new Paragraph((!Util.isEmpty(record.get("province")) ? record.getString("province")
+				//						: "")
+				//						+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : "")
+				//						+ (!Util.isEmpty(record.get("detailedaddress")) ? record.getString("detailedaddress") : ""),
+				//						font));
 				cell = new PdfPCell(new Paragraph((!Util.isEmpty(record.get("province")) ? record.getString("province")
-						: "")
-						+ "\n"+ (!Util.isEmpty(record.get("city")) ? record.getString("city") : ""),
-						font));
+						: "") + "\n" + (!Util.isEmpty(record.get("city")) ? record.getString("city") : ""), font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				if (flag) {
@@ -919,33 +938,36 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					table.addCell(cell);
 				}
 				//备注
-				if(record.get("isMainApplicant").equals(1)) {
+				if (record.get("isMainApplicant").equals(1)) {
 					cell = new PdfPCell(new Paragraph(
-							(!Util.isEmpty(record.get("relationremark")) ? record.getString("relationremark") : ""), font));
+							(!Util.isEmpty(record.get("relationremark")) ? record.getString("relationremark") : ""),
+							font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					if (flag) {
 						cell.setRowspan(wealthjpinfo.size());
 					}
 					table.addCell(cell);
-				}else {
+				} else {
 					//主申请人姓名
-//					副申请人ID
+					//					副申请人ID
 					TApplicantEntity applicant = new TApplicantEntity();
-					if(!Util.isEmpty(record.get("MainId"))) {
-							 applicant = dbDao.fetch(TApplicantEntity.class,Cnd.where("id", "=",record.get("MainId") ));
+					if (!Util.isEmpty(record.get("MainId"))) {
+						applicant = dbDao.fetch(TApplicantEntity.class, Cnd.where("id", "=", record.get("MainId")));
 					}
 					cell = new PdfPCell(new Paragraph(
-							(!Util.isEmpty(record.get("mainRelation")) ? applicant.getFirstName()+applicant.getLastName()+"("+record.getString("mainRelation")+")" : ""), font));
+							(!Util.isEmpty(record.get("mainRelation")) ? applicant.getFirstName()
+									+ applicant.getLastName() + "(" + record.getString("mainRelation") + ")" : ""),
+							font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					if (flag) {
 						cell.setRowspan(wealthjpinfo.size());
 					}
 					table.addCell(cell);
-					
+
 				}
-				
+
 				//旅行社意见
 				cell = new PdfPCell(new Paragraph(
 						(!Util.isEmpty(record.get("traveladvice")) ? record.getString("traveladvice") : ""), font));
@@ -1062,6 +1084,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			font.setSize(10);
 			//日期格式化
 			String pattern = "yy年MM月dd日";
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			//副标题1
 			String godatestr = "";
 			String returndatestr = "";
@@ -1112,17 +1135,17 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			{
 				String text = applyname + "，他" + dengsize + "名(男" + boysize + "/女" + grilsize + ")";
 				Paragraph p = new Paragraph(text, font);
-//				p.setSpacingAfter(5);
+				//				p.setSpacingAfter(5);
 				p.setIndentationRight(13);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
 
 			{
-//				String subtitle = "（平成" + godatestr + "から平成" + returndatestr + "）";
+				//				String subtitle = "（平成" + godatestr + "から平成" + returndatestr + "）";
 				String subtitle = "(平成" + godatestr + "～" + returndatestr.substring(3, 8) + ")";
 				Paragraph p = new Paragraph(subtitle, font);
-//				p.setSpacingBefore(5);
+				//				p.setSpacingBefore(5);
 				p.setIndentationRight(13);
 				p.setSpacingAfter(5);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
@@ -1130,7 +1153,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				document.add(p);
 			}
 			//表格
-			float[] columns = {3,5,5};
+			float[] columns = { 3, 5, 5 };
 			PdfPTable table = new PdfPTable(columns);
 			table.setWidthPercentage(95);
 			table.setTotalWidth(PageSize.A4.getWidth());
@@ -1157,8 +1180,16 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 					if (ordertripjp.getTripType().equals(1)) {
 						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-						scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
-								+ goflight.getLandingName();
+						String goFlightNum = ordertripjp.getGoFlightNum();
+						/*scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
+								+ goflight.getLandingName();*/
+						scenic = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+								+ "："
+								+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+								+ "->"
+								+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
 						if (!Util.isEmpty(mutiltrip)) {
@@ -1166,16 +1197,32 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 							TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
 							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-							scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
-									+ goflight.getLandingName();
+							String goFlightNum = entrytrip.getFlightNum();
+							/*scenic = goflight.getFlightnum().replace("*", "") + "：" + goflight.getTakeOffName() + "->"
+									+ goflight.getLandingName();*/
+							scenic = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+									+ "："
+									+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+									+ "->"
+									+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
 						}
 					}
 				} else if (count == ordertravelplans.size()) {
 					if (ordertripjp.getTripType().equals(1)) {
 						TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-						scenic = returnflight.getFlightnum().replace("*", "") + "：" + returnflight.getTakeOffName() + "->"
-								+ returnflight.getLandingName();
+						String goFlightNum = ordertripjp.getReturnFlightNum();
+						/*scenic = returnflight.getFlightnum().replace("*", "") + "：" + returnflight.getTakeOffName()
+								+ "->" + returnflight.getLandingName();*/
+						scenic = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+								+ "："
+								+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+								+ "->"
+								+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
 					} else if (ordertripjp.getTripType().equals(2)) {
 						//多程出发航班
 						if (!Util.isEmpty(mutiltrip)) {
@@ -1183,8 +1230,16 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 							TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
 							TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
 									Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-							scenic = returnflight.getFlightnum().replace("*", "") + "：" + returnflight.getTakeOffName() + "->"
-									+ returnflight.getLandingName();
+							String goFlightNum = returntrip.getFlightNum();
+							/*scenic = returnflight.getFlightnum().replace("*", "") + "：" + returnflight.getTakeOffName()
+									+ "->" + returnflight.getLandingName();*/
+							scenic = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+									+ "："
+									+ goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+									+ "->"
+									+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
 						}
 					}
 				} else {
@@ -1203,7 +1258,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				} else {
 					hotel = " ";
 				}
-				String[] datas = { format(ordertravelplan.getOutDate(), pointpattren), scenic, hotel };
+				String[] datas = { sdf.format(ordertravelplan.getOutDate()), scenic, hotel };
 				for (String title : datas) {
 					PdfPCell cell = new PdfPCell(new Paragraph(title, font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1279,7 +1334,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 			}
 			if (!Util.isEmpty(sealUrl)) {
 				document.add(getSeal1(sealUrl, ordertravelplans.size() / 2));
-//				document.add(getSeal1(sealUrl, ordertravelplans.size()));
+				//				document.add(getSeal1(sealUrl, ordertravelplans.size()));
 			}
 			document.close();
 			IOUtils.closeQuietly(stream);
@@ -1582,7 +1637,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 				}
 			}
 			{
-//				String subtitle = "（平成" + godatestr + "から平成" + returndatestr + "）";
+				//				String subtitle = "（平成" + godatestr + "から平成" + returndatestr + "）";
 				String subtitle = "（平成" + godatestr + "～" + returndatestr.substring(3, 8) + "）";
 				Paragraph p = new Paragraph(subtitle, font);
 				p.setSpacingBefore(5);

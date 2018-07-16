@@ -24,6 +24,8 @@ public class TCityUpdateForm extends ModForm implements Serializable {
 
 	private String code;
 
+	private String relationcity;
+
 	/**创建时间*/
 	private Date createTime;
 

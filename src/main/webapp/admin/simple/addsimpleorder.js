@@ -123,5 +123,5 @@ function saveAddOrder(status){
 		error : function() {
 			console.log("error");
 		}
-	}); 
+	});
 }
