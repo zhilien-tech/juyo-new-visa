@@ -55,15 +55,20 @@
 						<div class="info-imgUpload front has-error" id="borderColorFront">
 							<!-- 身份证 正面 -->
 							<div class="col-xs-6 widthBig">
-								<div class="form-group">
+								<div class="form-group" style="margin-top: 0!important;">
 									<div class="cardFront-div">
-										<span>点击上传身份证正面</span> <input id="cardFront" name="cardFront"
-											type="hidden" value="${obj.applicant.cardFront }" /> <input
+										<span></span>
+											<input id="cardFront" name="cardFront"
+											type="hidden" value="${obj.applicant.cardFront }" /> 
+											<!-- <input
 											id="uploadFile" name="uploadFile"
-											class="btn btn-primary btn-sm" type="file" value="1111" /> <img
+											class="btn btn-primary btn-sm" type="file" value="1111" /> -->
+											
+											<img
 											id="sqImg" name="sqImg" alt=""
-											src="${obj.applicant.cardFront }"> <i class="delete"
-											onclick="deleteApplicantFrontImg(${obj.orderid});"></i>
+											style="margin-top: -20px;"
+											src="${obj.applicant.cardFront }"> <%-- <i class="delete"
+											onclick="deleteApplicantFrontImg(${obj.orderid});"></i> --%>
 									</div>
 								</div>
 							</div>
@@ -690,7 +695,7 @@
 		}
 		//正面上传,扫描
 		
-		$('#uploadFile').change(function() {
+		/* $('#uploadFile').change(function() {
 			var layerIndex = layer.load(1, {
 				shade : "#000"
 			});
@@ -756,7 +761,7 @@
 				}); // end of ajaxSubmit
 			};
 			reader.readAsDataURL(file);
-		});
+		}); */
 		
 		//背面上传,扫描
 		$('#uploadFileBack').change(function() {

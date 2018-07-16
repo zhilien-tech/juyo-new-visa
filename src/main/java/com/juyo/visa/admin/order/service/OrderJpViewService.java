@@ -3331,7 +3331,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 
 			long startTime2 = System.currentTimeMillis();//获取当前时间
-			/*Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
+			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
 			file.delete();
 			if (!Util.isEmpty(spin)) {
 				spin.delete();
@@ -3339,7 +3339,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 
 			long startTime3 = System.currentTimeMillis();//获取当前时间
-			System.out.println("将图片上传运行时间：" + (startTime3 - startTime2) + "ms");*/
+			System.out.println("将图片上传运行时间：" + (startTime3 - startTime2) + "ms");
 
 			//jsonEntity.setUrl(url);
 			jsonEntity.setOCRline1(out.getString("line0"));
