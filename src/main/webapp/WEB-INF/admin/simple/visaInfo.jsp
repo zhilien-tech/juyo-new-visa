@@ -12,13 +12,13 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v=<%=System.currentTimeMillis() %>">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
-	<link rel="stylesheet" href="${base}/references/public/css/style.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/public/css/style.css?v=<%=System.currentTimeMillis() %>">
 	<!-- 本页css -->
-	<link rel="stylesheet" href="${base}/references/common/css/simpleVisaInfo.css?v='20180703'">
+	<link rel="stylesheet" href="${base}/references/common/css/simpleVisaInfo.css?v=<%=System.currentTimeMillis() %>">
 </head>
 <body>
 	<div class="modal-content">

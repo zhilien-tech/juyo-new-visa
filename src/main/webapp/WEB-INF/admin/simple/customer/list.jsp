@@ -12,11 +12,11 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>客户管理</title>
 				  <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-  		  <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
+  		  <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v=<%=System.currentTimeMillis() %>">
           <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
           <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
           <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
-          <link rel="stylesheet" href="${base}/references/public/css/style.css?v='20180510'">
+          <link rel="stylesheet" href="${base}/references/public/css/style.css?v=<%=System.currentTimeMillis() %>">
           <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">

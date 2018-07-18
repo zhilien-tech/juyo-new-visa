@@ -33,6 +33,8 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.springframework.web.socket.TextMessage;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Ints;
@@ -53,6 +55,7 @@ import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.ApplicantJpWealthEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CollarAreaEnum;
+import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
@@ -90,6 +93,7 @@ import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TCompanyOfCustomerEntity;
 import com.juyo.visa.entities.TCustomerEntity;
 import com.juyo.visa.entities.TCustomerVisainfoEntity;
 import com.juyo.visa.entities.TFlightEntity;
@@ -141,6 +145,81 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	private VisaInfoWSHandler visaInfoWSHandler = (VisaInfoWSHandler) SpringContextUtil.getBean("myVisaInfoHander",
 			VisaInfoWSHandler.class);
 
+	private static final String VISAINFO_WEBSPCKET_ADDR = "visainfowebsocket";
+
+	public Object toList(HttpServletRequest request) {
+		Map<String, Object> result = Maps.newHashMap();
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		JSONArray ja = new JSONArray();
+
+		//送签社下拉
+		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
+				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+			//如果公司自己有指定番号，说明有送签资质，也需要出现在下拉中
+			if (!Util.isEmpty(loginCompany.getCdesignNum())) {
+				ja.add(loginCompany);
+			}
+			List<TCompanyOfCustomerEntity> list = dbDao.query(TCompanyOfCustomerEntity.class,
+					Cnd.where("comid", "=", loginCompany.getId()), null);
+			for (TCompanyOfCustomerEntity tCompanyOfCustomerEntity : list) {
+				JSONObject jo = new JSONObject();
+				Integer sendcomid = tCompanyOfCustomerEntity.getSendcomid();
+
+				TCompanyEntity sendCompany = dbDao.fetch(TCompanyEntity.class,
+						Cnd.where("id", "=", sendcomid).and("cdesignNum", "!=", ""));
+
+				ja.add(sendCompany);
+			}
+		}
+		result.put("songqianlist", ja);
+
+		//员工下拉
+		Integer comid = loginCompany.getId();
+		Integer adminId = loginCompany.getAdminId();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();//当前登录用户类型
+
+		//查询拥有某个权限模块的工作人员
+		String sqlstr = sqlManager.get("logs_user_select_list");
+		Sql sql = Sqls.create(sqlstr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tcf.comid", "=", comid);
+		cnd.and("tu.id", "!=", adminId);
+		for (JPOrderProcessTypeEnum typeEnum : JPOrderProcessTypeEnum.values()) {
+			if (1 == typeEnum.intKey()) {
+				cnd.and(" tf.funName", "=", typeEnum.value());
+			}
+		}
+		List<Record> employees = dbDao.query(sql, cnd, null);
+		Cnd usercnd = Cnd.NEW();
+		usercnd.and("comId", "=", loginCompany.getId());
+		if (!loginCompany.getAdminId().equals(loginUser.getId())) {
+			usercnd.and("id", "!=", loginCompany.getAdminId());
+		}
+		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+
+			List<TUserEntity> companyuser = dbDao.query(TUserEntity.class, usercnd, null);
+			List<Record> companyusers = Lists.newArrayList();
+			for (TUserEntity tUserEntity : companyuser) {
+				Record record = new Record();
+				record.put("userid", tUserEntity.getId());
+				record.put("username", tUserEntity.getName());
+				companyusers.add(record);
+			}
+			employees = companyusers;
+		}
+
+		result.put("employees", employees);
+		result.put("orderstatus", EnumUtil.enum2(JpOrderSimpleEnum.class));
+		String localAddr = request.getServerName();
+		int localPort = request.getServerPort();
+		result.put("localAddr", localAddr);
+		result.put("localPort", localPort);
+		result.put("websocketaddr", VISAINFO_WEBSPCKET_ADDR);
+		return result;
+	}
+
 	/**
 	 *列表页数据展示
 	 * <p>
@@ -176,7 +255,20 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		@SuppressWarnings("unchecked")
 		//主sql数据
 		List<Record> list = (List<Record>) sql.getResult();
+
+		int orderscount = list.size();
+
 		for (Record record : list) {
+
+			if (!Util.isEmpty(record.get("visatype"))) {
+				Integer visatype = (Integer) record.get("visatype");
+				for (SimpleVisaTypeEnum visatypenum : SimpleVisaTypeEnum.values()) {
+					if (visatype == visatypenum.intKey()) {
+						record.set("visatype", visatypenum.value());
+					}
+				}
+			}
+
 			Integer orderid = (Integer) record.get("id");
 			String sqlStr = sqlManager.get("get_japan_visa_list_data_apply");
 			Sql applysql = Sqls.create(sqlStr);
@@ -2206,6 +2298,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderinfo.setOrderNum(generrateOrdernum());
 		orderinfo.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
 		orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+		orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
 		orderinfo.setCreateTime(new Date());
 		orderinfo.setUpdateTime(new Date());
 		TOrderEntity orderinsert = dbDao.insert(orderinfo);

@@ -17,7 +17,7 @@
 <link rel="stylesheet"
 	href="${base}/references/public/bootstrap/css/bootstrap.css">
 <link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
+	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v=<%=System.currentTimeMillis() %>">
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 </head>

@@ -279,6 +279,7 @@
         				layer.msg("识别失败");
         			}
         			
+    				_self.passportdata.passporturl = obj.url;
         			if("xingCn" in obj){
     					_self.passportdata.firstname = obj.xingCn;
     					_self.passportdata.firstnameen = getPinYinStr(obj.xingCn);
@@ -288,7 +289,6 @@
     					_self.passportdata.lastname = obj.mingCn;
     					_self.passportdata.lastnameen = getPinYinStr(obj.mingCn);
         			}
-    					_self.passportdata.passporturl = obj.url;
     					_self.passportdata.type = obj.type;
     					_self.passportdata.passport = obj.num;
     					_self.passportdata.sex = obj.sex;

@@ -5,10 +5,12 @@
 
 .card-head div:nth-child(1) {
 	width: 14%;
+	margin-right:25px;
 }
 
 .card-head div:nth-child(2) {
-	width: 14%;
+	width: 13%;
+	margin-right:20px;
 }
 
 .card-head div:nth-child(3) {
@@ -16,15 +18,17 @@
 }
 
 .card-head div:nth-child(4) {
+	margin-left:25px;
 	width: 13%;
 }
 
 .card-head div:nth-child(5) {
-	width: 5%;
+	width: 6%;
+	text-align:center;
 }
 
 .card-head div:nth-child(6) {
-	width: 9%;
+	width: 34.6%;
 	text-align: right;
 }
 
@@ -36,19 +40,24 @@
 }
 
 .everybody-info div:nth-child(1) {
+	
 	width: 13%;
 }
 
 .everybody-info div:nth-child(2) {
 	width: 16.5%;
+	
 }
 
 .everybody-info div:nth-child(3) {
 	width: 13%;
+	text-align: left;
+	
 }
 
 .everybody-info div:nth-child(4) {
-	width: 50%;
+	margin-left:30px;
+	width: 54%;
 }
 
 .everybody-info div:nth-child(5) {

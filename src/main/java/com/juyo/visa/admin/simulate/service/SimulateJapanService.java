@@ -546,14 +546,20 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			//记录发招宝成功状态
 			System.out.println("发招宝成功了，我要记录了");
 			order.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+			//要收费啦
+			order.setZhaobaoupdate(IsYesOrNoEnum.YES.intKey());
 			order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
 		} else if (JPOrderStatusEnum.BIANGENGZHONG.intKey() == form.getOrderstatus()) {
 			System.out.println("招宝更新成功了");
 			order.setStatus(JPOrderStatusEnum.YIBIANGENG.intKey());
+			//要收费啦
+			order.setZhaobaoupdate(IsYesOrNoEnum.YES.intKey());
 		} else if (JPOrderStatusEnum.QUXIAOZHONG.intKey() == form.getOrderstatus()) {
 			System.out.println("招宝取消成功了");
 			//记录招宝取消状态
 			order.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+			//取消收费记录
+			order.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
 			order.setStatus(JPOrderStatusEnum.YIQUXIAO.intKey());
 		}
 		dbDao.update(order);
