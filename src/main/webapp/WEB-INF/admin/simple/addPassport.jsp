@@ -446,27 +446,35 @@
 			}
 			var passportInfo = $("#passportInfo").serialize();
 			layer.load(1);
-			$.ajax({
-				type: 'POST',
-				async : false,
-				data : passportInfo,
-				url: '${base}/admin/simple/saveEditPassport.html',
-				success :function(data) {
-					$("#addBtn").attr('disabled', false);
-					layer.closeAll("loading");
-					window.parent.document.getElementById("orderid").value = data.orderid;
-					console.log(JSON.stringify(data));
-					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					layer.close(index); */
-					parent.saveAddOrder(2);
-					if(status == 2){
-						socket.onclose();
-						window.location.href = '/admin/simple/updateApplicant.html?applicantid='+data.applicantid+'&orderid='+data.orderid;
-					}else if(status == 1){
-						closeWindow();
+			ajaxConnection();
+			var count = 0;
+			function ajaxConnection(){
+				$.ajax({
+					type: 'POST',
+					async : false,
+					data : passportInfo,
+					url: '${base}/admin/simple/saveEditPassport.html',
+					success :function(data) {
+						$("#addBtn").attr('disabled', false);
+						layer.closeAll("loading");
+						if(data.msg){
+							layer.msg(data.msg);
+						}else{
+							window.parent.document.getElementById("orderid").value = data.orderid;
+							console.log(JSON.stringify(data));
+							/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							layer.close(index); */
+							parent.saveAddOrder(2);
+							if(status == 2){
+								socket.onclose();
+								window.location.href = '/admin/simple/updateApplicant.html?applicantid='+data.applicantid+'&orderid='+data.orderid;
+							}else if(status == 1){
+								closeWindow();
+							}
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 		
 		

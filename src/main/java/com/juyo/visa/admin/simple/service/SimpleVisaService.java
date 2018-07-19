@@ -3242,6 +3242,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TApplicantPassportEntity passport = new TApplicantPassportEntity();
+		if (isCNChar(form.getFirstNameEn()) || isCNChar(form.getLastNameEn())) {
+			//输入非法
+			result.put("msg", "姓名拼音不能包含中文");
+			return result;
+
+		}
 		if (!Util.isEmpty(form.getId())) {
 			passport = dbDao.fetch(TApplicantPassportEntity.class, form.getId().longValue());
 			/*TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class, passport
@@ -3363,6 +3369,24 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//		savaOrUpdatePassport(form, request);
 		//int update = dbDao.update(passport);
 		return result;
+	}
+
+	public static boolean isCNChar(String s) {
+		boolean booleanValue = false;
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			if (c > 128) {
+				booleanValue = true;
+				break;
+			}
+		}
+		return booleanValue;
+	}
+
+	public boolean isChineseStr(String str) {
+		String reg = "[\\u4e00-\\u9fa5]+";
+		boolean isChinese = str.matches(reg);
+		return isChinese;
 	}
 
 	/***

@@ -470,15 +470,19 @@
 					success :function(data) {
 						layer.closeAll("loading");
 						console.log(JSON.stringify(data));
-						/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-						layer.close(index); */
-						if(status == 2){
-							socket.onclose();
-							window.location.href = '/admin/simple/updateApplicant.html?applicantid='+id+'&orderid='+orderid;
-						}
-						if(status == 1){
-							parent.successCallBack(1);
-							closeWindow();
+						if(data.msg){
+							layer.msg(data.msg);
+						}else{
+							/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							layer.close(index); */
+							if(status == 2){
+								socket.onclose();
+								window.location.href = '/admin/simple/updateApplicant.html?applicantid='+id+'&orderid='+orderid;
+							}
+							if(status == 1){
+								parent.successCallBack(1);
+								closeWindow();
+							}
 						}
 					},error:function(error,XMLHttpRequest,status){
 						console.log("error:",error);
