@@ -218,7 +218,7 @@ body {
 	background-color: #f9f9f9;
 }
 
-.houseProperty, .vehicle, .deposit, .financial, .vice, .certificate, .bankflow, .taxbill, .taxproof, .readstudent, .graduate {
+.houseProperty, .vehicle, .deposit, .financial, .vice, .certificate, .bankflow, .taxbill, .taxproof, .readstudent, .goldcard, .graduate {
 	display: none;
 }
 .dropdown-menu {

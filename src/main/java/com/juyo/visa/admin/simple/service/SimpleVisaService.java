@@ -42,6 +42,7 @@ import com.juyo.visa.admin.changePrincipal.service.ChangePrincipalViewService;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
+import com.juyo.visa.admin.simple.entity.StatisticsEntity;
 import com.juyo.visa.admin.simple.form.AddOrderForm;
 import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
@@ -248,6 +249,42 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		Pager pager = new OffsetPager((pageNumber - 1) * pageSize, pageSize);
 		pager.setRecordCount((int) Daos.queryCount(nutDao, sql.toString()));
+
+		sql.setCallback(Sqls.callback.records());
+		nutDao.execute(sql);
+
+		@SuppressWarnings("unchecked")
+		//主sql数据
+		List<Record> totallist = (List<Record>) sql.getResult();
+		int orderscount = totallist.size();
+		int peopletotal = 0;
+		int disableorder = 0;
+		int disablepeople = 0;
+		int zhaobaoorder = 0;
+		int zhaobaopeople = 0;
+		for (Record record : totallist) {
+			//作废单子、人数
+			if (Util.eq(1, record.get("isdisabled"))) {
+				disableorder++;
+				if (!Util.eq(0, record.get("peoplenumber"))) {
+					disablepeople += record.getInt("peoplenumber");
+				}
+			}
+
+			//收费单子，人数
+			if (Util.eq(1, record.get("zhaobaoupdate"))) {
+				zhaobaoorder++;
+				if (!Util.eq(0, record.get("peoplenumber"))) {
+					zhaobaopeople += record.getInt("peoplenumber");
+				}
+			}
+
+			//单子人数
+			if (!Util.eq(0, record.get("peoplenumber"))) {
+				peopletotal += record.getInt("peoplenumber");
+			}
+		}
+
 		sql.setPager(pager);
 		sql.setCallback(Sqls.callback.records());
 		nutDao.execute(sql);
@@ -255,8 +292,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		@SuppressWarnings("unchecked")
 		//主sql数据
 		List<Record> list = (List<Record>) sql.getResult();
-
-		int orderscount = list.size();
 
 		for (Record record : list) {
 
@@ -309,6 +344,15 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 			}
 		}
+
+		StatisticsEntity entity = new StatisticsEntity();
+		entity.setDisableorder(disableorder);
+		entity.setDisablepeople(disablepeople);
+		entity.setOrderscount(orderscount);
+		entity.setPeopletotal(peopletotal);
+		entity.setZhaobaoorder(zhaobaoorder);
+		entity.setZhaobaopeople(zhaobaopeople);
+		result.put("entity", entity);
 		result.put("pagetotal", pager.getPageCount());
 		result.put("visaJapanData", list);
 		return result;
@@ -4171,6 +4215,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getBankflow());
 							applicantWealthJpEntity.setBankflowfree(form.getBankflowfree());
+							applicantWealthJpEntity.setSequence(1);
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getBankflow());
@@ -4197,6 +4242,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getVehicle());
 							applicantWealthJpEntity.setVehiclefree(form.getVehiclefree());
+							applicantWealthJpEntity.setSequence(2);
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getVehicle());
@@ -4225,6 +4271,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getHouseProperty());
 							applicantWealthJpEntity.setHousePropertyfree(form.getHousePropertyfree());
+							applicantWealthJpEntity.setSequence(3);
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getHouseProperty());
@@ -4253,6 +4300,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getFinancial());
 							applicantWealthJpEntity.setFinancialfree(form.getFinancialfree());
+							applicantWealthJpEntity.setSequence(4);
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getFinancial());
@@ -4280,6 +4328,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getCertificate());
 							applicantWealthJpEntity.setCertificatefree(form.getCertificatefree());
+							applicantWealthJpEntity.setSequence(5);
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getCertificate());
@@ -4305,6 +4354,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getDeposit());
 							applicantWealthJpEntity.setDepositfree(form.getDepositfree());
+							applicantWealthJpEntity.setSequence(6);
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getDeposit());
@@ -4330,6 +4380,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getTaxbill());
 							applicantWealthJpEntity.setTaxbillfree(form.getTaxbillfree());
+							applicantWealthJpEntity.setSequence(7);
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getTaxbill());
@@ -4355,6 +4406,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getTaxproof());
 							applicantWealthJpEntity.setTaxprooffree(form.getTaxprooffree());
+							applicantWealthJpEntity.setSequence(8);
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getTaxproof());
@@ -4373,6 +4425,32 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						}
 					}
 
+					//银行金卡
+					if (!Util.isEmpty(form.getGoldcard())) {
+						TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(TApplicantWealthJpEntity.class,
+								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=", "银行金卡"));
+						if (!Util.isEmpty(applicantWealthJpEntity)) {
+							applicantWealthJpEntity.setDetails(form.getGoldcard());
+							applicantWealthJpEntity.setGoldcardfree(form.getGoldcardfree());
+							applicantWealthJpEntity.setSequence(9);
+							dbDao.update(applicantWealthJpEntity);
+						} else {
+							wealthJp.setDetails(form.getGoldcard());
+							wealthJp.setGoldcardfree(form.getGoldcardfree());
+							wealthJp.setType("银行金卡");
+							wealthJp.setSequence(9);
+							wealthJp.setCreateTime(new Date());
+							wealthJp.setOpId(loginUser.getId());
+							dbDao.insert(wealthJp);
+						}
+					} else {
+						TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(TApplicantWealthJpEntity.class,
+								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=", "银行金卡"));
+						if (!Util.isEmpty(applicantWealthJpEntity)) {
+							dbDao.delete(applicantWealthJpEntity);
+						}
+					}
+
 					//特定高校在读生
 					if (!Util.isEmpty(form.getReadstudent())) {
 						TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(
@@ -4382,12 +4460,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getReadstudent());
 							applicantWealthJpEntity.setReadstudentfree(form.getReadstudentfree());
+							applicantWealthJpEntity.setSequence(10);
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getReadstudent());
 							wealthJp.setReadstudentfree(form.getReadstudentfree());
 							wealthJp.setType("特定高校在读生");
-							wealthJp.setSequence(9);
+							wealthJp.setSequence(10);
 							wealthJp.setCreateTime(new Date());
 							wealthJp.setOpId(loginUser.getId());
 							dbDao.insert(wealthJp);
@@ -4411,12 +4490,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (!Util.isEmpty(applicantWealthJpEntity)) {
 							applicantWealthJpEntity.setDetails(form.getGraduate());
 							applicantWealthJpEntity.setGraduatefree(form.getGraduatefree());
+							applicantWealthJpEntity.setSequence(11);
 							dbDao.update(applicantWealthJpEntity);
 						} else {
 							wealthJp.setDetails(form.getGraduate());
 							wealthJp.setGraduatefree(form.getGraduatefree());
 							wealthJp.setType("特定高校毕业生");
-							wealthJp.setSequence(10);
+							wealthJp.setSequence(11);
 							wealthJp.setCreateTime(new Date());
 							wealthJp.setOpId(loginUser.getId());
 							dbDao.insert(wealthJp);

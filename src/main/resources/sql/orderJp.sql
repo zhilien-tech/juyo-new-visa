@@ -196,6 +196,7 @@ tawj.depositfree,
 tawj.taxbillfree,
 tawj.taxprooffree,
 tawj.readstudentfree,
+tawj.goldcardfree,
 tawj.graduatefree
 FROM
 t_applicant_wealth_jp tawj

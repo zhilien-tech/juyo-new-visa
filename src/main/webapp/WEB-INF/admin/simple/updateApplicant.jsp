@@ -1000,8 +1000,29 @@
 			bootstrapValidator.validate();
 			if (bootstrapValidator.isValid()){
 				layer.load(1);
+				ajaxConnection();
+				var count = 0;
+			}
+			}else{
+				layer.load(1);
 				$.ajax({
 					async: false,
+					type: 'POST',
+					data : applicantInfo,
+					url: '${base}/admin/simple/saveApplicantInfo.html',
+					success :function(data) {
+						layer.closeAll("loading");
+						console.log(JSON.stringify(data));
+						socket.onclose();
+						window.location.href = '/admin/simple/passportInfo.html?applicantid='+applicantid+'&orderid='+orderid;
+						}
+					});
+					
+			}
+			
+			function ajaxConnection(){
+				$.ajax({
+					//async: false,
 					type: 'POST',
 					data : applicantInfo,
 					url: '${base}/admin/simple/saveApplicantInfo.html',
@@ -1021,24 +1042,29 @@
 							socket.onclose();
 							window.location.href = '/admin/simple/visaInfo.html?applicantid='+applicantid+'&orderid='+orderid;
 						}
-					}
+					},error:function(error,XMLHttpRequest,status){
+						console.log("error:",error);
+						console.log("XMLHttpRequest:",error);
+						console.log("status:",error);
+						if(status=='timeout'){//超时,status还有success,error等值的情况
+						 　　　　　//ajaxTimeOut.abort(); //取消请求
+							count++;
+						　　　ajaxConnection();
+							var index = layer.load(1, {content:'第'+count+'次重连中...<br/>取消重连请刷新！',success: function(layero){
+								layero.find('.layui-layer-content').css({
+									'width': '140px',
+									'padding-top': '50px',
+								    'background-position': 'center',
+									'text-align': 'center',
+									'margin-left': '-55px',
+									'margin-top': '-10px'
+								});
+								
+								
+							}});
+						　}
+					},timeout:10000
 				});
-			}
-			}else{
-				layer.load(1);
-				$.ajax({
-					async: false,
-					type: 'POST',
-					data : applicantInfo,
-					url: '${base}/admin/simple/saveApplicantInfo.html',
-					success :function(data) {
-						layer.closeAll("loading");
-						console.log(JSON.stringify(data));
-						socket.onclose();
-						window.location.href = '/admin/simple/passportInfo.html?applicantid='+applicantid+'&orderid='+orderid;
-						}
-					});
-					
 			}
 		}
 		

@@ -230,7 +230,7 @@
             	success: function(data){
 	            	_self.visaJapanData = data.visaJapanData;
             		if(data.visaJapanData.length != 0){
-	            		_self.visaJapanDataS = data.visaJapanData[0];
+	            		_self.visaJapanDataS = data.entity;
             		}else{
             			_self.visaJapanDataS = {
             				orderscount:0,
@@ -590,7 +590,7 @@
         	success: function(data){
         		_self.visaJapanData = data.visaJapanData;
         		if(data.visaJapanData.length != 0){
-            		_self.visaJapanDataS = data.visaJapanData[0];
+            		_self.visaJapanDataS = data.entity;
         		}else{
             			_self.visaJapanDataS = {
             				orderscount:0,
@@ -630,7 +630,7 @@
         		console.log(data.visaJapanData);
         		_self.visaJapanData = data.visaJapanData;
         		if(data.visaJapanData.length != 0){
-            		_self.visaJapanDataS = data.visaJapanData[0];
+            		_self.visaJapanDataS = data.entity;
         		}else{
             			_self.visaJapanDataS = {
             				orderscount:0,

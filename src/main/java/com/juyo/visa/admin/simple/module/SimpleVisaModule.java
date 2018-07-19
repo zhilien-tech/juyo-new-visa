@@ -213,6 +213,12 @@ public class SimpleVisaModule {
 	@POST
 	public Object saveEditVisa(@Param("..") VisaEditDataForm form, HttpServletRequest request) {
 		return simpleVisaService.saveEditVisa(form, request);
+		/*try {
+			Thread.sleep(18000);//括号里面的5000代表5000毫秒，也就是5秒，可以该成你需要的时间
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return "111";*/
 	}
 
 	/**

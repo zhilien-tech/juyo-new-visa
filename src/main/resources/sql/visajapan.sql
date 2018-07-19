@@ -11,13 +11,6 @@ toj.acceptDesign number,
 DATE_FORMAT(tr.sendVisaDate, '%Y-%m-%d') sendingTime,
 DATE_FORMAT(tr.outVisaDate, '%Y-%m-%d') signingTime,
 tr.STATUS japanState,
-tr.isDisabled,
-tr.zhaobaocomplete,
-tr.zhaobaoupdate,
-toj.visastatus visastatus,
-toj.visaType,
-toj.acceptDesign,
-tr.id orderid,
 (
 SELECT
 count(*)
@@ -26,61 +19,13 @@ t_applicant_order_jp
 WHERE
 orderId = toj.id
 ) peopleNumber,
-(
-SELECT
-count(*)
-FROM
-t_order
-WHERE
-comId = tcom.id
-) orderscount,
-(
-SELECT
-count(*)
-FROM
-t_applicant_order_jp taoj
-LEFT JOIN t_order_jp toj ON taoj.orderId = toj.id
-LEFT JOIN t_order tr ON toj.orderId = tr.id
-WHERE
-tr.comId = tcom.id
-) peopletotal,
-(
-SELECT
-count(*)
-FROM
-t_order
-WHERE 
-isDisabled = 1 AND comId = tcom.id
-) disableorder,
-(
-SELECT
-count(*)
-FROM
-t_order
-where
-comId = tcom.id AND zhaobaoupdate = 1
-) zhaobaoorder,
-(
-SELECT
-count(*)
-FROM
-t_applicant_order_jp taoj
-LEFT JOIN t_order_jp toj ON taoj.orderId = toj.id
-LEFT JOIN t_order tr ON toj.orderId = tr.id
-WHERE
-tr.comId = tcom.id and tr.zhaobaoupdate = 1
-
-) zhaobaopeople,
-(
-SELECT
-count(*)
-FROM
-t_applicant_order_jp taoj
-LEFT JOIN t_order_jp toj ON taoj.orderId = toj.id
-LEFT JOIN t_order tr ON toj.orderId = tr.id
-WHERE
-tr.comId = tcom.id AND tr.isDisabled = 1
-) disablepeople
+tr.isDisabled,
+tr.zhaobaocomplete,
+tr.zhaobaoupdate,
+toj.visastatus visastatus,
+toj.visaType,
+toj.acceptDesign,
+tr.id orderid
 FROM
 t_order tr
 INNER JOIN t_order_jp toj ON toj.orderId = tr.id

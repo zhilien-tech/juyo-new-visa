@@ -458,26 +458,54 @@
 			var id = '${obj.applicantid}';
 			var orderid = '${obj.orderid}';
 			layer.load(1);
-			$.ajax({
-				type: 'POST',
-				async : false,
-				data : passportInfo,
-				url: '${base}/admin/simple/saveEditPassport.html',
-				success :function(data) {
-					layer.closeAll("loading");
-					console.log(JSON.stringify(data));
-					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					layer.close(index); */
-					if(status == 2){
-						socket.onclose();
-						window.location.href = '/admin/simple/updateApplicant.html?applicantid='+id+'&orderid='+orderid;
-					}
-					if(status == 1){
-						parent.successCallBack(1);
-						closeWindow();
-					}
-				}
-			});
+			
+			ajaxConnection();
+			var count = 0;
+			function ajaxConnection(){
+				$.ajax({
+					type: 'POST',
+					//async : false,
+					data : passportInfo,
+					url: '${base}/admin/simple/saveEditPassport.html',
+					success :function(data) {
+						layer.closeAll("loading");
+						console.log(JSON.stringify(data));
+						/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+						layer.close(index); */
+						if(status == 2){
+							socket.onclose();
+							window.location.href = '/admin/simple/updateApplicant.html?applicantid='+id+'&orderid='+orderid;
+						}
+						if(status == 1){
+							parent.successCallBack(1);
+							closeWindow();
+						}
+					},error:function(error,XMLHttpRequest,status){
+						console.log("error:",error);
+						console.log("XMLHttpRequest:",error);
+						console.log("status:",error);
+						if(status=='timeout'){//超时,status还有success,error等值的情况
+						 　　　　　//ajaxTimeOut.abort(); //取消请求
+							count++;
+						　　　ajaxConnection();
+							var index = layer.load(1, {content:'第'+count+'次重连中...<br/>取消重连请刷新！',success: function(layero){
+								layero.find('.layui-layer-content').css({
+									'width': '140px',
+									'padding-top': '50px',
+								    'background-position': 'center',
+									'text-align': 'center',
+									'margin-left': '-55px',
+									'margin-top': '-10px'
+								});
+								
+								
+							}});
+						　}
+					},timeout:10000
+				});
+				
+			}
+			
 		}
 		
 		

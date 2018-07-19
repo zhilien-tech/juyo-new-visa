@@ -80,12 +80,12 @@ public class ListDataForm implements SQLParamForm {
 		cnd.and(statusexp);*/
 		if (!Util.isEmpty(sendSignDate)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
-			exp.and("tr.sendVisaDate", ">=", sendSignDate);
+			exp.and("tr.sendVisaDate", "=", sendSignDate);
 			cnd.and(exp);
 		}
 		if (!Util.isEmpty(orderDate)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
-			exp.and("tr.createTime", ">=", orderDate);
+			exp.and("DATE_FORMAT(tr.createTime,'%Y-%m-%d')", "=", orderDate);
 			cnd.and(exp);
 		}
 		if (!Util.isEmpty(status)) {

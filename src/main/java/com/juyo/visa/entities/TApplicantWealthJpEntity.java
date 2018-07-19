@@ -58,6 +58,10 @@ public class TApplicantWealthJpEntity implements Serializable {
 	private String taxprooffree;
 
 	@Column
+	@Comment("银行金卡")
+	private String goldcardfree;
+
+	@Column
 	@Comment("特定高校在读生")
 	private String readstudentfree;
 
