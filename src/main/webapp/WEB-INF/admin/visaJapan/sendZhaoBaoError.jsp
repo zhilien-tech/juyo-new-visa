@@ -55,6 +55,7 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script type="text/javascript">
 		var orderid = '${obj.orderid}';
+		console.log('${obj.data}');
 		function fillIn(){
 			var type = '${obj.type}';
 			if(type == 1){

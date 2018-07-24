@@ -6,8 +6,6 @@
 
 package com.juyo.visa.admin.simple.form;
 
-import java.util.Date;
-
 import lombok.Data;
 
 import org.nutz.dao.Cnd;
@@ -18,7 +16,6 @@ import org.nutz.dao.util.cri.SqlExpressionGroup;
 
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
-import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
 
@@ -35,8 +32,14 @@ public class ListDataForm implements SQLParamForm {
 
 	//状态
 	private Integer status;
+	//送签社
+	private String songqianshe;
+	//员工
+	private String employee;
 	//送签时间
 	private String sendSignDate;
+	//下单时间
+	private String orderDate;
 	//检索框
 	private String searchStr;
 
@@ -67,7 +70,8 @@ public class ListDataForm implements SQLParamForm {
 			exp.and("tr.orderNum", "like", "%" + searchStr + "%").or("tc.linkman", "like", "%" + searchStr + "%")
 					.or("tc.mobile", "like", "%" + searchStr + "%").or("tc.email", "like", "%" + searchStr + "%")
 					.or("taj.applyname", "like", "%" + searchStr + "%")
-					.or("toj.acceptDesign", "like", "%" + searchStr + "%");
+					.or("toj.acceptDesign", "like", "%" + searchStr + "%")
+					.or("taj.passport", "like", "%" + searchStr + "%");
 			cnd.and(exp);
 		}
 
@@ -75,12 +79,14 @@ public class ListDataForm implements SQLParamForm {
 		statusexp.and("tr.status", ">=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
 		cnd.and(statusexp);*/
 		if (!Util.isEmpty(sendSignDate)) {
-			//cnd.and("tr.sendVisaDate", ">=", sendSignDate);
-			String[] split = sendSignDate.split(" - ");
-			Date sendSignDate = DateUtil.string2Date(split[0], DateUtil.FORMAT_YYYY_MM_DD);
-			Date outSignDate = DateUtil.string2Date(split[1], DateUtil.FORMAT_YYYY_MM_DD);
-			//SqlExpressionGroup exp = new SqlExpressionGroup();
-			cnd.and("sendVisaDate", ">=", sendSignDate).and("outVisaDate", "<=", outSignDate);
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.sendVisaDate", "=", sendSignDate);
+			cnd.and(exp);
+		}
+		if (!Util.isEmpty(orderDate)) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("DATE_FORMAT(tr.createTime,'%Y-%m-%d')", "=", orderDate);
+			cnd.and(exp);
 		}
 		if (!Util.isEmpty(status)) {
 			if (Util.eq(status, JPOrderStatusEnum.DISABLED.intKey())) {
@@ -90,6 +96,18 @@ public class ListDataForm implements SQLParamForm {
 						IsYesOrNoEnum.NO.intKey());
 				cnd.and(e1);
 			}
+		}
+
+		if (!Util.isEmpty(songqianshe)) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("toj.sendsignid", "=", songqianshe);
+			cnd.and(exp);
+		}
+
+		if (!Util.isEmpty(employee)) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tuser.id", "=", employee);
+			cnd.and(exp);
 		}
 
 		if (userid.equals(adminId)) {

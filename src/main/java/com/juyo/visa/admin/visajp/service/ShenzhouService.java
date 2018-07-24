@@ -597,13 +597,31 @@ public class ShenzhouService extends BaseService<TOrderJpEntity> {
 			//家庭电话
 			map.put("homephone", "无");
 			//手机
-			map.put("homemobile", record.getString("telephone"));
+			if (Util.isEmpty(record.getString("telephone"))) {
+				map.put("homemobile", "无");
+			} else {
+				map.put("homemobile", record.getString("telephone"));
+			}
 			//电子邮箱
 			map.put("homeEmail", "无");
 			//工作单位
-			map.put("workname", record.getString("workname"));
-			map.put("workphone", record.getString("workphone"));
-			map.put("workaddress", record.getString("workaddress"));
+			if (Util.isEmpty(record.getString("workname"))) {
+				map.put("workname", "无");
+			} else {
+				map.put("workname", record.getString("workname"));
+			}
+			//工作电话
+			if (Util.isEmpty(record.getString("workphone"))) {
+				map.put("workphone", "无");
+			} else {
+				map.put("workphone", record.getString("workphone"));
+			}
+			//工作地址
+			if (Util.isEmpty(record.getString("workaddress"))) {
+				map.put("workaddress", "无");
+			} else {
+				map.put("workaddress", record.getString("workaddress"));
+			}
 			//目前的职位
 			map.put("occupation", record.getString("position"));
 			//配偶所从事的职业
@@ -1602,6 +1620,13 @@ public class ShenzhouService extends BaseService<TOrderJpEntity> {
 								wealthType += tApplicantWealthJpEntity.getType() + "\n";
 							}
 							detail += "元\n";
+						} else if ("银行金卡".equals(tApplicantWealthJpEntity.getType())) {
+							if (!Util.isEmpty(tApplicantWealthJpEntity.getGoldcardfree())) {
+								wealthType += tApplicantWealthJpEntity.getGoldcardfree() + "\n";
+							} else {
+								wealthType += tApplicantWealthJpEntity.getType() + "\n";
+							}
+							detail += "\n";
 						} else if ("特定高校在读生".equals(tApplicantWealthJpEntity.getType())) {
 							if (!Util.isEmpty(tApplicantWealthJpEntity.getReadstudentfree())) {
 								wealthType += tApplicantWealthJpEntity.getReadstudentfree() + "\n";

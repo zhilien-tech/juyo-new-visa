@@ -38,6 +38,7 @@ import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.PdfTypeEnum;
+import com.juyo.visa.common.enums.SimpleVisaTypeEnum;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TCompanyEntity;
@@ -210,7 +211,12 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 						Integer type = orderjp.getVisaType();
 						System.out.println(type);
 						if (!Util.isEmpty(type)) {
-							if (type == 1) {
+							for (SimpleVisaTypeEnum visatype : SimpleVisaTypeEnum.values()) {
+								if (type == visatype.intKey()) {
+									visaType = visatype.value();
+								}
+							}
+							/*if (type == 1) {
 								visaType = "单次";
 							}
 							if (type == 2) {
@@ -221,7 +227,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 							}
 							if (type == 4) {
 								visaType = "普通五年多次";
-							}
+							}*/
 						}
 					}
 					mainapplicantname = "  " + applicat.getFirstName() + applicat.getLastName();

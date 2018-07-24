@@ -13,11 +13,11 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v=<%=System.currentTimeMillis() %>">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css?v=<%=System.currentTimeMillis() %>">
 	<!-- 本页css -->
-	<link rel="stylesheet" href="${base}/references/common/css/simplePassportInfo.css?v='20180703'">
+	<link rel="stylesheet" href="${base}/references/common/css/simplePassportInfo.css?v=<%=System.currentTimeMillis() %>">
 </head>
 <body>
 	<div class="modal-content">
@@ -42,13 +42,13 @@
 						
 						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
 							<div class="col-xs-6 widthBig">
-							<div class="form-group">
+							<div class="form-group" style="margin-top: 0!important;">
 								<div class="cardFront-div">
-									<span>点击上传护照</span>
+									<span></span>
 									<input id="passportUrl" name="passportUrl" type="hidden" value="${obj.passport.passportUrl }"/>
-									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+									<!-- <input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/> -->
 									<img id="sqImg" alt="" src="${obj.passport.passportUrl }" >
-									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+									<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 								</div>
 							</div>
 						</div>
@@ -171,23 +171,24 @@
 								</div>
 							</div>
 						</div><!-- end 签发日期/有效期至 -->
-						<div class="row none"><!-- 签发机关 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+						<div class="row"><!-- 签发机关 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发机关</label>
 									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
 								</div>
 							</div>
-						</div><!-- end 签发机关 -->
-						
-						<div class="row none">
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group groupWidth">
+									<label><span>*</span>Exit & Entry Administration</label>
 									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
-						</div>
+						</div><!-- end 签发机关 -->
+						
+						<!-- <div class="row">
+						</div> -->
 					</div>	
 						
 				</div>
@@ -218,6 +219,15 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
+			
+			var issuedOrganization = "${obj.passport.issuedOrganization }";
+			var issuedOrganizationen = "${obj.passport.issuedOrganizationEn }";
+			if(issuedOrganization == ""){
+				$("#issuedOrganization").val("公安部出入境管理局");
+			}
+			if(issuedOrganizationen == ""){
+				$("#issuedOrganizationEn").val("Ministry of Public Security");
+			}
 			
 			//护照图片验证
 			$('#passportInfo').bootstrapValidator({
@@ -335,7 +345,7 @@
 		
 		//护照上传,扫描
 		
-		$('#uploadFile').change(function() {
+		/* $('#uploadFile').change(function() {
 			var layerIndex = layer.load(1, {
 				shade : "#000"
 			});
@@ -422,7 +432,7 @@
 				
 			};
 			reader.readAsDataURL(file);
-		});
+		}); */
 		
 		//把dataUrl类型的数据转为blob
 		function dataURLtoBlob(dataurl) {
@@ -448,26 +458,58 @@
 			var id = '${obj.applicantid}';
 			var orderid = '${obj.orderid}';
 			layer.load(1);
-			$.ajax({
-				type: 'POST',
-				async : false,
-				data : passportInfo,
-				url: '${base}/admin/simple/saveEditPassport.html',
-				success :function(data) {
-					layer.closeAll("loading");
-					console.log(JSON.stringify(data));
-					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					layer.close(index); */
-					if(status == 2){
-						socket.onclose();
-						window.location.href = '/admin/simple/updateApplicant.html?applicantid='+id+'&orderid='+orderid;
-					}
-					if(status == 1){
-						parent.successCallBack(1);
-						closeWindow();
-					}
-				}
-			});
+			
+			ajaxConnection();
+			var count = 0;
+			function ajaxConnection(){
+				$.ajax({
+					type: 'POST',
+					//async : false,
+					data : passportInfo,
+					url: '${base}/admin/simple/saveEditPassport.html',
+					success :function(data) {
+						layer.closeAll("loading");
+						console.log(JSON.stringify(data));
+						if(data.msg){
+							layer.msg(data.msg);
+						}else{
+							/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							layer.close(index); */
+							if(status == 2){
+								socket.onclose();
+								window.location.href = '/admin/simple/updateApplicant.html?applicantid='+id+'&orderid='+orderid;
+							}
+							if(status == 1){
+								parent.successCallBack(1);
+								closeWindow();
+							}
+						}
+					},error:function(error,XMLHttpRequest,status){
+						console.log("error:",error);
+						console.log("XMLHttpRequest:",error);
+						console.log("status:",error);
+						if(status=='timeout'){//超时,status还有success,error等值的情况
+						 　　　　　//ajaxTimeOut.abort(); //取消请求
+							count++;
+						　　　ajaxConnection();
+							var index = layer.load(1, {content:'第'+count+'次重连中...<br/>取消重连请刷新！',success: function(layero){
+								layero.find('.layui-layer-content').css({
+									'width': '140px',
+									'padding-top': '50px',
+								    'background-position': 'center',
+									'text-align': 'center',
+									'margin-left': '-55px',
+									'margin-top': '-10px'
+								});
+								
+								
+							}});
+						　}
+					},timeout:10000
+				});
+				
+			}
+			
 		}
 		
 		

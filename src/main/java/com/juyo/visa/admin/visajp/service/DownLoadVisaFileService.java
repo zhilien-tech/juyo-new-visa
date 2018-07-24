@@ -1740,7 +1740,15 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			}
 			map.put("gender", sex);
 			//居住地域
-			map.put("city", !Util.isEmpty(record.get("city")) ? record.getString("city") : "");
+			String province = "";
+			if (!Util.isEmpty(record.get("province"))) {
+				province = (String) record.get("province");
+				if (province.endsWith("省") || province.endsWith("市")) {
+					province = province.substring(0, province.length() - 1);
+				}
+			}
+
+			map.put("city", province);
 			//生年月日
 			map.put("birthday", birthdaystr);
 			//旅券番号

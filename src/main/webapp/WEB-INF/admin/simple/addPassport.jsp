@@ -13,11 +13,11 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v=<%=System.currentTimeMillis() %>">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 	<!-- 本页css -->
-	<link rel="stylesheet" href="${base}/references/common/css/simpleAddPassport.css?v='20180703'">
+	<link rel="stylesheet" href="${base}/references/common/css/simpleAddPassport.css?v=<%=System.currentTimeMillis() %>">
 </head>
 <body>
 	<div class="modal-content">
@@ -42,13 +42,13 @@
 						
 						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
 							<div class="col-xs-6 widthBig">
-							<div class="form-group">
+							<div class="form-group" style="margin-top: 0!important;">
 								<div class="cardFront-div">
-									<span>点击上传护照</span>
-									<input id="passportUrl" name="passportUrl" type="hidden" value=""/>
-									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
-									<img id="sqImg" alt="" src="" >
-									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+									<span></span>
+									<input id="passportUrl" name="passportUrl" type="hidden" value="${obj.passport.passportUrl }"/>
+									<!-- <input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/> -->
+									<img id="sqImg" alt="" src="${obj.passport.passportUrl }" >
+									<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 								</div>
 							</div>
 						</div>
@@ -173,23 +173,24 @@
 								</div>
 							</div>
 						</div><!-- end 签发日期/有效期至 -->
-						<div class="row none"><!-- 签发机关 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+						<div class="row"><!-- 签发机关 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发机关</label>
-									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="公安部出入境管理局"/>
+								</div>
+							</div>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group groupWidth">
+									<label><span>*</span>Exit & Entry Administration</label>
+									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value="Ministry of Public Security"/>
+									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 						</div><!-- end 签发机关 -->
 						
-						<div class="row none">
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value=""/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
+						<!-- <div class="row">
+						</div> -->
 					</div>	
 						
 				</div>
@@ -338,7 +339,7 @@
 		
 		//护照上传,扫描
 		
-		$('#uploadFile').change(function() {
+		/* $('#uploadFile').change(function() {
 			var layerIndex = layer.load(1, {
 				shade : "#000"
 			});
@@ -418,7 +419,7 @@
 				}); // end of ajaxSubmit
 			};
 			reader.readAsDataURL(file);
-		});
+		}); */
 		
 		//把dataUrl类型的数据转为blob
 		function dataURLtoBlob(dataurl) {
@@ -445,27 +446,35 @@
 			}
 			var passportInfo = $("#passportInfo").serialize();
 			layer.load(1);
-			$.ajax({
-				type: 'POST',
-				async : false,
-				data : passportInfo,
-				url: '${base}/admin/simple/saveEditPassport.html',
-				success :function(data) {
-					$("#addBtn").attr('disabled', false);
-					layer.closeAll("loading");
-					window.parent.document.getElementById("orderid").value = data.orderid;
-					console.log(JSON.stringify(data));
-					/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-					layer.close(index); */
-					parent.saveAddOrder(2);
-					if(status == 2){
-						socket.onclose();
-						window.location.href = '/admin/simple/updateApplicant.html?applicantid='+data.applicantid+'&orderid='+data.orderid;
-					}else if(status == 1){
-						closeWindow();
+			ajaxConnection();
+			var count = 0;
+			function ajaxConnection(){
+				$.ajax({
+					type: 'POST',
+					async : false,
+					data : passportInfo,
+					url: '${base}/admin/simple/saveEditPassport.html',
+					success :function(data) {
+						$("#addBtn").attr('disabled', false);
+						layer.closeAll("loading");
+						if(data.msg){
+							layer.msg(data.msg);
+						}else{
+							window.parent.document.getElementById("orderid").value = data.orderid;
+							console.log(JSON.stringify(data));
+							/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+							layer.close(index); */
+							parent.saveAddOrder(2);
+							if(status == 2){
+								socket.onclose();
+								window.location.href = '/admin/simple/updateApplicant.html?applicantid='+data.applicantid+'&orderid='+data.orderid;
+							}else if(status == 1){
+								closeWindow();
+							}
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 		
 		
@@ -478,9 +487,9 @@
 		$(function(){
 			var passport = $("#passportUrl").val();
 			if(passport != ""){
-				$("#uploadFile").siblings("i").css("display","block");
+				$("#sqImg").siblings("i").css("display","block");
 			}else{
-				$("#uploadFile").siblings("i").css("display","none");
+				$("#sqImg").siblings("i").css("display","none");
 			}
 			
 		});

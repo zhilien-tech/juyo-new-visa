@@ -10,134 +10,185 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>精简版-日本</title>
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-  	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
+  	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v=<%=System.currentTimeMillis() %>">
     <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/skin-blue.css">
     <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/skins/_all-skins.css">
     <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
-    <link rel="stylesheet" href="${base}/references/public/css/style.css?v='20180510'">
+    <link rel="stylesheet" href="${base}/references/public/css/style.css?v=<%=System.currentTimeMillis() %>">
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
-	<link rel="stylesheet" href="${base}/references/public/css/visaJapan.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/public/css/visaJapan.css?v=<%=System.currentTimeMillis() %>">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 	<!-- 订单切换卡 样式 -->
 	<link rel="stylesheet" href="${base}/references/common/css/switchCardOfOrder.css">
 	<!-- 本页css -->
-	<link rel="stylesheet" href="${base}/references/common/css/simpleList.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/common/css/simpleList.css?v=<%=System.currentTimeMillis() %>">
 	<!-- 加载中。。。样式 -->
-	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
+	<link rel="stylesheet" href="${base}/references/common/css/spinner.css?v=<%=System.currentTimeMillis() %>">
+	<style>
+	[class*=" datetimepicker-dropdown"]:before{
+		top:-8px;
+	}
+		.form-control{
+		    height: 30px;
+		}
+		.datetimepicker{
+			top:67px!important;
+			position: fixed;
+			
+		}
+		
+	</style>	
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-				<section class="content">
-					<div class="box-header"><!-- 检索条件 -->
-						<!-- 切换卡按钮 start -->
-						<!-- <div class="btnGroups">
-							<a name="myOrder" class="searchOrderBtn btnList  bgColor">我的</a>
-							<a name="allOrder" class="searchOrderBtn btnList">全部</a>
-						</div> -->
-						<!-- 切换卡按钮 end -->
-						<div class="row searchMar">
-							<div class="col-md-2 left-5px right-0px">
-								<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
-									<option value="">状态</option>
-									<c:forEach items="${obj.orderstatus }" var="orstatus">
-										<option value="${orstatus.key }">${orstatus.value }</option>
-									</c:forEach>
-								</select>
-							</div>
-							<!-- <div class="col-md-2 left-5px right-0px marginLR">
-								<input type="text" class="input-sm input-class" id="sendSignDate" name="sendSignDate" placeholder="送签时间 - 出签时间" onkeypress="onkeyEnter()"/>
-							</div> -->
-							<div class="col-md-3 left-5px right-0px">
-								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/联系人/电话/邮箱/申请人/受付番号" onkeypress="onkeyEnter()"/>
-							</div>
-							<div class="col-md-1 left-5px btnSearch">
-								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
-							</div>
-							<div class="col-md-1 right-5px btnSearch btnRight">
-								<a class="btn btn-primary btn-sm pull-right" onclick="addOrder();">下单</a>
-							</div>
+				<div class="box-header"style=" padding-top:25px!important"><!-- 检索条件 -->
+					<!-- 切换卡按钮 start -->
+					<!-- <div class="btnGroups">
+						<a name="myOrder" class="searchOrderBtn btnList  bgColor">我的</a>
+						<a name="allOrder" class="searchOrderBtn btnList">全部</a>
+					</div> -->
+					<!-- 切换卡按钮 end -->
+					<div class="row searchMar tab-header">
+						<div class="col-md col-md-2" style="width:12%">
+							<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
+								<option value="">状态</option>
+								<c:forEach items="${obj.orderstatus }" var="orstatus">
+									<option value="${orstatus.key }">${orstatus.value }</option>
+								</c:forEach>
+							</select>
 						</div>
-					</div><!-- end 检索条件 -->
-					<div class="box-body" id="card" v-cloak><!-- 卡片列表 -->
-						<div class="card-list" v-for="data in visaJapanData">
-							<div class="card-head">
-								<div><label>订单号：</label><span><a v-on:click="visaDetail(data.id)" href="javascript:;">{{data.japannumber}}</a></span></div>	
-								<div><label>送签编号：</label><span>{{data.sendvisanum}}</span></div>	
-								<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
-								<div><label>出签时间：</label><span>{{data.signingtime}}</span></div>
-								<div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	
-								<div><label></label><span style="font-weight:bold;font-size:16px;">
-									<span v-if="data.visastatus === '招宝成功'">
-										<font color="red">{{data.visastatus}}</font>
-									</span>
-									<span v-else-if="data.visastatus === '发招宝中'">
-										<font>{{data.visastatus}}</font>
-										<!-- 加载中 -->
-										<div class="spinner">
-										  <div class="bounce1"></div>
-										  <div class="bounce2"></div>
-										  <div class="bounce3"></div>
-										</div>
-									</span>
-									<span v-else-if="data.isdisabled == 1">
-										作废
-									</span>
-									<span v-else>
-										{{data.visastatus}}
-									</span>
-								
-								</span></div>	
-								<div v-if="data.isdisabled != 1">
-									<label>操作：</label>
-									<i class="edit" v-on:click="visaDetail(data.id)"> </i>
-									<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-									<span v-if="data.zhaobaocomplete == 0 && data.visatype != 14">
-										<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
-									</span>
-									<span v-else>
-										<i class="theTrial1"> </i>
-									</span>
-									<span v-if="data.zhaobaocomplete ==1">
-										<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
-										<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
-									</span>
-									<span v-else>
-										<i class="theTrial1"> </i>
-										<i class="theTrial1"> </i>
-									</span>
-									<i class="Refusal" v-on:click="sendInsurance(data.id,27)"></i>
-									<i class="download" v-on:click="downLoadFile(data.id)"> </i>
-									<i class="handoverTable"> </i>
-									<!-- 作废按钮 -->
-									<i class="toVoid" v-on:click="disabled(data.id)"> </i>
-								</div>
-								<div v-else>
-									<label>操作：</label>
-									<i class="toVoid1" v-on:click="undisabled(data.id)"> </i>
-								</div>
-							</div>
-							<ul class="card-content cf">
-								<li class="everybody-info cf" v-for="(item,index) in data.everybodyinfo">
-									<span v-if="index === 0" class="visaListSpan">
-										<div><label>申请人：</label><span>{{item.applicant}}</span></div>
-										<div><label>护照号：</label><span>{{item.passportno}}</span></div>
-										<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
-										<div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div>
-										<span class="hideInfo"></span>
-										<div class="visaBtn" v-if="data.isdisabled != 1"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
-									</span>
-									<span v-else class="visaListSpan">
-										<div><label style="width:48px;">      </label><span>{{item.applicant}}</span></div>
-										<div><label style="width:48px;">　　　　</label><span>{{item.passportno}}</span></div>
-										<div><label style="width:60px;">　　　　　</label><span>{{item.datatype}}</span></div>
-										<div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div>
-										<span class="hideInfo"></span>
-										<div class="visaBtn" v-if="data.isdisabled != 1"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div>
-									</span>
-								</li>
-							</ul> 
+						<div class="col-md col-md-2 left-5px right-0px">
+							<select class="input-class input-sm" id="songqianshe" name="songqianshe" onchange="changestatus()">
+								<option value="">送签社</option>
+								<c:forEach items="${obj.songqianlist }" var="songqianlist">
+									<option value="${songqianlist.id}">${songqianlist.name }</option>
+								</c:forEach>
+							</select>
 						</div>
-					</div><!-- end 卡片列表 -->
+						<div class="col-md col-md-1 left-5px right-0px">
+							<select class="input-class input-sm" id="employee" name="employee" onchange="changestatus()">
+								<option value="">员工</option>
+								<c:forEach items="${obj.employees }" var="employees">
+									<option value="${employees.userid }">${employees.username }</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%">
+							<input type="text" class="input-sm input-class form-control" id="orderDate" name="orderDate" placeholder="下单时间" onkeypress="onkeyEnter()"/>
+						</div>
+						<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%">
+							<input type="text" class="input-sm input-class form-control" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onkeypress="onkeyEnter()"/>
+						</div>
+						<div class="col-md col-md-3 left-5px right-0px">
+							<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照号/电话/邮箱/申请人/受付番号" onkeypress="onkeyEnter()"/>
+						</div>
+						<div class="col-md col-md-1 ">
+							<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
+						</div>
+						<div class="col-md col-md-1  " style="    margin-left: 10px;">
+							<a class="btn btn-primary btn-sm pull-right" onclick="addOrder();">下单</a>
+						</div>
+					</div>
+				</div><!-- end 检索条件 -->
+				<section class="card-list-content content">
+					
+					<div id="card" style="    margin-left: -5px;" v-cloak>
+						<div class = "card-tj">	
+								<span>订单总数(单)： {{visaJapanDataS.orderscount}}</span>
+								<span>总人数(人)： {{visaJapanDataS.peopletotal}}</span>
+								<span>作废数(单)： {{visaJapanDataS.disableorder}}</span>
+								<span>作废人数(人)： {{visaJapanDataS.disablepeople}}</span>
+								<span>招宝成功(单)： {{visaJapanDataS.zhaobaoorder}}</span>
+								<span>招宝成功(人)： {{visaJapanDataS.zhaobaopeople}}</span>
+						</div>
+						
+						<div style="margin-top:123px!important;" class="box-body" v-cloak><!-- 卡片列表 -->
+							
+							<div class="card-list" v-for="data in visaJapanData">
+								<div class="card-head">
+									<div><label>订单号：</label><span><a v-on:click="visaDetail(data.id)" href="javascript:;">{{data.japannumber}}</a></span></div>	
+									<div><label>受付番号：</label><span>{{data.acceptdesign}}</span></div>	
+									<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
+									<div><label>操作人：</label><span>{{data.opname}}</span></div>
+									<!-- <div><label>送签社：</label><span>{{data.shortname}}</span></div> -->
+									<!-- <div><span>{{data.visastatus}}</span></div> -->
+									<!-- <div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	 -->
+										<!-- <font>{{data.visatype}}</font> -->
+									<div><label></label><span style="font-weight:bold;font-size:16px;">
+										<span v-if="data.visastatus === '招宝成功'">
+											<font color="red">{{data.visastatus}}</font>
+										</span>
+										<span v-else-if="data.visastatus === '发招宝中'">
+											<font>{{data.visastatus}}</font>
+											<!-- 加载中 -->
+											<div class="spinner">
+											  <div class="bounce1"></div>
+											  <div class="bounce2"></div>
+											  <div class="bounce3"></div>
+											</div>
+										</span>
+										<span v-else-if="data.isdisabled == 1">
+											作废
+										</span>
+										<span v-else>
+											{{data.visastatus}}
+										</span>
+									
+									</span></div>	
+									<div v-if="data.isdisabled != 1">
+										<label>操作：</label>
+										<i class="edit" v-on:click="visaDetail(data.id)"> </i>
+										<i class="shiShou" v-on:click="revenue(data.id)"> </i>
+										<span v-if="data.zhaobaocomplete == 0 && data.visatype != 14">
+											<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
+										</span>
+										<span v-else>
+											<i class="theTrial1"> </i>
+										</span>
+										<span v-if="data.zhaobaocomplete ==1">
+											<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
+											<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
+										</span>
+										<span v-else>
+											<i class="theTrial1"> </i>
+											<i class="theTrial1"> </i>
+										</span>
+										<i class="Refusal" v-on:click=""></i>
+										<i class="download" v-on:click="downLoadFile(data.id)"> </i>
+										<i class="handoverTable"> </i>
+										<!-- 作废按钮 -->
+										<i class="toVoid" v-on:click="disabled(data.id,data.zhaobaoupdate)"> </i>
+									</div>
+									<div v-else>
+										<label>操作：</label>
+										<i class="toVoid1" v-on:click="undisabled(data.id)"> </i>
+									</div>
+								</div>
+								<ul class="card-content">
+									<li class="everybody-info" v-for="(item,index) in data.everybodyinfo">
+										<span v-if="index === 0" class="visaListSpan">
+											<div class="div-s1"><label>申请人：</label><span>{{item.applicant}}</span></div>
+											<div><label>手机号：</label><span>{{item.telephone}}</span></div>
+											<div><label>护照号：</label><span>{{item.passportno}}</span></div>
+											<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
+											<!-- <div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div> -->
+											<span class="hideInfo"></span>
+											<!-- <div class="visaBtn" v-if="data.isdisabled != 1"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div> -->
+										</span>
+										<span v-else class="visaListSpan">
+											<div class="div-s2"><label style="opacity:0;">申请人：</label><span>{{item.applicant}}</span></div>
+											<div><label style="opacity:0;">手机号：</label><span>{{item.telephone}}</span></div>
+											<div><label style="opacity:0;">护照号：</label><span>{{item.passportno}}</span></div>
+											<div><label style="opacity:0;">资料类型：</label><span>{{item.datatype}}</span></div>
+											<!-- <div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div> -->
+											<span class="hideInfo"></span>
+											<!-- <div class="visaBtn" v-if="data.isdisabled != 1"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div> -->
+										</span>
+									</li>
+								</ul> 
+							</div>
+						</div><!-- end 卡片列表 -->
+					</div>
 				</section>
 		<input type="hidden" id="pageNumber" name="pageNumber" value="1">
 		<input type="hidden" id="pagetotal" name="pagetotal">
@@ -166,7 +217,10 @@
     var _self;
 	new Vue({
 		el: '#card',
-		data: {visaJapanData:""},
+		data: {
+			visaJapanData:[],
+			visaJapanDataS:{}
+		},
 		created:function(){
             _self=this;
             $.ajax({ 
@@ -174,7 +228,20 @@
             	dataType:"json",
             	type:'post',
             	success: function(data){
-            		_self.visaJapanData = data.visaJapanData;
+	            	_self.visaJapanData = data.visaJapanData;
+            		if(data.visaJapanData.length != 0){
+	            		_self.visaJapanDataS = data.entity;
+            		}else{
+            			_self.visaJapanDataS = {
+            				orderscount:0,
+            				peopletotal:0,
+            				disableorder:0,
+            				disablepeople:0,
+            				zhaobaoorder:0,
+            				zhaobaopeople:0
+            			}
+            		}
+            		
             		$('#pagetotal').val(data.pagetotal);
               	}
             });
@@ -309,31 +376,35 @@
                    	}
                  });
         	},
-        	disabled:function(orderid){//作废
-        		layer.confirm("您确认要<font color='red'>作废</font>吗？", {
-    				title:"作废",
-    				btn: ["是","否"], //按钮
-    				shade: false //不显示遮罩
-    			}, function(){
-    				layer.load(1);
-    				$.ajax({
-    					url : '/admin/simple/disabled',
-    					dataType : "json",
-    					data : {
-    						orderId : orderid
-    					},
-    					type : 'post',
-    					success : function(data) {
-    						layer.closeAll("loading");
-    						layer.msg("操作成功", {
-    							time: 500,
-    							end: function () {
-    								successCallBack(12);
-    							}
-    						});
-    					}
-    				});
-    			});
+        	disabled:function(orderid,zhaobaoupdate){//作废
+        		if(zhaobaoupdate == 1){
+        			layer.msg("请先取消招宝，再进行作废操作");
+        		}else{
+	        		layer.confirm("您确认要<font color='red'>作废</font>吗？", {
+	    				title:"作废",
+	    				btn: ["是","否"], //按钮
+	    				shade: false //不显示遮罩
+	    			}, function(){
+	    				layer.load(1);
+	    				$.ajax({
+	    					url : '/admin/simple/disabled',
+	    					dataType : "json",
+	    					data : {
+	    						orderId : orderid
+	    					},
+	    					type : 'post',
+	    					success : function(data) {
+	    						layer.closeAll("loading");
+	    						layer.msg("操作成功", {
+	    							time: 500,
+	    							end: function () {
+	    								successCallBack(12);
+	    							}
+	    						});
+	    					}
+	    				});
+	    			});
+        		}
         	},
         	undisabled:function(orderid){//还原
         		layer.confirm("您确认要<font color='red'>还原</font>吗？", {
@@ -431,6 +502,10 @@
 			//搜索条件
 			var status = $('#status').val();
 			var sendSignDate = $('#sendSignDate').val();
+			
+			var orderDate = $('#orderDate').val();
+			var songqianshe = $("#songqianshe").val();
+			var employee = $("#employee").val();
 			/* var signOutDate = $('#signOutDate').val(); */
 			var searchStr = $('#searchStr').val();
 			//异步加载数据
@@ -445,7 +520,7 @@
 				});
 				$.ajax({ 
 			    	url: url,
-			    	data:{status:status,sendSignDate:sendSignDate,searchStr:searchStr,pageNumber:pageNumber,orderAuthority:orderAuthority},
+			    	data:{status:status,sendSignDate:sendSignDate,orderDate:orderDate,employee:employee,songqianshe:songqianshe,searchStr:searchStr,pageNumber:pageNumber,orderAuthority:orderAuthority},
 			    	dataType:"json",
 			    	type:'post',
 			    	success: function(data){
@@ -491,6 +566,9 @@
 	function search(){
 		var status = $('#status').val();
 		var sendSignDate = $('#sendSignDate').val();
+		var orderDate = $('#orderDate').val();
+		var songqianshe = $("#songqianshe").val();
+		var employee = $("#employee").val();
 		//var signOutDate = $('#signOutDate').val();
 		var searchStr = $('#searchStr').val();
 		var orderAuthority = "allOrder";
@@ -504,7 +582,10 @@
         	url: url,
         	data:{
         		status:status,
+        		songqianshe:songqianshe,
+        		employee:employee,
         		sendSignDate:sendSignDate,
+        		orderDate:orderDate,
         		searchStr:searchStr,
         		orderAuthority:orderAuthority
         	},
@@ -512,6 +593,18 @@
         	type:'post',
         	success: function(data){
         		_self.visaJapanData = data.visaJapanData;
+        		if(data.visaJapanData.length != 0){
+            		_self.visaJapanDataS = data.entity;
+        		}else{
+            			_self.visaJapanDataS = {
+            				orderscount:0,
+            				peopletotal:0,
+            				disableorder:0,
+            				disablepeople:0,
+            				zhaobaoorder:0,
+            				zhaobaopeople:0
+            			}
+            		}
           	}
         });
 	}
@@ -538,13 +631,27 @@
         	dataType:"json",
         	type:'post',
         	success: function(data){
+        		console.log(data.visaJapanData);
         		_self.visaJapanData = data.visaJapanData;
+        		if(data.visaJapanData.length != 0){
+            		_self.visaJapanDataS = data.entity;
+        		}else{
+            			_self.visaJapanDataS = {
+            				orderscount:0,
+            				peopletotal:0,
+            				disableorder:0,
+            				disablepeople:0,
+            				zhaobaoorder:0,
+            				zhaobaopeople:0
+            			}
+            		}
           	}
         });
 	}
 	
 	function successCallBack(status){
-		var orderAuthority = "allOrder";
+		search();
+		/* var orderAuthority = "allOrder";
 		$(".searchOrderBtn").each(function(){
 			if($(this).hasClass("bgColor")){
 				orderAuthority = $(this).attr("name");
@@ -557,8 +664,20 @@
         	type:'post',
         	success: function(data){
         		_self.visaJapanData = data.visaJapanData;
+        		if(data.visaJapanData.length != 0){
+            		_self.visaJapanDataS = data.visaJapanData[0];
+        		}else{
+            			_self.visaJapanDataS = {
+            				orderscount:0,
+            				peopletotal:0,
+            				disableorder:0,
+            				disablepeople:0,
+            				zhaobaoorder:0,
+            				zhaobaopeople:0
+            			}
+            		}
           	}
-        });
+        }); */
 		if(status == 1){
 			//layer.msg('发招宝');
 			parent.successCallBack(4);
@@ -589,12 +708,46 @@
 			
 		}); */
 		
-		$('#sendSignDate').daterangepicker(null, function(start, end, label) {
-		  	console.log(start.toISOString(), end.toISOString(), label);
+		//送签时间
+		$("#sendSignDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,//高亮
+			startView: 2,//从天开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"bottom",//显示位置
+			minView: "month"//只显示年月日
+		}).on("changeDate",function(){  
+			search();
 		});
+		
+		//下单时间
+		$("#orderDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+	        weekStart: 1,
+	        todayBtn: 1,
+			autoclose: true,
+			todayHighlight: true,//高亮
+			startView: 2,//从天开始选择
+			forceParse: 0,
+	        showMeridian: false,
+			pickerPosition:"bottom",//显示位置
+			minView: "month"//只显示年月日
+		}).on("changeDate",function(){  
+			search();
+		});
+		
+		/* $('#sendSignDate').daterangepicker(null, function(start, end, label) {
+		  	console.log(start.toISOString(), end.toISOString(), label);
+		}); */
 		//鼠标移入事件
 		$(document).on('mouseover','.showInfo',function(){
-			
+
 			let text = $(this).html();
 			$(this).parent().next().show();
 			$(this).parent().next().html(text);
@@ -625,13 +778,14 @@
 
             socket.onmessage = function (evt){
                 console.log('message received!');  
-            	loadListData();
+                search();
              };  
 
           } else {  
             console.log('Websocket not supported');  
           }  
 	}
+	
 	</script>
 </body>
 </html>

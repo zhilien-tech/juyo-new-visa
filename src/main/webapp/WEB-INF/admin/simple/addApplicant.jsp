@@ -13,11 +13,11 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v=<%=System.currentTimeMillis() %>">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css?v=<%=System.currentTimeMillis() %>">
 	<!-- 本页css -->
-	<link rel="stylesheet" href="${base}/references/common/css/simpleAddApplicant.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/common/css/simpleAddApplicant.css?v=<%=System.currentTimeMillis() %>">
 </head>
 <body>
 	<div class="modal-content">

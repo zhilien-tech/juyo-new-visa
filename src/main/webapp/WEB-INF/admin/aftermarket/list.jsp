@@ -22,7 +22,7 @@
 	<!-- 加载中。。。样式 -->
 	<link rel="stylesheet" href="${base}/references/common/css/spinner.css">
 	<!-- 本页css -->
-	<link rel="stylesheet" href="${base}/references/common/css/afterMarketList.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/common/css/afterMarketList.css?v=<%=System.currentTimeMillis() %>">
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
