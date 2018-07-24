@@ -77,6 +77,10 @@ public class VisaEditDataForm implements Serializable {
 
 	private String housePropertyfree;
 
+	private String goldcard;
+
+	private String goldcardfree;
+
 	private String vehicle;
 
 	private String vehiclefree;

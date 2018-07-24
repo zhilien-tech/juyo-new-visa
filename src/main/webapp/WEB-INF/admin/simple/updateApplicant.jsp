@@ -19,14 +19,14 @@
 <link rel="stylesheet"
 	href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 <link rel="stylesheet"
-	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
+	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v=<%=System.currentTimeMillis() %>">
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/addApplicant.css">
 <!-- 本页css -->
 <link rel="stylesheet"
-	href="${base}/references/common/css/liteUpdateApplicant.css?v='20180510'">
+	href="${base}/references/common/css/liteUpdateApplicant.css?v=<%=System.currentTimeMillis() %>">
 </head>
 <body>
 	<div class="modal-content">
@@ -55,15 +55,20 @@
 						<div class="info-imgUpload front has-error" id="borderColorFront">
 							<!-- 身份证 正面 -->
 							<div class="col-xs-6 widthBig">
-								<div class="form-group">
+								<div class="form-group" style="margin-top: 0!important;">
 									<div class="cardFront-div">
-										<span>点击上传身份证正面</span> <input id="cardFront" name="cardFront"
-											type="hidden" value="${obj.applicant.cardFront }" /> <input
+										<span></span>
+											<input id="cardFront" name="cardFront"
+											type="hidden" value="${obj.applicant.cardFront }" /> 
+											<!-- <input
 											id="uploadFile" name="uploadFile"
-											class="btn btn-primary btn-sm" type="file" value="1111" /> <img
+											class="btn btn-primary btn-sm" type="file" value="1111" /> -->
+											
+											<img
 											id="sqImg" name="sqImg" alt=""
-											src="${obj.applicant.cardFront }"> <i class="delete"
-											onclick="deleteApplicantFrontImg(${obj.orderid});"></i>
+											style="margin-top: -20px;"
+											src="${obj.applicant.cardFront }"> <%-- <i class="delete"
+											onclick="deleteApplicantFrontImg(${obj.orderid});"></i> --%>
 									</div>
 								</div>
 							</div>
@@ -995,8 +1000,29 @@
 			bootstrapValidator.validate();
 			if (bootstrapValidator.isValid()){
 				layer.load(1);
+				ajaxConnection();
+				var count = 0;
+			}
+			}else{
+				layer.load(1);
 				$.ajax({
 					async: false,
+					type: 'POST',
+					data : applicantInfo,
+					url: '${base}/admin/simple/saveApplicantInfo.html',
+					success :function(data) {
+						layer.closeAll("loading");
+						console.log(JSON.stringify(data));
+						socket.onclose();
+						window.location.href = '/admin/simple/passportInfo.html?applicantid='+applicantid+'&orderid='+orderid;
+						}
+					});
+					
+			}
+			
+			function ajaxConnection(){
+				$.ajax({
+					//async: false,
 					type: 'POST',
 					data : applicantInfo,
 					url: '${base}/admin/simple/saveApplicantInfo.html',
@@ -1016,24 +1042,29 @@
 							socket.onclose();
 							window.location.href = '/admin/simple/visaInfo.html?applicantid='+applicantid+'&orderid='+orderid;
 						}
-					}
+					},error:function(error,XMLHttpRequest,status){
+						console.log("error:",error);
+						console.log("XMLHttpRequest:",error);
+						console.log("status:",error);
+						if(status=='timeout'){//超时,status还有success,error等值的情况
+						 　　　　　//ajaxTimeOut.abort(); //取消请求
+							count++;
+						　　　ajaxConnection();
+							var index = layer.load(1, {content:'第'+count+'次重连中...<br/>取消重连请刷新！',success: function(layero){
+								layero.find('.layui-layer-content').css({
+									'width': '140px',
+									'padding-top': '50px',
+								    'background-position': 'center',
+									'text-align': 'center',
+									'margin-left': '-55px',
+									'margin-top': '-10px'
+								});
+								
+								
+							}});
+						　}
+					},timeout:10000
 				});
-			}
-			}else{
-				layer.load(1);
-				$.ajax({
-					async: false,
-					type: 'POST',
-					data : applicantInfo,
-					url: '${base}/admin/simple/saveApplicantInfo.html',
-					success :function(data) {
-						layer.closeAll("loading");
-						console.log(JSON.stringify(data));
-						socket.onclose();
-						window.location.href = '/admin/simple/passportInfo.html?applicantid='+applicantid+'&orderid='+orderid;
-						}
-					});
-					
 			}
 		}
 		

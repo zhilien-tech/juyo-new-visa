@@ -8,11 +8,25 @@ public class TestChinest {
 
 	public static void main(String[] args) {
 
-		String a = "asdb";
+		String test1 = "0123456789abcde!@#$%^& 水电费";
+		char[] chars_test1 = test1.toCharArray();
+		for (int i = 0; i < chars_test1.length; i++) {
+			String temp = String.valueOf(chars_test1[i]);
+			// 判断是全角字符
+			if (temp.matches("[^\\x00-\\xff]")) {
+				System.out.println("全角   " + temp);
+			}
+			// 判断是半角字符
+			else {
+				System.out.println("半角    " + temp);
+			}
+		}
+
+		/*String a = "asdb";
 		StringBuffer sb = new StringBuffer("34243");
 		sb.insert(0, a);
 		System.out.println(sb);
-
+		*/
 		/*
 				String someStr = "ABCDEFG";
 				String search = "AOJOIHGRJIOTH";

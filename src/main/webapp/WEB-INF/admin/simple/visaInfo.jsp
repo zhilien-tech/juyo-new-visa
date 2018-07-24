@@ -12,13 +12,22 @@
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v=<%=System.currentTimeMillis() %>">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
-	<link rel="stylesheet" href="${base}/references/public/css/style.css?v='20180510'">
+	<link rel="stylesheet" href="${base}/references/public/css/style.css?v=<%=System.currentTimeMillis() %>">
 	<!-- 本页css -->
-	<link rel="stylesheet" href="${base}/references/common/css/simpleVisaInfo.css?v='20180703'">
+	<link rel="stylesheet" href="${base}/references/common/css/simpleVisaInfo.css?v=<%=System.currentTimeMillis() %>">
+	<style type="text/css">
+		.clearConnectBtn{
+		    position: fixed;
+		    top: 0;
+		    right: 15px;
+		    background:red;
+		}
+
+	</style>
 </head>
 <body>
 	<div class="modal-content">
@@ -32,9 +41,13 @@
 				<input type="hidden" value="${obj.visaInfo.applicantid }" name="applicantId"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
 				<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
+				<!-- <input type="button" class="clearConnectBtn btn btn-primary pull-right btn-sm btn-margin" value="取消" /> -->
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
+				
 				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
-			</div>
+				
+			</div> 
+			
 			<div class="modal-main"></div>
 			<div class="modal-body">
 			<div class="ipt-info">
@@ -368,6 +381,7 @@
 							<input id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState btnBank" />
 							<input id="taxbillType" name="wealthType" value="税单" type="button" class="btn btn-sm btnState" />
 							<input id="taxproofType" name="wealthType" value="完税证明" type="button" class="btn btn-sm btnState btnBank" />
+							<input id="goldcardType" name="wealthType" value="银行金卡" type="button" class="btn btn-sm btnState btnBank" />
 							<input id="readstudentType" name="wealthType" value="特定高校在读生" type="button" class="btn btn-sm btnState btnReadstudent" />
 							<input id="graduateType" name="wealthType" value="特定高校毕业生" type="button" class="btn btn-sm btnState btnGraduate" />
 							<!-- <input id="financialType" name="wealthType" value="其他" type="button" class="btn btn-sm btnState" /> -->
@@ -574,6 +588,32 @@
 						<!-- 提示 -->
 						<div class="col-xs-5 taxproofs" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
 							<small class="help-blocktaxproof" data-bv-validator="notEmpty" data-bv-for="taxproof" data-bv-result="IVVALID" >完税证明不能为空</small>
+						</div>
+						<!-- 提示End -->
+						<!-- 银行金卡 -->
+						<div class="info-body-from clone-module cf goldcard">
+							<div class="row body-from-input"><!-- 银行金卡-->
+								<div class="col-sm-5">
+									<div class="form-group">
+										<label><span>*</span>银行金卡</label>
+										<input id="goldcardfree" name="goldcardfree" type="text" class="form-control input-sm" value="银行金卡"/>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="form-group">
+										<label>&nbsp;</label>
+										<input id="goldcard" name="goldcard" type="text" class="form-control input-sm" placeholder=""  />
+									</div>
+								</div>
+								<!-- <div style="float:left;  margin:40px 0 0 -10px;">
+								元
+								</div> -->
+							</div><!-- end 银行金卡 -->
+							<i class="remove-btn delete-icon"></i>
+						</div>
+						<!-- 提示 -->
+						<div class="col-xs-5 goldcards" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
+							<small class="help-blockgoldcard" data-bv-validator="notEmpty" data-bv-for="goldcard" data-bv-result="IVVALID" >银行金卡不能为空</small>
 						</div>
 						<!-- 提示End -->
 						<!-- 特定高校在读生 -->
@@ -1055,6 +1095,7 @@
 					$(".taxproof").css("display","none");
 					$(".readstudent").css("display","none");
 					$(".graduate").css("display","none");
+					$(".goldcard").css("display","none");
 				}
 			});
 			
@@ -1145,6 +1186,16 @@
 									$("#taxprooffree").val(item.taxprooffree);
 								}
 							}
+							if(wealth.val() == "银行金卡"){
+								$(".goldcard").css("display","block");
+								wealth.addClass("btnState-true");
+								$("#goldcard").val(item.details);
+								if(item.goldcardfree == "" || item.goldcardfree == null){
+									$("#goldcardfree").val(item.type);
+								}else{
+									$("#goldcardfree").val(item.goldcardfree);
+								}
+							}
 							if(wealth.val() == "特定高校在读生"){
 								$(".readstudent").css("display","block");
 								wealth.addClass("btnState-true");
@@ -1188,6 +1239,7 @@
 					$(".certificate").css("display","none");
 					$(".taxbill").css("display","none");
 					$(".taxproof").css("display","none");
+					$(".goldcard").css("display","none");
 					$(".readstudent").css("display","none");
 					$(".graduate").css("display","none");
 				}
@@ -1204,6 +1256,7 @@
 					$(".taxbill").css("display","none");
 					$(".taxproof").css("display","none");
 					$(".readstudent").css("display","none");
+					$(".goldcard").css("display","none");
 					$(".graduate").css("display","none");
 				}else{
 					$(".wealthmain").show();
@@ -1356,6 +1409,20 @@
 						$("#taxproof").val("");
 						$("#taxprooffree").val("完税证明");
 					}
+				}else if(financeBtnInfo == "银行金卡"){
+					if($(this).hasClass("btnState-true")){
+						$(".goldcard").css("display","none");
+						$(this).removeClass("btnState-true");
+						$("#goldcard").val("");
+						$(".goldcards").css({"display":"none"});
+						$(".goldcards").attr("class", "col-xs-6 goldcards has-success");
+						$("#goldcard").attr("style", null);
+					}else{
+						$(".goldcard").css("display","block");
+						$(this).addClass("btnState-true");
+						$("#goldcard").val("");
+						$("#goldcardfree").val("银行金卡");
+					}
 				}else if(financeBtnInfo == "特定高校在读生"){
 					if($(this).hasClass("btnState-true")){
 						$(".readstudent").css("display","none");
@@ -1452,6 +1519,14 @@
 					$(".taxproofs").css({"display":"none"});
 					$(".taxproofs").attr("class", "col-xs-6 taxproofs has-success");
 					$("#taxproof").attr("style", null);
+				}
+				if($(this).parent().is(".goldcard")){
+					$(".goldcard").css("display","none");
+					$("#goldcardType").removeClass("btnState-true");
+					$("#goldcard").val("");
+					$(".goldcards").css({"display":"none"});
+					$(".goldcards").attr("class", "col-xs-6 goldcards has-success");
+					$("#goldcard").attr("style", null);
 				}
 				if($(this).parent().is(".readstudent")){
 					$(".readstudent").css("display","none");
@@ -1602,24 +1677,52 @@
 			}
 			
 			var passportInfo = $.param({"wealthType":wealthType,'visatype':visatype,'visacounty':visacounty,'isVisit':isVisit,'threecounty':threecounty,'isname':isname,'isyaoqing':isyaoqing}) + "&" +  $("#passportInfo").serialize();
-			$.ajax({
-				type: 'POST',
-				//async: false,
-				data : passportInfo,
-				url: '${base}/admin/simple/saveEditVisa.html',
-				success :function(data) {
-					layer.closeAll("loading");
-					console.log(JSON.stringify(data));
-					if(status == 1){
-						parent.successCallBack(1);
-						closeWindow();
-					}else if(status == 2){
-						socket.onclose();
-						window.location.href = '/admin/simple/updateApplicant.html?applicantid='+applicantid+'&orderid='+orderid;
-					}
-				}
-			});
+			ajaxConnection();
+			var count = 0;
+			function ajaxConnection(){
+				console.log("要进入ajax请求了");
+				$.ajax({
+					type: 'POST',
+					//async: false,
+					data : passportInfo,
+					url: '${base}/admin/simple/saveEditVisa.html',
+					success :function(data) {
+						layer.closeAll("loading");
+						console.log(JSON.stringify(data));
+						if(status == 1){
+							parent.successCallBack(1);
+							closeWindow();
+						}else if(status == 2){
+							socket.onclose();
+							window.location.href = '/admin/simple/updateApplicant.html?applicantid='+applicantid+'&orderid='+orderid;
+						}
+					},error:function(error,XMLHttpRequest,status){
+						console.log("error:",error);
+						console.log("XMLHttpRequest:",error);
+						console.log("status:",error);
+						if(status=='timeout'){//超时,status还有success,error等值的情况
+						 　　　　　//ajaxTimeOut.abort(); //取消请求
+							count++;
+						　　　ajaxConnection();
+							var index = layer.load(1, {content:'第'+count+'次重连中...<br/>取消重连请刷新！',success: function(layero){
+								layero.find('.layui-layer-content').css({
+									'width': '140px',
+									'padding-top': '50px',
+								    'background-position': 'center',
+									'text-align': 'center',
+									'margin-left': '-55px',
+									'margin-top': '-10px'
+								});
+								
+								
+							}});
+						　}
+					},timeout:10000
+				});
+			}
 		}
+	
+		
 		
 		//上传结婚证
 		

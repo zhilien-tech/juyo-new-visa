@@ -161,4 +161,8 @@ public class TOrderEntity implements Serializable {
 	@Comment("发招宝是否成功")
 	private Integer zhaobaocomplete;
 
+	@Column
+	@Comment("招宝变更是否成功")
+	private Integer zhaobaoupdate;
+
 }
