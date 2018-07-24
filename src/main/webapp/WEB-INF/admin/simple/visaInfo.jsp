@@ -1680,6 +1680,7 @@
 			ajaxConnection();
 			var count = 0;
 			function ajaxConnection(){
+				console.log("要进入ajax请求了");
 				$.ajax({
 					type: 'POST',
 					//async: false,
@@ -1720,11 +1721,7 @@
 				});
 			}
 		}
-		
-		$('.clearConnectBtn').on('click', function() {
-			console.log('1');
-		});
-		
+	
 		
 		
 		//上传结婚证

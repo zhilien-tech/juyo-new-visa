@@ -76,7 +76,7 @@ function setCaretPosition(ctrl, pos){
         range.select();
     }
 }
-document.write('<script language=javascript src="/references/common/js/pinyin.js"></script>');
+document.write('<script language=javascript src="/references/common/js/pinyin.js?v='+new Date().getTime()+'"></script>');
 //联想拼音
 $(document).on("input","#firstName",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){

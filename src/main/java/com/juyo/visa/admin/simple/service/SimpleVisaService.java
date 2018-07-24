@@ -3877,6 +3877,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveEditVisa(VisaEditDataForm form, HttpServletRequest request) {
+		System.out.println("进入请求了========");
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		//日本申请人
@@ -3893,6 +3894,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			orderjp.setLaststayday(form.getLaststayday());
 			orderjp.setLastreturndate(form.getLastreturndate());
 			dbDao.update(orderjp);
+			System.out.println("更新日本申请人========");
 			//申请人
 			TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
 					new Long(applicantOrderJpEntity.getApplicantId()).intValue());
@@ -3922,6 +3924,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					dbDao.update(applicantEntity);
 				}
 			}
+			System.out.println("更新申请人信息完毕========");
 			if (Util.eq(applicantEntity.getId(), applicantEntity.getMainId())) {
 				applicantOrderJpEntity.setIsMainApplicant(MainOrViceEnum.YES.intKey());
 			} else {
@@ -3941,293 +3944,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					if (beforeList.size() > 0) {
 						dbDao.delete(beforeList);
 					}
-					/*if (!Util.isEmpty(applicantEntity.getMainId())) {
-						TApplicantEntity mainApplicant = dbDao.fetch(TApplicantEntity.class,
-								new Long(applicantEntity.getMainId()).intValue());
-						TApplicantOrderJpEntity mainAppyJp = dbDao.fetch(TApplicantOrderJpEntity.class,
-								Cnd.where("applicantId", "=", mainApplicant.getId()));
-						//获取主申请人的财产信息
-						List<TApplicantWealthJpEntity> mainwealthList = dbDao.query(TApplicantWealthJpEntity.class,
-								Cnd.where("applicantId", "=", mainAppyJp.getId()), null);
-						List<TApplicantWealthJpEntity> beforeList = dbDao.query(TApplicantWealthJpEntity.class,
-								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()), null);
-						dbDao.updateRelations(beforeList, mainwealthList);
+					System.out.println("副申请人财产信息同主申请人========");
 
-						//银行流水
-						TApplicantWealthJpEntity mainApplyWealthJp = dbDao.fetch(
-								TApplicantWealthJpEntity.class,
-								Cnd.where("applicantId", "=", mainAppyJp.getId()).and("type", "=",
-										ApplicantJpWealthEnum.BANK.value()));
-						TApplicantWealthJpEntity applyWealthJp = dbDao.fetch(
-								TApplicantWealthJpEntity.class,
-								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=",
-										ApplicantJpWealthEnum.BANK.value()));
-						if (!Util.isEmpty(mainApplyWealthJp)) {
-							if (!Util.isEmpty(applyWealthJp)) {//如果申请人有银行流水信息，则更新
-								if (!Util.isEmpty(mainApplyWealthJp.getDetails())) {
-									applyWealthJp.setDetails(mainApplyWealthJp.getDetails());
-									applyWealthJp.setApplicantId(applicantOrderJpEntity.getId());
-									applyWealthJp.setOpId(loginUser.getId());
-									applyWealthJp.setUpdateTime(new Date());
-									dbDao.update(applyWealthJp);
-								}
-							} else {//没有则添加
-								TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
-								applyWealth.setType("银行流水");
-								applyWealth.setDetails(mainApplyWealthJp.getDetails());
-								applyWealth.setApplicantId(applicantOrderJpEntity.getId());
-								applyWealth.setSequence(1);
-								applyWealth.setOpId(loginUser.getId());
-								applyWealth.setCreateTime(new Date());
-								dbDao.insert(applyWealth);
-							}
-						}
-						//车产
-						TApplicantWealthJpEntity applicantWealthJpCar = dbDao.fetch(
-								TApplicantWealthJpEntity.class,
-								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=",
-										ApplicantJpWealthEnum.CAR.value()));
-						TApplicantWealthJpEntity mainApplyWealthJpCar = dbDao.fetch(
-								TApplicantWealthJpEntity.class,
-								Cnd.where("applicantId", "=", mainAppyJp.getId()).and("type", "=",
-										ApplicantJpWealthEnum.CAR.value()));
-						if (!Util.isEmpty(mainApplyWealthJpCar)) {
-							if (!Util.isEmpty(applicantWealthJpCar)) {//如果申请人有银行流水信息，则更新
-								if (!Util.isEmpty(mainApplyWealthJpCar.getDetails())) {
-									applicantWealthJpCar.setDetails(mainApplyWealthJpCar.getDetails());
-									applicantWealthJpCar.setApplicantId(applicantOrderJpEntity.getId());
-									applicantWealthJpCar.setOpId(loginUser.getId());
-									applicantWealthJpCar.setUpdateTime(new Date());
-									dbDao.update(applicantWealthJpCar);
-								}
-							} else {
-								TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
-								applyWealth.setType("车产");
-								applyWealth.setDetails(mainApplyWealthJpCar.getDetails());
-								applyWealth.setApplicantId(applicantOrderJpEntity.getId());
-								applyWealth.setSequence(2);
-								applyWealth.setOpId(loginUser.getId());
-								applyWealth.setCreateTime(new Date());
-								dbDao.insert(applyWealth);
-							}
-						}
-
-						//房产
-						TApplicantWealthJpEntity applicantWealthJpHome = dbDao.fetch(
-								TApplicantWealthJpEntity.class,
-								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=",
-										ApplicantJpWealthEnum.HOME.value()));
-						TApplicantWealthJpEntity mainApplyWealthJpHome = dbDao.fetch(
-								TApplicantWealthJpEntity.class,
-								Cnd.where("applicantId", "=", mainAppyJp.getId()).and("type", "=",
-										ApplicantJpWealthEnum.HOME.value()));
-						if (!Util.isEmpty(mainApplyWealthJpHome)) {
-							if (!Util.isEmpty(applicantWealthJpHome)) {//如果申请人有银行流水信息，则更新
-								if (!Util.isEmpty(mainApplyWealthJpHome.getDetails())) {
-									applicantWealthJpHome.setDetails(mainApplyWealthJpHome.getDetails());
-									applicantWealthJpHome.setApplicantId(applicantOrderJpEntity.getId());
-									applicantWealthJpHome.setOpId(loginUser.getId());
-									applicantWealthJpHome.setUpdateTime(new Date());
-									dbDao.update(applicantWealthJpHome);
-								}
-							} else {
-								TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
-								applyWealth.setType("房产");
-								applyWealth.setDetails(mainApplyWealthJpHome.getDetails());
-								applyWealth.setSequence(3);
-								applyWealth.setApplicantId(applicantOrderJpEntity.getId());
-								applyWealth.setOpId(loginUser.getId());
-								applyWealth.setCreateTime(new Date());
-								dbDao.insert(applyWealth);
-							}
-						}
-
-						//理财
-						TApplicantWealthJpEntity applicantWealthJpLi = dbDao.fetch(
-								TApplicantWealthJpEntity.class,
-								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=",
-										ApplicantJpWealthEnum.LICAI.value()));
-						TApplicantWealthJpEntity mainApplyWealthJpLi = dbDao.fetch(
-								TApplicantWealthJpEntity.class,
-								Cnd.where("applicantId", "=", mainAppyJp.getId()).and("type", "=",
-										ApplicantJpWealthEnum.LICAI.value()));
-						if (!Util.isEmpty(mainApplyWealthJpLi)) {
-							if (!Util.isEmpty(applicantWealthJpLi)) {//如果申请人有银行流水信息，则更新
-								if (!Util.isEmpty(mainApplyWealthJpLi.getDetails())) {
-									applicantWealthJpLi.setDetails(mainApplyWealthJpLi.getDetails());
-									applicantWealthJpLi.setApplicantId(applicantOrderJpEntity.getId());
-									applicantWealthJpLi.setOpId(loginUser.getId());
-									applicantWealthJpLi.setUpdateTime(new Date());
-									dbDao.update(applicantWealthJpLi);
-								}
-							} else {
-								TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
-								applyWealth.setType("理财");
-								applyWealth.setDetails(mainApplyWealthJpLi.getDetails());
-								applyWealth.setSequence(4);
-								applyWealth.setApplicantId(applicantOrderJpEntity.getId());
-								applyWealth.setOpId(loginUser.getId());
-								applyWealth.setCreateTime(new Date());
-								dbDao.insert(applyWealth);
-							}
-						}
-
-						//在职证明
-						TApplicantWealthJpEntity applicantWealthJp2 = dbDao.fetch(TApplicantWealthJpEntity.class, Cnd
-								.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=", "在职证明"));
-						TApplicantWealthJpEntity mainApplyWealthJp2 = dbDao.fetch(TApplicantWealthJpEntity.class, Cnd
-								.where("applicantId", "=", mainAppyJp.getId()).and("type", "=", "在职证明"));
-						if (!Util.isEmpty(mainApplyWealthJp2)) {
-							if (!Util.isEmpty(applicantWealthJp2)) {//如果申请人有银行流水信息，则更新
-								if (!Util.isEmpty(mainApplyWealthJp2.getDetails())) {
-									applicantWealthJp2.setDetails(mainApplyWealthJp2.getDetails());
-									applicantWealthJp2.setApplicantId(applicantOrderJpEntity.getId());
-									applicantWealthJp2.setOpId(loginUser.getId());
-									applicantWealthJp2.setUpdateTime(new Date());
-									dbDao.update(applicantWealthJp2);
-								}
-							} else {
-								TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
-								applyWealth.setType("在职证明");
-								applyWealth.setDetails(mainApplyWealthJp2.getDetails());
-								applyWealth.setApplicantId(applicantOrderJpEntity.getId());
-								applyWealth.setOpId(loginUser.getId());
-								applyWealth.setSequence(5);
-								applyWealth.setCreateTime(new Date());
-								dbDao.insert(applyWealth);
-							}
-						}
-
-						//银行存款
-						TApplicantWealthJpEntity applicantWealthJp3 = dbDao.fetch(TApplicantWealthJpEntity.class, Cnd
-								.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=", "银行存款"));
-						TApplicantWealthJpEntity mainApplyWealthJp3 = dbDao.fetch(TApplicantWealthJpEntity.class, Cnd
-								.where("applicantId", "=", mainAppyJp.getId()).and("type", "=", "银行存款"));
-						if (!Util.isEmpty(mainApplyWealthJp3)) {
-							if (!Util.isEmpty(applicantWealthJp3)) {//如果申请人有银行流水信息，则更新
-								if (!Util.isEmpty(mainApplyWealthJp3.getDetails())) {
-									applicantWealthJp3.setDetails(mainApplyWealthJp3.getDetails());
-									applicantWealthJp3.setApplicantId(applicantOrderJpEntity.getId());
-									applicantWealthJp3.setOpId(loginUser.getId());
-									applicantWealthJp3.setUpdateTime(new Date());
-									dbDao.update(applicantWealthJp3);
-								}
-							} else {
-								TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
-								applyWealth.setType("银行存款");
-								applyWealth.setDetails(mainApplyWealthJp3.getDetails());
-								applyWealth.setApplicantId(applicantOrderJpEntity.getId());
-								applyWealth.setOpId(loginUser.getId());
-								applyWealth.setSequence(6);
-								applyWealth.setCreateTime(new Date());
-								dbDao.insert(applyWealth);
-							}
-						}
-
-						//税单
-						TApplicantWealthJpEntity applicantWealthJp4 = dbDao.fetch(TApplicantWealthJpEntity.class, Cnd
-								.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=", "税单"));
-						TApplicantWealthJpEntity mainApplyWealthJp4 = dbDao.fetch(TApplicantWealthJpEntity.class, Cnd
-								.where("applicantId", "=", mainAppyJp.getId()).and("type", "=", "税单"));
-						if (!Util.isEmpty(mainApplyWealthJp4)) {
-							if (!Util.isEmpty(applicantWealthJp4)) {//如果申请人有银行流水信息，则更新
-								if (!Util.isEmpty(mainApplyWealthJp4.getDetails())) {
-									applicantWealthJp4.setDetails(mainApplyWealthJp4.getDetails());
-									applicantWealthJp4.setApplicantId(applicantOrderJpEntity.getId());
-									applicantWealthJp4.setOpId(loginUser.getId());
-									applicantWealthJp4.setUpdateTime(new Date());
-									dbDao.update(applicantWealthJp4);
-								}
-							} else {
-								TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
-								applyWealth.setType("税单");
-								applyWealth.setDetails(mainApplyWealthJp4.getDetails());
-								applyWealth.setApplicantId(applicantOrderJpEntity.getId());
-								applyWealth.setOpId(loginUser.getId());
-								applyWealth.setSequence(7);
-								applyWealth.setCreateTime(new Date());
-								dbDao.insert(applyWealth);
-							}
-						}
-
-						//完税证明
-						TApplicantWealthJpEntity applicantWealthJp5 = dbDao.fetch(TApplicantWealthJpEntity.class, Cnd
-								.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=", "完税证明"));
-						TApplicantWealthJpEntity mainApplyWealthJp5 = dbDao.fetch(TApplicantWealthJpEntity.class, Cnd
-								.where("applicantId", "=", mainAppyJp.getId()).and("type", "=", "完税证明"));
-						if (!Util.isEmpty(mainApplyWealthJp5)) {
-							if (!Util.isEmpty(applicantWealthJp5)) {//如果申请人有银行流水信息，则更新
-								if (!Util.isEmpty(mainApplyWealthJp5.getDetails())) {
-									applicantWealthJp5.setDetails(mainApplyWealthJp5.getDetails());
-									applicantWealthJp5.setApplicantId(applicantOrderJpEntity.getId());
-									applicantWealthJp5.setOpId(loginUser.getId());
-									applicantWealthJp5.setUpdateTime(new Date());
-									dbDao.update(applicantWealthJp4);
-								}
-							} else {
-								TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
-								applyWealth.setType("完税证明");
-								applyWealth.setDetails(mainApplyWealthJp5.getDetails());
-								applyWealth.setApplicantId(applicantOrderJpEntity.getId());
-								applyWealth.setOpId(loginUser.getId());
-								applyWealth.setSequence(8);
-								applyWealth.setCreateTime(new Date());
-								dbDao.insert(applyWealth);
-							}
-						}
-
-						//特定高校在读生
-						TApplicantWealthJpEntity applicantWealthJp6 = dbDao.fetch(TApplicantWealthJpEntity.class, Cnd
-								.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=", "特定高校在读生"));
-						TApplicantWealthJpEntity mainApplyWealthJp6 = dbDao.fetch(TApplicantWealthJpEntity.class, Cnd
-								.where("applicantId", "=", mainAppyJp.getId()).and("type", "=", "特定高校在读生"));
-						if (!Util.isEmpty(mainApplyWealthJp6)) {
-							if (!Util.isEmpty(applicantWealthJp6)) {//如果申请人有银行流水信息，则更新
-								if (!Util.isEmpty(mainApplyWealthJp6.getDetails())) {
-									applicantWealthJp6.setDetails(mainApplyWealthJp6.getDetails());
-									applicantWealthJp6.setApplicantId(applicantOrderJpEntity.getId());
-									applicantWealthJp6.setOpId(loginUser.getId());
-									applicantWealthJp6.setUpdateTime(new Date());
-									dbDao.update(applicantWealthJp4);
-								}
-							} else {
-								TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
-								applyWealth.setType("特定高校在读生");
-								applyWealth.setDetails(mainApplyWealthJp6.getDetails());
-								applyWealth.setApplicantId(applicantOrderJpEntity.getId());
-								applyWealth.setOpId(loginUser.getId());
-								applyWealth.setSequence(9);
-								applyWealth.setCreateTime(new Date());
-								dbDao.insert(applyWealth);
-							}
-						}
-
-						//特定高校毕业生
-						TApplicantWealthJpEntity applicantWealthJp7 = dbDao.fetch(TApplicantWealthJpEntity.class, Cnd
-								.where("applicantId", "=", applicantOrderJpEntity.getId()).and("type", "=", "特定高校毕业生"));
-						TApplicantWealthJpEntity mainApplyWealthJp7 = dbDao.fetch(TApplicantWealthJpEntity.class, Cnd
-								.where("applicantId", "=", mainAppyJp.getId()).and("type", "=", "特定高校毕业生"));
-						if (!Util.isEmpty(mainApplyWealthJp7)) {
-							if (!Util.isEmpty(applicantWealthJp7)) {//如果申请人有银行流水信息，则更新
-								if (!Util.isEmpty(mainApplyWealthJp7.getDetails())) {
-									applicantWealthJp7.setDetails(mainApplyWealthJp7.getDetails());
-									applicantWealthJp7.setApplicantId(applicantOrderJpEntity.getId());
-									applicantWealthJp7.setOpId(loginUser.getId());
-									applicantWealthJp7.setUpdateTime(new Date());
-									dbDao.update(applicantWealthJp4);
-								}
-							} else {
-								TApplicantWealthJpEntity applyWealth = new TApplicantWealthJpEntity();
-								applyWealth.setType("特定高校毕业生");
-								applyWealth.setDetails(mainApplyWealthJp7.getDetails());
-								applyWealth.setApplicantId(applicantOrderJpEntity.getId());
-								applyWealth.setOpId(loginUser.getId());
-								applyWealth.setSequence(10);
-								applyWealth.setCreateTime(new Date());
-								dbDao.insert(applyWealth);
-							}
-						}
-					}*/
 				} else {
 					//添加财产信息
 					TApplicantWealthJpEntity wealthJp = new TApplicantWealthJpEntity();
@@ -4257,6 +3975,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							dbDao.delete(applicantWealthJpEntity);
 						}
 					}
+					System.out.println("银行流水完毕========");
 					//车产
 					if (!Util.isEmpty(form.getVehicle())) {
 						TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(
@@ -4286,6 +4005,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							dbDao.delete(applicantWealthJpEntity);
 						}
 					}
+					System.out.println("车产完毕========");
 					//房产
 					if (!Util.isEmpty(form.getHouseProperty())) {
 						TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(
@@ -4315,6 +4035,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							dbDao.delete(applicantWealthJpEntity);
 						}
 					}
+					System.out.println("房产完毕========");
 					//理财
 					if (!Util.isEmpty(form.getFinancial())) {
 						TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(
@@ -4344,7 +4065,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							dbDao.delete(applicantWealthJpEntity);
 						}
 					}
-
+					System.out.println("理财完毕========");
 					//在职证明
 					if (!Util.isEmpty(form.getCertificate())) {
 						TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(TApplicantWealthJpEntity.class,
@@ -4370,7 +4091,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							dbDao.delete(applicantWealthJpEntity);
 						}
 					}
-
+					System.out.println("在职证明完毕========");
 					//银行存款
 					if (!Util.isEmpty(form.getDeposit())) {
 						TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(TApplicantWealthJpEntity.class,
@@ -4396,7 +4117,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							dbDao.delete(applicantWealthJpEntity);
 						}
 					}
-
+					System.out.println("银行存款完毕========");
 					//税单
 					if (!Util.isEmpty(form.getTaxbill())) {
 						TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(TApplicantWealthJpEntity.class,
@@ -4422,7 +4143,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							dbDao.delete(applicantWealthJpEntity);
 						}
 					}
-
+					System.out.println("税单完毕========");
 					//完税证明
 					if (!Util.isEmpty(form.getTaxproof())) {
 						TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(TApplicantWealthJpEntity.class,
@@ -4448,7 +4169,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							dbDao.delete(applicantWealthJpEntity);
 						}
 					}
-
+					System.out.println("完税证明完毕========");
 					//银行金卡
 					if (!Util.isEmpty(form.getGoldcard())) {
 						TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(TApplicantWealthJpEntity.class,
@@ -4474,7 +4195,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							dbDao.delete(applicantWealthJpEntity);
 						}
 					}
-
+					System.out.println("银行金卡完毕========");
 					//特定高校在读生
 					if (!Util.isEmpty(form.getReadstudent())) {
 						TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(
@@ -4504,7 +4225,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							dbDao.delete(applicantWealthJpEntity);
 						}
 					}
-
+					System.out.println("在读生完毕========");
 					//特定高校毕业生
 					if (!Util.isEmpty(form.getGraduate())) {
 						TApplicantWealthJpEntity applicantWealthJpEntity = dbDao.fetch(
@@ -4536,6 +4257,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					}
 				}
 			}
+			System.out.println("财产信息完毕========");
 			TApplicantVisaOtherInfoEntity otherinfo = dbDao.fetch(TApplicantVisaOtherInfoEntity.class,
 					Cnd.where("applicantid", "=", applicantOrderJpEntity.getId()));
 			if (Util.isEmpty(otherinfo)) {
@@ -4570,6 +4292,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			} else {
 				dbDao.insert(otherinfo);
 			}
+			System.out.println("其他信息完毕========");
 			//更新工作信息
 			TApplicantWorkJpEntity applicantWorkJpEntity = dbDao.fetch(TApplicantWorkJpEntity.class,
 					Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()));
@@ -4598,6 +4321,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			applicantWorkJpEntity.setTelephone(form.getTelephone());
 			applicantWorkJpEntity.setUpdateTime(new Date());
 			dbDao.update(applicantWorkJpEntity);
+			System.out.println("工作信息完毕========");
 			if (!Util.isEmpty(form.getMainRelation())) {
 				applicantOrderJpEntity.setMainRelation(form.getMainRelation());
 			} else {
@@ -5093,6 +4817,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			String workStatus = sbWork.toString();
 			applicantWorkJpEntity.setPrepareMaterials(workStatus.substring(0, workStatus.length() - 1));
 		}
+		System.out.println("职业相关处理完毕");
 	}
 
 	public List<TApplicantFrontPaperworkJpEntity> toInsertFrontJp(Integer workType, Integer applicantId,

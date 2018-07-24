@@ -502,6 +502,10 @@
 			//搜索条件
 			var status = $('#status').val();
 			var sendSignDate = $('#sendSignDate').val();
+			
+			var orderDate = $('#orderDate').val();
+			var songqianshe = $("#songqianshe").val();
+			var employee = $("#employee").val();
 			/* var signOutDate = $('#signOutDate').val(); */
 			var searchStr = $('#searchStr').val();
 			//异步加载数据
@@ -516,7 +520,7 @@
 				});
 				$.ajax({ 
 			    	url: url,
-			    	data:{status:status,sendSignDate:sendSignDate,searchStr:searchStr,pageNumber:pageNumber,orderAuthority:orderAuthority},
+			    	data:{status:status,sendSignDate:sendSignDate,orderDate:orderDate,employee:employee,songqianshe:songqianshe,searchStr:searchStr,pageNumber:pageNumber,orderAuthority:orderAuthority},
 			    	dataType:"json",
 			    	type:'post',
 			    	success: function(data){
