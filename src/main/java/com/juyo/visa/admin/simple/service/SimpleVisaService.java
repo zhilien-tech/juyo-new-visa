@@ -3136,7 +3136,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		passport.setFirstName(form.getFirstName());
 		//passport.setFirstNameEn(passportForm.getFirstNameEn().substring(1));
 		passport.setIssuedDate(form.getIssuedDate());
-		passport.setIssuedOrganization("公安部出入境管理局");
+		passport.setIssuedOrganization(form.getIssuedOrganization());
 		passport.setIssuedOrganizationEn(form.getIssuedOrganizationEn());
 		passport.setIssuedPlace(form.getIssuedPlace());
 		passport.setIssuedPlaceEn(form.getIssuedPlaceEn());

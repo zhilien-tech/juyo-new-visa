@@ -690,7 +690,7 @@
 		}
 		//正面上传,扫描
 		
-		$('#uploadFile').change(function() {
+		/* $('#uploadFile').change(function() {
 			var layerIndex = layer.load(1, {
 				shade : "#000"
 			});
@@ -756,7 +756,7 @@
 				}); // end of ajaxSubmit
 			};
 			reader.readAsDataURL(file);
-		});
+		}); */
 		
 		//背面上传,扫描
 		$('#uploadFileBack').change(function() {

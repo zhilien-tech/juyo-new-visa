@@ -234,8 +234,8 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
 
 		String url = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, extName, mediaId); //参数必须是final类型的
-		passport.setPassportUrl(url);
-		dbDao.update(passport);
+		//passport.setPassportUrl(url);
+		//dbDao.update(passport);
 
 		passportRecognitionBack = orderJpViewService.passportRecognition(url, request, response);
 		passportRecognitionBack.setUrl(url);
@@ -278,8 +278,8 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
 
 		String url = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, extName, mediaId); //参数必须是final类型的
-		apply.setCardFront(url);
-		dbDao.update(apply);
+		//apply.setCardFront(url);
+		//dbDao.update(apply);
 
 		ApplicantJsonEntity ApplicantJsonEntity = orderJpViewService.wechatJsSDKToCard(url, request, response);
 		ApplicantJsonEntity.setUrl(url);
@@ -298,8 +298,8 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
 
 		String url = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, extName, mediaId); //参数必须是final类型的
-		apply.setCardBack(url);
-		dbDao.update(apply);
+		//apply.setCardBack(url);
+		//dbDao.update(apply);
 
 		ApplicantJsonEntity ApplicantJsonEntity = orderJpViewService.wechatJsSDKToCardBack(url, request, response);
 

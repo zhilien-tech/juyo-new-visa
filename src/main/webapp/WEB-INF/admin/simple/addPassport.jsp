@@ -44,11 +44,11 @@
 							<div class="col-xs-6 widthBig">
 							<div class="form-group">
 								<div class="cardFront-div">
-									<span>点击上传护照</span>
+									<!-- <span>点击上传护照</span> -->
 									<input id="passportUrl" name="passportUrl" type="hidden" value=""/>
-									<input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/>
+									<!-- <input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/> -->
 									<img id="sqImg" alt="" src="" >
-									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+									<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 								</div>
 							</div>
 						</div>
@@ -173,23 +173,24 @@
 								</div>
 							</div>
 						</div><!-- end 签发日期/有效期至 -->
-						<div class="row none"><!-- 签发机关 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+						<div class="row"><!-- 签发机关 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发机关</label>
-									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value=""/>
+									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="公安部出入境管理局"/>
+								</div>
+							</div>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group groupWidth">
+									<label><span>*</span>Exit & Entry Administration</label>
+									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value="Ministry of Public Security"/>
+									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 						</div><!-- end 签发机关 -->
 						
-						<div class="row none">
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value=""/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
+						<!-- <div class="row">
+						</div> -->
 					</div>	
 						
 				</div>
@@ -338,7 +339,7 @@
 		
 		//护照上传,扫描
 		
-		$('#uploadFile').change(function() {
+		/* $('#uploadFile').change(function() {
 			var layerIndex = layer.load(1, {
 				shade : "#000"
 			});
@@ -418,7 +419,7 @@
 				}); // end of ajaxSubmit
 			};
 			reader.readAsDataURL(file);
-		});
+		}); */
 		
 		//把dataUrl类型的数据转为blob
 		function dataURLtoBlob(dataurl) {
@@ -478,9 +479,9 @@
 		$(function(){
 			var passport = $("#passportUrl").val();
 			if(passport != ""){
-				$("#uploadFile").siblings("i").css("display","block");
+				$("#sqImg").siblings("i").css("display","block");
 			}else{
-				$("#uploadFile").siblings("i").css("display","none");
+				$("#sqImg").siblings("i").css("display","none");
 			}
 			
 		});
