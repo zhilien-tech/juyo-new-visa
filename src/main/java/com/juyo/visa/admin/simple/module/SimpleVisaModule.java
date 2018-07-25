@@ -257,4 +257,13 @@ public class SimpleVisaModule {
 			@Param("exname") String exname, HttpSession session) {
 		return simpleVisaService.getCustomerCitySelect(cityname, citytype, exname, session);
 	}
+
+	/**
+	 * 保存姓名中没有翻译的中文，以便在 汉字转拼音 js中加入对应的中文拼音
+	 */
+	@At
+	@POST
+	public Object toRecordCharacters(@Param("characterStr") String characterStr) {
+		return simpleVisaService.toRecordCharacters(characterStr);
+	}
 }

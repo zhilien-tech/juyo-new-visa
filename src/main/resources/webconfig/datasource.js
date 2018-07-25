@@ -23,7 +23,7 @@ var ioc = {
 			InitialSize : 10,
 			
 			/*最小连接池数量*/
-			//minIdle : 5,
+			minIdle : 5,
 			
 			/*最大连接池数量*/
 			maxActive : 20,
@@ -51,7 +51,7 @@ var ioc = {
 			testWhileIdle: true,
 			
 			/*申请连接时是否执行validationQuery检测*/
-			TestOnBorrow : false,
+			TestOnBorrow : true,
 			
 			/*归还连接时是否执行validationQuery检测*/
 			testOnReturn : false,

@@ -451,7 +451,7 @@
 			function ajaxConnection(){
 				$.ajax({
 					type: 'POST',
-					async : false,
+					//async : false,
 					data : passportInfo,
 					url: '${base}/admin/simple/saveEditPassport.html',
 					success :function(data) {

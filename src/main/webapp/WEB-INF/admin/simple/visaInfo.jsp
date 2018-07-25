@@ -924,6 +924,26 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
+			
+			var laststartdate = '${obj.jporderinfo.laststartdate}';
+			var laststayday = '${obj.jporderinfo.laststayday}';
+			var lastreturndate = '${obj.jporderinfo.lastreturndate}';
+			
+			var newlaststartdate = '${obj.applyorderinfo.laststartdate}';
+			var newlaststayday = '${obj.applyorderinfo.laststayday}';
+			var newlastreturndate = '${obj.applyorderinfo.lastreturndate}';
+			
+			if(newlaststartdate == "" && laststartdate != ""){
+				$("#laststartdate").val(laststartdate);
+			}
+			if(newlaststayday == "" && laststayday != ""){
+				$("#laststayday").val(laststayday);
+			}
+			if(newlastreturndate == "" && lastreturndate != ""){
+				$("#lastreturndate").val(lastreturndate);
+			}
+			
+			
 			var visatype = $('#visatype').val();
 			
 			if(visatype == 7){//冲绳
@@ -1100,7 +1120,7 @@
 			});
 			
 			var wealthType = '${obj.wealthJp}';
-			console.log(wealthType);
+			//console.log(wealthType);
 			if(wealthType){
 				$('[name=wealthType]').each(function(){
 					var wealth = $(this);
@@ -1677,6 +1697,7 @@
 			}
 			
 			var passportInfo = $.param({"wealthType":wealthType,'visatype':visatype,'visacounty':visacounty,'isVisit':isVisit,'threecounty':threecounty,'isname':isname,'isyaoqing':isyaoqing}) + "&" +  $("#passportInfo").serialize();
+			
 			ajaxConnection();
 			var count = 0;
 			function ajaxConnection(){
@@ -1688,7 +1709,7 @@
 					url: '${base}/admin/simple/saveEditVisa.html',
 					success :function(data) {
 						layer.closeAll("loading");
-						console.log(JSON.stringify(data));
+						//console.log(JSON.stringify(data));
 						if(status == 1){
 							parent.successCallBack(1);
 							closeWindow();
@@ -1717,7 +1738,7 @@
 								
 							}});
 						　}
-					},timeout:10000
+					}/* ,timeout:10000 */
 				});
 			}
 		}

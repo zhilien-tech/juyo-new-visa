@@ -1390,6 +1390,9 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 					if (province.endsWith("省") || province.endsWith("市")) {
 						province = province.substring(0, province.length() - 1);
 					}
+					if (province.length() > 3 && province.endsWith("自治区")) {
+						province = province.substring(0, province.length() - 3);
+					}
 				}
 				cell = new PdfPCell(new Paragraph(province, font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -2237,6 +2240,9 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 				if (province.endsWith("省") || province.endsWith("市")) {
 					province = province.substring(0, province.length() - 1);
 				}
+				if (province.length() > 3 && province.endsWith("自治区")) {
+					province = province.substring(0, province.length() - 3);
+				}
 				if (count == 1) {
 					if (ordertripjp.getTripType().equals(1)) {
 						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
@@ -2687,6 +2693,9 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 					province = (String) record.get("province");
 					if (province.endsWith("省") || province.endsWith("市")) {
 						province = province.substring(0, province.length() - 1);
+					}
+					if (province.length() > 3 && province.endsWith("自治区")) {
+						province = province.substring(0, province.length() - 3);
 					}
 				}
 				String[] data = {
