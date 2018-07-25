@@ -19,9 +19,9 @@
 $(function(){
 	/* 点击名字关闭左菜单栏状态 */
 	$("#psersonal").click(function(){
-		   $(".nav-item>a").next('ul').slideUp(300);
-           $('.nav-item.nav-show').removeClass('nav-show');
-           $(".navUl li").removeClass('navLi');
+		$(".nav-item>a").next('ul').slideUp(300);
+		$('.nav-item.nav-show').removeClass('nav-show');
+		$(".navUl li").removeClass('navLi');
 	});
 });
 </script>
@@ -196,31 +196,31 @@ $(function(){
 	</div>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script type="text/javascript">
-	function successCallBack(status){
-		if(status == 1){
-			layer.msg('添加成功');
-		}else if(status == 2){
-			layer.msg('保存成功');
-		}else if(status == 3){
-			layer.msg('编辑成功');
-		}else if(status == 4){
-			layer.msg('发招宝');
-		}else if(status == 5){
-			layer.msg('招宝变更');
-		}else if(status == 6){
-			layer.msg('招宝取消');
-		}else if(status == 7){
-			layer.msg('报告拒签');
-		}else if(status == 8){
-			layer.msg('删除成功');
-		}else if(status == 9){
-			layer.msg('已移交售后');
-		}else if(status == 10){
-			layer.msg('已作废');
-		}else if(status == 11){
-			layer.msg('已还原');
+		function successCallBack(status){
+			if(status == 1){
+				layer.msg('添加成功');
+			}else if(status == 2){
+				layer.msg('保存成功');
+			}else if(status == 3){
+				layer.msg('编辑成功');
+			}else if(status == 4){
+				layer.msg('发招宝');
+			}else if(status == 5){
+				layer.msg('招宝变更');
+			}else if(status == 6){
+				layer.msg('招宝取消');
+			}else if(status == 7){
+				layer.msg('报告拒签');
+			}else if(status == 8){
+				layer.msg('删除成功');
+			}else if(status == 9){
+				layer.msg('已移交售后');
+			}else if(status == 10){
+				layer.msg('已作废');
+			}else if(status == 11){
+				layer.msg('已还原');
+			}
 		}
-	}
-</script>
+	</script>
 </body>
 </html>

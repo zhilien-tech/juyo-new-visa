@@ -216,6 +216,7 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
+	<script type="text/javascript" src="${base}/admin/simple/validationZh.js"></script>
 	
 	
 	<script type="text/javascript">
@@ -290,6 +291,11 @@
 				}
 			});
 			//$('#passportInfo').bootstrapValidator('validate');
+			
+			
+			/**
+				
+			*/
 			
 			var remark = $("#passRemark").val();
 			if(remark != ""){

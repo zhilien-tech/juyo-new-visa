@@ -1,11 +1,17 @@
 $(function(){
 	//默认显示第一个
-	$(".nav-item").first().addClass('nav-show');
-	$(".navUl li").first().addClass('navLi');
-	$(".nav-item li.nav-show").find('.navUl').show();
+	// $(".nav-item").first().addClass('nav-show');
+	// $(".navUl li").first().addClass('navLi');
+	// $(".nav-item li.nav-show").find('.navUl').show();
     // nav收缩展开
 	$('.nav-item > a').on('click',function(){
 		if (!$('.nav').hasClass('nav-mini')) {
+            /**
+             * 
+             */
+            if ($(this).parent('li').hasClass('nav-show') ) {
+                return 0;
+            }
             if ($(this).next().css('display') == "none") {
                 //展开未展开
                 $('.nav-item').children('ul').hide();
@@ -17,11 +23,17 @@ $(function(){
                 	$(this).parent('li').addClass('nav-show').siblings('li').removeClass('nav-show');
                 	 
                 }
+                if ($(this).parent('li').attr('id') == 1) {
+                    $(this).parent('li').removeClass('nav-show');
+                }
             }else{
                 //收缩已展开
                 $(this).next('ul').hide();
                 $('.nav-item.nav-show').removeClass('nav-show');
             }
+            /**
+             * 
+             */
         }else{
         	var subnav = $(this).next('ul').html();
             if(subnav == "" || subnav == null || subnav == undefined){
@@ -38,7 +50,8 @@ $(function(){
     	$('.navLi').removeClass('navLi');
     	$(this).addClass('navLi').siblings().removeClass('navLi');
     	
-    	$(this).parent().parent().addClass("nav-show").siblings('li').removeClass('nav-show');
+        // $(this).parent().parent().addClass("nav-show").siblings('li').removeClass('nav-show');
+        $(this).parent().parent().addClass("").siblings('li').removeClass('nav-show');
     });
     //nav-mini切换
     $('#mini').on('click',function(){

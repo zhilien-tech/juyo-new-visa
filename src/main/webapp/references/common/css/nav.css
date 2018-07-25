@@ -37,7 +37,22 @@ a{text-decoration:none;}
 
 /*---------------------*/
 .nav-show .icon-arrowright{transform:rotate(90deg);}
-.nav-show,.nav-item>a:hover {color: #FFF;}
+.nav-show,.nav-item>a:hover {
+    color: #FFF;
+}
+
+
+
+/* .navUl li a:before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    width: 4px;
+    height: 50px;
+    background: #3086f1;
+    opacity: 0;
+} */
+
 .nav-item>a:hover span { color:#FFF;}
 .navLi>a:before {opacity:1 !important;} 
 .nav-item li:hover a{color: #FFF;}
@@ -62,3 +77,23 @@ a{text-decoration:none;}
 .nav .btnMore { font-size:14px  !important; position:absolute; right:10px;top:0;}
 .icon-huobi,.icon-homepage, .icon-zhucetianjiahaoyou, .icon-computer { font-size:23px !important;}
 icon-iconfontfuwushichang { font-size:17px !important;}
+
+.nav-show,
+.nav-item>a:hover{
+    background: #294461!important;
+}
+
+.nav-show a:before,
+.nav-item a:hover:before {
+    opacity: 1!important;
+}
+
+.nav-item a:before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    width: 4px;
+    height: 50px;
+    background: #3086f1;
+    opacity: 0;
+}
