@@ -216,6 +216,7 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
+	<script type="text/javascript" src="${base}/admin/simple/validationZh.js"></script>
 	
 	
 	<script type="text/javascript">
@@ -266,7 +267,7 @@
 						trigger:"change keyup",
 						validators : {
 							regexp: {
-	                            regexp: /^\/{1}[a-zA-Z]+$/,
+	                            regexp: /^\/{1}[a-zA-Z]*$/,
 	                            message: '拼音中不能包含汉字或其他特殊符号'
 	                        },
 						}
@@ -275,7 +276,7 @@
 						trigger:"change keyup",
 						validators : {
 							regexp: {
-	                            regexp: /^\/{1}[a-zA-Z]+$/,
+	                            regexp: /^\/{1}[a-zA-Z]*$/,
 	                            message: '拼音中不能包含汉字或其他特殊符号'
 	                        },
 						}
@@ -290,6 +291,11 @@
 				}
 			});
 			//$('#passportInfo').bootstrapValidator('validate');
+			
+			
+			/**
+				
+			*/
 			
 			var remark = $("#passRemark").val();
 			if(remark != ""){

@@ -26,7 +26,7 @@
 		</a>
 		<form id="passportInfo">
 			<div class="modal-header">
-				<span class="heading">护照信息</span> 
+				<span class="heading">护照信息123345345</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 			</div>
@@ -227,8 +227,8 @@
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
+	<script type="text/javascript" src="${base}/admin/simple/validationZh.js"></script>
 	
 	
 	<script type="text/javascript">
@@ -237,6 +237,7 @@
 			
 			var issuedOrganization = "${obj.passport.issuedOrganization }";
 			var issuedOrganizationen = "${obj.passport.issuedOrganizationEn }";
+			
 			
 			
 			
@@ -314,7 +315,12 @@
 					}
 				}
 			});
+
 			$('#passportInfo').bootstrapValidator('validate');
+
+			
+
+			
 			
 			var remark = $("#passRemark").val();
 			if(remark != ""){
