@@ -218,7 +218,8 @@
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script src="${base}/references/public/dist/newvisacss/js/ "></script>
+	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
@@ -283,14 +284,6 @@
 						validators : {
 							notEmpty : {
 								message : '姓不能为空'
-							}
-						}
-					},
-					firstNameEn: {
-						validators : {
-							regexp: {
-	                            regexp: /^[a-zA-Z0-9_\.]+$/,
-	                            message: '只能是数字和字母_.'
 							}
 						}
 					},
