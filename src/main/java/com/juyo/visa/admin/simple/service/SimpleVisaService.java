@@ -3897,9 +3897,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				orderjp.setVisaCounty(form.getVisacounty());
 				orderjp.setIsVisit(form.getIsVisit());
 				orderjp.setThreeCounty(form.getThreecounty());
-				orderjp.setLaststartdate(form.getLaststartdate());
-				orderjp.setLaststayday(form.getLaststayday());
-				orderjp.setLastreturndate(form.getLastreturndate());
+				//orderjp.setLaststartdate(form.getLaststartdate());
+				//orderjp.setLaststayday(form.getLaststayday());
+				//orderjp.setLastreturndate(form.getLastreturndate());
 				applicantOrderJpEntity.setLaststartdate(form.getLaststartdate());
 				applicantOrderJpEntity.setLaststayday(form.getLaststayday());
 				applicantOrderJpEntity.setLastreturndate(form.getLastreturndate());

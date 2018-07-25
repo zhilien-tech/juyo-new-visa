@@ -219,6 +219,7 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
@@ -287,6 +288,7 @@
 						}
 					},
 					firstNameEn: {
+						trigger:"change keyup",
 						validators : {
 							regexp: {
 	                            regexp: /^\/{1}[a-zA-Z]+$/,
@@ -295,6 +297,7 @@
 						}
 					},
 					lastNameEn: {
+						trigger:"change keyup",
 						validators : {
 							regexp: {
 	                            regexp: /^\/{1}[a-zA-Z]+$/,

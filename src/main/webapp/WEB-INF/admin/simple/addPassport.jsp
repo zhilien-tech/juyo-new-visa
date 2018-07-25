@@ -263,6 +263,7 @@
 						}
 					},
 					firstNameEn: {
+						trigger:"change keyup",
 						validators : {
 							regexp: {
 	                            regexp: /^\/{1}[a-zA-Z]+$/,
@@ -271,6 +272,7 @@
 						}
 					},
 					lastNameEn: {
+						trigger:"change keyup",
 						validators : {
 							regexp: {
 	                            regexp: /^\/{1}[a-zA-Z]+$/,
