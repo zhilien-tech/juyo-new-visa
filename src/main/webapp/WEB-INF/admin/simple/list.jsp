@@ -508,6 +508,8 @@
 			var employee = $("#employee").val();
 			/* var signOutDate = $('#signOutDate').val(); */
 			var searchStr = $('#searchStr').val();
+			console.log("pageNumber:"+pageNumber);
+			console.log("pagetotal:"+pagetotal);
 			//异步加载数据
 			if(pageNumber <= pagetotal){
 				//遮罩
@@ -572,6 +574,8 @@
 		//var signOutDate = $('#signOutDate').val();
 		var searchStr = $('#searchStr').val();
 		var orderAuthority = "allOrder";
+		var pageNumber = $('#pageNumber').val();
+		console.log('#searchPageNumber:'+pageNumber);
 		$(".searchOrderBtn").each(function(){
 			if($(this).hasClass("bgColor")){
 				orderAuthority = $(this).attr("name");
@@ -592,6 +596,7 @@
         	dataType:"json",
         	type:'post',
         	success: function(data){
+        		$('#pageNumber').val(1);
         		_self.visaJapanData = data.visaJapanData;
         		if(data.visaJapanData.length != 0){
             		_self.visaJapanDataS = data.entity;
@@ -651,6 +656,10 @@
 	
 	function successCallBack(status){
 		search();
+		
+		
+		
+		
 		/* var orderAuthority = "allOrder";
 		$(".searchOrderBtn").each(function(){
 			if($(this).hasClass("bgColor")){
@@ -678,7 +687,7 @@
             		}
           	}
         }); */
-		if(status == 1){
+		/* if(status == 1){
 			//layer.msg('发招宝');
 			parent.successCallBack(4);
 		}else if(status == 12){
@@ -686,7 +695,7 @@
 		}else{
 			//layer.msg('保存成功');
 			parent.successCallBack(2);
-		}
+		} */
 	}
 	
 	$(function(){
