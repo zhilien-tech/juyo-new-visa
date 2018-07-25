@@ -65,10 +65,10 @@
 							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
 									<div class="form-group" style="position:relative;">
 									<label><span>*</span>姓/拼音</label> <input id="firstName"
-										name="firstName" type="text" class="form-control input-sm"  tabIndex="2"
+										name="firstName" type="text" autocomplete="off" class="form-control input-sm"  tabIndex="2"
 										placeholder=" " value="" />
 										
-										<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstNameEn" value=""/>
+										<input type="text" id="firstNameEn" autocomplete="off" style="position:absolute;top:32px;border:none;left:150px;"  name="firstNameEn" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 									<input type="hidden" id="id" name="id" value=""/>
@@ -86,9 +86,9 @@
 							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
 								<div class="form-group" style="position:relative;">
 									<label><span>*</span>名/拼音</label> <input id="lastName"
-										name="lastName" type="text" class="form-control input-sm" tabIndex="3"
+										name="lastName" type="text" class="form-control input-sm" tabIndex="3" autocomplete="off"
 										placeholder=" " value="" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastNameEn" value=""/>
+										<input type="text" id="lastNameEn" autocomplete="off" style="position:absolute;top:32px;border:none;left:150px;" name="lastNameEn" value=""/>
 
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -99,7 +99,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth">
 									<label><span>*</span>护照号</label>
-									<input id="passport" name="passport" type="text" class="form-control input-sm" tabIndex="4" value=""/>
+									<input id="passport" name="passport" type="text" autocomplete="off" class="form-control input-sm" tabIndex="4" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -118,13 +118,13 @@
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<input id="sexEn" class="form-control input-sm" name="sexEn" tabIndex="6" type="text" value=""/>
+									<input id="sexEn" class="form-control input-sm" autocomplete="off" name="sexEn" tabIndex="6" type="text" value=""/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 							 	<div class="form-group groupWidth" style="position:relative;">
 									<label><span>*</span>出生地点/拼音</label>
-									<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " tabIndex="7" value=""/>
+									<input id="birthAddress" name="birthAddress" autocomplete="off" type="text" class="form-control input-sm " tabIndex="7" value=""/>
 									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:30px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -134,14 +134,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生日期</label>
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" tabIndex="8" value=""/>
+									<input id="birthday" name="birthday" type="text" autocomplete="off" class="form-control input-sm" tabIndex="8" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth" style="position:relative;">
 									<label><span>*</span>签发地点/拼音</label>
-									<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " tabIndex="9" value=""/>
+									<input id="issuedPlace" name="issuedPlace"  type="text" autocomplete="off" class="form-control input-sm " tabIndex="9" value=""/>
 									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:30px;border:0px;left:80px;width:120px;" placeholder=" " value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -151,7 +151,7 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发日期</label>
-									<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" tabIndex="10" value=""/>
+									<input id="issuedDate" name="issuedDate" type="text" autocomplete="off" class="form-control input-sm" tabIndex="10" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -168,7 +168,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth">
 									<label><span>*</span>有效期至</label>
-									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" tabIndex="12" value=""/>
+									<input id="validEndDate" name="validEndDate" type="text" autocomplete="off" class="form-control input-sm" tabIndex="12" value=""/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -177,13 +177,13 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发机关</label>
-									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="公安部出入境管理局"/>
+									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " autocomplete="off" value="公安部出入境管理局"/>
 								</div>
 							</div>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth">
 									<label><span>*</span>Exit & Entry Administration</label>
-									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value="Ministry of Public Security"/>
+									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " autocomplete="off" value="Ministry of Public Security"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>

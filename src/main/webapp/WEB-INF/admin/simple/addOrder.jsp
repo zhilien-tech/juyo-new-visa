@@ -185,14 +185,14 @@
 								<!-- 送签时间/出签时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>预计送签时间：</label> <input id="sendVisaDate"
+										<label><span>*</span>预计送签时间：</label> <input id="sendVisaDate" autocomplete="off"
 											name="sendvisadate" type="text" class="form-control input-sm"
 											placeholder=" "  />
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>预计出签时间：</label> <input id="outVisaDate"
+										<label><span>*</span>预计出签时间：</label> <input id="outVisaDate" autocomplete="off"
 											name="outvisadate" type="text" class="form-control input-sm datetimepickercss"
 											placeholder=" "  />
 									</div>
@@ -200,7 +200,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>送签编号：</label>
-										<input id="sendvisanum" type="text" class="form-control input-sm"/>
+										<input id="sendvisanum" type="text" autocomplete="off" class="form-control input-sm"/>
 									</div>
 								</div>
 							</div>
@@ -214,7 +214,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行目的：</label>
-										<input id="tripPurpose" name="tripPurpose" type="text" class="form-control input-sm" placeholder=" " value="旅游"/>
+										<input id="tripPurpose" name="tripPurpose" autocomplete="off" type="text" class="form-control input-sm" placeholder=" " value="旅游"/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -233,19 +233,19 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行时间：</label>
-										<input id="goDate" name="" type="text" class="form-control input-sm datetimepickercss"/>
+										<input id="goDate" name="" type="text" autocomplete="off"  class="form-control input-sm datetimepickercss"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>停留天数：</label>
-										<input id="stayday" type="text" class="form-control input-sm"/>
+										<input id="stayday" type="text" autocomplete="off" class="form-control input-sm"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回时间：</label>
-										<input id="returnDate" type="text" class="form-control input-sm datetimepickercss"/>
+										<input id="returnDate" type="text" autocomplete="off" class="form-control input-sm datetimepickercss"/>
 									</div>
 								</div>
 							</div>

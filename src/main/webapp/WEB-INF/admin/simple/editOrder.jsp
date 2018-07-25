@@ -286,6 +286,7 @@
 									<div class="form-group">
 										<label><span>*</span>预计送签时间：</label> <input id="sendVisaDate" tabindex="10"
 											name="sendvisadate" type="text" class="form-control input-sm"
+											autocomplete="off"
 											placeholder=" " value="<fmt:formatDate value="${obj.orderinfo.sendVisaDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
@@ -293,13 +294,14 @@
 									<div class="form-group">
 										<label><span>*</span>预计出签时间：</label> <input id="outVisaDate" tabindex="11"
 											name="outvisadate" type="text" class="form-control input-sm"
+											autocomplete="off"
 											placeholder=" " value="<fmt:formatDate value="${obj.orderinfo.outVisaDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>送签编号：</label>
-										<input id="sendvisanum" type="text" class="form-control input-sm" value="${obj.orderinfo.sendVisaNum }"/>
+										<input id="sendvisanum" type="text" class="form-control input-sm" autocomplete="off" value="${obj.orderinfo.sendVisaNum }"/>
 									</div>
 								</div>
 							</div>
@@ -313,7 +315,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行目的：</label>
-										<input id="tripPurpose" name="tripPurpose" tabindex="12" type="text" class="form-control input-sm" placeholder=" " value="${obj.tripinfo.tripPurpose }"/>
+										<input id="tripPurpose" name="tripPurpose" tabindex="12" type="text" class="form-control input-sm" placeholder=" " autocomplete="off" value="${obj.tripinfo.tripPurpose }"/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
@@ -332,19 +334,19 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行时间：</label>
-										<input id="goDate" name="" tabindex="14" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.tripinfo.goDate }" pattern="yyyy-MM-dd" />"/>
+										<input id="goDate" name="" tabindex="14" type="text" class="form-control input-sm datetimepickercss" autocomplete="off" value="<fmt:formatDate value="${obj.tripinfo.goDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>停留天数：</label>
-										<input id="stayday" type="text" tabindex="15" class="form-control input-sm" value="${obj.orderinfo.stayDay }"/>
+										<input id="stayday" type="text" tabindex="15" class="form-control input-sm" autocomplete="off" value="${obj.orderinfo.stayDay }"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回时间：</label>
-										<input id="returnDate" type="text" class="form-control input-sm datetimepickercss" tabindex="16" value="<fmt:formatDate value="${obj.tripinfo.returnDate }" pattern="yyyy-MM-dd" />"/>
+										<input id="returnDate" type="text" class="form-control input-sm datetimepickercss" autocomplete="off" tabindex="16" value="<fmt:formatDate value="${obj.tripinfo.returnDate }" pattern="yyyy-MM-dd" />"/>
 									</div>
 								</div>
 							</div>

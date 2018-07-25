@@ -312,7 +312,8 @@ $(document).on("input","#issuedPlace",function(){
 	}
 });
 
-$(document).on("input","#passport",function(){
+$(document).on("input","#passport, #firstNameEn, #lastNameEn",function(){
+	console.log('--------------------------------');
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
 	}
