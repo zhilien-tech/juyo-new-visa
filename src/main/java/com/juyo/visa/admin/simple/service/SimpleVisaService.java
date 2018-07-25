@@ -5177,9 +5177,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object toRecordCharacters(String characterStr) {
-		TUncommoncharacterEntity entity = new TUncommoncharacterEntity();
-		entity.setHanzi(characterStr);
-		dbDao.insert(entity);
+		TUncommoncharacterEntity fetch = dbDao.fetch(TUncommoncharacterEntity.class,
+				Cnd.where("hanzi", "=", characterStr));
+		if (Util.isEmpty(fetch)) {
+			TUncommoncharacterEntity entity = new TUncommoncharacterEntity();
+			entity.setHanzi(characterStr);
+			dbDao.insert(entity);
+		}
 		return null;
 	}
 
