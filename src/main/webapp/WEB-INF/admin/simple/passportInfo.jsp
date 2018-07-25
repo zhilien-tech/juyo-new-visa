@@ -64,10 +64,13 @@
 						<!-- 姓/拼音 -->
 							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
 									<div class="form-group" style="position:relative;">
-									<label><span>*</span>姓/拼音</label> <input id="firstName"
-										name="firstName" type="text" class="form-control input-sm " tabIndex="1"
+									<label><span>*</span>姓/拼音</label> 
+									
+									<input id="firstName"
+										name="firstName" type="text" class="form-control input-sm " tabIndex="1" autocomplete="off"
 										placeholder=" " value="${obj.passport.firstName }" />
-										<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
+										
+										<input type="text" id="firstNameEn" name="firstNameEn"  autocomplete="off" style="position:absolute;top:32px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
@@ -85,9 +88,9 @@
 							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
 								<div class="form-group" style="position:relative;">
 									<label><span>*</span>名/拼音</label> <input id="lastName"
-										name="lastName" type="text" class="form-control input-sm" tabIndex="2"
+										name="lastName" type="text" class="form-control input-sm" tabIndex="2" autocomplete="off"
 										placeholder=" " value="${obj.passport.lastName }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
+										<input type="text" id="lastNameEn" autocomplete="off" style="position:absolute;top:32px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -98,7 +101,18 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>护照号</label>
-									<input id="passport" name="passport" type="text" class="form-control input-sm" maxlength="9" tabIndex="3" value="${obj.passport.passport }"/>
+									
+									<input 
+										id="passport" 
+										name="passport" 
+										type="text" 
+										class="form-control input-sm" 
+										autocomplete="off" 
+										maxlength="9" 
+										tabIndex="3" 
+										value="${obj.passport.passport }"
+									/>
+									
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -117,13 +131,13 @@
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<input id="sexEn" class="form-control input-sm" name="sexEn" tabIndex="5" type="text" value="${obj.passport.sexEn }"/>
+									<input id="sexEn" class="form-control input-sm" autocomplete="off" name="sexEn" tabIndex="5" type="text" value="${obj.passport.sexEn }"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 							 	<div class="form-group groupWidth" style="position:relative;">
 									<label><span>*</span>出生地点/拼音</label>
-									<input id="birthAddress" name="birthAddress"  type="text" class="form-control input-sm " tabIndex="6" value="${obj.passport.birthAddress }"/>
+									<input id="birthAddress" name="birthAddress" autocomplete="off"  type="text" class="form-control input-sm " tabIndex="6" value="${obj.passport.birthAddress }"/>
 									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:30px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -133,14 +147,14 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>出生日期</label>
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" tabIndex="7" value="${obj.birthday}"/>
+									<input id="birthday" name="birthday" type="text" autocomplete="off" class="form-control input-sm" tabIndex="7" value="${obj.birthday}"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth" style="position:relative;">
 									<label><span>*</span>签发地点/拼音</label>
-									<input id="issuedPlace" name="issuedPlace"  type="text" class="form-control input-sm " tabIndex="8" value="${obj.passport.issuedPlace }"/>
+									<input id="issuedPlace" name="issuedPlace" autocomplete="off" type="text" class="form-control input-sm " tabIndex="8" value="${obj.passport.issuedPlace }"/>
 									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:30px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -150,7 +164,7 @@
 							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发日期</label>
-									<input id="issuedDate" name="issuedDate" type="text" class="form-control input-sm" tabIndex="9" value="${obj.issuedDate }"/>
+									<input id="issuedDate" name="issuedDate"  autocomplete="off" type="text" class="form-control input-sm" tabIndex="9" value="${obj.issuedDate }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -167,7 +181,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth">
 									<label><span>*</span>有效期至</label>
-									<input id="validEndDate" name="validEndDate" type="text" class="form-control input-sm" tabIndex="11" value="${obj.validEndDate }"/>
+									<input id="validEndDate" name="validEndDate" autocomplete="off" type="text" class="form-control input-sm" tabIndex="11" value="${obj.validEndDate }"/>
 								</div>
 							</div>
 						</div><!-- end 签发日期/有效期至 -->
@@ -175,13 +189,13 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>签发机关</label>
-									<input id="issuedOrganization" name="issuedOrganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
+									<input id="issuedOrganization" name="issuedOrganization" type="text" autocomplete="off" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
 								</div>
 							</div>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group groupWidth">
 									<label><span>*</span>Exit & Entry Administration</label>
-									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
+									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" autocomplete="off" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -204,7 +218,7 @@
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
-	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script src="${base}/references/public/dist/newvisacss/js/ "></script>
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
@@ -222,6 +236,9 @@
 			
 			var issuedOrganization = "${obj.passport.issuedOrganization }";
 			var issuedOrganizationen = "${obj.passport.issuedOrganizationEn }";
+			
+			
+			
 			if(issuedOrganization == ""){
 				$("#issuedOrganization").val("公安部出入境管理局");
 			}
@@ -266,6 +283,14 @@
 						validators : {
 							notEmpty : {
 								message : '姓不能为空'
+							}
+						}
+					},
+					firstNameEn: {
+						validators : {
+							regexp: {
+	                            regexp: /^[a-zA-Z0-9_\.]+$/,
+	                            message: '只能是数字和字母_.'
 							}
 						}
 					},
@@ -448,6 +473,20 @@
 		
 		//保存
 		function save(status){
+			/* if (status == 1) {
+				var firstName = $('#firstNameEn').val();
+				var lastName = $('#lastNameEn').val();
+				
+				().test('ASDAASD按时ASDAD')
+				
+				var reg = new RegExp(/^[A-Z]*$/g)
+				
+				if (!reg.test(firstName)) {
+					layer.msg("");
+					return 0;
+				}
+				
+			} */
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();

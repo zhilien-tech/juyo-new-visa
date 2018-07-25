@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
+	<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
 <!DOCTYPE HTML>
 <html lang="en-US" id="addHtml">
@@ -107,7 +107,7 @@
 										<label><span>*</span>备注</label>
 										</br>
 										<div class="input-box">
-											<input type="text" id="relationRemark" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
+											<input type="text" id="relationRemark" autocomplete="off" name="relationRemark" class="input" value="${obj.visaInfo.relationRemark}">
 											<ul class="dropdown">
 												<li>主卡</li>
 												<li>朋友</li>
@@ -257,19 +257,19 @@
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次出行时间</label>
-														<input id="laststartdate" name="laststartdate"  style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.applyorderinfo.laststartdate }" pattern="yyyy-MM-dd" />"/>
+														<input id="laststartdate" name="laststartdate" autocomplete="off" style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.laststartdate }" pattern="yyyy-MM-dd" />"/>
 													</div>
 												</div>
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次停留天数</label>
-														<input id="laststayday" name="laststayday"  style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm" value="${obj.applyorderinfo.laststayday }"/>
+														<input id="laststayday" name="laststayday" autocomplete="off" style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm" value="${obj.jporderinfo.laststayday }"/>
 													</div>
 												</div>
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次返回时间</label>
-														<input id="lastreturndate" name="lastreturndate"  style="left:605.328px !important; color:#555 !important;border-color:#d2d6de !important;" type="text" class="lastreturndate form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.applyorderinfo.lastreturndate }" pattern="yyyy-MM-dd" />"/>
+														<input id="lastreturndate" name="lastreturndate" autocomplete="off" style="left:605.328px !important; color:#555 !important;border-color:#d2d6de !important;" type="text" class="lastreturndate form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.lastreturndate }" pattern="yyyy-MM-dd" />"/>
 													</div>
 												</div>
 											</div>
@@ -278,7 +278,7 @@
 					</div>
 					<!-- end 申请人 -->
 					
-					<!-- 出行信息 -->
+					<!-- 出行信息 -->	
 					<div class="info tripvice">
 						<div class="info-head">出行信息 </div>
 						<div class="info-body-from cf ">
@@ -340,7 +340,7 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>职业</label>
-										<input id="position" name="position" type="text" class="form-control input-sm" value="${obj.workJp.position }"/>
+										<input id="position" name="position"  type="text" class="form-control input-sm" value="${obj.workJp.position }"/>
 									</div>
 								</div>
 							</div>
@@ -391,13 +391,13 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>银行流水</label>
-										<input id="bankflowfree" name="bankflowfree" type="text" class="form-control input-sm" value="银行流水"  />
+										<input id="bankflowfree" autocomplete="off" name="bankflowfree" type="text" class="form-control input-sm" value="银行流水"  />
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="bankflow" name="bankflow" type="text" class="form-control input-sm" placeholder="工资对账单收入"  />
+										<input id="bankflow" name="bankflow" autocomplete="off" type="text" class="form-control input-sm" placeholder="工资对账单收入"  />
 									</div>
 								</div>
 								<div style="float:left; margin:40px 0 0 -10px;">
@@ -416,13 +416,13 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>车产</label>
-										<input id="vehiclefree" name="vehiclefree"  type="text" class="form-control input-sm" value="车产"  />
+										<input id="vehiclefree" name="vehiclefree" autocomplete="off" type="text" class="form-control input-sm" value="车产"  />
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="vehicle" name="vehicle" type="text" class="form-control input-sm" placeholder="例如:大众速腾"/>
+										<input id="vehicle" name="vehicle" type="text" autocomplete="off" class="form-control input-sm" placeholder="例如:大众速腾"/>
 									</div>
 								</div>
 								<!-- <div style="float:left;  margin:40px 0 0 -23px;">
@@ -441,13 +441,13 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>房产</label>
-										<input id="housePropertyfree" name="housePropertyfree" type="text" class="form-control input-sm" value="房产" />
+										<input id="housePropertyfree" autocomplete="off" name="housePropertyfree" type="text" class="form-control input-sm" value="房产" />
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="houseProperty" name="houseProperty" type="text" class="form-control input-sm" placeholder=""  />
+										<input id="houseProperty" name="houseProperty" autocomplete="off"  type="text" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
 								<div style="float:left;  margin:40px 0 0 -10px;">
@@ -466,13 +466,13 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>理财</label>
-										<input id="financialfree" name="financialfree" type="text" class="form-control input-sm" value="理财" />
+										<input id="financialfree" autocomplete="off" name="financialfree" type="text" class="form-control input-sm" value="理财" />
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="financial" name="financial" type="text" class="form-control input-sm" placeholder=""  />
+										<input id="financial" name="financial" autocomplete="off" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
 								<div style="float:left;  margin:40px 0 0 -10px;">
@@ -492,13 +492,13 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>在职证明</label>
-										<input id="certificatefree" name="certificatefree" type="text" class="form-control input-sm" value="在职证明" />
+										<input id="certificatefree" name="certificatefree" autocomplete="off" type="text" class="form-control input-sm" value="在职证明" />
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="certificate" name="certificate" type="text" class="form-control input-sm" placeholder="年收入"  />
+										<input id="certificate" name="certificate" type="text" autocomplete="off" class="form-control input-sm" placeholder="年收入"  />
 									</div>
 								</div>
 								<div style="float:left;  margin:40px 0 0 -10px;">
@@ -518,13 +518,13 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>银行存款</label>
-										<input id="depositfree" name="depositfree" type="text" class="form-control input-sm" value="银行存款"/>
+										<input id="depositfree" name="depositfree" autocomplete="off" type="text" class="form-control input-sm" value="银行存款"/>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="deposit" name="deposit" type="text" class="form-control input-sm" placeholder=""  />
+										<input id="deposit" name="deposit" type="text" autocomplete="off" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
 								<div style="float:left;  margin:40px 0 0 -10px;">
@@ -544,13 +544,13 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>税单</label>
-										<input id="taxbillfree" name="taxbillfree" type="text" class="form-control input-sm" value="税单"/>
+										<input id="taxbillfree" name="taxbillfree" type="text" autocomplete="off" class="form-control input-sm" value="税单"/>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="taxbill" name=taxbill type="text" class="form-control input-sm" placeholder="年收入"  />
+										<input id="taxbill" name=taxbill type="text" autocomplete="off" class="form-control input-sm" placeholder="年收入"  />
 									</div>
 								</div>
 								<div style="float:left;  margin:40px 0 0 -10px;">
@@ -570,13 +570,13 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>完税证明</label>
-										<input id="taxprooffree" name="taxprooffree" type="text" class="form-control input-sm" value="完税证明"/>
+										<input id="taxprooffree" name="taxprooffree" autocomplete="off" type="text" class="form-control input-sm" value="完税证明"/>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="taxproof" name="taxproof" type="text" class="form-control input-sm" placeholder="年缴税"  />
+										<input id="taxproof" name="taxproof" type="text" autocomplete="off" class="form-control input-sm" placeholder="年缴税"  />
 									</div>
 								</div>
 								<div style="float:left;  margin:40px 0 0 -10px;">
@@ -596,13 +596,13 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>银行金卡</label>
-										<input id="goldcardfree" name="goldcardfree" type="text" class="form-control input-sm" value="银行金卡"/>
+										<input id="goldcardfree" name="goldcardfree" autocomplete="off" type="text" class="form-control input-sm" value="银行金卡"/>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="goldcard" name="goldcard" type="text" class="form-control input-sm" placeholder=""  />
+										<input id="goldcard" name="goldcard" type="text" autocomplete="off" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
 								<!-- <div style="float:left;  margin:40px 0 0 -10px;">
@@ -622,13 +622,13 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>特定高校在读生</label>
-										<input id="readstudentfree" name="readstudentfree" type="text" class="form-control input-sm" value="特定高校在读生" />
+										<input id="readstudentfree" name="readstudentfree" autocomplete="off" type="text" class="form-control input-sm" value="特定高校在读生" />
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="readstudent" name="readstudent" type="text" class="form-control input-sm" placeholder=""  />
+										<input id="readstudent" name="readstudent" type="text" autocomplete="off" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
 							</div><!-- end 特定高校在读生 -->
@@ -645,13 +645,13 @@
 								<div class="col-sm-5">
 									<div class="form-group">
 										<label><span>*</span>特定高校毕业生</label>
-										<input id="graduatefree" name="graduatefree" type="text" class="form-control input-sm" value="特定高校毕业生" />
+										<input id="graduatefree" name="graduatefree" autocomplete="off" type="text" class="form-control input-sm" value="特定高校毕业生" />
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label>&nbsp;</label>
-										<input id="graduate" name="graduate" type="text" class="form-control input-sm" placeholder=""  />
+										<input id="graduate" name="graduate" autocomplete="off" type="text" class="form-control input-sm" placeholder=""  />
 									</div>
 								</div>
 							</div><!-- end 房产 -->
@@ -673,19 +673,19 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="JapanFriendName"><span>*</span>酒店名称或友人姓名</label>
-										<input id="hotelname" name="hotelname" type="text" class="form-control input-sm" placeholder="参照'赴日予定表'" value="${obj.visaother.hotelname }"/>
+										<input id="hotelname" name="hotelname" autocomplete="off" type="text" class="form-control input-sm" placeholder="参照'赴日予定表'" value="${obj.visaother.hotelname }"/>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="JapanTelNumber">电话</label>
-										<input id="hotelphone" name="hotelphone" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.hotelphone }"/>
+										<input id="hotelphone" name="hotelphone" autocomplete="off" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.hotelphone }"/>
 									</div>
 								</div>
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="JapanAddress">地址</label>
-										<input id="hoteladdress" name="hoteladdress" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.hoteladdress }"/>
+										<input id="hoteladdress" name="hoteladdress" autocomplete="off" type="text" class="form-control input-sm" placeholder=" " value="${obj.visaother.hoteladdress }"/>
 									</div>
 								</div>
 							</div>
@@ -704,7 +704,7 @@
 											 <input type="checkbox" value="1" ${obj.visaother.isname == 1?'checked':'' } id="guaranteeCBInput" name="" />
 											 <label for="guaranteeCBInput"></label>
 										</div>
-										<input id="vouchname" name="vouchname" type="text" class="form-control input-sm guaranty" placeholder="参照'申元保证书" value="${obj.visaother.vouchname }"/>
+										<input id="vouchname" name="vouchname" autocomplete="off" type="text" class="form-control input-sm guaranty" placeholder="参照'申元保证书" value="${obj.visaother.vouchname }"/>
 										<%-- <input id="vouchname" name="vouchname" type="text" class="form-control input-sm guaranteeName" placeholder="姓名/拼音" value="${obj.visaother.vouchname }"/> --%>
 									</div>
 								</div>
@@ -808,7 +808,7 @@
 											 <input type="checkbox" value="1" ${obj.visaother.isyaoqing == 1?'checked':'' } id="inviterCBInput" name="" />
 											 <label for="inviterCBInput"></label>
 										</div>
-										<input id="invitename" name="invitename" type="text" class="form-control input-sm " placeholder="参照'申元保证书" value="${obj.visaother.invitename }"/>
+										<input id="invitename" autocomplete="off" name="invitename" type="text" class="form-control input-sm " placeholder="参照'申元保证书" value="${obj.visaother.invitename }"/>
 										<%-- <input id="invitename" name="invitename" type="text" class="form-control input-sm inviterName" placeholder="姓名/拼音" value="${obj.visaother.invitename }"/> --%>
 									</div>
 								</div>
@@ -890,7 +890,7 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="otherInfoHead"><span>*</span>旅行社意见</label>
-										<input id="traveladvice" name="traveladvice" type="text" class="form-control input-sm" placeholder="推荐" value="${obj.visaother.traveladvice }"/>
+										<input id="traveladvice" autocomplete="off" name="traveladvice" type="text" class="form-control input-sm" placeholder="推荐" value="${obj.visaother.traveladvice }"/>
 									</div>
 								</div>
 								
