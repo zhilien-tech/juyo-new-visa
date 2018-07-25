@@ -47,7 +47,7 @@
 									<span>点击上传护照</span>
 									<input id="passportUrl" name="passporturl" type="hidden" value="${obj.passurl.url }"/>
 									<input id="uploadFile" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
-									<img id="sqImg" alt="" src="${obj.passurl.url }" >
+									<img style="top:-219px;" id="sqImg" alt="" src="${obj.passurl.url }" >
 									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
 								</div>
 							</div>
