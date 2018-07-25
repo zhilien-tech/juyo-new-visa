@@ -113,6 +113,7 @@
 										value="${obj.orderid }" /> <input type="hidden" id="id"
 										name="id" value="${obj.applicant.id }" /> <input
 										id="telephone" name="telephone" type="text"
+										autocomplete="off"
 										class="form-control input-sm"
 										value="${obj.applicant.telephone }" />
 									<!-- <i class="bulb"></i> -->
@@ -120,7 +121,7 @@
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>邮箱</label> <input id="email" name="email" type="text"
+									<label>邮箱</label> <input id="email" name="email" type="text" autocomplete="off"
 										class="form-control input-sm" value="${obj.applicant.email }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -132,7 +133,7 @@
 							<!-- 公民身份证 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>公民身份证</label> <input id="cardId" name="cardId"
+									<label>公民身份证</label> <input id="cardId" name="cardId" autocomplete="off"
 										type="text" class="form-control input-sm"
 										value="${obj.applicant.cardId }" />
 									<!-- <i class="bulb"></i> -->
@@ -154,10 +155,18 @@
 							<!-- 民族 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>现居住地</label> <input
-							id="province" name="province" type="text"
-							class="form-control input-sm" placeholder="省" autocomplete="off"
-							value="${obj.applicant.province }" />
+									<label>现居住地</label>
+									
+									<input 
+										id="province" 
+										name="province" 
+										type="text"
+										class="form-control input-sm" 
+										placeholder="省" 
+										autocomplete="off"
+										value="${obj.applicant.province }" 
+									/>
+							
 									<!-- <i class="bulb"></i> -->
 								</div>
 							</div>
@@ -233,6 +242,7 @@
 										name="detailedAddress" type="text"
 										class="form-control input-sm"
 										placeholder="区(县)/街道/小区(社区)/楼号/单元/房间"
+										autocomplete="off"
 										value="${obj.applicant.detailedAddress }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -318,6 +328,7 @@
 									<label>紧急联系人姓名</label> <input id="emergencyLinkman"
 										name="emergencyLinkman" type="text"
 										class="form-control input-sm" placeholder=" "
+										autocomplete="off"
 										value="${obj.applicant.emergencyLinkman }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -328,6 +339,7 @@
 									<div class="input-box">
 										<input type="text" id="mainRelation" name="mainRelation"
 											style="font-size: 10px !important;" class="input"
+											autocomplete="off"
 											value=" ${obj.orderjp.mainRelation }">
 										<ul class="dropdown" style="font-size: 10px !important;">
 											<li>配偶</li>
@@ -345,6 +357,7 @@
 									<label>紧急联系人手机</label> <input id="emergencyTelephone"
 										name="emergencyTelephone" type="text"
 										class="form-control input-sm" placeholder=" "
+										autocomplete="off"
 										value="${obj.applicant.emergencyTelephone }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -357,6 +370,7 @@
 									<label>紧急联系人地址</label> <input id="emergencyaddress"
 										name="emergencyaddress" type="text"
 										class="form-control input-sm"
+										autocomplete="off"
 										value="${obj.applicant.emergencyaddress }" />
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -581,6 +595,8 @@
 		}
 		
 		//省份检索
+		/* 
+		
 		$("#province").on('input',function(){
 			$("#province").nextAll("ul.ui-autocomplete").remove();
 			$.ajax({
@@ -599,7 +615,9 @@
 					$("#province").after(liStr);
 				}
 			});
-		});
+		}); 
+		
+		*/
 		var provinceindex = -1;
 		$(document).on('keydown','#province',function(e){
 			
