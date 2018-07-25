@@ -262,6 +262,24 @@
 							}
 						}
 					},
+					firstNameEn: {
+						trigger:"change keyup",
+						validators : {
+							regexp: {
+	                            regexp: /^\/{1}[a-zA-Z]+$/,
+	                            message: '拼音中不能包含汉字或其他特殊符号'
+	                        },
+						}
+					},
+					lastNameEn: {
+						trigger:"change keyup",
+						validators : {
+							regexp: {
+	                            regexp: /^\/{1}[a-zA-Z]+$/,
+	                            message: '拼音中不能包含汉字或其他特殊符号'
+	                        },
+						}
+					},
 					lastName : {
 						validators : {
 							notEmpty : {

@@ -89,9 +89,9 @@ $(document).on("input","#firstName",function(){
 	var dex = temp.length;
 	//$("#firstNameEn").css('left',200);
 	if($(this).val().length == 0){
-		$("#firstNameEn").val("");
+		$("#firstNameEn").val("").change();
 	}else{
-		$("#firstNameEn").val("/"+pinyinchar.toUpperCase());
+		$("#firstNameEn").val("/"+pinyinchar.toUpperCase()).change();
 	}
 	//斜杠的位置
 	//var sepindex = hanzi.length + 1;
@@ -114,9 +114,9 @@ $(document).on("input","#lastName",function(){
 	//var hanzi = temp.split('/')[0];
 	var pinyinchar = getPinYinStr(temp);
 	if($(this).val().length == 0){
-		$("#lastNameEn").val("");
+		$("#lastNameEn").val("").change();
 	}else{
-		$("#lastNameEn").val("/"+pinyinchar.toUpperCase());
+		$("#lastNameEn").val("/"+pinyinchar.toUpperCase()).change();
 	}
 	//斜杠的位置
 	//var sepindex = hanzi.length + 1;

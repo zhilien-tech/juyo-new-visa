@@ -70,7 +70,7 @@
 										name="firstName" type="text" class="form-control input-sm " tabIndex="1" autocomplete="off"
 										placeholder=" " value="${obj.passport.firstName }" />
 										
-										<input type="text" id="firstNameEn" name="firstNameEn"  autocomplete="off" style="position:absolute;top:32px;border:none;left:150px;"  name="firstNameEn" value="${obj.firstNameEn }"/>
+										<input type="text" id="firstNameEn" name="firstNameEn"  autocomplete="off" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.firstNameEn }"/>
 									<!-- <i class="bulb"></i> -->
 								</div>
 									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
@@ -219,7 +219,7 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
-	
+
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
@@ -285,6 +285,24 @@
 							notEmpty : {
 								message : '姓不能为空'
 							}
+						}
+					},
+					firstNameEn: {
+						trigger:"change keyup",
+						validators : {
+							regexp: {
+	                            regexp: /^\/{1}[a-zA-Z]+$/,
+	                            message: '拼音中不能包含汉字或其他特殊符号'
+	                        },
+						}
+					},
+					lastNameEn: {
+						trigger:"change keyup",
+						validators : {
+							regexp: {
+	                            regexp: /^\/{1}[a-zA-Z]+$/,
+	                            message: '拼音中不能包含汉字或其他特殊符号'
+	                        },
 						}
 					},
 					lastName : {
