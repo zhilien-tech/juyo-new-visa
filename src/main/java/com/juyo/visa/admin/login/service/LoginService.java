@@ -282,7 +282,7 @@ public class LoginService extends BaseService<TUserEntity> {
 			form.setMessageErrMsg("该游客不存在");
 			return false;
 		} else {
-			if (CommonConstants.DATA_STATUS_VALID != user.getIsDisable()) {
+			if (CommonConstants.DATA_STATUS_VALID == user.getIsDisable()) {
 				form.setMessageErrMsg("游客已被锁定，请联系管理员");
 				return false;
 			} else {
