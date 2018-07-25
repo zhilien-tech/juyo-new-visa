@@ -62,6 +62,7 @@ import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.SimpleVisaTypeEnum;
 import com.juyo.visa.common.util.FormatDateUtil;
 import com.juyo.visa.entities.TApplicantEntity;
+import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantWealthJpEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCompanyEntity;
@@ -138,6 +139,10 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 			List<TApplicantWealthJpEntity> query = dbDao.query(TApplicantWealthJpEntity.class,
 					Cnd.where("applicantId", "=", record.get("applicatid")).orderBy("sequence", "ASC"), null);
 			record.put("wealthjpinfo", query);
+			//日本申请人信息
+			TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
+					(int) record.get("applicatid"));
+			record.put("applyorderjp", applicantOrderJpEntity);
 		}
 		Map<String, Object> tempdata = new HashMap<String, Object>();
 		//行程安排
@@ -349,6 +354,9 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 				.get("ordertravelplan");
 		TOrderJpEntity orderjp = (TOrderJpEntity) tempdata.get("orderjp");
 
+		//日本申请人
+		TApplicantOrderJpEntity applyorderjp = (TApplicantOrderJpEntity) record.get("applyorderjp");
+
 		try {
 			Map<String, String> map = new HashMap<String, String>();
 			map.put("firstName", record.getString("firstname"));
@@ -535,11 +543,12 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 			map.put("hotelphone", record.getString("hotelphone"));
 			map.put("hoteladdress", record.getString("hoteladdress"));
 			String lastinfo = "";
-			if (!Util.isEmpty(orderjp.getLaststartdate()) && !Util.isEmpty(orderjp.getLastreturndate())) {
-				lastinfo += dateFormat1.format(orderjp.getLaststartdate());
+			if (!Util.isEmpty(applyorderjp.getLaststartdate()) && !Util.isEmpty(applyorderjp.getLastreturndate())) {
+				lastinfo += dateFormat1.format(applyorderjp.getLaststartdate());
 				lastinfo += "~";
-				lastinfo += dateFormat1.format(orderjp.getLastreturndate());
-				lastinfo += "      " + (Util.isEmpty(orderjp.getLaststayday()) ? "" : orderjp.getLaststayday());
+				lastinfo += dateFormat1.format(applyorderjp.getLastreturndate());
+				lastinfo += "      "
+						+ (Util.isEmpty(applyorderjp.getLaststayday()) ? "" : applyorderjp.getLaststayday());
 			}
 			if (Util.isEmpty(lastinfo)) {
 				map.put("fill_26", "无");

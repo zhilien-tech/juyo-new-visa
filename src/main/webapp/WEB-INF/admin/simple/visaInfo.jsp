@@ -257,19 +257,41 @@
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次出行时间</label>
-														<input id="laststartdate" name="laststartdate" autocomplete="off" style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.laststartdate }" pattern="yyyy-MM-dd" />"/>
+														<c:choose>
+															<c:when test="${empty obj.applyorderinfo.laststartdate and obj.jporderinfo.laststartdate != '' }">
+																<input id="laststartdate" name="laststartdate" autocomplete="off" style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.laststartdate }" pattern="yyyy-MM-dd" />"/>
+															</c:when>
+															<c:otherwise>
+																<input id="laststartdate" name="laststartdate" autocomplete="off" style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.applyorderinfo.laststartdate }" pattern="yyyy-MM-dd" />"/>
+															</c:otherwise>
+														</c:choose>
 													</div>
 												</div>
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次停留天数</label>
-														<input id="laststayday" name="laststayday" autocomplete="off" style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm" value="${obj.jporderinfo.laststayday }"/>
+
+														<c:choose>
+															<c:when test="${empty obj.applyorderinfo.laststayday and obj.jporderinfo.laststayday != '' }">
+																<input id="laststayday" name="laststayday" autocomplete="off" style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm" value="${obj.jporderinfo.laststayday }"/>
+															</c:when>
+															<c:otherwise>
+																<input id="laststayday" name="laststayday" autocomplete="off" style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm" value="${obj.applyorderinfo.laststayday }"/>
+															</c:otherwise>
+														</c:choose>														
 													</div>
 												</div>
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次返回时间</label>
-														<input id="lastreturndate" name="lastreturndate" autocomplete="off" style="left:605.328px !important; color:#555 !important;border-color:#d2d6de !important;" type="text" class="lastreturndate form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.lastreturndate }" pattern="yyyy-MM-dd" />"/>
+														<c:choose>
+															<c:when test="${empty obj.applyorderinfo.lastreturndate and obj.jporderinfo.lastreturndate != '' }">
+																<input id="lastreturndate" name="lastreturndate" autocomplete="off" style="left:605.328px !important; color:#555 !important;border-color:#d2d6de !important;" type="text" class="lastreturndate form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.lastreturndate }" pattern="yyyy-MM-dd" />"/>
+															</c:when>
+															<c:otherwise>
+																<input id="lastreturndate" name="lastreturndate" autocomplete="off" style="left:605.328px !important; color:#555 !important;border-color:#d2d6de !important;" type="text" class="lastreturndate form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.applyorderinfo.lastreturndate }" pattern="yyyy-MM-dd" />"/>
+															</c:otherwise>
+														</c:choose>
 													</div>
 												</div>
 											</div>
@@ -925,7 +947,7 @@
 		var base = "${base}";
 		$(function() {
 			
-			var laststartdate = '${obj.jporderinfo.laststartdate}';
+			/* var laststartdate = '${obj.jporderinfo.laststartdate}';
 			var laststayday = '${obj.jporderinfo.laststayday}';
 			var lastreturndate = '${obj.jporderinfo.lastreturndate}';
 			
@@ -941,7 +963,7 @@
 			}
 			if(newlastreturndate == "" && lastreturndate != ""){
 				$("#lastreturndate").val(lastreturndate);
-			}
+			} */
 			
 			
 			var visatype = $('#visatype').val();
