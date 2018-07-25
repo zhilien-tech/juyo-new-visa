@@ -1,6 +1,7 @@
 package com.juyo.visa.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -79,5 +80,17 @@ public class TApplicantOrderJpEntity implements Serializable {
 	@Column
 	@Comment("签证信息是否填写完毕")
 	private Integer visaIsCompleted;
+
+	@Column
+	@Comment("上次赴日时间")
+	private Date laststartdate;
+
+	@Column
+	@Comment("上次停留天数")
+	private Integer laststayday;
+
+	@Column
+	@Comment("上次返回时间")
+	private Date lastreturndate;
 
 }

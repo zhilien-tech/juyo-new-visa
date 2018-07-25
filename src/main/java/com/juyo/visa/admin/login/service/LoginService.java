@@ -111,7 +111,7 @@ public class LoginService extends BaseService<TUserEntity> {
 			form.setErrMsg("用户名或密码错误");
 			return false;
 		} else {
-			if (CommonConstants.DATA_STATUS_VALID != user.getIsDisable()) {
+			if (CommonConstants.DATA_STATUS_VALID == user.getIsDisable()) {
 				form.setErrMsg("账号未激活");
 				return false;
 			}

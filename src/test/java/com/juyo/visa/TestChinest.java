@@ -8,7 +8,12 @@ public class TestChinest {
 
 	public static void main(String[] args) {
 
-		String test1 = "0123456789abcde!@#$%^& 水电费";
+		String province = "自治区";
+		if (province.length() > 3 && province.endsWith("自治区")) {
+			province = province.substring(0, province.length() - 3);
+		}
+		System.out.println(province);
+		/*String test1 = "0123456789abcde!@#$%^& 水电费";
 		char[] chars_test1 = test1.toCharArray();
 		for (int i = 0; i < chars_test1.length; i++) {
 			String temp = String.valueOf(chars_test1[i]);
@@ -20,7 +25,7 @@ public class TestChinest {
 			else {
 				System.out.println("半角    " + temp);
 			}
-		}
+		}*/
 
 		/*String a = "asdb";
 		StringBuffer sb = new StringBuffer("34243");

@@ -257,19 +257,19 @@
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次出行时间</label>
-														<input id="laststartdate" name="laststartdate"  style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.laststartdate }" pattern="yyyy-MM-dd" />"/>
+														<input id="laststartdate" name="laststartdate"  style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.applyorderinfo.laststartdate }" pattern="yyyy-MM-dd" />"/>
 													</div>
 												</div>
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次停留天数</label>
-														<input id="laststayday" name="laststayday"  style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm" value="${obj.jporderinfo.laststayday }"/>
+														<input id="laststayday" name="laststayday"  style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm" value="${obj.applyorderinfo.laststayday }"/>
 													</div>
 												</div>
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次返回时间</label>
-														<input id="lastreturndate" name="lastreturndate"  style="left:605.328px !important; color:#555 !important;border-color:#d2d6de !important;" type="text" class="lastreturndate form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.jporderinfo.lastreturndate }" pattern="yyyy-MM-dd" />"/>
+														<input id="lastreturndate" name="lastreturndate"  style="left:605.328px !important; color:#555 !important;border-color:#d2d6de !important;" type="text" class="lastreturndate form-control input-sm datetimepickercss" value="<fmt:formatDate value="${obj.applyorderinfo.lastreturndate }" pattern="yyyy-MM-dd" />"/>
 													</div>
 												</div>
 											</div>
@@ -924,6 +924,26 @@
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
+			
+			var laststartdate = '${obj.jporderinfo.laststartdate}';
+			var laststayday = '${obj.jporderinfo.laststayday}';
+			var lastreturndate = '${obj.jporderinfo.lastreturndate}';
+			
+			var newlaststartdate = '${obj.applyorderinfo.laststartdate}';
+			var newlaststayday = '${obj.applyorderinfo.laststayday}';
+			var newlastreturndate = '${obj.applyorderinfo.lastreturndate}';
+			
+			if(newlaststartdate == "" && laststartdate != ""){
+				$("#laststartdate").val(laststartdate);
+			}
+			if(newlaststayday == "" && laststayday != ""){
+				$("#laststayday").val(laststayday);
+			}
+			if(newlastreturndate == "" && lastreturndate != ""){
+				$("#lastreturndate").val(lastreturndate);
+			}
+			
+			
 			var visatype = $('#visatype').val();
 			
 			if(visatype == 7){//冲绳
@@ -1100,7 +1120,7 @@
 			});
 			
 			var wealthType = '${obj.wealthJp}';
-			console.log(wealthType);
+			//console.log(wealthType);
 			if(wealthType){
 				$('[name=wealthType]').each(function(){
 					var wealth = $(this);
@@ -1677,6 +1697,7 @@
 			}
 			
 			var passportInfo = $.param({"wealthType":wealthType,'visatype':visatype,'visacounty':visacounty,'isVisit':isVisit,'threecounty':threecounty,'isname':isname,'isyaoqing':isyaoqing}) + "&" +  $("#passportInfo").serialize();
+			
 			ajaxConnection();
 			var count = 0;
 			function ajaxConnection(){
@@ -1688,7 +1709,7 @@
 					url: '${base}/admin/simple/saveEditVisa.html',
 					success :function(data) {
 						layer.closeAll("loading");
-						console.log(JSON.stringify(data));
+						//console.log(JSON.stringify(data));
 						if(status == 1){
 							parent.successCallBack(1);
 							closeWindow();
@@ -1717,7 +1738,7 @@
 								
 							}});
 						　}
-					},timeout:10000
+					}/* ,timeout:10000 */
 				});
 			}
 		}

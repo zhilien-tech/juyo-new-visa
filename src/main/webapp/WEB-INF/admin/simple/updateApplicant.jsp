@@ -992,21 +992,19 @@
 				var orderid = '${obj.orderid}';
 				var applicantInfo = getFormJson('#applicantInfo');
 			if(status != 2){
-				
-			//得到获取validator对象或实例 
-			var bootstrapValidator = $("#applicantInfo").data(
-					'bootstrapValidator');
-			// 执行表单验证 
-			bootstrapValidator.validate();
-			if (bootstrapValidator.isValid()){
-				layer.load(1);
-				ajaxConnection();
-				var count = 0;
-			}
+				//得到获取validator对象或实例 
+				var bootstrapValidator = $("#applicantInfo").data(
+						'bootstrapValidator');
+				// 执行表单验证 
+				bootstrapValidator.validate();
+				if (bootstrapValidator.isValid()){
+					layer.load(1);
+					ajaxConnection();
+				}
 			}else{
 				layer.load(1);
 				$.ajax({
-					async: false,
+					//async: false,
 					type: 'POST',
 					data : applicantInfo,
 					url: '${base}/admin/simple/saveApplicantInfo.html',
@@ -1019,7 +1017,7 @@
 					});
 					
 			}
-			
+			var count = 0;
 			function ajaxConnection(){
 				$.ajax({
 					//async: false,

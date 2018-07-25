@@ -1746,6 +1746,9 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 				if (province.endsWith("省") || province.endsWith("市")) {
 					province = province.substring(0, province.length() - 1);
 				}
+				if (province.length() > 3 && province.endsWith("自治区")) {
+					province = province.substring(0, province.length() - 3);
+				}
 			}
 
 			map.put("city", province);
