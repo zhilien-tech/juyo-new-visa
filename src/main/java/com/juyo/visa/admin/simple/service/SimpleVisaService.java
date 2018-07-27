@@ -6,12 +6,15 @@
 
 package com.juyo.visa.admin.simple.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -20,6 +23,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -33,6 +43,7 @@ import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.springframework.web.socket.TextMessage;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
@@ -44,6 +55,7 @@ import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.admin.simple.entity.StatisticsEntity;
 import com.juyo.visa.admin.simple.form.AddOrderForm;
+import com.juyo.visa.admin.simple.form.BasicinfoForm;
 import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
 import com.juyo.visa.admin.user.form.ApplicantUser;
@@ -51,7 +63,10 @@ import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.admin.visajp.form.FlightSelectParam;
 import com.juyo.visa.admin.visajp.service.TripAirlineService;
 import com.juyo.visa.admin.visajp.service.VisaJapanService;
+import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 import com.juyo.visa.common.base.QrCodeService;
+import com.juyo.visa.common.base.UploadService;
+import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
 import com.juyo.visa.common.enums.ApplicantJpWealthEnum;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
@@ -81,6 +96,7 @@ import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.SimpleVisaTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.newairline.ResultflyEntity;
+import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
@@ -143,11 +159,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	private VisaJapanService visaJapanService;
 	@Inject
 	private ChangePrincipalViewService changePrincipalViewService;
+	@Inject
+	private WeXinTokenViewService weXinTokenViewService;
+	@Inject
+	private UploadService qiniuUploadService;//文件上传
 
 	private VisaInfoWSHandler visaInfoWSHandler = (VisaInfoWSHandler) SpringContextUtil.getBean("myVisaInfoHander",
 			VisaInfoWSHandler.class);
 
 	private static final String VISAINFO_WEBSPCKET_ADDR = "visainfowebsocket";
+	private static String WX_B_CODE_URL = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=ACCESS_TOKEN"; //不限次数 scene长度为32个字符
 
 	public Object toList(HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
@@ -3047,7 +3068,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 		applicant.setIsPrompted(IsYesOrNoEnum.NO.intKey());
 		applicant.setAddress(form.getAddress());
-		//applicant.setBirthday(form.getBirthday());
 		applicant.setCardId(form.getCardId());
 		applicant.setCity(form.getCity());
 		applicant.setDetailedAddress(form.getDetailedAddress());
@@ -3227,6 +3247,205 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		String qrCode = qrCodeService.encodeQrCode(request, passporturl);
 		result.put("qrCode", qrCode);
 		return result;
+	}
+
+	public Object basicInfo(Integer applicantid, Integer orderid, HttpServletRequest request) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("orderid", orderid);
+		result.put("applicantid", applicantid);
+
+		//护照信息
+		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+		if (!Util.isEmpty(passport.getIssuedPlaceEn())) {
+			if (!passport.getIssuedPlaceEn().startsWith("/")) {
+				passport.setIssuedPlaceEn("/" + passport.getIssuedPlaceEn());
+			}
+		}
+		if (!Util.isEmpty(passport.getBirthAddressEn())) {
+			if (!passport.getBirthAddressEn().startsWith("/")) {
+				passport.setBirthAddressEn("/" + passport.getBirthAddressEn());
+			}
+		}
+		result.put("passport", passport);
+		if (!Util.isEmpty(passport.getFirstNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.getFirstNameEn());
+			result.put("firstNameEn", sb.toString());
+		}
+		if (!Util.isEmpty(passport.getLastNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(passport.getLastNameEn());
+			result.put("lastNameEn", sb.toString());
+		}
+		//格式化日期
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		if (!Util.isEmpty(passport.getBirthday())) {
+			Date birthday = passport.getBirthday();
+			result.put("birthday", sdf.format(birthday));
+		}
+		if (!Util.isEmpty(passport.getIssuedDate())) {
+			Date issuedDate = passport.getIssuedDate();
+			result.put("issuedDate", sdf.format(issuedDate));
+		}
+		if (!Util.isEmpty(passport.getValidEndDate())) {
+			Date validEndDate = passport.getValidEndDate();
+			result.put("validEndDate", sdf.format(validEndDate));
+		}
+		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
+
+		//基本信息
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, applicantid.longValue());
+		result.put("applicant", applicant);
+		TApplicantOrderJpEntity orderjp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+		result.put("orderjp", orderjp);
+		if (!Util.isEmpty(applicant.getBirthday())) {
+			Date birthday = applicant.getBirthday();
+			String birthdayStr = sdf.format(birthday);
+			result.put("birthday", birthdayStr);
+		}
+		if (!Util.isEmpty(applicant.getValidStartDate())) {
+			Date validStartDate = applicant.getValidStartDate();
+			String validStartDateStr = sdf.format(validStartDate);
+			result.put("validStartDate", validStartDateStr);
+		}
+		if (!Util.isEmpty(applicant.getValidEndDate())) {
+			Date validEndDate = applicant.getValidEndDate();
+			String validEndDateStr = sdf.format(validEndDate);
+			result.put("validEndDate", validEndDateStr);
+		}
+
+		if (!Util.isEmpty(applicant.getFirstNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(applicant.getFirstNameEn());
+			result.put("firstNameEn", sb.toString());
+		}
+		if (!Util.isEmpty(applicant.getOtherFirstNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(applicant.getOtherFirstNameEn());
+			result.put("otherFirstNameEn", sb.toString());
+		}
+
+		if (!Util.isEmpty(applicant.getLastNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(applicant.getLastNameEn());
+			result.put("lastNameEn", sb.toString());
+		}
+
+		if (!Util.isEmpty(applicant.getOtherLastNameEn())) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("/").append(applicant.getOtherLastNameEn());
+			result.put("otherLastNameEn", sb.toString());
+		}
+		//婚姻状况下拉选项
+		result.put("marryStatusEnum", EnumUtil.enum2(MarryStatusEnum.class));
+
+		return result;
+	}
+
+	public Object saveBasicinfo(BasicinfoForm form, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		//基本信息
+		TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, form.getApplicantid().longValue());
+		//日本申请人信息
+		TApplicantOrderJpEntity applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class,
+				Cnd.where("applicantId", "=", applicant.getId()));
+		applicantjp.setMainRelation(form.getMainRelation());
+		dbDao.update(applicantjp);
+
+		applicant.setOpId(loginUser.getId());
+		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+		applicant.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+		applicant.setAddress(form.getAddress());
+		applicant.setCardId(form.getCardId());
+		applicant.setCity(form.getCity());
+		applicant.setDetailedAddress(form.getDetailedAddress());
+		applicant.setEmail(form.getEmail());
+		if (!Util.isEmpty(form.getOtherLastNameEn())) {
+			applicant.setOtherLastNameEn(form.getOtherLastNameEn().substring(1));
+		}
+		if (!Util.isEmpty(form.getOtherFirstNameEn())) {
+			applicant.setOtherFirstNameEn(form.getOtherFirstNameEn().substring(1));
+		}
+		applicant.setNationality(form.getNationality());
+		applicant.setHasOtherName(form.getHasOtherName());
+		applicant.setHasOtherNationality(form.getHasOtherNationality());
+		applicant.setOtherFirstName(form.getOtherFirstName());
+		applicant.setOtherLastName(form.getOtherLastName());
+		applicant.setAddressIsSameWithCard(form.getAddressIsSameWithCard());
+		applicant.setCardProvince(form.getCardProvince());
+		applicant.setCardCity(form.getCardCity());
+		applicant.setIssueOrganization(form.getIssueOrganization());
+		applicant.setNation(form.getNation());
+		applicant.setProvince(form.getProvince());
+		applicant.setTelephone(form.getTelephone());
+		applicant.setValidEndDate(form.getValidEndDate());
+		applicant.setValidStartDate(form.getValidStartDate());
+		applicant.setCardFront(form.getCardFront());
+		applicant.setCardBack(form.getCardBack());
+		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+		applicant.setCreateTime(new Date());
+		applicant.setEmergencyLinkman(form.getEmergencyLinkman());
+		applicant.setEmergencyTelephone(form.getEmergencyTelephone());
+		applicant.setEmergencyaddress(form.getEmergencyaddress());
+		if (!Util.isEmpty(form.getFirstNameEn())) {
+			applicant.setFirstNameEn(form.getFirstNameEn().substring(1));
+		}
+		if (!Util.isEmpty(form.getLastNameEn())) {
+			applicant.setLastNameEn(form.getLastNameEn().substring(1));
+		}
+		applicant.setSex(form.getSex());
+		applicant.setBirthday(form.getBirthday());
+
+		dbDao.update(applicant);
+
+		//护照信息
+		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
+				Cnd.where("applicantId", "=", form.getApplicantid()));
+		passport.setOpId(loginUser.getId());
+
+		passport.setFirstName(form.getFirstName());
+		if (!Util.isEmpty(form.getFirstNameEn())) {
+			passport.setFirstNameEn(form.getFirstNameEn().substring(1));
+		}
+		passport.setLastName(form.getLastName());
+		if (!Util.isEmpty(form.getLastNameEn())) {
+			passport.setLastNameEn(form.getLastNameEn().substring(1));
+		}
+		passport.setPassportUrl(form.getPassportUrl());
+		passport.setOCRline1(form.getOCRline1());
+		passport.setOCRline2(form.getOCRline2());
+		passport.setBirthAddress(form.getBirthAddress());
+		passport.setBirthAddressEn(form.getBirthAddressEn());
+		passport.setBirthday(form.getBirthday());
+		passport.setFirstName(form.getFirstName());
+		passport.setIssuedDate(form.getIssuedDate());
+		passport.setIssuedOrganization(form.getIssuedOrganization());
+		passport.setIssuedOrganizationEn(form.getIssuedOrganizationEn());
+		passport.setIssuedPlace(form.getIssuedPlace());
+		passport.setIssuedPlaceEn(form.getIssuedPlaceEn());
+		passport.setLastName(form.getLastName());
+		passport.setPassport(form.getPassport());
+		passport.setSex(form.getSex());
+		passport.setSexEn(form.getSexEn());
+		passport.setType(form.getType());
+		passport.setValidEndDate(form.getValidEndDate());
+		passport.setValidStartDate(form.getValidStartDate());
+		passport.setValidType(form.getValidType());
+		passport.setUpdateTime(new Date());
+		if (!Util.isEmpty(form.getFirstNameEn())) {
+			passport.setFirstNameEn(form.getFirstNameEn().substring(1));
+		}
+		if (!Util.isEmpty(form.getLastNameEn())) {
+			passport.setLastNameEn(form.getLastNameEn().substring(1));
+		}
+
+		dbDao.update(passport);
+
+		return null;
 	}
 
 	/**
@@ -3885,12 +4104,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		try {
-
+			System.out.println("applicant:" + form.getApplicantId());
 			//日本申请人
 			if (!Util.isEmpty(form.getApplicantId())) {
+				System.out.println("有applicantid==========");
 				//日本申请人
 				TApplicantOrderJpEntity applicantOrderJpEntity = dbDao.fetch(TApplicantOrderJpEntity.class,
 						Cnd.where("applicantId", "=", form.getApplicantId()));
+				System.out.println("查询到了日本申请人信息=======");
 				TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, applicantOrderJpEntity.getOrderId()
 						.longValue());
 				orderjp.setVisaType(form.getVisatype());
@@ -4033,6 +4254,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 			long endTime = System.currentTimeMillis();
 			System.out.println("程序运行时间：" + (endTime - startTime) + "ms");
+			System.out.println("-------------------------");
 		} catch (Exception e) {
 			String simplename = e.getClass().getSimpleName();
 			if ("ClientAbortException".equals(simplename)) {
@@ -4043,6 +4265,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 			return null;
 		}
+		System.out.println("*****************");
 		return null;
 	}
 
@@ -5182,9 +5405,111 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		if (Util.isEmpty(fetch)) {
 			TUncommoncharacterEntity entity = new TUncommoncharacterEntity();
 			entity.setHanzi(characterStr);
+			entity.setCreatetime(new Date());
 			dbDao.insert(entity);
 		}
 		return null;
+	}
+
+	public Object dataUpload(int orderid, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		String page = "pages/upload/index/index";
+		String scene = "orderid/" + orderid + "*userIdId/" + loginUser.getId();
+		String accessToken = (String) weXinTokenViewService.getAccessToken();
+		String url = createBCode(accessToken, page, scene);
+		System.out.println("url:" + url);
+		return url;
+	}
+
+	public String createBCode(String accessToken, String page, String scene) {
+		String url = WX_B_CODE_URL.replace("ACCESS_TOKEN", accessToken);
+		Map<String, Object> param = new HashMap<>();
+		param.put("page", page);
+		param.put("scene", scene);
+		param.put("width", "100");
+		param.put("auto_color", false);
+		Map<String, Object> line_color = new HashMap<>();
+		line_color.put("r", 0);
+		line_color.put("g", 0);
+		line_color.put("b", 0);
+		param.put("line_color", line_color);
+		JSONObject json = JSONObject.parseObject(JSON.toJSONString(param));
+		//JSONObject json = JSONObject.fromObject(param);
+		InputStream inputStream = toPostRequest(json.toString(), accessToken);
+
+		String imgurl = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, "", "");
+		/*try {
+			String imageUrl = httpPostWithJSON2(url, json.toString(), "xxx.png");
+			return imageUrl;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
+		return imgurl;
+	}
+
+	//返回图片地址
+	public String httpPostWithJSON2(String url, String json, String imagePath) throws Exception {
+		String result = null;
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		HttpPost httpPost = new HttpPost(url);
+		httpPost.addHeader(HTTP.CONTENT_TYPE, "application/json");
+
+		StringEntity se = new StringEntity(json);
+		se.setContentType("application/json");
+		se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "UTF-8"));
+		httpPost.setEntity(se);
+		HttpResponse response = httpClient.execute(httpPost);
+		if (response != null) {
+			HttpEntity resEntity = response.getEntity();
+			if (resEntity != null) {
+				InputStream instreams = resEntity.getContent();
+				//上传至资源服务器生成url
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				byte[] bs = new byte[1024];//缓冲数组
+				int len = -1;
+				while ((len = instreams.read(bs)) != -1) {
+					byteArrayOutputStream.write(bs, 0, len);
+				}
+				byte b[] = byteArrayOutputStream.toByteArray();
+				byteArrayOutputStream.close();
+				instreams.close();
+				//将byte字节数组上传至资源服务器返回图片地址
+				// ......
+			}
+		}
+		httpPost.abort();
+		return result;
+	}
+
+	//发送POST请求
+	public InputStream toPostRequest(String json, String accessToken) {
+		String host = "https://api.weixin.qq.com";
+		String path = "/cgi-bin/wxaapp/createwxaqrcode?access_token=" + accessToken;
+		String method = "POST";
+		String entityStr = "";
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Content-Type", "application/json; charset=UTF-8");
+		Map<String, String> querys = new HashMap<String, String>();
+		HttpResponse response;
+		InputStream inputStream = null;
+		try {
+			response = HttpUtils.doPost(host, path, method, headers, querys, json);
+			inputStream = response.getEntity().getContent();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		/*try {
+			response = HttpUtils.doPost(host, path, method, headers, querys, json);
+			entityStr = EntityUtils.toString(response.getEntity());
+			System.out.println("POST请求返回的数据：" + entityStr);
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}*/
+		return inputStream;
 	}
 
 }

@@ -1592,7 +1592,7 @@
 			
 		});
 		//连接websocket
-		connectWebSocket();
+		/* connectWebSocket();
 		function connectWebSocket(){
 			 if ('WebSocket' in window){  
 	            console.log('Websocket supported');  
@@ -1625,7 +1625,7 @@
 	          } else {  
 	            console.log('Websocket not supported');  
 	          }  
-		}
+		} */
 		$("#addBtn").click(function(){
 			save(1);
 		});
@@ -1760,7 +1760,7 @@
 								
 							}});
 						　}
-					}/* ,timeout:10000 */
+					},timeout:10000
 				});
 			}
 		}

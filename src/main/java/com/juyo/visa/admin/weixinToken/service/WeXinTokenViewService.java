@@ -274,6 +274,7 @@ public class WeXinTokenViewService extends BaseService<TConfWxEntity> {
 		String mediaId = split[0];
 		System.out.println("mediaId:" + mediaId);
 		String accessToken = (String) getAccessToken();
+		System.out.println("accessToken:" + accessToken);
 		String extName = getExtName(accessToken, mediaId);//获取扩展名
 		InputStream inputStream = getInputStream(accessToken, mediaId);//获取输入流
 

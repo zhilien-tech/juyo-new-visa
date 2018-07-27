@@ -4,15 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.alibaba.dubbo.common.URL;
+
 public class TestChinest {
 
 	public static void main(String[] args) {
 
-		String province = "自治区";
+		String scene = "orderid=" + 1 + "&applicantid=" + 2;
+		String encode = URL.encode(scene);
+		System.out.println(encode);
+
+		/*String province = "自治区";
 		if (province.length() > 3 && province.endsWith("自治区")) {
 			province = province.substring(0, province.length() - 3);
 		}
-		System.out.println(province);
+		System.out.println(province);*/
 		/*String test1 = "0123456789abcde!@#$%^& 水电费";
 		char[] chars_test1 = test1.toCharArray();
 		for (int i = 0; i < chars_test1.length; i++) {
