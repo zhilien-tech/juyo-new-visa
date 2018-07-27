@@ -163,7 +163,6 @@
 										type="text"
 										class="form-control input-sm" 
 										placeholder="省" 
-										autocomplete="off"
 										value="${obj.applicant.province }" 
 									/>
 							
