@@ -83,7 +83,8 @@ $(document).on("input","#firstName",function(){
 		return;
 	}
 	var pos=$(this).getCurPos();//保存原始光标位置
-	var temp = $(this).val();
+	var temp = $(this).val().replace(/\s*/g,"");
+
 	//var hanzi = temp.split('/')[0];
 	var pinyinchar = getPinYinStr(temp);
 	var dex = temp.length;
@@ -93,6 +94,7 @@ $(document).on("input","#firstName",function(){
 	}else{
 		$("#firstNameEn").val("/"+pinyinchar.toUpperCase()).change();
 	}
+
 	//斜杠的位置
 	//var sepindex = hanzi.length + 1;
 	//设置值
@@ -110,7 +112,7 @@ $(document).on("input","#lastName",function(){
 		return;
 	}
 	var pos=$(this).getCurPos();//保存原始光标位置
-	var temp = $(this).val();
+	var temp = $(this).val().replace(/\s*/g,"");
 	//var hanzi = temp.split('/')[0];
 	var pinyinchar = getPinYinStr(temp);
 	if($(this).val().length == 0){
