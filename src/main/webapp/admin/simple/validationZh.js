@@ -10,7 +10,7 @@
     var $firstNameEn = $('#firstNameEn');
     var $lastNameEn  = $('#lastNameEn');
 
-    var _url = `${BASE_PATH}/admin/simple/toRecordCharacters.html`;
+    var _url = BASE_PATH + '/admin/simple/toRecordCharacters.html';
 
     var inputBlur = (function() {
         return function(str) {

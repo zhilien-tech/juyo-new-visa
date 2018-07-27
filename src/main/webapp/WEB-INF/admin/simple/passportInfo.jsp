@@ -26,7 +26,7 @@
 		</a>
 		<form id="passportInfo">
 			<div class="modal-header">
-				<span class="heading">护照信息123345345</span> 
+				<span class="heading">护照信息</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 			</div>
@@ -292,7 +292,7 @@
 						trigger:"change keyup",
 						validators : {
 							regexp: {
-	                            regexp: /^\/{1}[a-zA-Z]+$/,
+	                            regexp: /^[\/a-zA-Z0-9_]{0,}$/,
 	                            message: '拼音中不能包含汉字或其他特殊符号'
 	                        },
 						}
@@ -301,7 +301,7 @@
 						trigger:"change keyup",
 						validators : {
 							regexp: {
-	                            regexp: /^\/{1}[a-zA-Z]+$/,
+	                            regexp: /\/{1}[a-zA-Z]+$/,
 	                            message: '拼音中不能包含汉字或其他特殊符号'
 	                        },
 						}
