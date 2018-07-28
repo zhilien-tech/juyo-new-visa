@@ -479,7 +479,7 @@
 					data : passportInfo,
 					url: '${base}/admin/simple/saveEditPassport.html',
 					success :function(data) {
-						$("#addBtn").attr('disabled', false);
+						//$("#addBtn").attr('disabled', false);
 						layer.closeAll("loading");
 						if(data.msg){
 							layer.msg(data.msg);

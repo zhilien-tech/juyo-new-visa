@@ -135,7 +135,7 @@
 											<label><span>*</span>与主申请人关系</label>
 											</br>
 										<div class="input-box">
-											<input type="text" id="mainRelation" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
+											<input type="text" id="mainRelation" autocomplete="off" name="mainRelation" class="input" value="${obj.visaInfo.mainRelation}">
 												<ul class="dropdown">
 													<li>之妻</li>
 													<li>之夫</li>
@@ -1736,7 +1736,7 @@
 							parent.successCallBack(1);
 							closeWindow();
 						}else if(status == 2){
-							socket.onclose();
+							//socket.onclose();
 							window.location.href = '/admin/simple/updateApplicant.html?applicantid='+applicantid+'&orderid='+orderid;
 						}
 					},error:function(error,XMLHttpRequest,status){
