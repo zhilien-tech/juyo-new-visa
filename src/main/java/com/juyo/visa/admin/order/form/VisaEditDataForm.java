@@ -187,5 +187,5 @@ public class VisaEditDataForm implements Serializable {
 
 	private Date lastreturndate;
 
-	private Map<Integer, WealthEntity> wealthInfoObject;
+	private Map<String, WealthEntity> wealthInfoObject;
 }

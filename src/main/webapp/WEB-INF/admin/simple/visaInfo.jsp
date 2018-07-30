@@ -929,7 +929,7 @@
 			// 			$(".vehicle").css("display","block");
 			// 			$(this).addClass("btnState-true");
 			// 			$("#vehicle").val("");
-			// 			$("#vehiclefree").val("车产");
+			// 			$("#sequence").val("车产");
 			// 			/* if(userType == 2){
 			// 		        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
 			// 		        $(".vehicles").css({"display":"block"});
@@ -1190,8 +1190,8 @@
 				function getNewAddId() {
 					var newAddId = 200011;
 					var len = wealthData.length;
-					if (len != 0 && wealthData[len-1]['vehiclefree'] > newAddId) {
-						newAddId = wealthData[len-1]['vehiclefree']
+					if (len != 0 && wealthData[len-1]['sequence'] > newAddId) {
+						newAddId = wealthData[len-1]['sequence']
 					}
 					return newAddId;
 				}
@@ -1204,7 +1204,7 @@
 				createWealthBtnHtml(function() {
 					wealthData.forEach(function(item) {
 						$wealthmain.find('input').each(function(idx, input) {
-							if (item['vehiclefree'] == $(input).attr('data-id')) {
+							if (item['sequence'] == $(input).attr('data-id')) {
 								$(input).addClass('btnState-true');
 								return 0;
 							}
@@ -1227,7 +1227,7 @@
 					
 					$self.addClass('btnState-true');
 					var $temp = createHtml({
-						vehiclefree: _id,
+						sequence: _id,
 						extension: obj.exten,
 						placeholder: obj.place,
 						bankflowfree: $self.val(),
@@ -1318,7 +1318,7 @@
 				$addWealthInfoBtn.on('click', function(event) {
 					if (wealthInputBtnLen < totalNum) {
 						var $temp = createHtml({
-							vehiclefree: ++newAddId,
+							sequence: ++newAddId,
 							extension: '',
 							placeholder: '',
 							bankflowfree: '',
@@ -1348,7 +1348,7 @@
 
 				function createHtml(it) {
 					var $temp = $(
-						'<div data-id="'+ it.vehiclefree +'" id="wealth-input-' + it.vehiclefree + '" class="info-body-from clone-module cf">' +
+						'<div data-id="'+ it.sequence +'" id="wealth-input-' + it.sequence + '" class="info-body-from clone-module cf">' +
 							'<div class="row body-from-input">' +
 								'<div class="col-sm-5">' +
 									'<div class="form-group">' +
@@ -1373,9 +1373,10 @@
 				
 				function createWealthInfo() {
 					wealthData.forEach(function(it, idx) {
-						var o =  getPlaceholderAndExtenText(parseInt(it.vehiclefree));
+						var o =  getPlaceholderAndExtenText(parseInt(it.sequence));
 						it.placeholder = o.place;
 						it.extension   = o.exten;
+						console.log(it);
 						$wealthInputGroup.append(createHtml(it, idx));
 					});
 
@@ -1432,12 +1433,25 @@
 				var $self 	= $(el);
 				var $inputs = $self.find('input');
 				var id 		= $self.attr('data-id');
-				ret[id] = {wealth_title: '', wealth_value: ''};
-				ret[id]['wealth_title'] = $inputs.eq(0).val();
-				ret[id]['wealth_value'] = $inputs.eq(1).val();
+				ret[id] = {wealthtitle: '', wealthvalue: ''};
+				ret[id]['wealthtitle'] = $inputs.eq(0).val();
+				ret[id]['wealthvalue'] = $inputs.eq(1).val();
+				ret[id]['wealthtype'] = getwealthType(id);
 			});
 			return ret;
 		}
+		
+		function getwealthType(id) {
+			var s = '';
+			wealthDeftData.forEach(function(it) {
+				if (!it[id]) return 0;
+				s = it[id];
+				return 0;
+			});
+			return s;
+		}
+
+
 		
 		
 		//保存
@@ -1529,15 +1543,19 @@
 			}
 
 			var wealthInfoObject = getWealthInfoObject();
-			wealthInfoObject['wealthType']  = wealthType;
-			wealthInfoObject['visatype']    = visatype;
-			wealthInfoObject['visacounty']  = visacounty;
-			wealthInfoObject['isVisit']     = isVisit;
-			wealthInfoObject['threecounty'] = threecounty;
-			wealthInfoObject['isname'] 		= isname;
-			wealthInfoObject['isyaoqing'] 	= isyaoqing;
+			console.log(JSON.stringify(wealthInfoObject));
 			console.log(wealthInfoObject);
-			var passportInfo = $.param(wealthInfoObject) + "&" + $("#passportInfo").serialize();
+			var passportInfo = $.param({
+				"wealthInfoObject": JSON.stringify(wealthInfoObject),
+				"wealthType": wealthType,
+				"visatype": visatype,
+				"visacounty": visacounty,
+				"isVisit": isVisit,
+				"threecounty": threecounty,
+				"isname": isname,
+				"isyaoqing": isyaoqing
+			}) + "&" + $("#passportInfo").serialize();
+
 			console.log(passportInfo);
 			//return;
 			ajaxConnection();

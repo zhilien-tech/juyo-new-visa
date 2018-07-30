@@ -4105,14 +4105,22 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							dbDao.delete(beforeList);
 						}
 
-						Map<Integer, WealthEntity> wealthInfo = form.getWealthInfoObject();
-						for (Map.Entry<Integer, WealthEntity> entry : wealthInfo.entrySet()) {
-							Integer sequence = entry.getKey();
-							WealthEntity wealthEntity = entry.getValue();
+						Map<String, WealthEntity> wealthInfo = form.getWealthInfoObject();
+						for (String sequence : wealthInfo.keySet()) {
+							WealthEntity wealthEntity = wealthInfo.get(sequence);
 							String wealthtitle = wealthEntity.getWealthtitle();
 							String wealthvalue = wealthEntity.getWealthvalue();
+							String wealthtype = wealthEntity.getWealthtype();
+							TApplicantWealthJpEntity wealthjp = new TApplicantWealthJpEntity();
+							wealthjp.setSequence(Integer.valueOf(sequence));
+							wealthjp.setBankflowfree(wealthtitle);
+							wealthjp.setDetails(wealthvalue);
+							wealthjp.setType(wealthtype);
+							wealthjp.setApplicantId(applicantOrderJpEntity.getId());
+							wealthjp.setCreateTime(new Date());
+							dbDao.insert(wealthjp);
 						}
-						insertorupdateWealthinfo(form, applicantOrderJpEntity, loginUser);
+						//insertorupdateWealthinfo(form, applicantOrderJpEntity, loginUser);
 						long wealthTime2 = System.currentTimeMillis();
 						System.out.println("财产信息所用时间：" + (wealthTime2 - wealthTime) + "ms");
 					}
