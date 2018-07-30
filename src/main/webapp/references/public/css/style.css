@@ -93,3 +93,13 @@ body{overflow-x: auto;}
 .deleteIcon {background-image:url(../dist/newvisacss/img/tableDelete1.png); display:inline-block;width:18px;height:20px; margin:0px 10px;}
 .toSure {background-image:url(../dist/newvisacss/img/theTrial.png);}
 .toSure1 {background-image:url(../dist/newvisacss/img/theTrialGray.png);}
+
+/*** 2018_07_28 ***/
+.wealthmain input {
+    margin-bottom: 10px; 
+}
+
+#addWealthInfoBtn:hover {
+    color: #287ae7 !important;
+    border-color: #cee1ff;
+}

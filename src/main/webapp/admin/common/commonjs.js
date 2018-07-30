@@ -292,12 +292,12 @@ $(document).on("input","#birthAddress",function(){
 		return;
 	}
 	var pos=$(this).getCurPos();//保存原始光标位置
-	var temp = $(this).val();
+	var temp = $(this).val().replace(/\s*/g,"");
 	var pinyinchar = getPinYinStr(temp);
 	if($(this).val().length == 0){
-		$("#birthAddressEn").val("");
+		$("#birthAddressEn").val("").change();
 	}else{
-		$("#birthAddressEn").val("/"+pinyinchar.toUpperCase());
+		$("#birthAddressEn").val("/"+pinyinchar.toUpperCase()).change();
 	}
 });
 $(document).on("input","#issuedPlace",function(){
@@ -305,12 +305,12 @@ $(document).on("input","#issuedPlace",function(){
 		return;
 	}
 	var pos=$(this).getCurPos();//保存原始光标位置
-	var temp = $(this).val();
+	var temp = $(this).val().replace(/\s*/g,"");
 	var pinyinchar = getPinYinStr(temp);
 	if($(this).val().length == 0){
-		$("#issuedPlaceEn").val("");
+		$("#issuedPlaceEn").val("").change();
 	}else{
-		$("#issuedPlaceEn").val("/"+pinyinchar.toUpperCase());
+		$("#issuedPlaceEn").val("/"+pinyinchar.toUpperCase()).change();
 	}
 });
 
