@@ -1,14 +1,24 @@
 /**
- * 监听 firstNameEn and lastNameEn input Event 
+ * 监听护照信息页和添加护照信息页 input blur event..
+ * {
+ * firstName    firstNameEn 
+ * lastName     lastNameEn
+ * birthAddress birthAddressEn
+ * issuedPlace  issuedPlaceEn
+ * }
  * 如果报错提交错误汉字至后台
 */
 (function() {
     'use strict';
 
-    var $firstName 	 = $('#firstName');
-    var $lastName 	 = $('#lastName');
-    var $firstNameEn = $('#firstNameEn');
-    var $lastNameEn  = $('#lastNameEn');
+    var $firstName 	    = $('#firstName');
+    var $lastName 	    = $('#lastName');
+    var $firstNameEn    = $('#firstNameEn');
+    var $lastNameEn     = $('#lastNameEn');
+    var $birthAddress   = $('#birthAddress');
+    var $birthAddressEn = $('#birthAddressEn');
+    var $issuedPlace    = $('#issuedPlace');
+    var $issuedPlaceEn  = $('#issuedPlaceEn');
 
     var _url = BASE_PATH + '/admin/simple/toRecordCharacters.html';
 
@@ -50,4 +60,19 @@
         inputBlur($(this).val());
     });
 
+    $birthAddress.blur(function() {
+        inputBlur($(this).val());
+    });
+
+    $birthAddressEn.blur(function() {
+        inputBlur($(this).val());
+    });
+    
+    $issuedPlace.blur(function() {
+        inputBlur($(this).val());
+    });
+
+    $issuedPlaceEn.blur(function() {
+        inputBlur($(this).val());
+    });
 })();
