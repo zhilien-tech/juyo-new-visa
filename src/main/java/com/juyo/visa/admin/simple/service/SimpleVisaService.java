@@ -54,6 +54,7 @@ import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.admin.simple.entity.StatisticsEntity;
+import com.juyo.visa.admin.simple.entity.WealthEntity;
 import com.juyo.visa.admin.simple.form.AddOrderForm;
 import com.juyo.visa.admin.simple.form.BasicinfoForm;
 import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
@@ -4098,6 +4099,19 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					} else {
 						//添加财产信息
 						long wealthTime = System.currentTimeMillis();
+						List<TApplicantWealthJpEntity> beforeList = dbDao.query(TApplicantWealthJpEntity.class,
+								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()), null);
+						if (beforeList.size() > 0) {
+							dbDao.delete(beforeList);
+						}
+
+						Map<Integer, WealthEntity> wealthInfo = form.getWealthInfoObject();
+						for (Map.Entry<Integer, WealthEntity> entry : wealthInfo.entrySet()) {
+							Integer sequence = entry.getKey();
+							WealthEntity wealthEntity = entry.getValue();
+							String wealthtitle = wealthEntity.getWealthtitle();
+							String wealthvalue = wealthEntity.getWealthvalue();
+						}
 						insertorupdateWealthinfo(form, applicantOrderJpEntity, loginUser);
 						long wealthTime2 = System.currentTimeMillis();
 						System.out.println("财产信息所用时间：" + (wealthTime2 - wealthTime) + "ms");

@@ -1539,7 +1539,7 @@
 			console.log(wealthInfoObject);
 			var passportInfo = $.param(wealthInfoObject) + "&" + $("#passportInfo").serialize();
 			console.log(passportInfo);
-			return;
+			//return;
 			ajaxConnection();
 			var count = 0;
 			function ajaxConnection(){
@@ -1579,7 +1579,7 @@
 								
 							}});
 						　}
-					},timeout:10000
+					}/* ,timeout:10000 */
 				});
 			}
 		}

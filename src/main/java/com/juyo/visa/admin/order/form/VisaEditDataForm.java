@@ -8,8 +8,11 @@ package com.juyo.visa.admin.order.form;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 import lombok.Data;
+
+import com.juyo.visa.admin.simple.entity.WealthEntity;
 
 @Data
 public class VisaEditDataForm implements Serializable {
@@ -183,4 +186,6 @@ public class VisaEditDataForm implements Serializable {
 	private Integer laststayday;
 
 	private Date lastreturndate;
+
+	private Map<Integer, WealthEntity> wealthInfoObject;
 }
