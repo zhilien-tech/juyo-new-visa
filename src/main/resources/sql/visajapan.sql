@@ -1,6 +1,7 @@
 /*get_japan_visa_list_data*/
 SELECT
 toj.id,
+toj.errormsg,
 taj.passport,
 tuser.`name` opname,
 tcompany.shortName,

@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.alibaba.dubbo.common.URL;
-
 public class TestChinest {
 
 	public static void main(String[] args) {
 
-		String scene = "orderid=" + 1 + "&applicantid=" + 2;
+		/*String scene = "orderid=" + 1 + "&applicantid=" + 2;
 		String encode = URL.encode(scene);
-		System.out.println(encode);
+		System.out.println(encode);*/
 
 		/*String province = "自治区";
 		if (province.length() > 3 && province.endsWith("自治区")) {

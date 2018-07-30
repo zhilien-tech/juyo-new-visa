@@ -318,6 +318,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		for (Record record : list) {
 
+			if (!Util.isEmpty(record.get("errorMsg"))) {
+				String errorMsg = (String) record.get("errorMsg");
+				if (errorMsg.contains("氏名")) {
+					record.set("errormsg", "第" + (Integer.valueOf(errorMsg.substring(0, 1)) - 1) + "个人姓名填写错误");
+				}
+				if (errorMsg.contains("居住地域")) {
+					record.set("errormsg", "第" + (Integer.valueOf(errorMsg.substring(0, 1)) - 1) + "个人居住地填写错误");
+				}
+			}
+
 			if (!Util.isEmpty(record.get("visatype"))) {
 				Integer visatype = (Integer) record.get("visatype");
 				for (SimpleVisaTypeEnum visatypenum : SimpleVisaTypeEnum.values()) {
@@ -467,83 +477,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 			}
 
-			//if (visatype == 1 || visatype == 6 || visatype == 14) {//单次，普通三年多次，普通五年多次
-			/*if (plan.getIsupdatecity() == IsYesOrNoEnum.YES.intKey()) {//如果手动改过城市，则只刷新景点
-				//获取城市所有的景区
-				Cnd cnd = Cnd.NEW();
-				cnd.and("cityId", "=", cityid);
-				scenics = dbDao.query(TScenicEntity.class, cnd, null);
-			} else {
-				if (Util.eq("false", contains)) {
-					if (Integer.valueOf(plan.getDay()) % 2 == 0 && Integer.valueOf(plan.getDay()) <= days) {//偶数行景点确实是景点
-						//获取城市所有的景区
-						Cnd cnd = Cnd.NEW();
-						cnd.and("cityId", "=", cityid);
-						scenics = dbDao.query(TScenicEntity.class, cnd, null);
-
-					} else if (Integer.valueOf(plan.getDay()) % 2 == 1 && Integer.valueOf(plan.getDay()) <= days + 1) {//奇数行为国内航班或新干线
-						int arrcityid = plan.getCityId();
-						TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
-								Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
-						int gocityid = fetch.getCityId();
-						if (planlist.get(0).getCityId() == 77 && Util.eq("false", contains)) {
-							scenics = visaJapanService.countryAirline(gocityid, arrcityid, 1);
-						} else {
-							scenics = visaJapanService.countryAirline(gocityid, arrcityid, 2);
-						}
-					} else {
-						//获取城市所有的景区
-						Cnd cnd = Cnd.NEW();
-						cnd.and("cityId", "=", cityid);
-						scenics = dbDao.query(TScenicEntity.class, cnd, null);
-					}
-				} else {
-					//第二天刷新景点
-					if (Integer.valueOf(plan.getDay()) == 2) {
-						//获取城市所有的景区
-						Cnd cnd = Cnd.NEW();
-						cnd.and("cityId", "=", cityid);
-						scenics = dbDao.query(TScenicEntity.class, cnd, null);
-					}
-					//第三天刷新新干线
-					else if (Integer.valueOf(plan.getDay()) == 3) {
-						int arrcityid = plan.getCityId();
-						TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
-								Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
-						int gocityid = fetch.getCityId();
-						scenics = visaJapanService.countryAirline(gocityid, arrcityid, 1);
-					}
-
-					else if (Integer.valueOf(plan.getDay()) > 3 && Integer.valueOf(plan.getDay()) % 2 == 1
-							&& Integer.valueOf(plan.getDay()) <= days) {//奇数行只刷新景点
-						//获取城市所有的景区
-						Cnd cnd = Cnd.NEW();
-						cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
-						if (!Util.isEmpty(cityid)) {
-							cnd.and("cityId", "=", cityid);
-						}
-						cnd.and("cityId", "=", cityid);
-						scenics = dbDao.query(TScenicEntity.class, cnd, null);
-
-					} else if (Integer.valueOf(plan.getDay()) > 3 && Integer.valueOf(plan.getDay()) % 2 == 0
-							&& Integer.valueOf(plan.getDay()) <= days + 1) {//偶数行为国内航班或新干线
-						int arrcityid = plan.getCityId();
-						TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
-								Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
-						int gocityid = fetch.getCityId();
-						scenics = visaJapanService.countryAirline(gocityid, arrcityid, 2);
-					} else {//最后几天
-						//获取城市所有的景区
-						Cnd cnd = Cnd.NEW();
-						cnd.and("name", "like", "%" + Strings.trim(scenicname) + "%");
-						if (!Util.isEmpty(cityid)) {
-							cnd.and("cityId", "=", cityid);
-						}
-						cnd.and("cityId", "=", cityid);
-						scenics = dbDao.query(TScenicEntity.class, cnd, null);
-					}
-				}
-			}*/
 		}
 
 		return scenics;

@@ -134,7 +134,11 @@
 											{{data.visastatus}}
 										</span>
 									
-									</span></div>	
+									</span>
+									<div><label></label><span style="margin-left:20px"><span v-if="data.visastatus =='发招宝失败'">{{data.errormsg}}</span></span></div>
+									</div>
+									
+										
 									<div v-if="data.isdisabled != 1">
 										<label>操作：</label>
 										<i class="edit" v-on:click="visaDetail(data.id)"> </i>
