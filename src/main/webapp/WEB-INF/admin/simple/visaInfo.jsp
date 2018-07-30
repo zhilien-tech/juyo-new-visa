@@ -19,15 +19,7 @@
 	<link rel="stylesheet" href="${base}/references/public/css/style.css?v=<%=System.currentTimeMillis() %>">
 	<!-- 本页css -->
 	<link rel="stylesheet" href="${base}/references/common/css/simpleVisaInfo.css?v=<%=System.currentTimeMillis() %>">
-	<style type="text/css">
-		.clearConnectBtn{
-		    position: fixed;
-		    top: 0;
-		    right: 15px;
-		    background:red;
-		}
 
-	</style>
 </head>
 <body>
 	<div class="modal-content">
@@ -37,15 +29,12 @@
 		<form id="passportInfo">
 			<input id="orderProcessType" name="orderProcessType" type="hidden" value="${obj.orderProcessType }">
 			<div class="modal-header">
-				<span class="heading">签证信息</span>
+				<span class="heading">签证信息 </span>
 				<input type="hidden" value="${obj.visaInfo.applicantid }" name="applicantId"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
 				<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
-				<!-- <input type="button" class="clearConnectBtn btn btn-primary pull-right btn-sm btn-margin" value="取消" /> -->
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
-				
 				<input id="addBtn" type="button"  class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
-				
 			</div> 
 			
 			<div class="modal-main"></div>
@@ -381,310 +370,26 @@
 					
 					<!-- 财产信息 -->
 					<div class="info" style="padding-bottom: 15px;">
-						<div class="info-head">财产信息 </div>
+						<div class="info-head">财产信息</div>
 						<div class="wealthvice row info-body-from clone-module cf">
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label><span>*</span>是否同主申请人</label>
-										<select id="wealth" name="sameMainWealth" class="form-control input-sm selectHeight">
-											<c:forEach var="map" items="${obj.isOrNo}">
-												<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWealth?'selected':''}>${map.value}</option>
-											</c:forEach>
-										</select>
-									</div>
+							<div class="col-sm-4">
+								<div class="form-group">
+									<label><span>*</span>是否同主申请人</label>
+									<select id="wealth" name="sameMainWealth" class="form-control input-sm selectHeight">
+										<c:forEach var="map" items="${obj.isOrNo}">
+											<option value="${map.key}" ${map.key==obj.visaInfo.sameMainWealth?'selected':''}>${map.value}</option>
+										</c:forEach>
+									</select>
 								</div>
+							</div>
 						</div>
+
 						<div class="info-body-from finance-btn wealthmain">
-							<input id="bankflowType" name="wealthType" value="银行流水" type="button" class="btn btn-sm btnState btnBank" />
-							<input id="vehicleType" name="wealthType" value="车产" type="button" class="btn btn-sm btnState" />
-							<input id="housePropertyType" name="wealthType" value="房产" type="button" class="btn btn-sm btnState" />
-							<input id="financialType" name="wealthType" value="理财" type="button" class="btn btn-sm btnState" />
-							<input id="certificateType" name="wealthType" value="在职证明" type="button" class="btn btn-sm btnState btnBank" />
-							<input id="depositType" name="wealthType" value="银行存款" type="button" class="btn btn-sm btnState btnBank" />
-							<input id="taxbillType" name="wealthType" value="税单" type="button" class="btn btn-sm btnState" />
-							<input id="taxproofType" name="wealthType" value="完税证明" type="button" class="btn btn-sm btnState btnBank" />
-							<input id="goldcardType" name="wealthType" value="银行金卡" type="button" class="btn btn-sm btnState btnBank" />
-							<input id="readstudentType" name="wealthType" value="特定高校在读生" type="button" class="btn btn-sm btnState btnReadstudent" />
-							<input id="graduateType" name="wealthType" value="特定高校毕业生" type="button" class="btn btn-sm btnState btnGraduate" />
-							<!-- <input id="financialType" name="wealthType" value="其他" type="button" class="btn btn-sm btnState" /> -->
+							<input id="addWealthInfoBtn" name="" value="+" type="button" class="btn btn-sm btnState" />
 						</div>
-						<div class="info-body-from  clone-module cf bankflow">
-							<div class="row body-from-input"><!-- 银行流水 -->
-								<div class="col-sm-5">
-									<div class="form-group">
-										<label><span>*</span>银行流水</label>
-										<input id="bankflowfree" autocomplete="off" name="bankflowfree" type="text" class="form-control input-sm" value="银行流水"  />
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label>&nbsp;</label>
-										<input id="bankflow" name="bankflow" autocomplete="off" type="text" class="form-control input-sm" placeholder="工资对账单收入"  />
-									</div>
-								</div>
-								<div style="float:left; margin:40px 0 0 -10px;">
-								万
-								</div>
-							</div><!-- end 银行流水 -->
-							<i class="remove-btn delete-icon"></i>
+						<div class="wealth-input-group">
+							
 						</div>
-						<!-- 提示 -->
-						<div class="col-xs-5 bankflows" style="display: none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
-							<small class="help-blockbankflow" data-bv-validator="notEmpty" data-bv-for="bankflow" data-bv-result="IVVALID" >银行流水不能为空</small>
-						</div>
-						<!-- 提示End -->
-						<div class="info-body-from clone-module cf vehicle">
-							<div class="row body-from-input"><!-- 车产 -->
-								<div class="col-sm-5">
-									<div class="form-group">
-										<label><span>*</span>车产</label>
-										<input id="vehiclefree" name="vehiclefree" autocomplete="off" type="text" class="form-control input-sm" value="车产"  />
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label>&nbsp;</label>
-										<input id="vehicle" name="vehicle" type="text" autocomplete="off" class="form-control input-sm" placeholder="例如:大众速腾"/>
-									</div>
-								</div>
-								<!-- <div style="float:left;  margin:40px 0 0 -23px;">
-								例如：大众速腾
-								</div> -->
-							</div><!-- end 车产 -->
-							<i class="remove-btn delete-icon"></i>
-						</div>
-						<!-- 提示 -->
-						<div class="col-xs-5 vehicles" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
-							<small class="help-blockvehicle" data-bv-validator="notEmpty" data-bv-for="vehicle" data-bv-result="IVVALID" >车产不能为空</small>
-						</div>
-						<!-- 提示End -->
-						<div class="info-body-from clone-module cf houseProperty">
-							<div class="row body-from-input"><!-- 房产 -->
-								<div class="col-sm-5">
-									<div class="form-group">
-										<label><span>*</span>房产</label>
-										<input id="housePropertyfree" autocomplete="off" name="housePropertyfree" type="text" class="form-control input-sm" value="房产" />
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label>&nbsp;</label>
-										<input id="houseProperty" name="houseProperty" autocomplete="off"  type="text" class="form-control input-sm" placeholder=""  />
-									</div>
-								</div>
-								<div style="float:left;  margin:40px 0 0 -10px;">
-								平米
-								</div>
-							</div><!-- end 房产 -->
-							<i class="remove-btn delete-icon"></i>
-						</div>
-						<!-- 提示 -->
-						<div class="col-xs-5 housePropertys" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
-							<small class="help-blockhouseProperty" data-bv-validator="notEmpty" data-bv-for="houseProperty" data-bv-result="IVVALID" >房产不能为空</small>
-						</div>
-						<!-- 提示End -->
-						<div class="info-body-from clone-module cf financial">
-							<div class="row body-from-input"><!-- 理财 -->
-								<div class="col-sm-5">
-									<div class="form-group">
-										<label><span>*</span>理财</label>
-										<input id="financialfree" autocomplete="off" name="financialfree" type="text" class="form-control input-sm" value="理财" />
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label>&nbsp;</label>
-										<input id="financial" name="financial" autocomplete="off" type="text" class="form-control input-sm" placeholder=""  />
-									</div>
-								</div>
-								<div style="float:left;  margin:40px 0 0 -10px;">
-								万
-								</div>
-							</div><!-- end 理财 -->
-							<i class="remove-btn delete-icon"></i>
-						</div>
-						<!-- 提示 -->
-						<div class="col-xs-5 financials" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
-							<small class="help-blockfinancial" data-bv-validator="notEmpty" data-bv-for="financial" data-bv-result="IVVALID" >理财不能为空</small>
-						</div>
-						<!-- 提示End -->
-						<!-- 在职证明 -->
-						<div class="info-body-from clone-module cf certificate">
-							<div class="row body-from-input"><!-- 在职证明 -->
-								<div class="col-sm-5">
-									<div class="form-group">
-										<label><span>*</span>在职证明</label>
-										<input id="certificatefree" name="certificatefree" autocomplete="off" type="text" class="form-control input-sm" value="在职证明" />
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label>&nbsp;</label>
-										<input id="certificate" name="certificate" type="text" autocomplete="off" class="form-control input-sm" placeholder="年收入"  />
-									</div>
-								</div>
-								<div style="float:left;  margin:40px 0 0 -10px;">
-								万
-								</div>
-							</div><!-- end 在职证明 -->
-							<i class="remove-btn delete-icon"></i>
-						</div>
-						<!-- 提示 -->
-						<div class="col-xs-5 certificates" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
-							<small class="help-blockcertificate" data-bv-validator="notEmpty" data-bv-for="certificate" data-bv-result="IVVALID" >在职证明不能为空</small>
-						</div>
-						<!-- 提示End -->
-						<!-- 银行存款 -->
-						<div class="info-body-from clone-module cf deposit">
-							<div class="row body-from-input"><!-- 银行存款 -->
-								<div class="col-sm-5">
-									<div class="form-group">
-										<label><span>*</span>银行存款</label>
-										<input id="depositfree" name="depositfree" autocomplete="off" type="text" class="form-control input-sm" value="银行存款"/>
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label>&nbsp;</label>
-										<input id="deposit" name="deposit" type="text" autocomplete="off" class="form-control input-sm" placeholder=""  />
-									</div>
-								</div>
-								<div style="float:left;  margin:40px 0 0 -10px;">
-								万
-								</div>
-							</div><!-- end 银行存款 -->
-							<i class="remove-btn delete-icon"></i>
-						</div>
-						<!-- 提示 -->
-						<div class="col-xs-5 deposits" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
-							<small class="help-blockdeposit" data-bv-validator="notEmpty" data-bv-for="deposit" data-bv-result="IVVALID" >银行存款不能为空</small>
-						</div>
-						<!-- 提示End -->
-						<!-- 税单 -->
-						<div class="info-body-from clone-module cf taxbill">
-							<div class="row body-from-input"><!-- 税单 -->
-								<div class="col-sm-5">
-									<div class="form-group">
-										<label><span>*</span>税单</label>
-										<input id="taxbillfree" name="taxbillfree" type="text" autocomplete="off" class="form-control input-sm" value="税单"/>
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label>&nbsp;</label>
-										<input id="taxbill" name=taxbill type="text" autocomplete="off" class="form-control input-sm" placeholder="年收入"  />
-									</div>
-								</div>
-								<div style="float:left;  margin:40px 0 0 -10px;">
-								万
-								</div>
-							</div><!-- end 税单 -->
-							<i class="remove-btn delete-icon"></i>
-						</div>
-						<!-- 提示 -->
-						<div class="col-xs-5 taxbills" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
-							<small class="help-blocktaxbill" data-bv-validator="notEmpty" data-bv-for="taxbill" data-bv-result="IVVALID" >税单不能为空</small>
-						</div>
-						<!-- 提示End -->
-						<!-- 完税证明 -->
-						<div class="info-body-from clone-module cf taxproof">
-							<div class="row body-from-input"><!-- 完税证明 -->
-								<div class="col-sm-5">
-									<div class="form-group">
-										<label><span>*</span>完税证明</label>
-										<input id="taxprooffree" name="taxprooffree" autocomplete="off" type="text" class="form-control input-sm" value="完税证明"/>
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label>&nbsp;</label>
-										<input id="taxproof" name="taxproof" type="text" autocomplete="off" class="form-control input-sm" placeholder="年缴税"  />
-									</div>
-								</div>
-								<div style="float:left;  margin:40px 0 0 -10px;">
-								元
-								</div>
-							</div><!-- end 完税证明 -->
-							<i class="remove-btn delete-icon"></i>
-						</div>
-						<!-- 提示 -->
-						<div class="col-xs-5 taxproofs" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
-							<small class="help-blocktaxproof" data-bv-validator="notEmpty" data-bv-for="taxproof" data-bv-result="IVVALID" >完税证明不能为空</small>
-						</div>
-						<!-- 提示End -->
-						<!-- 银行金卡 -->
-						<div class="info-body-from clone-module cf goldcard">
-							<div class="row body-from-input"><!-- 银行金卡-->
-								<div class="col-sm-5">
-									<div class="form-group">
-										<label><span>*</span>银行金卡</label>
-										<input id="goldcardfree" name="goldcardfree" autocomplete="off" type="text" class="form-control input-sm" value="银行金卡"/>
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label>&nbsp;</label>
-										<input id="goldcard" name="goldcard" type="text" autocomplete="off" class="form-control input-sm" placeholder=""  />
-									</div>
-								</div>
-								<!-- <div style="float:left;  margin:40px 0 0 -10px;">
-								元
-								</div> -->
-							</div><!-- end 银行金卡 -->
-							<i class="remove-btn delete-icon"></i>
-						</div>
-						<!-- 提示 -->
-						<div class="col-xs-5 goldcards" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
-							<small class="help-blockgoldcard" data-bv-validator="notEmpty" data-bv-for="goldcard" data-bv-result="IVVALID" >银行金卡不能为空</small>
-						</div>
-						<!-- 提示End -->
-						<!-- 特定高校在读生 -->
-						<div class="info-body-from clone-module cf readstudent">
-							<div class="row body-from-input"><!-- 特定高校在读生 -->
-								<div class="col-sm-5">
-									<div class="form-group">
-										<label><span>*</span>特定高校在读生</label>
-										<input id="readstudentfree" name="readstudentfree" autocomplete="off" type="text" class="form-control input-sm" value="特定高校在读生" />
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label>&nbsp;</label>
-										<input id="readstudent" name="readstudent" type="text" autocomplete="off" class="form-control input-sm" placeholder=""  />
-									</div>
-								</div>
-							</div><!-- end 特定高校在读生 -->
-							<i class="remove-btn delete-icon"></i>
-						</div>
-						<!-- 提示 -->
-						<div class="col-xs-5 readstudents" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
-							<small class="help-blockreadstudent" data-bv-validator="notEmpty" data-bv-for="readstudent" data-bv-result="IVVALID" >特定高校在读生不能为空</small>
-						</div>
-						<!-- 提示End -->
-						<!-- 特定高校毕业生 -->
-						<div class="info-body-from clone-module cf graduate">
-							<div class="row body-from-input"><!-- 特定高校毕业生 -->
-								<div class="col-sm-5">
-									<div class="form-group">
-										<label><span>*</span>特定高校毕业生</label>
-										<input id="graduatefree" name="graduatefree" autocomplete="off" type="text" class="form-control input-sm" value="特定高校毕业生" />
-									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="form-group">
-										<label>&nbsp;</label>
-										<input id="graduate" name="graduate" autocomplete="off" type="text" class="form-control input-sm" placeholder=""  />
-									</div>
-								</div>
-							</div><!-- end 房产 -->
-							<i class="remove-btn delete-icon"></i>
-						</div>
-						<!-- 提示 -->
-						<div class="col-xs-5 graduates" style="display:none;width:320px; height:30px; border:0 !important; color:red; margin-left:52%;">
-							<small class="help-blockgraduate" data-bv-validator="notEmpty" data-bv-for="graduate" data-bv-result="IVVALID" >特定高校毕业生不能为空</small>
-						</div>
-						<!-- 提示End -->
-						
 					</div>
 					<!-- end 财产信息 -->
 					<!-- 在日拟入住九点名称或友人姓名及地址 -->
@@ -943,29 +648,37 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script type="text/javascript" src="${base}/admin/orderJp/visaInfo.js"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
+	<script>
+		var wealthDeftData = [
+			{
+				200001: '银行流水'
+			},{
+				200002: '车产'
+			},{
+				200003: '房产'
+			},{
+				200004: '理财'
+			},{
+				200005: '在职证明'
+			},{
+				200006: '银行存款'
+			},{
+				200007: '税单'
+			},{
+				200008: '完税证明'
+			},{
+				200009: '银行金卡'
+			},{
+				200010: '特定高校在读生'
+			},{
+				200011: '特定高校毕业生'
+			}
+		];
+	</script>
 	<script type="text/javascript">
 		var base = "${base}";
 		$(function() {
-			
-			/* var laststartdate = '${obj.jporderinfo.laststartdate}';
-			var laststayday = '${obj.jporderinfo.laststayday}';
-			var lastreturndate = '${obj.jporderinfo.lastreturndate}';
-			
-			var newlaststartdate = '${obj.applyorderinfo.laststartdate}';
-			var newlaststayday = '${obj.applyorderinfo.laststayday}';
-			var newlastreturndate = '${obj.applyorderinfo.lastreturndate}';
-			
-			if(newlaststartdate == "" && laststartdate != ""){
-				$("#laststartdate").val(laststartdate);
-			}
-			if(newlaststayday == "" && laststayday != ""){
-				$("#laststayday").val(laststayday);
-			}
-			if(newlastreturndate == "" && lastreturndate != ""){
-				$("#lastreturndate").val(lastreturndate);
-			} */
-			
-			
+
 			var visatype = $('#visatype').val();
 			
 			if(visatype == 7){//冲绳
@@ -1085,25 +798,24 @@
 			
 			//主申请人 or 副申请人
 			var applicVal = $("#applicant").val();
-			if(applicVal == "1"){//主申请人
+			if(applicVal == "1"){ 
+				//主申请人
 				$(".applyvice").hide();
 				$(".tripvice").hide();
-				//$(".workvice").hide();
 				$(".wealthvice").hide();
 				$(".applymain").show();
-				//$(".workmain").show();
 				$(".wealthmain").show();
 				$("#mainApply").text("主申请人");
-			}else{//副申请人
+			}else{ 
+				//副申请人
 				$(".applyvice").show();
 				$(".tripvice").show();
 				$(".wealthvice").show();
-				//$(".workvice").show();
 				$(".applymain").hide();
-				//$(".workmain").hide();
 				$(".wealthmain").hide();
 				$("#mainApply").text("副申请人");
 			}
+
 			
 			//主申请人 or 副申请人
 			$("#applicant").change(function(){
@@ -1111,159 +823,30 @@
 				if(applicVal == "1"){//主申请人
 					$(".applyvice").hide();
 					$(".tripvice").hide();
-					//$(".workvice").hide();
+
 					$(".wealthvice").hide();
 					$(".applymain").show();
-					//$(".workmain").show();
+
 					$(".wealthmain").show();
 					$("#mainApply").text("主申请人");
 				}else{//副申请人
 					$(".applyvice").show();
 					$(".tripvice").show();
 					$(".wealthvice").show();
-					//$(".workvice").show();
 					$("#wealth").val(1);
 					$(".applymain").hide();
 					$(".workmain").hide();
 					$(".wealthmain").hide();
 					$("#mainApply").text("副申请人");
-					$(".deposit").css("display","none");
-					$(".vehicle").css("display","none");
-					$(".houseProperty").css("display","none");
-					$(".financial").css("display","none");
-					$(".bankflow").css("display","none");
-					$(".certificate").css("display","none");
-					$(".taxbill").css("display","none");
-					$(".taxproof").css("display","none");
-					$(".readstudent").css("display","none");
-					$(".graduate").css("display","none");
-					$(".goldcard").css("display","none");
+
+					$('.wealth-input-group').hide();
 				}
 			});
 			
-			var wealthType = '${obj.wealthJp}';
-			//console.log(wealthType);
-			if(wealthType){
-				$('[name=wealthType]').each(function(){
-					var wealth = $(this);
-					$.each(JSON.parse(wealthType), function(i, item){     
-						if(item.type == wealth.val()){
-							if(wealth.val() == "银行流水"){
-								$(".bankflow").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#bankflow").val(item.details);
-								if(item.bankflowfree == "" || item.bankflowfree == null){
-									$("#bankflowfree").val(item.type);
-								}else{
-									$("#bankflowfree").val(item.bankflowfree);
-								}
-							}
-							if(wealth.val() == "车产"){
-								$(".vehicle").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#vehicle").val(item.details);
-								if(item.vehiclefree == "" || item.vehiclefree == null){
-									$("#vehiclefree").val(item.type);
-								}else{
-									$("#vehiclefree").val(item.vehiclefree);
-								}
-							}
-							if(wealth.val() == "房产"){
-								$(".houseProperty").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#houseProperty").val(item.details);
-								if(item.housepropertyfree == "" || item.housepropertyfree == null){
-									$("#housePropertyfree").val(item.type);
-								}else{
-									$("#housePropertyfree").val(item.housepropertyfree);
-								}
-							}
-							if(wealth.val() == "理财"){
-								$(".financial").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#financial").val(item.details);
-								if(item.financialfree == "" || item.financialfree == null){
-									$("#financialfree").val(item.type);
-								}else{
-									$("#financialfree").val(item.financialfree);
-								}
-							}
-							if(wealth.val() == "银行存款"){
-								$(".deposit").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#deposit").val(item.details);
-								if(item.depositfree == "" || item.depositfree == null){
-									$("#depositfree").val(item.type);
-								}else{
-									$("#depositfree").val(item.depositfree);
-								}
-							}
-							if(wealth.val() == "在职证明"){
-								$(".certificate").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#certificate").val(item.details);
-								if(item.certificatefree == "" || item.certificatefree == null){
-									$("#certificatefree").val(item.type);
-								}else{
-									$("#certificatefree").val(item.certificatefree);
-								}
-							}
-							if(wealth.val() == "税单"){
-								$(".taxbill").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#taxbill").val(item.details);
-								if(item.taxbillfree == "" || item.taxbillfree == null){
-									$("#taxbillfree").val(item.type);
-								}else{
-									$("#taxbillfree").val(item.taxbillfree);
-								}
-							}
-							if(wealth.val() == "完税证明"){
-								$(".taxproof").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#taxproof").val(item.details);
-								if(item.taxprooffree == "" || item.taxprooffree == null){
-									$("#taxprooffree").val(item.type);
-								}else{
-									$("#taxprooffree").val(item.taxprooffree);
-								}
-							}
-							if(wealth.val() == "银行金卡"){
-								$(".goldcard").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#goldcard").val(item.details);
-								if(item.goldcardfree == "" || item.goldcardfree == null){
-									$("#goldcardfree").val(item.type);
-								}else{
-									$("#goldcardfree").val(item.goldcardfree);
-								}
-							}
-							if(wealth.val() == "特定高校在读生"){
-								$(".readstudent").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#readstudent").val(item.details);
-								if(item.readstudentfree == "" || item.readstudentfree == null){
-									$("#readstudentfree").val(item.type);
-								}else{
-									$("#readstudentfree").val(item.readstudentfree);
-								}
-							}
-							if(wealth.val() == "特定高校毕业生"){
-								$(".graduate").css("display","block");
-								wealth.addClass("btnState-true");
-								$("#graduate").val(item.details);
-								if(item.graduatefree == "" || item.graduatefree == null){
-									$("#graduatefree").val(item.type);
-								}else{
-									$("#graduatefree").val(item.graduatefree);
-								}
-							}
-							
-						}
-						});
-					});
-				
-			}
+			
+			
+	
+			
 			
 			var wealth = $("#wealth").val();
 			if(wealth == 0){
@@ -1310,285 +893,497 @@
 			
 			
 			//财务信息 部分按钮效果
-			$(".finance-btn input").click(function(){
-				var financeBtnInfo=$(this).val();
-				if(financeBtnInfo == "银行存款"){
-					if($(this).hasClass("btnState-true")){
-						$(".deposit").css("display","none");
-						$(this).removeClass("btnState-true");
-						$("#deposit").val("");
-						$(".deposits").css({"display":"none"});
-						$(".deposits").attr("class", "col-xs-6 deposits has-success");
-						$("#deposit").attr("style", null);
-					}else{
-						$(".deposit").css("display","block");
-						$(this).addClass("btnState-true");
-						$("#deposit").val("");
-						$("#depositfree").val("银行存款");
-						/* if(userType == 2){
-							$(".help-blockdeposit").attr("data-bv-result","INVALID");  
-						    $(".deposits").css({"display":"block"});
-						    $(".deposits").attr("class", "col-xs-6 deposits has-error");
-						    $("#deposit").attr("style", "border-color:#ff1a1a");
-						} */
-						//$("#deposit").placeholder("万");
-					}
-				}else if(financeBtnInfo == "车产"){
-					if($(this).hasClass("btnState-true")){
-						$(".vehicle").css("display","none");
-						$(this).removeClass("btnState-true");
-						$("#vehicle").val("");
-						$(".vehicles").css({"display":"none"});
-						$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
-						$("#vehicle").attr("style", null);
-					}else{
-						$(".vehicle").css("display","block");
-						$(this).addClass("btnState-true");
-						$("#vehicle").val("");
-						$("#vehiclefree").val("车产");
-						/* if(userType == 2){
-					        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
-					        $(".vehicles").css({"display":"block"});
-					        $(".vehicles").attr("class", "col-xs-6 vehicles has-error");
-					        $("#vehicle").attr("style", "border-color:#ff1a1a");
-						} */
-					}
-				}else if(financeBtnInfo == "房产"){
-					if($(this).hasClass("btnState-true")){
-						$(".houseProperty").css("display","none");
-						$(this).removeClass("btnState-true");
-						$("#houseProperty").val("");
-						$(".housePropertys").css({"display":"none"});
-						$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");
-						$("#houseProperty").attr("style", null);
-					}else{
-						$(".houseProperty").css("display","block");
-						$(this).addClass("btnState-true");
-						$("#houseProperty").val("");
-						$("#housePropertyfree").val("房产");
-						/* if(userType == 2){
-							$(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
-						    $(".housePropertys").css({"display":"block"});
-						    $(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");
-						    $("#houseProperty").attr("style", "border-color:#ff1a1a");
-						} */
-						//$("#houseProperty").placeholder("平米");
-					}
-				}else if(financeBtnInfo == "理财"){
-					if($(this).hasClass("btnState-true")){
-						$(".financial").css("display","none");
-						$(this).removeClass("btnState-true");
-						$("#financial").val("");
-						$(".financials").css({"display":"none"});
-						$(".financials").attr("class", "col-xs-6 financials has-success");
-						$("#financial").attr("style", null);
-					}else{
-						$(".financial").css("display","block");
-						$(this).addClass("btnState-true");
-						$("#financial").val("");
-						$("#financialfree").val("理财");
-						/* if(userType == 2){
-							$(".help-blockfinancial").attr("data-bv-result","INVALID");  
-						    $(".financials").css({"display":"block"});
-						    $(".financials").attr("class", "col-xs-6 financials has-error");
-						    $("#financial").attr("style", "border-color:#ff1a1a");
-						} */
-						//$("#financial").placeholder("万");
-					}
-				}else if(financeBtnInfo == "在职证明"){
-					if($(this).hasClass("btnState-true")){
-						$(".certificate").css("display","none");
-						$(this).removeClass("btnState-true");
-						$("#certificate").val("");
-						$(".certificates").css({"display":"none"});
-						$(".certificates").attr("class", "col-xs-6 certificates has-success");
-						$("#certificate").attr("style", null);
-					}else{
-						$(".certificate").css("display","block");
-						$(this).addClass("btnState-true");
-						$("#certificate").val("");
-						$("#certificatefree").val("在职证明");
-					}
-				}else if(financeBtnInfo == "银行流水"){
-					if($(this).hasClass("btnState-true")){
-						$(".bankflow").css("display","none");
-						$(this).removeClass("btnState-true");
-						$("#bankflow").val("");
-						$(".bankflows").css({"display":"none"});
-						$(".bankflows").attr("class", "col-xs-6 bankflows has-success");
-						$("#bankflow").attr("style", null);
-					}else{
-						$(".bankflow").css("display","block");
-						$(this).addClass("btnState-true");
-						$("#bankflow").val("");
-						$("#bankflowfree").val("银行流水");
-					}
-				}else if(financeBtnInfo == "税单"){
-					if($(this).hasClass("btnState-true")){
-						$(".taxbill").css("display","none");
-						$(this).removeClass("btnState-true");
-						$("#taxbill").val("");
-						$(".taxbills").css({"display":"none"});
-						$(".taxbills").attr("class", "col-xs-6 taxbills has-success");
-						$("#taxbill").attr("style", null);
-					}else{
-						$(".taxbill").css("display","block");
-						$(this).addClass("btnState-true");
-						$("#taxbill").val("");
-						$("#taxbillfree").val("税单");
-					}
-				}else if(financeBtnInfo == "完税证明"){
-					if($(this).hasClass("btnState-true")){
-						$(".taxproof").css("display","none");
-						$(this).removeClass("btnState-true");
-						$("#taxproof").val("");
-						$(".taxproofs").css({"display":"none"});
-						$(".taxproofs").attr("class", "col-xs-6 taxproofs has-success");
-						$("#taxproof").attr("style", null);
-					}else{
-						$(".taxproof").css("display","block");
-						$(this).addClass("btnState-true");
-						$("#taxproof").val("");
-						$("#taxprooffree").val("完税证明");
-					}
-				}else if(financeBtnInfo == "银行金卡"){
-					if($(this).hasClass("btnState-true")){
-						$(".goldcard").css("display","none");
-						$(this).removeClass("btnState-true");
-						$("#goldcard").val("");
-						$(".goldcards").css({"display":"none"});
-						$(".goldcards").attr("class", "col-xs-6 goldcards has-success");
-						$("#goldcard").attr("style", null);
-					}else{
-						$(".goldcard").css("display","block");
-						$(this).addClass("btnState-true");
-						$("#goldcard").val("");
-						$("#goldcardfree").val("银行金卡");
-					}
-				}else if(financeBtnInfo == "特定高校在读生"){
-					if($(this).hasClass("btnState-true")){
-						$(".readstudent").css("display","none");
-						$(this).removeClass("btnState-true");
-						$("#readstudent").val("");
-						$(".readstudents").css({"display":"none"});
-						$(".readstudents").attr("class", "col-xs-6 readstudents has-success");
-						$("#readstudent").attr("style", null);
-					}else{
-						$(".readstudent").css("display","block");
-						$(this).addClass("btnState-true");
-						$("#readstudent").val("学信网学籍在线验证报告");
-						$("#readstudentfree").val("特定高校在读生");
-					}
-				}else if(financeBtnInfo == "特定高校毕业生"){
-					if($(this).hasClass("btnState-true")){
-						$(".graduate").css("display","none");
-						$(this).removeClass("btnState-true");
-						$("#graduate").val("");
-						$(".graduates").css({"display":"none"});
-						$(".graduates").attr("class", "col-xs-6 graduates has-success");
-						$("#graduate").attr("style", null);
-					}else{
-						$(".graduate").css("display","block");
-						$(this).addClass("btnState-true");
-						$("#graduate").val("学信网电子学历认证书");
-						$("#graduatefree").val("特定高校毕业生");
-					}
-				}
-			});
+			// $(".finance-btn input").click(function(){
+			// 	console.log('asdasdasdasdadasd');
+			// 	var financeBtnInfo=$(this).val();
+			// 	if(financeBtnInfo == "银行存款"){
+			// 		if($(this).hasClass("btnState-true")){
+			// 			$(".deposit").css("display","none");
+			// 			$(this).removeClass("btnState-true");
+			// 			$("#deposit").val("");
+			// 			$(".deposits").css({"display":"none"});
+			// 			$(".deposits").attr("class", "col-xs-6 deposits has-success");
+			// 			$("#deposit").attr("style", null);
+			// 		}else{
+			// 			$(".deposit").css("display","block");
+			// 			$(this).addClass("btnState-true");
+			// 			$("#deposit").val("");
+			// 			$("#depositfree").val("银行存款");
+			// 			/* if(userType == 2){
+			// 				$(".help-blockdeposit").attr("data-bv-result","INVALID");  
+			// 			    $(".deposits").css({"display":"block"});
+			// 			    $(".deposits").attr("class", "col-xs-6 deposits has-error");
+			// 			    $("#deposit").attr("style", "border-color:#ff1a1a");
+			// 			} */
+			// 			//$("#deposit").placeholder("万");
+			// 		}
+			// 	}else if(financeBtnInfo == "车产"){
+			// 		if($(this).hasClass("btnState-true")){
+			// 			$(".vehicle").css("display","none");
+			// 			$(this).removeClass("btnState-true");
+			// 			$("#vehicle").val("");
+			// 			$(".vehicles").css({"display":"none"});
+			// 			$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
+			// 			$("#vehicle").attr("style", null);
+			// 		}else{
+			// 			$(".vehicle").css("display","block");
+			// 			$(this).addClass("btnState-true");
+			// 			$("#vehicle").val("");
+			// 			$("#vehiclefree").val("车产");
+			// 			/* if(userType == 2){
+			// 		        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
+			// 		        $(".vehicles").css({"display":"block"});
+			// 		        $(".vehicles").attr("class", "col-xs-6 vehicles has-error");
+			// 		        $("#vehicle").attr("style", "border-color:#ff1a1a");
+			// 			} */
+			// 		}
+			// 	}else if(financeBtnInfo == "房产"){
+			// 		if($(this).hasClass("btnState-true")){
+			// 			$(".houseProperty").css("display","none");
+			// 			$(this).removeClass("btnState-true");
+			// 			$("#houseProperty").val("");
+			// 			$(".housePropertys").css({"display":"none"});
+			// 			$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");
+			// 			$("#houseProperty").attr("style", null);
+			// 		}else{
+			// 			$(".houseProperty").css("display","block");
+			// 			$(this).addClass("btnState-true");
+			// 			$("#houseProperty").val("");
+			// 			$("#housePropertyfree").val("房产");
+			// 			/* if(userType == 2){
+			// 				$(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
+			// 			    $(".housePropertys").css({"display":"block"});
+			// 			    $(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");
+			// 			    $("#houseProperty").attr("style", "border-color:#ff1a1a");
+			// 			} */
+			// 			//$("#houseProperty").placeholder("平米");
+			// 		}
+			// 	}else if(financeBtnInfo == "理财"){
+			// 		if($(this).hasClass("btnState-true")){
+			// 			$(".financial").css("display","none");
+			// 			$(this).removeClass("btnState-true");
+			// 			$("#financial").val("");
+			// 			$(".financials").css({"display":"none"});
+			// 			$(".financials").attr("class", "col-xs-6 financials has-success");
+			// 			$("#financial").attr("style", null);
+			// 		}else{
+			// 			$(".financial").css("display","block");
+			// 			$(this).addClass("btnState-true");
+			// 			$("#financial").val("");
+			// 			$("#financialfree").val("理财");
+			// 			/* if(userType == 2){
+			// 				$(".help-blockfinancial").attr("data-bv-result","INVALID");  
+			// 			    $(".financials").css({"display":"block"});
+			// 			    $(".financials").attr("class", "col-xs-6 financials has-error");
+			// 			    $("#financial").attr("style", "border-color:#ff1a1a");
+			// 			} */
+			// 			//$("#financial").placeholder("万");
+			// 		}
+			// 	}else if(financeBtnInfo == "在职证明"){
+			// 		if($(this).hasClass("btnState-true")){
+			// 			$(".certificate").css("display","none");
+			// 			$(this).removeClass("btnState-true");
+			// 			$("#certificate").val("");
+			// 			$(".certificates").css({"display":"none"});
+			// 			$(".certificates").attr("class", "col-xs-6 certificates has-success");
+			// 			$("#certificate").attr("style", null);
+			// 		}else{
+			// 			$(".certificate").css("display","block");
+			// 			$(this).addClass("btnState-true");
+			// 			$("#certificate").val("");
+			// 			$("#certificatefree").val("在职证明");
+			// 		}
+			// 	}else if(financeBtnInfo == "银行流水"){
+			// 		if($(this).hasClass("btnState-true")){
+			// 			$(".bankflow").css("display","none");
+			// 			$(this).removeClass("btnState-true");
+			// 			$("#bankflow").val("");
+			// 			$(".bankflows").css({"display":"none"});
+			// 			$(".bankflows").attr("class", "col-xs-6 bankflows has-success");
+			// 			$("#bankflow").attr("style", null);
+			// 		}else{
+			// 			$(".bankflow").css("display","block");
+			// 			$(this).addClass("btnState-true");
+			// 			$("#bankflow").val("");
+			// 			$("#bankflowfree").val("银行流水");
+			// 		}
+			// 	}else if(financeBtnInfo == "税单"){
+			// 		if($(this).hasClass("btnState-true")){
+			// 			$(".taxbill").css("display","none");
+			// 			$(this).removeClass("btnState-true");
+			// 			$("#taxbill").val("");
+			// 			$(".taxbills").css({"display":"none"});
+			// 			$(".taxbills").attr("class", "col-xs-6 taxbills has-success");
+			// 			$("#taxbill").attr("style", null);
+			// 		}else{
+			// 			$(".taxbill").css("display","block");
+			// 			$(this).addClass("btnState-true");
+			// 			$("#taxbill").val("");
+			// 			$("#taxbillfree").val("税单");
+			// 		}
+			// 	}else if(financeBtnInfo == "完税证明"){
+			// 		if($(this).hasClass("btnState-true")){
+			// 			$(".taxproof").css("display","none");
+			// 			$(this).removeClass("btnState-true");
+			// 			$("#taxproof").val("");
+			// 			$(".taxproofs").css({"display":"none"});
+			// 			$(".taxproofs").attr("class", "col-xs-6 taxproofs has-success");
+			// 			$("#taxproof").attr("style", null);
+			// 		}else{
+			// 			$(".taxproof").css("display","block");
+			// 			$(this).addClass("btnState-true");
+			// 			$("#taxproof").val("");
+			// 			$("#taxprooffree").val("完税证明");
+			// 		}
+			// 	}else if(financeBtnInfo == "银行金卡"){
+			// 		if($(this).hasClass("btnState-true")){
+			// 			$(".goldcard").css("display","none");
+			// 			$(this).removeClass("btnState-true");
+			// 			$("#goldcard").val("");
+			// 			$(".goldcards").css({"display":"none"});
+			// 			$(".goldcards").attr("class", "col-xs-6 goldcards has-success");
+			// 			$("#goldcard").attr("style", null);
+			// 		}else{
+			// 			$(".goldcard").css("display","block");
+			// 			$(this).addClass("btnState-true");
+			// 			$("#goldcard").val("");
+			// 			$("#goldcardfree").val("银行金卡");
+			// 		}
+			// 	}else if(financeBtnInfo == "特定高校在读生"){
+			// 		if($(this).hasClass("btnState-true")){
+			// 			$(".readstudent").css("display","none");
+			// 			$(this).removeClass("btnState-true");
+			// 			$("#readstudent").val("");
+			// 			$(".readstudents").css({"display":"none"});
+			// 			$(".readstudents").attr("class", "col-xs-6 readstudents has-success");
+			// 			$("#readstudent").attr("style", null);
+			// 		}else{
+			// 			$(".readstudent").css("display","block");
+			// 			$(this).addClass("btnState-true");
+			// 			$("#readstudent").val("学信网学籍在线验证报告");
+			// 			$("#readstudentfree").val("特定高校在读生");
+			// 		}
+			// 	}else if(financeBtnInfo == "特定高校毕业生"){
+			// 		if($(this).hasClass("btnState-true")){
+			// 			$(".graduate").css("display","none");
+			// 			$(this).removeClass("btnState-true");
+			// 			$("#graduate").val("");
+			// 			$(".graduates").css({"display":"none"});
+			// 			$(".graduates").attr("class", "col-xs-6 graduates has-success");
+			// 			$("#graduate").attr("style", null);
+			// 		}else{
+			// 			$(".graduate").css("display","block");
+			// 			$(this).addClass("btnState-true");
+			// 			$("#graduate").val("学信网电子学历认证书");
+			// 			$("#graduatefree").val("特定高校毕业生");
+			// 		}
+			// 	}
+			// });
 			
-			$(".remove-btn").click(function(){
-				//$(this).parent().css("display","none");
-				if($(this).parent().is(".deposit")){
-					$(".deposit").css("display","none");
-					$("#depositType").removeClass("btnState-true");
-					$("#deposit").val("");
-					$(".deposits").css({"display":"none"});
-					$(".deposits").attr("class", "col-xs-6 deposits has-success");
-					$("#deposite").attr("style", null);
-				}
-				if($(this).parent().is(".bankflow")){
-					$(".bankflow").css("display","none");
-					$("#bankflowType").removeClass("btnState-true");
-					$("#bankflow").val("");
-					$(".bankflows").css({"display":"none"});
-					$(".bankflows").attr("class", "col-xs-6 bankflows has-success");
-					$("#bankflow").attr("style", null);
-				}
-				if($(this).parent().is(".vehicle")){
-					$(".vehicle").css("display","none");
-					$("#vehicleType").removeClass("btnState-true");
-					$("#vehicle").val("");
-					$(".vehicles").css({"display":"none"});
-					$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
-					$("#vehicle").attr("style", null);
-				}
-				if($(this).parent().is(".houseProperty")){
-					$(".houseProperty").css("display","none");
-					$("#housePropertyType").removeClass("btnState-true");
-					$("#houseProperty").val("");
-					$(".housePropertys").css({"display":"none"});
-					$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");
-					$("#houseProperty").attr("style", null);
-				}
-				if($(this).parent().is(".financial")){
-					$(".financial").css("display","none");
-					$("#financialType").removeClass("btnState-true");
-					$("#financial").val("");
-					$(".financials").css({"display":"none"});
-					$(".financials").attr("class", "col-xs-6 financials has-success");
-					$("#financial").attr("style", null);
-				}
-				if($(this).parent().is(".certificate")){
-					$(".certificate").css("display","none");
-					$("#certificateType").removeClass("btnState-true");
-					$("#certificate").val("");
-					$(".certificates").css({"display":"none"});
-					$(".certificates").attr("class", "col-xs-6 certificates has-success");
-					$("#certificate").attr("style", null);
-				}
-				if($(this).parent().is(".taxbill")){
-					$(".taxbill").css("display","none");
-					$("#taxbillType").removeClass("btnState-true");
-					$("#taxbill").val("");
-					$(".taxbills").css({"display":"none"});
-					$(".taxbills").attr("class", "col-xs-6 taxbills has-success");
-					$("#taxbill").attr("style", null);
-				}
-				if($(this).parent().is(".taxproof")){
-					$(".taxproof").css("display","none");
-					$("#taxproofType").removeClass("btnState-true");
-					$("#taxproof").val("");
-					$(".taxproofs").css({"display":"none"});
-					$(".taxproofs").attr("class", "col-xs-6 taxproofs has-success");
-					$("#taxproof").attr("style", null);
-				}
-				if($(this).parent().is(".goldcard")){
-					$(".goldcard").css("display","none");
-					$("#goldcardType").removeClass("btnState-true");
-					$("#goldcard").val("");
-					$(".goldcards").css({"display":"none"});
-					$(".goldcards").attr("class", "col-xs-6 goldcards has-success");
-					$("#goldcard").attr("style", null);
-				}
-				if($(this).parent().is(".readstudent")){
-					$(".readstudent").css("display","none");
-					$("#readstudentType").removeClass("btnState-true");
-					$("#readstudent").val("");
-					$(".readstudents").css({"display":"none"});
-					$(".readstudents").attr("class", "col-xs-6 readstudents has-success");
-					$("#readstudent").attr("style", null);
-				}
-				if($(this).parent().is(".graduate")){
-					$(".graduate").css("display","none");
-					$("#graduateType").removeClass("btnState-true");
-					$("#graduate").val("");
-					$(".graduates").css({"display":"none"});
-					$(".graduates").attr("class", "col-xs-6 graduates has-success");
-					$("#graduate").attr("style", null);
-				}
-			});
+			// $(".remove-btn").click(function(){
+			// 	//$(this).parent().css("display","none");
+			// 	if($(this).parent().is(".deposit")){
+			// 		$(".deposit").css("display","none");
+			// 		$("#depositType").removeClass("btnState-true");
+			// 		$("#deposit").val("");
+			// 		$(".deposits").css({"display":"none"});
+			// 		$(".deposits").attr("class", "col-xs-6 deposits has-success");
+			// 		$("#deposite").attr("style", null);
+			// 	}
+			// 	if($(this).parent().is(".bankflow")){
+			// 		$(".bankflow").css("display","none");
+			// 		$("#bankflowType").removeClass("btnState-true");
+			// 		$("#bankflow").val("");
+			// 		$(".bankflows").css({"display":"none"});
+			// 		$(".bankflows").attr("class", "col-xs-6 bankflows has-success");
+			// 		$("#bankflow").attr("style", null);
+			// 	}
+			// 	if($(this).parent().is(".vehicle")){
+			// 		$(".vehicle").css("display","none");
+			// 		$("#vehicleType").removeClass("btnState-true");
+			// 		$("#vehicle").val("");
+			// 		$(".vehicles").css({"display":"none"});
+			// 		$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
+			// 		$("#vehicle").attr("style", null);
+			// 	}
+			// 	if($(this).parent().is(".houseProperty")){
+			// 		$(".houseProperty").css("display","none");
+			// 		$("#housePropertyType").removeClass("btnState-true");
+			// 		$("#houseProperty").val("");
+			// 		$(".housePropertys").css({"display":"none"});
+			// 		$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");
+			// 		$("#houseProperty").attr("style", null);
+			// 	}
+			// 	if($(this).parent().is(".financial")){
+			// 		$(".financial").css("display","none");
+			// 		$("#financialType").removeClass("btnState-true");
+			// 		$("#financial").val("");
+			// 		$(".financials").css({"display":"none"});
+			// 		$(".financials").attr("class", "col-xs-6 financials has-success");
+			// 		$("#financial").attr("style", null);
+			// 	}
+			// 	if($(this).parent().is(".certificate")){
+			// 		$(".certificate").css("display","none");
+			// 		$("#certificateType").removeClass("btnState-true");
+			// 		$("#certificate").val("");
+			// 		$(".certificates").css({"display":"none"});
+			// 		$(".certificates").attr("class", "col-xs-6 certificates has-success");
+			// 		$("#certificate").attr("style", null);
+			// 	}
+			// 	if($(this).parent().is(".taxbill")){
+			// 		$(".taxbill").css("display","none");
+			// 		$("#taxbillType").removeClass("btnState-true");
+			// 		$("#taxbill").val("");
+			// 		$(".taxbills").css({"display":"none"});
+			// 		$(".taxbills").attr("class", "col-xs-6 taxbills has-success");
+			// 		$("#taxbill").attr("style", null);
+			// 	}
+			// 	if($(this).parent().is(".taxproof")){
+			// 		$(".taxproof").css("display","none");
+			// 		$("#taxproofType").removeClass("btnState-true");
+			// 		$("#taxproof").val("");
+			// 		$(".taxproofs").css({"display":"none"});
+			// 		$(".taxproofs").attr("class", "col-xs-6 taxproofs has-success");
+			// 		$("#taxproof").attr("style", null);
+			// 	}
+			// 	if($(this).parent().is(".goldcard")){
+			// 		$(".goldcard").css("display","none");
+			// 		$("#goldcardType").removeClass("btnState-true");
+			// 		$("#goldcard").val("");
+			// 		$(".goldcards").css({"display":"none"});
+			// 		$(".goldcards").attr("class", "col-xs-6 goldcards has-success");
+			// 		$("#goldcard").attr("style", null);
+			// 	}
+			// 	if($(this).parent().is(".readstudent")){
+			// 		$(".readstudent").css("display","none");
+			// 		$("#readstudentType").removeClass("btnState-true");
+			// 		$("#readstudent").val("");
+			// 		$(".readstudents").css({"display":"none"});
+			// 		$(".readstudents").attr("class", "col-xs-6 readstudents has-success");
+			// 		$("#readstudent").attr("style", null);
+			// 	}
+			// 	if($(this).parent().is(".graduate")){
+			// 		$(".graduate").css("display","none");
+			// 		$("#graduateType").removeClass("btnState-true");
+			// 		$("#graduate").val("");
+			// 		$(".graduates").css({"display":"none"});
+			// 		$(".graduates").attr("class", "col-xs-6 graduates has-success");
+			// 		$("#graduate").attr("style", null);
+			// 	}
+			// });
 			
-			
+			/** 2018_07_28 */
+			(function() {
+				'use strict';
+
+				var $wealthmain 	  = $('.wealthmain');
+				var $addWealthInfoBtn = $('#addWealthInfoBtn');
+				var $wealthInputGroup = $('.wealth-input-group');
+
+				var totalNum = 17;
+				var wealthInputBtnLen = 0;
+
+				var wealthData = JSON.parse('${obj.wealthJp}');
+				var newAddId = getNewAddId();
+				
+
+				function getNewAddId() {
+					var newAddId = 200011;
+					var len = wealthData.length;
+					if (len != 0 && wealthData[len-1]['vehiclefree'] > newAddId) {
+						newAddId = wealthData[len-1]['vehiclefree']
+					}
+					return newAddId;
+				}
+				/**
+				var t = 'orderProcessType=&applicantId=1112&orderid=632&isTrailOrder=&marryStatus=1&marryUrl=&applicant=1&relationRemark=主卡&mainRelation=&outboundrecord=良好&visacountys=冲绳县&visacountys=青森县&visacountys=岩手县&visacountys=宫城县&visacountys=秋田县&visacountys=山形县&visacountys=福岛县&laststartdate=2014-08-14&laststayday=6&lastreturndate=2014-08-19&careerStatus=4&name=五洲测试公司&telephone=在人有&address=朝阳区大连沈阳青岛胡同&position=工人&unitName=无&sameMainWealth=0&hotelname=参照赴日予定表&hotelphone=&hoteladdress=&vouchname=参照身元保证书&vouchphone=&vouchaddress=&vouchbirth=&vouchmainrelation=&vouchjob=&vouchcountry=&invitename=同上&invitephone=&inviteaddress=&invitebirth=&invitemainrelation=&invitejob=&invitecountry=&traveladvice=推荐';
+				var r = t.split('&');
+				console.log(r);
+				*/
+				createWealthInfo();
+				createWealthBtnHtml(function() {
+					wealthData.forEach(function(item) {
+						$wealthmain.find('input').each(function(idx, input) {
+							if (item['vehiclefree'] == $(input).attr('data-id')) {
+								$(input).addClass('btnState-true');
+								return 0;
+							}
+						});
+					});
+					wealthInputBtnLen = $wealthmain.children().length;
+				});
+
+				function isSelect($input) {
+					if ($input.hasClass('btnState-true')) return 1;
+					return 0;
+				}
+
+				$wealthmain.on('click', '.btn-ipt', function() {
+					var $self = $(this);
+					var _id = $self.attr('data-id');
+					var obj = getPlaceholderAndExtenText(parseInt(_id));
+					$wealthInputGroup.show();
+					if (isSelect($self)) return removeOnceWealth('inputBtn', $self);
+					
+					$self.addClass('btnState-true');
+					var $temp = createHtml({
+						vehiclefree: _id,
+						extension: obj.exten,
+						placeholder: obj.place,
+						bankflowfree: $self.val(),
+						type: $self.val(),
+						details: ''
+					});
+
+					$wealthInputGroup.append($temp);
+				});
+
+				function removeOnceWealth(origin, $btn) {
+					if (origin === 'inputBtn') {
+						var id = $btn.attr('data-id');
+						$btn.removeClass('btnState-true');
+						$wealthInputGroup.children().each(function() {
+							if ($(this).attr('data-id') == id) {
+								$(this).remove();
+							}
+						});
+					} else {
+						var $parent = $btn.parent();
+						var id = $parent.attr('data-id');
+						$wealthmain.find('.btn-ipt').each(function() {
+							if ($(this).attr('data-id') == id) {
+								$(this).removeClass('btnState-true');
+							}
+						});
+						if (id > 200011) wealthInputBtnLen--;
+						$parent.remove();
+					}
+				}
+
+				function getPlaceholderAndExtenText(id) {
+					var p = '';
+					var e = '';
+					switch(id) {
+						case 200001:
+							p = '工资对账单收入';
+							e = '万';
+							break;
+						case 200002:
+							p = '例如:大众速腾';
+							e = '';
+							break;
+						case 200003:
+							p = '';
+							e = '平米';
+							break;
+						case 200004:
+							p = '';
+							e = '万';
+							break;
+						case 200005:
+							p = '年收入';
+							e = '万';
+							break;
+						case 200006:
+							p = '';
+							e = '万';
+							break;
+						case 200007:
+							p = '年收入';
+							e = '万';
+							break;
+						case 200008:
+							p = '年缴税';
+							e = '元';
+							break;
+						case 200009:
+							p = '';
+							e = '';
+							break;
+						case 200010:
+							p = '学信网学籍在线验证报告';
+							e = '';
+							break;
+						case 200011:
+							p = '学信网电子学历认证书';
+							e = '';
+							break;
+					}
+					return {
+						place: p,
+						exten: e
+					};
+				}
+
+				$addWealthInfoBtn.on('click', function(event) {
+					if (wealthInputBtnLen < totalNum) {
+						var $temp = createHtml({
+							vehiclefree: ++newAddId,
+							extension: '',
+							placeholder: '',
+							bankflowfree: '',
+							type: '',
+							details: ''
+						});
+
+						$wealthInputGroup.append($temp);
+						wealthInputBtnLen++;
+						$wealthInputGroup.show();
+					}
+				});
+
+				function createWealthBtnHtml(fn) {
+					wealthDeftData.forEach(function(it, idx) {
+						for (var k in it) {
+							$addWealthInfoBtn.before(wealthBtnTemp(k, it[k]));
+						}
+					});
+					fn && fn();
+				}
+				
+				function wealthBtnTemp(k, v) {
+					var $temp = $('<input data-id="'+k+'" name="" value="'+v+'" type="button" class="btn btnState btn-ipt" />');
+					return $temp;
+				}
+
+				function createHtml(it) {
+					var $temp = $(
+						'<div data-id="'+ it.vehiclefree +'" id="wealth-input-' + it.vehiclefree + '" class="info-body-from clone-module cf">' +
+							'<div class="row body-from-input">' +
+								'<div class="col-sm-5">' +
+									'<div class="form-group">' +
+										'<label><span>*</span>' + it.type + '</label>' +
+										'<input autocomplete="off" type="text" class="form-control input-sm" value="' + it.bankflowfree + '"  />' +
+									'</div>' +
+								'</div>' +
+								'<div class="col-sm-4">' +
+									'<div class="form-group">' +
+										'<label>&nbsp;</label>' +
+										'<input type="text" autocomplete="off" class="form-control input-sm" placeholder="'+it.placeholder+'" value="'+it.details+'"/>' +
+									'</div>' +
+								'</div>' +
+								'<div style="float:left; margin:40px 0 0 -10px;"> '+it.extension+' </div>' +
+							'</div>' +
+							'<i class="remove-btn delete-icon"></i>' +
+						'</div>'
+					);
+
+					return $temp;
+				}
+				
+				function createWealthInfo() {
+					wealthData.forEach(function(it, idx) {
+						var o =  getPlaceholderAndExtenText(parseInt(it.vehiclefree));
+						it.placeholder = o.place;
+						it.extension   = o.exten;
+						$wealthInputGroup.append(createHtml(it, idx));
+					});
+
+					$wealthInputGroup.on('click', '.delete-icon', function() {
+						removeOnceWealth('delete-icon', $(this));
+					});
+				}
+			})();
 			
 		});
 		//连接websocket
@@ -1629,10 +1424,25 @@
 		$("#addBtn").click(function(){
 			save(1);
 		});
+
+		function getWealthInfoObject() {
+			var ret = {};
+			var $wealthInputGroup = $('.wealth-input-group');
+			$wealthInputGroup.children().each(function(index, el) {
+				var $self 	= $(el);
+				var $inputs = $self.find('input');
+				var id 		= $self.attr('data-id');
+				ret[id] = {wealth_title: '', wealth_value: ''};
+				ret[id]['wealth_title'] = $inputs.eq(0).val();
+				ret[id]['wealth_value'] = $inputs.eq(1).val();
+			});
+			return ret;
+		}
 		
 		
 		//保存
 		function save(status){
+
 			layer.load(1);
 			var applicantid = '${obj.applicant.id}';
 			var orderid = '${obj.orderid}';
@@ -1717,13 +1527,22 @@
 			}else{
 				isyaoqing = 0;
 			}
-			
-			var passportInfo = $.param({"wealthType":wealthType,'visatype':visatype,'visacounty':visacounty,'isVisit':isVisit,'threecounty':threecounty,'isname':isname,'isyaoqing':isyaoqing}) + "&" +  $("#passportInfo").serialize();
-			
+
+			var wealthInfoObject = getWealthInfoObject();
+			wealthInfoObject['wealthType']  = wealthType;
+			wealthInfoObject['visatype']    = visatype;
+			wealthInfoObject['visacounty']  = visacounty;
+			wealthInfoObject['isVisit']     = isVisit;
+			wealthInfoObject['threecounty'] = threecounty;
+			wealthInfoObject['isname'] 		= isname;
+			wealthInfoObject['isyaoqing'] 	= isyaoqing;
+			console.log(wealthInfoObject);
+			var passportInfo = $.param(wealthInfoObject) + "&" + $("#passportInfo").serialize();
+			console.log(passportInfo);
+			return;
 			ajaxConnection();
 			var count = 0;
 			function ajaxConnection(){
-				console.log("要进入ajax请求了");
 				$.ajax({
 					type: 'POST',
 					//async: false,
@@ -1764,8 +1583,6 @@
 				});
 			}
 		}
-	
-		
 		
 		//上传结婚证
 		
