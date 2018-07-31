@@ -342,6 +342,17 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			Sql applysql = Sqls.create(sqlStr);
 			List<Record> query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
 			for (Record apply : query) {
+
+				if (!Util.isEmpty(apply.get("province"))) {
+					String province = (String) apply.get("province");
+					if (province.endsWith("省") || province.endsWith("市")) {
+						apply.put("province", province.substring(0, province.length() - 1));
+					}
+					if (province.length() > 3 && province.endsWith("自治区")) {
+						apply.put("province", province.substring(0, province.length() - 3));
+					}
+				}
+
 				Integer dataType = (Integer) apply.get("dataType");
 				for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
 					if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {

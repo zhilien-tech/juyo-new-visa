@@ -53,6 +53,9 @@ $condition
 /*get_japan_visa_list_data_apply*/
 SELECT
 	CONCAT(ta.firstName, ta.lastName) applicant,
+	CONCAT(tap.firstNameEn, tap.lastNameEn) applicanten,
+	tap.sex,
+	ta.province,
 	tap.passport passportNo,
 	taoj.id applicatid,
 	taoj.applicantId applyid,

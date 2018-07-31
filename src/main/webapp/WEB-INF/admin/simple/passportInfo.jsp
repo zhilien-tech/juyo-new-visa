@@ -310,7 +310,7 @@
 						trigger:"change keyup",
 						validators : {
 							regexp: {
-	                            regexp: /\/{1}[a-zA-Z]+$/,
+	                            regexp: /\/{1}[a-z\s+A-Z]+$/,
 	                            message: '拼音中不能包含汉字或其他特殊符号'
 	                        },
 						}
@@ -319,7 +319,7 @@
 						trigger:"change keyup",
 						validators : {
 							regexp: {
-	                            regexp: /\/{1}[a-zA-Z]+$/,
+	                            regexp: /\/{1}[a-z\s+A-Z]+$/,
 	                            message: '拼音中不能包含汉字或其他特殊符号'
 	                        },
 						}
