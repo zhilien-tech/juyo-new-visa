@@ -295,9 +295,9 @@ $(document).on("input","#birthAddress",function(){
 	var temp = $(this).val();
 	var pinyinchar = getPinYinStr(temp);
 	if($(this).val().length == 0){
-		$("#birthAddressEn").val("");
+		$("#birthAddressEn").val("").change();
 	}else{
-		$("#birthAddressEn").val("/"+pinyinchar.toUpperCase());
+		$("#birthAddressEn").val("/"+pinyinchar.toUpperCase()).change();
 	}
 });
 $(document).on("input","#issuedPlace",function(){
@@ -308,9 +308,9 @@ $(document).on("input","#issuedPlace",function(){
 	var temp = $(this).val();
 	var pinyinchar = getPinYinStr(temp);
 	if($(this).val().length == 0){
-		$("#issuedPlaceEn").val("");
+		$("#issuedPlaceEn").val("").change();
 	}else{
-		$("#issuedPlaceEn").val("/"+pinyinchar.toUpperCase());
+		$("#issuedPlaceEn").val("/"+pinyinchar.toUpperCase()).change();
 	}
 });
 

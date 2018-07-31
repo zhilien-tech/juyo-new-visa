@@ -451,14 +451,14 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 				dbDao.insert(logs);
 			}
 
-			/*if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()) {
+			if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()) {
 				//消息通知
 				try {
 					visaInfoWSHandler.broadcast(new TextMessage(""));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			}*/
+			}
 		}
 		return null;
 	}
