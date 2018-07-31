@@ -10,5 +10,6 @@ public class WealthEntity implements Serializable {
 	private String wealthtitle;
 	private String wealthvalue;
 	private String wealthtype;
+	private String wealthname;
 
 }

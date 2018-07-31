@@ -4110,28 +4110,61 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					} else {
 						//添加财产信息
 						long wealthTime = System.currentTimeMillis();
-						List<TApplicantWealthJpEntity> beforeList = dbDao.query(TApplicantWealthJpEntity.class,
-								Cnd.where("applicantId", "=", applicantOrderJpEntity.getId()), null);
-						if (beforeList.size() > 0) {
-							dbDao.delete(beforeList);
+
+						List<Map<String, WealthEntity>> wealthInfoList = form.getWealthInfoObject();
+						for (Map<String, WealthEntity> map : wealthInfoList) {
+							for (String sequence : map.keySet()) {
+								WealthEntity wealthEntity = map.get(sequence);
+								String wealthtitle = wealthEntity.getWealthtitle();
+								String wealthvalue = wealthEntity.getWealthvalue();
+								String wealthtype = wealthEntity.getWealthtype();
+								String wealthname = wealthEntity.getWealthname();
+								if (Util.eq(wealthname, "bankflow")) {
+									form.setBankflow(wealthname);
+								}
+								if (Util.eq(wealthname, "vehicle")) {
+									form.setVehicle(wealthname);
+								}
+								if (Util.eq(wealthname, "houseProperty")) {
+									form.setHouseProperty(wealthname);
+								}
+								if (Util.eq(wealthname, "financial")) {
+									form.setFinancial(wealthname);
+								}
+								if (Util.eq(wealthname, "certificate")) {
+									form.setCertificate(wealthname);
+								}
+								if (Util.eq(wealthname, "deposit")) {
+									form.setDeposit(wealthname);
+								}
+								if (Util.eq(wealthname, "taxbill")) {
+									form.setTaxbill(wealthname);
+								}
+								if (Util.eq(wealthname, "taxproof")) {
+									form.setTaxproof(wealthname);
+								}
+								if (Util.eq(wealthname, "goldcard")) {
+									form.setGoldcard(wealthname);
+								}
+								if (Util.eq(wealthname, "readstudent")) {
+									form.setReadstudent(wealthname);
+								}
+								if (Util.eq(wealthname, "graduate")) {
+									form.setGraduate(wealthname);
+								}
+
+								/*TApplicantWealthJpEntity wealthjp = new TApplicantWealthJpEntity();
+								wealthjp.setSequence(Integer.valueOf(sequence));
+								wealthjp.setBankflowfree(wealthtitle);
+								wealthjp.setDetails(wealthvalue);
+								wealthjp.setType(wealthtype);
+								wealthjp.setApplicantId(applicantOrderJpEntity.getId());
+								wealthjp.setCreateTime(new Date());
+								dbDao.insert(wealthjp);*/
+							}
 						}
 
-						Map<String, WealthEntity> wealthInfo = form.getWealthInfoObject();
-						for (String sequence : wealthInfo.keySet()) {
-							WealthEntity wealthEntity = wealthInfo.get(sequence);
-							String wealthtitle = wealthEntity.getWealthtitle();
-							String wealthvalue = wealthEntity.getWealthvalue();
-							String wealthtype = wealthEntity.getWealthtype();
-							TApplicantWealthJpEntity wealthjp = new TApplicantWealthJpEntity();
-							wealthjp.setSequence(Integer.valueOf(sequence));
-							wealthjp.setBankflowfree(wealthtitle);
-							wealthjp.setDetails(wealthvalue);
-							wealthjp.setType(wealthtype);
-							wealthjp.setApplicantId(applicantOrderJpEntity.getId());
-							wealthjp.setCreateTime(new Date());
-							dbDao.insert(wealthjp);
-						}
-						//insertorupdateWealthinfo(form, applicantOrderJpEntity, loginUser);
+						insertorupdateWealthinfo(form, applicantOrderJpEntity, loginUser);
 						long wealthTime2 = System.currentTimeMillis();
 						System.out.println("财产信息所用时间：" + (wealthTime2 - wealthTime) + "ms");
 					}
