@@ -62,7 +62,7 @@
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> 
 					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-ToBig" onclick="saveAddOrder(3);" />
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
-					<input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/>
+					<!-- <input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/> -->
 					<c:choose>
 						<c:when test="${obj.orderinfo.status ==17 or obj.orderinfo.status == 20 }">
 							<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(22)"/>
@@ -81,7 +81,7 @@
 							<input type="button" value="发招宝" class="btn btn_del btn-sm pull-right"/>
 						</c:otherwise>
 					</c:choose>
-					<input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue()"/>
+					<!-- <input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue()"/> -->
 					<input type="button" value="日志" class="btn btn-primary btn-sm pull-right" onclick="log()"/>
 				<input type="hidden" id="orderid" name="orderid" value="${obj.orderjpinfo.id }"/>
 				
