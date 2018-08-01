@@ -739,7 +739,6 @@
 					e = '';
 					n = '';
 					break;
-
 			}
 			return {
 				place: p,
@@ -1464,11 +1463,11 @@
 				var $self 	= $(el);
 				var $inputs = $self.find('input');
 				var id 		= $self.attr('data-id');
-				ret[id] = {wealthtitle: '', wealthvalue: '', wealthtype: '', wealthname: ''};
-				ret[id]['wealthtitle'] = $inputs.eq(0).val();
-				ret[id]['wealthvalue'] = $inputs.eq(1).val();
-				ret[id]['wealthtype'] = getwealthType(id);
-				ret[id]['wealthname'] = getPlaceholderAndExtenText(parseInt(id)).name;
+				ret[id] = {wealth_title: '', wealth_value: '', 'wealth_type': ''};
+				ret[id]['wealth_title'] = $inputs.eq(0).val();
+				ret[id]['wealth_value'] = $inputs.eq(1).val();
+				ret[id]['wealth_type'] = getwealthType(id);
+				ret[id]['wealth_name'] = getPlaceholderAndExtenText(parseInt(id)).name;
 
 				arr.push(ret);
 			});
@@ -1578,7 +1577,7 @@
 			var wealthInfoObject = getWealthInfoObject();
 
 			var passportInfo = $.param({
-				wealthInfoObject: JSON.stringify(wealthInfoObject),
+				wealth: wealthInfoObject,
 				wealthType: wealthType,
 				visatype: visatype,
 				visacounty: visacounty,
@@ -1588,6 +1587,7 @@
 				isyaoqing: isyaoqing
 			}) + "&" + $("#passportInfo").serialize();
 			console.log(wealthInfoObject);
+			return 0;
 			ajaxConnection();
 			var count = 0;
 			function ajaxConnection(){

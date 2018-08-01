@@ -1346,10 +1346,11 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 					cell.setRowspan(wealthjpinfo.size());
 				}*/
 				table.addCell(cell);
+				String name = (!Util.isEmpty(record.get("firstname")) ? record.getString("firstname") : "")
+						+ (!Util.isEmpty(record.get("lastname")) ? record.getString("lastname") : "");
+				System.out.println(name);
 				//中文姓名
-				cell = new PdfPCell(new Paragraph(
-						(!Util.isEmpty(record.get("firstname")) ? record.getString("firstname") : "")
-								+ (!Util.isEmpty(record.get("lastname")) ? record.getString("lastname") : ""), font));
+				cell = new PdfPCell(new Paragraph(name, font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				/*if (flag) {

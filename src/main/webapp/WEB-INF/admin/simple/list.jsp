@@ -179,14 +179,14 @@
 							<span v-if="data.zhaobaocomplete == 0 && data.visatype != 14">
 								<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
 							</span>
-							<span v-else>
+							<!-- <span v-else>
 								<i class="theTrial1"> </i>
-							</span>
+							</span> -->
 
-							<!-- <span v-if="data.zhaobaocomplete ==1">
+							<span v-else-if="data.zhaobaocomplete ==1">
 								<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
 								<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
-							</span> -->
+							</span>
 
 							<!-- <span v-else>
 								<i class="theTrial1"> </i>
@@ -211,7 +211,7 @@
 									<div class="div-s1"><label>申请人：</label><span>{{item.applicant}}</span></div>
 									
 									<div><label>英文：</label><span>{{item.applicanten}}</span></div>
-									<div><label>性别：</label><span>{{item.sex}}</span></div>
+									<!-- <div><label>性别：</label><span>{{item.sex}}</span></div> -->
 									<div><label>现居住地：</label><span>{{item.province}}</span></div>
 									<div><label>护照号：</label><span>{{item.passportno}}</span></div>
 									
@@ -223,7 +223,7 @@
 								<span v-else class="visaListSpan">
 									<div class="div-s2"><label style="opacity:0;">申请人：</label><span>{{item.applicant}}</span></div>
 									<div><label>英文：</label><span>{{item.applicanten }}</span></div>
-									<div><label>性别：</label><span>{{item.sex}}</span></div>
+									<!-- <div><label>性别：</label><span>{{item.sex}}</span></div> -->
 									<div><label>现居住地：</label><span>{{item.province}}</span></div>
 									<div><label style="opacity:0;">护照号：</label><span>{{item.passportno}}</span></div>
 									
