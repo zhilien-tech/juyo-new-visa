@@ -4117,56 +4117,28 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						}
 
 						List<Map<String, WealthEntity>> wealthInfoList = form.getWealthInfoObject();
-						for (Map<String, WealthEntity> map : wealthInfoList) {
-							for (String sequence : map.keySet()) {
-								WealthEntity wealthEntity = map.get(sequence);
-								String wealthtitle = wealthEntity.getWealthtitle();
-								String wealthvalue = wealthEntity.getWealthvalue();
-								String wealthtype = wealthEntity.getWealthtype();
-								String wealthname = wealthEntity.getWealthname();
-								/*if (Util.eq(wealthname, "bankflow")) {
-									form.setBankflow(wealthname);
-								}
-								if (Util.eq(wealthname, "vehicle")) {
-									form.setVehicle(wealthname);
-								}
-								if (Util.eq(wealthname, "houseProperty")) {
-									form.setHouseProperty(wealthname);
-								}
-								if (Util.eq(wealthname, "financial")) {
-									form.setFinancial(wealthname);
-								}
-								if (Util.eq(wealthname, "certificate")) {
-									form.setCertificate(wealthname);
-								}
-								if (Util.eq(wealthname, "deposit")) {
-									form.setDeposit(wealthname);
-								}
-								if (Util.eq(wealthname, "taxbill")) {
-									form.setTaxbill(wealthname);
-								}
-								if (Util.eq(wealthname, "taxproof")) {
-									form.setTaxproof(wealthname);
-								}
-								if (Util.eq(wealthname, "goldcard")) {
-									form.setGoldcard(wealthname);
-								}
-								if (Util.eq(wealthname, "readstudent")) {
-									form.setReadstudent(wealthname);
-								}
-								if (Util.eq(wealthname, "graduate")) {
-									form.setGraduate(wealthname);
-								}*/
+						if (wealthInfoList.size() > 0) {
+							for (Map<String, WealthEntity> map : wealthInfoList) {
+								for (String sequence : map.keySet()) {
+									WealthEntity wealthEntity = map.get(sequence);
+									String wealthtitle = wealthEntity.getWealthtitle();
+									String wealthvalue = wealthEntity.getWealthvalue();
+									String wealthtype = wealthEntity.getWealthtype();
+									String wealthname = wealthEntity.getWealthname();
 
-								TApplicantWealthJpEntity wealthjp = new TApplicantWealthJpEntity();
-								wealthjp.setSequence(Integer.valueOf(sequence));
-								wealthjp.setBankflowfree(wealthtitle);
-								wealthjp.setDetails(wealthvalue);
-								wealthjp.setType(wealthtype);
-								wealthjp.setApplicantId(applicantOrderJpEntity.getId());
-								wealthjp.setCreateTime(new Date());
-								dbDao.insert(wealthjp);
+									if (!Util.isEmpty(wealthvalue)) {
+										TApplicantWealthJpEntity wealthjp = new TApplicantWealthJpEntity();
+										wealthjp.setSequence(Integer.valueOf(sequence));
+										wealthjp.setBankflowfree(wealthtitle);
+										wealthjp.setDetails(wealthvalue);
+										wealthjp.setType(wealthtype);
+										wealthjp.setApplicantId(applicantOrderJpEntity.getId());
+										wealthjp.setCreateTime(new Date());
+										dbDao.insert(wealthjp);
+									}
+								}
 							}
+
 						}
 
 						//insertorupdateWealthinfo(form, applicantOrderJpEntity, loginUser);
