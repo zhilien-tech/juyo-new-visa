@@ -46,7 +46,7 @@
 				width: 72%!important;
 			}
 			.card-content .visaListSpan div{
-				width: 16.6%!important;			
+				width: 19.5%!important;			
 			}
 	
 			.everybody-info div:nth-child(4) {
@@ -78,6 +78,13 @@
 				font-size: 14px;
 				font-weight: 400;
 			}
+			.everybody-info div:nth-child(3){
+				width: 16.5%!important;
+			}
+			.everybody-info div:nth-child(2){
+				width: 22.5%!important;
+			}
+			
 		</style>	
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
