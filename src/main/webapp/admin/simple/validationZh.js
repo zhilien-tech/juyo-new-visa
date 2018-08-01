@@ -8,35 +8,35 @@
  * }
  * 如果报错提交错误汉字至后台
 */
-(function() {
+(function () {
     'use strict';
 
-    var $firstName 	    = $('#firstName');
-    var $lastName 	    = $('#lastName');
-    var $firstNameEn    = $('#firstNameEn');
-    var $lastNameEn     = $('#lastNameEn');
-    var $birthAddress   = $('#birthAddress');
+    var $firstName = $('#firstName');
+    var $lastName = $('#lastName');
+    var $firstNameEn = $('#firstNameEn');
+    var $lastNameEn = $('#lastNameEn');
+    var $birthAddress = $('#birthAddress');
     var $birthAddressEn = $('#birthAddressEn');
-    var $issuedPlace    = $('#issuedPlace');
-    var $issuedPlaceEn  = $('#issuedPlaceEn');
+    var $issuedPlace = $('#issuedPlace');
+    var $issuedPlaceEn = $('#issuedPlaceEn');
 
     var _url = BASE_PATH + '/admin/simple/toRecordCharacters.html';
 
-    var inputBlur = (function() {
-        return function(str) {
+    var inputBlur = (function () {
+        return function (str) {
             console.log("**************************");
             if (!(/^\/{1}[a-zA-Z]+$/.test(str))) {
                 var s = str.replace(/^\/{1}[A-Z]+/g, '');
                 console.log(s);
                 $.ajax({
                     type: 'POST',
-                    data : {characterStr: s},
+                    data: { characterStr: s },
                     url: _url,
-                    success: function(data) {
+                    success: function (data) {
                         console.log('done..');
                         console.log(data);
                     },
-                    error: function(error) {
+                    error: function (error) {
                         console.log(error);
                     }
                 });
@@ -44,35 +44,37 @@
         };
     })();
 
-    $firstName.blur(function() {
+    $firstName.blur(function () {
         inputBlur($firstNameEn.val());
     });
 
-    $lastName.blur(function() {
+    $lastName.blur(function () {
         inputBlur($lastNameEn.val());
     });
-    
-    $firstNameEn.blur(function() {
+
+    $firstNameEn.blur(function () {
         inputBlur($(this).val());
     });
 
-    $lastNameEn.blur(function() {
+    $lastNameEn.blur(function () {
         inputBlur($(this).val());
     });
 
-    $birthAddress.blur(function() {
+    $birthAddress.blur(function () {
         inputBlur($(this).val());
     });
 
-    $birthAddressEn.blur(function() {
-        inputBlur($(this).val());
-    });
-    
-    $issuedPlace.blur(function() {
+    $birthAddressEn.blur(function () {
         inputBlur($(this).val());
     });
 
-    $issuedPlaceEn.blur(function() {
+    $issuedPlace.blur(function () {
+        inputBlur($(this).val());
+    });
+
+    $issuedPlaceEn.blur(function () {
         inputBlur($(this).val());
     });
 })();
+
+

@@ -46,7 +46,7 @@
 				width: 72%!important;
 			}
 			.card-content .visaListSpan div{
-				width: 16.6%!important;			
+				width: 19.5%!important;			
 			}
 	
 			.everybody-info div:nth-child(4) {
@@ -78,9 +78,12 @@
 				font-size: 14px;
 				font-weight: 400;
 			}
+			.c-body {
+				min-width: 1280px;
+			}
 		</style>	
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini c-body">
 	<div class="box-header"style=" padding-top:25px!important"><!-- 检索条件 -->
 		<!-- 切换卡按钮 start -->
 
