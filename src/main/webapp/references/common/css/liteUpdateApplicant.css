@@ -242,3 +242,66 @@ input[type="file"] {
 	background-color: #23a8ce;
 	color: #FFF;
 }
+
+/* 2018_07_31 */
+.c-modal-body{
+	padding-left: 50px;
+    padding-right: 50px;
+}
+.padding-0 {
+	padding: 0;
+}
+.pl-0{
+	padding-left: 0;
+}
+.pr-0{
+	padding-right: 0;
+}
+.pl-10{
+	padding-left: 10px;
+}
+.pl-5{
+	padding-left: 5px;
+}
+.pr-5{
+	padding-right: 5px;
+}
+
+.relative{
+	position: relative;
+}
+#otherLastNameEn,
+#otherFirstNameEn,
+#issuedPlaceEn,
+#birthAddressEn{
+	position:absolute;
+	top:30px;
+	border:0px;
+	left:80px; 
+	width: 88px;
+	background: #fff;
+}
+#otherLastNameEn,
+#otherFirstNameEn{
+	left: 170px;
+	width: 200px;
+}
+.guoji{
+	width: 50%;
+}
+.c-input-box{
+	width: 100%;
+}
+.c-input-box input{
+	width: 100%;
+	border-radius: 0;
+	border-radius: 3px;
+    border: 1px #f4f4f4 solid;
+    border-color: #d2d6de;
+    height: 35px;
+    box-shadow: none;
+}
+.c-dropdown{
+	width: 100%;
+	top: 35px;
+}

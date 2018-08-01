@@ -26,170 +26,248 @@
 	<!-- 加载中。。。样式 -->
 	<link rel="stylesheet" href="${base}/references/common/css/spinner.css?v=<%=System.currentTimeMillis() %>">
 	<style>
-	[class*=" datetimepicker-dropdown"]:before{
-		top:-8px;
-	}
-		.form-control{
-		    height: 30px;
+		[class*=" datetimepicker-dropdown"]:before{
+			top:-8px;
 		}
-		.datetimepicker{
-			top:67px!important;
-			position: fixed;
+			.form-control{
+				height: 30px;
+			}
+			.datetimepicker{
+				top:67px!important;
+				position: fixed;
+				
+			}
 			
-		}
-		
-	</style>	
+			/* 2018_07_30 */
+			/* .card-content {
+	
+			} */
+			.card-content {
+				width: 72%!important;
+			}
+			.card-content .visaListSpan div{
+				width: 16.6%!important;			
+			}
+	
+			.everybody-info div:nth-child(4) {
+				margin-left: 0;
+			}
+	
+			/* .card-content {
+				float: left;
+			} */
+	
+			.card-content-2{
+				top: 0;
+				right: 0;
+				position: absolute;
+				width: 28%;
+				height: 100%;
+			}
+
+			.card-content-2 span {
+				top: 50%;
+				left: 0;
+				position: absolute;
+				margin-top: -12px;
+				height: 24px;
+				line-height: 24px;
+				font-size: 18px;
+			}
+			.card-content-2 span b{
+				font-size: 14px;
+				font-weight: 400;
+			}
+		</style>	
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-				<div class="box-header"style=" padding-top:25px!important"><!-- 检索条件 -->
-					<!-- 切换卡按钮 start -->
-					<!-- <div class="btnGroups">
-						<a name="myOrder" class="searchOrderBtn btnList  bgColor">我的</a>
-						<a name="allOrder" class="searchOrderBtn btnList">全部</a>
-					</div> -->
-					<!-- 切换卡按钮 end -->
-					<div class="row searchMar tab-header">
-						<div class="col-md col-md-2" style="width:12%">
-							<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
-								<option value="">状态</option>
-								<c:forEach items="${obj.orderstatus }" var="orstatus">
-									<option value="${orstatus.key }">${orstatus.value }</option>
-								</c:forEach>
-							</select>
-						</div>
-						<div class="col-md col-md-2 left-5px right-0px">
-							<select class="input-class input-sm" id="songqianshe" name="songqianshe" onchange="changestatus()">
-								<option value="">送签社</option>
-								<c:forEach items="${obj.songqianlist }" var="songqianlist">
-									<option value="${songqianlist.id}">${songqianlist.name }</option>
-								</c:forEach>
-							</select>
-						</div>
-						<div class="col-md col-md-1 left-5px right-0px">
-							<select class="input-class input-sm" id="employee" name="employee" onchange="changestatus()">
-								<option value="">员工</option>
-								<c:forEach items="${obj.employees }" var="employees">
-									<option value="${employees.userid }">${employees.username }</option>
-								</c:forEach>
-							</select>
-						</div>
-						<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%">
-							<input type="text" class="input-sm input-class form-control" id="orderDate" name="orderDate" placeholder="下单时间" onkeypress="onkeyEnter()"/>
-						</div>
-						<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%">
-							<input type="text" class="input-sm input-class form-control" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onkeypress="onkeyEnter()"/>
-						</div>
-						<div class="col-md col-md-3 left-5px right-0px">
-							<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照号/电话/邮箱/申请人/受付番号" onkeypress="onkeyEnter()"/>
-						</div>
-						<div class="col-md col-md-1 ">
-							<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
-						</div>
-						<div class="col-md col-md-1  " style="    margin-left: 10px;">
-							<a class="btn btn-primary btn-sm pull-right" onclick="addOrder();">下单</a>
-						</div>
-					</div>
-				</div><!-- end 检索条件 -->
-				<section class="card-list-content content">
-					
-					<div id="card" style="    margin-left: -5px;" v-cloak>
-						<div class = "card-tj">	
-								<span>订单总数(单)： {{visaJapanDataS.orderscount}}</span>
-								<span>总人数(人)： {{visaJapanDataS.peopletotal}}</span>
-								<span>作废数(单)： {{visaJapanDataS.disableorder}}</span>
-								<span>作废人数(人)： {{visaJapanDataS.disablepeople}}</span>
-								<span>招宝成功(单)： {{visaJapanDataS.zhaobaoorder}}</span>
-								<span>招宝成功(人)： {{visaJapanDataS.zhaobaopeople}}</span>
-						</div>
-						
-						<div style="margin-top:123px!important;" class="box-body" v-cloak><!-- 卡片列表 -->
-							
-							<div class="card-list" v-for="data in visaJapanData">
-								<div class="card-head">
-									<div><label>订单号：</label><span><a v-on:click="visaDetail(data.id)" href="javascript:;">{{data.japannumber}}</a></span></div>	
-									<div><label>受付番号：</label><span>{{data.acceptdesign}}</span></div>	
-									<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
-									<div><label>操作人：</label><span>{{data.opname}}</span></div>
-									<!-- <div><label>送签社：</label><span>{{data.shortname}}</span></div> -->
-									<!-- <div><span>{{data.visastatus}}</span></div> -->
-									<!-- <div><label>人数：</label><span>{{data.peoplenumber}}</span></div>	 -->
-										<!-- <font>{{data.visatype}}</font> -->
-									<div><label></label><span style="font-weight:bold;font-size:16px;">
-										<span v-if="data.visastatus === '招宝成功'">
-											<font color="red">{{data.visastatus}}</font>
-										</span>
-										<span v-else-if="data.visastatus === '发招宝中'">
-											<font>{{data.visastatus}}</font>
-											<!-- 加载中 -->
-											<div class="spinner">
-											  <div class="bounce1"></div>
-											  <div class="bounce2"></div>
-											  <div class="bounce3"></div>
-											</div>
-										</span>
-										<span v-else-if="data.isdisabled == 1">
-											作废
-										</span>
-										<span v-else>
-											{{data.visastatus}}
-										</span>
-									
-									</span></div>	
-									<div v-if="data.isdisabled != 1">
-										<label>操作：</label>
-										<i class="edit" v-on:click="visaDetail(data.id)"> </i>
-										<i class="shiShou" v-on:click="revenue(data.id)"> </i>
-										<span v-if="data.zhaobaocomplete == 0 && data.visatype != 14">
-											<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
-										</span>
-										<span v-else>
-											<i class="theTrial1"> </i>
-										</span>
-										<span v-if="data.zhaobaocomplete ==1">
-											<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
-											<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
-										</span>
-										<span v-else>
-											<i class="theTrial1"> </i>
-											<i class="theTrial1"> </i>
-										</span>
-										<i class="Refusal" v-on:click=""></i>
-										<i class="download" v-on:click="downLoadFile(data.id)"> </i>
-										<i class="handoverTable"> </i>
-										<!-- 作废按钮 -->
-										<i class="toVoid" v-on:click="disabled(data.id,data.zhaobaoupdate)"> </i>
-									</div>
-									<div v-else>
-										<label>操作：</label>
-										<i class="toVoid1" v-on:click="undisabled(data.id)"> </i>
-									</div>
+	<div class="box-header"style=" padding-top:25px!important"><!-- 检索条件 -->
+		<!-- 切换卡按钮 start -->
+
+		<!-- 切换卡按钮 end -->
+		<div class="row searchMar tab-header">
+			<div class="col-md col-md-2" style="width:12%">
+				<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
+					<option value="">状态</option>
+					<c:forEach items="${obj.orderstatus }" var="orstatus">
+						<option value="${orstatus.key }">${orstatus.value}</option>
+					</c:forEach>
+				</select>
+			</div>
+			<div class="col-md col-md-2 left-5px right-0px">
+				<select class="input-class input-sm" id="songqianshe" name="songqianshe" onchange="changestatus()">
+					<option value="">送签社</option>
+					<c:forEach items="${obj.songqianlist }" var="songqianlist">
+						<option value="${songqianlist.id}">${songqianlist.name }</option>
+					</c:forEach>
+				</select>
+			</div>
+			<div class="col-md col-md-1 left-5px right-0px">
+				<select class="input-class input-sm" id="employee" name="employee" onchange="changestatus()">
+					<option value="">员工</option>
+					<c:forEach items="${obj.employees }" var="employees">
+						<option value="${employees.userid }">${employees.username }</option>
+					</c:forEach>
+				</select>
+			</div>
+			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%">
+				<input type="text" class="input-sm input-class form-control" id="orderDate" name="orderDate" placeholder="下单时间" onkeypress="onkeyEnter()"/>
+			</div>
+			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%">
+				<input type="text" class="input-sm input-class form-control" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onkeypress="onkeyEnter()"/>
+			</div>
+			<div class="col-md col-md-3 left-5px right-0px">
+				<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照号/电话/邮箱/申请人/受付番号" onkeypress="onkeyEnter()"/>
+			</div>
+			<div class="col-md col-md-1 ">
+				<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
+			</div>
+			<div class="col-md col-md-1  " style="    margin-left: 10px;">
+				<a class="btn btn-primary btn-sm pull-right" onclick="addOrder();">下单</a>
+			</div>
+		</div>
+	</div><!-- end 检索条件 -->
+	<section class="card-list-content content">
+		
+		<div id="card" style="margin-left: -5px;" v-cloak>
+			<div class = "card-tj">
+				<span>订单总数(单)： {{visaJapanDataS.orderscount}}</span>
+				<span>总人数(人)： {{visaJapanDataS.peopletotal}}</span>
+				<span>作废数(单)： {{visaJapanDataS.disableorder}}</span>
+				<span>作废人数(人)： {{visaJapanDataS.disablepeople}}</span>
+				<span>招宝成功(单)： {{visaJapanDataS.zhaobaoorder}}</span>
+				<span>招宝成功(人)： {{visaJapanDataS.zhaobaopeople}}</span>
+			</div>
+			
+			<div style="margin-top:123px!important;" class="box-body" v-cloak><!-- 卡片列表 -->
+				
+				<div class="card-list" v-for="data in visaJapanData">
+					<div class="card-head">
+						<div><label>订单号：</label><span><a v-on:click="visaDetail(data.id)" href="javascript:;">{{data.japannumber}}</a></span></div>	
+						<div><label>受付番号：</label><span>{{data.acceptdesign}}</span></div>	
+						<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
+						<div><label>操作人：</label><span>{{data.opname}}</span></div>
+						<div><label>送签社：</label><span>{{data.shortname}}</span></div>
+						<div><label></label><span>{{data.visatype}}</span></div>
+						<!-- <div><label></label><span style="font-weight:bold;font-size:16px;">
+							<span v-if="data.visastatus === '招宝成功'">
+								<font color="red">{{data.visastatus}}</font>
+							</span>
+							<span v-else-if="data.visastatus === '发招宝中'">
+								<font>{{data.visastatus}}</font>
+				
+								<div class="spinner">
+								  <div class="bounce1"></div>
+								  <div class="bounce2"></div>
+								  <div class="bounce3"></div>
 								</div>
-								<ul class="card-content">
-									<li class="everybody-info" v-for="(item,index) in data.everybodyinfo">
-										<span v-if="index === 0" class="visaListSpan">
-											<div class="div-s1"><label>申请人：</label><span>{{item.applicant}}</span></div>
-											<div><label>手机号：</label><span>{{item.telephone}}</span></div>
-											<div><label>护照号：</label><span>{{item.passportno}}</span></div>
-											<div><label>资料类型：</label><span>{{item.datatype}}</span></div>
-											<!-- <div class="whiteSpace"><label>资料：</label><span v-html="item.data" class="showInfo"></span></div> -->
-											<span class="hideInfo"></span>
-											<!-- <div class="visaBtn" v-if="data.isdisabled != 1"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div> -->
-										</span>
-										<span v-else class="visaListSpan">
-											<div class="div-s2"><label style="opacity:0;">申请人：</label><span>{{item.applicant}}</span></div>
-											<div><label style="opacity:0;">手机号：</label><span>{{item.telephone}}</span></div>
-											<div><label style="opacity:0;">护照号：</label><span>{{item.passportno}}</span></div>
-											<div><label style="opacity:0;">资料类型：</label><span>{{item.datatype}}</span></div>
-											<!-- <div class="whiteSpace"><label style="width:36px;">　　　</label><span v-html="item.data" class="showInfo"></span></div> -->
-											<span class="hideInfo"></span>
-											<!-- <div class="visaBtn" v-if="data.isdisabled != 1"><i class="visaEntry" v-on:click="visainput(item.applicatid,data.orderid)"></i></div> -->
-										</span>
-									</li>
-								</ul> 
-							</div>
-						</div><!-- end 卡片列表 -->
+							</span>
+							<span v-else-if="data.isdisabled == 1">
+									作废
+								</span>
+								<span v-else>
+									{{data.visastatus}}
+								</span>
+							
+							</span>
+						</div>	 -->
+						<div v-if="data.isdisabled != 1">
+							<label>操作：</label>
+							<i class="edit" v-on:click="visaDetail(data.id)"> </i>
+							<!-- <i class="shiShou" v-on:click="revenue(data.id)"> </i> -->
+							
+							<span v-if="data.zhaobaocomplete == 0 && data.visatype != 14">
+								<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
+							</span>
+							<!-- <span v-else>
+								<i class="theTrial1"> </i>
+							</span> -->
+
+							<span v-else-if="data.zhaobaocomplete ==1">
+								<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
+								<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
+							</span>
+
+							<!-- <span v-else>
+								<i class="theTrial1"> </i>
+								<i class="theTrial1"> </i>
+							</span> -->
+
+							<!-- <i class="Refusal" v-on:click=""></i> -->
+							<i class="download" v-on:click="downLoadFile(data.id)"> </i>
+							<!-- <i class="handoverTable"> </i> -->
+							<!-- 作废按钮 -->
+							<i class="toVoid" v-on:click="disabled(data.id,data.zhaobaoupdate)"> </i>
+						</div>
+						<div v-else>
+							<label>操作：</label>
+							<i class="toVoid1" v-on:click="undisabled(data.id)"> </i>
+						</div>
 					</div>
-				</section>
+					<div style="position: relative;">
+						<ul class="card-content">
+							<li class="everybody-info" v-for="(item,index) in data.everybodyinfo">
+								<span v-if="index === 0" class="visaListSpan">
+									<div class="div-s1"><label>申请人：</label><span>{{item.applicant}}</span></div>
+									
+									<div><label>英文：</label><span>{{item.applicanten}}</span></div>
+									<!-- <div><label>性别：</label><span>{{item.sex}}</span></div> -->
+									<div><label>现居住地：</label><span>{{item.province}}</span></div>
+									<div><label>护照号：</label><span>{{item.passportno}}</span></div>
+									
+									<div><label>手机号：</label><span>{{item.telephone}}</span></div>
+									
+									
+									<!-- <span class="hideInfo"></span> -->
+								</span>
+								<span v-else class="visaListSpan">
+									<div class="div-s2"><label style="opacity:0;">申请人：</label><span>{{item.applicant}}</span></div>
+									<div><label>英文：</label><span>{{item.applicanten }}</span></div>
+									<!-- <div><label>性别：</label><span>{{item.sex}}</span></div> -->
+									<div><label>现居住地：</label><span>{{item.province}}</span></div>
+									<div><label style="opacity:0;">护照号：</label><span>{{item.passportno}}</span></div>
+									
+									<div><label style="opacity:0;">手机号：</label><span>{{item.telephone}}</span></div>
+									
+									
+									<!-- <span class="hideInfo"></span> -->
+								</span>
+							</li>
+						</ul> 
+						<div class="card-content-2">
+							<span v-if="data.visastatus === '招宝成功'">
+								<font color="red">{{data.visastatus}}</font>
+							</span>
+
+							<span v-else-if="data.visastatus === '发招宝中'">
+								<font>{{data.visastatus}}</font>
+								<div class="spinner">
+									<div class="bounce1"></div>
+									<div class="bounce2"></div>
+									<div class="bounce3"></div>
+								</div>
+							</span>
+
+							<span v-else-if="data.isdisabled == 1">
+								作废
+							</span>
+
+							<span v-else-if="data.visastatus === '发招宝失败'">
+								{{data.visastatus}}
+								<b>{{data.errormsg}}</b>
+							</span>
+							
+
+							<span v-else>
+								{{data.visastatus}}
+							</span>
+								
+						</div>
+					</div>
+				</div>
+			</div><!-- end 卡片列表 -->
+		</div>
+	</section>
 		<input type="hidden" id="pageNumber" name="pageNumber" value="1">
 		<input type="hidden" id="pagetotal" name="pagetotal">
 	<script type="text/javascript">
@@ -550,7 +628,8 @@
 			$(this).addClass('bgColor').siblings().removeClass('bgColor');
 			clearSearchEle();
 			search();
-		})
+		});
+
 		
 	});
 	

@@ -5,37 +5,35 @@
 
 .card-head div:nth-child(1) {
 	width: 14%;
-	margin-right:25px;
 }
 
 .card-head div:nth-child(2) {
-	width: 13%;
-	margin-right:20px;
+	width: 14%;
 }
 
 .card-head div:nth-child(3) {
-	width: 13%;
+
+    width: 14%;
 }
 
 .card-head div:nth-child(4) {
-	margin-left:25px;
-	width: 13%;
+
+    width: 12%;
 }
 
 .card-head div:nth-child(5) {
-	width: 6%;
-	text-align:center;
+
+    width: 18%;
 }
 
 .card-head div:nth-child(6) {
-	width: 34.6%;
-	text-align: right;
+	width:10%;
+
 }
 
 .card-head div:nth-child(7) {
-	width: 32%;
+	width: 18%;
 	position: relative;
-	right: -8px;
 	text-align: right;
 }
 

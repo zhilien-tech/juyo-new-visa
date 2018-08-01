@@ -10,6 +10,7 @@
 	<meta http-equlv="expires" content="0" />
 	<title>护照信息</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
@@ -18,6 +19,7 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css?v=<%=System.currentTimeMillis() %>">
 	<!-- 本页css -->
 	<link rel="stylesheet" href="${base}/references/common/css/simplePassportInfo.css?v=<%=System.currentTimeMillis() %>">
+
 </head>
 <body>
 	<div class="modal-content">
@@ -388,7 +390,7 @@
 
 	            socket.onopen = function(){  
 	                 console.log('Connection open!');  
-	                 //setConnected(true);  
+	     
 	             };
 
 	            socket.onclose = function(){  
@@ -418,96 +420,6 @@
 	          }  
 		}
 		
-		//护照上传,扫描
-		
-		/* $('#uploadFile').change(function() {
-			var layerIndex = layer.load(1, {
-				shade : "#000"
-			});
-			$("#addBtn").attr('disabled', true);
-			$("#updateBtn").attr('disabled', true);
-			var file = this.files[0];
-			var reader = new FileReader();
-			reader.onload = function(e) {
-				var dataUrl = e.target.result;
-				var blob = dataURLtoBlob(dataUrl);
-				var formData = new FormData();
-				formData.append("image", blob, file.name);
-				var dt = new Date();  
-				var tm = dt.getTime();
-				$.ajax({
-					type : "POST",//提交类型  
-					//dataType : "json",//返回结果格式  
-					url : BASE_PATH + '/admin/orderJp/passportRecognition',//请求地址  
-					async : true,
-					processData : false, //当FormData在jquery中使用的时候需要设置此项
-					contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
-					//请求数据  
-					data : formData,
-					success : function(obj) {//请求成功后的函数 
-						//关闭加载层
-						layer.close(layerIndex);
-						if (true === obj.success) {
-							layer.msg("识别成功");
-						}else{
-							layer.msg("识别失败");
-						}
-							$('#firstName').val(obj.xingCn).change();
-							if(obj.xingCn != undefined){
-							$('#firstNameEn').val("/"+getPinYinStr(obj.xingCn));
-							}
-							$('#lastName').val(obj.mingCn).change();
-							if(obj.mingCn != undefined){
-							$('#lastNameEn').val("/"+getPinYinStr(obj.mingCn));
-							}
-							$('#passportUrl').val(obj.url);
-							$('#sqImg').attr('src', obj.url);
-							$("#uploadFile").siblings("i").css("display","block");
-							$(".front").attr("class", "info-imgUpload front has-success");  
-					        $(".help-blockFront").attr("data-bv-result","IVALID");  
-					        $(".help-blockFront").attr("style","display: none;");
-							$('#type').val(obj.type).change();
-							$('#passport').val(obj.num).change();
-							$('#sex').val(obj.sex);
-							$('#sexEn').val(obj.sexEn);
-							$('#birthAddress').val(obj.birthCountry).change();
-							if(obj.birthCountry != undefined){
-							$('#birthAddressEn').val("/"+getPinYinStr(obj.birthCountry));
-							}
-							$('#birthday').val(obj.birth).change();
-							$('#issuedPlace').val(obj.visaCountry).change();
-							if(obj.visaCountry != undefined){
-							$('#issuedPlaceEn').val("/"+getPinYinStr(obj.visaCountry));
-							}
-							$('#issuedDate').val(obj.issueDate).change();
-							$('#validEndDate').val(obj.expiryDay).change();
-							$('#OCRline1').val(obj.OCRline1);
-							$('#OCRline2').val(obj.OCRline2);
-							$("#borderColor").attr("style", null);
-							var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
-							if(years == 5){
-								$("#validType").val(2);
-							}else{
-								$("#validType").val(1);
-							}
-							
-						$("#addBtn").attr('disabled', false);
-						$("#updateBtn").attr('disabled', false);
-						var dt2 = new Date();  
-						var tm2 = dt2.getTime();
-						var tm3 = tm2 - tm;
-						console.log(tm3);
-					},
-					error : function(XMLHttpRequest, textStatus, errorThrown) {
-						layer.close(layerIndex);
-						$("#addBtn").attr('disabled', false);
-						$("#updateBtn").attr('disabled', false);
-					}
-				}); // end of ajaxSubmit
-				
-			};
-			reader.readAsDataURL(file);
-		}); */
 		
 		//把dataUrl类型的数据转为blob
 		function dataURLtoBlob(dataurl) {
@@ -523,20 +435,7 @@
 		
 		//保存
 		function save(status){
-			/* if (status == 1) {
-				var firstName = $('#firstNameEn').val();
-				var lastName = $('#lastNameEn').val();
-				
-				().test('ASDAASD按时ASDAD')
-				
-				var reg = new RegExp(/^[A-Z]*$/g)
-				
-				if (!reg.test(firstName)) {
-					layer.msg("");
-					return 0;
-				}
-				
-			} */
+			
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 			bootstrapValidator.validate();
@@ -745,9 +644,7 @@
 			var id = '${obj.applicantid}';
 			var orderid = '${obj.orderid}';
 			save(2);
-			//关闭socket连接
-			//socket.onclose();
-			//window.location.href = '/admin/orderJp/updateApplicant.html?id='+id+'&orderid='+'&isTrial=${obj.isTrailOrder}';
+			
 		 }
 	</script>
 

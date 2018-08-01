@@ -674,6 +674,78 @@
 				200011: '特定高校毕业生'
 			}
 		];
+		function getPlaceholderAndExtenText(id) {
+			var p = '';
+			var e = '';
+			var n = '';
+			switch(id) {
+				case 200001:
+					p = '工资对账单收入';
+					e = '万';
+					n = 'bankflowfree';
+					break;
+				case 200002:
+					p = '例如:大众速腾';
+					e = '';
+					n = 'vehiclefree';
+					break;
+				case 200003:
+					p = '';
+					e = '平米';
+					n = 'housepropertyfree';
+					break;
+				case 200004:
+					p = '';
+					e = '万';
+					n = 'financialfree';
+					break;
+				case 200005:
+					p = '年收入';
+					e = '万';
+					n = 'certificatefree';
+					break;
+				case 200006:
+					p = '';
+					e = '万';
+					n = 'depositfree';
+					break;
+				case 200007:
+					p = '年收入';
+					e = '万';
+					n = 'taxbillfree';
+					break;
+				case 200008:
+					p = '年缴税';
+					e = '元';
+					n = 'taxprooffree';
+					break;
+				case 200009:
+					p = '';
+					e = '';
+					n = 'goldcardfree';
+					break;
+				case 200010:
+					p = '学信网学籍在线验证报告';
+					e = '';
+					n = 'readstudentfree';
+					break;
+				case 200011:
+					p = '学信网电子学历认证书';
+					e = '';
+					n = 'graduatefree';
+					break;
+				default:
+					p = '';
+					e = '';
+					n = '';
+					break;
+			}
+			return {
+				place: p,
+				exten: e,
+				name: n
+			};
+		}
 	</script>
 	<script type="text/javascript">
 		var base = "${base}";
@@ -929,7 +1001,7 @@
 			// 			$(".vehicle").css("display","block");
 			// 			$(this).addClass("btnState-true");
 			// 			$("#vehicle").val("");
-			// 			$("#vehiclefree").val("车产");
+			// 			$("#sequence").val("车产");
 			// 			/* if(userType == 2){
 			// 		        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
 			// 		        $(".vehicles").css({"display":"block"});
@@ -1186,32 +1258,42 @@
 				var wealthData = JSON.parse('${obj.wealthJp}');
 				var newAddId = getNewAddId();
 				
-
+				console.log(wealthData);
 				function getNewAddId() {
 					var newAddId = 200011;
 					var len = wealthData.length;
-					if (len != 0 && wealthData[len-1]['vehiclefree'] > newAddId) {
-						newAddId = wealthData[len-1]['vehiclefree']
+					if (len != 0 && wealthData[len-1]['sequence'] > newAddId) {
+						newAddId = wealthData[len-1]['sequence']
 					}
 					return newAddId;
 				}
-				/**
-				var t = 'orderProcessType=&applicantId=1112&orderid=632&isTrailOrder=&marryStatus=1&marryUrl=&applicant=1&relationRemark=主卡&mainRelation=&outboundrecord=良好&visacountys=冲绳县&visacountys=青森县&visacountys=岩手县&visacountys=宫城县&visacountys=秋田县&visacountys=山形县&visacountys=福岛县&laststartdate=2014-08-14&laststayday=6&lastreturndate=2014-08-19&careerStatus=4&name=五洲测试公司&telephone=在人有&address=朝阳区大连沈阳青岛胡同&position=工人&unitName=无&sameMainWealth=0&hotelname=参照赴日予定表&hotelphone=&hoteladdress=&vouchname=参照身元保证书&vouchphone=&vouchaddress=&vouchbirth=&vouchmainrelation=&vouchjob=&vouchcountry=&invitename=同上&invitephone=&inviteaddress=&invitebirth=&invitemainrelation=&invitejob=&invitecountry=&traveladvice=推荐';
-				var r = t.split('&');
-				console.log(r);
-				*/
+				
 				createWealthInfo();
 				createWealthBtnHtml(function() {
+					var n = 0;
 					wealthData.forEach(function(item) {
+						var sequence = item['sequence'];
+						if (sequence > 200011)n++;
+						if (sequence < 12) sequence = 200000 + sequence;
+						
 						$wealthmain.find('input').each(function(idx, input) {
-							if (item['vehiclefree'] == $(input).attr('data-id')) {
+							if (sequence == $(input).attr('data-id')) {
 								$(input).addClass('btnState-true');
 								return 0;
 							}
 						});
 					});
-					wealthInputBtnLen = $wealthmain.children().length;
+
+					wealthInputBtnLen = computeWealthIptBtnLen(n);
 				});
+
+				function computeWealthIptBtnLen(n) {
+					var l = $wealthmain.children().length;
+					if (n > 0) {
+						l += n;
+					}
+					return l;
+				}
 
 				function isSelect($input) {
 					if ($input.hasClass('btnState-true')) return 1;
@@ -1227,7 +1309,7 @@
 					
 					$self.addClass('btnState-true');
 					var $temp = createHtml({
-						vehiclefree: _id,
+						sequence: _id,
 						extension: obj.exten,
 						placeholder: obj.place,
 						bankflowfree: $self.val(),
@@ -1260,65 +1342,10 @@
 					}
 				}
 
-				function getPlaceholderAndExtenText(id) {
-					var p = '';
-					var e = '';
-					switch(id) {
-						case 200001:
-							p = '工资对账单收入';
-							e = '万';
-							break;
-						case 200002:
-							p = '例如:大众速腾';
-							e = '';
-							break;
-						case 200003:
-							p = '';
-							e = '平米';
-							break;
-						case 200004:
-							p = '';
-							e = '万';
-							break;
-						case 200005:
-							p = '年收入';
-							e = '万';
-							break;
-						case 200006:
-							p = '';
-							e = '万';
-							break;
-						case 200007:
-							p = '年收入';
-							e = '万';
-							break;
-						case 200008:
-							p = '年缴税';
-							e = '元';
-							break;
-						case 200009:
-							p = '';
-							e = '';
-							break;
-						case 200010:
-							p = '学信网学籍在线验证报告';
-							e = '';
-							break;
-						case 200011:
-							p = '学信网电子学历认证书';
-							e = '';
-							break;
-					}
-					return {
-						place: p,
-						exten: e
-					};
-				}
-
 				$addWealthInfoBtn.on('click', function(event) {
 					if (wealthInputBtnLen < totalNum) {
 						var $temp = createHtml({
-							vehiclefree: ++newAddId,
+							sequence: ++newAddId,
 							extension: '',
 							placeholder: '',
 							bankflowfree: '',
@@ -1335,25 +1362,39 @@
 				function createWealthBtnHtml(fn) {
 					wealthDeftData.forEach(function(it, idx) {
 						for (var k in it) {
-							$addWealthInfoBtn.before(wealthBtnTemp(k, it[k]));
+							$addWealthInfoBtn.before(wealthBtnTemp(idx, k, it[k]));
 						}
 					});
 					fn && fn();
 				}
 				
-				function wealthBtnTemp(k, v) {
-					var $temp = $('<input data-id="'+k+'" name="" value="'+v+'" type="button" class="btn btnState btn-ipt" />');
+				function wealthBtnTemp(i, k, v) {
+					var $temp = $('<input data-id="'+k+'" name="" data-index="'+i+'" value="'+v+'" type="button" class="btn btnState btn-ipt" />');
 					return $temp;
 				}
 
+
 				function createHtml(it) {
+					var key = '';
+					if (it.sequence < 12) {
+						it.sequence = 200000 + it.sequence;
+						key = it[getPlaceholderAndExtenText(parseInt(it.sequence)).name];
+					} else {
+						key = it.bankflowfree;
+					}
+
+					var o =  getPlaceholderAndExtenText(parseInt(it.sequence));
+						it.placeholder = o.place;
+						it.extension   = o.exten;
+						it.name 	   = o.name;
+					
 					var $temp = $(
-						'<div data-id="'+ it.vehiclefree +'" id="wealth-input-' + it.vehiclefree + '" class="info-body-from clone-module cf">' +
+						'<div data-id="'+ it.sequence +'" id="wealth-input-' + it.sequence + '" class="info-body-from clone-module cf">' +
 							'<div class="row body-from-input">' +
 								'<div class="col-sm-5">' +
 									'<div class="form-group">' +
 										'<label><span>*</span>' + it.type + '</label>' +
-										'<input autocomplete="off" type="text" class="form-control input-sm" value="' + it.bankflowfree + '"  />' +
+										'<input autocomplete="off" type="text" class="form-control input-sm" value="' + key + '"  />' +
 									'</div>' +
 								'</div>' +
 								'<div class="col-sm-4">' +
@@ -1373,9 +1414,6 @@
 				
 				function createWealthInfo() {
 					wealthData.forEach(function(it, idx) {
-						var o =  getPlaceholderAndExtenText(parseInt(it.vehiclefree));
-						it.placeholder = o.place;
-						it.extension   = o.exten;
 						$wealthInputGroup.append(createHtml(it, idx));
 					});
 
@@ -1426,17 +1464,33 @@
 		});
 
 		function getWealthInfoObject() {
-			var ret = {};
+			var arr = [];
 			var $wealthInputGroup = $('.wealth-input-group');
 			$wealthInputGroup.children().each(function(index, el) {
+				var ret 	= {};
 				var $self 	= $(el);
 				var $inputs = $self.find('input');
 				var id 		= $self.attr('data-id');
-				ret[id] = {wealth_title: '', wealth_value: ''};
-				ret[id]['wealth_title'] = $inputs.eq(0).val();
-				ret[id]['wealth_value'] = $inputs.eq(1).val();
+				ret[id] = {wealthtitle: '', wealthvalue: '', 'wealthtype': ''};
+				ret[id]['wealthtitle'] = $inputs.eq(0).val();
+				ret[id]['wealthvalue'] = $inputs.eq(1).val();
+				ret[id]['wealthtype'] = getwealthType(id);
+				// ret[id]['wealth_name'] = getPlaceholderAndExtenText(parseInt(id)).name;
+
+				arr.push(ret);
 			});
-			return ret;
+			
+			return arr;
+		}
+
+		function getwealthType(id) {
+			var s = '';
+			wealthDeftData.forEach(function(it) {
+				if (!it[id]) return 0;
+				s = it[id];
+				return 0;
+			});
+			return s;
 		}
 		
 		
@@ -1529,17 +1583,19 @@
 			}
 
 			var wealthInfoObject = getWealthInfoObject();
-			wealthInfoObject['wealthType']  = wealthType;
-			wealthInfoObject['visatype']    = visatype;
-			wealthInfoObject['visacounty']  = visacounty;
-			wealthInfoObject['isVisit']     = isVisit;
-			wealthInfoObject['threecounty'] = threecounty;
-			wealthInfoObject['isname'] 		= isname;
-			wealthInfoObject['isyaoqing'] 	= isyaoqing;
+
+			var passportInfo = $.param({
+				wealthInfoObject: JSON.stringify(wealthInfoObject),
+				wealthType: wealthType,
+				visatype: visatype,
+				visacounty: visacounty,
+				isVisit: isVisit,
+				threecounty: threecounty,
+				isname: isname,
+				isyaoqing: isyaoqing
+			}) + "&" + $("#passportInfo").serialize();
 			console.log(wealthInfoObject);
-			var passportInfo = $.param(wealthInfoObject) + "&" + $("#passportInfo").serialize();
-			console.log(passportInfo);
-			return;
+
 			ajaxConnection();
 			var count = 0;
 			function ajaxConnection(){

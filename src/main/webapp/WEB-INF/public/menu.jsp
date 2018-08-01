@@ -28,7 +28,7 @@ $(function(){
 </head>
 <body>
 	<div class="top">
-		<div class="logo">优悦签</div>
+		<div class="logo"></div>
 		<div class="loginInfo">
 			<!-- 头像 -->
 			<img class="headPortrait-img" alt=""
