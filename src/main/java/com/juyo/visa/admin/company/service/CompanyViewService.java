@@ -120,7 +120,7 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 		user.setCreateTime(nowDate);//创建时间
 		user.setUpdateTime(nowDate);//上次更新时间
 		user.setOpId(opId);//操作人
-		user.setIsDisable(Integer.valueOf(IsYesOrNoEnum.YES.intKey()));//状态可用
+		user.setIsDisable(Integer.valueOf(IsYesOrNoEnum.NO.intKey()));//状态可用
 		if (CompanyTypeEnum.SONGQIAN.intKey() == comType) {
 			user.setUserType(UserLoginEnum.SQ_COMPANY_ADMIN.intKey());//送签社公司管理员
 		} else if (CompanyTypeEnum.DIJI.intKey() == comType) {

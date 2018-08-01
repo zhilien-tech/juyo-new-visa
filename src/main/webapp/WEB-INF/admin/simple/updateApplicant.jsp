@@ -402,10 +402,20 @@
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<!-- 公用js文件 -->
+<<<<<<< HEAD
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script type="text/javascript" src="${base}/admin/simple/validationZh.js"></script>
+=======
+	<script type="text/javascript"
+		src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js"
+		charset="UTF-8"></script>
+	<script type="text/javascript"
+		src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"
+		charset="UTF-8"></script>
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
+>>>>>>> refs/remotes/origin/dev
 	<script type="text/javascript">
 		//连接websocket
 		connectWebSocket();

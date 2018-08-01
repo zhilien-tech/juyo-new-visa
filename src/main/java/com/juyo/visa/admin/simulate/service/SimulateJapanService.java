@@ -85,7 +85,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		Sql sql = Sqls.create(sqlstring);
 		//查询发招宝、招宝变更中、招宝取消中的订单
 		Integer[] orderstatus = { JPOrderStatusEnum.READYCOMMING.intKey(), JPOrderStatusEnum.BIANGENGZHONG.intKey(),
-				JPOrderStatusEnum.QUXIAOZHONG.intKey() };
+				JPOrderStatusEnum.QUXIAOZHONG.intKey(), JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey() };
 		List<Record> orderjplist = dbDao.query(sql, Cnd.where("tr.status", "in", orderstatus), null);
 		/*List<Record> orderjplist = dbDao.query(sql,
 				Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);*/
@@ -388,28 +388,54 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			}*/
 
 			if (orderstatus == JPOrderStatusEnum.READYCOMMING.intKey()) {//发招宝失败 18
-				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
 				if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
 					System.out.println("不仅失败了，收付番号也没有");
 					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
 				} else {
 					System.out.println("虽然失败了，但收付番号还是有的");
 					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
+				}
+			}
+			if (orderstatus == JPOrderStatusEnum.COMMITING.intKey()) {//发招宝失败 18
+				if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
+					System.out.println("不仅失败了，收付番号也没有");
+					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+				} else {
+					System.out.println("虽然失败了，但收付番号还是有的");
+					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
 				}
 			}
 			if (orderstatus == JPOrderStatusEnum.BIANGENGZHONG.intKey()) {//招宝变更失败 21
-				orderinfo.setStatus(JPOrderStatusEnum.BIANGENGSHIBAI.intKey());
 				if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
 					System.out.println("不仅失败了，收付番号也没有");
 					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+					orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
 				} else {
 					System.out.println("虽然失败了，但收付番号还是有的");
 					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
 				}
 			}
 			if (orderstatus == JPOrderStatusEnum.QUXIAOZHONG.intKey()) {//招宝取消失败 24
-				orderinfo.setStatus(JPOrderStatusEnum.QUXIAOSHIBAI.intKey());
+				//orderinfo.setStatus(JPOrderStatusEnum.QUXIAOSHIBAI.intKey());
 			}
+
+			int count = 0;
+			if (errorMsg.contains("氏名") || errorMsg.contains("居住地域")) {
+				//orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
+			}
+			if (errorMsg.contains("登録可能")) {
+				count++;
+				//orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
+				if (count > 3) {
+					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
+				}
+			}
+
 			orderinfo.setUpdateTime(new Date());
 			//更新订单状态为发招保失败
 			dbDao.update(orderinfo);
@@ -423,6 +449,15 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 				logs.setOrderStatus(orderinfo.getStatus());
 				logs.setUpdateTime(new Date());
 				dbDao.insert(logs);
+			}
+
+			if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()) {
+				//消息通知
+				try {
+					visaInfoWSHandler.broadcast(new TextMessage(""));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return null;
@@ -561,6 +596,12 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			//取消收费记录
 			order.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
 			order.setStatus(JPOrderStatusEnum.YIQUXIAO.intKey());
+		} else if (JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey() == form.getOrderstatus()) {
+			System.out.println("失败之后重新发招宝成功了");
+			order.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+			//要收费啦
+			order.setZhaobaoupdate(IsYesOrNoEnum.YES.intKey());
+			order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
 		}
 		dbDao.update(order);
 		Integer visaOpid = order.getVisaOpid();

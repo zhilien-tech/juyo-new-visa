@@ -108,4 +108,17 @@ public class SimpleMobileModule {
 	public Object saveOtherInfo(@Param("..") TApplicantVisaOtherInfoEntity form) {
 		return simpleMobileService.saveOtherInfo(form);
 	}
+
+	@At
+	@POST
+	public Object isPassporturl(@Param("applicantid") int applicantid) {
+		return simpleMobileService.isPassporturl(applicantid);
+	}
+
+	@At
+	@POST
+	public Object isCardurl(@Param("applicantid") int applicantid) {
+		return simpleMobileService.isCardurl(applicantid);
+	}
+
 }
