@@ -8,26 +8,213 @@
 	<meta http-equlv="proma" content="no-cache" />
 	<meta http-equlv="cache-control" content="no-cache" />
 	<meta http-equlv="expires" content="0" />
-	<title>资料上传</title>
+	<title>护照信息</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v=<%=System.currentTimeMillis() %>">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/addApplicant.css?v=<%=System.currentTimeMillis() %>">
+	<!-- 本页css -->
+	<link rel="stylesheet" href="${base}/references/common/css/simplePassportInfo.css?v=<%=System.currentTimeMillis() %>">
+
 </head>
 <body>
 	<div class="modal-content">
-		<a id="toVisa" class="rightNav" onclick="applyBtn();"><span></span></a>
+		<a id="toVisa" class="rightNav" onclick="applyBtn();">
+			<span></span>
+		</a>
 		<form id="passportInfo">
 			<div class="modal-header">
-				<span class="heading">资料上传</span> 
+				<span class="heading">护照信息</span> 
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
 				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 			</div>
+			<div class="modal-main"></div>
 			<div class="modal-body">
+			<div class="ipt-info">
+				</div>
+				<div class="tab-content row">
+					<div class="col-sm-5 padding-right-0">
+						<div class="info-QRcode"> <!-- 二维码 -->
+							<img width="100%" height="100%" alt="" src="${obj.qrCode }">
+						</div><!-- end 二维码 -->
+						
+						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
+							<div class="col-xs-6 widthBig">
+							<div class="form-group" style="margin-top: 0!important;">
+								<div class="cardFront-div">
+									<span></span>
+									<input id="passportUrl" name="passportUrl" type="hidden" value="${obj.passport.passportUrl }"/>
+									<!-- <input id="uploadFile" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="1111"/> -->
+									<img id="sqImg" alt="" src="${obj.passport.passportUrl }" >
+									<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
+								</div>
+							</div>
+						</div>
+						</div><!-- end 护照 -->
+						<div class="col-xs-6 front has-error" style="width:320px; height:30px; border:0 !important; color:red;margin:-20px 0 0 8px !important;">
+							<small class="help-blockFront" data-bv-validator="notEmpty" data-bv-for="passportUrl" data-bv-result="IVVALID" style="display: none;">护照必须上传</small>
+						</div>
+						
+					</div>
+						
+					<div class="col-sm-7 padding-right-0">
+						<div class="row">
+						<!-- 姓/拼音 -->
+							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
+									<div class="form-group" style="position:relative;">
+									<label><span>*</span>姓/拼音</label> 
+									
+									<input id="firstName"
+										name="firstName" type="text" class="form-control input-sm " tabIndex="1" autocomplete="off"
+										placeholder=" " value="${obj.passport.firstName }" />
+										
+										<input type="text" id="firstNameEn" name="firstNameEn"  autocomplete="off" style="position:absolute;top:32px;border:none;left:150px;" value="${obj.firstNameEn }"/>
+									<!-- <i class="bulb"></i> -->
+								</div>
+									<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
+									<input type="hidden" id="OCRline1" name="OCRline1" value="">
+									<input type="hidden" id="OCRline2" name="OCRline2" value="">
+									<input type="hidden" id="applicantid" name="applicantid" value="${obj.applicantid }"/>
+									<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }"/>
+									
+									<!-- <i class="bulb"></i> -->
+							</div>
+						</div>
+						<!-- end 姓/拼音 -->
+					<div class="row">
+							<!-- 名/拼音 -->
+							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
+								<div class="form-group" style="position:relative;">
+									<label><span>*</span>名/拼音</label> <input id="lastName"
+										name="lastName" type="text" class="form-control input-sm" tabIndex="2" autocomplete="off"
+										placeholder=" " value="${obj.passport.lastName }" />
+										<input type="text" id="lastNameEn" autocomplete="off" style="position:absolute;top:32px;border:none;left:150px;" name="lastNameEn" value="${obj.lastNameEn }"/>
 
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div>
+						<!-- end 名/拼音 -->
+						<div class="row"><!-- 类型/护照号 -->
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label><span>*</span>护照号</label>
+									
+									<input 
+										id="passport" 
+										name="passport" 
+										type="text" 
+										class="form-control input-sm" 
+										autocomplete="off" 
+										maxlength="9" 
+										tabIndex="3" 
+										value="${obj.passport.passport }"
+									/>
+									
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div><!-- end 类型/护照号 -->
+						<div class="row"><!-- 性别/ 出生地点 拼音 -->
+							<div class="col-sm-3 col-sm-offset-1 padding-right-0 ">
+								<div class="form-group">
+									<label><span>*</span>性别</label>
+									<select class="form-control input-sm selectHeight" id="sex" name="sex" tabIndex="4">
+											<option value="男" ${obj.passport.sex == "男"?"selected":"" }>男</option>
+										<option value="女" ${obj.passport.sex == "女"?"selected":"" }>女</option>
+									</select>
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
+								<div class="form-group">
+									<label>&nbsp;&nbsp;</label>
+									<input id="sexEn" class="form-control input-sm" autocomplete="off" name="sexEn" tabIndex="5" type="text" value="${obj.passport.sexEn }"/>
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+							 	<div class="form-group groupWidth" style="position:relative;">
+									<label><span>*</span>出生地点/拼音</label>
+									<input id="birthAddress" name="birthAddress" autocomplete="off"  type="text" class="form-control input-sm " tabIndex="6" value="${obj.passport.birthAddress }"/>
+									<input id="birthAddressEn" name="birthAddressEn" style="position:absolute;top:30px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value="${obj.passport.birthAddressEn }"/>
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div><!-- end 性别/出生地点 拼音 -->
+						<div class="row"><!-- 出生日期/签发地点 拼音 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label><span>*</span>出生日期</label>
+									<input id="birthday" name="birthday" type="text" autocomplete="off" class="form-control input-sm" tabIndex="7" value="${obj.birthday}"/>
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group groupWidth" style="position:relative;">
+									<label><span>*</span>签发地点/拼音</label>
+									<input id="issuedPlace" name="issuedPlace" autocomplete="off" type="text" class="form-control input-sm " tabIndex="8" value="${obj.passport.issuedPlace }"/>
+									<input id="issuedPlaceEn" name="issuedPlaceEn" type="text" style="position:absolute;top:30px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passport.issuedPlaceEn }"/>
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div><!-- end 出生日期/签发地点 拼音 -->
+						<div class="row"><!-- 签发日期/有效期至 -->
+							<div class="col-sm-3 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label><span>*</span>签发日期</label>
+									<input id="issuedDate" name="issuedDate"  autocomplete="off" type="text" class="form-control input-sm" tabIndex="9" value="${obj.issuedDate }"/>
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
+								<div class="form-group">
+									<label>&nbsp;&nbsp;</label>
+									<select id="validType" name="validType" class="form-control input-sm selectHeight" tabIndex="10">
+									<c:forEach var="map" items="${obj.passportType}">
+										<option value="${map.key}" ${map.key == obj.passport.validType?'selected':'' }>${map.value}</option>
+									</c:forEach>
+								</select>
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group groupWidth">
+									<label><span>*</span>有效期至</label>
+									<input id="validEndDate" name="validEndDate" autocomplete="off" type="text" class="form-control input-sm" tabIndex="11" value="${obj.validEndDate }"/>
+								</div>
+							</div>
+						</div><!-- end 签发日期/有效期至 -->
+						<div class="row"><!-- 签发机关 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label><span>*</span>签发机关</label>
+									<input id="issuedOrganization" name="issuedOrganization" type="text" autocomplete="off" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
+								</div>
+							</div>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group groupWidth">
+									<label><span>*</span>Exit & Entry Administration</label>
+									<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" autocomplete="off" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
+									<!-- <i class="bulb"></i> -->
+								</div>
+							</div>
+						</div><!-- end 签发机关 -->
+						
+						<!-- <div class="row">
+						</div> -->
+					</div>	
+						
+				</div>
 			</div>
+			<!-- 订单流程枚举 -->
+			<input id="orderProcessType" name="orderProcessType" type="hidden" value="${obj.orderProcessType }">
 		</form>
 	</div>
 
-	<script>
+	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>

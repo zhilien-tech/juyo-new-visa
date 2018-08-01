@@ -13,6 +13,11 @@
 <link rel="stylesheet" href="${base}/references/common/css/top.css?v=<%=System.currentTimeMillis() %>">
 <link rel="stylesheet" href="${base}/references/common/css/nav.css?v=<%=System.currentTimeMillis() %>">
 <link rel="stylesheet" href="${base}/references/common/css/iconfont.css?v=<%=System.currentTimeMillis() %>">
+<style>
+	.c-body {
+		min-width: 1280px;
+	}
+</style>
 <script src="${base}/references/common/js/jquery-1.10.2.js"></script>
 <script src="${base}/references/common/js/nav.js?v=<%=System.currentTimeMillis() %>"></script>
 <script>
@@ -26,7 +31,7 @@ $(function(){
 });
 </script>
 </head>
-<body>
+<body class="c-body">
 	<div class="top">
 		<div class="logo"></div>
 		<div class="loginInfo">
