@@ -78,12 +78,16 @@
 				font-size: 14px;
 				font-weight: 400;
 			}
-			.c-body {
-				min-width: 1280px;
+			.everybody-info div:nth-child(3){
+				width: 16.5%!important;
 			}
+			.everybody-info div:nth-child(2){
+				width: 22.5%!important;
+			}
+			
 		</style>	
 </head>
-<body class="hold-transition skin-blue sidebar-mini c-body">
+<body class="hold-transition skin-blue sidebar-mini">
 	<div class="box-header"style=" padding-top:25px!important"><!-- 检索条件 -->
 		<!-- 切换卡按钮 start -->
 
