@@ -2,7 +2,7 @@
  * SimpleMobileService.java
  * com.juyo.visa.admin.simple.service
  * Copyright (c) 2018, 北京直立人科技有限公司版权所有.
-*/
+ */
 
 package com.juyo.visa.admin.simple.service;
 
@@ -78,7 +78,8 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 		}
 		//编辑申请人信息
 		if (!Util.isEmpty(applicant.getId())) {
-			TApplicantOrderJpEntity applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,Cnd.where("applicantid","=",applicant.getId()));
+			TApplicantOrderJpEntity applicantJp = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantid", "=", applicant.getId()));
 			applicantJp.setMainRelation(form.getMainRelation());
 			/*if (!Util.isEmpty(mobileuser)) {
 				applicant.setUserid(mobileuser.getId());
@@ -420,5 +421,34 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 				Cnd.where("applicantid", "=", applicantjp.getId()));
 		otherinfo.setTraveladvice(form.getTraveladvice());
 		return dbDao.update(otherinfo);
+	}
+
+	public Object isCardurl(int applicantid) {
+		Map<String, Object> result = Maps.newHashMap();
+		String url = "";
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid);
+		if (!Util.isEmpty(apply) && !Util.isEmpty(apply.getCardFront())) {
+			url = apply.getCardFront();
+		}
+		result.put("applyurl", url);
+		String passurl = "";
+		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+		if (!Util.isEmpty(passport) && !Util.isEmpty(passport.getPassportUrl())) {
+			passurl = passport.getPassportUrl();
+		}
+		result.put("passporturl", passurl);
+		return result;
+	}
+
+	public Object isPassporturl(int applicantid) {
+		String url = "";
+		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
+				Cnd.where("applicantId", "=", applicantid));
+		if (!Util.isEmpty(passport) && !Util.isEmpty(passport.getPassportUrl())) {
+			url = passport.getPassportUrl();
+		}
+		System.out.println("passporturl:" + url);
+		return url;
 	}
 }

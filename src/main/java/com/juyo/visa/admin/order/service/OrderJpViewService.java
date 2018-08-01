@@ -2810,16 +2810,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		long startTime = System.currentTimeMillis();//获取当前时间
 		//将图片进行旋转处理
-		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
+		/*ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
 				"jpeg");
 		File spin = null;
 		try {
 			spin = imageDeal.spin(-90);
 		} catch (Exception e1) {
 			e1.printStackTrace();
-		}
+		}*/
 
-		String imageDataValue = saveDiskImageToDisk(spin);
+		String imageDataValue = saveDiskImageToDisk(file);
 		Input input = new Input(imageDataValue, "face");
 		RecognizeData rd = new RecognizeData();
 		rd.getInputs().add(input);
@@ -2842,12 +2842,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		JSONObject out = new JSONObject(output);
 		if (out.getBoolean("success")) {
 			//上传
-			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
-			file.delete();
+			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+			/*file.delete();
 			if (!Util.isEmpty(spin)) {
 				spin.delete();
-			}
+			}*/
 			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+			System.out.println("url:" + url);
 
 			String addr = out.getString("address"); // 获取地址
 			String name = out.getString("name"); // 获取名字
@@ -2883,6 +2884,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		long endTime1 = System.currentTimeMillis();
 		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
+
+		if (!Util.isEmpty(jsonEntity)) {
+
+		}
 		return jsonEntity;
 	}
 
@@ -3241,15 +3246,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		long startTime = System.currentTimeMillis();//获取当前时间
 		//将图片进行旋转处理
-		ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
+		/*ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
 				"jpeg");
 		File spin = null;
 		try {
 			spin = imageDeal.spin(-90);
 		} catch (Exception e1) {
 			e1.printStackTrace();
-		}
-		String imageDataB64 = saveDiskImageToDisk(spin);
+		}*/
+		String imageDataB64 = saveDiskImageToDisk(file);
 
 		long startTime4 = System.currentTimeMillis();//获取当前时间
 		System.out.println("将图片转成流运行时间：" + (startTime4 - startTime) + "ms");
@@ -3331,11 +3336,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 
 			long startTime2 = System.currentTimeMillis();//获取当前时间
-			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
-			file.delete();
+			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+			/*file.delete();
 			if (!Util.isEmpty(spin)) {
 				spin.delete();
-			}
+			}*/
 			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 
 			long startTime3 = System.currentTimeMillis();//获取当前时间

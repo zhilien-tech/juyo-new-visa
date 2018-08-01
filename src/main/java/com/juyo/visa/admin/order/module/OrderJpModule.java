@@ -29,6 +29,7 @@ import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
+import com.juyo.visa.admin.simple.service.SimpleVisaService;
 import com.juyo.visa.common.base.QrCodeService;
 import com.juyo.visa.common.enums.BoyOrGirlEnum;
 import com.juyo.visa.common.enums.CustomerTypeEnum;
@@ -59,6 +60,8 @@ public class OrderJpModule {
 	private OrderJpViewService saleViewService;
 	@Inject
 	private QrCodeService qrCodeService;
+	@Inject
+	private SimpleVisaService simpleVisaService;
 	//基本信息连接websocket的地址
 	private static final String BASIC_WEBSPCKET_ADDR = "basicinfowebsocket";
 	private static final String VISAINFO_WEBSPCKET_ADDR = "visainfowebsocket";
@@ -141,7 +144,8 @@ public class OrderJpModule {
 	@At
 	@POST
 	public Object getOrder(@Param("id") Integer orderid, HttpServletRequest request) {
-		return saleViewService.fetchOrder(orderid, request);
+		//return saleViewService.fetchOrder(orderid, request);
+		return simpleVisaService.dataUpload(orderid, request);
 	}
 
 	/**

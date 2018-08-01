@@ -1,6 +1,7 @@
 package com.juyo.visa.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -19,5 +20,9 @@ public class TUncommoncharacterEntity implements Serializable {
 	@Column
 	@Comment("汉字")
 	private String hanzi;
+
+	@Column
+	@Comment("插入时间")
+	private Date createtime;
 
 }

@@ -9,12 +9,12 @@
 <meta http-equlv="cache-control" content="no-cache" />
 <meta http-equlv="expires" content="0" />
 <title>优悦签</title>
-<link rel="stylesheet" href="${base}/references/common/css/menuMain.css?v='20180510'">
-<link rel="stylesheet" href="${base}/references/common/css/top.css?v='20180510'">
-<link rel="stylesheet" href="${base}/references/common/css/nav.css?v='20180510'">
-<link rel="stylesheet" href="${base}/references/common/css/iconfont.css?v='20180510'">
+<link rel="stylesheet" href="${base}/references/common/css/menuMain.css?v=<%=System.currentTimeMillis() %>">
+<link rel="stylesheet" href="${base}/references/common/css/top.css?v=<%=System.currentTimeMillis() %>">
+<link rel="stylesheet" href="${base}/references/common/css/nav.css?v=<%=System.currentTimeMillis() %>">
+<link rel="stylesheet" href="${base}/references/common/css/iconfont.css?v=<%=System.currentTimeMillis() %>">
 <script src="${base}/references/common/js/jquery-1.10.2.js"></script>
-<script src="${base}/references/common/js/nav.js"></script>
+<script src="${base}/references/common/js/nav.js?v=<%=System.currentTimeMillis() %>"></script>
 <script>
 $(function(){
 	/* 点击名字关闭左菜单栏状态 */

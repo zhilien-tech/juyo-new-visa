@@ -2,17 +2,32 @@ package com.juyo.visa;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+
+import com.alibaba.fastjson.JSON;
 
 public class TestChinest {
 
 	public static void main(String[] args) {
 
-		String province = "自治区";
+		String newString = "{'200001':{'wealth_title':'银行流水325','wealth_value':'345','wealth_type':'银行流水'}}";
+		//org.json.JSONObject jsonObject = new org.json.JSONObject(newString);
+		//System.out.println(jsonObject);
+		Map maps = JSON.parseObject(newString, Map.class);
+		for (Object map : maps.entrySet()) {
+			System.out.println(((Map.Entry) map).getKey() + "     " + ((Map.Entry) map).getValue());
+		}
+
+		/*String scene = "orderid=" + 1 + "&applicantid=" + 2;
+		String encode = URL.encode(scene);
+		System.out.println(encode);*/
+
+		/*String province = "自治区";
 		if (province.length() > 3 && province.endsWith("自治区")) {
 			province = province.substring(0, province.length() - 3);
 		}
-		System.out.println(province);
+		System.out.println(province);*/
 		/*String test1 = "0123456789abcde!@#$%^& 水电费";
 		char[] chars_test1 = test1.toCharArray();
 		for (int i = 0; i < chars_test1.length; i++) {

@@ -18,6 +18,7 @@ import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.simple.form.AddOrderForm;
+import com.juyo.visa.admin.simple.form.BasicinfoForm;
 import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
 import com.juyo.visa.admin.simple.service.SimpleVisaService;
@@ -178,6 +179,25 @@ public class SimpleVisaModule {
 	}
 
 	/**
+	 * 跳转到新护照信息和基本信息页面页面
+	 */
+	@At
+	@Ok("jsp")
+	public Object basicInfo(@Param("applicantid") Integer applicantid, @Param("orderid") Integer orderid,
+			HttpServletRequest request) {
+		return simpleVisaService.basicInfo(applicantid, orderid, request);
+	}
+
+	/**
+	 * 保存新护照信息和基本信息
+	 */
+	@At
+	@POST
+	public Object saveBasicinfo(@Param("..") BasicinfoForm form, HttpServletRequest request) {
+		return simpleVisaService.saveBasicinfo(form, request);
+	}
+
+	/**
 	 * 保存护照信息
 	 */
 	@At
@@ -266,4 +286,11 @@ public class SimpleVisaModule {
 	public Object toRecordCharacters(@Param("characterStr") String characterStr) {
 		return simpleVisaService.toRecordCharacters(characterStr);
 	}
+
+	@At
+	@Ok("jsp")
+	public Object dataUpload(@Param("orderid") Integer orderid, HttpServletRequest request) {
+		return simpleVisaService.dataUpload(orderid, request);
+	}
+
 }

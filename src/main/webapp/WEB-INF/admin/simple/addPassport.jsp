@@ -215,7 +215,7 @@
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	
-	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript" src="${base}/admin/simple/validationZh.js"></script>
 	
 	
@@ -512,7 +512,7 @@
 					data : passportInfo,
 					url: '${base}/admin/simple/saveEditPassport.html',
 					success :function(data) {
-						$("#addBtn").attr('disabled', false);
+						//$("#addBtn").attr('disabled', false);
 						layer.closeAll("loading");
 						if(data.msg){
 							layer.msg(data.msg);

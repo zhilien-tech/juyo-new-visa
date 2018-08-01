@@ -4,7 +4,7 @@ function initApplicantTable(){
 		//layer.load(1);
 		$.ajax({ 
 			url: '/admin/visaJapan/getVisaDetailApply.html',
-			async : false,
+			//async : false,
 			dataType:"json",
 			data:{orderid:orderid},
 			type:'post',
@@ -79,7 +79,7 @@ function initTravelPlanTable(){
 		//layer.load(1);
 		$.ajax({ 
 			url: '/admin/visaJapan/getTrvalPlanData.html',
-			async : false,
+			//async : false,
 			dataType:"json",
 			data:{orderid:orderid},
 			type:'post',
