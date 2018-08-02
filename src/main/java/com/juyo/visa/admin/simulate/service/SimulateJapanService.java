@@ -399,7 +399,6 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					if (Util.eq(errorMsg, "受付番号获取失败")) {
 						System.out.println("受付番号虽然生成了，但并没有获取到");
 						orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
-						orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
 					} else {
 						System.out.println("不仅失败了，收付番号也没有");
 						orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
