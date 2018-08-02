@@ -263,11 +263,32 @@
 							}
 						}
 					},
+					lastName : {
+						validators : {
+							notEmpty : {
+								message : '名不能为空'
+							}
+						}
+					},
+					birthAddress : {
+						validators : {
+							notEmpty : {
+								message : '出生地点不能为空'
+							}
+						}
+					},
+					issuedPlace : {
+						validators : {
+							notEmpty : {
+								message : '签发地点不能为空'
+							}
+						}
+					},
 					firstNameEn: {
 						trigger:"change keyup",
 						validators : {
 							regexp: {
-	                            regexp: /^\/{1}[a-zA-Z]*$/,
+	                            regexp: /^[\/a-zA-Z0-9_]{0,}$/,
 	                            message: '拼音中不能包含汉字或其他特殊符号'
 	                        },
 						}
@@ -276,7 +297,8 @@
 						trigger:"change keyup",
 						validators : {
 							regexp: {
-	                            regexp: /^\/{1}[a-zA-Z]*$/,
+								// regexp: /\/{1}[a-zA-Z]+$/,
+								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
 	                            message: '拼音中不能包含汉字或其他特殊符号'
 	                        },
 						}
@@ -301,9 +323,19 @@
 					},
 					lastName : {
 						validators : {
-							notEmpty : {
-								message : '名不能为空'
-							}
+							regexp: {
+								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+	                            message: '拼音中不能包含汉字或其他特殊符号'
+	                        },
+						}
+					},
+					issuedPlaceEn: {
+						trigger:"change keyup",
+						validators : {
+							regexp: {
+								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+	                            message: '拼音中不能包含汉字或其他特殊符号'
+	                        },
 						}
 					}
 				}

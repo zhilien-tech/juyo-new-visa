@@ -292,7 +292,7 @@ $(document).on("input","#birthAddress",function(){
 		return;
 	}
 	var pos=$(this).getCurPos();//保存原始光标位置
-	var temp = $(this).val();
+	var temp = $(this).val().replace(/\s*/g,"");
 	var pinyinchar = getPinYinStr(temp);
 	if($(this).val().length == 0){
 		$("#birthAddressEn").val("").change();
@@ -309,7 +309,7 @@ $(document).on("input","#issuedPlace",function(){
 		return;
 	}
 	var pos=$(this).getCurPos();//保存原始光标位置
-	var temp = $(this).val();
+	var temp = $(this).val().replace(/\s*/g,"");
 	var pinyinchar = getPinYinStr(temp);
 	if($(this).val().length == 0){
 		$("#issuedPlaceEn").val("").change();
