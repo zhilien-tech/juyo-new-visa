@@ -110,20 +110,6 @@
 							}
 						}
 					},
-					birthAddress : {
-						validators : {
-							notEmpty : {
-								message : '出生地点不能为空'
-							}
-						}
-					},
-					issuedPlace : {
-						validators : {
-							notEmpty : {
-								message : '签发地点不能为空'
-							}
-						}
-					},
 					firstNameEn: {
 						trigger:"change keyup",
 						validators : {
