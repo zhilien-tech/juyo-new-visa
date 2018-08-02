@@ -3334,6 +3334,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setEmergencyLinkman(form.getEmergencyLinkman());
 		applicant.setEmergencyTelephone(form.getEmergencyTelephone());
 		applicant.setEmergencyaddress(form.getEmergencyaddress());
+		applicant.setMarryStatus(form.getMarryStatus());
+		applicant.setFirstName(form.getFirstName());
+		applicant.setLastName(form.getLastName());
 		if (!Util.isEmpty(form.getFirstNameEn())) {
 			applicant.setFirstNameEn(form.getFirstNameEn().substring(1));
 		}

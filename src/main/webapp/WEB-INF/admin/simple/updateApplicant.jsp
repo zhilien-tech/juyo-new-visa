@@ -266,7 +266,7 @@
 							<select id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight">
 								<option value="">请选择</option>
 								<c:forEach var="map" items="${obj.marryStatusEnum}">
-									<option value="${map.key}" ${map.key==obj.marryStatus?'selected':''}>${map.value}</option>
+									<option value="${map.key}" ${map.key==obj.applicant.marryStatus?'selected':''}>${map.value}</option>
 								</c:forEach>
 							</select>
 						</div>
@@ -404,8 +404,8 @@
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
-	<script type="text/javascript" src="${base}/admin/simple/validationZh.js"></script>
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
+	<script type="text/javascript" src="${base}/admin/simple/validationZh.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
 		$(function () {
 
@@ -1002,20 +1002,6 @@
 							validators: {
 								notEmpty: {
 									message: '名不能为空'
-								}
-							}
-						},
-						birthAddress: {
-							validators: {
-								notEmpty: {
-									message: '出生地点不能为空'
-								}
-							}
-						},
-						issuedPlace: {
-							validators: {
-								notEmpty: {
-									message: '签发地点不能为空'
 								}
 							}
 						},
