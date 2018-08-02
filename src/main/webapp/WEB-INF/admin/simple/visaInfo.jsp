@@ -43,7 +43,7 @@
 				</div>
 				<div class="tab-content row">
 					<!-- 结婚状况 -->
-					<div class="info">
+					<!-- <div class="info">
 						<div class="info-head">婚姻状况 </div>
 						<div class="info-body-from cf ">
 							<div class="row colSm">
@@ -75,7 +75,7 @@
 							</div>
 							
 						</div>
-					</div>
+					</div> -->
 					<!-- 申请人 -->
 					<div class="info">
 						<div id="mainApply" class="info-head">主申请人 </div>
@@ -962,288 +962,7 @@
 					});
 				}
 			});
-			
-			
-			//财务信息 部分按钮效果
-			// $(".finance-btn input").click(function(){
-			// 	console.log('asdasdasdasdadasd');
-			// 	var financeBtnInfo=$(this).val();
-			// 	if(financeBtnInfo == "银行存款"){
-			// 		if($(this).hasClass("btnState-true")){
-			// 			$(".deposit").css("display","none");
-			// 			$(this).removeClass("btnState-true");
-			// 			$("#deposit").val("");
-			// 			$(".deposits").css({"display":"none"});
-			// 			$(".deposits").attr("class", "col-xs-6 deposits has-success");
-			// 			$("#deposit").attr("style", null);
-			// 		}else{
-			// 			$(".deposit").css("display","block");
-			// 			$(this).addClass("btnState-true");
-			// 			$("#deposit").val("");
-			// 			$("#depositfree").val("银行存款");
-			// 			/* if(userType == 2){
-			// 				$(".help-blockdeposit").attr("data-bv-result","INVALID");  
-			// 			    $(".deposits").css({"display":"block"});
-			// 			    $(".deposits").attr("class", "col-xs-6 deposits has-error");
-			// 			    $("#deposit").attr("style", "border-color:#ff1a1a");
-			// 			} */
-			// 			//$("#deposit").placeholder("万");
-			// 		}
-			// 	}else if(financeBtnInfo == "车产"){
-			// 		if($(this).hasClass("btnState-true")){
-			// 			$(".vehicle").css("display","none");
-			// 			$(this).removeClass("btnState-true");
-			// 			$("#vehicle").val("");
-			// 			$(".vehicles").css({"display":"none"});
-			// 			$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
-			// 			$("#vehicle").attr("style", null);
-			// 		}else{
-			// 			$(".vehicle").css("display","block");
-			// 			$(this).addClass("btnState-true");
-			// 			$("#vehicle").val("");
-			// 			$("#sequence").val("车产");
-			// 			/* if(userType == 2){
-			// 		        $(".help-blockvehicle").attr("data-bv-result","INVALID");  
-			// 		        $(".vehicles").css({"display":"block"});
-			// 		        $(".vehicles").attr("class", "col-xs-6 vehicles has-error");
-			// 		        $("#vehicle").attr("style", "border-color:#ff1a1a");
-			// 			} */
-			// 		}
-			// 	}else if(financeBtnInfo == "房产"){
-			// 		if($(this).hasClass("btnState-true")){
-			// 			$(".houseProperty").css("display","none");
-			// 			$(this).removeClass("btnState-true");
-			// 			$("#houseProperty").val("");
-			// 			$(".housePropertys").css({"display":"none"});
-			// 			$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");
-			// 			$("#houseProperty").attr("style", null);
-			// 		}else{
-			// 			$(".houseProperty").css("display","block");
-			// 			$(this).addClass("btnState-true");
-			// 			$("#houseProperty").val("");
-			// 			$("#housePropertyfree").val("房产");
-			// 			/* if(userType == 2){
-			// 				$(".help-blockhouseProperty").attr("data-bv-result","INVALID");  
-			// 			    $(".housePropertys").css({"display":"block"});
-			// 			    $(".housePropertys").attr("class", "col-xs-6 housePropertys has-error");
-			// 			    $("#houseProperty").attr("style", "border-color:#ff1a1a");
-			// 			} */
-			// 			//$("#houseProperty").placeholder("平米");
-			// 		}
-			// 	}else if(financeBtnInfo == "理财"){
-			// 		if($(this).hasClass("btnState-true")){
-			// 			$(".financial").css("display","none");
-			// 			$(this).removeClass("btnState-true");
-			// 			$("#financial").val("");
-			// 			$(".financials").css({"display":"none"});
-			// 			$(".financials").attr("class", "col-xs-6 financials has-success");
-			// 			$("#financial").attr("style", null);
-			// 		}else{
-			// 			$(".financial").css("display","block");
-			// 			$(this).addClass("btnState-true");
-			// 			$("#financial").val("");
-			// 			$("#financialfree").val("理财");
-			// 			/* if(userType == 2){
-			// 				$(".help-blockfinancial").attr("data-bv-result","INVALID");  
-			// 			    $(".financials").css({"display":"block"});
-			// 			    $(".financials").attr("class", "col-xs-6 financials has-error");
-			// 			    $("#financial").attr("style", "border-color:#ff1a1a");
-			// 			} */
-			// 			//$("#financial").placeholder("万");
-			// 		}
-			// 	}else if(financeBtnInfo == "在职证明"){
-			// 		if($(this).hasClass("btnState-true")){
-			// 			$(".certificate").css("display","none");
-			// 			$(this).removeClass("btnState-true");
-			// 			$("#certificate").val("");
-			// 			$(".certificates").css({"display":"none"});
-			// 			$(".certificates").attr("class", "col-xs-6 certificates has-success");
-			// 			$("#certificate").attr("style", null);
-			// 		}else{
-			// 			$(".certificate").css("display","block");
-			// 			$(this).addClass("btnState-true");
-			// 			$("#certificate").val("");
-			// 			$("#certificatefree").val("在职证明");
-			// 		}
-			// 	}else if(financeBtnInfo == "银行流水"){
-			// 		if($(this).hasClass("btnState-true")){
-			// 			$(".bankflow").css("display","none");
-			// 			$(this).removeClass("btnState-true");
-			// 			$("#bankflow").val("");
-			// 			$(".bankflows").css({"display":"none"});
-			// 			$(".bankflows").attr("class", "col-xs-6 bankflows has-success");
-			// 			$("#bankflow").attr("style", null);
-			// 		}else{
-			// 			$(".bankflow").css("display","block");
-			// 			$(this).addClass("btnState-true");
-			// 			$("#bankflow").val("");
-			// 			$("#bankflowfree").val("银行流水");
-			// 		}
-			// 	}else if(financeBtnInfo == "税单"){
-			// 		if($(this).hasClass("btnState-true")){
-			// 			$(".taxbill").css("display","none");
-			// 			$(this).removeClass("btnState-true");
-			// 			$("#taxbill").val("");
-			// 			$(".taxbills").css({"display":"none"});
-			// 			$(".taxbills").attr("class", "col-xs-6 taxbills has-success");
-			// 			$("#taxbill").attr("style", null);
-			// 		}else{
-			// 			$(".taxbill").css("display","block");
-			// 			$(this).addClass("btnState-true");
-			// 			$("#taxbill").val("");
-			// 			$("#taxbillfree").val("税单");
-			// 		}
-			// 	}else if(financeBtnInfo == "完税证明"){
-			// 		if($(this).hasClass("btnState-true")){
-			// 			$(".taxproof").css("display","none");
-			// 			$(this).removeClass("btnState-true");
-			// 			$("#taxproof").val("");
-			// 			$(".taxproofs").css({"display":"none"});
-			// 			$(".taxproofs").attr("class", "col-xs-6 taxproofs has-success");
-			// 			$("#taxproof").attr("style", null);
-			// 		}else{
-			// 			$(".taxproof").css("display","block");
-			// 			$(this).addClass("btnState-true");
-			// 			$("#taxproof").val("");
-			// 			$("#taxprooffree").val("完税证明");
-			// 		}
-			// 	}else if(financeBtnInfo == "银行金卡"){
-			// 		if($(this).hasClass("btnState-true")){
-			// 			$(".goldcard").css("display","none");
-			// 			$(this).removeClass("btnState-true");
-			// 			$("#goldcard").val("");
-			// 			$(".goldcards").css({"display":"none"});
-			// 			$(".goldcards").attr("class", "col-xs-6 goldcards has-success");
-			// 			$("#goldcard").attr("style", null);
-			// 		}else{
-			// 			$(".goldcard").css("display","block");
-			// 			$(this).addClass("btnState-true");
-			// 			$("#goldcard").val("");
-			// 			$("#goldcardfree").val("银行金卡");
-			// 		}
-			// 	}else if(financeBtnInfo == "特定高校在读生"){
-			// 		if($(this).hasClass("btnState-true")){
-			// 			$(".readstudent").css("display","none");
-			// 			$(this).removeClass("btnState-true");
-			// 			$("#readstudent").val("");
-			// 			$(".readstudents").css({"display":"none"});
-			// 			$(".readstudents").attr("class", "col-xs-6 readstudents has-success");
-			// 			$("#readstudent").attr("style", null);
-			// 		}else{
-			// 			$(".readstudent").css("display","block");
-			// 			$(this).addClass("btnState-true");
-			// 			$("#readstudent").val("学信网学籍在线验证报告");
-			// 			$("#readstudentfree").val("特定高校在读生");
-			// 		}
-			// 	}else if(financeBtnInfo == "特定高校毕业生"){
-			// 		if($(this).hasClass("btnState-true")){
-			// 			$(".graduate").css("display","none");
-			// 			$(this).removeClass("btnState-true");
-			// 			$("#graduate").val("");
-			// 			$(".graduates").css({"display":"none"});
-			// 			$(".graduates").attr("class", "col-xs-6 graduates has-success");
-			// 			$("#graduate").attr("style", null);
-			// 		}else{
-			// 			$(".graduate").css("display","block");
-			// 			$(this).addClass("btnState-true");
-			// 			$("#graduate").val("学信网电子学历认证书");
-			// 			$("#graduatefree").val("特定高校毕业生");
-			// 		}
-			// 	}
-			// });
-			
-			// $(".remove-btn").click(function(){
-			// 	//$(this).parent().css("display","none");
-			// 	if($(this).parent().is(".deposit")){
-			// 		$(".deposit").css("display","none");
-			// 		$("#depositType").removeClass("btnState-true");
-			// 		$("#deposit").val("");
-			// 		$(".deposits").css({"display":"none"});
-			// 		$(".deposits").attr("class", "col-xs-6 deposits has-success");
-			// 		$("#deposite").attr("style", null);
-			// 	}
-			// 	if($(this).parent().is(".bankflow")){
-			// 		$(".bankflow").css("display","none");
-			// 		$("#bankflowType").removeClass("btnState-true");
-			// 		$("#bankflow").val("");
-			// 		$(".bankflows").css({"display":"none"});
-			// 		$(".bankflows").attr("class", "col-xs-6 bankflows has-success");
-			// 		$("#bankflow").attr("style", null);
-			// 	}
-			// 	if($(this).parent().is(".vehicle")){
-			// 		$(".vehicle").css("display","none");
-			// 		$("#vehicleType").removeClass("btnState-true");
-			// 		$("#vehicle").val("");
-			// 		$(".vehicles").css({"display":"none"});
-			// 		$(".vehicles").attr("class", "col-xs-6 vehicles has-success");
-			// 		$("#vehicle").attr("style", null);
-			// 	}
-			// 	if($(this).parent().is(".houseProperty")){
-			// 		$(".houseProperty").css("display","none");
-			// 		$("#housePropertyType").removeClass("btnState-true");
-			// 		$("#houseProperty").val("");
-			// 		$(".housePropertys").css({"display":"none"});
-			// 		$(".housePropertys").attr("class", "col-xs-6 housePropertys has-success");
-			// 		$("#houseProperty").attr("style", null);
-			// 	}
-			// 	if($(this).parent().is(".financial")){
-			// 		$(".financial").css("display","none");
-			// 		$("#financialType").removeClass("btnState-true");
-			// 		$("#financial").val("");
-			// 		$(".financials").css({"display":"none"});
-			// 		$(".financials").attr("class", "col-xs-6 financials has-success");
-			// 		$("#financial").attr("style", null);
-			// 	}
-			// 	if($(this).parent().is(".certificate")){
-			// 		$(".certificate").css("display","none");
-			// 		$("#certificateType").removeClass("btnState-true");
-			// 		$("#certificate").val("");
-			// 		$(".certificates").css({"display":"none"});
-			// 		$(".certificates").attr("class", "col-xs-6 certificates has-success");
-			// 		$("#certificate").attr("style", null);
-			// 	}
-			// 	if($(this).parent().is(".taxbill")){
-			// 		$(".taxbill").css("display","none");
-			// 		$("#taxbillType").removeClass("btnState-true");
-			// 		$("#taxbill").val("");
-			// 		$(".taxbills").css({"display":"none"});
-			// 		$(".taxbills").attr("class", "col-xs-6 taxbills has-success");
-			// 		$("#taxbill").attr("style", null);
-			// 	}
-			// 	if($(this).parent().is(".taxproof")){
-			// 		$(".taxproof").css("display","none");
-			// 		$("#taxproofType").removeClass("btnState-true");
-			// 		$("#taxproof").val("");
-			// 		$(".taxproofs").css({"display":"none"});
-			// 		$(".taxproofs").attr("class", "col-xs-6 taxproofs has-success");
-			// 		$("#taxproof").attr("style", null);
-			// 	}
-			// 	if($(this).parent().is(".goldcard")){
-			// 		$(".goldcard").css("display","none");
-			// 		$("#goldcardType").removeClass("btnState-true");
-			// 		$("#goldcard").val("");
-			// 		$(".goldcards").css({"display":"none"});
-			// 		$(".goldcards").attr("class", "col-xs-6 goldcards has-success");
-			// 		$("#goldcard").attr("style", null);
-			// 	}
-			// 	if($(this).parent().is(".readstudent")){
-			// 		$(".readstudent").css("display","none");
-			// 		$("#readstudentType").removeClass("btnState-true");
-			// 		$("#readstudent").val("");
-			// 		$(".readstudents").css({"display":"none"});
-			// 		$(".readstudents").attr("class", "col-xs-6 readstudents has-success");
-			// 		$("#readstudent").attr("style", null);
-			// 	}
-			// 	if($(this).parent().is(".graduate")){
-			// 		$(".graduate").css("display","none");
-			// 		$("#graduateType").removeClass("btnState-true");
-			// 		$("#graduate").val("");
-			// 		$(".graduates").css({"display":"none"});
-			// 		$(".graduates").attr("class", "col-xs-6 graduates has-success");
-			// 		$("#graduate").attr("style", null);
-			// 	}
-			// });
-			
+
 			/** 2018_07_28 */
 			(function() {
 				'use strict';
@@ -1381,6 +1100,12 @@
 						key = it[getPlaceholderAndExtenText(parseInt(it.sequence)).name];
 					} else {
 						key = it.bankflowfree;
+					}
+
+					if (it.sequence == 200010 || it.sequence == 200011) {
+						if (it.details == '') {
+							it.details = it.placeholder;
+						}
 					}
 
 					var o =  getPlaceholderAndExtenText(parseInt(it.sequence));
