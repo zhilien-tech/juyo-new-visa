@@ -406,7 +406,7 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
 	//连接websocket
-	connectWebSocket();
+	/* connectWebSocket();
 	function connectWebSocket(){
 		 if ('WebSocket' in window){  
             console.log('Websocket supported');  
@@ -446,7 +446,7 @@
           } else {  
             console.log('Websocket not supported');  
           }  
-	}
+	} */
 		$(function(){
 			
 			var remark = $("#baseRemark").val();
@@ -1028,7 +1028,7 @@
 					success :function(data) {
 						layer.closeAll("loading");
 						console.log(JSON.stringify(data));
-						socket.onclose();
+						//socket.onclose();
 						window.location.href = '/admin/simple/passportInfo.html?applicantid='+applicantid+'&orderid='+orderid;
 						}
 					});
@@ -1051,10 +1051,10 @@
 							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 							parent.layer.close(index);
 						}else if(status == 2){
-							socket.onclose();
+							//socket.onclose();
 							window.location.href = '/admin/simple/passportInfo.html?applicantid='+applicantid+'&orderid='+orderid;
 						}else if(status == 3){
-							socket.onclose();
+							//socket.onclose();
 							window.location.href = '/admin/simple/visaInfo.html?applicantid='+applicantid+'&orderid='+orderid;
 						}
 					},error:function(error,XMLHttpRequest,status){

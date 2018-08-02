@@ -337,7 +337,7 @@
 			});
 		});
 		//连接websocket
-		connectWebSocket();
+		/* connectWebSocket();
 		function connectWebSocket(){
 			 if ('WebSocket' in window){  
 	            console.log('Websocket supported');  
@@ -377,7 +377,7 @@
 	          } else {  
 	            console.log('Websocket not supported');  
 	          }  
-		}
+		} */
 		
 		//护照上传,扫描
 		
@@ -508,7 +508,7 @@
 							layer.close(index); */
 							parent.saveAddOrder(2);
 							if(status == 2){
-								socket.onclose();
+								//socket.onclose();
 								window.location.href = '/admin/simple/updateApplicant.html?applicantid='+data.applicantid+'&orderid='+data.orderid;
 							}else if(status == 1){
 								closeWindow();
