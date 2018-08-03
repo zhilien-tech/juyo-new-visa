@@ -297,7 +297,11 @@ $(document).on("input","#birthAddress",function(){
 	if($(this).val().length == 0){
 		$("#birthAddressEn").val("").change();
 	}else{
-		$("#birthAddressEn").val("/"+pinyinchar.toUpperCase()).change();
+		if(temp == "内蒙古"){
+			$("#birthAddressEn").val("/NEI MONGOL").change();
+		}else{
+			$("#birthAddressEn").val("/"+pinyinchar.toUpperCase()).change();
+		}
 	}
 });
 $(document).on("input","#issuedPlace",function(){
@@ -310,7 +314,11 @@ $(document).on("input","#issuedPlace",function(){
 	if($(this).val().length == 0){
 		$("#issuedPlaceEn").val("").change();
 	}else{
-		$("#issuedPlaceEn").val("/"+pinyinchar.toUpperCase()).change();
+		if(temp == "内蒙古"){
+			$("#issuedPlaceEn").val("/NEI MONGOL").change();
+		}else{
+			$("#issuedPlaceEn").val("/"+pinyinchar.toUpperCase()).change();
+		}
 	}
 });
 

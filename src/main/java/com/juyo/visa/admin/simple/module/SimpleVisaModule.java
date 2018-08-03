@@ -22,7 +22,6 @@ import com.juyo.visa.admin.simple.form.BasicinfoForm;
 import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
 import com.juyo.visa.admin.simple.service.SimpleVisaService;
-import com.juyo.visa.forms.TApplicantForm;
 import com.juyo.visa.forms.TApplicantPassportForm;
 
 /**
@@ -162,10 +161,18 @@ public class SimpleVisaModule {
 	/**
 	 * 保存申请人
 	 */
-	@At
+	/*@At
 	@POST
 	public Object saveApplicantInfo(HttpServletRequest request, @Param("..") TApplicantForm form) {
 		return simpleVisaService.saveApplicantInfo(request, form);
+	}*/
+	/**
+	 * 保存申请人
+	 */
+	@At
+	@POST
+	public Object saveApplicantInfo(@Param("..") BasicinfoForm form, HttpServletRequest request) {
+		return simpleVisaService.saveBasicinfo(form, request);
 	}
 
 	/**
@@ -213,7 +220,8 @@ public class SimpleVisaModule {
 	@Ok("jsp")
 	public Object updateApplicant(@Param("applicantid") Integer applicantid, @Param("orderid") Integer orderid,
 			HttpServletRequest request) {
-		return simpleVisaService.updateApplicant(applicantid, orderid, request);
+		//return simpleVisaService.updateApplicant(applicantid, orderid, request);
+		return simpleVisaService.basicInfo(applicantid, orderid, request);
 	}
 
 	/**

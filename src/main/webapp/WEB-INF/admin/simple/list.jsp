@@ -854,7 +854,7 @@
 	});
 	
 	//连接websocket
-	connectWebSocket();
+	/* connectWebSocket();
 	function connectWebSocket(){
 		 if ('WebSocket' in window){  
             console.log('Websocket supported');  
@@ -879,7 +879,7 @@
           } else {  
             console.log('Websocket not supported');  
           }  
-	}
+	} */
 	
 	</script>
 </body>

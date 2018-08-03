@@ -110,20 +110,6 @@
 							}
 						}
 					},
-					birthAddress : {
-						validators : {
-							notEmpty : {
-								message : '出生地点不能为空'
-							}
-						}
-					},
-					issuedPlace : {
-						validators : {
-							notEmpty : {
-								message : '签发地点不能为空'
-							}
-						}
-					},
 					firstNameEn: {
 						trigger:"change keyup",
 						validators : {
@@ -145,6 +131,23 @@
 					},
 					birthAddressEn: {
 						trigger:"change keyup",
+						validators : {
+							regexp: {
+	                            regexp: /\/{1}[a-z\s+A-Z]+$/,
+	                            message: '拼音中不能包含汉字或其他特殊符号'
+	                        },
+						}
+					},
+					issuedPlaceEn: {
+						trigger:"change keyup",
+						validators : {
+							regexp: {
+	                            regexp: /\/{1}[a-z\s+A-Z]+$/,
+	                            message: '拼音中不能包含汉字或其他特殊符号'
+	                        },
+						}
+					},
+					lastName : {
 						validators : {
 							regexp: {
 								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
@@ -193,7 +196,7 @@
 			});
 		});
 		//连接websocket
-		connectWebSocket();
+		/* connectWebSocket();
 		function connectWebSocket(){
 			 if ('WebSocket' in window){  
 	            console.log('Websocket supported');  
@@ -231,7 +234,7 @@
 	          } else {  
 	            console.log('Websocket not supported');  
 	          }  
-		}
+		} */
 		
 		
 		//把dataUrl类型的数据转为blob
@@ -277,7 +280,7 @@
 							/* var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 							layer.close(index); */
 							if(status == 2){
-								socket.onclose();
+								//socket.onclose();
 								window.location.href = '/admin/simple/updateApplicant.html?applicantid='+id+'&orderid='+orderid;
 							}
 							if(status == 1){

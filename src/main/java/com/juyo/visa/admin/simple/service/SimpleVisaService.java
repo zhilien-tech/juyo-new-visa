@@ -7,7 +7,6 @@
 package com.juyo.visa.admin.simple.service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -41,7 +40,6 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
-import org.springframework.web.socket.TextMessage;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -2830,11 +2828,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//		}
 
 		//消息通知
-		try {
+		/*try {
 			visaInfoWSHandler.broadcast(new TextMessage(""));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 		return null;
 	}
 
@@ -3336,6 +3334,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setEmergencyLinkman(form.getEmergencyLinkman());
 		applicant.setEmergencyTelephone(form.getEmergencyTelephone());
 		applicant.setEmergencyaddress(form.getEmergencyaddress());
+		applicant.setMarryStatus(form.getMarryStatus());
+		applicant.setFirstName(form.getFirstName());
+		applicant.setLastName(form.getLastName());
 		if (!Util.isEmpty(form.getFirstNameEn())) {
 			applicant.setFirstNameEn(form.getFirstNameEn().substring(1));
 		}
