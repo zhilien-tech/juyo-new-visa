@@ -266,7 +266,7 @@
 							<select id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight">
 								<option value="">请选择</option>
 								<c:forEach var="map" items="${obj.marryStatusEnum}">
-									<option value="${map.key}" ${map.key==obj.marryStatus?'selected':''}>${map.value}</option>
+									<option value="${map.key}" ${map.key==obj.applicant.marryStatus?'selected':''}>${map.value}</option>
 								</c:forEach>
 							</select>
 						</div>
@@ -404,51 +404,9 @@
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
-	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
-	<script type="text/javascript" src="${base}/admin/simple/validationZh.js"></script>
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
+	<script type="text/javascript" src="${base}/admin/simple/validationZh.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
-		//连接websocket
-		connectWebSocket();
-		function connectWebSocket() {
-			if ('WebSocket' in window) {
-				console.log('Websocket supported');
-				socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');
-
-				console.log('Connection attempted');
-
-				socket.onopen = function () {
-					console.log('Connection open!');
-
-				};
-
-				socket.onclose = function () {
-					console.log('Disconnecting connection');
-				};
-
-				socket.onmessage = function (evt) {
-					var received_msg = evt.data;
-					var applicantid = '${obj.applicantid}';
-					var orderid = '${obj.orderid}';
-					if (received_msg) {
-						var receiveMessage = JSON.parse(received_msg);
-						if (receiveMessage.applicantid == applicantid) {
-							if (receiveMessage.messagetype == 1) {
-								window.location.reload();
-							} else if (receiveMessage.messagetype == 2) {
-								window.location.href = '/admin/simple/passportInfo.html?applicantid=' + applicantid + '&orderid=' + orderid;
-							} else if (receiveMessage.messagetype == 3) {
-								window.location.href = '/admin/simple/visaInfo.html?applicantid=' + applicantid + '&orderid=' + orderid;
-							}
-						}
-					}
-					console.log('message received!');
-					//showMessage(received_msg);  
-				};
-
-			} else {
-				console.log('Websocket not supported');
-			}
-		}
 		$(function () {
 
 			var remark = $("#baseRemark").val();
@@ -912,11 +870,11 @@
 					success: function (data) {
 						layer.closeAll("loading");
 						console.log(JSON.stringify(data));
-						socket.onclose();
-						window.location.href = '/admin/simple/passportInfo.html?applicantid=' + applicantid + '&orderid=' + orderid;
-					}
-				});
-
+						//socket.onclose();
+						window.location.href = '/admin/simple/passportInfo.html?applicantid='+applicantid+'&orderid='+orderid;
+						}
+					});
+					
 			}
 			var count = 0;
 			function ajaxConnection() {
@@ -934,12 +892,12 @@
 							parent.successCallBack(1);
 							var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 							parent.layer.close(index);
-						} else if (status == 2) {
-							socket.onclose();
-							window.location.href = '/admin/simple/passportInfo.html?applicantid=' + applicantid + '&orderid=' + orderid;
-						} else if (status == 3) {
-							socket.onclose();
-							window.location.href = '/admin/simple/visaInfo.html?applicantid=' + applicantid + '&orderid=' + orderid;
+						}else if(status == 2){
+							//socket.onclose();
+							window.location.href = '/admin/simple/passportInfo.html?applicantid='+applicantid+'&orderid='+orderid;
+						}else if(status == 3){
+							//socket.onclose();
+							window.location.href = '/admin/simple/visaInfo.html?applicantid='+applicantid+'&orderid='+orderid;
 						}
 					}, error: function (error, XMLHttpRequest, status) {
 						console.log("error:", error);
@@ -1044,20 +1002,6 @@
 							validators: {
 								notEmpty: {
 									message: '名不能为空'
-								}
-							}
-						},
-						birthAddress: {
-							validators: {
-								notEmpty: {
-									message: '出生地点不能为空'
-								}
-							}
-						},
-						issuedPlace: {
-							validators: {
-								notEmpty: {
-									message: '签发地点不能为空'
 								}
 							}
 						},

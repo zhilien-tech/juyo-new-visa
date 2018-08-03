@@ -554,11 +554,11 @@
 	<!-- select2 -->
 	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
-	<script src="${base}/admin/simple/customerInfo.js?v=0.0.1"></script>
-	<script src="${base}/admin/simple/travelinfo.js?v=0.0.6"></script><!-- 本页面js文件 -->
-	<script src="${base}/admin/simple/initpagedata.js?v=0.0.3"></script><!-- 本页面js文件 -->
-	<script src="${base}/admin/simple/addsimpleorder.js?v=0.0.1"></script><!-- 本页面js文件 -->
-	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
+	<script src="${base}/admin/simple/customerInfo.js?v=<%=System.currentTimeMillis() %>"></script>
+	<script src="${base}/admin/simple/travelinfo.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/initpagedata.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面js文件 -->
+	<script src="${base}/admin/simple/addsimpleorder.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面js文件 -->
+	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
 
 	<script type="text/javascript">
 		//加载申请人表格数据

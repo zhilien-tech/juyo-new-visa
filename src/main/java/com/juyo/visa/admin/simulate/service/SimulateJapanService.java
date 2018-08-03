@@ -31,7 +31,6 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Files;
-import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.simulate.form.JapanSimulateErrorForm;
@@ -42,7 +41,6 @@ import com.juyo.visa.common.enums.BusinessScopesEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.util.ResultObject;
-import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.entities.TComBusinessscopeEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
@@ -51,7 +49,6 @@ import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderLogsEntity;
 import com.juyo.visa.entities.TOrderTripJpEntity;
 import com.juyo.visa.entities.TOrderTripMultiJpEntity;
-import com.juyo.visa.websocket.VisaInfoWSHandler;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -68,8 +65,9 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 
 	@Inject
 	private QiniuUploadServiceImpl qiniuUploadService;
-	private VisaInfoWSHandler visaInfoWSHandler = (VisaInfoWSHandler) SpringContextUtil.getBean("myVisaInfoHander",
-			VisaInfoWSHandler.class);
+
+	/*private VisaInfoWSHandler visaInfoWSHandler = (VisaInfoWSHandler) SpringContextUtil.getBean("myVisaInfoHander",
+			VisaInfoWSHandler.class);*/
 
 	/**
 	 * 查看是否有可以执行的订单
@@ -353,12 +351,12 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		} catch (Exception e) {
 			return ResultObject.fail("文件上传失败,请稍后重试！");
 		}
-		//消息通知
+		/*//消息通知
 		try {
 			visaInfoWSHandler.broadcast(new TextMessage(""));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 		return ResultObject.success(visaFile);
 
 	}
@@ -388,9 +386,24 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			}*/
 
 			if (orderstatus == JPOrderStatusEnum.READYCOMMING.intKey()) {//发招宝失败 18
-				if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
+				/*if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
 					System.out.println("不仅失败了，收付番号也没有");
 					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+				} else {
+					System.out.println("虽然失败了，但收付番号还是有的");
+					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
+				}*/
+
+				if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
+					if (Util.eq(errorMsg, "受付番号获取失败")) {
+						System.out.println("受付番号虽然生成了，但并没有获取到");
+						orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+					} else {
+						System.out.println("不仅失败了，收付番号也没有");
+						orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+						orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
+					}
 				} else {
 					System.out.println("虽然失败了，但收付番号还是有的");
 					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
@@ -451,14 +464,14 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 				dbDao.insert(logs);
 			}
 
-			if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()) {
+			/*if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()) {
 				//消息通知
 				try {
 					visaInfoWSHandler.broadcast(new TextMessage(""));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			}
+			}*/
 		}
 		return null;
 	}
@@ -577,7 +590,8 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, form.getCid());
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		//order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
-		if (JPOrderStatusEnum.READYCOMMING.intKey() == form.getOrderstatus()) {
+		if (JPOrderStatusEnum.READYCOMMING.intKey() == form.getOrderstatus()
+				|| JPOrderStatusEnum.COMMITING.intKey() == form.getOrderstatus()) {
 			//记录发招宝成功状态
 			System.out.println("发招宝成功了，我要记录了");
 			order.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
@@ -616,12 +630,12 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(logs);
 		}
 
-		//消息通知
+		/*//消息通知
 		try {
 			visaInfoWSHandler.broadcast(new TextMessage(""));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 		return null;
 	}
 
@@ -639,12 +653,12 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		order.setStatus(JPOrderStatusEnum.BIANGENGSHIBAI.intKey());
 		dbDao.update(order);
-		//消息通知
+		/*//消息通知
 		try {
 			visaInfoWSHandler.broadcast(new TextMessage(""));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 		return null;
 	}
 
@@ -662,12 +676,12 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		order.setStatus(JPOrderStatusEnum.QUXIAOSHIBAI.intKey());
 		dbDao.update(order);
-		//消息通知
+		/*//消息通知
 		try {
 			visaInfoWSHandler.broadcast(new TextMessage(""));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 		return null;
 	}
 
