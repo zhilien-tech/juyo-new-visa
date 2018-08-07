@@ -371,8 +371,9 @@ public class OrderJpModule {
 	@Ok("json")
 	@Filters
 	@AdaptBy(type = UploadAdaptor.class)
-	public Object IDCardRecognition(@Param("image") File file, HttpServletRequest request, HttpServletResponse response) {
-		return saleViewService.IDCardRecognition(file, request, response);
+	public Object IDCardRecognition(@Param("image") File file, @Param("applyid") int applyid,
+			@Param("orderid") int orderid, HttpServletRequest request, HttpServletResponse response) {
+		return saleViewService.IDCardRecognition(file, applyid, orderid, request, response);
 	}
 
 	/**
@@ -394,9 +395,9 @@ public class OrderJpModule {
 	@Ok("json")
 	@Filters
 	@AdaptBy(type = UploadAdaptor.class)
-	public Object passportRecognition(@Param("image") File file, HttpServletRequest request,
-			HttpServletResponse response) {
-		return saleViewService.passportRecognitionBack(file, request, response);
+	public Object passportRecognition(@Param("image") File file, @Param("applyid") int applyid,
+			@Param("orderid") int orderid, HttpServletRequest request, HttpServletResponse response) {
+		return saleViewService.passportRecognitionBack(file, applyid, orderid, request, response);
 	}
 
 	/**

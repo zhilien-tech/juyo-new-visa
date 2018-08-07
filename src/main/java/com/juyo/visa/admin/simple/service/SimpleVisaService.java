@@ -3192,6 +3192,26 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
+	public Object toNewfilminginfo(int applyid, int orderid, HttpServletRequest request) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("orderid", orderid);
+		result.put("applyid", applyid);
+		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyid);
+		result.put("applyurl", apply.getCardFront());
+		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
+				Cnd.where("applicantId", "=", applyid));
+		result.put("passurl", passport.getPassportUrl());
+		//所访问的ip地址
+		String localAddr = request.getServerName();
+		result.put("localAddr", localAddr);
+		//所访问的端口
+		int localPort = request.getServerPort();
+		result.put("localPort", localPort);
+		//websocket地址
+		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
+		return result;
+	}
+
 	public Object basicInfo(Integer applicantid, Integer orderid, HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("orderid", orderid);
@@ -3443,14 +3463,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		passport.setBirthAddress(form.getBirthAddress());
 		passport.setBirthAddressEn(form.getBirthAddressEn());
 		passport.setBirthday(form.getBirthday());
-		passport.setFirstName(form.getFirstName());
+		//passport.setFirstName(form.getFirstName());
 		//passport.setFirstNameEn(passportForm.getFirstNameEn().substring(1));
 		passport.setIssuedDate(form.getIssuedDate());
 		passport.setIssuedOrganization(form.getIssuedOrganization());
 		passport.setIssuedOrganizationEn(form.getIssuedOrganizationEn());
 		passport.setIssuedPlace(form.getIssuedPlace());
 		passport.setIssuedPlaceEn(form.getIssuedPlaceEn());
-		passport.setLastName(form.getLastName());
+		//passport.setLastName(form.getLastName());
 		//passport.setLastNameEn(passportForm.getLastNameEn().substring(1));
 		passport.setPassport(form.getPassport());
 		passport.setSex(form.getSex());
@@ -4075,7 +4095,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				//申请人
 				TApplicantEntity applicantEntity = dbDao.fetch(TApplicantEntity.class,
 						new Long(applicantOrderJpEntity.getApplicantId()).intValue());
-				applicantEntity.setMarryStatus(form.getMarryStatus());
+				//applicantEntity.setMarryStatus(form.getMarryStatus());
 				applicantEntity.setMarryUrl(form.getMarryUrl());
 				applicantEntity.setMarryurltype(form.getMarryStatus());
 				applicantEntity.setOutboundrecord(form.getOutboundrecord());

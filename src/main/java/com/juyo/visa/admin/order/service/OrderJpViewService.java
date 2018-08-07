@@ -65,6 +65,7 @@ import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
+import com.juyo.visa.admin.simple.service.SimpleVisaService;
 import com.juyo.visa.admin.user.form.ApplicantUser;
 import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.base.QrCodeService;
@@ -165,6 +166,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	private QrCodeService qrCodeService;
 	@Inject
 	private QualifiedApplicantViewService qualifiedApplicantViewService;
+	@Inject
+	private SimpleVisaService simpleVisaService;
 
 	@Inject
 	private ChangePrincipalViewService changePrincipalViewService;
@@ -2806,7 +2809,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return customerEntity;
 	}
 
-	public Object IDCardRecognition(File file, HttpServletRequest request, HttpServletResponse response) {
+	public Object IDCardRecognition(File file, int applyid, int orderid, HttpServletRequest request,
+			HttpServletResponse response) {
 
 		long startTime = System.currentTimeMillis();//获取当前时间
 		//将图片进行旋转处理
@@ -2886,9 +2890,91 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
 
 		if (!Util.isEmpty(jsonEntity)) {
-
+			saveApplicantinfo(jsonEntity, applyid, orderid, request);
 		}
 		return jsonEntity;
+	}
+
+	public Object saveApplicantinfo(ApplicantJsonEntity form, int applyid, int orderid, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Map<String, Object> result = Maps.newHashMap();
+		Integer orderjpid = null;
+		TApplicantEntity applicant = new TApplicantEntity();
+		TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+		//修改
+		if (!Util.isEmpty(applyid)) {
+			applicant = dbDao.fetch(TApplicantEntity.class, applyid);
+			applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", applicant.getId()));
+			result.put("applicantjpid", applicantjp.getId());
+			result.put("applicantid", applicant.getId());
+			//applicantjp.setMainRelation(form.getMainRelation());
+			//dbDao.update(applicantjp);
+		}
+		applicant.setOpId(loginUser.getId());
+		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+		applicant.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+		applicant.setAddress(form.getAddress());
+		applicant.setCardId(form.getNum());
+		applicant.setCity(form.getCity());
+		applicant.setDetailedAddress(form.getAddress());
+		applicant.setNationality(form.getNationality());
+		applicant.setCardProvince(form.getProvince());
+		applicant.setCardCity(form.getCity());
+		applicant.setProvince(form.getProvince());
+		//applicant.setSex(form.getSex());
+		applicant.setValidEndDate(DateUtil.string2Date(form.getEndtime()));
+		applicant.setValidStartDate(DateUtil.string2Date(form.getStarttime()));
+		applicant.setCardFront(form.getUrl());
+		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+		applicant.setCreateTime(new Date());
+		if (!Util.isEmpty(applyid)) {
+			dbDao.update(applicant);
+
+		} else {
+
+			TApplicantEntity insertapplicant = dbDao.insert(applicant);
+			int applicantid = insertapplicant.getId();
+			result.put("applicantid", applicantid);
+			//如果订单不存在，则先创建订单
+			if (Util.isEmpty(orderid)) {
+				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
+				orderid = generrateorder.get("orderid");
+				orderjpid = generrateorder.get("orderjpid");
+			} else {
+				TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
+				orderid = orderjp.getOrderId();
+				applicantjp.setOrderId(orderid);
+			}
+			//新增日本订单基本信息
+			//applicantjp.setMainRelation(form.getMainRelation());
+			//dbDao.insert(applicantjp);
+			applicantjp.setOrderId(orderjpid);
+			applicantjp.setApplicantId(applicantid);
+			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+			//applicantjp.setMainRelation(form.getMainRelation());
+			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
+			result.put("applicantjpid", insertappjp.getId());
+			//日本工作信息
+			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
+			workJp.setApplicantId(insertappjp.getId());
+			workJp.setCreateTime(new Date());
+			workJp.setOpId(loginUser.getId());
+			dbDao.insert(workJp);
+			//护照信息
+			TApplicantPassportEntity passport = new TApplicantPassportEntity();
+			passport.setSex(form.getSex());
+			passport.setIssuedOrganization("公安部出入境管理局");
+			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
+			passport.setApplicantId(applicantid);
+			dbDao.insert(passport);
+		}
+		result.put("orderjpid", orderjpid);
+		//创建日本申请人 信息
+		return result;
 	}
 
 	public ApplicantJsonEntity wechatJsSDKToCard(String url, HttpServletRequest request, HttpServletResponse response) {
@@ -3242,8 +3328,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return jsonEntity;
 	}
 
-	public Object passportRecognitionBack(File file, HttpServletRequest request, HttpServletResponse response) {
+	public Object passportRecognitionBack(File file, int applyid, int orderid, HttpServletRequest request,
+			HttpServletResponse response) {
 
+		HttpSession session = request.getSession();
 		long startTime = System.currentTimeMillis();//获取当前时间
 		//将图片进行旋转处理
 		/*ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
@@ -3382,9 +3470,227 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			jsonEntity.setSuccess(out.getBoolean("success"));
 		}
 
+		if (!Util.isEmpty(jsonEntity)) {
+			//存库
+			savePassportinfo(jsonEntity, applyid, orderid, request);
+		}
 		long endTime1 = System.currentTimeMillis();
 		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
 		return jsonEntity;
+	}
+
+	public Object savePassportinfo(PassportJsonEntity form, int applyid, int orderid, HttpServletRequest request) {
+
+		Map<String, Object> result = Maps.newHashMap();
+		HttpSession session = request.getSession();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TApplicantPassportEntity passport = new TApplicantPassportEntity();
+		/*if (isCNChar(form.getFirstNameEn()) || isCNChar(form.getLastNameEn())) {
+			//输入非法
+			result.put("msg", "姓名拼音不能包含中文");
+			return result;
+
+		}*/
+		if (!Util.isEmpty(applyid)) {
+			passport = dbDao.fetch(TApplicantPassportEntity.class, applyid);
+			/*TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class, passport
+					.getApplicantId().longValue());*/
+			TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class,
+					Cnd.where("applicantId", "=", passport.getApplicantId().longValue()));
+			result.put("applicantjpid", applicantorder.getApplicantId());
+			result.put("applicantid", applicantorder.getApplicantId());
+			result.put("orderid", applicantorder.getOrderId());
+
+		}
+		//TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class, form.getId().longValue());
+		passport.setOpId(loginUser.getId());
+
+		passport.setFirstName(form.getXingCn());
+		if (!Util.isEmpty(form.getXingEn())) {
+			passport.setFirstNameEn(form.getXingEn().substring(1));
+		}
+		passport.setLastName(form.getMingCn());
+		if (!Util.isEmpty(form.getMingEn())) {
+			passport.setLastNameEn(form.getMingEn().substring(1));
+		}
+		passport.setPassportUrl(form.getUrl());
+		passport.setOCRline1(form.getOCRline1());
+		passport.setOCRline2(form.getOCRline2());
+		passport.setBirthAddress(form.getBirthCountry());
+		passport.setIssuedPlace(form.getVisaCountry());
+		passport.setIssuedOrganization("公安部出入境管理局");
+		passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
+		PinyinTool tool = new PinyinTool();
+		try {
+			String birthCountry = form.getBirthCountry();
+			passport.setBirthAddressEn(tool.toPinYin(birthCountry));
+			String issuedPlace = form.getVisaCountry();
+			passport.setIssuedPlaceEn(tool.toPinYin(issuedPlace));
+		} catch (BadHanyuPinyinOutputFormatCombination e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		if (!Util.isEmpty(form.getBirth())) {
+			passport.setBirthday(DateUtil.string2Date(form.getBirth()));
+		}
+		if (!Util.isEmpty(form.getIssueDate())) {
+			passport.setIssuedDate(DateUtil.string2Date(form.getIssueDate()));
+		}
+		//passport.setIssuedOrganization(form.getIssuedOrganization());
+		//passport.setIssuedOrganizationEn(form.getIssuedOrganizationEn());
+
+		passport.setPassport(form.getNum());
+		passport.setSex(form.getSex());
+		passport.setSexEn(form.getSexEn());
+		passport.setType(form.getType());
+		if (!Util.isEmpty(form.getExpiryDay())) {
+			passport.setValidEndDate(DateUtil.string2Date(form.getExpiryDay()));
+		}
+		if (!Util.isEmpty(form.getIssueDate()) && !Util.isEmpty(form.getExpiryDay())) {
+			int yearsBetween = DateUtil.yearsBetween(form.getIssueDate(), form.getExpiryDay());
+			if (yearsBetween == 10) {
+				passport.setValidType(2);
+			} else {
+				passport.setValidType(1);
+			}
+		}
+		//passport.setValidType(form.getValidType());
+		passport.setUpdateTime(new Date());
+		if (!Util.isEmpty(applyid)) {
+			dbDao.update(passport);
+			TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, passport.getApplicantId().longValue());
+			applicant.setFirstName(form.getXingCn());
+			applicant.setLastName(form.getMingCn());
+			if (!Util.isEmpty(form.getXingEn())) {
+				applicant.setFirstNameEn(form.getXingEn().substring(1));
+			}
+			if (!Util.isEmpty(form.getMingEn())) {
+				applicant.setLastNameEn(form.getMingEn().substring(1));
+			}
+			applicant.setSex(form.getSex());
+			if (!Util.isEmpty(form.getBirth())) {
+				applicant.setBirthday(DateUtil.string2Date(form.getBirth()));
+			}
+			dbDao.update(applicant);
+		} else {
+			if (Util.isEmpty(orderid)) {
+				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
+				orderid = generrateorder.get("orderjpid");
+			}
+			TApplicantEntity applicantEntity = new TApplicantEntity();
+			applicantEntity.setFirstName(form.getXingCn());
+			applicantEntity.setLastName(form.getMingCn());
+			if (!Util.isEmpty(form.getXingEn())) {
+				applicantEntity.setFirstNameEn(form.getXingEn().substring(1));
+			}
+			if (!Util.isEmpty(form.getMingEn())) {
+				applicantEntity.setLastNameEn(form.getMingEn().substring(1));
+			}
+			//applicantEntity.setLastNameEn(form.getLastNameEn());
+			applicantEntity.setSex(form.getSex());
+			if (!Util.isEmpty(form.getBirth())) {
+				applicantEntity.setBirthday(DateUtil.string2Date(form.getBirth()));
+			}
+			TApplicantEntity insertapplicant = dbDao.insert(applicantEntity);
+			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+			applicantjp.setApplicantId(insertapplicant.getId());
+			applicantjp.setOrderId(orderid);
+			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+			//设置主申请人信息
+			List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderid), null);
+			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
+
+				applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
+			} else {
+				//设置为主申请人
+				applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+				insertapplicant.setMainId(insertapplicant.getId());
+				dbDao.update(insertapplicant);
+			}
+			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
+			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
+			workJp.setApplicantId(insertappjp.getId());
+			workJp.setCreateTime(new Date());
+			workJp.setOpId(loginUser.getId());
+			dbDao.insert(workJp);
+			passport.setApplicantId(insertapplicant.getId());
+			dbDao.insert(passport);
+			TApplicantVisaOtherInfoEntity visaother = new TApplicantVisaOtherInfoEntity();
+			visaother.setApplicantid(insertappjp.getId());
+			visaother.setHotelname("参照'赴日予定表'");
+			visaother.setVouchname("参照'身元保证书'");
+			visaother.setInvitename("同上");
+			visaother.setTraveladvice("推荐");
+			dbDao.insert(visaother);
+			result.put("applicantjpid", applicantjp.getApplicantId());
+			result.put("applicantid", applicantjp.getApplicantId());
+			result.put("orderid", applicantjp.getOrderId());
+
+		}
+		//保存历史信息
+		//		savaOrUpdatePassport(form, request);
+		//int update = dbDao.update(passport);
+		return result;
+	}
+
+	public Map<String, Integer> generrateorder(TUserEntity user, TCompanyEntity company) {
+		Map<String, Integer> result = Maps.newHashMap();
+		//如果订单不存在，则先创建订单
+		TOrderEntity orderinfo = new TOrderEntity();
+		orderinfo.setComId(company.getId());
+		orderinfo.setUserId(user.getId());
+		orderinfo.setOrderNum(generrateOrdernum());
+		orderinfo.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
+		orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+		orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
+		orderinfo.setCreateTime(new Date());
+		orderinfo.setUpdateTime(new Date());
+		TOrderEntity orderinsert = dbDao.insert(orderinfo);
+		changePrincipalViewService.ChangePrincipal(orderinsert.getId(), JPOrderProcessTypeEnum.SALES_PROCESS.intKey(),
+				user.getId());
+		result.put("orderid", orderinsert.getId());
+		TOrderJpEntity orderjp = new TOrderJpEntity();
+		orderjp.setOrderId(orderinsert.getId());
+		orderjp.setVisaType(MainSaleVisaTypeEnum.SINGLE.intKey());
+		orderjp.setIsVisit(IsYesOrNoEnum.NO.intKey());
+		TOrderJpEntity orderjpinsert = dbDao.insert(orderjp);
+		Integer orderjpid = orderjpinsert.getId();
+		result.put("orderjpid", orderjpid);
+		return result;
+	}
+
+	private String generrateOrdernum() {
+		//生成订单号
+		SimpleDateFormat smf = new SimpleDateFormat("yyMMdd");
+		String format = smf.format(new Date());
+		String sqlString = sqlManager.get("orderJp_ordernum");
+		Sql sql = Sqls.create(sqlString);
+		List<Record> query = dbDao.query(sql, null, null);
+		int sum = 1;
+		if (!Util.isEmpty(query) && query.size() > 0) {
+			String string = query.get(0).getString("orderNum");
+			int a = Integer.valueOf(string.substring(9, string.length()));
+			sum += a;
+		}
+		String sum1 = "";
+		if (sum / 10 == 0) {
+			sum1 = "000" + sum;
+		} else if (sum / 100 == 0) {
+			sum1 = "00" + sum;
+
+		} else if (sum / 1000 == 0) {
+			sum1 = "0" + sum;
+		} else {
+			sum1 = "" + sum;
+
+		}
+		return format + "-JP" + sum1;
 	}
 
 	private static Object appCodeCall(String content) {

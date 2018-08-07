@@ -182,7 +182,8 @@ public class SimpleVisaModule {
 	@Ok("jsp")
 	public Object passportInfo(@Param("applicantid") Integer applicantid, @Param("orderid") Integer orderid,
 			HttpServletRequest request) {
-		return simpleVisaService.passportInfo(applicantid, orderid, request);
+		//return simpleVisaService.passportInfo(applicantid, orderid, request);
+		return simpleVisaService.toNewfilminginfo(applicantid, orderid, request);
 	}
 
 	/**
