@@ -94,7 +94,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="wrap qrcode-wrap">
-					<div class="qrcode"></div>
+					<img class="qrcode" src="${obj.qrCode }">
 					<div class="tips">微信扫描二维码上传识别</div>
 				</div>
 				<div class="wrap photo-wrap">
@@ -106,7 +106,7 @@
 					<div class="tips">资料要求：<br>拍摄的字体清晰可见、不要反光</div>
 				</div>
 				<div class="wrap photo-wrap">
-					<div class="title">护照首页</div>
+					<div class="title">身份证</div>
 					<div class="photo">
 						等候上传..
 						<img class="img" src="${obj.applyurl }">

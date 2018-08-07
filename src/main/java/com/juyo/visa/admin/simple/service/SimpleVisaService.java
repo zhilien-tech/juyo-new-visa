@@ -3209,6 +3209,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("localPort", localPort);
 		//websocket地址
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
+		//生成二维码
+		String qrCode = dataUpload(orderid, request);
+		result.put("qrCode", qrCode);
 		return result;
 	}
 
@@ -5408,7 +5411,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
-	public Object dataUpload(int orderid, HttpServletRequest request) {
+	public String dataUpload(int orderid, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		String page = "pages/upload/index/index";
