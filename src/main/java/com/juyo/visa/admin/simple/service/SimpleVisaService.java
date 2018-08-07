@@ -5307,7 +5307,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		result.put("orderid", orderid);
-		result.put("passportType", EnumUtil.enum2(PassportTypeEnum.class));
 		String localAddr = request.getServerName();
 		request.getServerName();
 		String serverName = request.getServerName();
@@ -5316,15 +5315,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("localAddr", localAddr);
 		result.put("localPort", localPort);
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
-		String qrurl = "http://" + localAddr + ":" + localPort + "/simplemobile/passport.html";
-		if (Util.isEmpty(orderid)) {
-			qrurl += "?comid=" + loginCompany.getId() + "&userid=" + loginUser.getId() + "&sessionid="
-					+ session.getId();
-		} else {
-			qrurl += "?comid=" + loginCompany.getId() + "&userid=" + loginUser.getId() + "&orderid=" + orderid
-					+ "&sessionid=" + session.getId();
-		}
-		String qrCode = qrCodeService.encodeQrCode(request, qrurl);
+		//生成二维码
+		String qrCode = dataUpload(orderid, request);
 		result.put("qrCode", qrCode);
 		result.put("sessionid", session.getId());
 		return result;
