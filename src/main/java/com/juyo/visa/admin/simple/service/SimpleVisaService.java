@@ -3350,8 +3350,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setTelephone(form.getTelephone());
 		applicant.setValidEndDate(form.getValidEndDate());
 		applicant.setValidStartDate(form.getValidStartDate());
-		applicant.setCardFront(form.getCardFront());
-		applicant.setCardBack(form.getCardBack());
+		//applicant.setCardFront(form.getCardFront());
+		//applicant.setCardBack(form.getCardBack());
 		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
 		applicant.setCreateTime(new Date());
 		applicant.setEmergencyLinkman(form.getEmergencyLinkman());
@@ -3384,7 +3384,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(form.getLastNameEn())) {
 			passport.setLastNameEn(form.getLastNameEn().substring(1));
 		}
-		passport.setPassportUrl(form.getPassportUrl());
+		//passport.setPassportUrl(form.getPassportUrl());
 		passport.setOCRline1(form.getOCRline1());
 		passport.setOCRline2(form.getOCRline2());
 		passport.setBirthAddress(form.getBirthAddress());

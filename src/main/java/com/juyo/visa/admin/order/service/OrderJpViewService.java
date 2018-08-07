@@ -2890,7 +2890,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
 
 		if (!Util.isEmpty(jsonEntity)) {
-			saveApplicantinfo(jsonEntity, applyid, orderid, request);
+			Object saveApplicantinfo = saveApplicantinfo(jsonEntity, applyid, orderid, request);
+			if (!Util.isEmpty(saveApplicantinfo)) {
+				//消息通知
+				try {
+					visaInfoWSHandler.broadcast(new TextMessage(""));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return jsonEntity;
 	}
@@ -3472,7 +3480,15 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		if (!Util.isEmpty(jsonEntity)) {
 			//存库
-			savePassportinfo(jsonEntity, applyid, orderid, request);
+			Object savePassportinfo = savePassportinfo(jsonEntity, applyid, orderid, request);
+			if (!Util.isEmpty(savePassportinfo)) {
+				//消息通知
+				try {
+					visaInfoWSHandler.broadcast(new TextMessage(""));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		long endTime1 = System.currentTimeMillis();
 		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");

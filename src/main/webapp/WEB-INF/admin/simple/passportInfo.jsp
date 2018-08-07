@@ -121,7 +121,7 @@
 	<script src="${base}/admin/common/utils.js"></script>
 	<script>
 		const orderid 	  = '${obj.orderid}';
-		const applicantid = '${obj.applicantid}';
+		const applicantid = '${obj.applyid}';
 		const BASEURL 	  = 'ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}';
 		const REDIRECTURL = '/admin/simple/updateApplicant.html?applicantid=' + applicantid + '&orderid=' + orderid;
 
@@ -149,13 +149,13 @@
 			console.log('socket Connection onmessage done..');
 		};
 
-		$('#backBtn').on('click', () => {
+		$('#backBtn, #addBtn').on('click', () => {
 			layerFn.close(() => {
 				socket.close();
 			});
 		});
 
-		$('#toVisa, #addBtn').on('click', () => {
+		$('#toVisa').on('click', () => {
 			socket.close();
 			window.location.href = REDIRECTURL;
 		});
