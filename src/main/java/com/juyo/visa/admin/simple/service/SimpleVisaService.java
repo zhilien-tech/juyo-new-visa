@@ -3195,12 +3195,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	public Object toNewfilminginfo(int applyid, int orderid, HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("orderid", orderid);
-		result.put("applyid", applyid);
-		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyid);
-		result.put("applyurl", apply.getCardFront());
-		TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
-				Cnd.where("applicantId", "=", applyid));
-		result.put("passurl", passport.getPassportUrl());
+		if (!Util.isEmpty(applyid)) {
+			result.put("applyid", applyid);
+			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyid);
+			result.put("applyurl", apply.getCardFront());
+			TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
+					Cnd.where("applicantId", "=", applyid));
+			result.put("passurl", passport.getPassportUrl());
+		}
 		//所访问的ip地址
 		String localAddr = request.getServerName();
 		result.put("localAddr", localAddr);
