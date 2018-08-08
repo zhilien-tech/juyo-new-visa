@@ -336,6 +336,7 @@ public class FengshangService extends BaseService<TOrderJpEntity> {
 			map.put("Text7", "");
 		}
 		map.put("Text8", applyinfo.size() + "");
+		map.put("Text9", sendVisaNum);
 		//获取模板文件
 		URL resource = getClass().getClassLoader().getResource("japanfile/fengshang/note.pdf");
 		TemplateUtil templateUtil = new TemplateUtil();
