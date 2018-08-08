@@ -3216,7 +3216,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//websocket地址
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
 		//生成二维码
-		String qrCode = dataUpload(orderid, request);
+		String qrCode = dataUpload(applyid, orderid, request);
 		result.put("qrCode", qrCode);
 		return result;
 	}
@@ -5320,7 +5320,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("localPort", localPort);
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
 		//生成二维码
-		String qrCode = dataUpload(orderid, request);
+		String qrCode = dataUpload(0, orderid, request);
 		result.put("qrCode", qrCode);
 		result.put("sessionid", session.getId());
 		return result;
@@ -5409,12 +5409,18 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
-	public String dataUpload(int orderid, HttpServletRequest request) {
+	public String dataUpload(int applyid, int orderid, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		String page = "pages/upload/index/index";
-		String scene = "orderid/" + orderid + "*userIdId/" + loginUser.getId();
+		String scene = "";
+		if (!Util.isEmpty(applyid) && applyid != 0) {
+			scene = "orderid=" + orderid + "&userid=" + loginUser.getId() + "&applyid=" + applyid;
+		} else {
+			scene = "orderid=" + orderid + "&userid=" + loginUser.getId();
+		}
 		String accessToken = (String) weXinTokenViewService.getAccessToken();
+		System.out.println("accessToken:" + accessToken + "=================");
 		String url = createBCode(accessToken, page, scene);
 		System.out.println("url:" + url);
 		return url;

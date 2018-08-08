@@ -144,8 +144,7 @@ public class OrderJpModule {
 	@At
 	@POST
 	public Object getOrder(@Param("id") Integer orderid, HttpServletRequest request) {
-		//return saleViewService.fetchOrder(orderid, request);
-		return simpleVisaService.dataUpload(orderid, request);
+		return saleViewService.fetchOrder(orderid, request);
 	}
 
 	/**

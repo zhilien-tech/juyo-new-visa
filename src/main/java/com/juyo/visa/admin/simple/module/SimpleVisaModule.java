@@ -296,10 +296,10 @@ public class SimpleVisaModule {
 		return simpleVisaService.toRecordCharacters(characterStr);
 	}
 
-	@At
+	/*@At
 	@Ok("jsp")
 	public Object dataUpload(@Param("orderid") Integer orderid, HttpServletRequest request) {
 		return simpleVisaService.dataUpload(orderid, request);
-	}
+	}*/
 
 }
