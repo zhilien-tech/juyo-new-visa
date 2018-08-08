@@ -3216,6 +3216,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//websocket地址
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
 		//生成二维码
+		if (Util.isEmpty(applyid)) {
+			applyid = 0;
+		}
+		if (Util.isEmpty(orderid)) {
+			orderid = 0;
+		}
 		String qrCode = dataUpload(applyid, orderid, request);
 		result.put("qrCode", qrCode);
 		return result;
@@ -5320,6 +5326,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("localPort", localPort);
 		result.put("websocketaddr", SIMPLE_WEBSOCKET_ADDR);
 		//生成二维码
+		if (Util.isEmpty(orderid)) {
+			orderid = 0;
+		}
 		String qrCode = dataUpload(0, orderid, request);
 		result.put("qrCode", qrCode);
 		result.put("sessionid", session.getId());
@@ -5412,13 +5421,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	public String dataUpload(int applyid, int orderid, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		String page = "pages/upload/index/index";
+		String page = "pages/Japan/upload/index/index";
 		String scene = "";
-		if (!Util.isEmpty(applyid) && applyid != 0) {
-			scene = "orderid=" + orderid + "&userid=" + loginUser.getId() + "&applyid=" + applyid;
-		} else {
-			scene = "orderid=" + orderid + "&userid=" + loginUser.getId();
-		}
+		scene = orderid + "&" + loginUser.getId() + "&" + applyid;
+		System.out.println("scene:" + scene + "--------------");
 		String accessToken = (String) weXinTokenViewService.getAccessToken();
 		System.out.println("accessToken:" + accessToken + "=================");
 		String url = createBCode(accessToken, page, scene);
@@ -5429,7 +5435,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	public String createBCode(String accessToken, String page, String scene) {
 		String url = WX_B_CODE_URL.replace("ACCESS_TOKEN", accessToken);
 		Map<String, Object> param = new HashMap<>();
-		param.put("page", page);
+		param.put("path", page);
 		param.put("scene", scene);
 		param.put("width", "100");
 		param.put("auto_color", false);
@@ -5439,6 +5445,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		line_color.put("b", 0);
 		param.put("line_color", line_color);
 		JSONObject json = JSONObject.parseObject(JSON.toJSONString(param));
+		System.out.println("json:" + json.toString());
 		//JSONObject json = JSONObject.fromObject(param);
 		InputStream inputStream = toPostRequest(json.toString(), accessToken);
 

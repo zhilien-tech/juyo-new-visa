@@ -87,6 +87,7 @@
 	<div class="modal-content">
 		<a id="toVisa" class="rightNav"><span></span></a>
 		<form id="passportInfo">
+			<input type="hidden" id="orderid">
 			<div class="modal-header">
 				<span class="heading">资料上传</span>
 				<input id="backBtn" type="button" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" />

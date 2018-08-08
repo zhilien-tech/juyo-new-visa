@@ -2911,7 +2911,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		TApplicantEntity applicant = new TApplicantEntity();
 		TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
 		//修改
-		if (!Util.isEmpty(applyid)) {
+		if (applyid != 0) {
 			applicant = dbDao.fetch(TApplicantEntity.class, applyid);
 			applicantjp = dbDao.fetch(TApplicantOrderJpEntity.class, Cnd.where("applicantId", "=", applicant.getId()));
 			result.put("applicantjpid", applicantjp.getId());
@@ -2940,7 +2940,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicant.setCardFront(form.getUrl());
 		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
 		applicant.setCreateTime(new Date());
-		if (!Util.isEmpty(applyid)) {
+		if (applyid != 0) {
 			dbDao.update(applicant);
 
 		} else {
@@ -2949,7 +2949,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			int applicantid = insertapplicant.getId();
 			result.put("applicantid", applicantid);
 			//如果订单不存在，则先创建订单
-			if (Util.isEmpty(orderid)) {
+			if (orderid == 0) {
 				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
 				orderid = generrateorder.get("orderid");
 				orderjpid = generrateorder.get("orderjpid");
@@ -2985,6 +2985,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		result.put("orderjpid", orderjpid);
 		result.put("orderid", orderid);
+		System.out.println("result:" + result);
 		//创建日本申请人 信息
 		return result;
 	}
@@ -3502,10 +3503,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object savePassportinfo(PassportJsonEntity form, int applyid, int orderid, int userid) {
 
 		Map<String, Object> result = Maps.newHashMap();
+		int orderjpid = 0;
 		TUserEntity loginUser = dbDao.fetch(TUserEntity.class, userid);
 		TCompanyEntity loginCompany = dbDao.fetch(TCompanyEntity.class, loginUser.getComId().longValue());
 		TApplicantPassportEntity passport = new TApplicantPassportEntity();
-		if (!Util.isEmpty(applyid)) {
+		if (applyid != 0) {
 			passport = dbDao.fetch(TApplicantPassportEntity.class, Cnd.where("applicantId", "=", applyid));
 			/*TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class, passport
 					.getApplicantId().longValue());*/
@@ -3572,7 +3574,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		//passport.setValidType(form.getValidType());
 		passport.setUpdateTime(new Date());
-		if (!Util.isEmpty(applyid)) {
+		if (applyid != 0) {
 			dbDao.update(passport);
 			TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, passport.getApplicantId().longValue());
 			applicant.setFirstName(form.getXingCn());
@@ -3596,9 +3598,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 			dbDao.update(applicant);
 		} else {
-			if (Util.isEmpty(orderid)) {
+			if (orderid == 0) {
 				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
-				orderid = generrateorder.get("orderjpid");
+				orderid = generrateorder.get("orderid");
+				orderjpid = generrateorder.get("orderjpid");
 			}
 			TApplicantEntity applicantEntity = new TApplicantEntity();
 			applicantEntity.setFirstName(form.getXingCn());
@@ -3664,6 +3667,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		//保存历史信息
 		//		savaOrUpdatePassport(form, request);
 		//int update = dbDao.update(passport);
+		result.put("orderjpid", orderjpid);
+		result.put("orderid", orderid);
+		System.out.println("result:" + result);
 		return result;
 	}
 
