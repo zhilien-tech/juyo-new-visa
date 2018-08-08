@@ -3203,6 +3203,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					Cnd.where("applicantId", "=", applyid));
 			result.put("passurl", passport.getPassportUrl());
 		}
+		HttpSession session = request.getSession();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userid = loginUser.getId();
+		result.put("userdi", userid);
 		//所访问的ip地址
 		String localAddr = request.getServerName();
 		result.put("localAddr", localAddr);

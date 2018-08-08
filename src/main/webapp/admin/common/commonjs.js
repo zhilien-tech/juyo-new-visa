@@ -299,6 +299,8 @@ $(document).on("input","#birthAddress",function(){
 	}else{
 		if(temp == "内蒙古"){
 			$("#birthAddressEn").val("/NEI MONGOL").change();
+		}else if(temp == "陕西"){
+			$("#birthAddressEn").val("/SHAANXI").change();
 		}else{
 			$("#birthAddressEn").val("/"+pinyinchar.toUpperCase()).change();
 		}
@@ -316,6 +318,8 @@ $(document).on("input","#issuedPlace",function(){
 	}else{
 		if(temp == "内蒙古"){
 			$("#issuedPlaceEn").val("/NEI MONGOL").change();
+		}else if(temp == "陕西"){
+			$("#issuedPlaceEn").val("/SHAANXI").change();
 		}else{
 			$("#issuedPlaceEn").val("/"+pinyinchar.toUpperCase()).change();
 		}

@@ -121,7 +121,7 @@
 	<script src="${base}/admin/common/utils.js"></script>
 	<script>
 		const orderid 	  = '${obj.orderid}';
-		const applicantid = '${obj.applyid}';
+		//const applicantid = '${obj.applyid}';
 		const BASEURL 	  = 'ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}';
 		const REDIRECTURL = '/admin/simple/updateApplicant.html?applicantid=' + applicantid + '&orderid=' + orderid;
 

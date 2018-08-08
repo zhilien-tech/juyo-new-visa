@@ -2809,7 +2809,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return customerEntity;
 	}
 
-	public Object IDCardRecognition(File file, int applyid, int orderid, HttpServletRequest request,
+	public Object IDCardRecognition(File file, int applyid, int orderid, int userid, HttpServletRequest request,
 			HttpServletResponse response) {
 
 		long startTime = System.currentTimeMillis();//获取当前时间
@@ -2890,7 +2890,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
 
 		if (!Util.isEmpty(jsonEntity)) {
-			Object saveApplicantinfo = saveApplicantinfo(jsonEntity, applyid, orderid, request);
+			Object saveApplicantinfo = saveApplicantinfo(jsonEntity, applyid, orderid, userid);
 			if (!Util.isEmpty(saveApplicantinfo)) {
 				//消息通知
 				try {
@@ -2903,10 +2903,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return jsonEntity;
 	}
 
-	public Object saveApplicantinfo(ApplicantJsonEntity form, int applyid, int orderid, HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+	public Object saveApplicantinfo(ApplicantJsonEntity form, int applyid, int orderid, int userid) {
+		TUserEntity loginUser = dbDao.fetch(TUserEntity.class, userid);
+		TCompanyEntity loginCompany = dbDao.fetch(TCompanyEntity.class, loginUser.getComId().longValue());
 		Map<String, Object> result = Maps.newHashMap();
 		Integer orderjpid = null;
 		TApplicantEntity applicant = new TApplicantEntity();
@@ -2932,8 +2931,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicant.setCardCity(form.getCity());
 		applicant.setProvince(form.getProvince());
 		//applicant.setSex(form.getSex());
-		applicant.setValidEndDate(DateUtil.string2Date(form.getEndtime()));
-		applicant.setValidStartDate(DateUtil.string2Date(form.getStarttime()));
+		if (!Util.isEmpty(form.getEndtime())) {
+			applicant.setValidEndDate(DateUtil.string2Date(form.getEndtime()));
+		}
+		if (!Util.isEmpty(form.getStarttime())) {
+			applicant.setValidStartDate(DateUtil.string2Date(form.getStarttime()));
+		}
 		applicant.setCardFront(form.getUrl());
 		applicant.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
 		applicant.setCreateTime(new Date());
@@ -2981,6 +2984,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(passport);
 		}
 		result.put("orderjpid", orderjpid);
+		result.put("orderid", orderid);
 		//创建日本申请人 信息
 		return result;
 	}
@@ -3336,7 +3340,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return jsonEntity;
 	}
 
-	public Object passportRecognitionBack(File file, int applyid, int orderid, HttpServletRequest request,
+	public Object passportRecognitionBack(File file, int applyid, int orderid, int userid, HttpServletRequest request,
 			HttpServletResponse response) {
 
 		HttpSession session = request.getSession();
@@ -3442,7 +3446,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			long startTime3 = System.currentTimeMillis();//获取当前时间
 			System.out.println("将图片上传运行时间：" + (startTime3 - startTime2) + "ms");
 
-			//jsonEntity.setUrl(url);
+			jsonEntity.setUrl(url);
 			jsonEntity.setOCRline1(out.getString("line0"));
 			jsonEntity.setOCRline2(out.getString("line1"));
 
@@ -3480,7 +3484,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 		if (!Util.isEmpty(jsonEntity)) {
 			//存库
-			Object savePassportinfo = savePassportinfo(jsonEntity, applyid, orderid, request);
+			Object savePassportinfo = savePassportinfo(jsonEntity, applyid, orderid, userid);
 			if (!Util.isEmpty(savePassportinfo)) {
 				//消息通知
 				try {
@@ -3495,21 +3499,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return jsonEntity;
 	}
 
-	public Object savePassportinfo(PassportJsonEntity form, int applyid, int orderid, HttpServletRequest request) {
+	public Object savePassportinfo(PassportJsonEntity form, int applyid, int orderid, int userid) {
 
 		Map<String, Object> result = Maps.newHashMap();
-		HttpSession session = request.getSession();
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = dbDao.fetch(TUserEntity.class, userid);
+		TCompanyEntity loginCompany = dbDao.fetch(TCompanyEntity.class, loginUser.getComId().longValue());
 		TApplicantPassportEntity passport = new TApplicantPassportEntity();
-		/*if (isCNChar(form.getFirstNameEn()) || isCNChar(form.getLastNameEn())) {
-			//输入非法
-			result.put("msg", "姓名拼音不能包含中文");
-			return result;
-
-		}*/
 		if (!Util.isEmpty(applyid)) {
-			passport = dbDao.fetch(TApplicantPassportEntity.class, applyid);
+			passport = dbDao.fetch(TApplicantPassportEntity.class, Cnd.where("applicantId", "=", applyid));
 			/*TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class, passport
 					.getApplicantId().longValue());*/
 			TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class,
@@ -3523,13 +3520,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		passport.setOpId(loginUser.getId());
 
 		passport.setFirstName(form.getXingCn());
-		if (!Util.isEmpty(form.getXingEn())) {
-			passport.setFirstNameEn(form.getXingEn().substring(1));
-		}
 		passport.setLastName(form.getMingCn());
-		if (!Util.isEmpty(form.getMingEn())) {
-			passport.setLastNameEn(form.getMingEn().substring(1));
-		}
 		passport.setPassportUrl(form.getUrl());
 		passport.setOCRline1(form.getOCRline1());
 		passport.setOCRline2(form.getOCRline2());
@@ -3539,6 +3530,12 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
 		PinyinTool tool = new PinyinTool();
 		try {
+			if (!Util.isEmpty(form.getXingCn())) {
+				passport.setFirstNameEn(tool.toPinYin(form.getXingCn()));
+			}
+			if (!Util.isEmpty(form.getMingCn())) {
+				passport.setLastNameEn(tool.toPinYin(form.getMingCn()));
+			}
 			String birthCountry = form.getBirthCountry();
 			passport.setBirthAddressEn(tool.toPinYin(birthCountry));
 			String issuedPlace = form.getVisaCountry();
@@ -3580,11 +3577,18 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			TApplicantEntity applicant = dbDao.fetch(TApplicantEntity.class, passport.getApplicantId().longValue());
 			applicant.setFirstName(form.getXingCn());
 			applicant.setLastName(form.getMingCn());
-			if (!Util.isEmpty(form.getXingEn())) {
-				applicant.setFirstNameEn(form.getXingEn().substring(1));
-			}
-			if (!Util.isEmpty(form.getMingEn())) {
-				applicant.setLastNameEn(form.getMingEn().substring(1));
+			try {
+				if (!Util.isEmpty(form.getXingCn())) {
+					applicant.setFirstNameEn(tool.toPinYin(form.getXingCn()));
+				}
+				if (!Util.isEmpty(form.getMingCn())) {
+					applicant.setLastNameEn(tool.toPinYin(form.getMingCn()));
+				}
+			} catch (BadHanyuPinyinOutputFormatCombination e) {
+
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
 			}
 			applicant.setSex(form.getSex());
 			if (!Util.isEmpty(form.getBirth())) {
@@ -3599,12 +3603,20 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			TApplicantEntity applicantEntity = new TApplicantEntity();
 			applicantEntity.setFirstName(form.getXingCn());
 			applicantEntity.setLastName(form.getMingCn());
-			if (!Util.isEmpty(form.getXingEn())) {
-				applicantEntity.setFirstNameEn(form.getXingEn().substring(1));
+			try {
+				if (!Util.isEmpty(form.getXingCn())) {
+					applicantEntity.setFirstNameEn(tool.toPinYin(form.getXingCn()));
+				}
+				if (!Util.isEmpty(form.getMingCn())) {
+					applicantEntity.setLastNameEn(tool.toPinYin(form.getMingCn()));
+				}
+			} catch (BadHanyuPinyinOutputFormatCombination e) {
+
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
 			}
-			if (!Util.isEmpty(form.getMingEn())) {
-				applicantEntity.setLastNameEn(form.getMingEn().substring(1));
-			}
+
 			//applicantEntity.setLastNameEn(form.getLastNameEn());
 			applicantEntity.setSex(form.getSex());
 			if (!Util.isEmpty(form.getBirth())) {
