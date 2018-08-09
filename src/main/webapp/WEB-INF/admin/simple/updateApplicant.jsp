@@ -20,6 +20,13 @@
 	<link rel="stylesheet" href="${base}/references/common/css/simplePassportInfo.css?v=<%=System.currentTimeMillis() %>">
 	<!-- 基本信息css -->
 	<link rel="stylesheet" href="${base}/references/common/css/liteUpdateApplicant.css?v=<%=System.currentTimeMillis() %>">
+	<style>
+		#juzhudi-checkbox{
+			position: absolute;
+			top: 1px;
+			right: -10px;
+		}
+	</style>
 </head>
 <body>
 	<div class="modal-content">
@@ -248,7 +255,7 @@
 					<!-- 现居住地 -->
 					<div class="col-sm-3 pr-5">
 						<div class="form-group">
-							<label><span>*</span>现居住地</label>
+							<label style="position: relative;"><span>*</span>现居住地（同主申请人）<input id="juzhudi-checkbox" type="checkbox" value="0"></label>
 							<input id="province" name="province" type="text" class="form-control input-sm" placeholder="省" value="${obj.applicant.province }"/>
 						</div>
 					</div>
@@ -942,7 +949,18 @@
 			});
 			return o;
 		}
-
+		
+		/** 2018_08_03 */
+		(() => {
+			let $jzdChenkbox = $('#juzhudi-checkbox');
+			$jzdChenkbox.change(function() {
+				let $checkbox = $(this);
+				let v = $checkbox.val();
+				v = v == 0 ? 1 : 0;
+				$checkbox.val(v);
+				console.log($checkbox.val());
+			});
+		})();
 	</script>
 	<script>
 		(function() {
