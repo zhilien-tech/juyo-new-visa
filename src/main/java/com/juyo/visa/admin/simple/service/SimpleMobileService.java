@@ -424,6 +424,8 @@ public class SimpleMobileService extends BaseService<TOrderEntity> {
 	}
 
 	public Object isCardurl(int applicantid) {
+
+		System.out.println("===========+++++++++");
 		Map<String, Object> result = Maps.newHashMap();
 		String url = "";
 		TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applicantid);
