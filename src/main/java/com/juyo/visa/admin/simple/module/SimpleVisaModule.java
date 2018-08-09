@@ -182,7 +182,8 @@ public class SimpleVisaModule {
 	@Ok("jsp")
 	public Object passportInfo(@Param("applicantid") Integer applicantid, @Param("orderid") Integer orderid,
 			HttpServletRequest request) {
-		return simpleVisaService.passportInfo(applicantid, orderid, request);
+		//return simpleVisaService.passportInfo(applicantid, orderid, request);
+		return simpleVisaService.toNewfilminginfo(applicantid, orderid, request);
 	}
 
 	/**
@@ -295,10 +296,16 @@ public class SimpleVisaModule {
 		return simpleVisaService.toRecordCharacters(characterStr);
 	}
 
-	@At
+	/*@At
 	@Ok("jsp")
 	public Object dataUpload(@Param("orderid") Integer orderid, HttpServletRequest request) {
 		return simpleVisaService.dataUpload(orderid, request);
+	}*/
+
+	@At
+	@POST
+	public Object hasApplyInfo(@Param("applyid") int applyid, @Param("orderid") int orderid, HttpSession session) {
+		return simpleVisaService.hasApplyInfo(applyid, orderid, session);
 	}
 
 }

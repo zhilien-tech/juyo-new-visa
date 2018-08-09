@@ -483,6 +483,81 @@
 							}
 						}
 					},
+					passport: {
+						trigger: "change keyup",
+						validators: {
+							stringLength: {
+								min: 1,
+								max: 9,
+								message: '护照号不能超过9位'
+							},
+							remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+								url: '${base}/admin/orderJp/checkPassport.html',
+								message: '护照号已存在，请重新输入',//提示消息
+								delay: 2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+								type: 'POST',//请求方式
+								//自定义提交数据，默认值提交当前input value
+								data: function (validator) {
+									return {
+										passport: $('#passport').val(),
+										adminId: $('#id').val(),
+										orderid: $('#orderid').val()
+									};
+								}
+							}
+						}
+					},
+					firstName: {
+						validators: {
+							notEmpty: {
+								message: '姓不能为空'
+							}
+						}
+					},
+					lastName: {
+						validators: {
+							notEmpty: {
+								message: '名不能为空'
+							}
+						}
+					},
+					firstNameEn: {
+						trigger: "change keyup",
+						validators: {
+							regexp: {
+								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+								message: '拼音中不能包含汉字或其他特殊符号'
+							},
+						}
+					},
+					lastNameEn: {
+						trigger: "change keyup",
+						validators: {
+							regexp: {
+								// regexp: /\/{1}[a-zA-Z]+$/,
+								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+								message: '拼音中不能包含汉字或其他特殊符号'
+							},
+						}
+					},
+					birthAddressEn: {
+						trigger: "change keyup",
+						validators: {
+							regexp: {
+								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+								message: '拼音中不能包含汉字或其他特殊符号'
+							},
+						}
+					},
+					issuedPlaceEn: {
+						trigger: "change keyup",
+						validators: {
+							regexp: {
+								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+								message: '拼音中不能包含汉字或其他特殊符号'
+							},
+						}
+					}
 				}
 			});
 			$('#applicantInfo').bootstrapValidator('validate');
@@ -977,7 +1052,7 @@
 				}
 
 				//护照图片验证
-				$('#passportInfo').bootstrapValidator({
+				$('#applicantInfo').bootstrapValidator({
 					message: '验证不通过',
 					feedbackIcons: {
 						valid: 'glyphicon glyphicon-ok',

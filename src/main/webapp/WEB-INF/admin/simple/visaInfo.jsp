@@ -43,7 +43,7 @@
 				</div>
 				<div class="tab-content row">
 					<!-- 结婚状况 -->
-					<!-- <div class="info">
+					<%-- <div class="info">
 						<div class="info-head">婚姻状况 </div>
 						<div class="info-body-from cf ">
 							<div class="row colSm">
@@ -75,7 +75,7 @@
 							</div>
 							
 						</div>
-					</div> -->
+					</div> --%>
 					<!-- 申请人 -->
 					<div class="info">
 						<div id="mainApply" class="info-head">主申请人 </div>
@@ -798,15 +798,15 @@
 				$(".ipt-info").show();
 			}
 			
-			var marry = $("#marryUrl").val();
+			/* var marry = $("#marryUrl").val();
 			if(marry != ""){
 				$(".delete").css("display","block");
 			}else{
 				$(".delete").css("display","none");
-			}
+			} */
 			//删除——————————————————————————————————————————————
 			//婚姻状况为单身和丧偶时没有上传图片接口
-			var marryStatus = $("#marryStatus").val();
+			/* var marryStatus = $("#marryStatus").val();
 			if(marryStatus == 3 || marryStatus == 4 || !marryStatus){
 				$(".info-imgUpload").hide();
 				$("#unitNameLabel").html("<span></span>父母职业");
@@ -834,7 +834,7 @@
 					}
 					$(".info-imgUpload").show();
 				}
-			});
+			}); */
 			
 			var career = $("#careerStatus").val();
 			if(career == 4){
@@ -1150,7 +1150,7 @@
 			
 		});
 		//连接websocket
-		connectWebSocket();
+		/* connectWebSocket();
 		function connectWebSocket(){
 			 if ('WebSocket' in window){  
 	            console.log('Websocket supported');  
@@ -1183,7 +1183,7 @@
 	          } else {  
 	            console.log('Websocket not supported');  
 	          }  
-		}
+		} */
 		$("#addBtn").click(function(){
 			save(1);
 		});
@@ -1336,7 +1336,7 @@
 							parent.successCallBack(1);
 							closeWindow();
 						}else if(status == 2){
-							socket.onclose();
+							//socket.onclose();
 							window.location.href = '/admin/simple/updateApplicant.html?applicantid='+applicantid+'&orderid='+orderid;
 						}
 					},error:function(error,XMLHttpRequest,status){

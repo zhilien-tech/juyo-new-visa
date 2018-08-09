@@ -144,8 +144,7 @@ public class OrderJpModule {
 	@At
 	@POST
 	public Object getOrder(@Param("id") Integer orderid, HttpServletRequest request) {
-		//return saleViewService.fetchOrder(orderid, request);
-		return simpleVisaService.dataUpload(orderid, request);
+		return saleViewService.fetchOrder(orderid, request);
 	}
 
 	/**
@@ -371,8 +370,10 @@ public class OrderJpModule {
 	@Ok("json")
 	@Filters
 	@AdaptBy(type = UploadAdaptor.class)
-	public Object IDCardRecognition(@Param("image") File file, HttpServletRequest request, HttpServletResponse response) {
-		return saleViewService.IDCardRecognition(file, request, response);
+	public Object IDCardRecognition(@Param("image") File file, @Param("applyid") int applyid,
+			@Param("orderid") int orderid, @Param("userid") int userid, HttpServletRequest request,
+			HttpServletResponse response) {
+		return saleViewService.IDCardRecognition(file, applyid, orderid, userid, request, response);
 	}
 
 	/**
@@ -394,9 +395,10 @@ public class OrderJpModule {
 	@Ok("json")
 	@Filters
 	@AdaptBy(type = UploadAdaptor.class)
-	public Object passportRecognition(@Param("image") File file, HttpServletRequest request,
+	public Object passportRecognition(@Param("image") File file, @Param("applyid") int applyid,
+			@Param("orderid") int orderid, @Param("userid") int userid, HttpServletRequest request,
 			HttpServletResponse response) {
-		return saleViewService.passportRecognitionBack(file, request, response);
+		return saleViewService.passportRecognitionBack(file, applyid, orderid, userid, request, response);
 	}
 
 	/**

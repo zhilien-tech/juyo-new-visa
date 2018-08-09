@@ -49,7 +49,7 @@
 			float: left;
 			width: 150px;
 			height: 150px;
-			background: rosybrown;
+			/* background: rosybrown; */
 		}
 		.qrcode-wrap .tips{
 			float: left;
@@ -75,7 +75,6 @@
 			margin-left: 50px;
 		}
 		.photo-wrap .photo .img{
-			display: none;
 			top: 0;
 			left: 0;
 			position: absolute;
@@ -95,22 +94,22 @@
 			</div>
 			<div class="modal-body">
 				<div class="wrap qrcode-wrap">
-					<div class="qrcode"></div>
+					<img class="qrcode" src="${obj.qrCode }">
 					<div class="tips">微信扫描二维码上传识别</div>
 				</div>
 				<div class="wrap photo-wrap">
 					<div class="title">护照首页</div>
 					<div class="photo">
 						等候上传..
-						<div class="img"></div>
+						<img class="img" src="${obj.passurl }">
 					</div>
 					<div class="tips">资料要求：<br>拍摄的字体清晰可见、不要反光</div>
 				</div>
 				<div class="wrap photo-wrap">
-					<div class="title">护照首页</div>
+					<div class="title">身份证</div>
 					<div class="photo">
 						等候上传..
-						<div class="img"></div>
+						<img class="img" src="${obj.applyurl }">
 					</div>
 					<div class="tips">资料要求：<br>清晰拍摄在有效期内的身份证正反面</div>
 				</div>
@@ -122,7 +121,7 @@
 	<script src="${base}/admin/common/utils.js"></script>
 	<script>
 		const orderid 	  = '${obj.orderid}';
-		const applicantid = '${obj.applicantid}';
+		const applicantid = '${obj.applyid}';
 		const BASEURL 	  = 'ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}';
 		const REDIRECTURL = '/admin/simple/updateApplicant.html?applicantid=' + applicantid + '&orderid=' + orderid;
 
@@ -139,24 +138,20 @@
 		socket.onmessage = (ev) => {
 			if (ev.data) {
 				let ret = JSON.parse(ev.data);
-				if (ret.applicantid == applicantid) {
-					switch(ret.messagetype >> 0) {
-						case 1:
-							window.location.reload();
-							break;
-					}
+				if (ret.applyid == applicantid) {
+					window.location.reload();
 				}
 			}
 			console.log('socket Connection onmessage done..');
 		};
 
-		$('#backBtn').on('click', () => {
+		$('#backBtn, #addBtn').on('click', () => {
 			layerFn.close(() => {
 				socket.close();
 			});
 		});
 
-		$('#toVisa, #addBtn').on('click', () => {
+		$('#toVisa').on('click', () => {
 			socket.close();
 			window.location.href = REDIRECTURL;
 		});
