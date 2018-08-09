@@ -117,7 +117,7 @@
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/public/plugins/jquery.fileDownload.js"></script>
 	<script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
-	<%-- <script src="${base}/admin/visaJapan/visaList.js"></script> --%>
+	<!-- <script src="${base}/admin/visaJapan/visaList.js"></script> -->
 	<script src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script type="text/javascript">
@@ -136,7 +136,9 @@
             	type:'post',
             	success: function(data){
             		console.log(data);
-            		_self.visaJapanData = data.visaJapanData;
+					_self.visaJapanData = data.visaJapanData;
+					
+					$('#pagetotal').val(data.pagetotal);
               	}
             });
         },
@@ -255,8 +257,9 @@
 	　　var scrollHeight = $(document).height();
 	　　var windowHeight = $(this).height();
 		// 判断是否滚动到底部  
+
 	　　if(scrollTop + windowHeight == scrollHeight){
-	　　　　// alert("滚到底了");
+			
 			//分页条件
 			var pageNumber = $('#pageNumber').val();
 			pageNumber = parseInt(pageNumber) + 1;
@@ -267,6 +270,8 @@
 			var zhaobaotime = $('#zhaobaotime').val();
 			var searchStr = $('#searchStr').val();
 			//异步加载数据
+			console.log(pageNumber);
+			console.log(pagetotal);
 			if(pageNumber <= pagetotal){
 				//遮罩
 				layer.load(1);
