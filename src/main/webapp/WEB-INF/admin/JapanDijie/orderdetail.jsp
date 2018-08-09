@@ -538,6 +538,7 @@
 		<script src="${base}/admin/visaJapan/visaDetail.js"></script><!-- 本页面js文件 -->
 		<script src="${base}/admin/visaJapan/visaDetailSelect2.js"></script><!-- 本页面js文件 -->
 		<script type="text/javascript">
+
 			var threecounty = '${obj.jporderinfo.visaCounty}';
 			if(threecounty){
 				var threecountys = threecounty.split(",");
