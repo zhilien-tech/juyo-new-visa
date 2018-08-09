@@ -49,7 +49,7 @@
 			float: left;
 			width: 150px;
 			height: 150px;
-			background: rosybrown;
+			/* background: rosybrown; */
 		}
 		.qrcode-wrap .tips{
 			float: left;
@@ -137,13 +137,9 @@
 		
 		socket.onmessage = (ev) => {
 			if (ev.data) {
-				let ret = JSON.parse(ret);
-				if (ret.applicantid == applicantid) {
-					switch(ret.messagetype >> 0) {
-						case 1:
-							window.location.reload();
-							break;
-					}
+				let ret = JSON.parse(ev.data);
+				if (ret.applyid == applicantid) {
+					window.location.reload();
 				}
 			}
 			console.log('socket Connection onmessage done..');

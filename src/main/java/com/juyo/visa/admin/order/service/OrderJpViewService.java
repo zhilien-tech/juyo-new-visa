@@ -2894,7 +2894,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(saveApplicantinfo)) {
 				//消息通知
 				try {
-					visaInfoWSHandler.broadcast(new TextMessage(""));
+					visaInfoWSHandler.broadcast(new TextMessage(JsonUtil.toJson(saveApplicantinfo)));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -2907,7 +2907,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = dbDao.fetch(TUserEntity.class, userid);
 		TCompanyEntity loginCompany = dbDao.fetch(TCompanyEntity.class, loginUser.getComId().longValue());
 		Map<String, Object> result = Maps.newHashMap();
-		Integer orderjpid = null;
 		TApplicantEntity applicant = new TApplicantEntity();
 		TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
 		//修改
@@ -2946,23 +2945,20 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		} else {
 
 			TApplicantEntity insertapplicant = dbDao.insert(applicant);
-			int applicantid = insertapplicant.getId();
-			result.put("applicantid", applicantid);
+			applyid = insertapplicant.getId();
 			//如果订单不存在，则先创建订单
 			if (orderid == 0) {
 				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
-				orderid = generrateorder.get("orderid");
-				orderjpid = generrateorder.get("orderjpid");
+				orderid = generrateorder.get("orderjpid");
 			} else {
-				TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
-				orderid = orderjp.getOrderId();
-				applicantjp.setOrderId(orderid);
+				/*TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+				orderjpid = orderjp.getId();*/
 			}
 			//新增日本订单基本信息
 			//applicantjp.setMainRelation(form.getMainRelation());
 			//dbDao.insert(applicantjp);
-			applicantjp.setOrderId(orderjpid);
-			applicantjp.setApplicantId(applicantid);
+			applicantjp.setOrderId(orderid);
+			applicantjp.setApplicantId(applyid);
 			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
 			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
 			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
@@ -2980,10 +2976,20 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			passport.setSex(form.getSex());
 			passport.setIssuedOrganization("公安部出入境管理局");
 			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
-			passport.setApplicantId(applicantid);
+			passport.setApplicantId(applyid);
 			dbDao.insert(passport);
+
+			TApplicantVisaOtherInfoEntity visaother = new TApplicantVisaOtherInfoEntity();
+			visaother.setApplicantid(insertappjp.getId());
+			visaother.setHotelname("参照'赴日予定表'");
+			visaother.setVouchname("参照'身元保证书'");
+			visaother.setInvitename("同上");
+			visaother.setTraveladvice("推荐");
+			dbDao.insert(visaother);
+
 		}
-		result.put("orderjpid", orderjpid);
+		result.put("applyurl", form.getUrl());
+		result.put("applyid", applyid);
 		result.put("orderid", orderid);
 		System.out.println("result:" + result);
 		//创建日本申请人 信息
@@ -3489,7 +3495,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(savePassportinfo)) {
 				//消息通知
 				try {
-					visaInfoWSHandler.broadcast(new TextMessage(""));
+					visaInfoWSHandler.broadcast(new TextMessage(JsonUtil.toJson(savePassportinfo)));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -3503,7 +3509,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object savePassportinfo(PassportJsonEntity form, int applyid, int orderid, int userid) {
 
 		Map<String, Object> result = Maps.newHashMap();
-		int orderjpid = 0;
 		TUserEntity loginUser = dbDao.fetch(TUserEntity.class, userid);
 		TCompanyEntity loginCompany = dbDao.fetch(TCompanyEntity.class, loginUser.getComId().longValue());
 		TApplicantPassportEntity passport = new TApplicantPassportEntity();
@@ -3600,8 +3605,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		} else {
 			if (orderid == 0) {
 				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
-				orderid = generrateorder.get("orderid");
-				orderjpid = generrateorder.get("orderjpid");
+				orderid = generrateorder.get("orderjpid");
 			}
 			TApplicantEntity applicantEntity = new TApplicantEntity();
 			applicantEntity.setFirstName(form.getXingCn());
@@ -3645,6 +3649,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				dbDao.update(insertapplicant);
 			}
 			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
+			applyid = insertappjp.getId();
 			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
 			workJp.setApplicantId(insertappjp.getId());
 			workJp.setCreateTime(new Date());
@@ -3661,13 +3666,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(visaother);
 			result.put("applicantjpid", applicantjp.getApplicantId());
 			result.put("applicantid", applicantjp.getApplicantId());
-			result.put("orderid", applicantjp.getOrderId());
+			//result.put("orderid", applicantjp.getOrderId());
 
 		}
 		//保存历史信息
 		//		savaOrUpdatePassport(form, request);
 		//int update = dbDao.update(passport);
-		result.put("orderjpid", orderjpid);
+		result.put("passurl", form.getUrl());
+		result.put("applyid", applyid);
 		result.put("orderid", orderid);
 		System.out.println("result:" + result);
 		return result;

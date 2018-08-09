@@ -302,4 +302,10 @@ public class SimpleVisaModule {
 		return simpleVisaService.dataUpload(orderid, request);
 	}*/
 
+	@At
+	@POST
+	public Object hasApplyInfo(@Param("applyid") int applyid, @Param("orderid") int orderid, HttpSession session) {
+		return simpleVisaService.hasApplyInfo(applyid, orderid, session);
+	}
+
 }

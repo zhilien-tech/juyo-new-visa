@@ -3198,14 +3198,24 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	public Object toNewfilminginfo(int applyid, int orderid, HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("orderid", orderid);
+		String applyurl = " ";
+		String passurl = " ";
 		if (!Util.isEmpty(applyid)) {
 			result.put("applyid", applyid);
 			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyid);
-			result.put("applyurl", apply.getCardFront());
+			if (!Util.isEmpty(apply.getCardFront())) {
+				applyurl = apply.getCardFront();
+			}
+
 			TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
 					Cnd.where("applicantId", "=", applyid));
-			result.put("passurl", passport.getPassportUrl());
+			if (!Util.isEmpty(passport.getPassportUrl())) {
+				passurl = passport.getPassportUrl();
+			}
+
 		}
+		result.put("applyurl", applyurl);
+		result.put("passurl", passurl);
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userid = loginUser.getId();
@@ -5426,7 +5436,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		String page = "pages/Japan/upload/index/index";
 		String scene = "";
-		scene = orderid + "&" + loginUser.getId() + "&" + applyid;
+		scene = "o=" + orderid + "&u=" + loginUser.getId() + "&a=" + applyid;
 		System.out.println("scene:" + scene + "--------------");
 		String accessToken = (String) getAccessToken();
 		System.out.println("accessToken:" + accessToken + "=================");
@@ -5523,7 +5533,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	//发送POST请求
 	public InputStream toPostRequest(String json, String accessToken) {
 		String host = "https://api.weixin.qq.com";
-		String path = "/cgi-bin/wxaapp/createwxaqrcode?access_token=" + accessToken;
+		String path = "/wxa/getwxacodeunlimit?access_token=" + accessToken;
 		String method = "POST";
 		String entityStr = "";
 		Map<String, String> headers = new HashMap<String, String>();
@@ -5548,6 +5558,59 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		}*/
 		return inputStream;
+	}
+
+	public Object hasApplyInfo(int applyid, int orderid, HttpSession session) {
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Map<String, Object> result = Maps.newHashMap();
+		if (Util.isEmpty(applyid) || applyid == 0) {
+			//新建申请人表
+			TApplicantEntity apply = new TApplicantEntity();
+			apply.setOpId(loginUser.getId());
+			apply.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+			apply.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+			apply.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+			apply.setCreateTime(new Date());
+			TApplicantEntity insertApply = dbDao.insert(apply);
+			applyid = insertApply.getId();
+			//新建日本申请人表
+			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+			if (Util.isEmpty(orderid) || orderid == 0) {
+				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
+				orderid = generrateorder.get("orderjpid");
+			}
+			applicantjp.setOrderId(orderid);
+			applicantjp.setApplicantId(applyid);
+			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
+
+			//日本工作信息
+			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
+			workJp.setApplicantId(insertappjp.getId());
+			workJp.setCreateTime(new Date());
+			workJp.setOpId(loginUser.getId());
+			dbDao.insert(workJp);
+			//护照信息
+			TApplicantPassportEntity passport = new TApplicantPassportEntity();
+			passport.setIssuedOrganization("公安部出入境管理局");
+			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
+			passport.setApplicantId(applyid);
+			dbDao.insert(passport);
+
+			TApplicantVisaOtherInfoEntity visaother = new TApplicantVisaOtherInfoEntity();
+			visaother.setApplicantid(insertappjp.getId());
+			visaother.setHotelname("参照'赴日予定表'");
+			visaother.setVouchname("参照'身元保证书'");
+			visaother.setInvitename("同上");
+			visaother.setTraveladvice("推荐");
+			dbDao.insert(visaother);
+		}
+		result.put("applyid", applyid);
+		result.put("orderid", orderid);
+		return result;
 	}
 
 }

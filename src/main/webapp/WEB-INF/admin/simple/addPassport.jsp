@@ -49,7 +49,7 @@
 			float: left;
 			width: 150px;
 			height: 150px;
-			background: rosybrown;
+			/* background: rosybrown; */
 		}
 		.qrcode-wrap .tips{
 			float: left;
@@ -87,7 +87,8 @@
 	<div class="modal-content">
 		<a id="toVisa" class="rightNav"><span></span></a>
 		<form id="passportInfo">
-			<input type="hidden" id="orderid">
+			<input type="hidden" id="orderid" value="${obj.orderid }">
+			<input type="hidden" id="applyid">
 			<div class="modal-header">
 				<span class="heading">资料上传</span>
 				<input id="backBtn" type="button" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" />
@@ -102,7 +103,7 @@
 					<div class="title">护照首页</div>
 					<div class="photo">
 						等候上传..
-						<img class="img" src=" ">
+						<img id="passurl" class="img" src=" ">
 					</div>
 					<div class="tips">资料要求：<br>拍摄的字体清晰可见、不要反光</div>
 				</div>
@@ -110,7 +111,7 @@
 					<div class="title">身份证</div>
 					<div class="photo">
 						等候上传..
-						<img class="img" src=" ">
+						<img id="cardurl" class="img" src=" ">
 					</div>
 					<div class="tips">资料要求：<br>清晰拍摄在有效期内的身份证正反面</div>
 				</div>
@@ -121,10 +122,10 @@
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/admin/common/utils.js"></script>
 	<script>
-		const orderid 	  = '${obj.orderid}';
+		//const orderid 	  = '${obj.orderid}';
 		//const applicantid = '${obj.applyid}';
 		const BASEURL 	  = 'ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}';
-		const REDIRECTURL = '/admin/simple/updateApplicant.html?applicantid=' + applicantid + '&orderid=' + orderid;
+		const REDIRECTURL = '/admin/simple/updateApplicant.html?applicantid=' + $("#applyid").val() + '&orderid=' + $("#orderid").val();
 
 		const socket = new Socket().connect(BASEURL);
 
@@ -138,14 +139,22 @@
 		
 		socket.onmessage = (ev) => {
 			if (ev.data) {
-				let ret = JSON.parse(ret);
-				if (ret.applicantid == applicantid) {
-					switch(ret.messagetype >> 0) {
-						case 1:
-							window.location.reload();
-							break;
-					}
+				let ret = JSON.parse(ev.data);
+				if(ret.orderid != ""){
+					$("#orderid").val(ret.orderid);
 				}
+				if(ret.applyid != ""){
+					$("#applyid").val(ret.applyid);
+				}
+				if(ret.passurl != ""){
+					$("#passurl").attr("src",ret.passurl);
+				}
+				if(ret.applyurl != ""){
+					$("#cardurl").attr("src",ret.applyrul);
+				}
+				 window.document.getElementById('orderid').value = ret.orderid;
+				 window.document.getElementById('applyid').value = ret.applyid;
+				
 			}
 			console.log('socket Connection onmessage done..');
 		};
@@ -157,8 +166,23 @@
 		});
 
 		$('#toVisa').on('click', () => {
-			socket.close();
-			window.location.href = REDIRECTURL;
+			$.ajax({
+				type: 'POST',
+				data: {
+					applyid: $("#applyid").val(),
+					orderid: $("#orderid").val()
+				},
+				url: '/admin/simple/hasApplyInfo.html',
+				success: function (data) {
+					window.parent.document.getElementById('orderid').value = data.orderid;
+					console.log(data.orderid);
+					console.log(data.applyid);
+					window.document.getElementById('orderid').value = data.orderid;
+					window.document.getElementById('applyid').value = data.applyid;
+					socket.close();
+					window.location.href = '/admin/simple/updateApplicant.html?applicantid=' + $("#applyid").val() + '&orderid=' + $("#orderid").val();
+				}
+			});
 		});
 	</script>
 </body>
