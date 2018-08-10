@@ -308,4 +308,10 @@ public class SimpleVisaModule {
 		return simpleVisaService.hasApplyInfo(applyid, orderid, session);
 	}
 
+	@At
+	@POST
+	public Object isSamewithMainapply(@Param("orderid") int orderid) {
+		return simpleVisaService.isSamewithMainapply(orderid);
+	}
+
 }

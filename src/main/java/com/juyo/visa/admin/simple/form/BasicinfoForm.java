@@ -198,4 +198,6 @@ public class BasicinfoForm {
 
 	private String OCRline2;
 
+	private Integer juzhudicheckbox;
+
 }
