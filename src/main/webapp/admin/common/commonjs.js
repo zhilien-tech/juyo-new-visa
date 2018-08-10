@@ -77,18 +77,19 @@ function setCaretPosition(ctrl, pos){
     }
 }
 document.write('<script language=javascript src="/references/common/js/pinyin.js?v='+new Date().getTime()+'"></script>');
-//联想拼音
-$(document).on("input","#firstName",function(){
+
+$(document).on("input","#firstName",function(ev){
+
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
 	}
 	var pos=$(this).getCurPos();//保存原始光标位置
 	var temp = $(this).val().replace(/\s*/g,"");
 
-	//var hanzi = temp.split('/')[0];
+
 	var pinyinchar = getPinYinStr(temp);
 	var dex = temp.length;
-	//$("#firstNameEn").css('left',200);
+	
 	if($(this).val().length == 0){
 		$("#firstNameEn").val("").change();
 	}else{
