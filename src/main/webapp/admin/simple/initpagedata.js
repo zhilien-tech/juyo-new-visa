@@ -12,6 +12,7 @@ function initApplicantTable(){
 				layer.closeAll("loading");
 				var html = '';
 				$.each(data.applyinfo,function(index,value){
+					console.log(value);
 					html += '<tr>';
 					if(value.id == value.mainid){
 						html += '<td>主</td>';
