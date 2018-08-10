@@ -3687,6 +3687,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		orderinfo.setUserId(user.getId());
 		orderinfo.setOrderNum(generrateOrdernum());
 		orderinfo.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
+		orderinfo.setIsDisabled(IsYesOrNoEnum.NO.intKey());
 		orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
 		orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
 		orderinfo.setCreateTime(new Date());

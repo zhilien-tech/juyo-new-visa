@@ -2312,6 +2312,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderinfo.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
 		orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
 		orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
+		orderinfo.setIsDisabled(IsYesOrNoEnum.NO.intKey());
 		orderinfo.setCreateTime(new Date());
 		orderinfo.setUpdateTime(new Date());
 		TOrderEntity orderinsert = dbDao.insert(orderinfo);
@@ -3352,6 +3353,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setIsPrompted(IsYesOrNoEnum.NO.intKey());
 		applicant.setAddress(form.getAddress());
 		applicant.setCardId(form.getCardId());
+		if (Util.isEmpty(form.getJuzhudicheckbox())) {
+			applicant.setAddressIsSameWithCard(IsYesOrNoEnum.NO.intKey());
+		} else {
+			applicant.setAddressIsSameWithCard(form.getJuzhudicheckbox());
+		}
 		applicant.setCity(form.getCity());
 		applicant.setDetailedAddress(form.getDetailedAddress());
 		applicant.setEmail(form.getEmail());
@@ -3366,7 +3372,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setHasOtherNationality(form.getHasOtherNationality());
 		applicant.setOtherFirstName(form.getOtherFirstName());
 		applicant.setOtherLastName(form.getOtherLastName());
-		applicant.setAddressIsSameWithCard(form.getAddressIsSameWithCard());
 		applicant.setCardProvince(form.getCardProvince());
 		applicant.setCardCity(form.getCardCity());
 		applicant.setIssueOrganization(form.getIssueOrganization());
@@ -5610,6 +5615,17 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 		result.put("applyid", applyid);
 		result.put("orderid", orderid);
+		return result;
+	}
+
+	public Object isSamewithMainapply(int orderid) {
+		Map<String, Object> result = Maps.newHashMap();
+		String applicantSqlstr = sqlManager.get("getMainapplyinfo");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		applicantSql.setParam("id", orderid);
+		Record mainapplyinfo = dbDao.fetch(applicantSql);
+		result.put("maininfo", mainapplyinfo);
+
 		return result;
 	}
 
