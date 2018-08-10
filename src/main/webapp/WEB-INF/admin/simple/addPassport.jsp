@@ -49,7 +49,8 @@
 			float: left;
 			width: 150px;
 			height: 150px;
-			/* background: rosybrown; */
+			margin-left: 50px;
+    		margin-right: 55px;
 		}
 		.qrcode-wrap .tips{
 			float: left;
