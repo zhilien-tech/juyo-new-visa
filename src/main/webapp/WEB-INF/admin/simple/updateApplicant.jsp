@@ -26,6 +26,9 @@
 			top: 1px;
 			right: -10px;
 		}
+		.dropdown-menu {
+			top: 284px !important;
+		}
 	</style>
 </head>
 <body>
@@ -201,7 +204,7 @@
 							<div class="col-sm-4 pr-0 pl-10">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<select id="validType" name="validType" class="form-control input-sm selectHeight" tabIndex="10">
+									<select id="validType" name="validType" class="form-control input-sm selectHeight" tabIndex="10" style="padding: 0">
 										<c:forEach var="map" items="${obj.passportType}">
 											<option value="${map.key}" ${map.key == obj.passport.validType?'selected':'' }>${map.value}</option>
 										</c:forEach>
@@ -255,7 +258,7 @@
 					<!-- 现居住地 -->
 					<div class="col-sm-3 pr-5">
 						<div class="form-group">
-							<label style="position: relative;"><span>*</span>现居住地（同主申请人）<input id="juzhudi-checkbox" type="checkbox" value="0"></label>
+							<label style="position: relative;"><span>*</span>现居住地（同主申请人）<input id="juzhudi-checkbox" name="juzhudicheckbox" type="checkbox" value=""></label>
 							<input id="province" name="province" type="text" class="form-control input-sm" placeholder="省" value="${obj.applicant.province }"/>
 						</div>
 					</div>
@@ -924,7 +927,6 @@
 			saveApplicant(3);
 		}
 		function saveApplicant(status) {
-
 			var str = "";
 			$("input:checkbox[name='addressIsSameWithCard']:checked").each(function () {
 				str = $(this).val();
@@ -1027,13 +1029,51 @@
 		
 		/** 2018_08_03 */
 		(() => {
+			let flag = "${obj.orderjp.isMainApplicant}";
 			let $jzdChenkbox = $('#juzhudi-checkbox');
+			let v = "${obj.applicant.addressIsSameWithCard }";
+			let maininfo;
+
+			flag == 1 ? $jzdChenkbox.hide() : $jzdChenkbox.show();
+
+
+			$.ajax({
+				type: 'POST',
+				url: '${base}/admin/simple/isSamewithMainapply.html',
+				data: {
+					orderid: '${obj.orderid}'
+				},
+				success: function (data) {
+					maininfo = data.maininfo;
+					console.log(maininfo);
+				}
+			});
+			
+			if (v == '' || v == null || v == undefined) {
+				v = 0
+			}
+			
+			if (Number(v) == 1) {
+				$jzdChenkbox.attr('checked', 'checked');
+			}
+
+			$jzdChenkbox.val(v);
+			
 			$jzdChenkbox.change(function() {
 				let $checkbox = $(this);
 				let v = $checkbox.val();
-				v = v == 0 ? 1 : 0;
+				if (v == 0) {
+					v = 1;
+					$('#province').val(maininfo.province);
+					$('#detailedAddress').val(maininfo.detailedaddress);
+				} else {
+					v = 0;
+					$('#province').val('');
+					$('#detailedAddress').val('');
+				}
+				
 				$checkbox.val(v);
-				console.log($checkbox.val());
+				
 			});
 		})();
 	</script>
@@ -1179,7 +1219,6 @@
 
 			//保存
 			function save(status) {
-
 				//得到获取validator对象或实例 
 				var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 				bootstrapValidator.validate();
@@ -1190,7 +1229,6 @@
 				var id = '${obj.applicantid}';
 				var orderid = '${obj.orderid}';
 				layer.load(1);
-
 				ajaxConnection();
 				var count = 0;
 				function ajaxConnection() {
