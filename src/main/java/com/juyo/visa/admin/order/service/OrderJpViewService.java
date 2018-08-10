@@ -2957,6 +2957,24 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//新增日本订单基本信息
 			//applicantjp.setMainRelation(form.getMainRelation());
 			//dbDao.insert(applicantjp);
+
+			//设置主申请人信息
+			List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderid), null);
+			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
+
+				applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
+				TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
+						Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()));
+				insertapplicant.setMainId(mainApply.getApplicantId());
+				dbDao.update(insertapplicant);
+			} else {
+				//设置为主申请人
+				applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+				insertapplicant.setMainId(applyid);
+				dbDao.update(insertapplicant);
+			}
+
 			applicantjp.setOrderId(orderid);
 			applicantjp.setApplicantId(applyid);
 			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
@@ -3642,6 +3660,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
 
 				applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
+				TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
+						Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()));
+				insertapplicant.setMainId(mainApply.getApplicantId());
+				dbDao.update(insertapplicant);
 			} else {
 				//设置为主申请人
 				applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());

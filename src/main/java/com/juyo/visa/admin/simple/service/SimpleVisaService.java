@@ -5592,6 +5592,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
 
 				applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
+				TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
+						Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()));
+				apply.setMainId(mainApply.getApplicantId());
+				dbDao.update(apply);
 			} else {
 				//设置为主申请人
 				applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());

@@ -159,9 +159,24 @@
 			console.log('socket Connection onmessage done..');
 		};
 
-		$('#backBtn, #addBtn').on('click', () => {
+		$('#backBtn').on('click', () => {
 			layerFn.close(() => {
 				socket.close();
+			});
+		});
+		$('#addBtn').on('click', () => {
+			$.ajax({
+				type: 'POST',
+				data: {
+					applyid: $("#applyid").val(),
+					orderid: $("#orderid").val()
+				},
+				url: '/admin/simple/hasApplyInfo.html',
+				success: function (data) {
+					layerFn.close(() => {
+						socket.close();
+					});
+				}
 			});
 		});
 
