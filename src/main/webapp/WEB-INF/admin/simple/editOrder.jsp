@@ -27,6 +27,7 @@
 <!-- 加载中。。。样式 -->
 <link rel="stylesheet" href="${base}/references/common/css/spinner.css?v=<%=System.currentTimeMillis() %>">
 </head>
+
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper" id="wrapper">
 		<div class="content-wrapper">
@@ -559,7 +560,6 @@
 	<script src="${base}/admin/simple/initpagedata.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面js文件 -->
 	<script src="${base}/admin/simple/addsimpleorder.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面js文件 -->
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
-
 	<script type="text/javascript">
 		//加载申请人表格数据
 		initApplicantTable();
