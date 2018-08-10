@@ -5585,6 +5585,20 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
 				orderid = generrateorder.get("orderjpid");
 			}
+
+			//设置主申请人信息
+			List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderid), null);
+			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
+
+				applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
+			} else {
+				//设置为主申请人
+				applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+				apply.setMainId(applyid);
+				dbDao.update(apply);
+			}
+
 			applicantjp.setOrderId(orderid);
 			applicantjp.setApplicantId(applyid);
 			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
@@ -5627,6 +5641,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("maininfo", mainapplyinfo);
 
 		return result;
+	}
+
+	public Object autoCalculateStaydays(Date laststartdate, Date lastreturndate) {
+		int daysBetween = DateUtil.daysBetween(laststartdate, lastreturndate);
+		return daysBetween + 1;
 	}
 
 }

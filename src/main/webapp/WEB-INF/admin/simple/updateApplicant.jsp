@@ -58,6 +58,7 @@
 								tabIndex="1" 
 								autocomplete="off"
 								value="${obj.passport.firstName }" 
+								onkeyup="this.value=this.value.replace(/^ +| +$/g,'')"
 							/>
 							<input 
 								type="text" 
@@ -66,6 +67,7 @@
 								autocomplete="off" 
 								style="position:absolute;top:32px;border:none;left:150px;" 
 								value="${obj.firstNameEn }"
+								onkeyup="this.value=this.value.replace(/^ +| +$/g,'')"
 							/>
 						</div>
 						<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>

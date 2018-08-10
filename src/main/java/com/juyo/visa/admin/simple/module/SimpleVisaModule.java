@@ -6,6 +6,8 @@
 
 package com.juyo.visa.admin.simple.module;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -312,6 +314,13 @@ public class SimpleVisaModule {
 	@POST
 	public Object isSamewithMainapply(@Param("orderid") int orderid) {
 		return simpleVisaService.isSamewithMainapply(orderid);
+	}
+
+	@At
+	@POST
+	public Object autoCalculateStaydays(@Param("laststartdate") Date laststartdate,
+			@Param("lastreturndate") Date lastreturndate) {
+		return simpleVisaService.autoCalculateStaydays(laststartdate, lastreturndate);
 	}
 
 }

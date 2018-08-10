@@ -256,20 +256,7 @@
 														</c:choose>
 													</div>
 												</div>
-												<div class="col-sm-4">
-													<div class="form-group">
-														<label>上次停留天数</label>
-
-														<c:choose>
-															<c:when test="${empty obj.applyorderinfo.laststayday and obj.jporderinfo.laststayday != '' }">
-																<input id="laststayday" name="laststayday" autocomplete="off" style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm" value="${obj.jporderinfo.laststayday }"/>
-															</c:when>
-															<c:otherwise>
-																<input id="laststayday" name="laststayday" autocomplete="off" style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm" value="${obj.applyorderinfo.laststayday }"/>
-															</c:otherwise>
-														</c:choose>														
-													</div>
-												</div>
+												
 												<div class="col-sm-4">
 													<div class="form-group">
 														<label>上次返回时间</label>
@@ -283,6 +270,19 @@
 														</c:choose>
 													</div>
 												</div>
+												<div class="col-sm-4">
+														<div class="form-group">
+															<label>上次停留天数</label>
+															<c:choose>
+																<c:when test="${empty obj.applyorderinfo.laststayday and obj.jporderinfo.laststayday != '' }">
+																	<input id="laststayday" name="laststayday" autocomplete="off" style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm" value="${obj.jporderinfo.laststayday }"/>
+																</c:when>
+																<c:otherwise>
+																	<input id="laststayday" name="laststayday" autocomplete="off" style="color:#555 !important;border-color:#d2d6de !important;" type="text" class="form-control input-sm" value="${obj.applyorderinfo.laststayday }"/>
+																</c:otherwise>
+															</c:choose>														
+														</div>
+													</div>
 											</div>
 										</div>	
 						</div>
@@ -798,43 +798,6 @@
 				$(".ipt-info").show();
 			}
 			
-			/* var marry = $("#marryUrl").val();
-			if(marry != ""){
-				$(".delete").css("display","block");
-			}else{
-				$(".delete").css("display","none");
-			} */
-			//删除——————————————————————————————————————————————
-			//婚姻状况为单身和丧偶时没有上传图片接口
-			/* var marryStatus = $("#marryStatus").val();
-			if(marryStatus == 3 || marryStatus == 4 || !marryStatus){
-				$(".info-imgUpload").hide();
-				$("#unitNameLabel").html("<span></span>父母职业");
-			}else{
-				$(".info-imgUpload").show();
-				if(marryStatus == 1){
-					$("#unitNameLabel").html("<span></span>配偶职业");
-				}else{
-					$("#unitNameLabel").html("<span></span>父母职业");
-				}
-			}
-			$("#marryStatus").change(function(){
-				var status = $(this).val();
-				if(status == 3 || status == 4 || !status){
-					$("#unitNameLabel").html("<span></span>父母职业");
-					$(".info-imgUpload").hide();
-					$('#marryUrl').val("");
-					$('#sqImg').attr('src', "");
-					$("#uploadFile").siblings("i").css("display","none");
-				}else{
-					if(status == 1){
-						$("#unitNameLabel").html("<span></span>配偶职业");
-					}else{
-						$("#unitNameLabel").html("<span></span>父母职业");
-					}
-					$(".info-imgUpload").show();
-				}
-			}); */
 			
 			var career = $("#careerStatus").val();
 			if(career == 4){
@@ -1149,41 +1112,13 @@
 			})();
 			
 		});
-		//连接websocket
-		/* connectWebSocket();
-		function connectWebSocket(){
-			 if ('WebSocket' in window){  
-	            console.log('Websocket supported');  
-	            socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+		/** 2018_08_10 */
+		(() => {
+			'use strict';
 
-	            console.log('Connection attempted');  
-
-	            socket.onopen = function(){  
-	                 console.log('Connection open!');  
-	                 //setConnected(true);  
-	             };
-
-	            socket.onclose = function(){  
-	                console.log('Disconnecting connection');  
-	            };
-
-	            socket.onmessage = function (evt){
-	                  var received_msg = evt.data;
-	                  var applicantid = '${obj.visaInfo.applicantid}';
-	                  if(received_msg){
-		                  var receiveMessage = JSON.parse(received_msg);
-		                  if(receiveMessage.messagetype == 3 && receiveMessage.applicantid == applicantid){
-		                	  window.location.reload();
-		                  }
-	                  }
-	                  console.log('message received!');  
-	                  //showMessage(received_msg);  
-	             };  
-
-	          } else {  
-	            console.log('Websocket not supported');  
-	          }  
-		} */
+			
+		})();
+		
 		$("#addBtn").click(function(){
 			save(1);
 		});
@@ -1425,7 +1360,7 @@
 			$('#sqImg').attr('src', "");
 			$(".delete").css("display","none");
 		}
-		
+
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -1435,18 +1370,7 @@
 		function passportBtn(){
 			save(2);
 		}
-		//签证类型
-		/* var threecounty = '${obj.jporderinfo.visaCounty}';
-		if(threecounty){
-			var threecountys = threecounty.split(",");
-			for (var i = 0; i < threecountys.length; i++) {
-				$('[name=visacounty]').each(function(){
-					if(threecountys[i] == $(this).val()){
-						$(this).addClass('btnState-true');
-					}
-				});
-			}
-		} */
+		
 		var threecounty = '${obj.jporderinfo.threeCounty}';
 		if(threecounty){
 			var threecountys = threecounty.split(",");
@@ -1469,28 +1393,7 @@
 				console.log(btnInfo);
 			}
 		});
-		/* $('#visatype').change(function(){
-			var thisval = $(this).val();
-			var visit = $('#isVisit').val();
-			if(thisval == 2){
-				//$('#visacounty').show();
-				$('#threefangwen').show();
-				$('#visacounty input').removeClass('btnState-true');
-				if(visit == 1){
-					  $('#threexian').show();
-						$('.alignment').show(); 
-				}
-			}else{
-				$('#visacounty').hide();
-				$('#threefangwen').hide();
-				$('.row body-from-input').hide();
-				$('#threexian').hide();
-				$('.alignment').hide();
-				$('#laststartdate').val('');
-				$('#laststayday').val('');
-				$('#lastreturndate').val('');
-			}
-		}); */
+		
 		
 		$('#isVisit').change(function(){
 			var thisval = $(this).val();
@@ -1605,6 +1508,7 @@
 		$(document).on("input","#laststayday",function(){
 			var gotripdate = $('#laststartdate').val();
 			var thisval = $(this).val();
+			
 			thisval = thisval.replace(/[^\d]/g,'');
 			$(this).val(thisval);
 			if(!thisval){
@@ -1623,6 +1527,41 @@
 				});
 			}
 		});
+		let $laststartdate = $('#laststartdate');
+		let $lastreturndate = $('#lastreturndate');
+		$laststartdate.on("change", function() {
+			let fv = $(this).val();
+			let lv = $lastreturndate.val();
+			autoCalculateStaydays(fv, lv);
+		});
+
+		$lastreturndate.on("change", function() {
+			let lv = $(this).val();
+			let fv = $laststartdate.val();
+			autoCalculateStaydays(fv, lv);
+		});
+
+		function autoCalculateStaydays(fv, lv) {
+			if (fv.length > 9 && lv.length > 9) {
+				$.ajax({ 
+					url: '/admin/simple/autoCalculateStaydays.html',
+					dataType:"json",
+					data:{
+						laststartdate: fv,
+						lastreturndate: lv,
+					},
+					type:'post',
+					success: function(data){
+						if (data < 0) {
+							alert('上次出行时间不能大于上次返回时间');	
+						} else {
+							$('#laststayday').val(data);
+						}
+					}
+				});
+			}
+		}
+		
 		$('#isVisit').change(function(){
 			var isvisit = $('#isVisit').val();
 			
@@ -1632,10 +1571,7 @@
 				$('#laststayday').val('');
 				$('#lastreturndate').val('');
 			}
-		})
-/* 		$('#visatype').change(function(){
-				$('#threefangwen input').removeClass('btnState-true');
-		}) */
+		});
 	</script>
 </body>
 </html>
