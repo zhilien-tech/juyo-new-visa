@@ -24,6 +24,15 @@
 		#juzhudi-text{display: none;}
 		#juzhudi-checkbox{display: none;position: absolute;top: 1px;right: -10px;}
 		.dropdown-menu {top: 284px !important;}
+		#birthAddressEn,#issuedPlaceEn{left: 60px;width: 120px;}
+		#passport-tips{
+			background: url(../../references/public/dist/newvisacss/img/error.png) no-repeat;
+			padding-left: 18px;
+			background-position: 0px 3px;
+			line-height: 18px;
+			display: none; 
+			color: red;
+		}
 	</style>
 </head>
 <body>
@@ -62,7 +71,6 @@
 								autocomplete="off" 
 								style="position:absolute;top:32px;border:none;left:150px;" 
 								value="${obj.firstNameEn }"
-								onkeyup="this.value=this.value.replace(/^ +| +$/g,'')"
 							/>
 						</div>
 						<input type="hidden" id="id" name="id" value="${obj.passport.id }"/>
@@ -114,6 +122,7 @@
 									value="${obj.passport.passport }"
 									onkeyup="this.value=this.value.replace(/^ +| +$/g,'')"
 								/>
+								<small id="passport-tips">护照号已存在，请重新输入</small>
 							</div>
 						</div>
 						<!-- 性别 -->
@@ -416,6 +425,7 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript" src="${base}/admin/simple/validationZh.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
+		var passportVali;
 		$(function () {
 
 			var remark = $("#baseRemark").val();
@@ -491,22 +501,22 @@
 							stringLength: {
 								min: 1,
 								max: 9,
-								message: '护照号不能超过9位'
+								message: ''
 							},
-							remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
-								url: '${base}/admin/orderJp/checkPassport.html',
-								message: '护照号已存在，请重新输入',//提示消息
-								delay: 2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
-								type: 'POST',//请求方式
-								//自定义提交数据，默认值提交当前input value
-								data: function (validator) {
-									return {
-										passport: $('#passport').val(),
-										adminId: $('#id').val(),
-										orderid: $('#orderid').val()
-									};
-								}
-							}
+							// remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+							// 	url: '${base}/admin/orderJp/checkPassport.html',
+							// 	message: '护照号已存在，请重新输入',//提示消息
+							// 	delay: 2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+							// 	type: 'POST',//请求方式
+							// 	//自定义提交数据，默认值提交当前input value
+							// 	data: function (validator) {
+							// 		return {
+							// 			passport: $('#passport').val(),
+							// 			adminId: $('#id').val(),
+							// 			orderid: $('#orderid').val()
+							// 		};
+							// 	}
+							// }
 						}
 					},
 					firstName: {
@@ -527,7 +537,7 @@
 						trigger: "change keyup",
 						validators: {
 							regexp: {
-								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+								regexp: /^[\/a-zA-Z]{0,}$/,
 								message: '拼音中不能包含汉字或其他特殊符号'
 							},
 						}
@@ -537,7 +547,7 @@
 						validators: {
 							regexp: {
 								// regexp: /\/{1}[a-zA-Z]+$/,
-								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+								regexp: /^[\/a-zA-Z]{0,}$/,
 								message: '拼音中不能包含汉字或其他特殊符号'
 							},
 						}
@@ -546,7 +556,7 @@
 						trigger: "change keyup",
 						validators: {
 							regexp: {
-								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+								regexp: /^[\/a-zA-Z\s]{0,}$/,
 								message: '拼音中不能包含汉字或其他特殊符号'
 							},
 						}
@@ -555,12 +565,43 @@
 						trigger: "change keyup",
 						validators: {
 							regexp: {
-								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+								regexp: /^[\/a-zA-Z\s]{0,}$/,
 								message: '拼音中不能包含汉字或其他特殊符号'
 							},
 						}
 					}
 				}
+			});
+
+			passportValiFn();
+			function passportValiFn() {
+				var $i = $('#passport').next();
+				var $s = $i.next();
+				$.ajax({
+					type: 'POST',
+					data: {
+						passport: $('#passport').val(),
+						adminId: $('#id').val(),
+						orderid: $('#orderid').val()
+					},
+					url: '${base}/admin/orderJp/checkPassport.html',
+					success(data) {
+						passportVali = data.valid;
+						console.log("*******************************");
+						console.log( data.valid);
+						console.log("*******************************");
+
+						if (!passportVali) {
+							$('#passport-tips').show();
+						} else {
+							$('#passport-tips').hide();
+						}
+					}
+				});
+			}
+			
+			$('#passport').on('input',function() {
+				passportValiFn();
 			});
 
 			var front = $("#cardFront").val();
@@ -933,11 +974,13 @@
 			var applicantInfo = getFormJson('#applicantInfo');
 			if (status != 2) {
 				//得到获取validator对象或实例 
-				var bootstrapValidator = $("#applicantInfo").data(
-					'bootstrapValidator');
+				var bootstrapValidator = $("#applicantInfo").data('bootstrapValidator');
 				// 执行表单验证 
 				bootstrapValidator.validate();
-				if (bootstrapValidator.isValid()) {
+				console.log('-----------------------------------------');
+				console.log(passportVali);
+				console.log('-----------------------------------------');
+				if (bootstrapValidator.isValid() && passportVali) {
 					layer.load(1);
 					ajaxConnection();
 				}

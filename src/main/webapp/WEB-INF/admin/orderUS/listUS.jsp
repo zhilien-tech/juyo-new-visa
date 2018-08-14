@@ -198,7 +198,7 @@ $(function(){
 	function connectWebSocket(){
 		 if ('WebSocket' in window){  
             console.log('Websocket supported');  
-            socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+            socket = new WebSocket('wss://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
 
             console.log('Connection attempted');  
 

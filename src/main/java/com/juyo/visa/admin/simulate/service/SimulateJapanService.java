@@ -225,7 +225,8 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 				Integer status = orderinfo.getStatus();
 				map.put("orderstatus", status);
 				//将订单设置为提交中
-				if (JPOrderStatusEnum.READYCOMMING.intKey() == status) {
+				if (JPOrderStatusEnum.READYCOMMING.intKey() == status
+						|| JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey() == status) {
 					//如果是发招宝状态，将订单状态变为提交中
 					orderinfo.setStatus(JPOrderStatusEnum.COMMITING.intKey());
 				} else if (JPOrderStatusEnum.BIANGENGZHONG.intKey() == status) {
@@ -435,29 +436,8 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			dbDao.update(orderjp);
 			System.out.println(errorCode);
 			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
-			//提交失败
-			/*if (errorCode == ErrorCodeEnum.completedNumberFail.intKey()) {
-				//orderinfo.setStatus(JPOrderStatusEnum.COMMINGFAIL.intKey());
-			} else if (errorCode == ErrorCodeEnum.persionNameList.intKey()) {
-				//个人名簿生成失败
-				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
-			} else if (errorCode == ErrorCodeEnum.comeReport.intKey()) {
-				//归国报告上传失败
-				//orderinfo.setStatus(JPOrderStatusEnum.JAPANREPORTFAIL.intKey());
-			} else {
-				//orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
-			}*/
 
 			if (orderstatus == JPOrderStatusEnum.READYCOMMING.intKey()) {//发招宝失败 18
-				/*if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
-					System.out.println("不仅失败了，收付番号也没有");
-					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
-				} else {
-					System.out.println("虽然失败了，但收付番号还是有的");
-					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
-					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
-				}*/
-
 				if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
 					if (Util.eq(errorMsg, "受付番号获取失败")) {
 						System.out.println("受付番号虽然生成了，但并没有获取到");
@@ -472,6 +452,12 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
 					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
 				}
+
+			}
+			if (orderstatus == JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey()) {//失败重发时再失败
+				System.out.println("失败重发之后又失败了，继续发");
+				orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
 
 			}
 			if (orderstatus == JPOrderStatusEnum.COMMITING.intKey()) {//发招宝失败 18

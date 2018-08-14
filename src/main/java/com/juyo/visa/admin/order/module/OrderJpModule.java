@@ -377,6 +377,19 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 美国身份证正面上传、扫描
+	 */
+	@At
+	@Ok("json")
+	@Filters
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object IDCardRecognitionUS(@Param("image") File file, @Param("applyid") int applyid,
+			@Param("orderid") int orderid, @Param("userid") int userid, HttpServletRequest request,
+			HttpServletResponse response) {
+		return saleViewService.IDCardRecognitionUS(file, applyid, orderid, userid, request, response);
+	}
+
+	/**
 	 * 身份证背面上传、扫描
 	 */
 	@At
@@ -399,6 +412,19 @@ public class OrderJpModule {
 			@Param("orderid") int orderid, @Param("userid") int userid, HttpServletRequest request,
 			HttpServletResponse response) {
 		return saleViewService.passportRecognitionBack(file, applyid, orderid, userid, request, response);
+	}
+
+	/**
+	 * 美国护照上传、扫描
+	 */
+	@At
+	@Ok("json")
+	@Filters
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object passportRecognitionUS(@Param("image") File file, @Param("applyid") int applyid,
+			@Param("orderid") int orderid, @Param("userid") int userid, HttpServletRequest request,
+			HttpServletResponse response) {
+		return saleViewService.passportRecognitionUS(file, applyid, orderid, userid, request, response);
 	}
 
 	/**

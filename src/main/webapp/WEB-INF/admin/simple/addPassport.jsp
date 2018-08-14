@@ -104,7 +104,7 @@
 					<div class="title">护照首页</div>
 					<div class="photo">
 						等候上传..
-						<img id="passurl" class="img" src=" ">
+						<img id="passurl" onclick="toUpperPhoto(this)" class="img" src=" ">
 					</div>
 					<div class="tips">资料要求：<br>拍摄的字体清晰可见、不要反光</div>
 				</div>
@@ -112,7 +112,7 @@
 					<div class="title">身份证</div>
 					<div class="photo">
 						等候上传..
-						<img id="cardurl" class="img" src=" ">
+						<img id="cardurl" onclick="toUpperPhoto(this)" class="img" src=" ">
 					</div>
 					<div class="tips">资料要求：<br>清晰拍摄在有效期内的身份证正反面</div>
 				</div>
@@ -125,7 +125,7 @@
 	<script>
 		//const orderid 	  = '${obj.orderid}';
 		//const applicantid = '${obj.applyid}';
-		const BASEURL 	  = 'ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}';
+		const BASEURL 	  = 'wss://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}';
 		const REDIRECTURL = '/admin/simple/updateApplicant.html?applicantid=' + $("#applyid").val() + '&orderid=' + $("#orderid").val();
 
 		const socket = new Socket().connect(BASEURL);
@@ -139,8 +139,10 @@
 		};
 		
 		socket.onmessage = (ev) => {
+			console.log(ev);
 			if (ev.data) {
 				let ret = JSON.parse(ev.data);
+				console.log(ret);
 				if(ret.orderid != ""){
 					$("#orderid").val(ret.orderid);
 				}
@@ -151,10 +153,13 @@
 					$("#passurl").attr("src",ret.passurl);
 				}
 				if(ret.applyurl != ""){
-					$("#cardurl").attr("src",ret.applyrul);
+					$("#cardurl").attr("src",ret.applyurl);
 				}
 				 window.document.getElementById('orderid').value = ret.orderid;
 				 window.document.getElementById('applyid').value = ret.applyid;
+				 console.log($("#applyid").val());
+				 console.log($("#orderid").val());
+				 console.log("=============");
 				
 			}
 			console.log('socket Connection onmessage done..');
@@ -196,10 +201,19 @@
 					window.document.getElementById('orderid').value = data.orderid;
 					window.document.getElementById('applyid').value = data.applyid;
 					socket.close();
+					console.log($("#applyid").val());
+					console.log($("#orderid").val());
 					window.location.href = '/admin/simple/updateApplicant.html?applicantid=' + $("#applyid").val() + '&orderid=' + $("#orderid").val();
 				}
 			});
 		});
+		
+		function toUpperPhoto(photo){
+			var url = $(photo).attr("src");
+			if(url != ""){
+				window.open('/admin/pcVisa/toUpperPhoto.html?url='+url);
+			}
+		}
 	</script>
 </body>
 </html>

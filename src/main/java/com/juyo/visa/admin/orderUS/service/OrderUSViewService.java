@@ -1656,7 +1656,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object sendShareMsg(Integer staffId, Integer orderid, String sendType, HttpServletRequest request) {
 
-		String pcUrl = "http://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin";
+		String pcUrl = "https://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin";
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());

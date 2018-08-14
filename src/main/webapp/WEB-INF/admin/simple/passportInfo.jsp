@@ -102,7 +102,7 @@
 					<div class="title">护照首页</div>
 					<div class="photo">
 						等候上传..
-						<img class="img" src="${obj.passurl }">
+						<img class="img" onclick="toUpperPhoto(this)" src="${obj.passurl }">
 					</div>
 					<div class="tips">资料要求：<br>拍摄的字体清晰可见、不要反光</div>
 				</div>
@@ -110,7 +110,7 @@
 					<div class="title">身份证</div>
 					<div class="photo">
 						等候上传..
-						<img class="img" src="${obj.applyurl }">
+						<img class="img" onclick="toUpperPhoto(this)" src="${obj.applyurl }">
 					</div>
 					<div class="tips">资料要求：<br>清晰拍摄在有效期内的身份证正反面</div>
 				</div>
@@ -123,7 +123,7 @@
 	<script>
 		const orderid 	  = '${obj.orderid}';
 		const applicantid = '${obj.applyid}';
-		const BASEURL 	  = 'ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}';
+		const BASEURL 	  = 'wss://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}';
 		const REDIRECTURL = '/admin/simple/updateApplicant.html?applicantid=' + applicantid + '&orderid=' + orderid;
 
 		const socket = new Socket().connect(BASEURL);
@@ -137,7 +137,9 @@
 		};
 		
 		socket.onmessage = (ev) => {
+			console.log(ev);
 			if (ev.data) {
+				window.location.reload();
 				let ret = JSON.parse(ev.data);
 				if (ret.applyid == applicantid) {
 					window.location.reload();
@@ -156,6 +158,13 @@
 			socket.close();
 			window.location.href = REDIRECTURL;
 		});
+		
+		function toUpperPhoto(photo){
+			var url = $(photo).attr("src");
+			if(url != ""){
+				window.open('/admin/pcVisa/toUpperPhoto.html?url='+url);
+			}
+		}
 	</script>
 </body>
 </html>
