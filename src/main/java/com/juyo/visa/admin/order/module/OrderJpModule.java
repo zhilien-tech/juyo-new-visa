@@ -373,6 +373,7 @@ public class OrderJpModule {
 	public Object IDCardRecognition(@Param("image") File file, @Param("applyid") int applyid,
 			@Param("orderid") int orderid, @Param("userid") int userid, HttpServletRequest request,
 			HttpServletResponse response) {
+		System.out.println("applyid:" + applyid + " orderid:" + orderid + " userid:" + userid);
 		return saleViewService.IDCardRecognition(file, applyid, orderid, userid, request, response);
 	}
 
