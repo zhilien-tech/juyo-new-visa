@@ -2822,6 +2822,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object IDCardRecognition(File file, int applyid, int orderid, int userid, HttpServletRequest request,
 			HttpServletResponse response) {
 
+		System.out.println("applyid:" + applyid + " orderid:" + orderid + " userid:" + userid);
 		long startTime = System.currentTimeMillis();//获取当前时间
 		String imageDataValue = saveDiskImageToDisk(file);
 		Input input = new Input(imageDataValue, "face");
@@ -3454,6 +3455,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object passportRecognitionBack(File file, int applyid, int orderid, int userid, HttpServletRequest request,
 			HttpServletResponse response) {
+		System.out.println("applyid:" + applyid + " orderid:" + orderid + " userid:" + userid);
 		//将图片转成流并BASE64加密
 		String imageDataB64 = saveDiskImageToDisk(file);
 		//进行扫描识别操作
