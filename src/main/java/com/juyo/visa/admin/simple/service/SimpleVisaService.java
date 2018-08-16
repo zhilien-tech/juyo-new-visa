@@ -5440,6 +5440,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		String page = "pages/Japan/upload/index/index";
 		String scene = "";
+		//因为小程序参数最长为32，所以参数尽量简化，o是订单id,u是userid,a是申请人id
 		scene = "o=" + orderid + "&u=" + loginUser.getId() + "&a=" + applyid;
 		System.out.println("scene:" + scene + "--------------");
 		String accessToken = (String) getAccessToken();
