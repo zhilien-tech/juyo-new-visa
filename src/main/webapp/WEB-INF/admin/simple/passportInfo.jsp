@@ -123,6 +123,8 @@
 	<script>
 		const orderid 	  = '${obj.orderid}';
 		const applicantid = '${obj.applyid}';
+		console.log(orderid);
+		console.log(applicantid);
 		const BASEURL 	  = 'wss://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}';
 		const REDIRECTURL = '/admin/simple/updateApplicant.html?applicantid=' + applicantid + '&orderid=' + orderid;
 

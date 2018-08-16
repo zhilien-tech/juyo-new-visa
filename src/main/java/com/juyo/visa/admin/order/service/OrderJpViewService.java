@@ -2897,6 +2897,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				form.setApplyurl(applyurl);
 				form.setApplyid(aid);
 				form.setOrderid(oid);
+				form.setUserid(userid);
 				//消息通知
 				try {
 					simpleInfoWSHandler.broadcast(new TextMessage(JsonUtil.toJson(form)));
@@ -3582,6 +3583,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				jsonEntity.setOrderid(oid);
 				form.setApplyid(aid);
 				form.setOrderid(oid);
+				form.setUserid(userid);
 				form.setPassurl(passurl);
 				System.out.println("passurl:" + passurl);
 				//消息通知
@@ -3824,6 +3826,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				applicantEntity.setBirthday(DateUtil.string2Date(form.getBirth()));
 			}
 			TApplicantEntity insertapplicant = dbDao.insert(applicantEntity);
+			applyid = insertapplicant.getId();
 			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
 			applicantjp.setApplicantId(insertapplicant.getId());
 			applicantjp.setOrderId(orderid);
@@ -3847,7 +3850,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				dbDao.update(insertapplicant);
 			}
 			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
-			applyid = insertappjp.getId();
 			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
 			workJp.setApplicantId(insertappjp.getId());
 			workJp.setCreateTime(new Date());

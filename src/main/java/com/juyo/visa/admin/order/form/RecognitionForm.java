@@ -13,4 +13,6 @@ public class RecognitionForm {
 
 	private String applyurl;
 
+	private Integer userid;
+
 }

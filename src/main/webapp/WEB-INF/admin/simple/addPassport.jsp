@@ -125,6 +125,8 @@
 	<script>
 		//const orderid 	  = '${obj.orderid}';
 		//const applicantid = '${obj.applyid}';
+		var userid = '${obj.userid}';
+		console.log("userid:"+userid);
 		const BASEURL 	  = 'wss://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}';
 		const REDIRECTURL = '/admin/simple/updateApplicant.html?applicantid=' + $("#applyid").val() + '&orderid=' + $("#orderid").val();
 
@@ -143,23 +145,25 @@
 			if (ev.data) {
 				let ret = JSON.parse(ev.data);
 				console.log(ret);
-				if(ret.orderid != ""){
-					$("#orderid").val(ret.orderid);
+				if(ret.userid == userid){
+					if(ret.orderid != ""){
+						$("#orderid").val(ret.orderid);
+					}
+					if(ret.applyid != ""){
+						$("#applyid").val(ret.applyid);
+					}
+					if(ret.passurl != ""){
+						$("#passurl").attr("src",ret.passurl);
+					}
+					if(ret.applyurl != ""){
+						$("#cardurl").attr("src",ret.applyurl);
+					}
+					 window.document.getElementById('orderid').value = ret.orderid;
+					 window.document.getElementById('applyid').value = ret.applyid;
+					 console.log($("#applyid").val());
+					 console.log($("#orderid").val());
+					 console.log("=============");
 				}
-				if(ret.applyid != ""){
-					$("#applyid").val(ret.applyid);
-				}
-				if(ret.passurl != ""){
-					$("#passurl").attr("src",ret.passurl);
-				}
-				if(ret.applyurl != ""){
-					$("#cardurl").attr("src",ret.applyurl);
-				}
-				 window.document.getElementById('orderid').value = ret.orderid;
-				 window.document.getElementById('applyid').value = ret.applyid;
-				 console.log($("#applyid").val());
-				 console.log($("#orderid").val());
-				 console.log("=============");
 				
 			}
 			console.log('socket Connection onmessage done..');
