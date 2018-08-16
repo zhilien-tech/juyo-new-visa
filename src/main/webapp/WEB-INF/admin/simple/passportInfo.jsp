@@ -47,7 +47,7 @@
 		}
 		.qrcode-wrap .qrcode{
 			float: left;
-			width: 150px;
+			width: 130px;
 			height: 150px;
 			margin-left: 50px;
     		margin-right: 55px;
