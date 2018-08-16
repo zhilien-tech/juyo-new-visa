@@ -64,7 +64,6 @@ import com.juyo.visa.admin.visajp.service.TripAirlineService;
 import com.juyo.visa.admin.visajp.service.VisaJapanService;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 import com.juyo.visa.common.base.QrCodeService;
-import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
@@ -112,7 +111,6 @@ import com.juyo.visa.entities.TApplicantWorkJpEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCompanyOfCustomerEntity;
-import com.juyo.visa.entities.TConfWxEntity;
 import com.juyo.visa.entities.TCustomerEntity;
 import com.juyo.visa.entities.TCustomerVisainfoEntity;
 import com.juyo.visa.entities.TFlightEntity;
@@ -5452,24 +5450,23 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 	//获取accessToken
 	public Object getAccessToken() {
-		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		/*Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
 		String wxConfigStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID"));
 		Long T_APP_STAFF_CONF_WX_ID = Long.valueOf(wxConfigStr);
 		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, T_APP_STAFF_CONF_WX_ID);
 		String WX_APPID = wx.getAppid();
 		String WX_APPSECRET = wx.getAppsecret();
-		String WX_TOKENKEY = wx.getAccesstokenkey();
+		String WX_TOKENKEY = wx.getAccesstokenkey();*/
 
-		String accessTokenUrl;
-		if (wx == null) {
-			accessTokenUrl = "请联系管理员配置微信公众号!";
-		} else {
-			accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
-			String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("APPSECRET", WX_APPSECRET);
-			JSONObject result = HttpUtil.doGet(requestUrl);
-			//redis中设置 access_token
-			accessTokenUrl = result.getString("access_token");
-		}
+		String WX_APPID = "wx17bf0dde91fec324";
+		String WX_APPSECRET = "6cc0aa2089c4ba020297fb23af31081a";
+		String WX_TOKENKEY = "WX_ACCESS_TOKEN_2018";
+
+		String accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+		String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("APPSECRET", WX_APPSECRET);
+		JSONObject result = HttpUtil.doGet(requestUrl);
+		//redis中设置 access_token
+		accessTokenUrl = result.getString("access_token");
 
 		return accessTokenUrl;
 	}
