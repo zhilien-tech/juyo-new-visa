@@ -185,9 +185,15 @@
 								<!-- 送签时间/出签时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>预计送签时间：</label> <input id="sendVisaDate" autocomplete="off"
-											name="sendvisadate" type="text" class="form-control input-sm"
-											placeholder=" "  />
+										<label><span>*</span>预计送签时间：</label> 
+										<input 
+											id="sendVisaDate" 
+											autocomplete="off"
+											name="sendvisadate" 
+											type="text" 
+											class="form-control input-sm"
+											placeholder=" "  
+										/>
 									</div>
 								</div>
 								<div class="col-sm-3">
@@ -374,6 +380,7 @@
 		var BASE_PATH = '${base}';
 		var cityidstr = '${obj.orderinfo.cityId}';
 		var visatype = '';
+		let sendVisaDateVal = "${obj.orderinfo.sendVisaDate }";
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>

@@ -1,23 +1,28 @@
 package com.juyo.visa;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-
-import com.alibaba.fastjson.JSON;
+import java.util.Set;
 
 public class TestChinest {
 
 	public static void main(String[] args) {
 
-		String newString = "{'200001':{'wealth_title':'银行流水325','wealth_value':'345','wealth_type':'银行流水'}}";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
+		System.out.println(sdf.format(new Date()));
+
+		/*String newString = "{'200001':{'wealth_title':'银行流水325','wealth_value':'345','wealth_type':'银行流水'}}";
 		//org.json.JSONObject jsonObject = new org.json.JSONObject(newString);
 		//System.out.println(jsonObject);
 		Map maps = JSON.parseObject(newString, Map.class);
 		for (Object map : maps.entrySet()) {
 			System.out.println(((Map.Entry) map).getKey() + "     " + ((Map.Entry) map).getValue());
-		}
+		}*/
 
 		/*String scene = "orderid=" + 1 + "&applicantid=" + 2;
 		String encode = URL.encode(scene);
@@ -235,6 +240,29 @@ public class TestChinest {
 			}
 		}
 		return newArray;
+	}
+
+	public static Set<String> getYearDoubleWeekend(int year) {
+		Set<String> listDates = new HashSet<String>();
+		Calendar calendar = Calendar.getInstance();//当前日期
+		calendar.set(year, 6, 1);
+		Calendar nowyear = Calendar.getInstance();
+		Calendar nexty = Calendar.getInstance();
+		nowyear.set(year, 01, 01);//2010-1-1
+		nexty.set(year + 1, 01, 01);//2011-1-1
+		calendar.add(Calendar.DAY_OF_MONTH, -calendar.get(Calendar.DAY_OF_WEEK));//周六
+		Calendar c = (Calendar) calendar.clone();
+		for (; calendar.before(nexty) && calendar.after(nowyear); calendar.add(Calendar.DAY_OF_YEAR, -7)) {
+			listDates.add(calendar.get(Calendar.YEAR) + "-" + (1 + calendar.get(Calendar.MONTH)) + "-"
+					+ calendar.get(Calendar.DATE));
+			listDates.add(calendar.get(Calendar.YEAR) + "-" + (1 + calendar.get(Calendar.MONTH)) + "-"
+					+ (1 + calendar.get(Calendar.DATE)));
+		}
+		for (; c.before(nexty) && c.after(nowyear); c.add(Calendar.DAY_OF_YEAR, 7)) {
+			listDates.add(c.get(Calendar.YEAR) + "-" + (1 + c.get(Calendar.MONTH)) + "-" + c.get(Calendar.DATE));
+			listDates.add(c.get(Calendar.YEAR) + "-" + (1 + c.get(Calendar.MONTH)) + "-" + (1 + c.get(Calendar.DATE)));
+		}
+		return listDates;
 	}
 
 }

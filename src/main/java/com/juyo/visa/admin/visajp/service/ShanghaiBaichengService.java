@@ -165,11 +165,17 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 		//酒店信息
 		ByteArrayOutputStream hotelInfo = hotelInfo(tempdata);
 		pdffiles.add(hotelInfo);
-		//申请人信息
+
 		Collections.reverse(applyinfo);
 		for (Record record : applyinfo) {
+			//申请人信息
 			ByteArrayOutputStream apply = applyinfo(record, tempdata);
 			pdffiles.add(apply);
+		}
+		for (Record record : applyinfo) {
+			//签证申请信息表
+			ByteArrayOutputStream visaapplication = visaapplicationinfo(record, tempdata);
+			pdffiles.add(visaapplication);
 		}
 		//		ByteArrayOutputStream returnhome = returnhome(tempdata);
 		//		pdffiles.add(returnhome);
@@ -252,10 +258,11 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 					String airportName = goFlightNum.substring(
 							goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
 							goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
-					TCityEntity airCity = dbDao.fetch(TCityEntity.class, Cnd.where("city", "=", airportName));
+					TFlightEntity airCity = dbDao
+							.fetch(TFlightEntity.class, Cnd.where("takeOffName", "=", airportName));
 					String aircode = "";
 					if (!Util.isEmpty(airCity)) {
-						aircode = airCity.getCode();
+						aircode = airCity.getTakeOffCode();
 					}
 					map.put("Text3",
 							cityName
@@ -288,10 +295,11 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 					}
 					//出境机场名
 					String airportName = goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")));
-					TCityEntity airCity = dbDao.fetch(TCityEntity.class, Cnd.where("city", "=", airportName));
+					TFlightEntity airCity = dbDao
+							.fetch(TFlightEntity.class, Cnd.where("takeOffName", "=", airportName));
 					String aircode = "";
 					if (!Util.isEmpty(airCity)) {
-						aircode = airCity.getCode();
+						aircode = airCity.getTakeOffCode();
 					}
 					map.put("Text5",
 							cityName
@@ -355,6 +363,36 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 		URL resource = getClass().getClassLoader().getResource("japanfile/shanghaibaicheng/note.pdf");
 		TemplateUtil templateUtil = new TemplateUtil();
 		stream = templateUtil.pdfTemplateStream(resource, map);
+		return stream;
+	}
+
+	private ByteArrayOutputStream visaapplicationinfo(Record record, Map<String, Object> tempdata) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DateFormat dateFormat1 = new SimpleDateFormat("yyyy/MM/dd");
+		TOrderTripJpEntity ordertripjp = (TOrderTripJpEntity) tempdata.get("ordertripjp");
+		//多程信息
+		List<TOrderTripMultiJpEntity> mutiltrip = (List<TOrderTripMultiJpEntity>) tempdata.get("mutiltrip");
+		List<TOrderTravelplanJpEntity> ordertravelplan = (List<TOrderTravelplanJpEntity>) tempdata
+				.get("ordertravelplan");
+		TOrderJpEntity orderjp = (TOrderJpEntity) tempdata.get("orderjp");
+
+		//日本申请人
+		TApplicantOrderJpEntity applyorderjp = (TApplicantOrderJpEntity) record.get("applyorderjp");
+		try {
+			Map<String, String> map = new HashMap<String, String>();
+			map.put("Text1", record.getString("emergencylinkman"));
+			map.put("Text2", applyorderjp.getMainRelation());
+			map.put("Text3", record.getString("emergencyaddress"));
+			map.put("Text4", record.getString("emergencytelephone"));
+
+			//获取模板文件
+			URL resource = getClass().getClassLoader().getResource("japanfile/shanghaibaicheng/visaapplication.pdf");
+			TemplateUtil templateUtil = new TemplateUtil();
+			stream = templateUtil.pdfTemplateStream(resource, map);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return stream;
 	}
 
@@ -698,12 +736,10 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 				//第二个，地接社公司名
 				Paragraph np = new Paragraph(dijie, font);
 				np.setSpacingBefore(5);
-				np.setSpacingAfter(5);
 				np.setAlignment(Paragraph.ALIGN_CENTER);
 				document.add(np);
 				//第三个，ホテル予約確認書
 				Paragraph np2 = new Paragraph("ホテル予約確認書", font);
-				np2.setSpacingBefore(5);
 				np2.setSpacingAfter(5);
 				np2.setAlignment(Paragraph.ALIGN_CENTER);
 				document.add(np2);
@@ -711,7 +747,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 				font.setSize(7.96f);
 				Paragraph np3 = new Paragraph("   以下为预定内容：", font);
 				np3.setSpacingBefore(5);
-				np3.setSpacingAfter(5);
+				np3.setSpacingAfter(10);
 				np3.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(np3);
 			}
@@ -1511,21 +1547,15 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 			Font font1 = ttf.getFont();
 			font1.setFamily("宋体");
 			font1.setSize(17);
-			PdfPTable table1 = new PdfPTable(2); //表格两列
-			table1.setWidthPercentage(95);
-			table1.setHorizontalAlignment(Element.ALIGN_CENTER); //垂直居中
-			table1.setTotalWidth(PageSize.A4.rotate().getWidth());
-			float[] wid1 = { 0.5f, 0.5f }; //两列宽度的比例
-			table1.setWidths(wid1);
-			//			table1.getDefaultCell().setBorderWidth(0); //不显示边框
-			PdfPCell cell11 = new PdfPCell();
-			Paragraph paragraph = new Paragraph("签证申请人名单", font1);
-			paragraph.setAlignment(Element.ALIGN_CENTER);
-			cell11.addElement(paragraph);
-			cell11.setBorder(0);
-			table1.addCell(cell11);
-			table1.getDefaultCell().setBorderWidth(0);
-			document.add(table1);
+
+			{
+				Paragraph p = new Paragraph("签证申请人名单", font1);
+				p.setSpacingBefore(5);
+				p.setSpacingAfter(15);
+				p.setIndentationLeft(20);
+				p.setAlignment(Paragraph.ALIGN_CENTER);
+				document.add(p);
+			}
 
 			float[] columns = { 2, 3, 4, 2, 3, 3, 3, 3, 3, 2, 3, 4, 3, 2, 4, };
 			PdfPTable table = new PdfPTable(columns);
@@ -2048,7 +2078,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 			table.setTotalWidth(PageSize.A4.getWidth());
 
 			//设置表头
-			String titles[] = { "年月日", "行動予定", "滞在先", };
+			String titles[] = { "年月日", "行動予定", "宿泊先", };
 			font.setSize(7.98f);
 			for (String title : titles) {
 				PdfPCell cell = new PdfPCell(new Paragraph(title, font));
@@ -2331,28 +2361,41 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 			Map<String, String> map = new HashMap<String, String>();
 			StringBuffer strb = new StringBuffer("");
 
+			//PDF操作开始
+			Document document = new Document(PageSize.A4, 0, 0, 36, 36);
+			PdfWriter.getInstance(document, stream);
+			document.open();
+			TtfClassLoader ttf = new TtfClassLoader();
+			Font font = ttf.getFont();
+			font.setSize(15);
+			//第一行
+			String firstStr = "";
+			String genderstr = " ";
 			for (Record record : applyinfo) {
-				if (!Util.isEmpty(record.get("firstnameen"))) {
-					strb.append(record.getString("firstnameen"));
+
+				{
+					if (!Util.isEmpty(record.get("sex")) && "男".equals(record.getString("sex"))) {
+						genderstr = " MR";
+					} else {
+						genderstr = " MS";
+					}
+					firstStr += record.getString("firstnameen") + " " + record.getString("lastnameen") + genderstr
+							+ ";";
 				}
-				if (!Util.isEmpty(record.get("lastnameen"))) {
-					strb.append("/" + record.getString("lastnameen"));
-				}
-				strb.append("；");
+
 			}
-			//旅客姓名
-			map.put("Text1", strb.toString().toUpperCase());
-			//座位等级
-			map.put("Text7", "Y");
-			map.put("Text8", "Y");
+			Paragraph p = new Paragraph("1." + firstStr, font);
+			p.setSpacingBefore(5);
+			p.setIndentationLeft(20);
+			p.setAlignment(Paragraph.ALIGN_LEFT);
+			document.add(p);
 
-			//客票状态
-			map.put("Text18", "OK");
-			map.put("Text17", "OK");
-
-			//行李
-			map.put("Text19", applyinfo.size() + "PC");
-			map.put("Text20", applyinfo.size() + "PC");
+			//第二行
+			//applyinfo.size()
+			String secondStr = "";
+			String thirdStr = "";
+			String fourthStr = "";
+			String fifthStr = "";
 
 			if (!Util.isEmpty(ordertripjp)) {
 				if (ordertripjp.getTripType().equals(1)) {
@@ -2407,6 +2450,22 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							Date addDay = DateUtil.addDay(ordertripjp.getGoDate(), 8);
 							map.put("Text15", df.format(addDay).toUpperCase());
 
+							secondStr = "2."
+									+ goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.indexOf("//"))
+									+ " Y "
+									+ df.format(ordertripjp.getGoDate()).toUpperCase()
+									+ " "
+									+ firstname.getTakeOffCode()
+									+ secondname.getLandingCode()
+									+ " HK"
+									+ applyinfo.size()
+									+ " "
+									+ goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
+											goFlightNum.lastIndexOf(" ") + 5)
+									+ "/"
+									+ goFlightNum.substring(goFlightNum.lastIndexOf("//") - 4,
+											goFlightNum.lastIndexOf("//"));
+
 							//第二行
 							//始发地/目的地
 							map.put("Text3", secondname.getLandingCode() + "/" + lastname.getLandingCode());
@@ -2427,6 +2486,20 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 									+ ":" + goFlightNum.substring(goFlightNum.lastIndexOf("/") + 1).substring(2, 4));
 							//有效期
 							map.put("Text16", df.format(addDay).toUpperCase());
+							thirdStr = "3."
+									+ goFlightNum
+											.substring(goFlightNum.indexOf("//") + 2, goFlightNum.lastIndexOf(" "))
+									+ " Y "
+									+ df.format(ordertripjp.getGoDate()).toUpperCase()
+									+ " "
+									+ secondname.getLandingCode()
+									+ lastname.getLandingCode()
+									+ " HK"
+									+ applyinfo.size()
+									+ " "
+									+ goFlightNum.substring(goFlightNum.lastIndexOf("//") + 2,
+											goFlightNum.lastIndexOf("/")) + "/"
+									+ goFlightNum.substring(goFlightNum.lastIndexOf("/") + 1);
 
 						} else {//直飞
 							//只需占一行
@@ -2463,6 +2536,11 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							Date addDay = DateUtil.addDay(ordertripjp.getGoDate(), 8);
 							map.put("Text15", df.format(addDay).toUpperCase());
 
+							secondStr = "2."
+									+ goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" "))
+									+ " Y " + df.format(ordertripjp.getGoDate()).toUpperCase() + " "
+									+ firstname.getTakeOffCode() + secondname.getLandingCode() + " HK"
+									+ applyinfo.size() + " " + takeofftime + "/" + landingtime;
 						}
 					}
 
@@ -2519,6 +2597,23 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 								Date addDay = DateUtil.addDay(ordertripjp.getReturnDate(), 8);
 								map.put("Text16", df.format(addDay).toUpperCase());
 
+								thirdStr = "3."
+										+ returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
+												returnFlightNum.indexOf("//"))
+										+ " Y "
+										+ df.format(ordertripjp.getReturnDate()).toUpperCase()
+										+ " "
+										+ firstname.getTakeOffCode()
+										+ secondname.getLandingCode()
+										+ " HK"
+										+ applyinfo.size()
+										+ " "
+										+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
+												returnFlightNum.lastIndexOf(" ") + 5)
+										+ "/"
+										+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") - 4,
+												returnFlightNum.lastIndexOf("//"));
+
 								//第二行
 								//始发地/目的地
 								map.put("Text4", secondname.getLandingCode() + "/" + lastname.getLandingCode());
@@ -2547,6 +2642,20 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 								map.put("Text22", "Y");
 								map.put("Text27", "OK");
 								map.put("Text28", applyinfo.size() + "PC");
+								fourthStr = "4."
+										+ returnFlightNum.substring(returnFlightNum.indexOf("//") + 2,
+												returnFlightNum.lastIndexOf(" "))
+										+ " Y "
+										+ df.format(ordertripjp.getReturnDate()).toUpperCase()
+										+ " "
+										+ secondname.getLandingCode()
+										+ lastname.getLandingCode()
+										+ " HK"
+										+ applyinfo.size()
+										+ " "
+										+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") + 2,
+												returnFlightNum.lastIndexOf("/")) + "/"
+										+ returnFlightNum.substring(returnFlightNum.lastIndexOf("/") + 1);
 
 							} else {//直飞，从第二行开始，只占一行
 								//第一个机场
@@ -2585,6 +2694,21 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 								//有效期（返回日期+6天）
 								Date addDay2 = DateUtil.addDay(ordertripjp.getReturnDate(), 6);
 								map.put("Text16", df.format(addDay2).toUpperCase());
+
+								thirdStr = "3."
+										+ returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
+												returnFlightNum.lastIndexOf(" "))
+										+ " Y "
+										+ df.format(ordertripjp.getReturnDate()).toUpperCase()
+										+ " "
+										+ firstname.getTakeOffCode()
+										+ secondname.getLandingCode()
+										+ " HK"
+										+ applyinfo.size()
+										+ " "
+										+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
+												returnFlightNum.indexOf("/")) + "/"
+										+ returnFlightNum.substring(returnFlightNum.indexOf("/") + 1);
 							}
 
 						} else {//转机，从第三行开始
@@ -2634,6 +2758,23 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 								Date addDay = DateUtil.addDay(ordertripjp.getReturnDate(), 8);
 								map.put("Text26", df.format(addDay).toUpperCase());
 
+								fourthStr = "4."
+										+ returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
+												returnFlightNum.indexOf("//"))
+										+ " Y "
+										+ df.format(ordertripjp.getReturnDate()).toUpperCase()
+										+ " "
+										+ firstname.getTakeOffCode()
+										+ secondname.getLandingCode()
+										+ " HK"
+										+ applyinfo.size()
+										+ " "
+										+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
+												returnFlightNum.lastIndexOf(" ") + 5)
+										+ "/"
+										+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") - 4,
+												returnFlightNum.lastIndexOf("//"));
+
 								//第二行
 								//始发地/目的地
 								map.put("Text29", secondname.getLandingCode() + "/" + lastname.getLandingCode());
@@ -2658,13 +2799,20 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 														.substring(2, 4));
 								//有效期
 								map.put("Text35", df.format(addDay).toUpperCase());
-
-								map.put("Text22", "Y");
-								map.put("Text31", "Y");
-								map.put("Text27", "OK");
-								map.put("Text36", "OK");
-								map.put("Text28", applyinfo.size() + "PC");
-								map.put("Text37", applyinfo.size() + "PC");
+								fifthStr = "5."
+										+ returnFlightNum.substring(returnFlightNum.indexOf("//") + 2,
+												returnFlightNum.lastIndexOf(" "))
+										+ " Y "
+										+ df.format(ordertripjp.getReturnDate()).toUpperCase()
+										+ " "
+										+ secondname.getLandingCode()
+										+ lastname.getLandingCode()
+										+ " HK"
+										+ applyinfo.size()
+										+ " "
+										+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") + 2,
+												returnFlightNum.lastIndexOf("/")) + "/"
+										+ returnFlightNum.substring(returnFlightNum.lastIndexOf("/") + 1);
 
 							} else {//直飞
 								//第一个机场
@@ -2704,9 +2852,20 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 								Date addDay2 = DateUtil.addDay(ordertripjp.getReturnDate(), 6);
 								map.put("Text26", df.format(addDay2).toUpperCase());
 
-								map.put("Text22", "Y");
-								map.put("Text27", "OK");
-								map.put("Text28", applyinfo.size() + "PC");
+								fourthStr = "4."
+										+ returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
+												returnFlightNum.lastIndexOf(" "))
+										+ " Y "
+										+ df.format(ordertripjp.getReturnDate()).toUpperCase()
+										+ " "
+										+ firstname.getTakeOffCode()
+										+ secondname.getLandingCode()
+										+ " HK"
+										+ applyinfo.size()
+										+ " "
+										+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
+												returnFlightNum.indexOf("/")) + "/"
+										+ returnFlightNum.substring(returnFlightNum.indexOf("/") + 1);
 							}
 
 						}
@@ -2759,10 +2918,31 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 				}
 			}
 
-			//获取模板文件
-			URL resource = getClass().getClassLoader().getResource("japanfile/huanyu/flight.pdf");
-			TemplateUtil templateUtil = new TemplateUtil();
-			stream = templateUtil.pdfTemplateStream(resource, map);
+			{
+				Paragraph p2 = new Paragraph(secondStr, font);
+				p2.setSpacingBefore(5);
+				p2.setIndentationLeft(20);
+				p2.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(p2);
+				Paragraph p3 = new Paragraph(thirdStr, font);
+				p3.setSpacingBefore(5);
+				p3.setIndentationLeft(20);
+				p3.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(p3);
+				Paragraph p4 = new Paragraph(fourthStr, font);
+				p4.setSpacingBefore(5);
+				p4.setIndentationLeft(20);
+				p4.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(p4);
+				Paragraph p5 = new Paragraph(fifthStr, font);
+				p5.setSpacingBefore(5);
+				p5.setIndentationLeft(20);
+				p5.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(p5);
+			}
+			document.close();
+			IOUtils.closeQuietly(stream);
+			return stream;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2936,7 +3116,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 						(!Util.isEmpty(record.get("firstname")) ? record.getString("firstname") : "")
 								+ (!Util.isEmpty(record.get("lastname")) ? record.getString("lastname") : ""),
 						//姓名英文
-						((!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : "") + "\n" + (!Util
+						((!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : "") + " " + (!Util
 								.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : ""))
 								.toUpperCase(), !Util.isEmpty(record.get("sex")) ? record.getString("sex") : "",
 						!Util.isEmpty(record.get("birthday")) ? tableformat.format((Date) record.get("birthday")) : "",

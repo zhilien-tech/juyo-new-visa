@@ -1350,24 +1350,12 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 			table1.setWidthPercentage(95);
 			table1.setHorizontalAlignment(Element.ALIGN_CENTER); //垂直居中
 			table1.setTotalWidth(PageSize.A4.rotate().getWidth());
-			//float[] wid1 = { 0.5f, 0.5f }; //两列宽度的比例
-			//table1.setWidths(wid1);
-			//			table1.getDefaultCell().setBorderWidth(0); //不显示边框
 			PdfPCell cell11 = new PdfPCell();
-			//PdfPCell cell12 = new PdfPCell();
 			Paragraph paragraph = new Paragraph("签证申请人名单", font);
-			//Paragraph paragraph2 = new Paragraph(company.getName(), font1);
-			//paragraph2.setAlignment(Element.ALIGN_RIGHT);
 			paragraph.setAlignment(Element.ALIGN_LEFT);
 			cell11.addElement(paragraph);
 			cell11.setBorder(0);
-			//cell12.addElement(paragraph2);
-			//cell12.setBorder(0);
-			//			paragraph.setSpacingBefore(30);
-			//			paragraph.setIndentationLeft(50);
-			//			paragraph2.setSpacingAfter(200);
 			table1.addCell(cell11);
-			//table1.addCell(cell12);
 			table1.getDefaultCell().setBorderWidth(0);
 			document.add(table1);
 

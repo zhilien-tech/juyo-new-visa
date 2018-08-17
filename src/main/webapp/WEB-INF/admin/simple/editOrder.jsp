@@ -539,6 +539,7 @@
 		var orderid = '${obj.orderjpinfo.id}';
 		var cityidstr = '${obj.orderinfo.cityId}';
 		var visatype = '${obj.orderjpinfo.visaType}';
+		let sendVisaDateVal = "${obj.orderinfo.sendVisaDate }";
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
