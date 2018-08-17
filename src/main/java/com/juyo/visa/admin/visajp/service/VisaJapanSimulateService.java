@@ -87,6 +87,9 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	//上海百城文件下载
 	@Inject
 	private ShanghaiBaichengService shanghaiBaichengService;
+	//和平文件下载
+	@Inject
+	private HepingService hepingService;
 
 	private static final Integer VISA_PROCESS = JPOrderProcessTypeEnum.VISA_PROCESS.intKey();
 
@@ -202,6 +205,8 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 				byteArray = fengshangService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.BAICHENG_TYPE.intKey()) {
 				byteArray = shanghaiBaichengService.generateFile(orderjp, request).toByteArray();
+			} else if (pdftype == PdfTypeEnum.HEPING_TYPE.intKey()) {
+				byteArray = hepingService.generateFile(orderjp, request).toByteArray();
 			}
 
 			// 获取订单信息，准备文件名称
