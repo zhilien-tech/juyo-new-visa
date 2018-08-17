@@ -234,6 +234,24 @@
 						</div>
 					</div>
 				</div>
+				
+				<div class="row"><!-- 签发机关 -->
+					<div class="col-sm-3 pr-5">
+						<div class="form-group">
+							<label><span>*</span>签发机关</label>
+							<input id="issuedOrganization" name="issuedOrganization" type="text" autocomplete="off" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
+						</div>
+					</div>
+
+					<div class="col-sm-6 pl-5 pr-5">
+						<div class="form-group">
+							<label><span>*</span>Authority</label>
+							<input id="issuedOrganizationEn" name="issuedOrganizationEn" type="text" autocomplete="off" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
+						</div>
+					</div>
+				</div><!-- end 签发机关 -->
+
+
 				<div class="row">
 					<!-- 公民身份号码 -->
 					<div class="col-sm-6">
@@ -1125,6 +1143,7 @@
 	<script>
 		(function() {
 			var base = "${base}";
+			
 			$(function () {
 				var issuedOrganization = "${obj.passport.issuedOrganization }";
 				var issuedOrganizationen = "${obj.passport.issuedOrganizationEn }";
@@ -1133,7 +1152,7 @@
 					$("#issuedOrganization").val("公安部出入境管理局");
 				}
 				if (issuedOrganizationen == "") {
-					$("#issuedOrganizationEn").val("Ministry of Public Security");
+					$("#issuedOrganizationEn").val("MPS Exit & Entry Administration");
 				}
 
 				

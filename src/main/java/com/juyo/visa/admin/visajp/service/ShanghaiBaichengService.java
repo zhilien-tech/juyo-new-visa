@@ -679,26 +679,8 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 			document.open();
 			TtfClassLoader ttf = new TtfClassLoader();
 			Font font = ttf.getFont();
-			font.setSize(23.88f);
+			font.setSize(12f);
 			font.setFamily("宋体");
-
-			//第一个表格,空表格
-			float[] firstcolumns = { 13 };
-			PdfPTable titletable = new PdfPTable(firstcolumns);
-			titletable.setWidthPercentage(95);
-			titletable.setTotalWidth(PageSize.A4.getWidth());
-
-			PdfPCell titlecell = new PdfPCell(new Paragraph("", font));
-			titlecell.setFixedHeight(50);
-			titlecell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			titlecell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-			titlecell.setBorder(0);
-			titletable.addCell(titlecell);
-
-			document.add(titletable);
-
-			//第二个表格
-			//地接社
 			String dijie = "";
 			if (!Util.isEmpty(orderjp.getGroundconnectid())) {
 				TCompanyEntity dijiecompany = dbDao.fetch(TCompanyEntity.class, orderjp.getGroundconnectid()
@@ -706,51 +688,35 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 				dijie = dijiecompany.getName();
 			}
 
-			float[] kongcolumns = { 13 };
-			PdfPTable kongtable = new PdfPTable(kongcolumns);
-			kongtable.setWidthPercentage(95);
-			kongtable.setTotalWidth(PageSize.A4.getWidth());
-			font.setSize(8);
+			{
+				//第一个，空行
+				Paragraph p = new Paragraph("", font);
+				p.setSpacingBefore(5);
+				p.setSpacingAfter(5);
+				p.setAlignment(Paragraph.ALIGN_CENTER);
+				document.add(p);
+				//第二个，地接社公司名
+				Paragraph np = new Paragraph(dijie, font);
+				np.setSpacingBefore(5);
+				np.setSpacingAfter(5);
+				np.setAlignment(Paragraph.ALIGN_CENTER);
+				document.add(np);
+				//第三个，ホテル予約確認書
+				Paragraph np2 = new Paragraph("ホテル予約確認書", font);
+				np2.setSpacingBefore(5);
+				np2.setSpacingAfter(5);
+				np2.setAlignment(Paragraph.ALIGN_CENTER);
+				document.add(np2);
+				//第四个
+				font.setSize(7.96f);
+				Paragraph np3 = new Paragraph("   以下为预定内容：", font);
+				np3.setSpacingBefore(5);
+				np3.setSpacingAfter(5);
+				np3.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(np3);
+			}
 
-			PdfPCell kongcell = new PdfPCell(new Paragraph(dijie, font));
-			kongcell.setFixedHeight(20);
-			kongcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			kongcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-			kongtable.addCell(kongcell);
-
-			document.add(kongtable);
-
-			//第三个表格
-			float[] kongcolumns2 = { 13 };
-			PdfPTable kongtable2 = new PdfPTable(kongcolumns2);
-			kongtable2.setWidthPercentage(95);
-			kongtable2.setTotalWidth(PageSize.A4.getWidth());
-			font.setSize(8);
-
-			PdfPCell kongcell2 = new PdfPCell(new Paragraph("ホテル予約確認書", font));
-			kongcell2.setFixedHeight(20);
-			kongcell2.setHorizontalAlignment(Element.ALIGN_CENTER);
-			kongcell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
-			kongtable2.addCell(kongcell2);
-
-			document.add(kongtable2);
-
-			//第四个表格
-			float[] kongcolumns3 = { 13 };
-			PdfPTable kongtable3 = new PdfPTable(kongcolumns3);
-			kongtable3.setWidthPercentage(95);
-			kongtable3.setTotalWidth(PageSize.A4.getWidth());
-			font.setSize(8);
-
-			PdfPCell kongcell3 = new PdfPCell(new Paragraph("以下为预定内容：", font));
-			kongcell3.setFixedHeight(20);
-			kongcell3.setHorizontalAlignment(Element.ALIGN_LEFT);
-			kongcell3.setVerticalAlignment(Element.ALIGN_MIDDLE);
-			kongtable3.addCell(kongcell3);
-
-			document.add(kongtable3);
-
-			//第五个表格，表头
+			//表格，表头
 
 			float[] tcolumns = { 3, 3, 4, 3 };
 			PdfPTable titable = new PdfPTable(tcolumns);
@@ -764,21 +730,19 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 				PdfPCell cell = new PdfPCell(new Paragraph(title, font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				cell.setFixedHeight(30);
+				cell.setFixedHeight(20);
 				titable.addCell(cell);
 			}
+			document.add(titable);
 
+			//主要数据表格
 			float[] maincolumns = { 3, 3, 2, 1, 1, 3 };
 			PdfPTable maintable = new PdfPTable(maincolumns);
 			maintable.setWidthPercentage(95);
 			maintable.setTotalWidth(PageSize.A4.getWidth());
 
-			float[] maincolumns2 = { 3, 3, 2, 1, 1, 3 };
-			PdfPTable maintable2 = new PdfPTable(maincolumns2);
-			maintable2.setWidthPercentage(95);
-			maintable2.setTotalWidth(PageSize.A4.getWidth());
-
 			//数据处理
+			//分三种情况：1、中间随机城市，去程抵达城市和返程出发城市是同一个城市。2、中间随机城市，去程抵达城市和返程出发城市不是同一个城市。3、不随机城市
 			if (!Util.isEmpty(ordertripjp)) {
 				List<TOrderTravelplanJpEntity> ordertravelplanList = dbDao.query(TOrderTravelplanJpEntity.class, Cnd
 						.where("orderId", "=", orderjp.getId()).orderBy("outDate", "ASC"), null);
@@ -802,18 +766,18 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 									Cnd.where("orderId", "=", orderjp.getId()).and("cityId", "=", cityidList.get(i)));
 							PdfPCell cell;
 
-							//maintable1
+							//第一行
 							//第一列，时间
 							Date outDate = fetch.getOutDate();
 							SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd");
-							Date addDay = DateUtil.addDay(outDate, query.size());
+							Date addDay = DateUtil.addDay(outDate, query.size() - 1);
 							String timeStampStr = simpleDateFormat.format(outDate);
 							String addtimeStampStr = simpleDateFormat.format(addDay);
 							String timeStr = timeStampStr + "-" + addtimeStampStr;
 							cell = new PdfPCell(new Paragraph(timeStr, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
+							cell.setFixedHeight(30);
 							maintable.addCell(cell);
 
 							//第二列，酒店名称
@@ -823,7 +787,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							cell = new PdfPCell(new Paragraph(hotelname, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
+							cell.setFixedHeight(30);
 							maintable.addCell(cell);
 
 							//第三列，酒店地址
@@ -832,7 +796,8 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							cell = new PdfPCell(new Paragraph(hoteladdress, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
+							cell.setColspan(3);
+							cell.setFixedHeight(30);
 							maintable.addCell(cell);
 
 							//第四列，酒店电话
@@ -841,75 +806,74 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							cell = new PdfPCell(new Paragraph(hotelmobile, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
+							cell.setFixedHeight(30);
 							maintable.addCell(cell);
-
-							//maintable2
-							//第一行
-							//第一列
-							cell = new PdfPCell(new Paragraph("", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
-
-							//第二列
-							cell = new PdfPCell(new Paragraph("予約番号", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
-
-							//第三列
-							cell = new PdfPCell(new Paragraph("泊数", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
-
-							//第四列
-							cell = new PdfPCell(new Paragraph("部屋", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
-
-							//第五列
-							cell = new PdfPCell(new Paragraph("部屋", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
-
-							//第六列
-							cell = new PdfPCell(new Paragraph("食室", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
 
 							//第二行
 							//第一列
 							cell = new PdfPCell(new Paragraph("", font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
+							cell.setFixedHeight(20);
+							maintable.addCell(cell);
+
+							//第二列
+							cell = new PdfPCell(new Paragraph("予約番号", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(20);
+							maintable.addCell(cell);
+
+							//第三列
+							cell = new PdfPCell(new Paragraph("する", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(20);
+							maintable.addCell(cell);
+
+							//第四列
+							cell = new PdfPCell(new Paragraph("泊数", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(20);
+							maintable.addCell(cell);
+
+							//第五列
+							cell = new PdfPCell(new Paragraph("部屋", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(20);
+							maintable.addCell(cell);
+
+							//第六列
+							cell = new PdfPCell(new Paragraph("食室", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(20);
+							maintable.addCell(cell);
+
+							//第三行
+							//第一列
+							cell = new PdfPCell(new Paragraph("", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(30);
+							maintable.addCell(cell);
 
 							//第二列
 							String mainapplyinfo = mainApplyname + "-" + "\n" + passportNo;
 							cell = new PdfPCell(new Paragraph(mainapplyinfo, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
+							cell.setFixedHeight(30);
+							maintable.addCell(cell);
 
 							//第三列
 							cell = new PdfPCell(new Paragraph(timeStr, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
+							cell.setFixedHeight(30);
+							maintable.addCell(cell);
 
 							//第四列
 							if (i == cityidList.size() - 1) {
@@ -921,8 +885,8 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							}
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
+							cell.setFixedHeight(30);
+							maintable.addCell(cell);
 
 							//第五列
 							String room = "";
@@ -937,33 +901,32 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							cell = new PdfPCell(new Paragraph(room, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
+							cell.setFixedHeight(30);
+							maintable.addCell(cell);
 
 							//第六列
 							cell = new PdfPCell(new Paragraph("早", font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
+							cell.setFixedHeight(30);
+							maintable.addCell(cell);
 
 						}
 
 					} else {
-						//第一行
 						PdfPCell cell;
-						//maintable1
+						//第一行
 						//第一列，时间
 						Date outDate = ordertravelplanList.get(0).getOutDate();
 						SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd");
-						Date addDay = DateUtil.addDay(outDate, ordertravelplanList.size());
+						Date addDay = DateUtil.addDay(outDate, 1);
 						String timeStampStr = simpleDateFormat.format(outDate);
 						String addtimeStampStr = simpleDateFormat.format(addDay);
 						String timeStr = timeStampStr + "-" + addtimeStampStr;
 						cell = new PdfPCell(new Paragraph(timeStr, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
+						cell.setFixedHeight(30);
 						maintable.addCell(cell);
 
 						//第二列，酒店名称
@@ -973,7 +936,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 						cell = new PdfPCell(new Paragraph(hotelname, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
+						cell.setFixedHeight(30);
 						maintable.addCell(cell);
 
 						//第三列，酒店地址
@@ -982,7 +945,8 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 						cell = new PdfPCell(new Paragraph(hoteladdress, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
+						cell.setFixedHeight(30);
+						cell.setColspan(3);
 						maintable.addCell(cell);
 
 						//第四列，酒店电话
@@ -991,82 +955,81 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 						cell = new PdfPCell(new Paragraph(hotelmobile, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
+						cell.setFixedHeight(30);
 						maintable.addCell(cell);
-
-						//maintable2
-						//第一行
-						//第一列
-						cell = new PdfPCell(new Paragraph("", font));
-						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable2.addCell(cell);
-
-						//第二列
-						cell = new PdfPCell(new Paragraph("予約番号", font));
-						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable2.addCell(cell);
-
-						//第三列
-						cell = new PdfPCell(new Paragraph("泊数", font));
-						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable2.addCell(cell);
-
-						//第四列
-						cell = new PdfPCell(new Paragraph("部屋", font));
-						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable2.addCell(cell);
-
-						//第五列
-						cell = new PdfPCell(new Paragraph("部屋", font));
-						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable2.addCell(cell);
-
-						//第六列
-						cell = new PdfPCell(new Paragraph("食室", font));
-						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable2.addCell(cell);
 
 						//第二行
 						//第一列
 						cell = new PdfPCell(new Paragraph("", font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable2.addCell(cell);
+						cell.setFixedHeight(20);
+						maintable.addCell(cell);
+
+						//第二列
+						cell = new PdfPCell(new Paragraph("予約番号", font));
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setFixedHeight(20);
+						maintable.addCell(cell);
+
+						//第三列
+						cell = new PdfPCell(new Paragraph("する", font));
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setFixedHeight(20);
+						maintable.addCell(cell);
+
+						//第四列
+						cell = new PdfPCell(new Paragraph("泊数", font));
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setFixedHeight(20);
+						maintable.addCell(cell);
+
+						//第五列
+						cell = new PdfPCell(new Paragraph("部屋", font));
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setFixedHeight(20);
+						maintable.addCell(cell);
+
+						//第六列
+						cell = new PdfPCell(new Paragraph("食室", font));
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setFixedHeight(20);
+						maintable.addCell(cell);
+
+						//第三行
+						//第一列
+						cell = new PdfPCell(new Paragraph("", font));
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setFixedHeight(30);
+						maintable.addCell(cell);
 
 						//第二列
 						String mainapplyinfo = mainApplyname + "-" + "\n" + passportNo;
 						cell = new PdfPCell(new Paragraph(mainapplyinfo, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable2.addCell(cell);
+						cell.setFixedHeight(30);
+						maintable.addCell(cell);
 
 						//第三列
 						cell = new PdfPCell(new Paragraph(timeStr, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable2.addCell(cell);
+						cell.setFixedHeight(30);
+						maintable.addCell(cell);
 
 						//第四列
 						cell = new PdfPCell(new Paragraph("2", font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable2.addCell(cell);
+						cell.setFixedHeight(30);
+						maintable.addCell(cell);
 
 						//第五列
 						String room = "";
@@ -1081,15 +1044,15 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 						cell = new PdfPCell(new Paragraph(room, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable2.addCell(cell);
+						cell.setFixedHeight(30);
+						maintable.addCell(cell);
 
 						//第六列
 						cell = new PdfPCell(new Paragraph("早", font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(50);
-						maintable2.addCell(cell);
+						cell.setFixedHeight(30);
+						maintable.addCell(cell);
 
 						//剩下的行数
 						Integer firstcityid = cityidList.get(0);
@@ -1107,17 +1070,23 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 										Cnd.where("orderId", "=", orderjp.getId())
 												.and("cityId", "=", cityidList.get(i)));
 							}
-							//maintable1
+							//第一行
 							//第一列，时间
 							Date outDate1 = fetch.getOutDate();
-							Date addDay1 = DateUtil.addDay(outDate1, query.size());
+							String addtimeStampStr1 = "";
+							if (i == cityidList.size() - 1) {
+								Date addDay1 = DateUtil.addDay(outDate1, query.size() - 3);
+								addtimeStampStr1 = simpleDateFormat.format(addDay1);
+							} else {
+								Date addDay1 = DateUtil.addDay(outDate1, query.size() - 1);
+								addtimeStampStr1 = simpleDateFormat.format(addDay1);
+							}
 							String timeStampStr1 = simpleDateFormat.format(outDate1);
-							String addtimeStampStr1 = simpleDateFormat.format(addDay1);
 							String timeStr1 = timeStampStr1 + "-" + addtimeStampStr1;
 							cell = new PdfPCell(new Paragraph(timeStr1, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
+							cell.setFixedHeight(30);
 							maintable.addCell(cell);
 
 							//第二列，酒店名称
@@ -1127,7 +1096,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							cell = new PdfPCell(new Paragraph(hotelname1, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
+							cell.setFixedHeight(30);
 							maintable.addCell(cell);
 
 							//第三列，酒店地址
@@ -1136,7 +1105,8 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							cell = new PdfPCell(new Paragraph(hoteladdress1, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
+							cell.setFixedHeight(30);
+							cell.setColspan(3);
 							maintable.addCell(cell);
 
 							//第四列，酒店电话
@@ -1145,79 +1115,78 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							cell = new PdfPCell(new Paragraph(hotelmobile1, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
+							cell.setFixedHeight(30);
 							maintable.addCell(cell);
-
-							//maintable2
-							//第一行
-							//第一列
-							cell = new PdfPCell(new Paragraph("", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
-
-							//第二列
-							cell = new PdfPCell(new Paragraph("予約番号", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
-
-							//第三列
-							cell = new PdfPCell(new Paragraph("泊数", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
-
-							//第四列
-							cell = new PdfPCell(new Paragraph("部屋", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
-
-							//第五列
-							cell = new PdfPCell(new Paragraph("部屋", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
-
-							//第六列
-							cell = new PdfPCell(new Paragraph("食室", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
 
 							//第二行
 							//第一列
 							cell = new PdfPCell(new Paragraph("", font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
+							cell.setFixedHeight(20);
+							maintable.addCell(cell);
+
+							//第二列
+							cell = new PdfPCell(new Paragraph("予約番号", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(20);
+							maintable.addCell(cell);
+
+							//第三列
+							cell = new PdfPCell(new Paragraph("する", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(20);
+							maintable.addCell(cell);
+
+							//第四列
+							cell = new PdfPCell(new Paragraph("泊数", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(20);
+							maintable.addCell(cell);
+
+							//第五列
+							cell = new PdfPCell(new Paragraph("部屋", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(20);
+							maintable.addCell(cell);
+
+							//第六列
+							cell = new PdfPCell(new Paragraph("食室", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(20);
+							maintable.addCell(cell);
+
+							//第三行
+							//第一列
+							cell = new PdfPCell(new Paragraph("", font));
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setFixedHeight(30);
+							maintable.addCell(cell);
 
 							//第二列
 							String mainapplyinfo1 = mainApplyname + "-" + "\n" + passportNo;
 							cell = new PdfPCell(new Paragraph(mainapplyinfo1, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
+							cell.setFixedHeight(30);
+							maintable.addCell(cell);
 
 							//第三列
 							cell = new PdfPCell(new Paragraph(timeStr, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
+							cell.setFixedHeight(30);
+							maintable.addCell(cell);
 
 							//第四列
 							if (i == cityidList.size() - 1) {
-								cell = new PdfPCell(new Paragraph(String.valueOf((query.size() - 1)), font));
+								cell = new PdfPCell(new Paragraph(String.valueOf((query.size() - 3)), font));
 
 							} else {
 								cell = new PdfPCell(new Paragraph(String.valueOf(query.size()), font));
@@ -1225,8 +1194,8 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							}
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
+							cell.setFixedHeight(30);
+							maintable.addCell(cell);
 
 							//第五列
 							String room1 = "";
@@ -1241,15 +1210,15 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							cell = new PdfPCell(new Paragraph(room1, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
+							cell.setFixedHeight(30);
+							maintable.addCell(cell);
 
 							//第六列
 							cell = new PdfPCell(new Paragraph("早", font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable2.addCell(cell);
+							cell.setFixedHeight(30);
+							maintable.addCell(cell);
 						}
 
 					}
@@ -1257,18 +1226,18 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 				} else {//中间不随机城市
 					PdfPCell cell;
 
-					//maintable1
+					//第一行
 					//第一列，时间
 					Date outDate = ordertripjp.getGoDate();
 					SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd");
-					Date addDay = DateUtil.addDay(outDate, ordertravelplanList.size());
+					Date addDay = DateUtil.addDay(outDate, ordertravelplanList.size() - 1);
 					String timeStampStr = simpleDateFormat.format(outDate);
 					String addtimeStampStr = simpleDateFormat.format(addDay);
 					String timeStr = timeStampStr + "-" + addtimeStampStr;
 					cell = new PdfPCell(new Paragraph(timeStr, font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
+					cell.setFixedHeight(30);
 					maintable.addCell(cell);
 
 					//第二列，酒店名称
@@ -1279,7 +1248,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 					cell = new PdfPCell(new Paragraph(hotelname, font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
+					cell.setFixedHeight(30);
 					maintable.addCell(cell);
 
 					//第三列，酒店地址
@@ -1288,7 +1257,8 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 					cell = new PdfPCell(new Paragraph(hoteladdress, font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
+					cell.setFixedHeight(30);
+					cell.setColspan(3);
 					maintable.addCell(cell);
 
 					//第四列，酒店电话
@@ -1297,83 +1267,82 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 					cell = new PdfPCell(new Paragraph(hotelmobile, font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
+					cell.setFixedHeight(30);
 					maintable.addCell(cell);
-
-					//maintable2
-					//第一行
-					//第一列
-					cell = new PdfPCell(new Paragraph("", font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
-					maintable2.addCell(cell);
-
-					//第二列
-					cell = new PdfPCell(new Paragraph("予約番号", font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
-					maintable2.addCell(cell);
-
-					//第三列
-					cell = new PdfPCell(new Paragraph("泊数", font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
-					maintable2.addCell(cell);
-
-					//第四列
-					cell = new PdfPCell(new Paragraph("部屋", font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
-					maintable2.addCell(cell);
-
-					//第五列
-					cell = new PdfPCell(new Paragraph("部屋", font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
-					maintable2.addCell(cell);
-
-					//第六列
-					cell = new PdfPCell(new Paragraph("食室", font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
-					maintable2.addCell(cell);
 
 					//第二行
 					//第一列
 					cell = new PdfPCell(new Paragraph("", font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
-					maintable2.addCell(cell);
+					cell.setFixedHeight(20);
+					maintable.addCell(cell);
+
+					//第二列
+					cell = new PdfPCell(new Paragraph("予約番号", font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setFixedHeight(20);
+					maintable.addCell(cell);
+
+					//第三列
+					cell = new PdfPCell(new Paragraph("する", font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setFixedHeight(20);
+					maintable.addCell(cell);
+
+					//第四列
+					cell = new PdfPCell(new Paragraph("泊数", font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setFixedHeight(20);
+					maintable.addCell(cell);
+
+					//第五列
+					cell = new PdfPCell(new Paragraph("部屋", font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setFixedHeight(20);
+					maintable.addCell(cell);
+
+					//第六列
+					cell = new PdfPCell(new Paragraph("食室", font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setFixedHeight(20);
+					maintable.addCell(cell);
+
+					//第三行
+					//第一列
+					cell = new PdfPCell(new Paragraph("", font));
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setFixedHeight(30);
+					maintable.addCell(cell);
 
 					//第二列
 					String mainapplyinfo = mainApplyname + "-" + "\n" + passportNo;
 					cell = new PdfPCell(new Paragraph(mainapplyinfo, font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
-					maintable2.addCell(cell);
+					cell.setFixedHeight(30);
+					maintable.addCell(cell);
 
 					//第三列
 					cell = new PdfPCell(new Paragraph(timeStr, font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
-					maintable2.addCell(cell);
+					cell.setFixedHeight(30);
+					maintable.addCell(cell);
 
 					//第四列
 					int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
 					cell = new PdfPCell(new Paragraph(String.valueOf(stayday), font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
-					maintable2.addCell(cell);
+					cell.setFixedHeight(30);
+					maintable.addCell(cell);
 
 					//第五列
 					String room = "";
@@ -1388,21 +1357,130 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 					cell = new PdfPCell(new Paragraph(room, font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
-					maintable2.addCell(cell);
+					cell.setFixedHeight(30);
+					maintable.addCell(cell);
 
 					//第六列
 					cell = new PdfPCell(new Paragraph("早", font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setFixedHeight(50);
-					maintable2.addCell(cell);
+					cell.setFixedHeight(30);
+					maintable.addCell(cell);
 
 				}
 			}
 
 			document.add(maintable);
-			document.add(maintable2);
+
+			{
+				//第一行
+				Paragraph p = new Paragraph("    注意事项：             1.分房单：        必须在客人入住6天前确认传给我公司，并付清全款", font);
+				p.setSpacingBefore(5);
+				p.setSpacingAfter(5);
+				p.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(p);
+				//第二行
+				Paragraph np = new Paragraph("                           2.取消金：        入住日期的6天前取消订房不需要支付取消金", font);
+				np.setSpacingAfter(5);
+				np.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(np);
+				//第三行
+				Paragraph np2 = new Paragraph("                                             若距离入住日期的5天内取消订房，则需支付取消金",
+						font);
+				np2.setSpacingAfter(5);
+				np2.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(np2);
+			}
+
+			float[] explaincolumns = { 2, 3 };
+			PdfPTable explaintable = new PdfPTable(explaincolumns);
+			explaintable.setWidthPercentage(40);
+			explaintable.setHorizontalAlignment(Element.ALIGN_JUSTIFIED);
+			explaintable.setTotalWidth(PageSize.A4.getWidth());
+
+			PdfPCell cell;
+			cell = new PdfPCell(new Paragraph("5天", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("房费的10%", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("4天", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("房费的20%", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("3天", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("房费的30%", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("2天", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("房费的50%", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("1天", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("房费的80%", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("当天", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("房费的100%", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			explaintable.addCell(cell);
+
+			document.add(explaintable);
+
+			{
+				//第四行
+				Paragraph p = new Paragraph("                           3.以上规定适用于一般情况，若有特殊情况请以我方确认单上注册信息为准。", font);
+				p.setSpacingBefore(5);
+				p.setSpacingAfter(5);
+				p.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(p);
+				//第五行
+				Paragraph np = new Paragraph("                           确认上述内容和注意事项后请签字或加盖公司印章，并立即传回我公司。", font);
+				np.setSpacingAfter(5);
+				np.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(np);
+				//第六行
+				Paragraph np2 = new Paragraph("    确认签字和盖章", font);
+				np2.setSpacingBefore(15);
+				np2.setSpacingAfter(5);
+				np2.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(np2);
+			}
 
 			document.close();
 			IOUtils.closeQuietly(stream);
@@ -1953,7 +2031,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 
 			{
 				//				String subtitle = "（平成" + godatestr + "から平成" + returndatestr + "）";
-				String subtitle = "(平成" + godatestr + " - 平成" + returndatestr;
+				String subtitle = "(平成" + godatestr + " - 平成" + returndatestr + ")";
 				Paragraph p = new Paragraph(subtitle, font);
 				//				p.setSpacingBefore(5);
 				p.setIndentationRight(13);
@@ -2067,7 +2145,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 						if (intDay != ordertravelplans.size()) {//不是最后一天
 							TOrderTravelplanJpEntity beforeplan = dbDao.fetch(TOrderTravelplanJpEntity.class, Cnd
 									.where("orderId", "=", ordertravelplan.getOrderId()).and("day", "=", intDay - 1));
-							if (ordertravelplan.getHotel() != beforeplan.getHotel()) {
+							if (!Util.eq(ordertravelplan.getHotel(), beforeplan.getHotel())) {
 								THotelEntity hotelentity = hotelViewService.fetch(ordertravelplan.getHotel());
 								hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
 										+ hotelentity.getMobile();
@@ -2821,7 +2899,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 			}
 
 			//这里是表格********************************
-			float[] columns = { 1, 3, 3, 1, 3, 3, 2.5f, 3 };
+			float[] columns = { 1, 3, 4, 1, 3, 3, 2.5f, 3 };
 			PdfPTable table = new PdfPTable(columns);
 			table.setWidthPercentage(95);
 			table.setTotalWidth(PageSize.A4.getWidth());
