@@ -1561,8 +1561,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 
 		//"2018-09-24", "2018-09-29", "2018-09-30", "2018-10-01", "2018-10-02", "2018-10-03", "2018-10-04", "2018-10-05", "2018-12-31"
-		int count = getCount(gotripdate, stayday - 1, 0);
-		return format.format(DateUtil.addDay(gotripdate, stayday - 1 + count));
+		int count = getCount(gotripdate, stayday - 3, 0);
+		return format.format(DateUtil.addDay(gotripdate, stayday - 3 + count));
 	}
 
 	public Object autoCalculateBackDate(Date gotripdate, Integer stayday) {
