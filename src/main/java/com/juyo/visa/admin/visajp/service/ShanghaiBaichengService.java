@@ -1854,6 +1854,9 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					/*if (flag) {
+						cell.setRowspan(wealthjpinfo.size());
+					}*/
 					table.addCell(cell);
 				} else {
 					//主申请人姓名
@@ -1863,11 +1866,12 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 						applicant = dbDao.fetch(TApplicantEntity.class, Cnd.where("id", "=", record.get("MainId")));
 					}
 					cell = new PdfPCell(new Paragraph(
-							(!Util.isEmpty(record.get("mainRelation")) ? applicant.getFirstName()
-									+ applicant.getLastName() + "(" + record.getString("mainRelation") + ")" : ""),
-							font));
+							(!Util.isEmpty(record.get("mainRelation")) ? record.getString("mainRelation") : ""), font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					/*if (flag) {
+						cell.setRowspan(wealthjpinfo.size());
+					}*/
 					table.addCell(cell);
 
 				}
