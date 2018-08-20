@@ -140,25 +140,25 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 		//准备封皮信息
 		ByteArrayOutputStream note = note(tempdata);
 		pdffiles.add(note);
-		//申请人名单
-		ByteArrayOutputStream applyList = applyList(tempdata);
-		pdffiles.add(applyList);
 		//査 証 申 請 人 名 簿
 		ByteArrayOutputStream book = book(tempdata);
 		pdffiles.add(book);
 		//滞在予定表
 		ByteArrayOutputStream tripInfo = tripInfo(tempdata);
 		pdffiles.add(tripInfo);
-		ByteArrayOutputStream airticket = airticket(tempdata);
-		pdffiles.add(airticket);
-		//酒店信息
-		ByteArrayOutputStream hotelInfo = hotelInfo(tempdata);
-		pdffiles.add(hotelInfo);
+		//申请人名单
+		ByteArrayOutputStream applyList = applyList(tempdata);
+		pdffiles.add(applyList);
 		//申请人信息
 		for (Record record : applyinfo) {
 			ByteArrayOutputStream apply = applyinfo(record, tempdata);
 			pdffiles.add(apply);
 		}
+		ByteArrayOutputStream airticket = airticket(tempdata);
+		pdffiles.add(airticket);
+		//酒店信息
+		ByteArrayOutputStream hotelInfo = hotelInfo(tempdata);
+		pdffiles.add(hotelInfo);
 		//		ByteArrayOutputStream returnhome = returnhome(tempdata);
 		//		pdffiles.add(returnhome);
 		ByteArrayOutputStream mergePdf = templateUtil.mergePdf(pdffiles);

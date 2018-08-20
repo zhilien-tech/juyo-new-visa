@@ -161,15 +161,22 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 		//准备封皮信息
 		ByteArrayOutputStream note = note(tempdata);
 		pdffiles.add(note);
-		//申请人名单
-		ByteArrayOutputStream applyList = applyList(tempdata);
-		pdffiles.add(applyList);
 		//査 証 申 請 人 名 簿
 		ByteArrayOutputStream book = book(tempdata);
 		pdffiles.add(book);
 		//滞在予定表
 		ByteArrayOutputStream tripInfo = tripInfo(tempdata);
 		pdffiles.add(tripInfo);
+		//申请人名单
+		ByteArrayOutputStream applyList = applyList(tempdata);
+		pdffiles.add(applyList);
+		//申请人信息（赴日签证申请表）
+		int count = 1;
+		for (Record record : applyinfo) {
+			ByteArrayOutputStream apply = applyinfo(record, tempdata, request, count);
+			pdffiles.add(apply);
+			count++;
+		}
 		//电子客票行程单
 		ByteArrayOutputStream flightinfo = flightinfo(tempdata);
 		pdffiles.add(flightinfo);
@@ -179,14 +186,6 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 		//酒店信息
 		ByteArrayOutputStream hotelInfo = hotelInfo(tempdata);
 		pdffiles.add(hotelInfo);
-		//申请人信息（赴日签证申请表）
-		int count = 1;
-		Collections.reverse(applyinfo);
-		for (Record record : applyinfo) {
-			ByteArrayOutputStream apply = applyinfo(record, tempdata, request, count);
-			pdffiles.add(apply);
-			count++;
-		}
 		//		ByteArrayOutputStream returnhome = returnhome(tempdata);
 		//		pdffiles.add(returnhome);
 		ByteArrayOutputStream mergePdf = templateUtil.mergePdf(pdffiles);

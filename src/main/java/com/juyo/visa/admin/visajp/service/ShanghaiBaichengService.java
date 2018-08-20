@@ -159,6 +159,14 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 		//申请人名单
 		ByteArrayOutputStream applyList = applyList(tempdata);
 		pdffiles.add(applyList);
+		for (Record record : applyinfo) {
+			//申请人信息
+			ByteArrayOutputStream apply = applyinfo(record, tempdata);
+			pdffiles.add(apply);
+			//签证申请信息表
+			ByteArrayOutputStream visaapplication = visaapplicationinfo(record, tempdata);
+			pdffiles.add(visaapplication);
+		}
 		//电子航票
 		ByteArrayOutputStream airticket = airticket(tempdata);
 		pdffiles.add(airticket);
@@ -166,17 +174,6 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 		ByteArrayOutputStream hotelInfo = hotelInfo(tempdata);
 		pdffiles.add(hotelInfo);
 
-		Collections.reverse(applyinfo);
-		for (Record record : applyinfo) {
-			//申请人信息
-			ByteArrayOutputStream apply = applyinfo(record, tempdata);
-			pdffiles.add(apply);
-		}
-		for (Record record : applyinfo) {
-			//签证申请信息表
-			ByteArrayOutputStream visaapplication = visaapplicationinfo(record, tempdata);
-			pdffiles.add(visaapplication);
-		}
 		//		ByteArrayOutputStream returnhome = returnhome(tempdata);
 		//		pdffiles.add(returnhome);
 		ByteArrayOutputStream mergePdf = templateUtil.mergePdf(pdffiles);
@@ -509,17 +506,32 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 					}
 					if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
 						String goFlightNum = ordertripjp.getGoFlightNum();
+
+						TCityEntity goCity = dbDao.fetch(TCityEntity.class, ordertripjp.getGoArrivedCity().longValue());
+						String cityName = goCity.getCity();
+						if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
+							cityName = cityName.substring(0, cityName.length() - 1);
+						}
+						//入境机场名
+						String airportName = goFlightNum.substring(
+								goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
+						TFlightEntity airCity = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("takeOffName", "=", airportName));
+						String aircode = "";
+						if (!Util.isEmpty(airCity)) {
+							aircode = airCity.getTakeOffCode();
+						}
+
 						if (goFlightNum.contains("//")) {//转机
 							//入境口岸
-							map.put("goArrivedCity",
-									goFlightNum.substring(goFlightNum.lastIndexOf("-") + 1, goFlightNum.indexOf(" ")));
+							map.put("goArrivedCity", cityName + " " + airportName + " " + aircode);
 							//航空公司
 							map.put("goFlightNum",
 									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.indexOf("//")));
 						} else {//直飞
 							//入境口岸
-							map.put("goArrivedCity",
-									goFlightNum.substring(goFlightNum.indexOf("-") + 1, goFlightNum.indexOf(" ")));
+							map.put("goArrivedCity", cityName + " " + airportName + " " + aircode);
 							//航空公司
 							map.put("goFlightNum",
 									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
@@ -745,7 +757,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 				document.add(np2);
 				//第四个
 				font.setSize(7.96f);
-				Paragraph np3 = new Paragraph("   以下为预定内容：", font);
+				Paragraph np3 = new Paragraph("                   以下为预定内容：", font);
 				np3.setSpacingBefore(5);
 				np3.setSpacingAfter(10);
 				np3.setAlignment(Paragraph.ALIGN_LEFT);
@@ -754,9 +766,9 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 
 			//表格，表头
 
-			float[] tcolumns = { 3, 3, 4, 3 };
+			float[] tcolumns = { 2, 2, 4, 2 };
 			PdfPTable titable = new PdfPTable(tcolumns);
-			titable.setWidthPercentage(95);
+			titable.setWidthPercentage(75);
 			titable.setTotalWidth(PageSize.A4.getWidth());
 
 			//设置表头
@@ -772,9 +784,9 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 			document.add(titable);
 
 			//主要数据表格
-			float[] maincolumns = { 3, 3, 2, 1, 1, 3 };
+			float[] maincolumns = { 2, 2, 2, 1, 1, 2 };
 			PdfPTable maintable = new PdfPTable(maincolumns);
-			maintable.setWidthPercentage(95);
+			maintable.setWidthPercentage(75);
 			maintable.setTotalWidth(PageSize.A4.getWidth());
 
 			//数据处理
@@ -861,7 +873,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							maintable.addCell(cell);
 
 							//第三列
-							cell = new PdfPCell(new Paragraph("する", font));
+							cell = new PdfPCell(new Paragraph("チェックイン", font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 							cell.setFixedHeight(20);
@@ -1010,7 +1022,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 						maintable.addCell(cell);
 
 						//第三列
-						cell = new PdfPCell(new Paragraph("する", font));
+						cell = new PdfPCell(new Paragraph("チェックイン", font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 						cell.setFixedHeight(20);
@@ -1170,7 +1182,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 							maintable.addCell(cell);
 
 							//第三列
-							cell = new PdfPCell(new Paragraph("する", font));
+							cell = new PdfPCell(new Paragraph("チェックイン", font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 							cell.setFixedHeight(20);
@@ -1322,7 +1334,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 					maintable.addCell(cell);
 
 					//第三列
-					cell = new PdfPCell(new Paragraph("する", font));
+					cell = new PdfPCell(new Paragraph("チェックイン", font));
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setFixedHeight(20);
@@ -1410,87 +1422,133 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 
 			{
 				//第一行
-				Paragraph p = new Paragraph("    注意事项：             1.分房单：        必须在客人入住6天前确认传给我公司，并付清全款", font);
+				Paragraph p = new Paragraph(
+						"                   注意事项：                     1.分房单：        必须在客人入住6天前确认传给我公司，并付清全款", font);
 				p.setSpacingBefore(5);
 				p.setSpacingAfter(5);
 				p.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(p);
 				//第二行
-				Paragraph np = new Paragraph("                           2.取消金：        入住日期的6天前取消订房不需要支付取消金", font);
+				Paragraph np = new Paragraph(
+						"                                                  2.取消金：        入住日期的6天前取消订房不需要支付取消金", font);
 				np.setSpacingAfter(5);
 				np.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(np);
 				//第三行
-				Paragraph np2 = new Paragraph("                                             若距离入住日期的5天内取消订房，则需支付取消金",
+				Paragraph np2 = new Paragraph(
+						"                                                                    若距离入住日期的5天内取消订房，则需支付取消金",
 						font);
 				np2.setSpacingAfter(5);
 				np2.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(np2);
 			}
 
-			float[] explaincolumns = { 2, 3 };
+			float[] explaincolumns = { 2.3f, 1.2f, 2 };
 			PdfPTable explaintable = new PdfPTable(explaincolumns);
-			explaintable.setWidthPercentage(40);
+			explaintable.setWidthPercentage(51);
 			explaintable.setHorizontalAlignment(Element.ALIGN_JUSTIFIED);
-			explaintable.setTotalWidth(PageSize.A4.getWidth());
+			//explaintable.setTotalWidth(PageSize.A4.getWidth());
 
 			PdfPCell cell;
-			cell = new PdfPCell(new Paragraph("5天", font));
+
+			cell = new PdfPCell(new Paragraph("  ", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			cell.setBorder(0);
+			explaintable.addCell(cell);
+
+			cell = new PdfPCell(new Paragraph("  5天", font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setFixedHeight(20);
 			explaintable.addCell(cell);
-			cell = new PdfPCell(new Paragraph("房费的10%", font));
+			cell = new PdfPCell(new Paragraph("  房费的10%", font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setFixedHeight(20);
 			explaintable.addCell(cell);
-			cell = new PdfPCell(new Paragraph("4天", font));
+
+			cell = new PdfPCell(new Paragraph("  ", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			cell.setBorder(0);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("  4天", font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setFixedHeight(20);
 			explaintable.addCell(cell);
-			cell = new PdfPCell(new Paragraph("房费的20%", font));
+			cell = new PdfPCell(new Paragraph("  房费的20%", font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setFixedHeight(20);
 			explaintable.addCell(cell);
-			cell = new PdfPCell(new Paragraph("3天", font));
+
+			cell = new PdfPCell(new Paragraph("  ", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			cell.setBorder(0);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("  3天", font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setFixedHeight(20);
 			explaintable.addCell(cell);
-			cell = new PdfPCell(new Paragraph("房费的30%", font));
+			cell = new PdfPCell(new Paragraph("  房费的30%", font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setFixedHeight(20);
 			explaintable.addCell(cell);
-			cell = new PdfPCell(new Paragraph("2天", font));
+
+			cell = new PdfPCell(new Paragraph("  ", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			cell.setBorder(0);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("  2天", font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setFixedHeight(20);
 			explaintable.addCell(cell);
-			cell = new PdfPCell(new Paragraph("房费的50%", font));
+			cell = new PdfPCell(new Paragraph("  房费的50%", font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setFixedHeight(20);
 			explaintable.addCell(cell);
-			cell = new PdfPCell(new Paragraph("1天", font));
+
+			cell = new PdfPCell(new Paragraph("  ", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			cell.setBorder(0);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("  1天", font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setFixedHeight(20);
 			explaintable.addCell(cell);
-			cell = new PdfPCell(new Paragraph("房费的80%", font));
+			cell = new PdfPCell(new Paragraph("  房费的80%", font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setFixedHeight(20);
 			explaintable.addCell(cell);
-			cell = new PdfPCell(new Paragraph("当天", font));
+
+			cell = new PdfPCell(new Paragraph("  ", font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setFixedHeight(20);
+			cell.setBorder(0);
+			explaintable.addCell(cell);
+			cell = new PdfPCell(new Paragraph("  当天", font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setFixedHeight(20);
 			explaintable.addCell(cell);
-			cell = new PdfPCell(new Paragraph("房费的100%", font));
+			cell = new PdfPCell(new Paragraph("  房费的100%", font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setFixedHeight(20);
@@ -1500,18 +1558,20 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 
 			{
 				//第四行
-				Paragraph p = new Paragraph("                           3.以上规定适用于一般情况，若有特殊情况请以我方确认单上注册信息为准。", font);
+				Paragraph p = new Paragraph(
+						"                                                  3.以上规定适用于一般情况，若有特殊情况请以我方确认单上注册信息为准。", font);
 				p.setSpacingBefore(5);
 				p.setSpacingAfter(5);
 				p.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(p);
 				//第五行
-				Paragraph np = new Paragraph("                           确认上述内容和注意事项后请签字或加盖公司印章，并立即传回我公司。", font);
+				Paragraph np = new Paragraph(
+						"                                                  确认上述内容和注意事项后请签字或加盖公司印章，并立即传回我公司。", font);
 				np.setSpacingAfter(5);
 				np.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(np);
 				//第六行
-				Paragraph np2 = new Paragraph("    确认签字和盖章", font);
+				Paragraph np2 = new Paragraph("                   确认签字和盖章", font);
 				np2.setSpacingBefore(15);
 				np2.setSpacingAfter(5);
 				np2.setAlignment(Paragraph.ALIGN_LEFT);
@@ -1532,7 +1592,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 	 */
 	public ByteArrayOutputStream applyList(Map<String, Object> tempdata) {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		DateFormat applydateformat = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat applydateformat = new SimpleDateFormat("yyyy-MM-dd");
 		//公司信息
 		TCompanyEntity company = (TCompanyEntity) tempdata.get("company");
 		//订单信息
@@ -3015,7 +3075,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 			font.setSize(10);
 			//日期格式化
 			//String pattern = "yy年MM月dd日";
-			SimpleDateFormat tableformat = new SimpleDateFormat("yyyy/MM/dd");
+			SimpleDateFormat tableformat = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat pattern = new SimpleDateFormat("yy年MM月dd日");
 			String applyname = "";
 			int nansize = 0;
