@@ -9,12 +9,28 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import com.uxuexi.core.common.util.DateUtil;
+
 public class TestChinest {
 
 	public static void main(String[] args) {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
-		System.out.println(sdf.format(new Date()));
+		Date gotripdate = new Date();
+		List<String> holidayDate = new ArrayList<>(getYearDoubleWeekend(2018));
+		int stayday = 10;
+		int count = 0;
+		int totalday = stayday + count;
+		for (int i = 0; i < totalday; i++) {
+			String dateStr = sdf.format(DateUtil.addDay(gotripdate, i + 1));
+			if (holidayDate.contains(dateStr)) {
+				count++;
+				totalday++;
+			}
+			System.out.println("i:" + i);
+			System.out.println(stayday + count);
+			System.out.println(count + "=======");
+		}
 
 		/*String newString = "{'200001':{'wealth_title':'银行流水325','wealth_value':'345','wealth_type':'银行流水'}}";
 		//org.json.JSONObject jsonObject = new org.json.JSONObject(newString);

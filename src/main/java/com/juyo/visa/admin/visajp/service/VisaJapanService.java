@@ -1561,11 +1561,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 
 		//"2018-09-24", "2018-09-29", "2018-09-30", "2018-10-01", "2018-10-02", "2018-10-03", "2018-10-04", "2018-10-05", "2018-12-31"
-		int count = getCount(gotripdate, stayday, 0);
-		//日期加上一定天数之后还可能又包含了新的节假日，这里用递归解决
-		if (count != 0) {
-			return format.format(DateUtil.addDay(gotripdate, stayday - 1 + count));
-		}
+		int count = getCount(gotripdate, stayday - 1, 0);
 		return format.format(DateUtil.addDay(gotripdate, stayday - 1 + count));
 	}
 
@@ -1593,11 +1589,18 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	public int getCount(Date gotripdate, Integer stayday, int count) {
 		DateFormat format = new SimpleDateFormat("YYYY-M-d");
 		List<String> holidayDate = getHolidayDate();
-		for (int i = 0; i < stayday; i++) {
+		int totalday = stayday + count;
+		for (int i = 0; i < totalday; i++) {
 			String dateStr = format.format(DateUtil.addDay(gotripdate, i + 1));
+			System.out.println(dateStr);
 			if (holidayDate.contains(dateStr)) {
+				System.out.println("holidayDate contains:" + dateStr);
 				count++;
+				totalday++;
 			}
+			System.out.println("i:" + i);
+			System.out.println("totalday:" + totalday);
+			System.out.println("count:" + count);
 		}
 		return count;
 	}
@@ -1618,10 +1621,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	public int getCount2(Date gotripdate, Integer stayday, int count) {
 		DateFormat format = new SimpleDateFormat("YYYY-M-d");
 		List<String> holidayDate = getHolidayDate();
-		for (int i = 0; i < stayday; i++) {
+		int totalday = stayday + count;
+		for (int i = 0; i < totalday; i++) {
 			String dateStr = format.format(DateUtil.addDay(gotripdate, i + 1));
 			if (holidayDate.contains(dateStr)) {
 				count++;
+				totalday++;
 			}
 		}
 		return count;
