@@ -169,7 +169,6 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 	 */
 	public synchronized Map<String, Object> fetchAllSendOrders() {
 		long start = System.currentTimeMillis();
-		System.out.println("进入方法了");
 		//用来存放信息
 		Map<String, Object> map = Maps.newTreeMap();
 		//查询是否有需要自动填表的订单
@@ -182,7 +181,6 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		/*List<Record> orderjplist = dbDao.query(sql,
 						Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);*/
 		if (!Util.isEmpty(orderjplist) && orderjplist.size() > 0) {
-			System.out.println("有内容-----------");
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 			//获取第一条
 			Record record = orderjplist.get(0);
@@ -240,9 +238,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 				map.put("ordernum", orderinfo.getOrderNum());
 			}
 		}
-		System.out.println("方法走完了");
 		long endTime = System.currentTimeMillis();
-		System.out.println("程序运行时间:" + (endTime - start) + "ms=============");
 		return map;
 	}
 
