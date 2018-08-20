@@ -241,8 +241,8 @@ public class HepingService extends BaseService<TOrderJpEntity> {
 		}
 		//受理番号
 		String cdesignnum = "";
-		if (!Util.isEmpty(company.getCdesignNum())) {
-			cdesignnum = company.getCdesignNum();
+		if (!Util.isEmpty(orderjp.getAcceptDesign())) {
+			cdesignnum = orderjp.getAcceptDesign();
 		}
 		map.put("Text1", cdesignnum);
 		//受理号为送签编号
