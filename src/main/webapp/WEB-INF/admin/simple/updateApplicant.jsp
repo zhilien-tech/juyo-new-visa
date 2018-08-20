@@ -554,6 +554,14 @@
 					firstNameEn: {
 						trigger: "change keyup",
 						validators: {
+							notEmpty: {
+								message: '姓拼音不能为空'
+							},
+							stringLength: {//检测长度
+                                min: 2,
+                                max: 100,
+                                message: '姓拼音不能为空'
+                            },
 							regexp: {
 								regexp: /^[\/a-zA-Z]{0,}$/,
 								message: '拼音中不能包含汉字或其他特殊符号'
@@ -563,6 +571,14 @@
 					lastNameEn: {
 						trigger: "change keyup",
 						validators: {
+							notEmpty: {
+								message: '名拼音不能为空'
+							},
+							stringLength: {//检测长度
+                                min: 2,
+                                max: 100,
+                                message: '名拼音不能为空'
+                            },
 							regexp: {
 								// regexp: /\/{1}[a-zA-Z]+$/,
 								regexp: /^[\/a-zA-Z]{0,}$/,
@@ -573,6 +589,14 @@
 					birthAddressEn: {
 						trigger: "change keyup",
 						validators: {
+							notEmpty: {
+								message: '出生地点不能为空'
+							},
+							stringLength: {//检测长度
+                                min: 2,
+                                max: 100,
+                                message: '出生地点不能为空'
+                            },
 							regexp: {
 								regexp: /^[\/a-zA-Z\s]{0,}$/,
 								message: '拼音中不能包含汉字或其他特殊符号'
@@ -582,6 +606,14 @@
 					issuedPlaceEn: {
 						trigger: "change keyup",
 						validators: {
+							notEmpty: {
+								message: '签发地点不能为空'
+							},
+							stringLength: {//检测长度
+                                min: 2,
+                                max: 100,
+                                message: '签发地点不能为空'
+                            },
 							regexp: {
 								regexp: /^[\/a-zA-Z\s]{0,}$/,
 								message: '拼音中不能包含汉字或其他特殊符号'
