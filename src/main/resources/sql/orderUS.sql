@@ -99,3 +99,21 @@ FROM
 WHERE
 	tou.id = @id
 	ORDER BY touf.createtime DESC
+	
+	
+/*orderUS_mobile_listdata*/
+SELECT
+tou.id,
+tou.`status` orderstatus,
+tou.ordernumber,
+tou.cityid,
+tasb.id,
+CONCAT(tasb.firstname,tasb.lastname) staffname
+FROM
+t_order_us tou
+INNER JOIN t_app_staff_order_us tasou ON tasou.orderid = tou.id
+INNER JOIN t_app_staff_basicinfo tasb ON tasou.staffid = tasb.id
+LEFT JOIN t_user tu ON tasb.userid = tu.id
+WHERE
+tu.mobile = @telephone
+ORDER BY tou.createtime DESC

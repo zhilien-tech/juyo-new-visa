@@ -6,20 +6,22 @@
 
 package com.juyo.visa.admin.orderUS.module;
 
+import java.io.File;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.upload.UploadAdaptor;
 
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
@@ -378,32 +380,36 @@ public class OrderUSModule {
 	 * 身份证正面扫描
 	 */
 	@At
-	@POST
+	@Ok("json")
 	@Filters
-	public Object IDCardRecognition(@Param("staffid") int staffid, HttpServletRequest request,
-			HttpServletResponse response) {
-		return orderUSViewService.IDCardRecognition(staffid, request, response);
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object IDCardRecognition(@Param("encode") String encode, @Param("image") File file,
+			@Param("staffid") int staffid) {
+		return orderUSViewService.IDCardRecognition(encode, file, staffid);
 	}
 
 	/**
 	 * 身份证背面扫描
 	 */
 	@At
-	@POST
+	@Ok("json")
 	@Filters
-	public Object IDCardRecognitionBack(@Param("staffid") int staffid, HttpServletRequest request,
-			HttpServletResponse response) {
-		return orderUSViewService.IDCardRecognitionBack(staffid, request, response);
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object IDCardRecognitionBack(@Param("encode") String encode, @Param("image") File file,
+			@Param("staffid") int staffid) {
+		return orderUSViewService.IDCardRecognitionBack(encode, file, staffid);
 	}
 
 	/**
 	 * 护照扫描
 	 */
 	@At
-	@POST
+	@Ok("json")
 	@Filters
-	public Object passportRecognition(@Param("staffid") int staffid) {
-		return orderUSViewService.passportRecognitionBack(staffid);
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object passportRecognition(@Param("encode") String encode, @Param("image") File file,
+			@Param("staffid") int staffid) {
+		return orderUSViewService.passportRecognitionBack(encode, file, staffid);
 	}
 
 	//微信JSSDK上传的文件需要重新下载后上传到七牛云
