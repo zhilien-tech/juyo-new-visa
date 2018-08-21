@@ -326,6 +326,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 
 	}
 
+	/**
+	 * 基本信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object saveBasicinfo(BasicinfoUSForm form) {
 		String encode = form.getEncode();
 		String openid = redisDao.get(encode);
