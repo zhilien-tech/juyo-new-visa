@@ -59,6 +59,7 @@ import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.common.util.TranslateUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
+import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TApplicantBackmailJpEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
@@ -367,6 +368,21 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			dbDao.update(basicinfo);
 		}
 		return null;
+	}
+
+	public Object passportinfo(String encode, int staffid){
+		String openid = redisDao.get(encode);
+		if(Util.isEmpty(openid)){
+			return "登录已过期";
+		}else{
+			Map<String, Object> result = Maps.newHashMap();
+			SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+			TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class, Cnd.where("staffid", "=", staffid));
+			if(!Util.isEmpty(passportinfo.getIssueddate())){
+				passportinfo
+			}
+			return result;
+		}
 	}
 
 	public String translate(String str) {

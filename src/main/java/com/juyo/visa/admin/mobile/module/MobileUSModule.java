@@ -103,6 +103,12 @@ public class MobileUSModule {
 		return mobileUSService.saveBasicinfo(form);
 	}
 
+	@At
+	@POST
+	public Object passportinfo(@Param("encode") String encode, @Param("staffid") int staffid) {
+		return mobileUSService.passportinfo(encode, staffid);
+	}
+
 	/**
 	 * 申请人回显数据接口
 	 */
