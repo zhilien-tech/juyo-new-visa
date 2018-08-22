@@ -1,16 +1,16 @@
 package com.juyo.visa.forms;
 
-import com.uxuexi.core.db.util.EntityUtil;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
-import com.uxuexi.core.web.form.DataTablesParamForm;
 
-import java.io.Serializable;
+import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
+import com.uxuexi.core.db.util.EntityUtil;
+import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -18,28 +18,32 @@ public class TAppStaffCompanioninfoForm extends DataTablesParamForm {
 	private static final long serialVersionUID = 1L;
 	/**主键*/
 	private Integer id;
-	
+
 	/**人员id*/
 	private Integer staffid;
-	
+
 	/**同伴的姓*/
 	private String firstname;
-	
+
+	private String explain;
+
+	private String explainen;
+
 	/**同伴的姓(英文)*/
 	private String firstnameen;
-	
+
 	/**同伴的名*/
 	private String lastname;
-	
+
 	/**同伴的名(英文)*/
 	private String lastnameen;
-	
+
 	/**与你的关系*/
 	private Integer relationship;
-	
+
 	/**与你的关系(英文)*/
 	private Integer relationshipen;
-	
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**

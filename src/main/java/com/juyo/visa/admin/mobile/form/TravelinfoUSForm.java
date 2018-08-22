@@ -1,20 +1,51 @@
-package com.juyo.visa.forms;
+/**
+ * MobileApplicantForm.java
+ * com.juyo.visa.admin.mobile.form
+ * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
+*/
 
-import java.io.Serializable;
+package com.juyo.visa.admin.mobile.form;
+
 import java.util.Date;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-import com.uxuexi.core.web.form.AddForm;
-
+/**
+ * TODO(这里用一句话描述这个类的作用)
+ * <p>
+ * TODO(这里描述这个类补充说明 – 可选)
+ *
+ * @author  
+ * @Date	 2018年8月22日 	 
+ */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class TAppStaffPrevioustripinfoAddForm extends AddForm implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class TravelinfoUSForm {
+
+	/**主键*/
+	private Integer id;
+
+	private String encode;
 
 	/**人员id*/
 	private Integer staffid;
+
+	/**是否与其他人一起旅行*/
+	private Integer istravelwithother;
+
+	/**是否与其他人一起旅行(英文)*/
+	private Integer istravelwithotheren;
+
+	/**是否作为团队或组织的一部分*/
+	private Integer ispart;
+
+	/**是否作为团队或组织的一部分(英文)*/
+	private Integer isparten;
+
+	/**团队名称*/
+	private String groupname;
+
+	/**团队名称(英文)*/
+	private String groupnameen;
 
 	/**是否去过美国*/
 	private Integer hasbeeninus;
@@ -143,5 +174,26 @@ public class TAppStaffPrevioustripinfoAddForm extends AddForm implements Seriali
 
 	/**移民申请说明(英文)*/
 	private String immigrantpetitionexplainen;
+
+	/**抵达日期*/
+	private Date arrivedate;
+
+	private Date arrivedateen;
+
+	/**停留时间*/
+	private Integer staydays;
+
+	private Integer staydaysen;
+
+	/**过去五年是否去过任何国家旅游*/
+	private Integer istraveledanycountry;
+
+	private Integer istraveledanycountryen;
+
+	/**去旅游的国家*/
+	private Integer traveledcountry;
+
+	/**去旅游的国家(英文)*/
+	private Integer traveledcountryen;
 
 }

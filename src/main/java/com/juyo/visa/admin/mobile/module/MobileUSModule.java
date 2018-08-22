@@ -8,10 +8,6 @@ package com.juyo.visa.admin.mobile.module;
 
 import java.io.File;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.AdaptBy;
@@ -22,15 +18,11 @@ import org.nutz.mvc.annotation.Param;
 import org.nutz.mvc.upload.UploadAdaptor;
 
 import com.juyo.visa.admin.mobile.form.BasicinfoUSForm;
-import com.juyo.visa.admin.mobile.form.MainApplicantForm;
-import com.juyo.visa.admin.mobile.form.MarryImageForm;
-import com.juyo.visa.admin.mobile.form.MobileApplicantForm;
-import com.juyo.visa.admin.mobile.form.WealthInfoForm;
-import com.juyo.visa.admin.mobile.form.WorkInfoForm;
+import com.juyo.visa.admin.mobile.form.FamilyinfoUSForm;
+import com.juyo.visa.admin.mobile.form.PassportinfoUSForm;
+import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
+import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
 import com.juyo.visa.admin.mobile.service.MobileUSService;
-import com.juyo.visa.entities.TApplicantLowerEntity;
-import com.juyo.visa.entities.TApplicantPassportLowerEntity;
-import com.juyo.visa.forms.TApplicantBackmailJpForm;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -53,7 +45,7 @@ public class MobileUSModule {
 	 */
 	@At
 	@POST
-	public Object getOpenidandSessionkey(String code, int staffid) {
+	public Object getOpenidandSessionkey(@Param("code") String code, @Param("staffid") int staffid) {
 		return mobileUSService.getOpenidandSessionkey(code, staffid);
 	}
 
@@ -80,9 +72,9 @@ public class MobileUSModule {
 	 */
 	@At
 	@AdaptBy(type = UploadAdaptor.class)
-	public Object updateImage(@Param("encode") String encode, @Param("file") File file, @Param("staffid") int staffid,
-			@Param("type") int type, @Param("status") int status) {
-		return mobileUSService.updateImage(encode, file, staffid, type, status);
+	public Object updateImage(@Param("encode") String encode, @Param("image") File file, @Param("staffid") int staffid,
+			@Param("type") int type) {
+		return mobileUSService.updateImage(encode, file, staffid, type);
 	}
 
 	/**
@@ -103,6 +95,9 @@ public class MobileUSModule {
 		return mobileUSService.saveBasicinfo(form);
 	}
 
+	/**
+	 * 护照信息回显
+	 */
 	@At
 	@POST
 	public Object passportinfo(@Param("encode") String encode, @Param("staffid") int staffid) {
@@ -110,165 +105,66 @@ public class MobileUSModule {
 	}
 
 	/**
-	 * 申请人回显数据接口
-	 */
-	@At
-	@POST
-	public Object applicatinfo(@Param("..") MobileApplicantForm form) {
-		return mobileUSService.applicatinfo(form);
-	}
-
-	/**
-	 * 保存基本信息
-	 */
-	@At
-	@POST
-	public Object saveApplicatinfo(@Param("..") MobileApplicantForm form,
-			@Param("..") TApplicantLowerEntity applicantEntity, HttpSession session) {
-		return mobileUSService.saveApplicatinfo(form, applicantEntity, session);
-	}
-
-	/**
-	 * 护照信息回显数据
-	 */
-	@At
-	@POST
-	public Object passportinfo(@Param("..") MobileApplicantForm form) {
-		return mobileUSService.passportinfo(form);
-	}
-
-	/**
 	 * 保存护照信息
 	 */
 	@At
 	@POST
-	public Object savePassportInfo(@Param("..") TApplicantPassportLowerEntity passportinfo) {
-		return mobileUSService.savePassportInfo(passportinfo);
+	public Object savePassportinfo(@Param("..") PassportinfoUSForm form) {
+		return mobileUSService.savePassportInfo(form);
 	}
 
 	/**
-	 * 签证信息页面数据
+	 * 家庭信息回显
 	 */
 	@At
 	@POST
-	public Object getVisaInfoData(@Param("..") MobileApplicantForm form) {
-		return mobileUSService.getVisaInfoData(form);
+	public Object familyinfo(@Param("encode") String encode, @Param("staffid") int staffid) {
+		return mobileUSService.familyinfo(encode, staffid);
 	}
 
 	/**
-	 * 上传结婚照、离婚照片。。。。
-	 */
-	@At
-	@AdaptBy(type = UploadAdaptor.class)
-	public Object uploadPic(@Param("image") File file, HttpServletRequest request, HttpServletResponse response) {
-		return mobileUSService.uploadPic(file, request, response);
-	}
-
-	/**
-	 * 保存上传的照片信息
+	 * 保存家庭信息
 	 */
 	@At
 	@POST
-	public Object saveCardInfo(@Param("..") MarryImageForm form) {
-		return mobileUSService.saveCardInfo(form);
+	public Object saveFamilyinfo(@Param("..") FamilyinfoUSForm form) {
+		return mobileUSService.saveFamilyinfo(form);
 	}
 
 	/**
-	 * 获取申请人信息数据
+	 * 职业与教育信息回显
 	 */
 	@At
 	@POST
-	public Object getApplicantData(@Param("applicantid") Integer applicantid) {
-		return mobileUSService.getApplicantData(applicantid);
+	public Object workandeducation(@Param("encode") String encode, @Param("staffid") int staffid) {
+		return mobileUSService.workandeducation(encode, staffid);
 	}
 
 	/**
-	 * 保存主申请人数据
+	 * 保存职业与教育信息
 	 */
 	@At
 	@POST
-	public Object saveMainApplicant(@Param("..") MainApplicantForm form) {
-		return mobileUSService.saveMainApplicant(form);
+	public Object saveWorkandeducation(@Param("..") WorkandeducateinfoUSForm form) {
+		return mobileUSService.saveWorkandeducation(form);
 	}
 
 	/**
-	 * 获取申请人的职业或教育信息
+	 * 旅行信息回显
 	 */
 	@At
 	@POST
-	public Object getJobOrEducationData(@Param("applicantid") Long applicantid) {
-		return mobileUSService.getJobOrEducationData(applicantid);
+	public Object travelinfo(@Param("encode") String encode, @Param("staffid") int staffid) {
+		return mobileUSService.travelinfo(encode, staffid);
 	}
 
 	/**
-	 * 保存申请人的职业教育信息
+	 * 保存旅行信息
 	 */
 	@At
 	@POST
-	public Object saveJobOrEducationData(@Param("..") WorkInfoForm form) {
-		return mobileUSService.saveJobOrEducationData(form);
+	public Object saveTravelinfo(@Param("..") TravelinfoUSForm form) {
+		return mobileUSService.saveTravelinfo(form);
 	}
 
-	/**
-	 * 获取财产信息页面数据
-	 */
-	@At
-	@POST
-	public Object getWealthData(@Param("applicantid") Integer applicantid) {
-		return mobileUSService.getWealthData(applicantid);
-	}
-
-	/**
-	 * 保存财产信息
-	 */
-	@At
-	@POST
-	public Object saveWealthData(@Param("..") WealthInfoForm form) {
-		return mobileUSService.saveWealthData(form);
-	}
-
-	/**
-	 * 保存签证信息
-	 */
-	@At
-	@POST
-	public Object saveVisaInfo(@Param("applicantid") Integer applicantid, @Param("marrystatus") Integer marrystatus) {
-		return mobileUSService.saveVisaInfo(applicantid, marrystatus);
-	}
-
-	/**
-	 * 获取回邮信息
-	 */
-	@At
-	@POST
-	public Object getBackMailInfo(@Param("applicantId") Integer applicantId) {
-		return mobileUSService.getBackMailInfo(applicantId);
-	}
-
-	/**
-	 * 保存回邮信息
-	 */
-	@At
-	@POST
-	public Object saveBackMailInfo(@Param("..") TApplicantBackmailJpForm form) {
-		return mobileUSService.saveBackMailInfo(form);
-	}
-
-	/**
-	 * 查询照片格式是否提示过
-	 */
-	@At
-	@POST
-	public Object ismobileprompted(@Param("applicantid") int applicantid) {
-		return mobileUSService.ismobileprompted(applicantid);
-	}
-
-	/**
-	 * 记录已经提示过
-	 */
-	@At
-	@POST
-	public Object mobilehasprompted(@Param("applicantid") int applicantid) {
-		return mobileUSService.mobilehasprompted(applicantid);
-	}
 }

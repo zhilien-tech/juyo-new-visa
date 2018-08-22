@@ -1,25 +1,30 @@
-package com.juyo.visa.forms;
+/**
+ * MobileApplicantForm.java
+ * com.juyo.visa.admin.mobile.form
+ * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
+*/
+
+package com.juyo.visa.admin.mobile.form;
 
 import java.util.Date;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-import org.nutz.dao.Cnd;
-import org.nutz.dao.SqlManager;
-import org.nutz.dao.Sqls;
-import org.nutz.dao.sql.Sql;
-
-import com.juyo.visa.entities.TAppStaffPassportEntity;
-import com.uxuexi.core.db.util.EntityUtil;
-import com.uxuexi.core.web.form.DataTablesParamForm;
-
+/**
+ * TODO(这里用一句话描述这个类的作用)
+ * <p>
+ * TODO(这里描述这个类补充说明 – 可选)
+ *
+ * @author  
+ * @Date	 2018年8月22日 	 
+ */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class TAppStaffPassportForm extends DataTablesParamForm {
-	private static final long serialVersionUID = 1L;
+public class PassportinfoUSForm {
+
 	/**主键*/
 	private Integer id;
+
+	private String encode;
 
 	/**人员id*/
 	private Integer staffid;
@@ -111,22 +116,4 @@ public class TAppStaffPassportForm extends DataTablesParamForm {
 
 	private String lostpassportnumen;
 
-	@Override
-	public Sql sql(SqlManager sqlManager) {
-		/**
-		 * 默认使用了当前form关联entity的单表查询sql,如果是多表复杂sql，
-		 * 请使用sqlManager获取自定义的sql，并设置查询条件
-		 */
-		String sqlString = EntityUtil.entityCndSql(TAppStaffPassportEntity.class);
-		Sql sql = Sqls.create(sqlString);
-		sql.setCondition(cnd());
-		return sql;
-	}
-
-	private Cnd cnd() {
-		Cnd cnd = Cnd.NEW();
-		//TODO 添加自定义查询条件（可选）
-		cnd.orderBy("id", "DESC");
-		return cnd;
-	}
 }
