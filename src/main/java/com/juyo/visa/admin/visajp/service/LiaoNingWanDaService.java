@@ -46,8 +46,8 @@ import com.juyo.visa.admin.scenic.service.ScenicViewService;
 import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.admin.visajp.util.TtfClassLoader;
 import com.juyo.visa.common.enums.JobStatusEnum;
-import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
+import com.juyo.visa.common.enums.SimpleVisaTypeEnum;
 import com.juyo.visa.common.util.FormatDateUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantWealthJpEntity;
@@ -192,7 +192,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 		String visatypestr = "";
 		Integer visaType = orderjp.getVisaType();
 		if (!Util.isEmpty(visaType)) {
-			for (MainSaleVisaTypeEnum visatypeEnum : MainSaleVisaTypeEnum.values()) {
+			for (SimpleVisaTypeEnum visatypeEnum : SimpleVisaTypeEnum.values()) {
 				if (visatypeEnum.intKey() == visaType) {
 					visatypestr = visatypeEnum.value();
 				}

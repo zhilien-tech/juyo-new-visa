@@ -73,11 +73,11 @@ import com.uxuexi.core.web.base.service.BaseService;
  * <p>
  * TODO(这里描述这个类补充说明 – 可选)
  *
- * @author   刘旭利
+ * @author   
  * @Date	 2018年3月14日 	 
  */
 @IocBean
-public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
+public class ShanghaiBaoshiService extends BaseService<TOrderJpEntity> {
 
 	@Inject
 	private FlightViewService flightViewService;
@@ -189,8 +189,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 	private ByteArrayOutputStream note(Map<String, Object> tempdata) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日");
-		DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy 年 MM 月 dd 日");
 		//公司信息
 		TCompanyEntity company = (TCompanyEntity) tempdata.get("company");
 		//出行信息
@@ -204,6 +203,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 		//多程信息
 		List<TOrderTripMultiJpEntity> mutiltrip = (List<TOrderTripMultiJpEntity>) tempdata.get("mutiltrip");
 
+		//签证类型
 		String visatypestr = "";
 		Integer visaType = orderjp.getVisaType();
 		if (!Util.isEmpty(visaType)) {
@@ -226,53 +226,46 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 				dijiecdesignnum = dijiecompany.getCdesignNum();
 			}
 		}
+		//公司名称
 		String companyname = "";
 		if (!Util.isEmpty(company.getName())) {
 			companyname = company.getName();
 		}
+		//指定番号
 		String cdesignnum = "";
 		if (!Util.isEmpty(company.getCdesignNum())) {
 			cdesignnum = company.getCdesignNum();
 		}
-		content.append("　　" + companyname).append("(").append(cdesignnum).append(")根据与").append(dijie).append("(指定番号:")
-				.append(dijiecdesignnum).append(")的合同约定,组织").append(applyinfo.size()).append("人访日旅游团，请协助办理赴日签证。");
+		//主申请人姓名
+		String applyname = "";
+		if (!Util.isEmpty(applyinfo)) {
+			Record record = applyinfo.get(0);
+			applyname += record.getString("firstname");
+			applyname += record.getString("lastname");
+		}
+
+		content.append("　　" + companyname).append("(").append(cdesignnum).append(")根据与").append(dijie).append("(番号:")
+				.append(dijiecdesignnum).append(")旅行社的合同约定,组织").append(applyname + " ").append(applyinfo.size())
+				.append("+0 人访日旅游，请协助办理").append(visatypestr).append("赴日签证。");
 		map.put("Text1", content.toString());
 		map.put("Text8", company.getName());
 		if (!Util.isEmpty(ordertripjp)) {
 			if (ordertripjp.getTripType().equals(1)) {
 				if (!Util.isEmpty(ordertripjp.getGoDate())) {
-					map.put("Text2", dateFormat1.format(ordertripjp.getGoDate()));
+					map.put("Text2", dateFormat.format(ordertripjp.getGoDate()));
 				}
 				//入境航班
 				if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
 					String goFlightNum = ordertripjp.getGoFlightNum();
-					TCityEntity goCity = dbDao.fetch(TCityEntity.class, ordertripjp.getGoArrivedCity().longValue());
-					String cityName = goCity.getCity();
-					if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
-						cityName = cityName.substring(0, cityName.length() - 1);
-					}
-					//入境机场名
-					String airportName = goFlightNum.substring(
-							goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-							goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
-					TFlightEntity airCity = dbDao
-							.fetch(TFlightEntity.class, Cnd.where("takeOffName", "=", airportName));
-					String aircode = "";
-					if (!Util.isEmpty(airCity)) {
-						aircode = airCity.getTakeOffCode();
-					}
 					map.put("Text3",
-							cityName
-									+ " "
-									+ airportName
-									+ " "
-									+ aircode
-									+ ": "
+							goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+									goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")))
+									+ "、 "
 									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 				}
 				if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-					map.put("Text4", dateFormat1.format(ordertripjp.getReturnDate()));
+					map.put("Text4", dateFormat.format(ordertripjp.getReturnDate()));
 				}
 				//天数
 				/*if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
@@ -284,27 +277,9 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 				if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
 					//出境航班
 					String goFlightNum = ordertripjp.getReturnFlightNum();
-					TCityEntity leaveCity = dbDao.fetch(TCityEntity.class, ordertripjp.getReturnDepartureCity()
-							.longValue());
-					String cityName = leaveCity.getCity();
-					if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
-						cityName = cityName.substring(0, cityName.length() - 1);
-					}
-					//出境机场名
-					String airportName = goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")));
-					TFlightEntity airCity = dbDao
-							.fetch(TFlightEntity.class, Cnd.where("takeOffName", "=", airportName));
-					String aircode = "";
-					if (!Util.isEmpty(airCity)) {
-						aircode = airCity.getTakeOffCode();
-					}
 					map.put("Text5",
-							cityName
-									+ " "
-									+ airportName
-									+ " "
-									+ aircode
-									+ ": "
+							goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
+									+ "、 "
 									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 				}
@@ -357,7 +332,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 			map.put("Text9", "");
 		}
 		//获取模板文件
-		URL resource = getClass().getClassLoader().getResource("japanfile/shanghaibaicheng/note.pdf");
+		URL resource = getClass().getClassLoader().getResource("japanfile/shanghaibaoshi/note.pdf");
 		TemplateUtil templateUtil = new TemplateUtil();
 		stream = templateUtil.pdfTemplateStream(resource, map);
 		return stream;

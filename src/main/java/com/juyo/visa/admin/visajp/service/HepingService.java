@@ -243,7 +243,7 @@ public class HepingService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(orderjp.getAcceptDesign())) {
 			cdesignnum = orderjp.getAcceptDesign();
 		}
-		map.put("Text1", cdesignnum);
+		//map.put("Text1", cdesignnum);
 		//受理号为送签编号
 		String sendVisaNum = orderinfo.getSendVisaNum();
 		content.append(companyname).append("根据与").append(dijie).append("的合同约定，组织").append(applyinfo.size())
