@@ -167,4 +167,19 @@ public class MobileUSModule {
 		return mobileUSService.saveTravelinfo(form);
 	}
 
+	/**
+	 * 国家模糊查询
+	 */
+	@At
+	@POST
+	public Object getCountry(@Param("searchstr") String searchstr) {
+		return mobileUSService.getCountry(searchstr);
+	}
+
+	@At
+	@POST
+	public Object getUSstate(@Param("searchstr") String searchstr) {
+		return mobileUSService.getUSstate(searchstr);
+	}
+
 }

@@ -8,6 +8,7 @@ package com.juyo.visa.admin.mobile.service;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
@@ -32,8 +34,11 @@ import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.MarryStatusEnum;
+import com.juyo.visa.common.enums.USMarryStatusEnum;
 import com.juyo.visa.common.enums.orderUS.DistrictEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaFamilyInfoEnum;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.common.util.TranslateUtil;
@@ -51,8 +56,11 @@ import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TApplicantEntity;
+import com.juyo.visa.entities.TCountryEntity;
+import com.juyo.visa.entities.TUsStateEntity;
 import com.juyo.visa.websocket.BasicInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -294,6 +302,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		result.put("basic", basic);
 		result.put("staffid", staffid);
 		result.put("encode", encode);
+		result.put("marrystatusenum", EnumUtil.enum2(USMarryStatusEnum.class));
 		return result;
 		//}
 
@@ -439,6 +448,8 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				Cnd.where("staffid", "=", staffid));
 		result.put("immediaterelatives", immediaterelatives);
 
+		result.put("familyinfoenum", EnumUtil.enum2(VisaFamilyInfoEnum.class));
+		result.put("immediaterelationshipenum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));
 		return result;
 		//}
 	}
@@ -676,18 +687,76 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveTravelinfo(TravelinfoUSForm form) {
-		String encode = form.getEncode();
+		/*String encode = form.getEncode();
 		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
+		} else {*/
+		Integer staffid = form.getStaffid();
+		//同行人信息
+		TAppStaffTravelcompanionEntity travelcompanion = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		travelcompanion.setIstravelwithother(form.getIstravelwithother());
+		dbDao.update(travelcompanion);
+		return null;
+		//}
+	}
+
+	/**
+	 * 国家模糊查询
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param searchstr
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object getCountry(String searchstr) {
+		List<String> countryList = new ArrayList<>();
+		List<TCountryEntity> country = dbDao.query(TCountryEntity.class,
+				Cnd.where("chinesename", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		for (TCountryEntity tCountry : country) {
+			if (!countryList.contains(tCountry.getChinesename())) {
+				countryList.add(tCountry.getChinesename());
+			}
+		}
+		List<String> list = new ArrayList<>();
+		if (!Util.isEmpty(countryList) && countryList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(countryList.get(i));
+			}
+			return list;
 		} else {
-			Integer staffid = form.getStaffid();
-			//同行人信息
-			TAppStaffTravelcompanionEntity travelcompanion = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
-					Cnd.where("staffid", "=", staffid));
-			travelcompanion.setIstravelwithother(form.getIstravelwithother());
-			dbDao.update(travelcompanion);
-			return null;
+			return countryList;
+		}
+	}
+
+	/**
+	 * 模糊查询美国所有州
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param searchstr
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object getUSstate(String searchstr) {
+		List<String> stateList = new ArrayList<>();
+		List<TUsStateEntity> state = dbDao.query(TUsStateEntity.class,
+				Cnd.where("statecn", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		for (TUsStateEntity tState : state) {
+			if (!stateList.contains(tState.getStatecn())) {
+				stateList.add(tState.getStatecn());
+			}
+		}
+		List<String> list = new ArrayList<>();
+		if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(stateList.get(i));
+			}
+			return list;
+		} else {
+			return stateList;
 		}
 	}
 
