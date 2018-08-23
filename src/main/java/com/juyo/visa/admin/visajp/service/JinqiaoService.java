@@ -1680,12 +1680,12 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 							}
 						}
 
-						if (!record.get("isMainApplicant").equals(1)) {//副申请人
+						/*if (!record.get("isMainApplicant").equals(1)) {//副申请人
 							if (wealthType.indexOf("银行流水") == -1) {
 								wealthType = "银行流水\n" + wealthType;
 								detail = "\n" + detail;
 							}
-						}
+						}*/
 
 					}
 					cell = new PdfPCell(new Paragraph(wealthType, font));
@@ -1708,34 +1708,6 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 					table.addCell(cell);
 				}
 
-				/*if (flag) {
-					TApplicantWealthJpEntity tApplicantWealthJpEntity = wealthjpinfo.get(0);
-					cell = new PdfPCell(new Paragraph(tApplicantWealthJpEntity.getType(), font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					table.addCell(cell);
-					String detail = tApplicantWealthJpEntity.getDetails();
-					if ("银行流水".equals(tApplicantWealthJpEntity.getType())) {
-						detail += "万\n";
-					} else if ("理财".equals(tApplicantWealthJpEntity.getType())) {
-						detail += "万\n";
-					} else if ("房产".equals(tApplicantWealthJpEntity.getType())) {
-						detail += "平米\n";
-					}
-					cell = new PdfPCell(new Paragraph(detail, font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					table.addCell(cell);
-				} else {
-					cell = new PdfPCell(new Paragraph("", font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					table.addCell(cell);
-					cell = new PdfPCell(new Paragraph("", font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					table.addCell(cell);
-				}*/
 				//备注
 				if (record.get("isMainApplicant").equals(1)) {
 					cell = new PdfPCell(new Paragraph(

@@ -1855,12 +1855,12 @@ public class ShanghaiBaoshiService extends BaseService<TOrderJpEntity> {
 							}
 						}
 
-						if (!record.get("isMainApplicant").equals(1)) {//副申请人
+						/*if (!record.get("isMainApplicant").equals(1)) {//副申请人
 							if (wealthType.indexOf("银行流水") == -1) {
 								wealthType = "银行流水\n" + wealthType;
 								detail = "\n" + detail;
 							}
-						}
+						}*/
 
 					}
 					cell = new PdfPCell(new Paragraph(wealthType, font));
@@ -1916,9 +1916,6 @@ public class ShanghaiBaoshiService extends BaseService<TOrderJpEntity> {
 						(!Util.isEmpty(record.get("traveladvice")) ? record.getString("traveladvice") : ""), font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				if (flag) {
-					cell.setRowspan(wealthjpinfo.size());
-				}
 				table.addCell(cell);
 			}
 			document.add(table);

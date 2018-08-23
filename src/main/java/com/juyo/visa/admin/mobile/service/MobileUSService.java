@@ -218,12 +218,29 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 
 		List<TAppStaffCredentialsEntity> list = dbDao.query(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid), null);
+		result.put("credentials", list);
+		return result;
+		//}
+	}
+
+	public Object simpleishavephoto(String encode, int staffid) {
+		//先验证是否登录过期
+		/*String openid = redisDao.get(encode);
+		if (Util.isEmpty(openid)) {
+			//如果为空则过期
+			return -1;
+		} else {*/
+		Map<String, Object> result = Maps.newHashMap();
+
+		List<TAppStaffCredentialsEntity> list = dbDao.query(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
 		for (TAppStaffCredentialsEntity tAppStaffCredentialsEntity : list) {
 			TAppStaffCredentialsEntity credentials = new TAppStaffCredentialsEntity();
-			credentials.setStatus(tAppStaffCredentialsEntity.getStatus());
+			credentials.setType(tAppStaffCredentialsEntity.getType());
 			credentials.setUrl(tAppStaffCredentialsEntity.getUrl());
-			result.put(String.valueOf(tAppStaffCredentialsEntity.getType()), credentials);
+			result.put(String.valueOf(credentials.getType()), credentials);
 		}
+		result.put("credentials", list);
 		return result;
 		//}
 	}
@@ -239,15 +256,22 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @param type
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object updateImage(String encode, File file, int staffid, int type) {
+	public Object updateImage(String encode, File file, int staffid, int type, int sequence) {
 		/*String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
 		} else {*/
 		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
 		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
-		TAppStaffCredentialsEntity credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
-				Cnd.where("staffid", "=", staffid).and("type", "=", type));
+
+		TAppStaffCredentialsEntity credentials = new TAppStaffCredentialsEntity();
+		if (Util.isEmpty(sequence)) {
+			credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffid).and("type", "=", type));
+		} else {
+			credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffid).and("type", "=", type).and("sequence", "=", sequence));
+		}
 
 		//先查询是否有图片，有的话只需更新图片地址，没有的话新建
 		if (Util.isEmpty(credentials)) {
@@ -255,6 +279,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			credentialsEntity.setCreatetime(new Date());
 			credentialsEntity.setStaffid(staffid);
 			credentialsEntity.setType(type);
+			credentialsEntity.setSequence(sequence);
 			credentialsEntity.setUpdatetime(new Date());
 			credentialsEntity.setUrl(url);
 			dbDao.insert(credentialsEntity);

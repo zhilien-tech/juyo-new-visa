@@ -199,8 +199,8 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			} else if (pdftype == PdfTypeEnum.HUANYU_TYPE.intKey()) {
 				byteArray = huanyuService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.JINQIAO_TYPE.intKey()) {
-				//byteArray = jinqiaoService.generateFile(orderjp, request).toByteArray();
-				byteArray = hepingService.generateFile(orderjp, request).toByteArray();
+				byteArray = jinqiaoService.generateFile(orderjp, request).toByteArray();
+				//byteArray = hepingService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.SHENZHOU_TYPE.intKey()) {
 				byteArray = shenzhouService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.FENGSHANG_TYPE.intKey()) {

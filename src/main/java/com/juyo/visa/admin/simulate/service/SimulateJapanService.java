@@ -499,16 +499,18 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			orderinfo.setUpdateTime(new Date());
 			//更新订单状态为发招保失败
 			dbDao.update(orderinfo);
-			Integer visaOpid = orderinfo.getVisaOpid();
-			if (!Util.isEmpty(visaOpid)) {
-				//添加日志
-				TOrderLogsEntity logs = new TOrderLogsEntity();
-				logs.setCreateTime(new Date());
-				logs.setOpId(visaOpid);
-				logs.setOrderId(orderinfo.getId());
-				logs.setOrderStatus(orderinfo.getStatus());
-				logs.setUpdateTime(new Date());
-				dbDao.insert(logs);
+			if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()) {
+				Integer visaOpid = orderinfo.getVisaOpid();
+				if (!Util.isEmpty(visaOpid)) {
+					//添加日志
+					TOrderLogsEntity logs = new TOrderLogsEntity();
+					logs.setCreateTime(new Date());
+					logs.setOpId(visaOpid);
+					logs.setOrderId(orderinfo.getId());
+					logs.setOrderStatus(orderinfo.getStatus());
+					logs.setUpdateTime(new Date());
+					dbDao.insert(logs);
+				}
 			}
 
 			/*if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()) {
@@ -665,7 +667,12 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
 		}
 		dbDao.update(order);
-		Integer visaOpid = order.getVisaOpid();
+		Integer visaOpid = 0;
+		if (!Util.isEmpty(order.getReceptionOpid())) {
+			visaOpid = order.getReceptionOpid();
+		} else {
+			visaOpid = order.getVisaOpid();
+		}
 		if (!Util.isEmpty(visaOpid)) {
 			//添加日志
 			TOrderLogsEntity logs = new TOrderLogsEntity();

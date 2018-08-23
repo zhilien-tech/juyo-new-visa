@@ -67,14 +67,20 @@ public class MobileUSModule {
 		return mobileUSService.ishavePhoto(encode, staffid);
 	}
 
+	@At
+	@POST
+	public Object simpleishavephoto(@Param("encode") String encode, @Param("staffid") int staffid) {
+		return mobileUSService.simpleishavephoto(encode, staffid);
+	}
+
 	/**
 	 * 图片上传
 	 */
 	@At
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object updateImage(@Param("encode") String encode, @Param("image") File file, @Param("staffid") int staffid,
-			@Param("type") int type) {
-		return mobileUSService.updateImage(encode, file, staffid, type);
+			@Param("type") int type, @Param("sequence") int sequence) {
+		return mobileUSService.updateImage(encode, file, staffid, type, sequence);
 	}
 
 	/**

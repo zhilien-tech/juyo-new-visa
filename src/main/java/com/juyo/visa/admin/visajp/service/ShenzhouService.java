@@ -1691,12 +1691,12 @@ public class ShenzhouService extends BaseService<TOrderJpEntity> {
 							}
 						}
 
-						if (!record.get("isMainApplicant").equals(1)) {//副申请人
+						/*if (!record.get("isMainApplicant").equals(1)) {//副申请人
 							if (wealthType.indexOf("银行流水") == -1) {
 								wealthType = "银行流水\n" + wealthType;
 								detail = "\n" + detail;
 							}
-						}
+						}*/
 
 					}
 					cell = new PdfPCell(new Paragraph(wealthType, font));

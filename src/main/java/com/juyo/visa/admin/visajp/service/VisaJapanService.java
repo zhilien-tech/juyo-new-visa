@@ -1955,7 +1955,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			//更新订单状态为发招保中或准备提交大使馆，此时发招宝就会开始，所以必须在准备工作之后，即orderjp相关的操作和excel完成之后
 
 			Integer userId = loginuser.getId();
-			orderinfo.setVisaOpid(userId);
+			//如果是lelv点的，则记录原订单的操作人
+			if (Util.eq("lelv", loginuser.getName())) {
+				orderinfo.setReceptionOpid(orderinfo.getSalesOpid());
+			} else {
+				orderinfo.setVisaOpid(userId);
+			}
 			dbDao.update(orderinfo);
 
 			//orderJpViewService.insertLogs(orderinfo.getId(), JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey(), session);
