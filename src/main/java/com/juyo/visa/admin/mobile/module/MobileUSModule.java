@@ -176,6 +176,9 @@ public class MobileUSModule {
 		return mobileUSService.getCountry(searchstr);
 	}
 
+	/**
+	 * 美国的州模糊查询
+	 */
 	@At
 	@POST
 	public Object getUSstate(@Param("searchstr") String searchstr) {

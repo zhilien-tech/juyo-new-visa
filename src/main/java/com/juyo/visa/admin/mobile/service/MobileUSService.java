@@ -47,6 +47,7 @@ import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
 import com.juyo.visa.entities.TAppStaffBeforeworkEntity;
 import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
+import com.juyo.visa.entities.TAppStaffDriverinfoEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffGocountryEntity;
 import com.juyo.visa.entities.TAppStaffGousinfoEntity;
@@ -57,7 +58,7 @@ import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TCountryEntity;
-import com.juyo.visa.entities.TUsStateEntity;
+import com.juyo.visa.entities.TStateUsEntity;
 import com.juyo.visa.websocket.BasicInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
@@ -665,10 +666,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				result.put("arrivedate", format.format(gousinfo.getArrivedate()));
 			}
 
+			//美国的驾照信息
+			TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			result.put("driverinfo", driverinfo);
+
 			//是否有出境记录
 			TAppStaffWorkEducationTrainingEntity workeducation = dbDao.fetch(
 					TAppStaffWorkEducationTrainingEntity.class, Cnd.where("staffid", "=", staffid));
-			result.put("isexitrecord", workeducation.getIstraveledanycountry());
+			result.put("istraveledanycountry", workeducation.getIstraveledanycountry());
 			//出境记录
 			List<TAppStaffGocountryEntity> gocountry = dbDao.query(TAppStaffGocountryEntity.class,
 					Cnd.where("staffid", "=", staffid), null);
@@ -693,11 +699,62 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			return -1;
 		} else {*/
 		Integer staffid = form.getStaffid();
-		//同行人信息
+		//是否有同行人
 		TAppStaffTravelcompanionEntity travelcompanion = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		travelcompanion.setIstravelwithother(form.getIstravelwithother());
 		dbDao.update(travelcompanion);
+
+		//同行人信息
+		List<TAppStaffCompanioninfoEntity> companioninfo_old = dbDao.query(TAppStaffCompanioninfoEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		List<TAppStaffCompanioninfoEntity> companioninfo_new = form.getCompanioninfoList();
+		dbDao.updateRelations(companioninfo_old, companioninfo_new);
+
+		//以前的美国旅游信息
+		TAppStaffPrevioustripinfoEntity previoustripinfo = dbDao.fetch(TAppStaffPrevioustripinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		previoustripinfo.setCostpayer(form.getCostpayer());
+		previoustripinfo.setHasbeeninus(form.getHasbeeninus());
+		previoustripinfo.setHasdriverlicense(form.getHasdriverlicense());
+		previoustripinfo.setIsissuedvisa(form.getIsissuedvisa());
+		previoustripinfo.setIssueddate(form.getIssueddate());
+		previoustripinfo.setVisanumber(form.getVisanumber());
+		previoustripinfo.setIsapplyingsametypevisa(form.getIsapplyingsametypevisa());
+		previoustripinfo.setIstenprinted(form.getIstenprinted());
+		previoustripinfo.setIslost(form.getIslost());
+		previoustripinfo.setIscancelled(form.getIscancelled());
+		previoustripinfo.setIsrefused(form.getIsrefused());
+		previoustripinfo.setRefusedexplain(form.getRefusedexplain());
+		previoustripinfo.setIsfiledimmigrantpetition(form.getIsfiledimmigrantpetition());
+		previoustripinfo.setEmigrationreason(form.getEmigrationreason());
+		previoustripinfo.setImmigrantpetitionexplain(form.getImmigrantpetitionexplain());
+		dbDao.update(previoustripinfo);
+
+		//去过美国信息
+		TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		gousinfo.setStaydays(form.getStaydays());
+		gousinfo.setArrivedate(form.getArrivedate());
+		dbDao.update(gousinfo);
+
+		//美国驾照信息
+		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		driverinfo.setDriverlicensenumber(form.getDriverlicensenumber());
+		driverinfo.setWitchstateofdriver(form.getWitchstateofdriver());
+		dbDao.update(driverinfo);
+
+		//是否有出境记录
+		TAppStaffWorkEducationTrainingEntity workeducation = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		workeducation.setIstraveledanycountry(form.getIstraveledanycountry());
+
+		//出境记录
+		List<TAppStaffGocountryEntity> gocountry_old = dbDao.query(TAppStaffGocountryEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		List<TAppStaffGocountryEntity> gocountry_new = form.getGocountryList();
+		dbDao.updateRelations(gocountry_old, gocountry_new);
 		return null;
 		//}
 	}
@@ -742,11 +799,11 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 */
 	public Object getUSstate(String searchstr) {
 		List<String> stateList = new ArrayList<>();
-		List<TUsStateEntity> state = dbDao.query(TUsStateEntity.class,
-				Cnd.where("statecn", "like", "%" + Strings.trim(searchstr) + "%"), null);
-		for (TUsStateEntity tState : state) {
-			if (!stateList.contains(tState.getStatecn())) {
-				stateList.add(tState.getStatecn());
+		List<TStateUsEntity> state = dbDao.query(TStateUsEntity.class,
+				Cnd.where("name", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		for (TStateUsEntity tState : state) {
+			if (!stateList.contains(tState.getName())) {
+				stateList.add(tState.getName());
 			}
 		}
 		List<String> list = new ArrayList<>();
