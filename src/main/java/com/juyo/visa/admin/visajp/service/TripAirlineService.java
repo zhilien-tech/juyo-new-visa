@@ -663,60 +663,6 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				}
 				newairLineResult.setResultflyEntity(arrayList);
 
-				/*//航班分直飞和转机
-				List<TFlightEntity> zhiflyList = dbDao.query(TFlightEntity.class, Cnd.where("takeOffCode", "=", dep)
-						.and("landingCode", "=", arr), null);
-				//直飞航班
-				if (!Util.isEmpty(zhiflyList)) {
-					for (TFlightEntity tFlightEntity : zhiflyList) {
-						ResultflyEntity resultflyEntity = new ResultflyEntity();
-						resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-						resultflyEntity.setArrflightname(tFlightEntity.getLandingName());
-						resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-						resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-						resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-						if (!arrayList.contains(resultflyEntity)) {
-							arrayList.add(resultflyEntity);
-						}
-					}
-					//newairLineResult.setResultflyEntity(arrayList);
-				}
-
-				//转机航班
-				List<TFlightEntity> flights = dbDao
-						.query(TFlightEntity.class, Cnd.where("takeOffCode", "=", dep), null);
-				if (!Util.isEmpty(flights)) {
-					for (TFlightEntity tFlightEntity : flights) {
-						if (!Util.isEmpty(tFlightEntity.getRelationflight())) {
-							TFlightEntity fetch = dbDao.fetch(TFlightEntity.class, tFlightEntity.getRelationflight()
-									.longValue());
-							if (Util.eq(fetch.getLandingCode(), arr)) {
-								ResultflyEntity resultflyEntity = new ResultflyEntity();
-								resultflyEntity.setArrflightname(fetch.getLandingName());
-								resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-								resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-								resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-								resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-								resultflyEntity.setZhuanflightname(fetch.getTakeOffName());
-								resultflyEntity.setZhuanflightnum(fetch.getFlightnum());
-								resultflyEntity.setZhuanlandingofftime(fetch.getLandingTime());
-								resultflyEntity.setZhuantakeofftime(fetch.getTakeOffTime());
-								if (!arrayList.contains(resultflyEntity)) {
-									arrayList.add(resultflyEntity);
-								}
-							}
-						}
-					}
-				}*/
-				/*Collections.sort(arrayList, new Comparator<ResultflyEntity>() {
-					public int compare(ResultflyEntity o1, ResultflyEntity o2) {
-						if (Util.isEmpty(o1.getZhuanflightname())) {
-							return -1;
-						}
-						return 0;
-					}
-				});*/
-				//newairLineResult.setResultflyEntity(arrayList);
 			}
 
 			if (!Util.isEmpty(arr) && arr.contains(",") && !Util.isEmpty(dep) && !dep.contains(",")) {
@@ -782,65 +728,6 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				}
 				newairLineResult.setResultflyEntity(arrayList);
 
-				/*String[] strings = arr.split(",");
-				for (String string : strings) {
-					TCityEntity city = dbDao.fetch(TCityEntity.class, Long.valueOf(string));
-
-					//如果缓存中不存在数据则查询数据库
-					//航班分直飞和转机
-					List<TFlightEntity> zhiflyList = dbDao.query(TFlightEntity.class, Cnd
-							.where("takeOffCode", "=", dep).and("landingCode", "=", city.getCode()), null);
-					//直飞航班
-					if (!Util.isEmpty(zhiflyList)) {
-						for (TFlightEntity tFlightEntity : zhiflyList) {
-							ResultflyEntity resultflyEntity = new ResultflyEntity();
-							resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-							resultflyEntity.setArrflightname(tFlightEntity.getLandingName());
-							resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-							resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-							resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-							if (!arrayList.contains(resultflyEntity)) {
-								arrayList.add(resultflyEntity);
-							}
-						}
-					}
-					//转机航班
-					List<TFlightEntity> flights = dbDao.query(TFlightEntity.class, Cnd.where("takeOffCode", "=", dep),
-							null);
-					if (!Util.isEmpty(flights)) {
-						for (TFlightEntity tFlightEntity : flights) {
-							if (!Util.isEmpty(tFlightEntity.getRelationflight())) {
-								TFlightEntity fetch = dbDao.fetch(TFlightEntity.class, tFlightEntity
-										.getRelationflight().longValue());
-								if (Util.eq(fetch.getLandingCode(), city.getCode())) {
-									ResultflyEntity resultflyEntity = new ResultflyEntity();
-									resultflyEntity.setArrflightname(fetch.getLandingName());
-									resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-									resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-									resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-									resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-									resultflyEntity.setZhuanflightname(fetch.getTakeOffName());
-									resultflyEntity.setZhuanflightnum(fetch.getFlightnum());
-									resultflyEntity.setZhuanlandingofftime(fetch.getLandingTime());
-									resultflyEntity.setZhuantakeofftime(fetch.getTakeOffTime());
-									if (!arrayList.contains(resultflyEntity)) {
-										arrayList.add(resultflyEntity);
-									}
-								}
-							}
-						}
-					}
-
-				}*/
-				/*Collections.sort(arrayList, new Comparator<ResultflyEntity>() {
-					public int compare(ResultflyEntity o1, ResultflyEntity o2) {
-						if (Util.isEmpty(o1.getZhuanflightname())) {
-							return -1;
-						}
-						return 0;
-					}
-				});*/
-				//newairLineResult.setResultflyEntity(arrayList);
 			}
 
 			if (!Util.isEmpty(arr) && !arr.contains(",") && !Util.isEmpty(dep) && dep.contains(",")) {
@@ -905,58 +792,6 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				}
 				newairLineResult.setResultflyEntity(arrayList);
 
-				/*String[] strings = dep.split(",");
-				for (String string : strings) {
-					TCityEntity city = dbDao.fetch(TCityEntity.class, Long.valueOf(string));
-
-					//如果缓存中不存在数据则查询数据库
-					//航班分直飞和转机
-					List<TFlightEntity> zhiflyList = dbDao.query(TFlightEntity.class,
-							Cnd.where("takeOffCode", "=", city.getCode()).and("landingCode", "=", arr), null);
-					//直飞航班
-					if (!Util.isEmpty(zhiflyList)) {
-						for (TFlightEntity tFlightEntity : zhiflyList) {
-							ResultflyEntity resultflyEntity = new ResultflyEntity();
-							resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-							resultflyEntity.setArrflightname(tFlightEntity.getLandingName());
-							resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-							resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-							resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-							if (!arrayList.contains(resultflyEntity)) {
-								arrayList.add(resultflyEntity);
-							}
-						}
-						//newairLineResult.setResultflyEntity(arrayList);
-					}
-					//转机航班
-					List<TFlightEntity> flights = dbDao.query(TFlightEntity.class,
-							Cnd.where("takeOffCode", "=", city.getCode()), null);
-					if (!Util.isEmpty(flights)) {
-						for (TFlightEntity tFlightEntity : flights) {
-							if (!Util.isEmpty(tFlightEntity.getRelationflight())) {
-								TFlightEntity fetch = dbDao.fetch(TFlightEntity.class, tFlightEntity
-										.getRelationflight().longValue());
-								if (Util.eq(fetch.getLandingCode(), arr)) {
-									ResultflyEntity resultflyEntity = new ResultflyEntity();
-									resultflyEntity.setArrflightname(fetch.getLandingName());
-									resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-									resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-									resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-									resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-									resultflyEntity.setZhuanflightname(fetch.getTakeOffName());
-									resultflyEntity.setZhuanflightnum(fetch.getFlightnum());
-									resultflyEntity.setZhuanlandingofftime(fetch.getLandingTime());
-									resultflyEntity.setZhuantakeofftime(fetch.getTakeOffTime());
-									if (!arrayList.contains(resultflyEntity)) {
-										arrayList.add(resultflyEntity);
-									}
-								}
-							}
-						}
-					}
-
-				}
-				newairLineResult.setResultflyEntity(arrayList);*/
 			}
 
 			if (!Util.isEmpty(arr) && arr.contains(",") && !Util.isEmpty(dep) && dep.contains(",")) {
@@ -1022,64 +857,6 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				}
 				newairLineResult.setResultflyEntity(arrayList);
 
-				/*String[] deps = dep.split(",");
-				String[] arrs = arr.split(",");
-				for (int i = 0; i < deps.length; i++) {
-					for (int j = 0; j < arrs.length; j++) {
-						TCityEntity depcity = dbDao.fetch(TCityEntity.class, Long.valueOf(deps[i]));
-						TCityEntity arrcity = dbDao.fetch(TCityEntity.class, Long.valueOf(arrs[j]));
-
-						//航班分直飞和转机
-						List<TFlightEntity> zhiflyList = dbDao.query(
-								TFlightEntity.class,
-								Cnd.where("takeOffCode", "=", depcity.getCode()).and("landingCode", "=",
-										arrcity.getCode()), null);
-						//直飞航班
-						if (!Util.isEmpty(zhiflyList)) {
-							for (TFlightEntity tFlightEntity : zhiflyList) {
-								ResultflyEntity resultflyEntity2 = new ResultflyEntity();
-								resultflyEntity2.setFlightnum(tFlightEntity.getFlightnum());
-								resultflyEntity2.setArrflightname(tFlightEntity.getLandingName());
-								resultflyEntity2.setGoflightname(tFlightEntity.getTakeOffName());
-								resultflyEntity2.setTakeofftime(tFlightEntity.getTakeOffTime());
-								resultflyEntity2.setLandingofftime(tFlightEntity.getLandingTime());
-								if (!arrayList.contains(resultflyEntity2)) {
-									arrayList.add(resultflyEntity2);
-								}
-							}
-							//newairLineResult.setResultflyEntity(arrayList);
-						}
-						//转机航班
-						List<TFlightEntity> flights = dbDao.query(TFlightEntity.class,
-								Cnd.where("takeOffCode", "=", depcity.getCode()), null);
-						if (!Util.isEmpty(flights)) {
-							for (TFlightEntity tFlightEntity : flights) {
-								if (!Util.isEmpty(tFlightEntity.getRelationflight())) {
-									TFlightEntity fetch = dbDao.fetch(TFlightEntity.class, tFlightEntity
-											.getRelationflight().longValue());
-									if (Util.eq(fetch.getLandingCode(), arrcity.getCode())) {
-										ResultflyEntity resultflyEntity = new ResultflyEntity();
-										resultflyEntity.setArrflightname(fetch.getLandingName());
-										resultflyEntity.setFlightnum(tFlightEntity.getFlightnum());
-										resultflyEntity.setGoflightname(tFlightEntity.getTakeOffName());
-										resultflyEntity.setLandingofftime(tFlightEntity.getLandingTime());
-										resultflyEntity.setTakeofftime(tFlightEntity.getTakeOffTime());
-										resultflyEntity.setZhuanflightname(fetch.getTakeOffName());
-										resultflyEntity.setZhuanflightnum(fetch.getFlightnum());
-										resultflyEntity.setZhuanlandingofftime(fetch.getLandingTime());
-										resultflyEntity.setZhuantakeofftime(fetch.getTakeOffTime());
-										if (!arrayList.contains(resultflyEntity)) {
-											arrayList.add(resultflyEntity);
-										}
-									}
-								}
-							}
-						}
-
-					}
-
-					newairLineResult.setResultflyEntity(arrayList);
-				}*/
 			}
 
 			//放入缓存
@@ -1287,6 +1064,76 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 		}
 
 		return airLineResult.getAiliLineInFos();
+	}
+
+	public Object getAirLineByInterfateUS(FlightSelectParam param) {
+
+		NewAirLineResult newairLineResult = new NewAirLineResult();
+		List<TFlightEntity> result = Lists.newArrayList();
+		String dep = "";
+		if (!Util.isEmpty(param.getGocity())) {
+			TCityEntity gocity = dbDao.fetch(TCityEntity.class, param.getGocity());
+			dep = gocity.getCode();
+		} else {
+			return result;
+		}
+		String arr = "";
+		if (!Util.isEmpty(param.getArrivecity())) {
+			TCityEntity arrivecity = dbDao.fetch(TCityEntity.class, param.getArrivecity());
+			arr = arrivecity.getCode();
+		} else {
+			return result;
+		}
+		String date = "";
+		if (!Util.isEmpty(param.getDate())) {
+			Date string2Date = DateUtil.string2Date(param.getDate(), DateUtil.FORMAT_YYYY_MM_DD);
+			DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYYMMDD);
+			date = format.format(string2Date);
+		} else {
+			return result;
+		}
+		AirLineResult airLineResult = new AirLineResult();
+
+		//查询接口
+		AirLineParam airLineParam = new AirLineParam();
+		airLineParam.setDep(dep);
+		airLineParam.setArr(arr);
+		airLineParam.setDate(date);
+		//执行查询
+		String airLinejson = AirlineData.getAirLineInfo(airLineParam);
+		Map<String, Object> map = JsonUtil.fromJson(airLinejson, Map.class);
+		//返回代码
+		airLineResult.setError_code(map.get("error_code").toString());
+		//返回错误信息
+		airLineResult.setReason((String) map.get("reason"));
+		List<LinkedHashMap<String, String>> fromJsonAsList = (List) map.get("result");
+		DateFormat dateFormat = new SimpleDateFormat("HHmm");
+		for (LinkedHashMap<String, String> airmap : fromJsonAsList) {
+			TFlightEntity flightEntity = new TFlightEntity();
+			//flightEntity.setAirlinecomp(airmap.get("airmode"));
+			flightEntity.setFlightnum(airmap.get("flightNo"));
+			//起飞机场三字代码
+			String OrgCity = airmap.get("OrgCity");
+			flightEntity.setTakeOffName(getAirportName(OrgCity));
+			flightEntity.setTakeOffCode(OrgCity);
+			//降落机场三字代码
+			String Dstcity = airmap.get("Dstcity");
+			flightEntity.setLandingName(getAirportName(Dstcity));
+			flightEntity.setLandingCode(Dstcity);
+			//起飞城市
+			flightEntity.setTakeOffCityId(param.getGocity().intValue());
+			//降落城市
+			flightEntity.setLandingCityId(param.getArrivecity().intValue());
+			flightEntity.setTakeOffTime(airmap.get("DepTime"));
+			flightEntity.setLandingTime(airmap.get("ArrTime")
+					+ (Util.isEmpty(airmap.get("arrTimeModify")) ? "" : airmap.get("arrTimeModify")));
+			airLineResult.getAiliLineInFos().add(flightEntity);
+		}
+		//放入缓存
+		redisDao.hset(CommonConstants.AIRLINE_INFO_KEY, dep + arr, JsonUtil.toJson(airLineResult.getAiliLineInFos()));
+		//同步到数据库
+		//updateFlightByCache(param.getGocity().intValue(), param.getArrivecity().intValue());
+		return null;
 	}
 
 }

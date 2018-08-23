@@ -638,49 +638,49 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object travelinfo(String encode, int staffid) {
-		String openid = redisDao.get(encode);
+		/*String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
-		} else {
-			Map<String, Object> result = Maps.newHashMap();
-			SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-			//同行人信息
-			TAppStaffTravelcompanionEntity travelcompanion = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
-					Cnd.where("staffid", "=", staffid));
-			result.put("travelcompanion", travelcompanion.getIstravelwithother());
-			List<TAppStaffCompanioninfoEntity> companioninfoList = dbDao.query(TAppStaffCompanioninfoEntity.class,
-					Cnd.where("staffid", "=", staffid), null);
-			result.put("companioninfoList", companioninfoList);
-			//以前的美国旅游信息
-			TAppStaffPrevioustripinfoEntity previoustripinfo = dbDao.fetch(TAppStaffPrevioustripinfoEntity.class,
-					Cnd.where("staffid", "=", staffid));
-			result.put("previoustripinfo", previoustripinfo);
-			if (!Util.isEmpty(previoustripinfo.getIssueddate())) {
-				result.put("issueddate", format.format(previoustripinfo.getIssueddate()));
-			}
-			//去过美国信息
-			TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
-					Cnd.where("staffid", "=", staffid));
-			result.put("staydays", gousinfo.getStaydays());
-			if (!Util.isEmpty(gousinfo.getArrivedate())) {
-				result.put("arrivedate", format.format(gousinfo.getArrivedate()));
-			}
-
-			//美国的驾照信息
-			TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
-					Cnd.where("staffid", "=", staffid));
-			result.put("driverinfo", driverinfo);
-
-			//是否有出境记录
-			TAppStaffWorkEducationTrainingEntity workeducation = dbDao.fetch(
-					TAppStaffWorkEducationTrainingEntity.class, Cnd.where("staffid", "=", staffid));
-			result.put("istraveledanycountry", workeducation.getIstraveledanycountry());
-			//出境记录
-			List<TAppStaffGocountryEntity> gocountry = dbDao.query(TAppStaffGocountryEntity.class,
-					Cnd.where("staffid", "=", staffid), null);
-			result.put("gocountry", gocountry);
-			return result;
+		} else {*/
+		Map<String, Object> result = Maps.newHashMap();
+		SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		//同行人信息
+		TAppStaffTravelcompanionEntity travelcompanion = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		result.put("travelcompanion", travelcompanion.getIstravelwithother());
+		List<TAppStaffCompanioninfoEntity> companioninfoList = dbDao.query(TAppStaffCompanioninfoEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		result.put("companioninfoList", companioninfoList);
+		//以前的美国旅游信息
+		TAppStaffPrevioustripinfoEntity previoustripinfo = dbDao.fetch(TAppStaffPrevioustripinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		result.put("previoustripinfo", previoustripinfo);
+		if (!Util.isEmpty(previoustripinfo.getIssueddate())) {
+			result.put("issueddate", format.format(previoustripinfo.getIssueddate()));
 		}
+		//去过美国信息
+		TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		result.put("staydays", gousinfo.getStaydays());
+		if (!Util.isEmpty(gousinfo.getArrivedate())) {
+			result.put("arrivedate", format.format(gousinfo.getArrivedate()));
+		}
+
+		//美国的驾照信息
+		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		result.put("driverinfo", driverinfo);
+
+		//是否有出境记录
+		TAppStaffWorkEducationTrainingEntity workeducation = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		result.put("istraveledanycountry", workeducation.getIstraveledanycountry());
+		//出境记录
+		List<TAppStaffGocountryEntity> gocountry = dbDao.query(TAppStaffGocountryEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		result.put("gocountry", gocountry);
+		return result;
+		//}
 	}
 
 	/**

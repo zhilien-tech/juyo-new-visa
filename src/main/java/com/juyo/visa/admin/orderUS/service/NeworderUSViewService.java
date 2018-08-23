@@ -134,7 +134,7 @@ import com.we.business.sms.impl.HuaxinSMSServiceImpl;
  * @Date	 	 
  */
 @IocBean
-public class OrderUSViewService extends BaseService<TOrderUsEntity> {
+public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 	@Inject
 	private RedisDao redisDao;
@@ -168,6 +168,38 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	private USListWSHandler uslistwebsocket = (USListWSHandler) SpringContextUtil.getBean("usListHander",
 			USListWSHandler.class);
+
+	//图片上传后连接websocket的地址
+	private static final String SEND_INFO_WEBSPCKET_ADDR = "simplesendinfosocket";
+
+	public Object tofillimage(int staffid, HttpServletRequest request) {
+		Map<String, Object> result = Maps.newHashMap();
+		String localAddr = request.getServerName();
+		request.getServerName();
+		String serverName = request.getServerName();
+		int serverPort = request.getServerPort();
+		result.put("localAddr", serverName);
+		result.put("localPort", serverPort);
+		result.put("websocketaddr", SEND_INFO_WEBSPCKET_ADDR);
+
+		List<TAppStaffCredentialsEntity> credentialsList = dbDao.query(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		for (TAppStaffCredentialsEntity tAppStaffCredentialsEntity : credentialsList) {
+			TAppStaffCredentialsEntity credentials = new TAppStaffCredentialsEntity();
+			credentials.setStatus(tAppStaffCredentialsEntity.getStatus());
+			credentials.setUrl(tAppStaffCredentialsEntity.getUrl());
+			result.put(String.valueOf(tAppStaffCredentialsEntity.getType()), credentials);
+		}
+		return result;
+	}
+
+	public Object toBasicinfo(int staffid) {
+		Map<String, Object> result = Maps.newHashMap();
+		List<TAppStaffCredentialsEntity> photourls = dbDao.query(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "in", "3,13,14"), null);
+		result.put("photourls", photourls);
+		return result;
+	}
 
 	/**
 	 * 列表页下拉框内容获取
