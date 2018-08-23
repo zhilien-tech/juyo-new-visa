@@ -187,7 +187,7 @@
         		    shadeClose: false,
         		    scrollbar: false,
         		    area: ['400px', '300px'],
-        		    content: '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid
+        		    content: '${base}/admin/JapanDijie/sendZhaoBao.html?orderid='+orderid
         		  });
         	},
         	downLoadFile:function(orderid){
