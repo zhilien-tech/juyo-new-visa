@@ -633,4 +633,13 @@ public class OrderJpModule {
 		return saleViewService.getOrderStatus(orderid);
 	}
 
+	/**
+	 * 根据出生日期来设置婚姻状况和工作类型
+	 */
+	@At
+	@POST
+	public Object accordingbirtday(@Param("birthday") String birthday) {
+		return saleViewService.accordingbirtday(birthday);
+	}
+
 }

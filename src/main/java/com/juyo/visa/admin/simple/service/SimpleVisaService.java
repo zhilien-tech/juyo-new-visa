@@ -3335,6 +3335,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object saveBasicinfo(BasicinfoForm form, HttpServletRequest request) {
+
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -3345,6 +3346,21 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				Cnd.where("applicantId", "=", applicant.getId()));
 		applicantjp.setMainRelation(form.getMainRelation());
 		dbDao.update(applicantjp);
+
+		TApplicantWorkJpEntity workjp = dbDao.fetch(TApplicantWorkJpEntity.class,
+				Cnd.where("applicantId", "=", applicantjp.getId()));
+		//根据出生日期设置签证信息的工作类型
+		if (!Util.isEmpty(form.getBirthday()) && Util.isEmpty(workjp.getCareerStatus())) {
+			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+			int years = orderJpViewService.accordingbirtday(sdf.format(form.getBirthday()));
+			if (years >= 55) {
+				workjp.setCareerStatus(2);
+			}
+			if (years <= 5) {
+				workjp.setCareerStatus(5);
+			}
+			dbDao.update(workjp);
+		}
 
 		applicant.setOpId(loginUser.getId());
 		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());

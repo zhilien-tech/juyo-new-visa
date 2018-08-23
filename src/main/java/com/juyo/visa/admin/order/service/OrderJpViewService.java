@@ -4543,4 +4543,13 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		return null;
 	}
+
+	public int accordingbirtday(String birthday) {
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+		int years = -1;
+		if (!Util.isEmpty(birthday) && birthday.length() == 10) {
+			years = DateUtil.yearsBetween(birthday, sdf.format(new Date()));
+		}
+		return years;
+	}
 }
