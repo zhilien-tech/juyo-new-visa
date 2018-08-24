@@ -1,21 +1,25 @@
 package com.juyo.visa;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import com.uxuexi.core.common.util.DateUtil;
+import com.uxuexi.core.common.util.JsonUtil;
 
 public class TestChinest {
 
 	public static void main(String[] args) {
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
+		String data = "{'outputs':[{'outputLabel':'ocr_passport','outputMulti':{},'outputValue':{'dataType':50,'dataValue':'{'authority':'公安部出入境管理局','birth_date':'19551224','birth_day':'551224','birth_place':'安国ING','birth_place_raw':'安国ING','country':'C0N','expiry_date':'20260509','expiry_day':'260509','issue_date':'20160510','issue_place':'新疆','issue_place_raw':'新疆/XIHJIANG','line0':'P6C0NLING<<CHENGYONG<<<<<<<<<<<<<<<<<<<<<<<','line1':'E720735273CHN5512245M2605096MB8IIBMUNBMCA30','name':'LING.CHENGYONG','name_cn':'凌成勇','name_cn_raw':'LINJCHENGYONG凌成勇','passport_no':'E72073527','person_id':'','request_id':'20180824151913_6a9ece146337e359a84e91b3f2e8c65b','sex':'M','src_country':'CHN','success':true,'type':'P6}'}}]}";
+		Map maps = JsonUtil.fromJson(data, Map.class);
+		List object = (List) maps.get("outputs");
+		System.out.println(object.get(0));
+
+		/*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
 		Date gotripdate = new Date();
 		List<String> holidayDate = new ArrayList<>(getYearDoubleWeekend(2018));
 		int stayday = 10;
@@ -30,7 +34,7 @@ public class TestChinest {
 			System.out.println("i:" + i);
 			System.out.println(stayday + count);
 			System.out.println(count + "=======");
-		}
+		}*/
 
 		/*String newString = "{'200001':{'wealth_title':'银行流水325','wealth_value':'345','wealth_type':'银行流水'}}";
 		//org.json.JSONObject jsonObject = new org.json.JSONObject(newString);

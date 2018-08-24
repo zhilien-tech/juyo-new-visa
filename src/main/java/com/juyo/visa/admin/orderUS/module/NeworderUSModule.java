@@ -13,6 +13,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.mobile.form.BasicinfoUSForm;
@@ -66,6 +67,8 @@ public class NeworderUSModule {
 	/**
 	 * 保存基本信息
 	 */
+	@At
+	@POST
 	public Object saveBasicinfo(@Param("..") BasicinfoUSForm form) {
 		return neworderUSViewService.saveBasicinfo(form);
 	}
@@ -73,6 +76,9 @@ public class NeworderUSModule {
 	/**
 	 * 跳转到护照信息
 	 */
+	@At
+	@GET
+	@Ok("jsp")
 	public Object toPassportinfo(@Param("staffid") int staffid) {
 		return neworderUSViewService.toPassportinfo(staffid);
 	}
@@ -80,6 +86,8 @@ public class NeworderUSModule {
 	/**
 	 * 保存护照信息
 	 */
+	@At
+	@POST
 	public Object savePassportinfo(@Param("..") PassportinfoUSForm form) {
 		return neworderUSViewService.savePassportinfo(form);
 	}
@@ -87,6 +95,9 @@ public class NeworderUSModule {
 	/**
 	 * 跳转到家庭信息
 	 */
+	@At
+	@GET
+	@Ok("jsp")
 	public Object toFamilyinfo(@Param("staffid") int staffid) {
 		return neworderUSViewService.toFamilyinfo(staffid);
 	}
@@ -94,6 +105,8 @@ public class NeworderUSModule {
 	/**
 	 * 保存家庭信息
 	 */
+	@At
+	@POST
 	public Object saveFamilyinfo(@Param("..") FamilyinfoUSForm form) {
 		return neworderUSViewService.saveFamilyinfo(form);
 	}
@@ -101,6 +114,9 @@ public class NeworderUSModule {
 	/**
 	 * 跳转到职业与教育信息
 	 */
+	@At
+	@GET
+	@Ok("jsp")
 	public Object toWorkandeducation(@Param("staffid") int staffid) {
 		return neworderUSViewService.toWorkandeducation(staffid);
 	}
@@ -108,6 +124,8 @@ public class NeworderUSModule {
 	/**
 	 * 保存职业与教育信息
 	 */
+	@At
+	@POST
 	public Object saveWorkandeducation(@Param("..") WorkandeducateinfoUSForm form) {
 		return neworderUSViewService.saveWorkandeducation(form);
 	}
@@ -115,6 +133,9 @@ public class NeworderUSModule {
 	/**
 	 * 跳转到旅行信息
 	 */
+	@At
+	@GET
+	@Ok("jsp")
 	public Object toTravelinfo(@Param("staffid") int staffid) {
 		return neworderUSViewService.toTravelinfo(staffid);
 	}
@@ -122,6 +143,8 @@ public class NeworderUSModule {
 	/**
 	 * 保存旅行信息
 	 */
+	@At
+	@POST
 	public Object saveTravelinfo(@Param("..") TravelinfoUSForm form) {
 		return neworderUSViewService.saveTravelinfo(form);
 	}
