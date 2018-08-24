@@ -667,12 +667,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());
 		}
 		dbDao.update(order);
-		Integer visaOpid = 0;
-		if (!Util.isEmpty(order.getReceptionOpid())) {
-			visaOpid = order.getReceptionOpid();
-		} else {
-			visaOpid = order.getVisaOpid();
-		}
+		Integer visaOpid = order.getVisaOpid();
 		if (!Util.isEmpty(visaOpid)) {
 			//添加日志
 			TOrderLogsEntity logs = new TOrderLogsEntity();

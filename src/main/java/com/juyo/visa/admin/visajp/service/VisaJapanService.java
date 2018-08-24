@@ -1957,7 +1957,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			Integer userId = loginuser.getId();
 			//如果是lelv点的，则记录原订单的操作人
 			if (Util.eq("lelv", loginuser.getName())) {
-				orderinfo.setReceptionOpid(orderinfo.getSalesOpid());
+				orderinfo.setVisaOpid(orderinfo.getSalesOpid());
 			} else {
 				orderinfo.setVisaOpid(userId);
 			}
