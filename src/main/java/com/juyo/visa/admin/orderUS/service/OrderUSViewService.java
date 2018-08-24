@@ -1855,6 +1855,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		if (Util.isEmpty(openid)) {
 			return -1;
 		} else {*/
+		System.out.println("encode:" + encode + " file:" + file + " staffid:" + staffid);
 		String imageDataValue = saveDiskImageToDisk(file);
 		Input input = new Input(imageDataValue, "face");
 		RecognizeData rd = new RecognizeData();
@@ -1949,6 +1950,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		if (Util.isEmpty(openid)) {
 			return -1;
 		} else {*/
+		System.out.println("encode:" + encode + " file:" + file + " staffid:" + staffid);
+
 		USStaffJsonEntity jsonEntity = new USStaffJsonEntity();
 		String imageDataValue = saveDiskImageToDisk(file);
 		Input input = new Input(imageDataValue, "back");
@@ -2033,6 +2036,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		if (Util.isEmpty(openid)) {
 			return -1;
 		} else {*/
+
+		System.out.println("encode:" + encode + " file:" + file + " staffid:" + staffid);
+		//将图片上传到七牛云
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+		System.out.println("url:" + url);
 		PassportJsonEntity jsonEntity = new PassportJsonEntity();
 		String imageDataB64 = saveDiskImageToDisk(file);
 		Input input = new Input(imageDataB64);
@@ -2126,9 +2135,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 			}
 			jsonEntity.setSuccess(out.getBoolean("success"));
-			//将图片上传到七牛云
-			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
-			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 
 			jsonEntity.setUrl(url);
 		}
