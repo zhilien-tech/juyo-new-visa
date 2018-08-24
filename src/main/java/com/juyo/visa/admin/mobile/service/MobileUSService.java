@@ -29,8 +29,6 @@ import com.juyo.visa.admin.mobile.form.FamilyinfoUSForm;
 import com.juyo.visa.admin.mobile.form.PassportinfoUSForm;
 import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
 import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
-import com.juyo.visa.admin.order.service.OrderJpViewService;
-import com.juyo.visa.admin.user.service.UserViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.MarryStatusEnum;
@@ -40,7 +38,6 @@ import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaFamilyInfoEnum;
 import com.juyo.visa.common.util.HttpUtil;
-import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.common.util.TranslateUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
@@ -59,7 +56,6 @@ import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TCountryEntity;
 import com.juyo.visa.entities.TStateUsEntity;
-import com.juyo.visa.websocket.BasicInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
@@ -78,31 +74,10 @@ import com.uxuexi.core.web.base.service.BaseService;
 public class MobileUSService extends BaseService<TApplicantEntity> {
 
 	@Inject
-	private UserViewService userViewService;
-	@Inject
-	private UploadService qiniuupService;
-	@Inject
-	private OrderJpViewService orderJpViewService;
-
-	@Inject
 	private UploadService qiniuUploadService;//文件上传
 
 	@Inject
 	private RedisDao redisDao;
-
-	private BasicInfoWSHandler basicInfoWSHandler = (BasicInfoWSHandler) SpringContextUtil.getBean(
-			"myBasicInfoHandler", BasicInfoWSHandler.class);
-
-	//在职需要的资料
-	private static Integer[] WORKINGDATA = { 1, 2, 3, 4, 5, 6, 7, 8 };
-	//退休需要的资料
-	private static Integer[] RETIREMENTDATA = { 1, 2, 3, 4, 5, 8, 15 };
-	//自由职业所需资料
-	private static Integer[] FREELANCEDATA = { 1, 2, 3, 4, 5, 8 };
-	//学生所需资料
-	private static Integer[] STUDENTDATA = { 1, 2, 3, 5, 13, 14, 16, 17 };
-	//学龄前所需资料
-	private static Integer[] PRESCHOOLAGEDATA = { 1, 2, 5, 12, 16, 17 };
 
 	/**
 	 * 小程序获取登录态
@@ -288,7 +263,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			credentials.setUrl(url);
 			dbDao.update(credentials);
 		}
-		return null;
+		return url;
 		//}
 	}
 
@@ -371,6 +346,13 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		basicinfo.setProvince(form.getProvince());
 		basicinfo.setSex(form.getSex());
 		basicinfo.setUpdatetime(new Date());
+		//英文翻译保存
+		basicinfo.setDetailedaddressen(translate(form.getDetailedaddress()));
+		basicinfo.setCardprovinceen(translate(form.getCardprovince()));
+		basicinfo.setCityen(translate(form.getCity()));
+		basicinfo.setNationalityen(translate(form.getNationality()));
+		basicinfo.setProvinceen(translate(form.getProvince()));
+		basicinfo.setMarrystatusen(form.getMarrystatus());
 		dbDao.update(basicinfo);
 		//}
 		return null;
@@ -617,6 +599,10 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		workinfo.setPosition(form.getPosition());
 		workinfo.setSalary(form.getSalary());
 		workinfo.setIsemployed(form.getIsemployed());
+		workinfo.setIssecondarylevel(form.getIssecondarylevel());
+		//英文翻译保存
+		workinfo.setUnitnameen(translate(form.getUnitname()));
+		workinfo.setAddressen(translate(form.getAddress()));
 		dbDao.update(workinfo);
 		//上份工作信息
 		TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
@@ -859,7 +845,5 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			e.printStackTrace();
 		}
 		return result;
-
 	}
-
 }

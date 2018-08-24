@@ -6,32 +6,23 @@
 
 package com.juyo.visa.admin.orderUS.module;
 
-import java.io.File;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
-import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
-import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
-import org.nutz.mvc.upload.UploadAdaptor;
 
-import com.google.common.collect.Maps;
-import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
+import com.juyo.visa.admin.mobile.form.BasicinfoUSForm;
+import com.juyo.visa.admin.mobile.form.FamilyinfoUSForm;
+import com.juyo.visa.admin.mobile.form.PassportinfoUSForm;
+import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
+import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
 import com.juyo.visa.admin.orderUS.service.AutofillService;
 import com.juyo.visa.admin.orderUS.service.NeworderUSViewService;
 import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
-import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
-import com.juyo.visa.forms.OrderUpdateForm;
-import com.juyo.visa.forms.TAppStaffVisaUsAddForm;
-import com.juyo.visa.forms.TAppStaffVisaUsUpdateForm;
 
 /**
  * 美国订单US
@@ -62,6 +53,9 @@ public class NeworderUSModule {
 		return neworderUSViewService.tofillimage(staffid, request);
 	}
 
+	/**
+	 * 跳转到基本信息
+	 */
 	@At
 	@GET
 	@Ok("jsp")
@@ -70,375 +64,66 @@ public class NeworderUSModule {
 	}
 
 	/**
-	 * 跳转到美国订单list页面
+	 * 保存基本信息
 	 */
-	@At
-	@GET
-	@Ok("jsp")
-	public Object listUS(HttpServletRequest request) {
-		return orderUSViewService.toList(request);
+	public Object saveBasicinfo(@Param("..") BasicinfoUSForm form) {
+		return neworderUSViewService.saveBasicinfo(form);
 	}
 
 	/**
-	 * 加载列表页数据
+	 * 跳转到护照信息
 	 */
-	@At
-	@POST
-	public Object listDetailUSData(@Param("..") final OrderUSListDataForm sqlParamForm, HttpSession session) {
-		return orderUSViewService.listData(sqlParamForm, session);
+	public Object toPassportinfo(@Param("staffid") int staffid) {
+		return neworderUSViewService.toPassportinfo(staffid);
 	}
 
 	/**
-	 * 点击我的或者全部后列表数据回到之前位置
+	 * 保存护照信息
 	 */
-	@At
-	@POST
-	public Object toNewListdata(@Param("..") final OrderUSListDataForm sqlParamForm, HttpSession session) {
-		return orderUSViewService.newlistData(sqlParamForm, session);
+	public Object savePassportinfo(@Param("..") PassportinfoUSForm form) {
+		return neworderUSViewService.savePassportinfo(form);
 	}
 
 	/**
-	 * 跳转到美国订单详情页/下单 共用
+	 * 跳转到家庭信息
 	 */
-	@At
-	@GET
-	@Ok("jsp")
-	public Object orderUSDetail(@Param("orderid") int orderid, @Param("addOrder") int addOrder,
-			HttpServletRequest request) {
-		return orderUSViewService.getOrderUSDetail(orderid, addOrder, request);
+	public Object toFamilyinfo(@Param("staffid") int staffid) {
+		return neworderUSViewService.toFamilyinfo(staffid);
 	}
 
 	/**
-	 * 下单
+	 * 保存家庭信息
 	 */
-	@At
-	@GET
-	@Ok("jsp")
-	public Object addOrderUS() {
-		return null;
+	public Object saveFamilyinfo(@Param("..") FamilyinfoUSForm form) {
+		return neworderUSViewService.saveFamilyinfo(form);
 	}
 
 	/**
-	 * 获取最新订单
+	 * 跳转到职业与教育信息
 	 */
-	@At
-	@POST
-	public Object getOrderRefresh(@Param("orderid") int orderid, @Param("addOrder") int addOrder,
-			HttpServletRequest request) {
-		return orderUSViewService.getOrderUSDetail(orderid, addOrder, request);
+	public Object toWorkandeducation(@Param("staffid") int staffid) {
+		return neworderUSViewService.toWorkandeducation(staffid);
 	}
 
 	/**
-	 * 获取大客户公司姓名select2下拉
+	 * 保存职业与教育信息
 	 */
-	@At
-	@POST
-	public Object getBigcustomerSelect(@Param("bigcustomername") String bigcustomername) {
-		return orderUSViewService.getBigcustomerSelect(bigcustomername);
+	public Object saveWorkandeducation(@Param("..") WorkandeducateinfoUSForm form) {
+		return neworderUSViewService.saveWorkandeducation(form);
 	}
 
 	/**
-	 * 认领按钮功能
+	 * 跳转到旅行信息
 	 */
-	@At
-	@POST
-	public Object toMyself(@Param("orderid") int orderid, HttpSession session) {
-		return orderUSViewService.toMyself(orderid, session);
+	public Object toTravelinfo(@Param("staffid") int staffid) {
+		return neworderUSViewService.toTravelinfo(staffid);
 	}
 
 	/**
-	 * 跳转到签证录入页面
+	 * 保存旅行信息
 	 */
-	@At
-	@GET
-	@Ok("jsp")
-	public Object visaInput(@Param("staffid") int staffid, @Param("orderid") int orderid, HttpSession session) {
-		return orderUSViewService.visaInfo(staffid, orderid, session);
+	public Object saveTravelinfo(@Param("..") TravelinfoUSForm form) {
+		return neworderUSViewService.saveTravelinfo(form);
 	}
-
-	/**
-	 * 获取签证录入页面数据
-	 */
-	@At
-	@POST
-	public Object getVisaInfoData(@Param("staffid") int staffid) {
-		return orderUSViewService.getVisaInfoData(staffid);
-	}
-
-	/**
-	 * 跳转到签证录入修改页面
-	 */
-	@At
-	@GET
-	@Ok("jsp")
-	public Object visaInputUpdate(@Param("id") int id, @Param("orderid") int orderid) {
-		return orderUSViewService.visaInputUpdate(id, orderid);
-	}
-
-	/**
-	 * 删除签证录入
-	 */
-	@At
-	@POST
-	public Object deleteVisainput(@Param("id") int id) {
-		return orderUSViewService.deleteVisainput(id);
-	}
-
-	/**
-	 * 跳转到添加签证录入页面
-	 */
-	@At
-	@GET
-	@Ok("jsp")
-	public Object visaInputAdd(@Param("staffid") int staffid, @Param("orderid") int orderid) {
-		return orderUSViewService.visaInputAdd(staffid, orderid);
-	}
-
-	/**
-	 * 保存签证录入添加
-	 */
-	@At
-	@POST
-	public Object addVisainput(@Param("..") TAppStaffVisaUsAddForm addForm, HttpSession session) {
-		return orderUSViewService.addVisainput(addForm, session);
-	}
-
-	/**
-	 * 保存签证录入修改信息
-	 */
-	@At
-	@POST
-	public Object updateVisainput(@Param("..") TAppStaffVisaUsUpdateForm updateForm, HttpSession session) {
-		return orderUSViewService.updatedata(updateForm, session);
-	}
-
-	/**
-	 * 跳转到跟进页面
-	 */
-	@At
-	@GET
-	@Ok("jsp")
-	public Object addFollow(@Param("orderid") int orderid, @Param("addorder") int addorder) {
-		Map<String, Object> result = Maps.newHashMap();
-		result.put("orderid", orderid);
-		result.put("addorder", addorder);
-		return result;
-	}
-
-	/**
-	 * 保存跟进内容
-	 */
-	@At
-	@POST
-	public Object saveFollow(@Param("orderid") int orderid, @Param("content") String content, HttpSession session) {
-		return orderUSViewService.saveFollow(orderid, content, session);
-	}
-
-	/**
-	 * 跟进解决按钮
-	 */
-	@At
-	@POST
-	public Object solveFollow(@Param("id") int id, HttpSession session) {
-		return orderUSViewService.solveFollow(id, session);
-	}
-
-	/**
-	 * 跳转到日志页面
-	 */
-	@At
-	@GET
-	@Ok("jsp")
-	public Object log(@Param("orderid") int orderid, HttpSession session) {
-		return orderUSViewService.toLog(orderid, session);
-	}
-
-	/**
-	 * 获取日志页面数据
-	 */
-	@At
-	@POST
-	public Object getLogs(@Param("orderid") int orderid, HttpSession session) {
-		return orderUSViewService.getLogs(orderid, session);
-	}
-
-	/**
-	 * 日志页面点击保存时负责人变更
-	 */
-	@At
-	@POST
-	public Object changePrincipal(@Param("orderid") int orderid, @Param("principal") int principal, HttpSession session) {
-		return orderUSViewService.changePrincipal(orderid, principal, session);
-	}
-
-	/**
-	 * 
-	 * 分享发送消息
-	 *
-	 * @param staffId 人员id
-	 * @param orderid 订单id
-	 * @param telephone 手机号
-	 * @return 
-	 */
-	@At
-	@POST
-	public Object sendShareMsg(@Param("staffId") Integer staffId, @Param("orderid") Integer orderid,
-			@Param("sendType") String sendType, HttpServletRequest request) {
-		return orderUSViewService.sendShareMsg(staffId, orderid, sendType, request);
-	}
-
-	/**
-	 * 验证信息是否完整
-	 */
-	@At
-	@POST
-	public Object validateInfoIsFull(@Param("orderid") int orderid, HttpSession session) {
-		return autofillService.getData(orderid);
-	}
-
-	@At
-	@GET
-	@Ok("jsp")
-	public Object autofillError(@Param("errData") String errData) {
-		Map<String, Object> result = Maps.newHashMap();
-		result.put("errMsg", errData);
-		return result;
-	}
-
-	/*
-	 * 自动填表
-	 */
-	@At
-	@POST
-	public Object autofill(@Param("orderid") int orderid, HttpSession session) {
-		return orderUSViewService.autofill(orderid, session);
-	}
-
-	/**
-	 * 打开验证码页面
-	 */
-	@At
-	@GET
-	@Ok("jsp")
-	public Object testUS() {
-		return null;
-	}
-
-	@At
-	@GET
-	@Ok("jsp")
-	public Object writeVcode() {
-		return null;
-	}
-
-	@At
-	@POST
-	public Object returnVcode(@Param("vcode") String vcode, HttpSession session) {
-		return orderUSViewService.returnVcode(vcode, session);
-	}
-
-	@At
-	public Object toRenturnVcode(@Param("..") JapanSimulatorForm form) {
-		return orderUSViewService.toRenturnVcode(form);
-	}
-
-	/**
-	 * 通过
-	 */
-	@At
-	@POST
-	public Object passUS(@Param("orderid") int orderid, HttpSession session) {
-		return orderUSViewService.passUS(orderid, session);
-	}
-
-	/**
-	 * 拒绝
-	 */
-	@At
-	@POST
-	public Object refuseUS(@Param("orderid") int orderid, HttpSession session) {
-		return orderUSViewService.refuseUS(orderid, session);
-	}
-
-	/**
-	 * 作废
-	 */
-	@At
-	@POST
-	public Object disabled(@Param("orderid") int orderid, HttpSession session) {
-		return orderUSViewService.disabled(orderid, session);
-	}
-
-	/**
-	 * 还原
-	 */
-	@At
-	@POST
-	public Object undisabled(@Param("orderid") int orderid) {
-		return orderUSViewService.undisabled(orderid);
-	}
-
-	/**
-	 * 订单保存
-	 */
-	@At
-	@POST
-	public Object orderSave(@Param("..") OrderUpdateForm form, HttpSession session) {
-		return orderUSViewService.orderSave(form, session);
-	}
-
-	/**
-	 * 跳转到通知页面
-	 */
-	@At
-	@GET
-	@Ok("jsp")
-	public Object notice(@Param("orderid") int orderid, @Param("staffid") int staffid, HttpSession session) {
-		return orderUSViewService.toNotice(orderid, staffid, session);
-	}
-
-	/**
-	 * 身份证正面扫描
-	 */
-	@At
-	@Ok("json")
-	@Filters
-	@AdaptBy(type = UploadAdaptor.class)
-	public Object IDCardRecognition(@Param("encode") String encode, @Param("image") File file,
-			@Param("staffid") int staffid) {
-		return orderUSViewService.IDCardRecognition(encode, file, staffid);
-	}
-
-	/**
-	 * 身份证背面扫描
-	 */
-	@At
-	@Ok("json")
-	@Filters
-	@AdaptBy(type = UploadAdaptor.class)
-	public Object IDCardRecognitionBack(@Param("encode") String encode, @Param("image") File file,
-			@Param("staffid") int staffid) {
-		return orderUSViewService.IDCardRecognitionBack(encode, file, staffid);
-	}
-
-	/**
-	 * 护照扫描
-	 */
-	@At
-	@Ok("json")
-	@Filters
-	@AdaptBy(type = UploadAdaptor.class)
-	public Object passportRecognition(@Param("encode") String encode, @Param("image") File file,
-			@Param("staffid") int staffid) {
-		return orderUSViewService.passportRecognitionBack(encode, file, staffid);
-	}
-
-	//微信JSSDK上传的文件需要重新下载后上传到七牛云
-	/*@At
-	@POST
-	public Object wechatJsSDKUploadToQiniu(@Param("staffId") Integer staffId, @Param("mediaIds") String mediaIds,
-			@Param("sessionid") String sessionid, @Param("type") Integer type) {
-		return orderUSViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
-	}*/
 
 }

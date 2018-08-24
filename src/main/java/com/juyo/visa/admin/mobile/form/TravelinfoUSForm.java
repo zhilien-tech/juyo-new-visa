@@ -13,6 +13,7 @@ import lombok.Data;
 
 import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
 import com.juyo.visa.entities.TAppStaffGocountryEntity;
+import com.juyo.visa.entities.TAppStaffGousinfoEntity;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -207,5 +208,7 @@ public class TravelinfoUSForm {
 	List<TAppStaffCompanioninfoEntity> companioninfoList;
 
 	List<TAppStaffGocountryEntity> gocountryList;
+
+	List<TAppStaffGousinfoEntity> gousinfoList;
 
 }
