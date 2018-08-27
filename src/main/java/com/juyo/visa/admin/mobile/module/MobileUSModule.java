@@ -184,6 +184,15 @@ public class MobileUSModule {
 	}
 
 	/**
+	 * 婚姻状况回显
+	 */
+	@At
+	@POST
+	public Object getMarrystatus(@Param("encode") String encode, @Param("staffid") int staffid) {
+		return mobileUSService.toMarrystatus(encode, staffid);
+	}
+
+	/**
 	 * 国家模糊查询
 	 */
 	@At

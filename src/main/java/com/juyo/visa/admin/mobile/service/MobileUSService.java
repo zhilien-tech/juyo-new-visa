@@ -916,6 +916,18 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		//}
 	}
 
+	public Object toMarrystatus(String encode, int staffid) {
+		/*String openid = redisDao.get(encode);
+		if (Util.isEmpty(openid)) {
+			return -1;
+		} else {*/
+		Map<String, Object> result = Maps.newHashMap();
+		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+		result.put("marrystatus", basicinfo.getMarrystatus());
+		return result;
+		//}
+	}
+
 	/**
 	 * 国家模糊查询
 	 * TODO(这里用一句话描述这个方法的作用)
