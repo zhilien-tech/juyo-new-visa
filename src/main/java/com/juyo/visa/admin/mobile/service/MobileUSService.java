@@ -892,17 +892,28 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		//}
 	}
 
+	/**
+	 * 婚姻状况修改
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param encode
+	 * @param staffid
+	 * @param marrystatus
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object changeMarrystatus(String encode, int staffid, int marrystatus) {
-		String openid = redisDao.get(encode);
+		/*String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
-		} else {
-			TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
-			basicinfo.setMarrystatus(marrystatus);
-			basicinfo.setMarrystatusen(marrystatus);
-			dbDao.update(basicinfo);
-			return null;
-		}
+		} else {*/
+		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+		basicinfo.setMarrystatus(marrystatus);
+		basicinfo.setMarrystatusen(marrystatus);
+		dbDao.update(basicinfo);
+		return null;
+		//}
 	}
 
 	/**
@@ -914,23 +925,28 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @param searchstr
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object getCountry(String searchstr) {
-		List<String> countryList = new ArrayList<>();
-		List<TCountryRegionEntity> country = dbDao.query(TCountryRegionEntity.class,
-				Cnd.where("chinesename", "like", "%" + Strings.trim(searchstr) + "%"), null);
-		for (TCountryRegionEntity tCountry : country) {
-			if (!countryList.contains(tCountry.getChinesename())) {
-				countryList.add(tCountry.getChinesename());
-			}
-		}
-		List<String> list = new ArrayList<>();
-		if (!Util.isEmpty(countryList) && countryList.size() >= 5) {
-			for (int i = 0; i < 5; i++) {
-				list.add(countryList.get(i));
-			}
-			return list;
+	public Object getCountry(String encode, String searchstr) {
+		String openid = redisDao.get(encode);
+		if (Util.isEmpty(openid)) {
+			return -1;
 		} else {
-			return countryList;
+			List<String> countryList = new ArrayList<>();
+			List<TCountryRegionEntity> country = dbDao.query(TCountryRegionEntity.class,
+					Cnd.where("chinesename", "like", "%" + Strings.trim(searchstr) + "%"), null);
+			for (TCountryRegionEntity tCountry : country) {
+				if (!countryList.contains(tCountry.getChinesename())) {
+					countryList.add(tCountry.getChinesename());
+				}
+			}
+			List<String> list = new ArrayList<>();
+			if (!Util.isEmpty(countryList) && countryList.size() >= 5) {
+				for (int i = 0; i < 5; i++) {
+					list.add(countryList.get(i));
+				}
+				return list;
+			} else {
+				return countryList;
+			}
 		}
 	}
 
@@ -943,23 +959,28 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @param searchstr
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object getUSstate(String searchstr) {
-		List<String> stateList = new ArrayList<>();
-		List<TStateUsEntity> state = dbDao.query(TStateUsEntity.class,
-				Cnd.where("name", "like", "%" + Strings.trim(searchstr) + "%"), null);
-		for (TStateUsEntity tState : state) {
-			if (!stateList.contains(tState.getName())) {
-				stateList.add(tState.getName());
-			}
-		}
-		List<String> list = new ArrayList<>();
-		if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
-			for (int i = 0; i < 5; i++) {
-				list.add(stateList.get(i));
-			}
-			return list;
+	public Object getUSstate(String encode, String searchstr) {
+		String openid = redisDao.get(encode);
+		if (Util.isEmpty(openid)) {
+			return -1;
 		} else {
-			return stateList;
+			List<String> stateList = new ArrayList<>();
+			List<TStateUsEntity> state = dbDao.query(TStateUsEntity.class,
+					Cnd.where("name", "like", "%" + Strings.trim(searchstr) + "%"), null);
+			for (TStateUsEntity tState : state) {
+				if (!stateList.contains(tState.getName())) {
+					stateList.add(tState.getName());
+				}
+			}
+			List<String> list = new ArrayList<>();
+			if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
+				for (int i = 0; i < 5; i++) {
+					list.add(stateList.get(i));
+				}
+				return list;
+			} else {
+				return stateList;
+			}
 		}
 	}
 

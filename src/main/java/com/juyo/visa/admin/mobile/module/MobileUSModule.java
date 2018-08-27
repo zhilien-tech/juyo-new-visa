@@ -188,8 +188,8 @@ public class MobileUSModule {
 	 */
 	@At
 	@POST
-	public Object getCountry(@Param("searchstr") String searchstr) {
-		return mobileUSService.getCountry(searchstr);
+	public Object getCountry(@Param("encode") String encode, @Param("searchstr") String searchstr) {
+		return mobileUSService.getCountry(encode, searchstr);
 	}
 
 	/**
@@ -197,8 +197,8 @@ public class MobileUSModule {
 	 */
 	@At
 	@POST
-	public Object getUSstate(@Param("searchstr") String searchstr) {
-		return mobileUSService.getUSstate(searchstr);
+	public Object getUSstate(@Param("encode") String encode, @Param("searchstr") String searchstr) {
+		return mobileUSService.getUSstate(encode, searchstr);
 	}
 
 }
