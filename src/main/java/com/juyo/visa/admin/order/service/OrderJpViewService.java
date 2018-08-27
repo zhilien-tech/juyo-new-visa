@@ -3741,9 +3741,21 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				passport.setLastNameEn(tool.toPinYin(form.getMingCn()));
 			}
 			String birthCountry = form.getBirthCountry();
-			passport.setBirthAddressEn(tool.toPinYin(birthCountry));
+			if (Util.eq("陕西", birthCountry)) {
+				passport.setBirthAddressEn("SHAANXI");
+			} else if (Util.eq("内蒙古", birthCountry)) {
+				passport.setBirthAddressEn("NEI MONGOL");
+			} else {
+				passport.setBirthAddressEn(tool.toPinYin(birthCountry));
+			}
 			String issuedPlace = form.getVisaCountry();
-			passport.setIssuedPlaceEn(tool.toPinYin(issuedPlace));
+			if (Util.eq("陕西", issuedPlace)) {
+				passport.setIssuedPlaceEn("SHAANXI");
+			} else if (Util.eq("内蒙古", issuedPlace)) {
+				passport.setIssuedPlaceEn("NEI MONGOL");
+			} else {
+				passport.setIssuedPlaceEn(tool.toPinYin(issuedPlace));
+			}
 		} catch (BadHanyuPinyinOutputFormatCombination e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
