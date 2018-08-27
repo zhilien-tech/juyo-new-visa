@@ -149,4 +149,22 @@ public class NeworderUSModule {
 		return neworderUSViewService.saveTravelinfo(form);
 	}
 
+	/**
+	 * 国家模糊查询
+	 */
+	@At
+	@POST
+	public Object selectCountry(@Param("searchstr") String searchstr) {
+		return neworderUSViewService.selectCountry(searchstr);
+	}
+
+	/**
+	 * 美国州模糊查询
+	 */
+	@At
+	@POST
+	public Object selectUSstate(@Param("searchstr") String searchstr) {
+		return neworderUSViewService.selectUSstate(searchstr);
+	}
+
 }

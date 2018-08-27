@@ -202,7 +202,7 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DateFormat dateFormat = new SimpleDateFormat("MM 月  dd 日");
-		DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat dateFormat1 = new SimpleDateFormat("yyyy 年 MM 月 dd 日");
 		//公司信息
 		TCompanyEntity company = (TCompanyEntity) tempdata.get("company");
 		//出行信息
@@ -276,42 +276,20 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
-		String province = "";
-		String result = "";
-		List<String> provinceList = new ArrayList<>();
-		for (Record record : applyinfo) {
-			if (!Util.isEmpty(record.get("province"))) {
-				province = (String) record.get("province");
-				if (province.endsWith("省") || province.endsWith("市")) {
-					province = province.substring(0, province.length() - 1);
-				}
-				if (province.length() > 3 && province.endsWith("自治区")) {
-					province = province.substring(0, province.length() - 3);
-				}
-				if (!provinceList.contains(province)) {
-					provinceList.add(province);
-				}
-			}
-		}
-
-		for (String string : provinceList) {
-			int i = 0;
-			for (Record record : applyinfo) {
-				if (Util.eq(string, record.get("province"))) {
-					i++;
-				}
-			}
-			result += string + ":" + i;
-		}
-
-		map.put("Text9", company.getLinkman());
-
 		map.put("Text10", applyinfo.size() + " 名");
 		Date sendVisaDate = orderinfo.getSendVisaDate();
+		Date outVisaDate = orderinfo.getOutVisaDate();
 		if (!Util.isEmpty(sendVisaDate)) {
+			map.put("Text7", dateFormat.format(sendVisaDate));
 			map.put("Text11", dateFormat1.format(sendVisaDate));
 		} else {
+			map.put("Text7", "");
 			map.put("Text11", "");
+		}
+		if (!Util.isEmpty(outVisaDate)) {
+			map.put("Text8", dateFormat.format(outVisaDate));
+		} else {
+			map.put("Text8", "");
 		}
 		//获取模板文件
 		URL resource = getClass().getClassLoader().getResource("japanfile/anjie/note.pdf");

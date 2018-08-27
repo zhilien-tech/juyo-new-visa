@@ -581,7 +581,7 @@
 							stringLength: {//检测长度
                                 min: 2,
                                 max: 100,
-                                message: '姓不能为空'
+                                message: '姓拼音不能为空'
                             },
 							regexp: {
 								regexp: /^[\/a-zA-Z]{0,}$/,
@@ -598,7 +598,7 @@
 							stringLength: {//检测长度
                                 min: 2,
                                 max: 100,
-                                message: '名不能为空'
+                                message: '名拼音不能为空'
                             },
 							regexp: {
 								// regexp: /\/{1}[a-zA-Z]+$/,

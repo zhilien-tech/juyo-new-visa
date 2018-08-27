@@ -174,6 +174,16 @@ public class MobileUSModule {
 	}
 
 	/**
+	 * 婚姻状况修改
+	 */
+	@At
+	@POST
+	public Object changeMarrystatus(@Param("encode") String encode, @Param("staffid") int staffid,
+			@Param("marrystatus") int marrystatus) {
+		return mobileUSService.changeMarrystatus(encode, staffid, marrystatus);
+	}
+
+	/**
 	 * 国家模糊查询
 	 */
 	@At

@@ -34,7 +34,6 @@ import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.MarryStatusEnum;
-import com.juyo.visa.common.enums.USMarryStatusEnum;
 import com.juyo.visa.common.enums.orderUS.DistrictEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
@@ -62,7 +61,7 @@ import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TApplicantEntity;
-import com.juyo.visa.entities.TCountryEntity;
+import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TStateUsEntity;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
@@ -311,7 +310,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		result.put("basic", basic);
 		result.put("staffid", staffid);
 		result.put("encode", encode);
-		result.put("marrystatusenum", EnumUtil.enum2(USMarryStatusEnum.class));
+		result.put("marrystatusenum", EnumUtil.enum2(MarryStatusEnum.class));
 		return result;
 		//}
 
@@ -656,11 +655,13 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				Cnd.where("staffid", "=", staffid));
 		workinfo.setOccupation(form.getOccupation());
 		workinfo.setUnitname(form.getUnitname());
+		workinfo.setUnitnameen(form.getUnitnameen());
 		workinfo.setTelephone(form.getTelephone());
 		workinfo.setCountry(form.getCountry());
 		workinfo.setProvince(form.getProvince());
 		workinfo.setCity(form.getCity());
 		workinfo.setAddress(form.getAddress());
+		workinfo.setAddressen(form.getAddressen());
 		workinfo.setWorkstartdate(form.getWorkstartdate());
 		workinfo.setPosition(form.getPosition());
 		workinfo.setSalary(form.getSalary());
@@ -669,11 +670,9 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		workinfo.setIssecondarylevel(form.getIssecondarylevel());
 		//英文翻译保存
 		workinfo.setOccupationen(form.getOccupation());
-		workinfo.setUnitnameen(translate(form.getUnitname()));
 		workinfo.setTelephoneen(form.getTelephone());
 		workinfo.setProvinceen(translate(form.getProvince()));
 		workinfo.setCityen(translate(form.getCity()));
-		workinfo.setAddressen(translate(form.getAddress()));
 		workinfo.setWorkstartdateen(form.getWorkstartdate());
 		workinfo.setPositionen(translate(form.getPosition()));
 		workinfo.setSalaryen(form.getSalary());
@@ -859,11 +858,16 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		dbDao.update(previoustripinfo);
 
 		//去过美国信息
-		TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
+		List<TAppStaffGousinfoEntity> gousinfo_old = dbDao.query(TAppStaffGousinfoEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		List<TAppStaffGousinfoEntity> gousinfo_new = form.getGousinfoList();
+		dbDao.updateRelations(gousinfo_old, gousinfo_new);
+
+		/*TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		gousinfo.setStaydays(form.getStaydays());
 		gousinfo.setArrivedate(form.getArrivedate());
-		dbDao.update(gousinfo);
+		dbDao.update(gousinfo);*/
 
 		//美国驾照信息
 		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
@@ -888,6 +892,19 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		//}
 	}
 
+	public Object changeMarrystatus(String encode, int staffid, int marrystatus) {
+		String openid = redisDao.get(encode);
+		if (Util.isEmpty(openid)) {
+			return -1;
+		} else {
+			TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+			basicinfo.setMarrystatus(marrystatus);
+			basicinfo.setMarrystatusen(marrystatus);
+			dbDao.update(basicinfo);
+			return null;
+		}
+	}
+
 	/**
 	 * 国家模糊查询
 	 * TODO(这里用一句话描述这个方法的作用)
@@ -899,9 +916,9 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 */
 	public Object getCountry(String searchstr) {
 		List<String> countryList = new ArrayList<>();
-		List<TCountryEntity> country = dbDao.query(TCountryEntity.class,
+		List<TCountryRegionEntity> country = dbDao.query(TCountryRegionEntity.class,
 				Cnd.where("chinesename", "like", "%" + Strings.trim(searchstr) + "%"), null);
-		for (TCountryEntity tCountry : country) {
+		for (TCountryRegionEntity tCountry : country) {
 			if (!countryList.contains(tCountry.getChinesename())) {
 				countryList.add(tCountry.getChinesename());
 			}

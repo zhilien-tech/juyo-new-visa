@@ -8,6 +8,7 @@ package com.juyo.visa.admin.orderUS.service;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import org.apache.http.HttpResponse;
 import org.nutz.dao.Cnd;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Strings;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
@@ -35,7 +37,7 @@ import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
-import com.juyo.visa.common.enums.USMarryStatusEnum;
+import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.TravelCompanionRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaCareersEnum;
@@ -63,7 +65,9 @@ import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
+import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
+import com.juyo.visa.entities.TStateUsEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.websocket.USListWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
@@ -252,7 +256,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		List<TAppStaffCredentialsEntity> photourls = dbDao.query(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "in", "3,13,14"), null);
 		result.put("photourls", photourls);
-		result.put("marrystatusenum", EnumUtil.enum2(USMarryStatusEnum.class));
+		result.put("marrystatusenum", EnumUtil.enum2(MarryStatusEnum.class));
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
 		result.put("basicinfo", basicinfo);
 		//日期处理
@@ -829,5 +833,63 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	/**
+	 * 国家模糊查询
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param searchstr
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object selectCountry(String searchstr) {
+		List<String> countryList = new ArrayList<>();
+		List<TCountryRegionEntity> country = dbDao.query(TCountryRegionEntity.class,
+				Cnd.where("chinesename", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		for (TCountryRegionEntity tCountry : country) {
+			if (!countryList.contains(tCountry.getChinesename())) {
+				countryList.add(tCountry.getChinesename());
+			}
+		}
+		List<String> list = new ArrayList<>();
+		if (!Util.isEmpty(countryList) && countryList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(countryList.get(i));
+			}
+			return list;
+		} else {
+			return countryList;
+		}
+	}
+
+	/**
+	 * 美国州模糊查询
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param searchstr
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object selectUSstate(String searchstr) {
+		List<String> stateList = new ArrayList<>();
+		List<TStateUsEntity> state = dbDao.query(TStateUsEntity.class,
+				Cnd.where("name", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		for (TStateUsEntity tState : state) {
+			if (!stateList.contains(tState.getName())) {
+				stateList.add(tState.getName());
+			}
+		}
+		List<String> list = new ArrayList<>();
+		if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(stateList.get(i));
+			}
+			return list;
+		} else {
+			return stateList;
+		}
 	}
 }
