@@ -113,6 +113,7 @@ import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.OrderUpdateForm;
 import com.juyo.visa.forms.TAppStaffVisaUsAddForm;
 import com.juyo.visa.forms.TAppStaffVisaUsUpdateForm;
+import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
 import com.juyo.visa.websocket.USListWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
@@ -168,6 +169,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	private USListWSHandler uslistwebsocket = (USListWSHandler) SpringContextUtil.getBean("usListHander",
 			USListWSHandler.class);
+
+	private SimpleSendInfoWSHandler simplesendinfosocket = (SimpleSendInfoWSHandler) SpringContextUtil.getBean(
+			"mySimpleSendInfoWSHandler", SimpleSendInfoWSHandler.class);
 
 	/**
 	 * 列表页下拉框内容获取
@@ -1941,6 +1945,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 		}
 
+		//消息通知
+		try {
+			simplesendinfosocket.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return jsonEntity;
 		//}
 	}
@@ -2026,6 +2036,13 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 
 		}
+
+		//消息通知
+		try {
+			simplesendinfosocket.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return jsonEntity;
 		//}
 	}
@@ -2038,10 +2055,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		} else {*/
 
 		System.out.println("encode:" + encode + " file:" + file + " staffid:" + staffid);
-		//将图片上传到七牛云
-		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
-		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
-		System.out.println("url:" + url);
+
 		PassportJsonEntity jsonEntity = new PassportJsonEntity();
 		String imageDataB64 = saveDiskImageToDisk(file);
 		Input input = new Input(imageDataB64);
@@ -2135,7 +2149,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 			}
 			jsonEntity.setSuccess(out.getBoolean("success"));
-
+			//将图片上传到七牛云
+			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+			System.out.println("url:" + url);
 			jsonEntity.setUrl(url);
 		}
 		if (!Util.isEmpty(jsonEntity)) {
@@ -2166,6 +2183,13 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					dbDao.update(fetch);
 				}
 			}
+		}
+
+		//消息通知
+		try {
+			simplesendinfosocket.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return jsonEntity;
 		//}

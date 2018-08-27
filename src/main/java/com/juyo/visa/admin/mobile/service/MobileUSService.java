@@ -7,6 +7,7 @@
 package com.juyo.visa.admin.mobile.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +23,7 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
+import org.springframework.web.socket.TextMessage;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
@@ -45,6 +47,7 @@ import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnum;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.common.util.PinyinTool;
 import com.juyo.visa.common.util.PinyinTool.Type;
+import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.common.util.TranslateUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
@@ -63,6 +66,7 @@ import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TStateUsEntity;
+import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
@@ -85,6 +89,9 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 
 	@Inject
 	private RedisDao redisDao;
+
+	private SimpleSendInfoWSHandler simplesendinfosocket = (SimpleSendInfoWSHandler) SpringContextUtil.getBean(
+			"mySimpleSendInfoWSHandler", SimpleSendInfoWSHandler.class);
 
 	/**
 	 * 小程序获取登录态
@@ -269,6 +276,12 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			credentials.setUpdatetime(new Date());
 			credentials.setUrl(url);
 			dbDao.update(credentials);
+		}
+		//消息通知
+		try {
+			simplesendinfosocket.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return url;
 		//}

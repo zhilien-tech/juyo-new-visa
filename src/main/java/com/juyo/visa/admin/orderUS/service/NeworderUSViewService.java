@@ -69,7 +69,7 @@ import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TStateUsEntity;
 import com.juyo.visa.entities.TUserEntity;
-import com.juyo.visa.websocket.USListWSHandler;
+import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
 import com.uxuexi.core.common.util.Util;
@@ -114,14 +114,17 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	private final static String TOKEN = "ODBiOGIxNDY4NjdlMzc2Yg==";
 	private final static String APPID = "jhhMThiZjM1ZGQ2Y";
 
-	//订单列表页连接websocket的地址
+	/*//订单列表页连接websocket的地址
 	private static final String USLIST_WEBSPCKET_ADDR = "uslistwebsocket";
 
 	private USListWSHandler uslistwebsocket = (USListWSHandler) SpringContextUtil.getBean("usListHander",
-			USListWSHandler.class);
+			USListWSHandler.class);*/
 
 	//图片上传后连接websocket的地址
 	private static final String SEND_INFO_WEBSPCKET_ADDR = "simplesendinfosocket";
+	private SimpleSendInfoWSHandler simplesendinfosocket = (SimpleSendInfoWSHandler) SpringContextUtil.getBean(
+			"simplesendinfosocket", SimpleSendInfoWSHandler.class);
+	//微信生成小程序码接口
 	private static String WX_B_CODE_URL = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=ACCESS_TOKEN"; //不限次数 scene长度为32个字符
 
 	/**
@@ -145,7 +148,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("websocketaddr", SEND_INFO_WEBSPCKET_ADDR);
 
 		//生成二维码
-		String qrCode = dataUpload(staffid, request);
+		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+		String qrCode = dataUpload(staffid, basicinfo.getTelephone(), request);
 		result.put("qrCode", qrCode);
 
 		//图片回显
@@ -170,13 +174,13 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @param request
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public String dataUpload(int staffid, HttpServletRequest request) {
+	public String dataUpload(int staffid, String telephone, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		String page = "pages/Japan/upload/index/index";
 		String scene = "";
-		//因为小程序参数最长为32，所以参数尽量简化，o是订单id,u是userid,a是申请人id
-		scene = "a=" + staffid;
+		//因为小程序参数最长为32，所以参数尽量简化，a是人员id,t是电话号码
+		scene = "a=" + staffid + "t" + telephone;
 		System.out.println("scene:" + scene + "--------------");
 		String accessToken = (String) getAccessToken();
 		System.out.println("accessToken:" + accessToken + "=================");
