@@ -345,39 +345,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			return -1;
 		} else {*/
 		//基本信息
-		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, form.getStaffid().longValue());
-		basicinfo.setDetailedaddress(form.getDetailedaddress());
-		basicinfo.setBirthday(form.getBirthday());
-		basicinfo.setCardcity(form.getCardcity());
-		basicinfo.setCardId(form.getCardId());
-		basicinfo.setCardprovince(form.getCardprovince());
-		basicinfo.setCity(form.getCity());
-		basicinfo.setEmail(form.getEmail());
-		basicinfo.setFirstname(form.getFirstname());
-		basicinfo.setFirstnameen(form.getFirstnameen());
-		basicinfo.setHasothername(form.getHasothername());
-		basicinfo.setLastname(form.getLastname());
-		basicinfo.setLastnameen(form.getLastnameen());
-		basicinfo.setMarrystatus(form.getMarrystatus());
-		basicinfo.setNationality(form.getNationality());
-		basicinfo.setOtherfirstname(form.getOtherfirstname());
-		basicinfo.setOtherfirstnameen(form.getOtherfirstnameen());
-		basicinfo.setOtherlastname(form.getOtherlastname());
-		basicinfo.setOtherlastnameen(form.getOtherlastnameen());
-		basicinfo.setProvince(form.getProvince());
-		basicinfo.setSex(form.getSex());
-		basicinfo.setUpdatetime(new Date());
-		//英文翻译保存
-		basicinfo.setDetailedaddressen(translate(form.getDetailedaddress()));
-		basicinfo.setCardprovinceen(translate(form.getCardprovince()));
-		basicinfo.setCityen(translate(form.getCity()));
-		basicinfo.setNationalityen(translate(form.getNationality()));
-		basicinfo.setProvinceen(translate(form.getProvince()));
-		basicinfo.setMarrystatusen(form.getMarrystatus());
-		basicinfo.setTelephoneen(form.getTelephone());
-		basicinfo.setEmailen(form.getEmail());
-		basicinfo.setCardIden(form.getCardId());
-		dbDao.update(basicinfo);
+		updateBasicinfo(form);
 
 		//护照信息
 		TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
@@ -395,6 +363,54 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		passportinfo.setBirthday(form.getBirthday());
 		dbDao.update(passportinfo);
 		//}
+		return null;
+	}
+
+	/**
+	 * 基本信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateBasicinfo(BasicinfoUSForm form) {
+		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, form.getStaffid().longValue());
+		basicinfo.setDetailedaddress(form.getDetailedaddress());
+		basicinfo.setBirthday(form.getBirthday());
+		basicinfo.setCardcity(form.getCardcity());
+		basicinfo.setCardId(form.getCardId());
+		basicinfo.setCardprovince(form.getCardprovince());
+		basicinfo.setCity(form.getCity());
+		basicinfo.setEmail(form.getEmail());
+		basicinfo.setFirstname(form.getFirstname());
+		basicinfo.setFirstnameen(form.getFirstnameen());
+		basicinfo.setHasothername(form.getHasothername());
+		basicinfo.setLastname(form.getLastname());
+		basicinfo.setLastnameen(form.getLastnameen());
+		basicinfo.setMarrystatus(form.getMarrystatus());
+		basicinfo.setMarryexplain(form.getMarryexplain());
+		basicinfo.setNationality(form.getNationality());
+		basicinfo.setOtherfirstname(form.getOtherfirstname());
+		basicinfo.setOtherfirstnameen(form.getOtherfirstnameen());
+		basicinfo.setOtherlastname(form.getOtherlastname());
+		basicinfo.setOtherlastnameen(form.getOtherlastnameen());
+		basicinfo.setProvince(form.getProvince());
+		basicinfo.setSex(form.getSex());
+		basicinfo.setUpdatetime(new Date());
+		//英文翻译保存
+		basicinfo.setDetailedaddressen(translate(form.getDetailedaddress()));
+		basicinfo.setCardprovinceen(translate(form.getCardprovince()));
+		basicinfo.setCityen(translate(form.getCity()));
+		basicinfo.setNationalityen(translate(form.getNationality()));
+		basicinfo.setProvinceen(translate(form.getProvince()));
+		basicinfo.setMarrystatusen(form.getMarrystatus());
+		basicinfo.setMarryexplainen(translate(form.getMarryexplain()));
+		basicinfo.setTelephoneen(form.getTelephone());
+		basicinfo.setEmailen(form.getEmail());
+		basicinfo.setCardIden(form.getCardId());
+		dbDao.update(basicinfo);
 		return null;
 	}
 
@@ -534,6 +550,36 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		//配偶信息
+		updateSpouseinfo(form, familyinfo);
+
+		//父亲信息
+		updateFatherinfo(form, familyinfo);
+
+		//母亲信息
+		updateMotherinfo(form, familyinfo);
+
+		familyinfo.setHasimmediaterelatives(form.getHasimmediaterelatives());
+		familyinfo.setHasimmediaterelativesen(form.getHasimmediaterelatives());
+		dbDao.update(familyinfo);
+
+		//其他亲属
+		updateOtherinfo(form);
+
+		return null;
+		//}
+	}
+
+	/**
+	 * 配偶信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param familyinfo
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateSpouseinfo(FamilyinfoUSForm form, TAppStaffFamilyinfoEntity familyinfo) {
 		familyinfo.setSpousefirstname(form.getSpousefirstname());
 		familyinfo.setSpousefirstnameen(form.getSpousefirstnameen());
 		familyinfo.setSpouselastname(form.getSpouselastname());
@@ -545,12 +591,26 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		//英文
 		familyinfo.setSpousebirthdayen(form.getSpousebirthday());
 		//配偶国籍和出生国家是select还是input???
+		familyinfo.setSpousecountryen(form.getSpousecountry());
+		familyinfo.setSpousenationalityen(form.getSpousenationality());
 		//familyinfo.setSpousenationalityen(translate(form.getSpousenationality()));
 		//familyinfo.setSpousecountryen(translate(form.getSpousecountry()));
 		familyinfo.setSpousecityen(translate(form.getSpousecity()));
 		familyinfo.setSpouseaddressen(form.getSpouseaddress());
+		return null;
+	}
 
-		//父亲信息
+	/**
+	 * 父亲信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param familyinfo
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateFatherinfo(FamilyinfoUSForm form, TAppStaffFamilyinfoEntity familyinfo) {
 		familyinfo.setFatherfirstname(form.getFatherfirstname());
 		familyinfo.setFatherfirstnameen(form.getFatherfirstnameen());
 		familyinfo.setFatherlastname(form.getFatherlastname());
@@ -562,8 +622,20 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		familyinfo.setFatherbirthdayen(form.getFatherbirthday());
 		familyinfo.setFatherstatusen(form.getFatherstatus());
 		familyinfo.setIsfatherinusen(form.getIsfatherinus());
+		return null;
+	}
 
-		//母亲信息
+	/**
+	 * 母亲信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param familyinfo
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateMotherinfo(FamilyinfoUSForm form, TAppStaffFamilyinfoEntity familyinfo) {
 		familyinfo.setMotherbirthday(form.getMotherbirthday());
 		familyinfo.setMotherfirstname(form.getMotherfirstname());
 		familyinfo.setMotherfirstnameen(form.getMotherfirstnameen());
@@ -575,11 +647,20 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		familyinfo.setMotherbirthdayen(form.getMotherbirthday());
 		familyinfo.setMotherstatusen(form.getMotherstatus());
 		familyinfo.setIsmotherinusen(form.getIsmotherinus());
+		return null;
+	}
 
-		//其他亲属
-		familyinfo.setHasimmediaterelatives(form.getHasimmediaterelatives());
-		familyinfo.setHasimmediaterelativesen(form.getHasimmediaterelatives());
-		dbDao.update(familyinfo);
+	/**
+	 * 其他亲属保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateOtherinfo(FamilyinfoUSForm form) {
+		Integer staffid = form.getStaffid();
 		TAppStaffImmediaterelativesEntity immediaterelatives = dbDao.fetch(TAppStaffImmediaterelativesEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		immediaterelatives.setRelativesfirstname(form.getRelativesfirstname());
@@ -593,7 +674,6 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		immediaterelatives.setRelativesstatusen(form.getRelativesstatus());
 		dbDao.update(immediaterelatives);
 		return null;
-		//}
 	}
 
 	/**
@@ -664,6 +744,29 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		} else {*/
 		Integer staffid = form.getStaffid();
 		//工作教育信息
+		updateWorkinfo(form);
+
+		//上份工作信息
+		updateBeforework(form);
+
+		//教育信息
+		updateBeforeeducation(form);
+
+		return null;
+		//}
+	}
+
+	/**
+	 * 工作信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateWorkinfo(WorkandeducateinfoUSForm form) {
+		Integer staffid = form.getStaffid();
 		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		workinfo.setOccupation(form.getOccupation());
@@ -693,8 +796,20 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		workinfo.setIsemployeden(form.getIsemployed());
 		workinfo.setIssecondarylevelen(form.getIssecondarylevel());
 		dbDao.update(workinfo);
+		return null;
+	}
 
-		//上份工作信息
+	/**
+	 * 上份工作信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateBeforework(WorkandeducateinfoUSForm form) {
+		Integer staffid = form.getStaffid();
 		TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		beforework.setEmployername(form.getEmployername());
@@ -719,8 +834,20 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		beforework.setJobtitleen(translate(form.getJobtitle()));
 		beforework.setPreviousdutyen(translate(form.getPreviousduty()));
 		dbDao.update(beforework);
+		return null;
+	}
 
-		//教育信息
+	/**
+	 * 以前的教育信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateBeforeeducation(WorkandeducateinfoUSForm form) {
+		Integer staffid = form.getStaffid();
 		TAppStaffBeforeeducationEntity beforeeducate = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		beforeeducate.setHighesteducation(form.getHighesteducation());
@@ -744,7 +871,6 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		beforeeducate.setCourseenddateen(form.getCourseenddate());
 		dbDao.update(beforeeducate);
 		return null;
-		//}
 	}
 
 	/**
