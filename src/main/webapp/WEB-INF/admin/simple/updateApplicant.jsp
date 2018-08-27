@@ -443,6 +443,8 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript" src="${base}/admin/simple/validationZh.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
+	
+	let _FLAG = false;
 		(() => {
 			let marryStatus = "${obj.applicant.marryStatus}";
 		      if (!marryStatus || marryStatus == '') {
@@ -498,7 +500,35 @@
 			} else {
 				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked", false);
 			}
+			
+			
+			
+			(() => {
+				let _url = "${base}/references/public/dist/newvisacss/img/error.png";
+				let smallTemp = '<small id="diySmall" style="display: none;color: #ff1a1a;margin-top:5px; background: url('+_url+') no-repeat;padding-left: 18px;background-position: 0px 3px;line-height: 18px;">日本官网要求英文姓名少于15字母</small>';
+				$('#firstNameEn').parent().append($(smallTemp));
+				$('#lastNameEn').parent().append($(smallTemp));
 
+				let handler = ev => {
+					setTimeout(r => {
+						let fl = $('#firstNameEn').val().length;
+						let ll = $('#lastNameEn').val().length;
+						if ((fl + ll) > 17) {
+							$(ev.target).parent().find('#diySmall').show();
+							_FLAG = true;
+						} else {
+							$('#firstNameEn').parent().find('#diySmall').hide();
+							$('#lastNameEn').parent().find('#diySmall').hide();
+							_FLAG = false;
+						}
+					}, 300)
+				};
+
+				$('#firstNameEn, #firstName').on('input', handler);
+				$('#lastNameEn, #lastName').on('input', handler);
+			})();
+			
+			
 			$('#applicantInfo').bootstrapValidator({
 				message: '验证不通过',
 				feedbackIcons: {
@@ -576,7 +606,7 @@
 						trigger: "change keyup",
 						validators: {
 							notEmpty: {
-								message: '姓不能为空'
+								message: '姓拼音不能为空'
 							},
 							stringLength: {//检测长度
                                 min: 2,
@@ -593,9 +623,9 @@
 						trigger: "change keyup",
 						validators: {
 							notEmpty: {
-								message: '名不能为空'
+								message: '名拼音不能为空'
 							},
-							stringLength: {//检测长度
+							stringLength: {// 检测长度
                                 min: 2,
                                 max: 100,
                                 message: '名拼音不能为空'
@@ -1036,6 +1066,7 @@
 			saveApplicant(3);
 		}
 		function saveApplicant(status) {
+			if (_FLAG) return 0;
 			var str = "";
 			$("input:checkbox[name='addressIsSameWithCard']:checked").each(function () {
 				str = $(this).val();
