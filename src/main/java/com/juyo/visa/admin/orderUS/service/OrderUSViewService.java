@@ -2010,14 +2010,14 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 			//保存证件照片
 			TAppStaffCredentialsEntity fetch = dbDao.fetch(TAppStaffCredentialsEntity.class,
-					Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.IDCARD.intKey()));
+					Cnd.where("staffid", "=", staffid).and("type", "=", TAppStaffCredentialsEnum.IDCARDBACK.intKey()));
 			if (Util.isEmpty(fetch)) {
 				TAppStaffCredentialsEntity credentials = new TAppStaffCredentialsEntity();
 				credentials.setStaffid(staffid);
 				credentials.setCreatetime(new Date());
 				credentials.setUpdatetime(new Date());
 				credentials.setUrl(jsonEntity.getUrl());
-				credentials.setType(TAppStaffCredentialsEnum.IDCARD.intKey());
+				credentials.setType(TAppStaffCredentialsEnum.IDCARDBACK.intKey());
 				dbDao.insert(credentials);
 			} else {
 				fetch.setUrl(jsonEntity.getUrl());

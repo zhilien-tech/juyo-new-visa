@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -36,8 +38,14 @@ import com.juyo.visa.common.enums.USMarryStatusEnum;
 import com.juyo.visa.common.enums.orderUS.DistrictEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
+import com.juyo.visa.common.enums.visaProcess.TravelCompanionRelationshipEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaCareersEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaFamilyInfoEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaHighestEducationEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnum;
 import com.juyo.visa.common.util.HttpUtil;
+import com.juyo.visa.common.util.PinyinTool;
+import com.juyo.visa.common.util.PinyinTool.Type;
 import com.juyo.visa.common.util.TranslateUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
@@ -240,7 +248,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 
 		TAppStaffCredentialsEntity credentials = new TAppStaffCredentialsEntity();
-		if (Util.isEmpty(sequence)) {
+		if (Util.isEmpty(sequence) || sequence == 0) {
 			credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
 					Cnd.where("staffid", "=", staffid).and("type", "=", type));
 		} else {
@@ -324,6 +332,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		if (Util.isEmpty(openid)) {
 			return -1;
 		} else {*/
+		//基本信息
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, form.getStaffid().longValue());
 		basicinfo.setDetailedaddress(form.getDetailedaddress());
 		basicinfo.setBirthday(form.getBirthday());
@@ -353,7 +362,26 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		basicinfo.setNationalityen(translate(form.getNationality()));
 		basicinfo.setProvinceen(translate(form.getProvince()));
 		basicinfo.setMarrystatusen(form.getMarrystatus());
+		basicinfo.setTelephoneen(form.getTelephone());
+		basicinfo.setEmailen(form.getEmail());
+		basicinfo.setCardIden(form.getCardId());
 		dbDao.update(basicinfo);
+
+		//护照信息
+		TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
+				Cnd.where("staffid", "=", form.getStaffid().longValue()));
+		passportinfo.setFirstname(form.getFirstname());
+		passportinfo.setFirstnameen(form.getFirstnameen());
+		passportinfo.setLastname(form.getLastname());
+		passportinfo.setLastnameen(form.getLastnameen());
+		passportinfo.setSex(form.getSex());
+		if (Util.eq("女", form.getSex())) {
+			passportinfo.setSexen("F");
+		} else {
+			passportinfo.setSexen("M");
+		}
+		passportinfo.setBirthday(form.getBirthday());
+		dbDao.update(passportinfo);
 		//}
 		return null;
 	}
@@ -417,6 +445,18 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		passport.setIslostpassport(form.getIslostpassport());
 		passport.setIsrememberpassportnum(form.getIsrememberpassportnum());
 		passport.setLostpassportnum(form.getLostpassportnum());
+
+		//英文
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
+		try {
+			passport.setIssuedplaceen("/" + tool.toPinYin(form.getIssuedplace(), "", Type.UPPERCASE));
+		} catch (BadHanyuPinyinOutputFormatCombination e1) {
+			e1.printStackTrace();
+		}
+		passport.setIslostpassporten(form.getIslostpassport());
+		passport.setIsrememberpassportnumen(form.getIsrememberpassportnum());
+		passport.setLostpassportnumen(form.getLostpassportnum());
 		dbDao.update(passport);
 		//}
 		return null;
@@ -456,6 +496,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				Cnd.where("staffid", "=", staffid));
 		result.put("immediaterelatives", immediaterelatives);
 
+		result.put("spousecontactaddressenum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
 		result.put("familyinfoenum", EnumUtil.enum2(VisaFamilyInfoEnum.class));
 		result.put("immediaterelationshipenum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));
 		return result;
@@ -489,6 +530,14 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		familyinfo.setSpousenationality(form.getSpousenationality());
 		familyinfo.setSpousecountry(form.getSpousecountry());
 		familyinfo.setSpousecity(form.getSpousecity());
+		//英文
+		familyinfo.setSpousebirthdayen(form.getSpousebirthday());
+		//配偶国籍和出生国家是select还是input???
+		//familyinfo.setSpousenationalityen(translate(form.getSpousenationality()));
+		//familyinfo.setSpousecountryen(translate(form.getSpousecountry()));
+		familyinfo.setSpousecityen(translate(form.getSpousecity()));
+		familyinfo.setSpouseaddressen(form.getSpouseaddress());
+
 		//父亲信息
 		familyinfo.setFatherfirstname(form.getFatherfirstname());
 		familyinfo.setFatherfirstnameen(form.getFatherfirstnameen());
@@ -497,6 +546,11 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		familyinfo.setFatherbirthday(form.getFatherbirthday());
 		familyinfo.setIsfatherinus(form.getIsfatherinus());
 		familyinfo.setFatherstatus(form.getFatherstatus());
+		//英文
+		familyinfo.setFatherbirthdayen(form.getFatherbirthday());
+		familyinfo.setFatherstatusen(form.getFatherstatus());
+		familyinfo.setIsfatherinusen(form.getIsfatherinus());
+
 		//母亲信息
 		familyinfo.setMotherbirthday(form.getMotherbirthday());
 		familyinfo.setMotherfirstname(form.getMotherfirstname());
@@ -505,8 +559,14 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		familyinfo.setMotherlastnameen(form.getMotherlastnameen());
 		familyinfo.setMotherstatus(form.getMotherstatus());
 		familyinfo.setIsmotherinus(form.getIsmotherinus());
+		//英文
+		familyinfo.setMotherbirthdayen(form.getMotherbirthday());
+		familyinfo.setMotherstatusen(form.getMotherstatus());
+		familyinfo.setIsmotherinusen(form.getIsmotherinus());
+
 		//其他亲属
 		familyinfo.setHasimmediaterelatives(form.getHasimmediaterelatives());
+		familyinfo.setHasimmediaterelativesen(form.getHasimmediaterelatives());
 		dbDao.update(familyinfo);
 		TAppStaffImmediaterelativesEntity immediaterelatives = dbDao.fetch(TAppStaffImmediaterelativesEntity.class,
 				Cnd.where("staffid", "=", staffid));
@@ -516,6 +576,9 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		immediaterelatives.setRelativeslastnameen(form.getRelativeslastnameen());
 		immediaterelatives.setRelationship(form.getRelationship());
 		immediaterelatives.setRelativesstatus(form.getRelativesstatus());
+		//英文
+		immediaterelatives.setRelationshipen(form.getRelationship());
+		immediaterelatives.setRelativesstatusen(form.getRelativesstatus());
 		dbDao.update(immediaterelatives);
 		return null;
 		//}
@@ -565,6 +628,9 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		if (!Util.isEmpty(beforeeducate.getCourseenddate())) {
 			result.put("courseenddate", format.format(beforeeducate.getCourseenddate()));
 		}
+
+		result.put("careersenum", EnumUtil.enum2(VisaCareersEnum.class));
+		result.put("highesteducationenum", EnumUtil.enum2(VisaHighestEducationEnum.class));
 		return result;
 		//}
 	}
@@ -598,12 +664,24 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		workinfo.setWorkstartdate(form.getWorkstartdate());
 		workinfo.setPosition(form.getPosition());
 		workinfo.setSalary(form.getSalary());
+		workinfo.setDuty(form.getDuty());
 		workinfo.setIsemployed(form.getIsemployed());
 		workinfo.setIssecondarylevel(form.getIssecondarylevel());
 		//英文翻译保存
+		workinfo.setOccupationen(form.getOccupation());
 		workinfo.setUnitnameen(translate(form.getUnitname()));
+		workinfo.setTelephoneen(form.getTelephone());
+		workinfo.setProvinceen(translate(form.getProvince()));
+		workinfo.setCityen(translate(form.getCity()));
 		workinfo.setAddressen(translate(form.getAddress()));
+		workinfo.setWorkstartdateen(form.getWorkstartdate());
+		workinfo.setPositionen(translate(form.getPosition()));
+		workinfo.setSalaryen(form.getSalary());
+		workinfo.setDutyen(translate(form.getDuty()));
+		workinfo.setIsemployeden(form.getIsemployed());
+		workinfo.setIssecondarylevelen(form.getIssecondarylevel());
 		dbDao.update(workinfo);
+
 		//上份工作信息
 		TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
 				Cnd.where("staffid", "=", staffid));
@@ -618,7 +696,18 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		beforework.setEmploystartdate(form.getEmploystartdate());
 		beforework.setEmployenddate(form.getEmployenddate());
 		beforework.setJobtitle(form.getJobtitle());
+		beforework.setPreviousduty(form.getPreviousduty());
+		//英文
+		beforework.setEmployertelephoneen(form.getEmployertelephone());
+		beforework.setEmployercountryen(form.getEmployercountry());
+		beforework.setEmployerprovinceen(translate(form.getEmployerprovince()));
+		beforework.setEmployercityen(translate(form.getEmployercity()));
+		beforework.setEmploystartdateen(form.getEmploystartdate());
+		beforework.setEmployenddateen(form.getEmployenddate());
+		beforework.setJobtitleen(translate(form.getJobtitle()));
+		beforework.setPreviousdutyen(translate(form.getPreviousduty()));
 		dbDao.update(beforework);
+
 		//教育信息
 		TAppStaffBeforeeducationEntity beforeeducate = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
 				Cnd.where("staffid", "=", staffid));
@@ -633,6 +722,14 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		beforeeducate.setInstitutionaddressen(form.getInstitutionaddressen());
 		beforeeducate.setCoursestartdate(form.getCoursestartdate());
 		beforeeducate.setCourseenddate(form.getCourseenddate());
+		//英文
+		beforeeducate.setHighesteducationen(form.getHighesteducation());
+		beforeeducate.setCourseen(translate(form.getCourse()));
+		beforeeducate.setInstitutioncountryen(form.getInstitutioncountry());
+		beforeeducate.setInstitutionprovinceen(translate(form.getInstitutionprovince()));
+		beforeeducate.setInstitutioncityen(translate(form.getInstitutioncity()));
+		beforeeducate.setCoursestartdateen(form.getCoursestartdate());
+		beforeeducate.setCourseenddateen(form.getCourseenddate());
 		dbDao.update(beforeeducate);
 		return null;
 		//}
@@ -690,6 +787,8 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		List<TAppStaffGocountryEntity> gocountry = dbDao.query(TAppStaffGocountryEntity.class,
 				Cnd.where("staffid", "=", staffid), null);
 		result.put("gocountry", gocountry);
+
+		result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
 		return result;
 		//}
 	}
@@ -714,6 +813,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		TAppStaffTravelcompanionEntity travelcompanion = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		travelcompanion.setIstravelwithother(form.getIstravelwithother());
+		travelcompanion.setIstravelwithotheren(form.getIstravelwithother());
 		dbDao.update(travelcompanion);
 
 		//同行人信息
@@ -740,6 +840,22 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		previoustripinfo.setIsfiledimmigrantpetition(form.getIsfiledimmigrantpetition());
 		previoustripinfo.setEmigrationreason(form.getEmigrationreason());
 		previoustripinfo.setImmigrantpetitionexplain(form.getImmigrantpetitionexplain());
+		//英文
+		previoustripinfo.setCostpayeren(form.getCostpayer());
+		previoustripinfo.setHasbeeninusen(form.getHasbeeninus());
+		previoustripinfo.setHasdriverlicenseen(form.getHasdriverlicense());
+		previoustripinfo.setIsissuedvisaen(form.getIsissuedvisa());
+		previoustripinfo.setIssueddateen(form.getIssueddate());
+		previoustripinfo.setVisanumberen(translate(form.getVisanumber()));
+		previoustripinfo.setIsapplyingsametypevisaen(form.getIsapplyingsametypevisa());
+		previoustripinfo.setIstenprinteden(form.getIstenprinted());
+		previoustripinfo.setIslosten(form.getIslost());
+		previoustripinfo.setIscancelleden(form.getIscancelled());
+		previoustripinfo.setIsrefuseden(form.getIsrefused());
+		previoustripinfo.setRefusedexplainen(translate(form.getRefusedexplain()));
+		previoustripinfo.setIsfiledimmigrantpetitionen(form.getIsfiledimmigrantpetition());
+		previoustripinfo.setEmigrationreasonen(form.getEmigrationreason());
+		previoustripinfo.setImmigrantpetitionexplainen(translate(form.getImmigrantpetitionexplain()));
 		dbDao.update(previoustripinfo);
 
 		//去过美国信息
@@ -754,6 +870,8 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				Cnd.where("staffid", "=", staffid));
 		driverinfo.setDriverlicensenumber(form.getDriverlicensenumber());
 		driverinfo.setWitchstateofdriver(form.getWitchstateofdriver());
+		driverinfo.setDriverlicensenumberen(form.getDriverlicensenumber());
+		driverinfo.setWitchstateofdriveren(form.getWitchstateofdriver());
 		dbDao.update(driverinfo);
 
 		//是否有出境记录
