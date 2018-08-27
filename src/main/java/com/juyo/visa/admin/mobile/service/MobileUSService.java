@@ -299,14 +299,14 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			result.put("birthday", birthday);
 		}
 		//婚姻状况处理
-		if (!Util.isEmpty(basic.getMarrystatus())) {
+		/*if (!Util.isEmpty(basic.getMarrystatus())) {
 			Integer marrystatus = basic.getMarrystatus();
 			for (MarryStatusEnum marry : MarryStatusEnum.values()) {
 				if (marrystatus == marry.intKey()) {
 					result.put("marrystatus", marry.value());
 				}
 			}
-		}
+		}*/
 		result.put("basic", basic);
 		result.put("staffid", staffid);
 		result.put("encode", encode);
@@ -916,6 +916,16 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		//}
 	}
 
+	/**
+	 * 婚姻状况回显
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param encode
+	 * @param staffid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object toMarrystatus(String encode, int staffid) {
 		/*String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
