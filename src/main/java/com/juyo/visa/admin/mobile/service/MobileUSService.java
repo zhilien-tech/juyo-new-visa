@@ -289,7 +289,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return JuYouResult.ok(url);
+			return url;
 		}
 	}
 
