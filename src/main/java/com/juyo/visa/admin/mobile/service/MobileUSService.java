@@ -33,6 +33,7 @@ import com.juyo.visa.admin.mobile.form.FamilyinfoUSForm;
 import com.juyo.visa.admin.mobile.form.PassportinfoUSForm;
 import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
 import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
+import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.MarryStatusEnum;
@@ -288,7 +289,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return url;
+		return JuYouResult.ok(url);
 		//}
 	}
 
@@ -320,7 +321,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		if (!Util.isEmpty(credentials)) {
 			dbDao.delete(credentials);
 		}
-		return null;
+		return JuYouResult.ok();
 		//}
 	}
 
@@ -361,7 +362,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		result.put("staffid", staffid);
 		result.put("encode", encode);
 		result.put("marrystatusenum", EnumUtil.enum2(MarryStatusEnum.class));
-		return result;
+		return JuYouResult.ok(result);
 		//}
 
 	}
@@ -400,7 +401,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		passportinfo.setBirthday(form.getBirthday());
 		dbDao.update(passportinfo);
 		//}
-		return null;
+		return JuYouResult.ok();
 	}
 
 	/**
@@ -478,7 +479,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		if (!Util.isEmpty(passportinfo.getValidenddate())) {
 			result.put("validenddate", format.format(passportinfo.getValidenddate()));
 		}
-		return result;
+		return JuYouResult.ok(result);
 		//}
 	}
 
@@ -524,7 +525,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		passport.setLostpassportnumen(form.getLostpassportnum());
 		dbDao.update(passport);
 		//}
-		return null;
+		return JuYouResult.ok();
 	}
 
 	/**
@@ -564,7 +565,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		result.put("spousecontactaddressenum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
 		result.put("familyinfoenum", EnumUtil.enum2(VisaFamilyInfoEnum.class));
 		result.put("immediaterelationshipenum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));
-		return result;
+		return JuYouResult.ok(result);
 		//}
 	}
 
@@ -602,7 +603,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		//其他亲属
 		updateOtherinfo(form);
 
-		return null;
+		return JuYouResult.ok();
 		//}
 	}
 
@@ -760,7 +761,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 
 		result.put("careersenum", EnumUtil.enum2(VisaCareersEnum.class));
 		result.put("highesteducationenum", EnumUtil.enum2(VisaHighestEducationEnum.class));
-		return result;
+		return JuYouResult.ok(result);
 		//}
 	}
 
@@ -789,7 +790,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		//教育信息
 		updateBeforeeducation(form);
 
-		return null;
+		return JuYouResult.ok();
 		//}
 	}
 
@@ -964,7 +965,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		result.put("gocountry", gocountry);
 
 		result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
-		return result;
+		return JuYouResult.ok(result);
 		//}
 	}
 
@@ -998,6 +999,48 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		dbDao.updateRelations(companioninfo_old, companioninfo_new);
 
 		//以前的美国旅游信息
+		updatePrevioustripinfo(form);
+
+		//去过美国信息
+		List<TAppStaffGousinfoEntity> gousinfo_old = dbDao.query(TAppStaffGousinfoEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		List<TAppStaffGousinfoEntity> gousinfo_new = form.getGousinfoList();
+		dbDao.updateRelations(gousinfo_old, gousinfo_new);
+
+		//美国驾照信息
+		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		driverinfo.setDriverlicensenumber(form.getDriverlicensenumber());
+		driverinfo.setWitchstateofdriver(form.getWitchstateofdriver());
+		driverinfo.setDriverlicensenumberen(form.getDriverlicensenumber());
+		driverinfo.setWitchstateofdriveren(form.getWitchstateofdriver());
+		dbDao.update(driverinfo);
+
+		//是否有出境记录
+		TAppStaffWorkEducationTrainingEntity workeducation = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		workeducation.setIstraveledanycountry(form.getIstraveledanycountry());
+
+		//出境记录
+		List<TAppStaffGocountryEntity> gocountry_old = dbDao.query(TAppStaffGocountryEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		List<TAppStaffGocountryEntity> gocountry_new = form.getGocountryList();
+		dbDao.updateRelations(gocountry_old, gocountry_new);
+		return JuYouResult.ok();
+		//}
+	}
+
+	/**
+	 * 以前的美国旅游信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updatePrevioustripinfo(TravelinfoUSForm form) {
+		Integer staffid = form.getStaffid();
 		TAppStaffPrevioustripinfoEntity previoustripinfo = dbDao.fetch(TAppStaffPrevioustripinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		previoustripinfo.setCostpayer(form.getCostpayer());
@@ -1032,40 +1075,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		previoustripinfo.setEmigrationreasonen(form.getEmigrationreason());
 		previoustripinfo.setImmigrantpetitionexplainen(translate(form.getImmigrantpetitionexplain()));
 		dbDao.update(previoustripinfo);
-
-		//去过美国信息
-		List<TAppStaffGousinfoEntity> gousinfo_old = dbDao.query(TAppStaffGousinfoEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
-		List<TAppStaffGousinfoEntity> gousinfo_new = form.getGousinfoList();
-		dbDao.updateRelations(gousinfo_old, gousinfo_new);
-
-		/*TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		gousinfo.setStaydays(form.getStaydays());
-		gousinfo.setArrivedate(form.getArrivedate());
-		dbDao.update(gousinfo);*/
-
-		//美国驾照信息
-		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		driverinfo.setDriverlicensenumber(form.getDriverlicensenumber());
-		driverinfo.setWitchstateofdriver(form.getWitchstateofdriver());
-		driverinfo.setDriverlicensenumberen(form.getDriverlicensenumber());
-		driverinfo.setWitchstateofdriveren(form.getWitchstateofdriver());
-		dbDao.update(driverinfo);
-
-		//是否有出境记录
-		TAppStaffWorkEducationTrainingEntity workeducation = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		workeducation.setIstraveledanycountry(form.getIstraveledanycountry());
-
-		//出境记录
-		List<TAppStaffGocountryEntity> gocountry_old = dbDao.query(TAppStaffGocountryEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
-		List<TAppStaffGocountryEntity> gocountry_new = form.getGocountryList();
-		dbDao.updateRelations(gocountry_old, gocountry_new);
 		return null;
-		//}
 	}
 
 	/**
@@ -1124,28 +1134,28 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object getCountry(String encode, String searchstr) {
-		String openid = redisDao.get(encode);
+		/*String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
-		} else {
-			List<String> countryList = new ArrayList<>();
-			List<TCountryRegionEntity> country = dbDao.query(TCountryRegionEntity.class,
-					Cnd.where("chinesename", "like", "%" + Strings.trim(searchstr) + "%"), null);
-			for (TCountryRegionEntity tCountry : country) {
-				if (!countryList.contains(tCountry.getChinesename())) {
-					countryList.add(tCountry.getChinesename());
-				}
-			}
-			List<String> list = new ArrayList<>();
-			if (!Util.isEmpty(countryList) && countryList.size() >= 5) {
-				for (int i = 0; i < 5; i++) {
-					list.add(countryList.get(i));
-				}
-				return list;
-			} else {
-				return countryList;
+		} else {*/
+		List<String> countryList = new ArrayList<>();
+		List<TCountryRegionEntity> country = dbDao.query(TCountryRegionEntity.class,
+				Cnd.where("chinesename", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		for (TCountryRegionEntity tCountry : country) {
+			if (!countryList.contains(tCountry.getChinesename())) {
+				countryList.add(tCountry.getChinesename());
 			}
 		}
+		List<String> list = new ArrayList<>();
+		if (!Util.isEmpty(countryList) && countryList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(countryList.get(i));
+			}
+			return list;
+		} else {
+			return countryList;
+		}
+		//}
 	}
 
 	/**
@@ -1158,28 +1168,28 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object getUSstate(String encode, String searchstr) {
-		String openid = redisDao.get(encode);
+		/*String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
-		} else {
-			List<String> stateList = new ArrayList<>();
-			List<TStateUsEntity> state = dbDao.query(TStateUsEntity.class,
-					Cnd.where("name", "like", "%" + Strings.trim(searchstr) + "%"), null);
-			for (TStateUsEntity tState : state) {
-				if (!stateList.contains(tState.getName())) {
-					stateList.add(tState.getName());
-				}
-			}
-			List<String> list = new ArrayList<>();
-			if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
-				for (int i = 0; i < 5; i++) {
-					list.add(stateList.get(i));
-				}
-				return list;
-			} else {
-				return stateList;
+		} else {*/
+		List<String> stateList = new ArrayList<>();
+		List<TStateUsEntity> state = dbDao.query(TStateUsEntity.class,
+				Cnd.where("name", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		for (TStateUsEntity tState : state) {
+			if (!stateList.contains(tState.getName())) {
+				stateList.add(tState.getName());
 			}
 		}
+		List<String> list = new ArrayList<>();
+		if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(stateList.get(i));
+			}
+			return list;
+		} else {
+			return stateList;
+		}
+		//}
 	}
 
 	/**

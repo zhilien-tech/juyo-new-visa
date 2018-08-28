@@ -34,6 +34,7 @@ import com.juyo.visa.admin.mobile.form.PassportinfoUSForm;
 import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
 import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
+import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
@@ -161,7 +162,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			credentials.setUrl(tAppStaffCredentialsEntity.getUrl());
 			result.put(String.valueOf(tAppStaffCredentialsEntity.getType()), credentials);
 		}
-		return result;
+		return JuYouResult.ok(result);
 	}
 
 	/**
@@ -278,7 +279,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			sb.append("/").append(basicinfo.getLastnameen());
 			result.put("lastnameen", sb.toString());
 		}
-		return result;
+		return JuYouResult.ok(result);
 	}
 
 	/**
@@ -293,6 +294,42 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object saveBasicinfo(BasicinfoUSForm form) {
 		Integer staffid = form.getStaffid();
 		//基本信息
+		updateBasicinfo(form);
+
+		//护照信息
+		TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		passportinfo.setFirstname(form.getFirstname());
+		passportinfo.setLastname(form.getLastname());
+		if (!Util.isEmpty(form.getFirstnameen())) {
+			passportinfo.setFirstnameen(form.getFirstnameen().substring(1));
+		}
+		passportinfo.setLastname(form.getLastname());
+		if (!Util.isEmpty(form.getLastnameen())) {
+			passportinfo.setLastnameen(form.getLastnameen().substring(1));
+		}
+		passportinfo.setSex(form.getSex());
+		if (Util.eq("女", form.getSex())) {
+			passportinfo.setSexen("F");
+		} else {
+			passportinfo.setSexen("M");
+		}
+		passportinfo.setBirthday(form.getBirthday());
+		dbDao.update(passportinfo);
+		return JuYouResult.ok();
+	}
+
+	/**
+	 * 基本信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateBasicinfo(BasicinfoUSForm form) {
+		Integer staffid = form.getStaffid();
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid.longValue());
 		basicinfo.setFirstname(form.getFirstname());
 		if (!Util.isEmpty(form.getFirstnameen())) {
@@ -330,27 +367,6 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setMarryexplainen(translate(form.getMarryexplain()));
 		basicinfo.setNationalityen(translate(form.getNationality()));
 		dbDao.update(basicinfo);
-
-		//护照信息
-		TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		passportinfo.setFirstname(form.getFirstname());
-		passportinfo.setLastname(form.getLastname());
-		if (!Util.isEmpty(form.getFirstnameen())) {
-			passportinfo.setFirstnameen(form.getFirstnameen().substring(1));
-		}
-		basicinfo.setLastname(form.getLastname());
-		if (!Util.isEmpty(form.getLastnameen())) {
-			passportinfo.setLastnameen(form.getLastnameen().substring(1));
-		}
-		passportinfo.setSex(form.getSex());
-		if (Util.eq("女", form.getSex())) {
-			passportinfo.setSexen("F");
-		} else {
-			passportinfo.setSexen("M");
-		}
-		passportinfo.setBirthday(form.getBirthday());
-		dbDao.update(passportinfo);
 		return null;
 	}
 
@@ -381,7 +397,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			result.put("validenddate", sdf.format(passportinfo.getValidenddate()));
 		}
 
-		return result;
+		return JuYouResult.ok(result);
 	}
 
 	/**
@@ -421,7 +437,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		passportinfo.setIsrememberpassportnumen(form.getIsrememberpassportnum());
 		passportinfo.setLostpassportnumen(form.getLostpassportnum());
 		dbDao.update(passportinfo);
-		return null;
+		return JuYouResult.ok();
 	}
 
 	/**
@@ -456,7 +472,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("spousecontactaddressenum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
 		//直系亲属---与你的关系
 		result.put("immediaterelationshipenum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));
-		return result;
+		return JuYouResult.ok(result);
 	}
 
 	/**
@@ -473,6 +489,35 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		//配偶信息
+		updateSpouseinfo(form, familyinfo);
+
+		//父亲信息
+		updateFatherinfo(form, familyinfo);
+
+		//母亲信息
+		updateMotherinfo(form, familyinfo);
+
+		familyinfo.setHasimmediaterelatives(form.getHasimmediaterelatives());
+		familyinfo.setHasimmediaterelativesen(form.getHasimmediaterelatives());
+		dbDao.update(familyinfo);
+
+		//其他亲属
+		updateOtherinfo(form);
+
+		return JuYouResult.ok();
+	}
+
+	/**
+	 * 配偶信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param familyinfo
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateSpouseinfo(FamilyinfoUSForm form, TAppStaffFamilyinfoEntity familyinfo) {
 		familyinfo.setSpousefirstname(form.getSpousefirstname());
 		familyinfo.setSpousefirstnameen(form.getSpousefirstnameen());
 		familyinfo.setSpouselastname(form.getSpouselastname());
@@ -488,8 +533,20 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		familyinfo.setSpousecityen(translate(form.getSpousecity()));
 		familyinfo.setSpousecountryen(form.getSpousecountry());
 		familyinfo.setSpousenationalityen(form.getSpousenationality());
+		return null;
+	}
 
-		//父亲信息
+	/**
+	 * 父亲信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param familyinfo
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateFatherinfo(FamilyinfoUSForm form, TAppStaffFamilyinfoEntity familyinfo) {
 		familyinfo.setFatherbirthday(form.getFatherbirthday());
 		familyinfo.setFatherfirstname(form.getFatherfirstname());
 		familyinfo.setFatherfirstnameen(form.getFatherfirstnameen());
@@ -501,8 +558,20 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		familyinfo.setFatherbirthdayen(form.getFatherbirthday());
 		familyinfo.setFatherstatusen(form.getFatherstatus());
 		familyinfo.setIsfatherinusen(form.getIsfatherinus());
+		return null;
+	}
 
-		//母亲信息
+	/**
+	 * 母亲信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param familyinfo
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateMotherinfo(FamilyinfoUSForm form, TAppStaffFamilyinfoEntity familyinfo) {
 		familyinfo.setMotherbirthday(form.getMotherbirthday());
 		familyinfo.setMotherfirstname(form.getMotherfirstname());
 		familyinfo.setMotherfirstnameen(form.getMotherfirstnameen());
@@ -514,12 +583,20 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		familyinfo.setMotherbirthdayen(form.getMotherbirthday());
 		familyinfo.setMotherstatusen(form.getMotherstatus());
 		familyinfo.setIsmotherinusen(form.getIsmotherinus());
+		return null;
+	}
 
-		familyinfo.setHasimmediaterelatives(form.getHasimmediaterelatives());
-		familyinfo.setHasimmediaterelativesen(form.getHasimmediaterelatives());
-		dbDao.update(familyinfo);
-
-		//其他亲属
+	/**
+	 * 其他亲属信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateOtherinfo(FamilyinfoUSForm form) {
+		Integer staffid = form.getStaffid();
 		TAppStaffImmediaterelativesEntity immediaterelatives = dbDao.fetch(TAppStaffImmediaterelativesEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		immediaterelatives.setRelativesfirstname(form.getRelativesfirstname());
@@ -582,7 +659,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("careersenum", EnumUtil.enum2(VisaCareersEnum.class));
 		//最高学历
 		result.put("highesteducationenum", EnumUtil.enum2(VisaHighestEducationEnum.class));
-		return result;
+		return JuYouResult.ok(result);
 	}
 
 	/**
@@ -597,6 +674,31 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object saveWorkandeducation(WorkandeducateinfoUSForm form) {
 		Integer staffid = form.getStaffid();
 		//职业信息
+		updateWorkinfo(form);
+
+		//以前的工作信息
+		if (Util.eq(1, form.getIsemployed())) {
+			updateBeforework(form);
+		}
+		//教育信息
+		if (Util.eq(1, form.getIssecondarylevel())) {
+			updateBeforeeducation(form);
+		}
+
+		return JuYouResult.ok();
+	}
+
+	/**
+	 * 工作信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateWorkinfo(WorkandeducateinfoUSForm form) {
+		Integer staffid = form.getStaffid();
 		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		workinfo.setOccupation(form.getOccupation());
@@ -628,62 +730,82 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		workinfo.setIsemployeden(form.getIsemployed());
 
 		dbDao.update(workinfo);
+		return null;
+	}
 
-		//以前的工作信息
-		if (Util.eq(1, form.getIsemployed())) {
-			TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
-					Cnd.where("staffid", "=", staffid));
-			beforework.setEmployername(form.getEmployername());
-			beforework.setEmployernameen(form.getEmployernameen());
-			beforework.setEmployertelephone(form.getEmployertelephone());
-			beforework.setEmployercountry(form.getEmployercountry());
-			beforework.setEmployerprovince(form.getEmployerprovince());
-			beforework.setEmployercity(form.getEmployercity());
-			beforework.setEmployeraddress(form.getEmployeraddress());
-			beforework.setEmployeraddressen(form.getEmployeraddressen());
-			beforework.setEmploystartdate(form.getEmploystartdate());
-			beforework.setEmployenddate(form.getEmployenddate());
-			beforework.setJobtitle(form.getJobtitle());
-			beforework.setPreviousduty(form.getPreviousduty());
-			//英文
-			beforework.setEmployertelephoneen(form.getEmployertelephone());
-			beforework.setEmployercountryen(form.getEmployercountry());
-			beforework.setEmployerprovinceen(translate(form.getEmployerprovince()));
-			beforework.setEmployercityen(translate(form.getEmployercity()));
-			beforework.setEmploystartdateen(form.getEmploystartdate());
-			beforework.setEmployenddateen(form.getEmployenddate());
-			beforework.setJobtitleen(translate(form.getJobtitle()));
-			beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+	/**
+	 * 以前的工作信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateBeforework(WorkandeducateinfoUSForm form) {
+		Integer staffid = form.getStaffid();
+		TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		beforework.setEmployername(form.getEmployername());
+		beforework.setEmployernameen(form.getEmployernameen());
+		beforework.setEmployertelephone(form.getEmployertelephone());
+		beforework.setEmployercountry(form.getEmployercountry());
+		beforework.setEmployerprovince(form.getEmployerprovince());
+		beforework.setEmployercity(form.getEmployercity());
+		beforework.setEmployeraddress(form.getEmployeraddress());
+		beforework.setEmployeraddressen(form.getEmployeraddressen());
+		beforework.setEmploystartdate(form.getEmploystartdate());
+		beforework.setEmployenddate(form.getEmployenddate());
+		beforework.setJobtitle(form.getJobtitle());
+		beforework.setPreviousduty(form.getPreviousduty());
+		//英文
+		beforework.setEmployertelephoneen(form.getEmployertelephone());
+		beforework.setEmployercountryen(form.getEmployercountry());
+		beforework.setEmployerprovinceen(translate(form.getEmployerprovince()));
+		beforework.setEmployercityen(translate(form.getEmployercity()));
+		beforework.setEmploystartdateen(form.getEmploystartdate());
+		beforework.setEmployenddateen(form.getEmployenddate());
+		beforework.setJobtitleen(translate(form.getJobtitle()));
+		beforework.setPreviousdutyen(translate(form.getPreviousduty()));
 
-			dbDao.update(workinfo);
-		}
-		//教育信息
-		if (Util.eq(1, form.getIssecondarylevel())) {
-			TAppStaffBeforeeducationEntity beforeeducation = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
-					Cnd.where("staffid", "=", staffid));
-			beforeeducation.setHighesteducation(form.getHighesteducation());
-			beforeeducation.setInstitution(form.getInstitution());
-			beforeeducation.setInstitutionen(form.getInstitutionen());
-			beforeeducation.setCourse(form.getCourse());
-			beforeeducation.setInstitutioncountry(form.getInstitutioncountry());
-			beforeeducation.setInstitutionprovince(form.getInstitutionprovince());
-			beforeeducation.setInstitutioncity(form.getInstitutioncity());
-			beforeeducation.setInstitutionaddress(form.getInstitutionaddress());
-			beforeeducation.setInstitutionaddressen(form.getInstitutionaddressen());
-			beforeeducation.setCoursestartdate(form.getCoursestartdate());
-			beforeeducation.setCourseenddate(form.getCourseenddate());
-			//英文
-			beforeeducation.setHighesteducationen(form.getHighesteducation());
-			beforeeducation.setCourseen(translate(form.getCourse()));
-			beforeeducation.setInstitutioncountryen(form.getInstitutioncountry());
-			beforeeducation.setInstitutionprovinceen(translate(form.getInstitutionprovince()));
-			beforeeducation.setInstitutioncityen(translate(form.getInstitutioncity()));
-			beforeeducation.setCoursestartdateen(form.getCoursestartdate());
-			beforeeducation.setCourseenddateen(form.getCourseenddate());
+		dbDao.update(beforework);
+		return null;
+	}
 
-			dbDao.update(beforeeducation);
-		}
+	/**
+	 * 以前的教育信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateBeforeeducation(WorkandeducateinfoUSForm form) {
+		Integer staffid = form.getStaffid();
+		TAppStaffBeforeeducationEntity beforeeducation = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		beforeeducation.setHighesteducation(form.getHighesteducation());
+		beforeeducation.setInstitution(form.getInstitution());
+		beforeeducation.setInstitutionen(form.getInstitutionen());
+		beforeeducation.setCourse(form.getCourse());
+		beforeeducation.setInstitutioncountry(form.getInstitutioncountry());
+		beforeeducation.setInstitutionprovince(form.getInstitutionprovince());
+		beforeeducation.setInstitutioncity(form.getInstitutioncity());
+		beforeeducation.setInstitutionaddress(form.getInstitutionaddress());
+		beforeeducation.setInstitutionaddressen(form.getInstitutionaddressen());
+		beforeeducation.setCoursestartdate(form.getCoursestartdate());
+		beforeeducation.setCourseenddate(form.getCourseenddate());
+		//英文
+		beforeeducation.setHighesteducationen(form.getHighesteducation());
+		beforeeducation.setCourseen(translate(form.getCourse()));
+		beforeeducation.setInstitutioncountryen(form.getInstitutioncountry());
+		beforeeducation.setInstitutionprovinceen(translate(form.getInstitutionprovince()));
+		beforeeducation.setInstitutioncityen(translate(form.getInstitutioncity()));
+		beforeeducation.setCoursestartdateen(form.getCoursestartdate());
+		beforeeducation.setCourseenddateen(form.getCourseenddate());
 
+		dbDao.update(beforeeducation);
 		return null;
 	}
 
@@ -731,7 +853,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid), null);
 		result.put("gocountry", gocountry);
 		result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
-		return result;
+		return JuYouResult.ok(result);
 	}
 
 	/**
@@ -758,6 +880,46 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		dbDao.updateRelations(companioninfo_old, companioninfo_new);
 
 		//以前的美国旅游信息
+		updatePrevioustripinfo(form);
+
+		//去过美国信息
+		List<TAppStaffGousinfoEntity> gousinfo_old = dbDao.query(TAppStaffGousinfoEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		List<TAppStaffGousinfoEntity> gousinfo_new = form.getGousinfoList();
+		dbDao.updateRelations(gousinfo_old, gousinfo_new);
+
+		//美国驾照
+		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		driverinfo.setDriverlicensenumber(form.getDriverlicensenumber());
+		driverinfo.setWitchstateofdriver(form.getWitchstateofdriver());
+		driverinfo.setDriverlicensenumberen(form.getDriverlicensenumber());
+		driverinfo.setWitchstateofdriveren(form.getWitchstateofdriver());
+		dbDao.update(driverinfo);
+
+		//出境记录
+		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		workinfo.setIstraveledanycountry(form.getIstraveledanycountry());
+		dbDao.update(workinfo);
+
+		List<TAppStaffGocountryEntity> gocountry_old = dbDao.query(TAppStaffGocountryEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		List<TAppStaffGocountryEntity> gocountry_new = form.getGocountryList();
+		dbDao.updateRelations(gocountry_old, gocountry_new);
+		return null;
+	}
+
+	/**
+	 * 以前的美国旅游信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updatePrevioustripinfo(TravelinfoUSForm form) {
+		Integer staffid = form.getStaffid();
 		TAppStaffPrevioustripinfoEntity tripinfo = dbDao.fetch(TAppStaffPrevioustripinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		tripinfo.setCostpayer(form.getCostpayer());
@@ -791,32 +953,6 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		tripinfo.setEmigrationreasonen(form.getEmigrationreason());
 		tripinfo.setImmigrantpetitionexplainen(translate(form.getImmigrantpetitionexplain()));
 		dbDao.update(tripinfo);
-
-		//去过美国信息
-		List<TAppStaffGousinfoEntity> gousinfo_old = dbDao.query(TAppStaffGousinfoEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
-		List<TAppStaffGousinfoEntity> gousinfo_new = form.getGousinfoList();
-		dbDao.updateRelations(gousinfo_old, gousinfo_new);
-
-		//美国驾照
-		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		driverinfo.setDriverlicensenumber(form.getDriverlicensenumber());
-		driverinfo.setWitchstateofdriver(form.getWitchstateofdriver());
-		driverinfo.setDriverlicensenumberen(form.getDriverlicensenumber());
-		driverinfo.setWitchstateofdriveren(form.getWitchstateofdriver());
-		dbDao.update(driverinfo);
-
-		//出境记录
-		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		workinfo.setIstraveledanycountry(form.getIstraveledanycountry());
-		dbDao.update(workinfo);
-
-		List<TAppStaffGocountryEntity> gocountry_old = dbDao.query(TAppStaffGocountryEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
-		List<TAppStaffGocountryEntity> gocountry_new = form.getGocountryList();
-		dbDao.updateRelations(gocountry_old, gocountry_new);
 		return null;
 	}
 
