@@ -245,6 +245,10 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 
 		map.put("Text2", "1-" + applyinfo.size());
 		map.put("Text1", content.toString());
+		map.put("Text12", companyname);
+		map.put("Text13", companyname);
+		map.put("Text14", company.getLinkman());
+		map.put("Text15", company.getMobile());
 		if (!Util.isEmpty(ordertripjp)) {
 			if (!Util.isEmpty(ordertripjp.getGoDate())) {
 				map.put("Text3", dateFormat.format(ordertripjp.getGoDate()));
