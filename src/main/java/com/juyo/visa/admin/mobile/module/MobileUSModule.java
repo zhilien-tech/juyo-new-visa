@@ -84,6 +84,16 @@ public class MobileUSModule {
 	}
 
 	/**
+	 * 删除图片
+	 */
+	@At
+	@POST
+	public Object deleteImage(@Param("encode") String encode, @Param("staffid") int staffid, @Param("type") int type,
+			@Param("sequence") int sequence) {
+		return mobileUSService.deleteImage(encode, staffid, type, sequence);
+	}
+
+	/**
 	 * 基本信息回显数据接口
 	 */
 	@At

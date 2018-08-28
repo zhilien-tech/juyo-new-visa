@@ -253,6 +253,62 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
 		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 
+		//分多张图片和单张图片,sequence=0时为单张图片，分添加和修改。sequence不为0时为多张图片，只有添加，没有修改
+		if (Util.isEmpty(sequence) || sequence == 0) {//单张图片,分修改和添加
+			TAppStaffCredentialsEntity credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffid).and("type", "=", type));
+			//先查询是否有图片，有的话只需更新图片，没有的话添加
+			if (Util.isEmpty(credentials)) {
+				TAppStaffCredentialsEntity credentialsEntity = new TAppStaffCredentialsEntity();
+				credentialsEntity.setCreatetime(new Date());
+				credentialsEntity.setStaffid(staffid);
+				credentialsEntity.setType(type);
+				credentialsEntity.setUpdatetime(new Date());
+				credentialsEntity.setUrl(url);
+				dbDao.insert(credentialsEntity);
+			} else {
+				credentials.setUpdatetime(new Date());
+				credentials.setUrl(url);
+				dbDao.update(credentials);
+			}
+		} else {//多张图片，只有添加
+			TAppStaffCredentialsEntity credentialsEntity = new TAppStaffCredentialsEntity();
+			credentialsEntity.setCreatetime(new Date());
+			credentialsEntity.setStaffid(staffid);
+			credentialsEntity.setType(type);
+			credentialsEntity.setUpdatetime(new Date());
+			credentialsEntity.setUrl(url);
+			credentialsEntity.setSequence(sequence);
+			dbDao.insert(credentialsEntity);
+		}
+
+		//消息通知
+		try {
+			simplesendinfosocket.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return url;
+		//}
+	}
+
+	/**
+	 * 删除图片
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param encode
+	 * @param staffid
+	 * @param type
+	 * @param sequence
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object deleteImage(String encode, int staffid, int type, int sequence) {
+		/*String openid = redisDao.get(encode);
+		if (Util.isEmpty(openid)) {
+			return -1;
+		} else {*/
 		TAppStaffCredentialsEntity credentials = new TAppStaffCredentialsEntity();
 		if (Util.isEmpty(sequence) || sequence == 0) {
 			credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
@@ -261,29 +317,10 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
 					Cnd.where("staffid", "=", staffid).and("type", "=", type).and("sequence", "=", sequence));
 		}
-
-		//先查询是否有图片，有的话只需更新图片地址，没有的话新建
-		if (Util.isEmpty(credentials)) {
-			TAppStaffCredentialsEntity credentialsEntity = new TAppStaffCredentialsEntity();
-			credentialsEntity.setCreatetime(new Date());
-			credentialsEntity.setStaffid(staffid);
-			credentialsEntity.setType(type);
-			credentialsEntity.setSequence(sequence);
-			credentialsEntity.setUpdatetime(new Date());
-			credentialsEntity.setUrl(url);
-			dbDao.insert(credentialsEntity);
-		} else {
-			credentials.setUpdatetime(new Date());
-			credentials.setUrl(url);
-			dbDao.update(credentials);
+		if (!Util.isEmpty(credentials)) {
+			dbDao.delete(credentials);
 		}
-		//消息通知
-		try {
-			simplesendinfosocket.broadcast(new TextMessage(""));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return url;
+		return null;
 		//}
 	}
 
