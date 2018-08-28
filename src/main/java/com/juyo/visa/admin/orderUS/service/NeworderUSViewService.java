@@ -907,7 +907,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid), null);
 		List<TAppStaffGocountryEntity> gocountry_new = form.getGocountryList();
 		dbDao.updateRelations(gocountry_old, gocountry_new);
-		return null;
+		return JuYouResult.ok();
 	}
 
 	/**
