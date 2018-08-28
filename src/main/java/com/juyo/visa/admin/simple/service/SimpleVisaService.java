@@ -4150,15 +4150,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				if (Util.eq(form.getApplicant(), MainOrViceEnum.YES.intKey())) {//是主申请人
 					applicantEntity.setMainId(applicantEntity.getId());
 					dbDao.update(applicantEntity);
-				} else {
-					dbDao.update(applicantEntity);
-				}
-				System.out.println("更新申请人信息完毕========");
-				if (Util.eq(applicantEntity.getId(), applicantEntity.getMainId())) {
 					applicantOrderJpEntity.setIsMainApplicant(MainOrViceEnum.YES.intKey());
 				} else {
+					applicantEntity.setMainId(null);
+					dbDao.update(applicantEntity);
 					applicantOrderJpEntity.setIsMainApplicant(MainOrViceEnum.NO.intKey());
 				}
+				System.out.println("更新申请人信息完毕========");
 
 				//更新日本申请人信息
 				if (!Util.isEmpty(form.getSameMainTrip())) {
