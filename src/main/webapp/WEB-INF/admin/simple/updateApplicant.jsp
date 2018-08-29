@@ -92,6 +92,7 @@
 								autocomplete="off"
 								value="${obj.passport.lastName }" 
 								onkeyup="this.value=this.value.replace(/^ +| +$/g,'')"
+								style="width: 345px;"
 							/>
 							<input 
 								type="text" 
@@ -101,6 +102,12 @@
 								name="lastNameEn" 
 								value="${obj.lastNameEn }"
 							/>
+							<input 
+								name="" 
+								id="lastNamechecked" 
+								type="checkbox"
+								style="position: absolute;top: 27px;right: 0;width: 20px;height: 20px;"
+							>
 						</div>
 					</div>
 				</div>
@@ -528,7 +535,18 @@
 				$('#lastNameEn, #lastName').on('input', handler);
 			})();
 			
-			
+			$('#lastNamechecked').change(e => {
+				$(this).attr('checked', !$(this).attr('checked'));
+				if ($(this).attr('checked')) {
+					$('#lastNameEn').attr('disabled', 'disabled').text('');
+					$('#lastName').attr('disabled', 'disabled').text('');
+					$('#lastName').siblings('small').hide();
+				} else {
+					$('#lastName').removeAttr('disabled').text('');
+					$('#lastNameEn').removeAttr('disabled').text('');
+				}
+			});
+		
 			$('#applicantInfo').bootstrapValidator({
 				message: '验证不通过',
 				feedbackIcons: {
