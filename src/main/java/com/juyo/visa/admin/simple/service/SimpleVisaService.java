@@ -3365,6 +3365,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setOpId(loginUser.getId());
 		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 		applicant.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+		applicant.setMarryurltype(form.getIsnamedisabled());
 		applicant.setAddress(form.getAddress());
 		applicant.setCardId(form.getCardId());
 		if (Util.isEmpty(form.getJuzhudicheckbox())) {
@@ -3403,12 +3404,20 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setEmergencyaddress(form.getEmergencyaddress());
 		applicant.setMarryStatus(form.getMarryStatus());
 		applicant.setFirstName(form.getFirstName());
-		applicant.setLastName(form.getLastName());
+		if (!Util.isEmpty(form.getLastName())) {
+			applicant.setLastName(form.getLastName());
+		} else {
+			applicant.setLastName("");
+		}
 		if (!Util.isEmpty(form.getFirstNameEn())) {
 			applicant.setFirstNameEn(form.getFirstNameEn().substring(1));
+		} else {
+			applicant.setFirstNameEn("");
 		}
 		if (!Util.isEmpty(form.getLastNameEn())) {
 			applicant.setLastNameEn(form.getLastNameEn().substring(1));
+		} else {
+			applicant.setLastNameEn("");
 		}
 		applicant.setSex(form.getSex());
 		applicant.setBirthday(form.getBirthday());
@@ -3440,7 +3449,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		passport.setIssuedOrganizationEn(form.getIssuedOrganizationEn());
 		passport.setIssuedPlace(form.getIssuedPlace());
 		passport.setIssuedPlaceEn(form.getIssuedPlaceEn());
-		passport.setLastName(form.getLastName());
+		if (!Util.isEmpty(form.getLastName())) {
+			passport.setLastName(form.getLastName());
+		} else {
+			passport.setLastName("");
+		}
 		passport.setPassport(form.getPassport());
 		passport.setSex(form.getSex());
 		passport.setSexEn(form.getSexEn());
@@ -3451,9 +3464,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		passport.setUpdateTime(new Date());
 		if (!Util.isEmpty(form.getFirstNameEn())) {
 			passport.setFirstNameEn(form.getFirstNameEn().substring(1));
+		} else {
+			passport.setFirstNameEn("");
 		}
 		if (!Util.isEmpty(form.getLastNameEn())) {
 			passport.setLastNameEn(form.getLastNameEn().substring(1));
+		} else {
+			passport.setLastNameEn("");
 		}
 
 		dbDao.update(passport);

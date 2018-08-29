@@ -103,8 +103,9 @@
 								value="${obj.lastNameEn }"
 							/>
 							<input 
-								name="" 
+								name="isnamedisabled" 
 								id="lastNamechecked" 
+								value="2"
 								type="checkbox"
 								style="position: absolute;top: 27px;right: 0;width: 20px;height: 20px;"
 							>
@@ -534,16 +535,24 @@
 				$('#firstNameEn, #firstName').on('input', handler);
 				$('#lastNameEn, #lastName').on('input', handler);
 			})();
+
+			if ("${obj.applicant.marryurltype}" == 1) {
+				$('#lastNamechecked').val(1).attr('checked', 'checked');
+				$('#lastNameEn').attr('disabled', 'disabled').css('opacity', 0);
+				$('#lastName').attr('disabled', 'disabled');
+				$('#lastName').siblings('small').hide();
+			}
 			
 			$('#lastNamechecked').change(e => {
-				$(this).attr('checked', !$(this).attr('checked'));
-				if ($(this).attr('checked')) {
-					$('#lastNameEn').attr('disabled', 'disabled').text('');
-					$('#lastName').attr('disabled', 'disabled').text('');
+				if ($('#lastNamechecked').val() == 2) {
+					$('#lastNamechecked').val(1);
+					$('#lastNameEn').val('').attr('disabled', 'disabled').css('opacity', 0);
+					$('#lastName').val('').attr('disabled', 'disabled');
 					$('#lastName').siblings('small').hide();
 				} else {
-					$('#lastName').removeAttr('disabled').text('');
-					$('#lastNameEn').removeAttr('disabled').text('');
+					$('#lastNamechecked').val(2);
+					$('#lastName').removeAttr('disabled');
+					$('#lastNameEn').removeAttr('disabled').css('opacity', 1);
 				}
 			});
 		
