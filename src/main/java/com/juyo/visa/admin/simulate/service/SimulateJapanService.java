@@ -473,7 +473,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
 				} else {
 					System.out.println("虽然变更失败了，但收付番号还是有的");
-					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
 					orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
 					orderinfo.setReceptionOpid(1);
 					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
@@ -504,21 +504,30 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			int count = 0;
 			if (errorMsg.contains("氏名") || errorMsg.contains("居住地域")) {
 				//orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
-				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
+				if (Util.isEmpty(orderinfo.getReceptionOpid())) {
+					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
+				} else {
+					orderinfo.setStatus(JPOrderStatusEnum.BIANGENGSHIBAI.intKey());
+				}
 			}
 			if (errorMsg.contains("登録可能")) {
 				count++;
 				//orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
 				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
 				if (count > 3) {
-					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
+					if (Util.isEmpty(orderinfo.getReceptionOpid())) {
+						orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
+					} else {
+						orderinfo.setStatus(JPOrderStatusEnum.BIANGENGSHIBAI.intKey());
+					}
 				}
 			}
 
 			orderinfo.setUpdateTime(new Date());
 			//更新订单状态为发招保失败
 			dbDao.update(orderinfo);
-			if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()) {
+			if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()
+					|| orderinfo.getStatus() == JPOrderStatusEnum.BIANGENGSHIBAI.intKey()) {
 				Integer visaOpid = orderinfo.getVisaOpid();
 				if (!Util.isEmpty(visaOpid)) {
 					//添加日志
@@ -674,6 +683,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		} else if (JPOrderStatusEnum.BIANGENGZHONG.intKey() == form.getOrderstatus()) {
 			System.out.println("招宝更新成功了");
 			order.setStatus(JPOrderStatusEnum.YIBIANGENG.intKey());
+			order.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
 			//要收费啦
 			order.setZhaobaoupdate(IsYesOrNoEnum.YES.intKey());
 		} else if (JPOrderStatusEnum.QUXIAOZHONG.intKey() == form.getOrderstatus()) {
