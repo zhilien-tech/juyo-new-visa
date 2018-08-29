@@ -207,7 +207,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			Map<String, Object> result = Maps.newHashMap();
 
 			List<TAppStaffCredentialsEntity> list = dbDao.query(TAppStaffCredentialsEntity.class,
-					Cnd.where("staffid", "=", staffid), null);
+					Cnd.where("staffid", "=", staffid).orderBy("sequence", "ASC"), null);
 			result.put("credentials", list);
 			return result;
 		}
@@ -223,7 +223,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			Map<String, Object> result = Maps.newHashMap();
 
 			List<TAppStaffCredentialsEntity> list = dbDao.query(TAppStaffCredentialsEntity.class,
-					Cnd.where("staffid", "=", staffid), null);
+					Cnd.where("staffid", "=", staffid).orderBy("sequence", "ASC"), null);
 			for (TAppStaffCredentialsEntity tAppStaffCredentialsEntity : list) {
 				TAppStaffCredentialsEntity credentials = new TAppStaffCredentialsEntity();
 				credentials.setType(tAppStaffCredentialsEntity.getType());

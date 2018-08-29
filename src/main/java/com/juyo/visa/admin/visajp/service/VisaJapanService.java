@@ -1771,19 +1771,6 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
 			}
 
-			//送签社
-			/*if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())) {
-				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-				//订单负责人变更
-				Integer userId = loginuser.getId();
-				changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
-			} else if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
-				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-			} else {
-				//地接社为准备提交大使馆
-				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-			}*/
-
 			//生成excel
 			//申请人信息
 			Map<String, Object> tempdata = new HashMap<String, Object>();
