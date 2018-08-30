@@ -33,7 +33,6 @@ import com.juyo.visa.admin.mobile.form.FamilyinfoUSForm;
 import com.juyo.visa.admin.mobile.form.PassportinfoUSForm;
 import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
 import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
-import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
@@ -341,18 +340,14 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		if (Util.isEmpty(openid)) {
 			return -1;
 		} else {
-			Map<String, List<Record>> resultMap = Maps.newHashMap();
-			List<String> resultList = new ArrayList<>();
-			List<TIdcardEntity> provinceList = dbDao.query(TIdcardEntity.class, null, null);
-			for (TIdcardEntity tIdcardEntity : provinceList) {
-				String province = tIdcardEntity.getProvince();
-				if (!resultList.contains(province)) {
-					resultList.add(province);
-				}
-			}
-			for (String provinceStr : resultList) {
-				String sqlStr = sqlManager.get("orderUS_mobile_getCity");
-				Sql orderussql = Sqls.create(sqlStr);
+			Map<String, List<Record>> resultMap = Maps.newLinkedHashMap();
+			String sqlStr = sqlManager.get("orderUS_mobile_getProvince");
+			Sql provincesql = Sqls.create(sqlStr);
+			List<Record> provinceList = dbDao.query(provincesql, null, null);
+			for (Record provinceString : provinceList) {
+				String provinceStr = provinceString.getString("province");
+				String sqlStr2 = sqlManager.get("orderUS_mobile_getCity");
+				Sql orderussql = Sqls.create(sqlStr2);
 				orderussql.setParam("province", provinceStr);
 				List<Record> cityList = dbDao.query(orderussql, null, null);
 				resultMap.put(provinceStr, cityList);

@@ -599,6 +599,10 @@
 								max: 9,
 								message: ''
 							},
+							regexp: {
+								regexp: /^[0-9a-zA-Z]+$/,
+								message: '护照号格式错误'
+							}
 							// threshold: 6 , //有6字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
 							// remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
 							// 	url: '${base}/admin/orderJp/checkPassport.html',

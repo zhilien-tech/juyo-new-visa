@@ -118,6 +118,16 @@ WHERE
 tu.mobile = @telephone
 ORDER BY tou.createtime DESC
 
+/*orderUS_mobile_getProvince*/
+SELECT
+province
+FROM
+t_idcard
+WHERE
+province IS NOT NULL
+GROUP BY province
+ORDER BY id
+
 /*orderUS_mobile_getCity*/
 SELECT
 city
