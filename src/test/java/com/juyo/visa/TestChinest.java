@@ -4,22 +4,25 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import com.juyo.visa.common.access.sign.MD5;
-
 public class TestChinest {
+
+	static final int N = 50000;
 
 	public static void main(String[] args) {
 
-		String str = "c6a5b12ef119bf95e30e008c18856541";
+		System.out.println("ArrayList添加" + N + "条耗时：" + timeList(new ArrayList()));
+		System.out.println("LinkedList添加" + N + "条耗时：" + timeList(new LinkedList()));
 
-		//c9f9dae5dbd0fda869122661b568c03d
-		String sign = MD5.sign("", "visa-qwerASDF#123", "utf-8");
-		//String md5Hex = DigestUtils.md5Hex(getContentBytes("000000", "utf-8"));
-		System.out.println(sign);
+		List list1 = addList(new ArrayList<>());
+		List list2 = addList(new LinkedList<>());
+		System.out.println("ArrayList查找" + N + "条耗时：" + readList(list1));
+		System.out.println("LinkedList查找" + N + "条耗时：" + readList(list2));
+
 		/*String data = "{'outputs':[{'outputLabel':'ocr_passport','outputMulti':{},'outputValue':{'dataType':50,'dataValue':'{'authority':'公安部出入境管理局','birth_date':'19551224','birth_day':'551224','birth_place':'安国ING','birth_place_raw':'安国ING','country':'C0N','expiry_date':'20260509','expiry_day':'260509','issue_date':'20160510','issue_place':'新疆','issue_place_raw':'新疆/XIHJIANG','line0':'P6C0NLING<<CHENGYONG<<<<<<<<<<<<<<<<<<<<<<<','line1':'E720735273CHN5512245M2605096MB8IIBMUNBMCA30','name':'LING.CHENGYONG','name_cn':'凌成勇','name_cn_raw':'LINJCHENGYONG凌成勇','passport_no':'E72073527','person_id':'','request_id':'20180824151913_6a9ece146337e359a84e91b3f2e8c65b','sex':'M','src_country':'CHN','success':true,'type':'P6}'}}]}";
 		Map maps = JsonUtil.fromJson(data, Map.class);
 		List object = (List) maps.get("outputs");
@@ -300,6 +303,35 @@ public class TestChinest {
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("MD5签名过程中出现错误,指定的编码集不对,您目前指定的编码集是:" + charset);
 		}
+	}
+
+	static long timeList(List list) {
+		long start = System.currentTimeMillis();
+		Object o = new Object();
+		for (int i = 0; i < N; i++) {
+			list.add(0, o);
+		}
+		return System.currentTimeMillis() - start;
+	}
+
+	static long readList(List list) {
+		long start = System.currentTimeMillis();
+		for (int i = 0, j = list.size(); i < j; i++) {
+			Object object = list.get(i);
+		}
+		return System.currentTimeMillis() - start;
+	}
+
+	static List addList(List list) {
+		long start = System.currentTimeMillis();
+		Object o = new Object();
+		for (int i = 0; i < N; i++) {
+			list.add(0, o);
+		}
+		System.out.println(list.getClass());
+		System.out.println(System.currentTimeMillis() - start);
+		System.out.println("===========");
+		return list;
 	}
 
 }
