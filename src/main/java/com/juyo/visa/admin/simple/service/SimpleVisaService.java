@@ -3359,6 +3359,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setOpId(loginUser.getId());
 		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 		applicant.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+		//marryurltype是闲置字段，用来作为姓名checkbox字段
 		applicant.setMarryurltype(form.getIsnamedisabled());
 		applicant.setAddress(form.getAddress());
 		applicant.setCardId(form.getCardId());
@@ -4155,7 +4156,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						new Long(applicantOrderJpEntity.getApplicantId()).intValue());
 				//applicantEntity.setMarryStatus(form.getMarryStatus());
 				applicantEntity.setMarryUrl(form.getMarryUrl());
-				applicantEntity.setMarryurltype(form.getMarryStatus());
+				//applicantEntity.setMarryurltype(form.getMarryStatus());
 				applicantEntity.setOutboundrecord(form.getOutboundrecord());
 				//更新申请人信息
 				if (Util.eq(form.getApplicant(), MainOrViceEnum.YES.intKey())) {//是主申请人
