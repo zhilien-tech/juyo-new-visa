@@ -94,6 +94,15 @@ public class MobileUSModule {
 	}
 
 	/**
+	 * 省市联动下拉
+	 */
+	@At
+	@POST
+	public Object getProvinceAndCity(@Param("encode") String encode) {
+		return mobileUSService.getProvinceAndCity(encode);
+	}
+
+	/**
 	 * 基本信息回显数据接口
 	 */
 	@At

@@ -39,6 +39,7 @@ import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.EmigrationreasonEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.TravelCompanionRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaCareersEnum;
@@ -149,8 +150,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("websocketaddr", SEND_INFO_WEBSPCKET_ADDR);
 
 		//生成二维码
-		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
-		String qrCode = dataUpload(staffid, basicinfo.getTelephone(), request);
+		String qrCode = dataUpload(staffid, request);
 		result.put("qrCode", qrCode);
 
 		//图片回显
@@ -175,13 +175,13 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @param request
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public String dataUpload(int staffid, String telephone, HttpServletRequest request) {
+	public String dataUpload(int staffid, HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		String page = "pages/Japan/upload/index/index";
 		String scene = "";
-		//因为小程序参数最长为32，所以参数尽量简化，a是人员id,t是电话号码
-		scene = "a=" + staffid + "t" + telephone;
+		//因为小程序参数最长为32，所以参数尽量简化，a是人员id
+		scene = "a=" + staffid;
 		System.out.println("scene:" + scene + "--------------");
 		String accessToken = (String) getAccessToken();
 		System.out.println("accessToken:" + accessToken + "=================");
@@ -852,6 +852,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		List<TAppStaffGocountryEntity> gocountry = dbDao.query(TAppStaffGocountryEntity.class,
 				Cnd.where("staffid", "=", staffid), null);
 		result.put("gocountry", gocountry);
+
+		result.put("emigrationreasonenumenum", EnumUtil.enum2(EmigrationreasonEnum.class));
 		result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
 		return JuYouResult.ok(result);
 	}

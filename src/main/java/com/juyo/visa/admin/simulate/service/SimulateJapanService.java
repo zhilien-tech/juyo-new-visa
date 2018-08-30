@@ -431,6 +431,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			orderjp.setErrormsg(errorMsg);
 			dbDao.update(orderjp);
 			System.out.println(errorCode);
+			System.out.println(errorMsg);
 			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 
 			if (orderstatus == JPOrderStatusEnum.READYCOMMING.intKey()) {//发招宝失败 18
@@ -502,7 +503,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			}
 
 			int count = 0;
-			if (errorMsg.contains("氏名") || errorMsg.contains("居住地域")) {
+			if (errorMsg.contains("氏名") || errorMsg.contains("居住地域") || errorMsg.contains("半角英数字")) {
 				//orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
 				if (Util.isEmpty(orderinfo.getReceptionOpid())) {
 					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());

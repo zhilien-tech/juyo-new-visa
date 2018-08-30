@@ -3,15 +3,14 @@ package com.juyo.visa.common.enums.visaProcess;
 import com.uxuexi.core.common.enums.IEnum;
 
 /**
- * 美国各个州 枚举
+ * 旅伴信息---与你的关系
  */
-public enum VisaHighestEducationEnum implements IEnum {
-	CHUZHONG(1, "初中"), GAOZHONG(2, "高中"), DAZHUAN(3, "大专"), BENKE(4, "本科"), BOSHI(5, "硕士"), SHUOSHI(6, "博士");
-
+public enum EmigrationreasonEnum implements IEnum {
+	PARENTS(1, "家庭移民"), SPOUSE(2, "雇主担保移民"), CHILD(3, "投资移民"), OTHER_RELATIVES(4, "其他");
 	private int key;
 	private String value;
 
-	private VisaHighestEducationEnum(final int key, final String value) {
+	private EmigrationreasonEnum(final int key, final String value) {
 		this.value = value;
 		this.key = key;
 	}

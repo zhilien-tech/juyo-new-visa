@@ -33,12 +33,14 @@ import com.juyo.visa.admin.mobile.form.FamilyinfoUSForm;
 import com.juyo.visa.admin.mobile.form.PassportinfoUSForm;
 import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
 import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
+import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.orderUS.DistrictEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
+import com.juyo.visa.common.enums.visaProcess.EmigrationreasonEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.TravelCompanionRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaCareersEnum;
@@ -322,6 +324,40 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				dbDao.delete(credentials);
 			}
 			return JuYouResult.ok();
+		}
+	}
+
+	/**
+	 * 省市联动下拉
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param encode
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object getProvinceAndCity(String encode) {
+		String openid = redisDao.get(encode);
+		if (Util.isEmpty(openid)) {
+			return -1;
+		} else {
+			Map<String, List<Record>> resultMap = Maps.newHashMap();
+			List<String> resultList = new ArrayList<>();
+			List<TIdcardEntity> provinceList = dbDao.query(TIdcardEntity.class, null, null);
+			for (TIdcardEntity tIdcardEntity : provinceList) {
+				String province = tIdcardEntity.getProvince();
+				if (!resultList.contains(province)) {
+					resultList.add(province);
+				}
+			}
+			for (String provinceStr : resultList) {
+				String sqlStr = sqlManager.get("orderUS_mobile_getCity");
+				Sql orderussql = Sqls.create(sqlStr);
+				orderussql.setParam("province", provinceStr);
+				List<Record> cityList = dbDao.query(orderussql, null, null);
+				resultMap.put(provinceStr, cityList);
+			}
+			return resultMap;
 		}
 	}
 
@@ -964,6 +1000,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 					Cnd.where("staffid", "=", staffid), null);
 			result.put("gocountry", gocountry);
 
+			result.put("emigrationreasonenumenum", EnumUtil.enum2(EmigrationreasonEnum.class));
 			result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
 			return JuYouResult.ok(result);
 		}

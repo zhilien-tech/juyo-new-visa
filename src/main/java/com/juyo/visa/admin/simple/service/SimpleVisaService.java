@@ -267,7 +267,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Sql sql = form.sql(sqlManager);
 
 		Integer pageNumber = form.getPageNumber();
-		System.out.println(pageNumber);
 		Integer pageSize = form.getPageSize();
 
 		Pager pager = new OffsetPager((pageNumber - 1) * pageSize, pageSize);
@@ -2375,18 +2374,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
-		System.out.println(newArray.length + "----");
 		List<Integer> randomDates = getRandomDates(newArray, days);
-		System.out.println(randomDates.size() + "!!!!");
 
 		List<Integer> cityidList = Ints.asList(newArray);
-		System.out.println(cityidList.size() + "++++++");
 
 		for (int i = 0; i < cityidList.size(); i++) {
 			List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", cityidList.get(i)),
 					null);
-			System.out.println(scenics.size());
-			System.out.println(randomDates.size() + "======");
 			if (randomDates.size() > 0) {
 				if (randomDates.get(i) > scenics.size()) {
 					randomDates.clear();

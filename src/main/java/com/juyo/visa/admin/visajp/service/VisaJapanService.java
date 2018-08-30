@@ -1489,15 +1489,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		int totalday = stayday + count;
 		for (int i = 0; i < totalday; i++) {
 			String dateStr = format.format(DateUtil.addDay(gotripdate, i + 1));
-			System.out.println(dateStr);
 			if (holidayDate.contains(dateStr)) {
-				System.out.println("holidayDate contains:" + dateStr);
 				count++;
 				totalday++;
 			}
-			System.out.println("i:" + i);
-			System.out.println("totalday:" + totalday);
-			System.out.println("count:" + count);
 		}
 		return count;
 	}

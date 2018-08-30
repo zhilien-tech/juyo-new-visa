@@ -103,11 +103,11 @@ WHERE
 	
 /*orderUS_mobile_listdata*/
 SELECT
-tou.id,
+tou.id orderusid,
 tou.`status` orderstatus,
 tou.ordernumber,
 tou.cityid,
-tasb.id,
+tasb.id staffid,
 CONCAT(tasb.firstname,tasb.lastname) staffname
 FROM
 t_order_us tou
@@ -117,3 +117,14 @@ LEFT JOIN t_user tu ON tasb.userid = tu.id
 WHERE
 tu.mobile = @telephone
 ORDER BY tou.createtime DESC
+
+/*orderUS_mobile_getCity*/
+SELECT
+city
+FROM
+t_idcard
+WHERE
+province=@province
+AND
+city!=''
+GROUP BY city
