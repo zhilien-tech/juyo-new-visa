@@ -1104,6 +1104,7 @@
 				str = $(this).val();
 			});
 			var applicantid = '${obj.applicantid}';
+			console.log("updateApplicant的applicantid:"+applicantid+"===========");
 			var orderid = '${obj.orderid}';
 			var applicantInfo = getFormJson('#applicantInfo');
 			if (status != 2) {

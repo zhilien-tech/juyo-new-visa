@@ -239,6 +239,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		long endTime = System.currentTimeMillis();
+		System.out.println("走完了=====" + (endTime - start));
 		return map;
 	}
 

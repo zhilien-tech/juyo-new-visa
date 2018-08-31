@@ -30,7 +30,7 @@
 			<input id="orderProcessType" name="orderProcessType" type="hidden" value="${obj.orderProcessType }">
 			<div class="modal-header">
 				<span class="heading">签证信息 </span>
-				<input type="hidden" value="${obj.visaInfo.applicantid }" name="applicantId"/>
+				<input type="hidden" value="${obj.applicantid }" name="applicantId"/>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
 				<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
@@ -1158,7 +1158,8 @@
 		function save(status){
 
 			layer.load(1);
-			var applicantid = '${obj.applicant.id}';
+			var applicantid = '${obj.applicantid}';
+			console.log("visainfo的applicantid:"+applicantid+"===========");
 			var orderid = '${obj.orderid}';
 			//得到获取validator对象或实例 
 			var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');

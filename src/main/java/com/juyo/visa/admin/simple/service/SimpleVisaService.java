@@ -4018,6 +4018,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		HttpSession session = request.getSession();
 
+		System.out.println("applicantid:" + applicantid + "===============");
+		result.put("applicantid", applicantid);
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userType = loginUser.getUserType();
