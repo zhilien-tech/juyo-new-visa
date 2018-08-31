@@ -26,9 +26,6 @@ import com.juyo.visa.entities.TAppStaffGousinfoEntity;
 @Data
 public class TravelinfoUSForm {
 
-	/**主键*/
-	private Integer id;
-
 	private String encode;
 
 	/**人员id*/

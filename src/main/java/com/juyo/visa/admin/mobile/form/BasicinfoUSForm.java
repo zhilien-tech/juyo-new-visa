@@ -21,9 +21,6 @@ import lombok.Data;
 @Data
 public class BasicinfoUSForm {
 
-	/**主键*/
-	private Integer id;
-
 	private String encode;
 
 	private Integer staffid;

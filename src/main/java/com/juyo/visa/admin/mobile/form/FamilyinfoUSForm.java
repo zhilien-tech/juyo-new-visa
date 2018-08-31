@@ -21,9 +21,6 @@ import lombok.Data;
 @Data
 public class FamilyinfoUSForm {
 
-	/**主键*/
-	private Integer id;
-
 	private String encode;
 
 	/**人员id*/
