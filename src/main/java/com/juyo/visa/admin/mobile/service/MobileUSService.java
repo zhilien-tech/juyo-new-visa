@@ -593,12 +593,18 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			//日期格式处理
 			if (!Util.isEmpty(familyinfo.getSpousebirthday())) {
 				result.put("spousebirthday", format.format(familyinfo.getSpousebirthday()));
+			} else {
+				result.put("spousebirthday", "");
 			}
 			if (!Util.isEmpty(familyinfo.getFatherbirthday())) {
 				result.put("fatherbirthday", format.format(familyinfo.getFatherbirthday()));
+			} else {
+				result.put("fatherbirthday", "");
 			}
 			if (!Util.isEmpty(familyinfo.getMotherbirthday())) {
 				result.put("motherbirthday", format.format(familyinfo.getMotherbirthday()));
+			} else {
+				result.put("motherbirthday", "");
 			}
 			TAppStaffImmediaterelativesEntity immediaterelatives = dbDao.fetch(TAppStaffImmediaterelativesEntity.class,
 					Cnd.where("staffid", "=", staffid));

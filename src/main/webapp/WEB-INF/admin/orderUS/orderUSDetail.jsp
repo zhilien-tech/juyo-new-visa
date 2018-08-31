@@ -892,7 +892,7 @@
 		$('#goFlightNum').select2(
 				{
 					ajax : {
-						url : "/admin/tripairline/getTripAirlineSelect.html",
+						url : "/admin/tripairline/getAirLineByInterfateUS.html",
 						dataType : 'json',
 						delay : 250,
 						type : 'post',
@@ -963,7 +963,7 @@
 				.select2(
 						{
 							ajax : {
-								url : "/admin/tripairline/getTripAirlineSelect.html",
+								url : "/admin/tripairline/getAirLineByInterfateUS.html",
 								dataType : 'json',
 								delay : 250,
 								type : 'post',
