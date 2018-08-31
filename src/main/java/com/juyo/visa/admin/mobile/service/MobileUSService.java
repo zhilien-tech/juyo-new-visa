@@ -340,6 +340,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		if (Util.isEmpty(openid)) {
 			return -1;
 		} else {
+			//NutMap resultMap = new NutMap();
 			Map<String, List<Record>> resultMap = Maps.newLinkedHashMap();
 			String sqlStr = sqlManager.get("orderUS_mobile_getProvince");
 			Sql provincesql = Sqls.create(sqlStr);
