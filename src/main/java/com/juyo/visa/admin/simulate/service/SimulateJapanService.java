@@ -500,7 +500,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 				}
 			}*/
 			if (orderstatus == JPOrderStatusEnum.QUXIAOZHONG.intKey()) {//招宝取消失败 24
-				//orderinfo.setStatus(JPOrderStatusEnum.QUXIAOSHIBAI.intKey());
+				orderinfo.setStatus(JPOrderStatusEnum.QUXIAOZHONG.intKey());
 			}
 
 			int count = 0;

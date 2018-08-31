@@ -528,7 +528,8 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			return -1;
 		} else {
 			Integer staffid = form.getStaffid();
-			TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class, staffid.longValue());
+			TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
+					Cnd.where("staffid", "=", staffid));
 			passport.setPassport(form.getPassport());
 			passport.setIssuedplace(form.getIssuedplace());
 			passport.setIssuedplaceen(form.getIssuedplaceen());
@@ -544,10 +545,21 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			//英文
 			//中文翻译成拼音并大写工具
 			PinyinTool tool = new PinyinTool();
-			try {
-				passport.setIssuedplaceen("/" + tool.toPinYin(form.getIssuedplace(), "", Type.UPPERCASE));
-			} catch (BadHanyuPinyinOutputFormatCombination e1) {
-				e1.printStackTrace();
+			if (Util.isEmpty(form.getIssuedplace())) {
+				String issuedplace = form.getIssuedplace();
+				if (Util.eq("内蒙古", issuedplace)) {
+					passport.setIssuedplaceen("/NEI MONGOL");
+				} else if (Util.eq("陕西", issuedplace)) {
+					passport.setIssuedplaceen("/SHAANXI");
+				} else {
+					try {
+
+						passport.setIssuedplaceen("/" + tool.toPinYin(form.getIssuedplace(), "", Type.UPPERCASE));
+					} catch (BadHanyuPinyinOutputFormatCombination e1) {
+						e1.printStackTrace();
+					}
+				}
+
 			}
 			passport.setIslostpassporten(form.getIslostpassport());
 			passport.setIsrememberpassportnumen(form.getIsrememberpassportnum());
