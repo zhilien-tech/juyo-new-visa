@@ -459,7 +459,6 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		basicinfo.setLastname(form.getLastname());
 		basicinfo.setLastnameen(form.getLastnameen());
 		basicinfo.setMarrystatus(form.getMarrystatus());
-		basicinfo.setMarryexplain(form.getMarryexplain());
 		basicinfo.setNationality(form.getNationality());
 		basicinfo.setOtherfirstname(form.getOtherfirstname());
 		basicinfo.setOtherfirstnameen(form.getOtherfirstnameen());
@@ -475,7 +474,6 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		basicinfo.setNationalityen(translate(form.getNationality()));
 		basicinfo.setProvinceen(translate(form.getProvince()));
 		basicinfo.setMarrystatusen(form.getMarrystatus());
-		basicinfo.setMarryexplainen(translate(form.getMarryexplain()));
 		basicinfo.setTelephoneen(form.getTelephone());
 		basicinfo.setEmailen(form.getEmail());
 		basicinfo.setCardIden(form.getCardId());
@@ -1234,11 +1232,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public String translate(String str) {
-		String result = null;
-		try {
-			result = TranslateUtil.translate(str, "en");
-		} catch (Exception e) {
-			e.printStackTrace();
+		String result = "";
+		if (!Util.isEmpty(str)) {
+			try {
+				result = TranslateUtil.translate(str, "en");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("没有内容你让我翻译什么啊，神经病啊☺");
 		}
 		return result;
 	}

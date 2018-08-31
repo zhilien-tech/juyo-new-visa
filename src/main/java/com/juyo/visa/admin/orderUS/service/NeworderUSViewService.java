@@ -348,7 +348,6 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setDetailedaddress(form.getDetailedaddress());
 		basicinfo.setDetailedaddressen(form.getDetailedaddressen());
 		basicinfo.setMarrystatus(form.getMarrystatus());
-		basicinfo.setMarryexplain(form.getMarryexplain());
 		basicinfo.setBirthday(form.getBirthday());
 		basicinfo.setNationality(form.getNationality());
 		basicinfo.setHasothername(form.getHasothername());
@@ -364,7 +363,6 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setProvinceen(translate(form.getProvince()));
 		basicinfo.setCityen(translate(form.getCity()));
 		basicinfo.setMarrystatusen(form.getMarrystatus());
-		basicinfo.setMarryexplainen(translate(form.getMarryexplain()));
 		basicinfo.setNationalityen(translate(form.getNationality()));
 		dbDao.update(basicinfo);
 		return null;

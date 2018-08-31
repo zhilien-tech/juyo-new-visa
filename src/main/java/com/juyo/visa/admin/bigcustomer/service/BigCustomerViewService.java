@@ -1694,6 +1694,10 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		staffPassport.setUpdatetime(nowDate);
 		staffPassport.setFirstname(addForm.getFirstname());
 		staffPassport.setLastname(addForm.getLastname());
+		staffPassport.setIslostpassport(2);//创建护照信息时默认设置为2，没有丢失
+		staffPassport.setIslostpassporten(2);//创建护照信息时默认设置为2，没有丢失
+		staffPassport.setIsrememberpassportnum(2);//是否记得丢失的护照号码，默认为2不记得
+		staffPassport.setIsrememberpassportnumen(2);//是否记得丢失的护照号码，默认为2不记得
 		TAppStaffPassportEntity passportEntity = dbDao.insert(staffPassport);
 		Integer passportId = passportEntity.getId();
 
