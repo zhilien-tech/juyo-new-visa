@@ -604,6 +604,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 					Cnd.where("staffid", "=", staffid));
 			result.put("immediaterelatives", immediaterelatives);
 
+			//国家下拉
+			List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
+			result.put("gocountryfivelist", gocountryFiveList);
+			//城市下拉
+			String sqlStr = sqlManager.get("orderUS_mobile_getProvince");
+			Sql provincesql = Sqls.create(sqlStr);
+			List<Record> provinceList = dbDao.query(provincesql, null, null);
+			result.put("provincelist", provinceList);
+
 			result.put("spousecontactaddressenum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
 			result.put("familyinfoenum", EnumUtil.enum2(VisaFamilyInfoEnum.class));
 			result.put("immediaterelationshipenum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));

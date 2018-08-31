@@ -123,8 +123,6 @@ SELECT
 province
 FROM
 t_idcard
-WHERE
-province IS NOT NULL
 GROUP BY province
 ORDER BY id
 
@@ -138,3 +136,4 @@ province=@province
 AND
 city!=''
 GROUP BY city
+ORDER BY id

@@ -8,11 +8,42 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import org.nutz.lang.util.NutMap;
+
+import com.juyo.visa.admin.order.entity.TIdcardEntity;
+
 public class TestChinest {
 
 	static final int N = 50000;
 
 	public static void main(String[] args) {
+
+		NutMap resultMap = new NutMap();
+		TIdcardEntity cardentity = new TIdcardEntity();
+		cardentity.setCity("北京");
+		cardentity.setProvince("北京");
+		cardentity.setCounty("中国");
+		resultMap.put("北京", cardentity);
+
+		TIdcardEntity cardentity1 = new TIdcardEntity();
+		cardentity1.setCity("天津");
+		cardentity1.setProvince("天津");
+		cardentity1.setCounty("中国");
+		resultMap.put("天津", cardentity1);
+
+		TIdcardEntity cardentity2 = new TIdcardEntity();
+		cardentity2.setCity("大阪");
+		cardentity2.setProvince("大阪");
+		cardentity2.setCounty("日本");
+		resultMap.put("大阪", cardentity2);
+
+		resultMap.forEach((key, value) -> {
+			System.out.println(key + ":" + value);
+		});
+
+		for (String key : resultMap.keySet()) {
+			System.out.println(key + ":" + ((TIdcardEntity) resultMap.get(key)).getCounty());
+		}
 
 		/*//转机
 		String goFlightNum = "首都机场-羽田机场-青森机场 CA181//JL141 0800/1300//1400/1600";
