@@ -546,15 +546,11 @@ label {
 .goUS_drivers,.goUS_driversen {
 	display:inline-block;
 }
-#spousenationality {
-	width:100% !important;
-}
+
 #spousecountry {
 	width:100% !important;
 }
-#spousenationalityen {
-	margin-top:0px !important;
-}
+
 .directRelativesYesen {
 	display:inline-block;
 }

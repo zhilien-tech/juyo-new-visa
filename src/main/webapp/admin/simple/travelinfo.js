@@ -587,30 +587,111 @@ $("#sendVisaDate").datetimepicker({
 	language: 'zh-CN',
 	startDate: now,//日期小于今天
 	autoclose: true,//选中日期后 自动关闭
-	pickerPosition:"bottom-right",//显示位置
+	pickerPosition: "bottom-right",//显示位置
 	minView: "month"//只显示年月日
-}).on("click",function(){  
-    $("#sendVisaDate").datetimepicker("setEndDate",$("#goDate").val()); 
-}).on('changeDate', function(ev){
+}).on("click", function () {
+	console.log('click..');
+	
+	$(this).datetimepicker(
+		"setEndDate", $("#goDate").val()
+	);
+	
+}).on('changeDate', function (ev) {
+	console.log('change..');
 	var stayday;
-	console.log(cityidstr);
-	if(cityidstr == 1 || cityidstr == ""){
+	if (cityidstr == 1 || cityidstr == "") {
 		stayday = 7;
-	}else{
+	} else {
 		stayday = 6;
 	}
 	var startDate = $("#sendVisaDate").val();
-	$.ajax({ 
+	$.ajax({
 		url: '/admin/visaJapan/autoCalculateBackDateSpecial.html',
-		dataType:"json",
-		data:{gotripdate:startDate,stayday:stayday+1},
-		type:'post',
-		success: function(data){
+		dataType: "json",
+		data: { gotripdate: startDate, stayday: stayday + 1 },
+		type: 'post',
+		success: function (data) {
 			$("#outVisaDate").val(data);
-			$("#goDate").datetimepicker("setStartDate",data);
+			$("#goDate").datetimepicker("setStartDate", data);
 		}
 	});
+}).on('blur', function() {
+	
 });
+
+(function () {
+	
+	var stayday;
+	if (cityidstr == 1 || cityidstr == "") {
+		stayday = 7;
+	} else {
+		stayday = 6;
+	}
+
+	if (sendVisaDateVal == '') {
+		$.ajax({
+			url: '/admin/visaJapan/autofillsendvisatime.html',
+			dataType: "json",
+			type: 'post',
+			success: function (data) {
+				$('#sendVisaDate').val(data);
+				$.ajax({
+					url: '/admin/visaJapan/autoCalculateBackDateSpecial.html',
+					dataType: "json",
+					data: { gotripdate: data, stayday: stayday + 1 },
+					type: 'post',
+					success: function (data) {
+						$("#outVisaDate").val(data);
+						$("#goDate").datetimepicker("setStartDate", data);
+					}
+				});
+			}
+		});
+	}
+})();
+
+function getNewDate(temp, fn){
+	var tmd = temp.substring(0, 4)+'-' +temp.substring(4,6) + '-' + temp.substring(6,8);
+	var year = temp.substring(0,4);
+	var month = temp.substring(4,6);
+	var day = temp.substring(6,8);
+	if(month<1||month>12){
+		alert("月份必须在01和12之间!");
+		$(this).val("");
+		return;
+	}    
+    if(day<1||day>31){
+    	alert("日期必须在01和31之间!");
+    	$(this).val("");
+    	return;
+    }else{  
+    	if(month==2){      
+    		if((year%4)==0&&day>29){
+    			alert("二月份日期必须在01到29之间!");
+    			$(this).val("");
+    			return;
+    		}                
+            if((year%4)>0&&day>28){
+            	alert("二月份日期必须在01到28之间!");
+            	$(this).val("");
+            	return;
+            }    
+         }    
+         if((month==4||month==6||month==9||month==11)&&(day>30)){
+        	 alert(" 在四，六，九，十一月份   /n日期必须在01到30之间!");
+        	 $(this).val("");
+        	 return;
+         }    
+    }
+    var date =  new Date(tmd);
+	var YYYY = date.getFullYear();
+	var MM = date.getMonth()+1;
+	if (MM < 10) MM = "0" + MM;
+	var DD = date.getDate();
+	if (DD < 10) DD = "0" + DD;
+    return (YYYY+"-"+MM+"-"+DD);
+}
+
 $("#outVisaDate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',

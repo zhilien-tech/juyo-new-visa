@@ -12,6 +12,36 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>拍摄资料</title>
 <link rel="stylesheet" href="/references/public/dist/newvisacss/css/photograph.css?v='20180510'" />
+<style>
+	.photo{
+		overflow: hidden;
+	}
+	.samplePhoto{
+		margin-right: 7%;
+	}
+	.explain{
+		width: auto;
+		float: right;
+		font-size: 12px;
+	}
+	.QRCode{
+		font-size: 12px;
+		height: 200px;
+		line-height: 200px;
+	}
+	.QRCode .text{float: left;margin-left: 40px;}
+	.QRCode .scan{
+		margin-top: 0;
+		margin-left: 70px;
+	}
+	.sectionHead{
+		margin-top: 20px;
+	}
+	.imgInfoRight{
+		width: 100%;
+		float: left;
+	}
+</style>
 </head>
 <body>
 	<div class="head">
@@ -31,17 +61,12 @@
 	<div class="section">
 		<div class="dislogHide"></div>
 		<div class="QRCode">
-			<div class="explain">微信扫描二维码上传识别</div>
-			<div class="scan">
-				<img src="${obj.encodeQrCode }"  width="100%" height="auto"/>
-			</div>
+			<span class="text">微信扫描二维码上传识别</span>
+			<img class="scan" src="${obj.encodeQrCode }"  width="100%" height="auto"/>
 		</div>
 		<!--二寸免冠照-->
 		<div class="photo">
 			<div class="sectionHead">照片</div>
-			<div class="explain">
-				<span>二寸免冠照片注意事项</span> <span>1.白底</span> <span>2.摘掉帽子</span> <span>3.漏出耳朵</span>
-			</div>
 			<div class="samplePhoto">
 				<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-photo.jpg" />
 			</div>
@@ -53,6 +78,14 @@
 					<img src="${obj.twoinchphoto }" class="loadImg" width="100%"
 						height="100%" />
 				</c:if> --%>
+			</div>
+			<div class="explain">
+				<span>资料要求：</span> 
+				<span>1.白底，51×51mm</span> 
+				<span>2.拍摄时注意光线均匀，不要佩戴眼镜，露出双耳</span> 
+				<span>3.请用纯色墙做背景，避免衣服与背景色相同</span>
+				<span>4.手机拍摄的照片会经过程序检测，但最终结果由签</span>
+				<span>5.证专家人工审核，请严格根据要求拍摄</span>
 			</div>
 			<!-- <input type="file" id="uploadFileImg" class="publicFile uploadFileImg" name="uploadFileImg" /> -->
 		</div>
@@ -67,238 +100,57 @@
 				<div>上传</div>
 				<img id = "huzhao" onclick="toUpperPhoto(this)" class="transverseImg" src=""/>
 			</div>
+			<div class="explain">
+				<span>资料要求：</span> 
+				<span>拍摄的字体清晰可见、不要反光</span> 
+			</div>
 			<input type="file" class="publicFile" name="" />
 		</div>
-		<!--旧护照-->
-		<div class="passport">
-			<div class="sectionHead">旧护照</div>
-			<div class="explainLeft"></div>
-			<div class="imgInfoRight">
-				<div class="samplePassportImg">
-					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-visa.jpg" />
-				</div>
-				<div class="beforeInfo"></div>
-				<div class="uploadPassports oldpassports alignment" >
-					<div>上传</div>
-					<img id="oldhuzhao" onclick="toUpperPhoto(this)" class="transverseImg" src=""/>
-				</div>
-				<input type="file" class="publicFile" name="" />
-			</div>
-			
-		</div>
-		<!--身份证-->
-		<div class="passport">
-			<div class="sectionHead">身份证</div>
-			<div class="explainLeft"></div>
-			<div class="imgInfoRight">
-				<div class="samplePassportImg">
-					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-ID.jpg" />
-				</div>
-				<!-- <div class="beforeIDInfo"></div> -->
-				<div class="uploadPassports alignment" >
-					<div>上传</div>
-					<img id="card" onclick="toUpperPhoto(this)" src="" class="transverseImg" src="">
-				</div>
-				<div class="samplePassportImg">
-					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-IDBack.jpg" />
-				</div>
-				<div class="uploadPassports alignment" >
-					<div>上传</div>
-					<img id="cardBack" onclick="toUpperPhoto(this)" src="" class="transverseImg" src="">
-				</div>
-			</div>	
-		</div>
+		
 		<!--户口本-->
 		<div class="huKouBook">
 			<div class="sectionHead">户口本</div>
-			<div class="explain"></div>
+			<!-- 首页 -->
 			<div class="imgInfoRight">
 				<div class="sampleReleaseImg householdBack">
 					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-hold.jpeg" />
 				</div>
-				<!-- <div class="beforeHuKouInfo"></div> -->
-				<div class="uploadReleases" >
+				<div class="uploadReleases" style="margin-right: 10px;">
+					<div>首页</div>
+					<img id="household" onclick="toUpperPhoto(this)" class="longitudinal" src=""/>
+				</div>
+				<div class="explain" style="margin-right: 0;">
+					<span>资料要求：</span> 
+					<span>1.家庭户口的：拍摄整本户口本的所有页</span> 
+					<span>2.集体户口的：拍摄申请人本人页</span>
+					<span>3.要保证照片上的字体清晰可见，露出四个边角，不要压边拍摄</span>
+				</div>
+				<input type="file" class="publicFile" name="" multiple />
+			</div>		
+			<!-- 户主页 -->
+			<div class="imgInfoRight">
+				<div class="sampleReleaseImg householdBack">
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-hold.jpeg" />
+				</div>
+				<div class="uploadReleases" style="margin-right: 10px;">
 					<div>户主页</div>
+					<img id="household" onclick="toUpperPhoto(this)" class="longitudinal" src=""/>
+				</div>
+				
+				<input type="file" class="publicFile" name="" multiple />
+			</div>		
+			<!-- 本人页 -->
+			<div class="imgInfoRight">
+				<div class="sampleReleaseImg householdBack">
+					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-hold.jpeg" />
+				</div>
+				<div class="uploadReleases" style="margin-right: 10px;">
+					<div>本人页</div>
 					<img id="household" onclick="toUpperPhoto(this)" class="longitudinal" src=""/>
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
 			</div>		
 		</div>
-		<!--房产证-->
-		<div class="huKouBook">
-			<div class="sectionHead">房产证</div>
-			<div class="explain"></div>
-			<div class="imgInfoRight">
-				<div class="sampleReleaseImg hoursecardMain">
-					<img src="${base}/references/public/dist/newvisacss/img/icon-card.jpg" width="100%" height="100%" />
-				</div>
-				<!-- <div class="beforeHouseInfo"></div> -->
-				<div class="uploadReleases hoursecardMain housecard 1" >
-					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" id="" class="longitudinal" src=""/>
-				</div>
-				<div class="housecardAnother">
-					<div class="housecardInfo">
-						<div class="housecardL">
-							<label>产权人</label>
-							<input id="propertyholder" readonly="readonly" type="text" class="writter" >
-						</div>
-						<div class="housecardR">
-							<label>面积</label>
-							<input id="area" readonly="readonly" type="text" class="writter" />
-						</div>
-						<div class="areaMetre">平米</div>
-					</div>
-					<div class="housecardAddressInfo">
-						<label>地址</label>
-						<input id="address" readonly="readonly" type="text" class="writter"> 
-					</div>
-				</div>
-			</div>			
-		</div>
-		<!--婚姻状况-->
-		<div class="huKouBook">
-			<div class="sectionHead">婚姻状况</div>
-			<div class="explain"></div>
-			<div class="imgInfoRight">
-				<div class="sampleReleaseImg">
-					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-marry.jpeg" />
-				</div>
-				<div class="uploadReleases" >
-					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" id="marray" class="longitudinal" src=""/>
-				</div>
-				<input type="file" class="publicFile" name="" multiple />
-			</div>	
-		</div>
-		<!--银行流水-->
-		<div class="passport">
-			<div class="sectionHead">银行流水</div>
-			<div class="explainLeft"></div>
-			<div class="imgInfoRight">
-				<div class="samplePassportImg bankGroup bankflow_moreImaage_WX_jssdk">
-					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-bank.jpeg" />
-				</div>
-			</div>	
-		</div>
-		<%-- <div class="huKouBook">
-			<div class="sectionHead">银行流水</div>
-			<div class="explain"></div>
-			<div class="imgInfoRight">
-				<div class="sampleReleaseImg bankflow_moreImaage_WX_jssdk">
-					<img src="${base}/references/public/dist/newvisacss/img/icon-bank.jpeg" />
-				</div>
-				<!-- <div class="beforeBankInfo"></div> -->
-				<div class="uploadReleases" >
-					<div>上传</div>
-					<img class="longitudinal"  />
-				</div>
-			</div>	
-		</div> --%>
-		<!--在职证明-->
-		<div class="huKouBook">
-			<div class="sectionHead">在职证明</div>
-			<div class="explain"></div>
-			<div class="imgInfoRight">
-				<div class="sampleReleaseImg jobwidth">
-					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-job.jpeg" />
-				</div>
-				<!-- <div class="beforeJobInfo"></div> -->
-				<div class="uploadReleases jobwidth">
-					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" id="jobCertificate" class="sampleImg" src=""/>
-				</div>
-				<input type="file" class="publicFile" name="" multiple />
-			</div>	
-		</div>
-		<!--营业执照或机构代码证-->
-		<div class="huKouBook">
-			<div class="sectionHead">营业执照或机构代码证</div>
-			<div class="explain"></div>
-			<div class="imgInfoRight">
-				<div class="sampleReleaseImg businesswidth">
-					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-business.jpeg" />
-				</div>
-				<!-- <div class="beforeOZCardInfo"></div> -->
-				<div class="uploadReleases businesswidth" >
-					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" id="business" class="sampleImg" src=""/>
-				</div>
-				<input type="file" class="publicFile" name="" multiple />
-			</div>
-		</div>
-		<!--行驶证-->
-		<div class="passport">
-			<div class="sectionHead">行驶证</div>
-			<div class="explainLeft"></div>
-			<div class="imgInfoRight">
-				<div class="samplePassportImg driverGroup">
-					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-driver.jpg" />
-				</div>
-				<!-- <div class="beforeIDInfo"></div> -->
-				<div class="uploadPassports driverface alignment" >
-					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" id="drive" src="" class="transverseImg" src="">
-				</div>
-				<!-- <div class="uploadPassports driverback alignment" >
-					<div>上传</div>
-					<img id="drive2" src="" class="transverseImg" >
-				</div> -->
-				<input type="file" class="publicFile" name="" multiple />
-			</div>	
-		</div>
-		
-		<%-- <div class="huKouBook">
-			<div class="sectionHead">行驶证</div>
-			<div class="explain"></div>
-			<div class="imgInfoRight">
-				<div class="sampleReleaseImg">
-					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
-				</div>
-				<!-- <div class="beforeDriverInfo"></div> -->
-				<div class="uploadReleases" >
-					<div>上传</div>
-					<img id="drive" class="longitudinal" />
-				</div>
-				<div class="uploadReleases" >
-					<div>上传</div>
-					<img id="drive2" class="longitudinal" />
-				</div>
-				
-			</div>
-		</div> --%>
-		<!--过期美签-->
-		<div class="huKouBook">
-			<div class="sectionHead">过期美签</div>
-			<div class="explain"></div>
-			<div class="imgInfoRight">
-				<div class="sampleReleaseImg oldsigned_moreImaage_WX_jssdk">
-					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-overdue.jpeg" />
-				</div>
-				<!-- <div class="beforeOverdueInfo"></div> -->
-				<div class="uploadReleases" style="display:none;">
-					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" class="longitudinal" src="" />
-				</div>
-			</div>
-		</div>
-		<!--美国出签-->
-		<div class="huKouBook">
-			<div class="sectionHead">美国出签</div>
-			<div class="explain"></div>
-			<div class="imgInfoRight">
-				<div class="sampleReleaseImg">
-					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-overdue.jpeg" />
-				</div>
-				<!-- <div class="beforeSignInfo"></div> -->
-				<div class="uploadReleases" >
-					<div>上传</div>
-					<img onclick="toUpperPhoto(this)" id="chuqian" class="longitudinal" src=""/>
-				</div>
-				<input type="file" class="publicFile" name="" multiple />
-			</div>	
-		</div>
-
 	</div>
 </body>
 <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>

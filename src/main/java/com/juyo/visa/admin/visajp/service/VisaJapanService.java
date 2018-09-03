@@ -16,11 +16,14 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -1597,6 +1600,59 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			}
 		}
 		return count;
+	}
+
+	public List<String> getWeekendayofyear() {
+		List<String> result = new ArrayList<>(getYearDoubleWeekend(2018));
+		return result;
+	}
+
+	public Object autofillsendvisatime() {
+		Date d = new Date();
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+
+		int count = getCount2(d, 1, 0);
+		//日期加上一定天数之后还可能又包含了新的节假日，这里用递归解决
+		if (count != 0) {
+			return format.format(DateUtil.addDay(d, 1 + count));
+		}
+		return format.format(DateUtil.addDay(d, 1 + count));
+	}
+
+	public int getCount2(Date gotripdate, Integer stayday, int count) {
+		DateFormat format = new SimpleDateFormat("YYYY-M-d");
+		List<String> holidayDate = getWeekendayofyear();
+		for (int i = 0; i < stayday + count; i++) {
+			String dateStr = format.format(DateUtil.addDay(gotripdate, i + 1));
+			if (holidayDate.contains(dateStr)) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	//获取一年中的周末
+	public static Set<String> getYearDoubleWeekend(int year) {
+		Set<String> listDates = new HashSet<String>();
+		Calendar calendar = Calendar.getInstance();//当前日期
+		calendar.set(year, 6, 1);
+		Calendar nowyear = Calendar.getInstance();
+		Calendar nexty = Calendar.getInstance();
+		nowyear.set(year, 0, 1);//2010-1-1
+		nexty.set(year + 1, 0, 1);//2011-1-1
+		calendar.add(Calendar.DAY_OF_MONTH, -calendar.get(Calendar.DAY_OF_WEEK));//周六
+		Calendar c = (Calendar) calendar.clone();
+		for (; calendar.before(nexty) && calendar.after(nowyear); calendar.add(Calendar.DAY_OF_YEAR, -7)) {
+			listDates.add(calendar.get(Calendar.YEAR) + "-" + (1 + calendar.get(Calendar.MONTH)) + "-"
+					+ calendar.get(Calendar.DATE));
+			listDates.add(calendar.get(Calendar.YEAR) + "-" + (1 + calendar.get(Calendar.MONTH)) + "-"
+					+ (1 + calendar.get(Calendar.DATE)));
+		}
+		for (; c.before(nexty) && c.after(nowyear); c.add(Calendar.DAY_OF_YEAR, 7)) {
+			listDates.add(c.get(Calendar.YEAR) + "-" + (1 + c.get(Calendar.MONTH)) + "-" + c.get(Calendar.DATE));
+			listDates.add(c.get(Calendar.YEAR) + "-" + (1 + c.get(Calendar.MONTH)) + "-" + (1 + c.get(Calendar.DATE)));
+		}
+		return listDates;
 	}
 
 	/**

@@ -2301,7 +2301,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String passportSqlstr = sqlManager.get("passportInfo_byOrderId");
 		Sql passportSql = Sqls.create(passportSqlstr);
 		Cnd cnd = Cnd.NEW();
-		cnd.and("toj.orderId", "=", orderid);
+		cnd.and("toj.id", "=", orderid);
 		cnd.and("ap.passport", "=", passport);
 		if (!Util.isEmpty(adminId)) {
 			cnd.and("ap.id", "!=", adminId);

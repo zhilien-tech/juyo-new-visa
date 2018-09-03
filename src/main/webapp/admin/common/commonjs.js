@@ -501,10 +501,48 @@ $(document).on("input","#sendVisaDate",function(){
 				result += tmd[i].toString();
 			}
 			$(this).val(getNewDate(result));
+
+			var stayday;
+
+			if (cityidstr == 1 || cityidstr == "") {
+				stayday = 7;
+			} else {
+				stayday = 6;
+			}
+			var startDate = $("#sendVisaDate").val();
+			$.ajax({
+				url: '/admin/visaJapan/autoCalculateBackDateSpecial.html',
+				dataType: "json",
+				data: { gotripdate: startDate, stayday: stayday + 1 },
+				type: 'post',
+				success: function (data) {
+					$("#outVisaDate").val(data);
+					$("#goDate").datetimepicker("setStartDate", data);
+				}
+			});
 		}
 	}else{
 		if($(this).val().length == 8){
 			$(this).val(getNewDate(temp));
+
+			var stayday;
+
+			if (cityidstr == 1 || cityidstr == "") {
+				stayday = 7;
+			} else {
+				stayday = 6;
+			}
+			var startDate = $("#sendVisaDate").val();
+			$.ajax({
+				url: '/admin/visaJapan/autoCalculateBackDateSpecial.html',
+				dataType: "json",
+				data: { gotripdate: startDate, stayday: stayday + 1 },
+				type: 'post',
+				success: function (data) {
+					$("#outVisaDate").val(data);
+					$("#goDate").datetimepicker("setStartDate", data);
+				}
+			});
 		}
 	}
 });
@@ -633,7 +671,7 @@ $(document).on("input","#validStartDate",function(){
 });
 
 
-function getNewDate(temp){
+function getNewDate(temp, fn){
 	var tmd = temp.substring(0, 4)+'-' +temp.substring(4,6) + '-' + temp.substring(6,8);
 	var year = temp.substring(0,4);
 	var month = temp.substring(4,6);

@@ -327,6 +327,15 @@ public class VisaJapanModule {
 		return visaJapanService.autoCalculateBackDate(gotripdate, stayday);
 	}
 
+	/**
+	 * 自动计算返回日期
+	 */
+	@At
+	@POST
+	public Object autofillsendvisatime() {
+		return visaJapanService.autofillsendvisatime();
+	}
+
 	@At
 	@POST
 	public Object validateIsoriginal(@Param("paperid") Integer paperid) {

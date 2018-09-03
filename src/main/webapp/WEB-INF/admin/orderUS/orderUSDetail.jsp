@@ -27,6 +27,11 @@
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/visaDetail.css?v='20180510'">
 <!-- 加载中。。。样式 -->
 <link rel="stylesheet" href="${base}/references/common/css/spinner.css">
+<style>
+	.icon-line{
+		width: 2.2%;
+	}
+</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper" id="wrapper">
@@ -449,14 +454,24 @@
 						<!-- 标题以及按钮组 -->
 						<p class="info-head">申请人</p>
 						<div class="dataInfoGroup orderInfoGroup">
-						<input id="mypassportId" type="hidden" value="${obj.passport.id }">
+							<input id="mypassportId" type="hidden" value="${obj.passport.id }">
+
 							<a id="photoInfo" onclick="updatePhoto(${obj.basicinfo.id })">第一步：拍照资料</a>
 							<span class="icon-line"></span>
-							<a onclick="passport(${obj.passport.id },${obj.orderid})">第二步：护照信息</a>
+							<a onclick="baseInfo(${obj.basicinfo.id })">第二步：基本信息</a>
+
 							<span class="icon-line"></span>
-							<a onclick="baseInfo(${obj.basicinfo.id })">第三步：基本信息</a>
+							<a onclick="passport(${obj.passport.id },${obj.orderid})">第三步：护照信息</a>
+							
+							<!-- <span class="icon-line"></span>
+							<a onclick="visa(${obj.basicinfo.id })">第四步：签证信息</a> -->
+
 							<span class="icon-line"></span>
-							<a onclick="visa(${obj.basicinfo.id })">第四步：签证信息</a>
+							<a onclick="FamilyInfo(${obj.basicinfo.id })">第四步：家庭信息</a>
+							<span class="icon-line"></span>
+							<a onclick="WorkInfo(${obj.basicinfo.id })">第五步：工作教育信息</a>
+							<span class="icon-line"></span>
+							<a onclick="TravelInfo(${obj.basicinfo.id })">第六步：旅行信息</a>
 						</div>
 						<!-- 标题以及按钮组END -->
 
@@ -1629,6 +1644,51 @@
 				scrollbar: false,
 				area: ['900px', '80%'],
 				content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+staffid+'&isDisable'
+			});
+		}
+
+		//家庭信息
+		function FamilyInfo(staffid){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content: '/admin/bigCustomer/updateFamilyInfo.html?staffId='+staffid+'&isDisable'
+			});
+		}
+
+		//工作教育信息
+		function WorkInfo(staffid){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content: '/admin/bigCustomer/updateWorkInfo.html?staffId='+staffid+'&isDisable'
+			});
+		}
+
+		//旅行信息
+		function TravelInfo(staffid){
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content: '/admin/bigCustomer/updateTravelInfo.html?staffId='+staffid+'&isDisable'
 			});
 		}
 		

@@ -18,23 +18,15 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appAddStaff.css?v='20180510'">
 	<!-- 本页css -->
 	<link rel="stylesheet" href="${base}/references/public/css/passportInfo.css?v='20180510'">
-	<style>
-		.qrcode{
-			margin: 20px auto;
-			width: 150px;
-			height: 150px;
-			background: oldlace;
-		}
-	</style>
 </head>
 <body>
 	<div class="modal-content">
 		<a id="toVisa" class="leftNav" onclick="visaBtn();">
-			<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第二步</i>
+			<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第一步</i>
 			<span></span>
 		</a>
 		<a id="toBase" class="rightNav" onclick="baseBtn();">
-			<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第四步</i>
+			<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第三步</i>
 			<span></span>
 		</a>
 		<form id="passportInfo">
@@ -47,12 +39,8 @@
 				<div class="dislogHide"></div>
 				<div class="tab-content row">
 					<div class="col-sm-5 padding-right-0">
-						<div style="text-align: center;">
-							扫描二维码手机上传识别
-							<div class="qrcode"></div>
-						</div>
+						
 						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
-							
 							<div class="col-xs-6 mainWidth">
 							<div class="form-group">
 								<div class="cardFront-div">
@@ -183,8 +171,8 @@
 								</div>
 							</div>
 						</div><!-- end 签发日期/有效期至 -->
-						<div class="row"><!-- 签发机关 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+						<div class="row none"><!-- 签发机关 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>
 										<span>*</span>签发机关
@@ -192,15 +180,15 @@
 									<input id="issuedOrganization" name="issuedorganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedorganization }"/>
 								</div>
 							</div>
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+						</div><!-- end 签发机关 -->
+						
+						<div class="row none">
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-										<label>
-												<span>*</span>Exit & Entry Administration
-											</label>
-									<input id="issuedOrganizationEn" name="issuedorganizationen" type="text" class="form-control input-sm" placeholder="Ministry of Public Security" value="${obj.passport.issuedorganizationen }"/>
+									<input id="issuedOrganizationEn" name="issuedorganizationen" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedorganizationen }"/>
 								</div>
 							</div>
-						</div><!-- end 签发机关 -->
+						</div>
 					</div>	
 						
 				</div>

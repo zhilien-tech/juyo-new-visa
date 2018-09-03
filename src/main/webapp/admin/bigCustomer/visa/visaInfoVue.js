@@ -310,7 +310,14 @@ var visaVue = new Vue({
 			visaInfo.workEducationInfo.isclanen = isclan;
 		},
 		isemployed:function(){
+			console.warn('isemployed change function emit..');
 			var isemployed = visaInfo.workEducationInfo.isemployed;
+			console.log(isemployed);
+			if (isemployed == 1) {
+				$('#yiqian').css('margin-bottom', '369px');
+			} else {
+				$('#yiqian').css('margin-bottom', '177px');
+			}
 			visaInfo.workEducationInfo.isemployeden = isemployed;
 		},
 		issecondarylevel:function(){

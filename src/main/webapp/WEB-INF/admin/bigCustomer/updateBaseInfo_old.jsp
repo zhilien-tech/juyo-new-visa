@@ -15,23 +15,15 @@
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appAddStaff.css?v='20180510'">
 	<!-- 本页css -->
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/appUpdateStaff.css?v='20180510'">
-	<style>
-		.row{position: relative;}
-		.xx-en{
-			top: 0;
-			left: 425px;
-			position: absolute;
-		}
-	</style>
 </head>
 <body>
 	<div class="modal-content">
 		<a id="toPassport" class="leftNav" onclick="passportBtn();">
-			<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第一步</i>
+			<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第二步</i>
 			<span></span>
 		</a>
 		<a id="toVisa" class="rightNav" onclick="toVisaInfo();">
-			<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第三步</i>
+			<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第四步</i>
 			<span></span>
 		</a>
 		
@@ -49,7 +41,7 @@
 					<input id="staffId" name="id" type="hidden" value="${obj.staffId }">
 					<div class="col-sm-12 padding-right-0">
 						<!-- start 身份证 正面 -->
-							<div class="col-xs-4 pictures" style="margin-right: 30px;">
+							<div class="col-xs-4 pictures">
 								<div class="form-group pictureTop">
 									<div class="uploadInfo">
 										<span class="promptInfo">点击上传身份证正面</span>
@@ -65,7 +57,22 @@
 							</div>
 						
 						<!-- end 身份证 正面 -->
-
+						<!-- start 身份证 反面 -->
+							<div class="col-xs-4 picturesBack">
+								<div class="form-group pictureTop">
+									<div class="uploadInfo">
+										<span class="promptInfo">点击上传身份证背面</span>
+										<input id="cardBack" name="cardback" type="hidden" value="${obj.back.url }"/>
+										<img id="imgShowBack" alt="" src="${obj.back.url }" >
+										<input id="uploadFileImgBack" name="uploadFile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
+										<i class="delete" onclick="deleteApplicantBackImg();"></i>
+									</div>
+								</div>
+								<div class="front has-error" style="width:100%; height:20px; border:0 !important; color:red;margin:0px 0 0 0px !important">
+									<small class="help-blockBack" data-bv-validator="notEmpty" data-bv-for="cardBack" data-bv-result="IVVALID" style="display: none;">身份证背面必须上传</small>
+								</div> 
+							</div>
+						<!-- end 身份证 反面 -->
 						<!-- start 二寸免冠照片 -->
 							<div class="col-xs-3 picturesInch">
 								<div class="form-group pictureTop">
@@ -85,46 +92,6 @@
 						<!-- end 二寸免冠照片 -->
 						
 					</div>
-					<div class="row" style="padding-left: 50px;">
-									<!-- 姓/拼音 -->
-										<div class="col-sm-6">
-												<div class="form-group" style="position:relative;">
-												<label><span>*</span>姓/拼音</label> <input id="firstName"
-													name="firstname" type="text" class="form-control input-sm " tabIndex="1"
-													placeholder=" " value="${obj.passport.firstname }" />
-													<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstnameen" value="${obj.firstnameen }"/>
-												<!-- <i class="bulb"></i> -->
-											</div>
-												<!-- <i class="bulb"></i> -->
-
-									</div>
-					</div>
-					<div class="row" style="padding-left: 50px;">
-							<!-- 名/拼音 -->
-							<div class="col-sm-6">
-								<div class="form-group" style="position:relative;">
-									<label><span>*</span>名/拼音</label> <input id="lastName"
-										name="lastname" type="text" class="form-control input-sm" tabIndex="2"
-										placeholder=" " value="${obj.passport.lastname }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastnameen" value="${obj.lastnameen }"/>
-
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
-
-					<div class="row">
-							<div class="col-sm-3 col-sm-offset-1 " style="margin-left: 50px;padding-right: 35px;">
-									<div class="form-group">
-										<label><span>*</span>性别</label>
-										<select class="form-control input-sm selectHeight" id="sex" name="sex">
-											<option value="男" ${obj.passport.sex == "男"?"selected":"" }>男</option>
-											<option value="女" ${obj.passport.sex == "女"?"selected":"" }>女</option>
-										</select>
-									</div>
-								</div>
-					</div>
-
 					<div class="col-sm-6 padding-right-0">
 						<!-- 手机号和邮箱 -->
 						<div class="row">
@@ -156,7 +123,32 @@
 								</div>
 							</div>
 						</div>
-					
+						<!-- 民族 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>卡号</label> 
+									<input id="cardnum" name="cardnum"  type="text" class="form-control input-sm"  value="${obj.applicant.cardnum }" />
+								</div>
+							</div>
+							<!-- 民族 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>民族</label> 
+									<input id="nation" name="nation" onchange="translateZhToEn(this,'nationen','')" type="text" class="form-control input-sm"  value="${obj.applicant.nation }" />
+								</div>
+							</div>
+						</div>
+						<!-- 住址 -->
+						<div class="row">
+							<!-- 住宅 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>住址</label> 
+									<input id="address" name="address" onchange="translateZhToEn(this,'addressen','')" type="text" class="form-control input-sm"  tabIndex="9" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.address }" />
+								</div>
+							</div>
+						</div>
 						<!-- 现居住地是否与身份证相同  和  现居住地址城市 -->
 						<div class="row">
 							<!-- 现居住地址省份/现居住地址城市 -->
@@ -186,12 +178,6 @@
 									<input id="detailedAddress" name="detailedaddress" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.detailedaddress }" />
 								</div>
 							</div>
-							<!-- <div class="col-sm-12 xx-en">
-								<div class="form-group">
-									<label><span>*</span>Street Address</label>
-									<input id="" name="" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="Street Address" value="" />
-								</div>
-							</div> -->
 						</div>
 						<!-- 婚姻状况  和说明 -->
 						<div class="row">
@@ -215,48 +201,6 @@
 								</div>
 							</div>
 						</div>
-						<!-- 出生日期 && 出生国家 -->
-						<div class="row">
-							<!-- 手机号/邮箱 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>
-										<span>*</span>出生日期
-									</label> 
-									<input id="" name="" type="text"  class="form-control input-sm"  tabIndex="" placeholder=" " value="" />
-								</div>
-							</div>
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group"> 
-									<label>
-										<span>*</span>出生国家
-									</label>
-									<input id="" name="" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="" value="" />
-								</div>
-							</div>
-						</div>
-
-						<!-- 出生省 && 出生城市 -->
-						<div class="row">
-							<!-- 手机号/邮箱 -->
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>
-										<span>*</span>出生省
-									</label> 
-									<input id="" name="" type="text"  class="form-control input-sm"  tabIndex="" placeholder=" " value="" />
-								</div>
-							</div>
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group"> 
-									<label>
-										<span>*</span>出生城市
-									</label>
-									<input id="" name="" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="" value="" />
-								</div>
-							</div>
-						</div>
-
 						<!-- 曾用名 -->
 						<div class="row">
 							<!-- 是否有曾用名/曾有的或另有的国际(或公民身份) -->
@@ -332,38 +276,141 @@
 								</div>
 							</div>
 						</div>
-						
+						<!-- 国家注册号码 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>国家注册号码</label> 
+									<input id="nationalidentificationnumber"  name="nationalidentificationnumber" type="text" class="form-control input-sm" value="${obj.applicant.nationalidentificationnumber }"/>
+								</div>
+								
+								<div class="countryNum has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-countryNum" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">国家注册号码不能为空</small>
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
+								<div class="form-group">
+									<input type="checkbox" class="vertical isidentificationnumberapply" name="isidentificationnumberapply" value="1"/>
+									<label>不适用</label> 
+								</div>
+							</div>
+						</div>
+						<!-- 美国社会安全号码 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>美国社会安全号码</label> 
+									<input id="socialsecuritynumber"  name="socialsecuritynumber" type="text" class="form-control input-sm" value="${obj.applicant.socialsecuritynumber }" />
+								</div>
+								<div class="safeNum has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-blocksafe" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国社会安全号码</small>
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
+								<div class="form-group">
+									<input type="checkbox" class="vertical issecuritynumberapply" name="issecuritynumberapply" value="1"/>
+									<label>不适用</label> 
+								</div>
+							</div>
+						</div>
+						<!-- 美国纳税人证件号 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>美国纳税人证件号</label> 
+									<input id="taxpayernumber"  name="taxpayernumber" type="text" class="form-control input-sm" value="${obj.applicant.taxpayernumber }" />
+								</div>
+								<div class="safepay has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-ratepaying" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国纳税人证件号</small>
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
+								<div class="form-group">
+									<input type="checkbox" class="vertical istaxpayernumberapply" name="istaxpayernumberapply" value="1"/>
+									<label>不适用</label> 
+								</div>
+							</div>
+						</div>
 					</div>
 					<!-- 左侧结束 -->
 					<div class="col-sm-6 padding-right-0">
-						<div class="row" style="opacity: 0;">
-							<!-- 住宅 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+						<!-- 手机号和邮箱 -->
+						<div class="row">
+							<!-- 手机号/邮箱 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>Address</label> 
-									<div class="form-control input-sm"></div>
+									<label>
+										<span>*</span>Phone Number
+									</label> 
+									<input id="telephoneen" name="telephoneen" type="text" class="form-control input-sm" value="${obj.telephoneen }"/>
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>Email Address</label> 
+									<input id="emailen" name="emailen" type="text" class="form-control input-sm" value="${obj.emailen }"/>
 								</div>
 							</div>
 						</div>
-						<div class="row" style="opacity: 0;">
-							<!-- 住宅 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>Address</label> 
-									<div class="form-control input-sm"></div>
-								</div>
-							</div>
-						</div>
-						<div class="row" style="opacity: 0;">
-							<!-- 住宅 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>Address</label> 
-									<div class="form-control input-sm"></div>
-								</div>
-							</div>
-						</div>
+						<!-- 手机号和邮箱 END -->
 						
+						<!-- 身份证 -->
+						<div class="row">
+							<!-- 公民身份证 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>The identity card of the people's Republic of China</label> 
+									<input id="cardIden" name="cardIden" type="text" class="form-control input-sm" value="${obj.applicant.cardIden }" />
+								</div>
+							</div>
+						</div>
+						<!-- 民族 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>Cardnum</label> 
+									<input id="cardnumen" name="cardnumen" type="text" class="form-control input-sm" value="${obj.applicant.cardnumen }" />
+								</div>
+							</div>
+							<!-- 民族 -->
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>Nationality</label> 
+									<input id="nationen" name="nationen" type="text" class="form-control input-sm" value="${obj.applicant.nationen }" />
+								</div>
+							</div>
+						</div>
+						<!-- 住址 -->
+						<div class="row">
+							<!-- 住宅 -->
+							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>Address</label> 
+									<input id="addressen" name="addressen" type="text" class="form-control input-sm" value="${obj.applicant.addressen }"/>
+								</div>
+							</div>
+						</div>
+						<!-- 现居住地是否与身份证相同  和  现居住地址城市 -->
+						<div class="row">
+							<!-- 现居住地址省份/现居住地址城市 -->
+							<label class="EngLabel">
+							Is your Mailing Address the same as your Home Address
+							<input class="nowProvinceen" type="checkbox" name="addressIssamewithcarden" value="1" />
+							</label>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group" id="provinceDiv">
+									<input type="hidden" name="cardprovinceen" id="cardProvinceen" />
+									<input type="hidden" name="cardcityen" id="cardCityen" />
+									<input type="hidden" id="sameAddress" value=""/>
+									<input id="provinceen" name="provinceen" autocomplete="off" type="text" class="form-control input-sm" placeholder="省" value="${obj.applicant.provinceen }" />
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group" id="cityDiv">
+									<input id="cityen" name="cityen" autocomplete="off" type="text" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.cityen }" />
+								</div>
+							</div>
+						</div>
 						<!-- 详细地址 -->
 						<div class="row">
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
@@ -374,37 +421,28 @@
 								</div>
 							</div>
 						</div>
-
-						<div class="row" style="opacity: 0;">
-							<!-- 住宅 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
+						<!-- 婚姻状况  和说明 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>Address</label> 
-									<div class="form-control input-sm"></div>
+									<label>
+										<span>*</span>Marital Status
+									</label>
+									<select id="marrystatusen" name="marrystatusen" class="form-control input-sm selectHeight">
+											<option value="">please choose</option>
+											<c:forEach var="map" items="${obj.marryStatusEnEnum}">
+												<option value="${map.key}" ${map.key==obj.marryStatusEn?'selected':''}>${map.value}</option>
+											</c:forEach>
+									</select>
+								</div>
+							</div>
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group marryexplainen">
+									<label>Expain</label> 
+									<input id="marryexplainen" name="marryexplainen" type="text" class="form-control input-sm" value="${obj.applicant.marryexplainen }" />
 								</div>
 							</div>
 						</div>
-
-						<div class="row" style="opacity: 0;">
-							<!-- 住宅 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>Address</label> 
-									<div class="form-control input-sm"></div>
-								</div>
-							</div>
-						</div>
-
-						<div class="row" style="opacity: 0;">
-							<!-- 住宅 -->
-							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
-								<div class="form-group">
-									<label>Address</label> 
-									<div class="form-control input-sm"></div>
-								</div>
-							</div>
-						</div>
-						
 						<!-- 曾用名 -->
 						<div class="row">
 							<!-- 是否有曾用名/曾有的或另有的国籍(或公民身份) -->
@@ -479,7 +517,60 @@
 								</div>
 							</div>
 						</div>
-						
+						<!-- 国家注册号码 -->
+						<div class="row">
+							<label class="EngLabel">National Identification Number</label> 
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<input id="nationalidentificationnumberen" name="nationalidentificationnumberen" type="text" class="form-control input-sm" value="${obj.applicant.nationalidentificationnumberen }" />
+								</div>
+								<div class="countryNumen has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-countryNumen" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">国家注册号码不能为空</small>
+								</div>	
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMarginEng">
+								<div class="form-group">
+									<input type="checkbox" class="vertical isidentificationnumberapplyen" name="isidentificationnumberapplyen" value="1"/>
+									<label>Does Not Apply</label> 
+								</div>
+							</div>
+						</div>
+						<!-- 美国社会安全号码 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>U.S. Social Security Number</label> 
+									<input id="socialsecuritynumberen" name="socialsecuritynumberen" type="text" class="form-control input-sm" value="${obj.applicant.socialsecuritynumberen }" />
+								</div>
+								<div class="safeNumen has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-blocksafeen" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国社会安全号码</small>
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
+								<div class="form-group">
+									<input type="checkbox" class="vertical issecuritynumberapplyen" name="issecuritynumberapplyen" value="1"/>
+									<label>Does Not Apply</label> 
+								</div>
+							</div>
+						</div>
+						<!-- 美国纳税人证件号 -->
+						<div class="row">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+								<div class="form-group">
+									<label>U.S. Taxpayer ID Number</label> 
+									<input id="taxpayernumberen" name="taxpayernumberen" type="text" class="form-control input-sm" / value="${obj.applicant.taxpayernumberen }">
+								</div>
+								<div class="safepayen has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
+									<small class="help-ratepayingen" data-bv-validator="notEmpty" data-bv-for="cardFront" data-bv-result="IVVALID" style="display: none;">美国纳税人证件号</small>
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0 topMargin">
+								<div class="form-group">
+									<input type="checkbox" class="vertical istaxpayernumberapplyen" name="istaxpayernumberapplyen" value="1"/>
+									<label>Does Not Apply</label> 
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
