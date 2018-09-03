@@ -158,9 +158,6 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 		tempdata.put("mutiltrip", mutiltrip);
 		//准备合并的PDF文件
 		List<ByteArrayOutputStream> pdffiles = Lists.newArrayList();
-		//申请人名单
-		ByteArrayOutputStream applyList = applyList(tempdata);
-		pdffiles.add(applyList);
 		//准备封皮信息
 		ByteArrayOutputStream note = note(tempdata);
 		pdffiles.add(note);
@@ -170,6 +167,16 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 		//滞在予定表
 		ByteArrayOutputStream tripInfo = tripInfo(tempdata);
 		pdffiles.add(tripInfo);
+		//申请人名单
+		ByteArrayOutputStream applyList = applyList(tempdata);
+		pdffiles.add(applyList);
+		//申请人信息（赴日签证申请表）
+		int count = 1;
+		for (Record record : applyinfo) {
+			ByteArrayOutputStream apply = applyinfo(record, tempdata, request, count);
+			pdffiles.add(apply);
+			count++;
+		}
 		//电子客票行程单
 		ByteArrayOutputStream flightinfo = flightinfo(tempdata);
 		pdffiles.add(flightinfo);
@@ -179,14 +186,6 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 		//酒店信息
 		ByteArrayOutputStream hotelInfo = hotelInfo(tempdata);
 		pdffiles.add(hotelInfo);
-		//申请人信息（赴日签证申请表）
-		int count = 1;
-		Collections.reverse(applyinfo);
-		for (Record record : applyinfo) {
-			ByteArrayOutputStream apply = applyinfo(record, tempdata, request, count);
-			pdffiles.add(apply);
-			count++;
-		}
 		//		ByteArrayOutputStream returnhome = returnhome(tempdata);
 		//		pdffiles.add(returnhome);
 		ByteArrayOutputStream mergePdf = templateUtil.mergePdf(pdffiles);
@@ -1350,24 +1349,12 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 			table1.setWidthPercentage(95);
 			table1.setHorizontalAlignment(Element.ALIGN_CENTER); //垂直居中
 			table1.setTotalWidth(PageSize.A4.rotate().getWidth());
-			//float[] wid1 = { 0.5f, 0.5f }; //两列宽度的比例
-			//table1.setWidths(wid1);
-			//			table1.getDefaultCell().setBorderWidth(0); //不显示边框
 			PdfPCell cell11 = new PdfPCell();
-			//PdfPCell cell12 = new PdfPCell();
 			Paragraph paragraph = new Paragraph("签证申请人名单", font);
-			//Paragraph paragraph2 = new Paragraph(company.getName(), font1);
-			//paragraph2.setAlignment(Element.ALIGN_RIGHT);
 			paragraph.setAlignment(Element.ALIGN_LEFT);
 			cell11.addElement(paragraph);
 			cell11.setBorder(0);
-			//cell12.addElement(paragraph2);
-			//cell12.setBorder(0);
-			//			paragraph.setSpacingBefore(30);
-			//			paragraph.setIndentationLeft(50);
-			//			paragraph2.setSpacingAfter(200);
 			table1.addCell(cell11);
-			//table1.addCell(cell12);
 			table1.getDefaultCell().setBorderWidth(0);
 			document.add(table1);
 
@@ -1693,12 +1680,12 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 							}
 						}
 
-						if (!record.get("isMainApplicant").equals(1)) {//副申请人
+						/*if (!record.get("isMainApplicant").equals(1)) {//副申请人
 							if (wealthType.indexOf("银行流水") == -1) {
 								wealthType = "银行流水\n" + wealthType;
 								detail = "\n" + detail;
 							}
-						}
+						}*/
 
 					}
 					cell = new PdfPCell(new Paragraph(wealthType, font));
@@ -1721,34 +1708,6 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 					table.addCell(cell);
 				}
 
-				/*if (flag) {
-					TApplicantWealthJpEntity tApplicantWealthJpEntity = wealthjpinfo.get(0);
-					cell = new PdfPCell(new Paragraph(tApplicantWealthJpEntity.getType(), font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					table.addCell(cell);
-					String detail = tApplicantWealthJpEntity.getDetails();
-					if ("银行流水".equals(tApplicantWealthJpEntity.getType())) {
-						detail += "万\n";
-					} else if ("理财".equals(tApplicantWealthJpEntity.getType())) {
-						detail += "万\n";
-					} else if ("房产".equals(tApplicantWealthJpEntity.getType())) {
-						detail += "平米\n";
-					}
-					cell = new PdfPCell(new Paragraph(detail, font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					table.addCell(cell);
-				} else {
-					cell = new PdfPCell(new Paragraph("", font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					table.addCell(cell);
-					cell = new PdfPCell(new Paragraph("", font));
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					table.addCell(cell);
-				}*/
 				//备注
 				if (record.get("isMainApplicant").equals(1)) {
 					cell = new PdfPCell(new Paragraph(

@@ -328,7 +328,7 @@ public class VisaJapanModule {
 	}
 
 	/**
-	 * 自动计算返回日期
+	 * 自动添加日期
 	 */
 	@At
 	@POST

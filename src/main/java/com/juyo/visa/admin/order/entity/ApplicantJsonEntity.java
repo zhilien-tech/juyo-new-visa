@@ -11,6 +11,10 @@ public class ApplicantJsonEntity implements Serializable {
 
 	private String address;
 
+	private Integer orderid;
+
+	private Integer applyid;
+
 	private String birth;
 
 	private String name;

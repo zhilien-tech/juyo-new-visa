@@ -12,6 +12,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
 	<style>
+<<<<<<< HEAD
 			.modal-header{position:fixed;top:0;left:0;width:100%;height:50px;line-height:50px;background:#FFF;z-index:10000;padding:0 15px}.heading{font-size:16px;line-height:28px}.btn-group-sm>.btn,.btn-sm{width:60px!important;font-size:12px!important;border-radius:3px!important}.btn-margin{margin-top:10px}.btn-right{margin-right:15px}
 			.modal-body {
 				padding: 20px 50px;
@@ -83,6 +84,79 @@
 				height: 100%;
 			}
 		</style>
+=======
+		.modal-header{position:fixed;top:0;left:0;width:100%;height:50px;line-height:50px;background:#FFF;z-index:10000;padding:0 15px}.heading{font-size:16px;line-height:28px}.btn-group-sm>.btn,.btn-sm{width:60px!important;font-size:12px!important;border-radius:3px!important}.btn-margin{margin-top:10px}.btn-right{margin-right:15px}
+		.modal-body {
+			padding: 20px 50px;
+			height: 100%;
+			margin-top: 50px;
+			overflow-y: hidden;
+		}
+		.modal-content{
+			box-shadow: none;
+    		border: 0;
+		}
+		.rightNav {
+			position: fixed;
+			top: 15px;
+			right: 0;
+			z-index: 999;
+			width: 40px;
+			height: 100%;
+			cursor: pointer;
+		}
+		.rightNav span {
+			width: 24px;
+			height: 24px;
+			position: absolute;
+			top: 50%;
+			border-left: 4px solid #999;
+			border-bottom: 4px solid #999;
+			-webkit-transform: translate(0, -50%) rotate(-135deg);
+			transform: translate(0, -50%) rotate(-135deg);
+		}
+		.wrap{
+			overflow: hidden;
+		}
+		.qrcode-wrap .qrcode{
+			float: left;
+			width: 150px;
+			height: 150px;
+			margin-left: 50px;
+    		margin-right: 55px;
+		}
+		.qrcode-wrap .tips{
+			float: left;
+			margin-left: 50px;
+			line-height: 150px;
+		}
+		.photo-wrap .title {
+			font-size: 16px;
+			margin: 15px 0;
+		}
+		.photo-wrap .photo {
+			position: relative;
+			float: left;
+			width: 257px;
+			height: 162px;
+			line-height: 162px;
+			text-align: center;
+			border: 1px solid #000;
+		}
+		.photo-wrap .tips{
+			float: left;
+			margin-top: 60px;
+			margin-left: 50px;
+		}
+		.photo-wrap .photo .img{
+			top: 0;
+			left: 0;
+			position: absolute;
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+>>>>>>> refs/remotes/origin/dev
 </head>
 <body>
 	<div class="modal-content">
@@ -104,7 +178,7 @@
 					<div class="title">护照首页</div>
 					<div class="photo">
 						等候上传..
-						<img id="passurl" class="img" src=" ">
+						<img id="passurl" onclick="toUpperPhoto(this)" class="img" src=" ">
 					</div>
 					<div class="tips">资料要求：<br>拍摄的字体清晰可见、不要反光</div>
 				</div>
@@ -112,7 +186,7 @@
 					<div class="title">身份证</div>
 					<div class="photo">
 						等候上传..
-						<img id="cardurl" class="img" src=" ">
+						<img id="cardurl" onclick="toUpperPhoto(this)" class="img" src=" ">
 					</div>
 					<div class="tips">资料要求：<br>清晰拍摄在有效期内的身份证正反面</div>
 				</div>
@@ -125,7 +199,9 @@
 	<script>
 		//const orderid 	  = '${obj.orderid}';
 		//const applicantid = '${obj.applyid}';
-		const BASEURL 	  = 'ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}';
+		var userid = '${obj.userid}';
+		console.log("userid:"+userid);
+		const BASEURL 	  = 'wss://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}';
 		const REDIRECTURL = '/admin/simple/updateApplicant.html?applicantid=' + $("#applyid").val() + '&orderid=' + $("#orderid").val();
 
 		const socket = new Socket().connect(BASEURL);
@@ -139,30 +215,52 @@
 		};
 		
 		socket.onmessage = (ev) => {
+			console.log(ev);
 			if (ev.data) {
 				let ret = JSON.parse(ev.data);
-				if(ret.orderid != ""){
-					$("#orderid").val(ret.orderid);
+				console.log(ret);
+				if(ret.userid == userid){
+					if(ret.orderid != ""){
+						$("#orderid").val(ret.orderid);
+					}
+					if(ret.applyid != ""){
+						$("#applyid").val(ret.applyid);
+					}
+					if(ret.passurl != ""){
+						$("#passurl").attr("src",ret.passurl);
+					}
+					if(ret.applyurl != ""){
+						$("#cardurl").attr("src",ret.applyurl);
+					}
+					 window.document.getElementById('orderid').value = ret.orderid;
+					 window.document.getElementById('applyid').value = ret.applyid;
+					 console.log($("#applyid").val());
+					 console.log($("#orderid").val());
+					 console.log("=============");
 				}
-				if(ret.applyid != ""){
-					$("#applyid").val(ret.applyid);
-				}
-				if(ret.passurl != ""){
-					$("#passurl").attr("src",ret.passurl);
-				}
-				if(ret.applyurl != ""){
-					$("#cardurl").attr("src",ret.applyrul);
-				}
-				 window.document.getElementById('orderid').value = ret.orderid;
-				 window.document.getElementById('applyid').value = ret.applyid;
 				
 			}
 			console.log('socket Connection onmessage done..');
 		};
 
-		$('#backBtn, #addBtn').on('click', () => {
+		$('#backBtn').on('click', () => {
 			layerFn.close(() => {
 				socket.close();
+			});
+		});
+		$('#addBtn').on('click', () => {
+			$.ajax({
+				type: 'POST',
+				data: {
+					applyid: $("#applyid").val(),
+					orderid: $("#orderid").val()
+				},
+				url: '/admin/simple/hasApplyInfo.html',
+				success: function (data) {
+					layerFn.close(() => {
+						socket.close();
+					});
+				}
 			});
 		});
 
@@ -181,10 +279,19 @@
 					window.document.getElementById('orderid').value = data.orderid;
 					window.document.getElementById('applyid').value = data.applyid;
 					socket.close();
+					console.log($("#applyid").val());
+					console.log($("#orderid").val());
 					window.location.href = '/admin/simple/updateApplicant.html?applicantid=' + $("#applyid").val() + '&orderid=' + $("#orderid").val();
 				}
 			});
 		});
+		
+		function toUpperPhoto(photo){
+			var url = $(photo).attr("src");
+			if(url != ""){
+				window.open('/admin/pcVisa/toUpperPhoto.html?url='+url);
+			}
+		}
 	</script>
 </body>
 </html>

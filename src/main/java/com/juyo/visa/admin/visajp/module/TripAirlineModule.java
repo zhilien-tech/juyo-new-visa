@@ -53,4 +53,13 @@ public class TripAirlineModule {
 	public Object getAirlines(@Param("..") FlightSelectParam param) {
 		return tripAirlineService.getAirlines(param);
 	}
+
+	/**
+	 * 查询接口数据到缓存(美国)
+	 */
+	@At
+	@POST
+	public Object getAirLineByInterfateUS(@Param("..") FlightSelectParam param) {
+		return tripAirlineService.getAirLineByInterfateUS(param);
+	}
 }

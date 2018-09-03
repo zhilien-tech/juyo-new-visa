@@ -682,109 +682,6 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 
 				}
 
-				//除去最后几天
-				/*if (Integer.valueOf(plan.getDay()) % 2 == 0 && Integer.valueOf(plan.getDay()) <= days) {//偶数行只刷新景点
-					//获取城市所有的景区
-					String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-					Sql sql = Sqls.create(sqlString);
-					sql.setParam("orderid", orderid);
-					sql.setParam("cityid", plan.getCityId());
-					sql.setParam("scenicname", plan.getScenic());
-					List<Record> scenics = dbDao.query(sql, null, null);
-					Random random = new Random();
-					plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-					dbDao.update(plan);
-					TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
-					//订单负责人变更
-					changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
-
-				} else if (Integer.valueOf(plan.getDay()) % 2 == 1 && Integer.valueOf(plan.getDay()) <= days + 1) {//奇数行为国内航班或新干线
-					int arrcityid = plan.getCityId();
-					TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
-							Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
-					int gocityid = fetch.getCityId();
-					if (planlist.get(0).getCityId() == 77 && Util.eq("false", contains)) {
-						String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid, 1);
-						plan.setScenic(countryAirline);
-					} else {
-						String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid, 2);
-						plan.setScenic(countryAirline);
-					}
-					dbDao.update(plan);
-				} else {//最后几天
-					//获取城市所有的景区
-					String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-					Sql sql = Sqls.create(sqlString);
-					sql.setParam("orderid", orderid);
-					sql.setParam("cityid", plan.getCityId());
-					sql.setParam("scenicname", plan.getScenic());
-					List<Record> scenics = dbDao.query(sql, null, null);
-					Random random = new Random();
-					plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-					dbDao.update(plan);
-				}
-				} else {
-				//第二天刷新景点
-				if (Integer.valueOf(plan.getDay()) == 2) {
-					//获取城市所有的景区
-					String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-					Sql sql = Sqls.create(sqlString);
-					sql.setParam("orderid", orderid);
-					sql.setParam("cityid", plan.getCityId());
-					sql.setParam("scenicname", plan.getScenic());
-					List<Record> scenics = dbDao.query(sql, null, null);
-					Random random = new Random();
-					plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-					dbDao.update(plan);
-				}
-				//第三天刷新新干线
-				else if (Integer.valueOf(plan.getDay()) == 3) {
-					int arrcityid = plan.getCityId();
-					TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
-							Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
-					int gocityid = fetch.getCityId();
-					String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid, 1);
-					plan.setScenic(countryAirline);
-					dbDao.update(plan);
-				}
-
-				else if (Integer.valueOf(plan.getDay()) > 3 && Integer.valueOf(plan.getDay()) % 2 == 1
-						&& Integer.valueOf(plan.getDay()) <= days) {//奇数行只刷新景点
-					//获取城市所有的景区
-					String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-					Sql sql = Sqls.create(sqlString);
-					sql.setParam("orderid", orderid);
-					sql.setParam("cityid", plan.getCityId());
-					sql.setParam("scenicname", plan.getScenic());
-					List<Record> scenics = dbDao.query(sql, null, null);
-					Random random = new Random();
-					plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-					dbDao.update(plan);
-
-				} else if (Integer.valueOf(plan.getDay()) > 3 && Integer.valueOf(plan.getDay()) % 2 == 0
-						&& Integer.valueOf(plan.getDay()) <= days + 1) {//偶数行为国内航班或新干线
-					int arrcityid = plan.getCityId();
-					TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
-							Cnd.where("orderId", "=", orderid).and("day", "=", Integer.valueOf(plan.getDay()) - 1));
-					int gocityid = fetch.getCityId();
-					String countryAirline = simpleVisaService.countryAirline(gocityid, arrcityid, 2);
-					plan.setScenic(countryAirline);
-					dbDao.update(plan);
-				} else {//最后几天
-					//获取城市所有的景区
-					String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
-					Sql sql = Sqls.create(sqlString);
-					sql.setParam("orderid", orderid);
-					sql.setParam("cityid", plan.getCityId());
-					sql.setParam("scenicname", plan.getScenic());
-					List<Record> scenics = dbDao.query(sql, null, null);
-					Random random = new Random();
-					plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
-					dbDao.update(plan);
-				}
-
-				}*/
-
 			}
 		}
 		//行程安排
@@ -1561,12 +1458,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 
 		//"2018-09-24", "2018-09-29", "2018-09-30", "2018-10-01", "2018-10-02", "2018-10-03", "2018-10-04", "2018-10-05", "2018-12-31"
-		int count = getCount(gotripdate, stayday, 0);
-		//日期加上一定天数之后还可能又包含了新的节假日，这里用递归解决
-		if (count != 0) {
-			return format.format(DateUtil.addDay(gotripdate, stayday - 1 + count));
-		}
-		return format.format(DateUtil.addDay(gotripdate, stayday - 1 + count));
+		int count = getCount(gotripdate, stayday - 3, 0);
+		return format.format(DateUtil.addDay(gotripdate, stayday - 3 + count));
 	}
 
 	public Object autoCalculateBackDate(Date gotripdate, Integer stayday) {
@@ -1576,27 +1469,29 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	}
 
 	public List<String> getHolidayDate() {
-		List<String> holidayDate = new ArrayList<>();
-		holidayDate.add("2018-09-24");
-		holidayDate.add("2018-09-29");
-		holidayDate.add("2018-09-30");
-		holidayDate.add("2018-10-01");
-		holidayDate.add("2018-10-02");
-		holidayDate.add("2018-10-03");
-		holidayDate.add("2018-10-04");
-		holidayDate.add("2018-10-05");
+		List<String> holidayDate = getWeekendayofyear();
+		holidayDate.add("2018-9-24");
+		holidayDate.add("2018-9-29");
+		holidayDate.add("2018-9-30");
+		holidayDate.add("2018-10-1");
+		holidayDate.add("2018-10-2");
+		holidayDate.add("2018-10-3");
+		holidayDate.add("2018-10-4");
+		holidayDate.add("2018-10-5");
 		holidayDate.add("2018-12-31");
 
 		return holidayDate;
 	}
 
 	public int getCount(Date gotripdate, Integer stayday, int count) {
-		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		DateFormat format = new SimpleDateFormat("YYYY-M-d");
 		List<String> holidayDate = getHolidayDate();
-		for (int i = 0; i < stayday + count; i++) {
-			String dateStr = format.format(DateUtil.addDay(gotripdate, i));
+		int totalday = stayday + count;
+		for (int i = 0; i < totalday; i++) {
+			String dateStr = format.format(DateUtil.addDay(gotripdate, i + 1));
 			if (holidayDate.contains(dateStr)) {
 				count++;
+				totalday++;
 			}
 		}
 		return count;
@@ -1612,20 +1507,18 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 
 		int count = getCount2(d, 1, 0);
-		//日期加上一定天数之后还可能又包含了新的节假日，这里用递归解决
-		if (count != 0) {
-			return format.format(DateUtil.addDay(d, 1 + count));
-		}
 		return format.format(DateUtil.addDay(d, 1 + count));
 	}
 
 	public int getCount2(Date gotripdate, Integer stayday, int count) {
 		DateFormat format = new SimpleDateFormat("YYYY-M-d");
-		List<String> holidayDate = getWeekendayofyear();
-		for (int i = 0; i < stayday + count; i++) {
+		List<String> holidayDate = getHolidayDate();
+		int totalday = stayday + count;
+		for (int i = 0; i < totalday; i++) {
 			String dateStr = format.format(DateUtil.addDay(gotripdate, i + 1));
 			if (holidayDate.contains(dateStr)) {
 				count++;
+				totalday++;
 			}
 		}
 		return count;
@@ -1766,42 +1659,6 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param orderid
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	//	public Object sendZhaoBao(HttpServletRequest request, Long orderid) {
-	//		HttpSession session = request.getSession();
-	//		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-	//		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-	//		Integer adminId = loginCompany.getAdminId();
-	//
-	//
-	//
-	//		Map<String, Object> result = new HashMap<String, Object>();
-	//		result.put("orderid", orderid);
-	//		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
-	//		result.put("orderjpinfo", orderjp);
-	//		List<TCompanyEntity> songqianlist = Lists.newArrayList();
-	//		//送签社下拉
-	//		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
-	//				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
-	//
-	//			Cnd cnd = Cnd.where("adminId", "=",adminId);
-	//			cnd.and("cdesignNum","!=", "");
-	//
-	//			songqianlist = dbDao.query(TCompanyEntity.class,cnd, null);
-	//		} else {
-	//			TCompanyEntity songqian = dbDao.fetch(TCompanyEntity.class, orderjp.getSendsignid().longValue());
-	//			songqianlist.add(songqian);
-	//		}
-	//		if(songqianlist.size() == 0) {
-	//			result.put("songqianlist", "请选择含有指定番号的 送签社");
-	//		}else {
-	//			result.put("songqianlist", songqianlist);
-	//		}
-	//		//地接社下拉
-	//		List<TCompanyEntity> dijielist = dbDao.query(TCompanyEntity.class,
-	//				Cnd.where("comType", "=", CompanyTypeEnum.DIJI.intKey()).and("name", "like", "株式会社金通商社"), null);
-	//		result.put("dijielist", dijielist);
-	//		return result;
-	//	}
 	public Object sendZhaoBao(HttpServletRequest request, Long orderid) {
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -1909,19 +1766,6 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
 			}
 
-			//送签社
-			/*if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())) {
-				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-				//订单负责人变更
-				Integer userId = loginuser.getId();
-				changePrincipalViewService.ChangePrincipal(orderjp.getOrderId(), VISA_PROCESS, userId);
-			} else if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
-				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-			} else {
-				//地接社为准备提交大使馆
-				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-			}*/
-
 			//生成excel
 			//申请人信息
 			Map<String, Object> tempdata = new HashMap<String, Object>();
@@ -1954,7 +1798,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			//更新订单状态为发招保中或准备提交大使馆，此时发招宝就会开始，所以必须在准备工作之后，即orderjp相关的操作和excel完成之后
 
 			Integer userId = loginuser.getId();
-			orderinfo.setVisaOpid(userId);
+			//如果是lelv点的，则记录原订单的操作人
+			if (Util.eq("lelv", loginuser.getName())) {
+				orderinfo.setVisaOpid(orderinfo.getSalesOpid());
+			} else {
+				orderinfo.setVisaOpid(userId);
+			}
 			dbDao.update(orderinfo);
 
 			//orderJpViewService.insertLogs(orderinfo.getId(), JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey(), session);

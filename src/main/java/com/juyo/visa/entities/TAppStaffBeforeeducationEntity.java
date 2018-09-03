@@ -22,6 +22,13 @@ public class TAppStaffBeforeeducationEntity implements Serializable {
 	private Integer staffid;
 
 	@Column
+	@Comment("最高学历")
+	private Integer highesteducation;
+	@Column
+	@Comment("最高学历(英文)")
+	private Integer highesteducationen;
+
+	@Column
 	@Comment("机构名称")
 	private String institution;
 

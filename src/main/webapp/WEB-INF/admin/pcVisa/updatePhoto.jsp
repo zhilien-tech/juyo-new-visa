@@ -223,7 +223,7 @@
 		if ('WebSocket' in window) {
 			console.log('Websocket supported');
 			socket = new WebSocket(
-					'ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');
+					'wss://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');
 
 			console.log('Connection attempted');
 

@@ -256,9 +256,8 @@
 								<!-- 出发城市 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<input id="gocity" name="godeparturecity" type="hidden">
 										<label><span>*</span>出发城市：</label> <select
-											id="goDepartureCity"
+											id="goDepartureCity" name="godeparturecity"
 											class="form-control select2 select2City departurecity"
 											multiple="multiple">
 											<c:forEach items="${obj.citylist }" var="city">
@@ -283,14 +282,13 @@
 								<!-- 抵达城市 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>抵达城市：</label> <select id="goArrivedCity"
+										<label><span>*</span>抵达城市：</label> <select id="goArrivedCity" name="goArrivedCity"
 											class="form-control input-sm select2City arrivedcity"
 											multiple="multiple">
 											<c:if test="${not empty obj.orderInfo.goArrivedCity }">
 												<option value="${obj.travelInfo.goArrivedCity}"
 													selected="selected">${obj.orderInfo.goArrivedCity}</option>
 											</c:if>
-											<input id="goarrivecity" name="goArrivedCity" type="hidden" />
 											<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
 													<c:when test="${city.id eq obj.travelInfo.goArrivedCity }">
@@ -308,10 +306,11 @@
 								<!-- 航班号 -->
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span>*</span>航班号：</label> <select id="goFlightNum"
+										<label><span>*</span>航班号：</label> <select id="goFlightNum" name="goFlightNum"
 											class="form-control input-sm flightSelect2"
 											multiple="multiple">
-											<c:if test="${!empty obj.goFlightInfo }">
+											<option selected="selected" value="${obj.travelInfo.goFlightNum }">${obj.travelInfo.goFlightNum}</option>
+											<%-- <c:if test="${!empty obj.goFlightInfo }">
 												<option value="${obj.goFlightInfo.flightnum }"
 													selected="selected">${obj.goFlightInfo.takeOffName }-${obj.goFlightInfo.landingName }
 													${obj.goFlightInfo.flightnum }
@@ -325,7 +324,7 @@
 													<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName }
 														${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
 												</c:if>
-											</c:forEach>
+											</c:forEach> --%>
 										</select>
 									</div>
 								</div>
@@ -338,15 +337,13 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label> <select
-											id="returnDepartureCity"
+											id="returnDepartureCity" name="returnDepartureCity"
 											class="form-control select2 select2City departurecity"
 											multiple="multiple">
 											<c:if test="${!empty obj.orderInfo.returnDepartureCity}">
 												<option value="${obj.travelInfo.returnDepartureCity}"
 													selected="selected">${obj.orderInfo.returnDepartureCity}</option>
 											</c:if>
-											<input id="returncity" name="returnDepartureCity"
-											type="hidden" />
 										</select>
 									</div>
 								</div>
@@ -355,15 +352,13 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回城市：</label> <select
-											id="returnArrivedCity"
+											id="returnArrivedCity" name="returnArrivedCity"
 											class="form-control input-sm select2City arrivedcity"
 											multiple="multiple">
 											<c:if test="${!empty obj.orderInfo.returnArrivedCity}">
 												<option value="${obj.travelInfo.returnArrivedCity}"
 													selected="selected">${obj.orderInfo.returnArrivedCity}</option>
 											</c:if>
-											<input id="returnarrivecity" name="returnArrivedCity"
-											type="hidden">
 											<c:forEach items="${obj.citylist }" var="city">
 												<c:choose>
 													<c:when
@@ -382,10 +377,11 @@
 								<!-- 航班号 -->
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span>*</span>航班号：</label> <select id="returnFlightNum"
+										<label><span>*</span>航班号：</label> <select id="returnFlightNum" name="returnFlightNum"
 											class="form-control input-sm flightSelect2"
 											multiple="multiple">
-											<c:if test="${!empty obj.returnFlightInfo }">
+											<option selected="selected" value="${obj.travelInfo.returnFlightNum }">${obj.travelInfo.returnFlightNum}</option>
+											<%-- <c:if test="${!empty obj.returnFlightInfo }">
 												<option value="${obj.returnFlightInfo.flightnum }"
 													selected="selected">${obj.returnFlightInfo.takeOffName }-${obj.returnFlightInfo.landingName }
 													${obj.returnFlightInfo.flightnum }
@@ -399,7 +395,7 @@
 													<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName }
 														${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
 												</c:if>
-											</c:forEach>
+											</c:forEach> --%>
 										</select>
 									</div>
 								</div>
@@ -911,7 +907,7 @@
 		$('#goFlightNum').select2(
 				{
 					ajax : {
-						url : "/admin/tripairline/getTripAirlineSelect.html",
+						url : "/admin/tripairline/getAirLineByInterfateUS.html",
 						dataType : 'json',
 						delay : 250,
 						type : 'post',
@@ -946,15 +942,17 @@
 						},
 						processResults : function(data, params) {
 							params.page = params.page || 1;
-							var selectdata = $.map(data, function(obj) {
+							var selectdata = $.map(data, function (obj) {
 								//obj.id = obj.id; // replace pk with your identifier
-								obj.id = obj.flightnum; // replace pk with your identifier
-								obj.text = obj.takeOffName + '-'
-										+ obj.landingName + ' ' + obj.flightnum
-										+ ' ' + obj.takeOffTime + '/'
-										+ obj.landingTime;
+								if(obj.zhuanflightnum != undefined){
+									obj.id = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+									obj.text = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+								}else{
+									//obj.id = obj.flightnum; // replace pk with your identifier
+									obj.id = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+									obj.text = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+								}
 								/*obj.text = obj.dictCode;*/
-								goflightnum = obj.flightnum;
 								return obj;
 							});
 							return {
@@ -980,7 +978,7 @@
 				.select2(
 						{
 							ajax : {
-								url : "/admin/tripairline/getTripAirlineSelect.html",
+								url : "/admin/tripairline/getAirLineByInterfateUS.html",
 								dataType : 'json',
 								delay : 250,
 								type : 'post',
@@ -1019,16 +1017,19 @@
 								},
 								processResults : function(data, params) {
 									params.page = params.page || 1;
-									var selectdata = $.map(data, function(obj) {
+									var selectdata = $.map(data, function (obj) {
 										//obj.id = obj.id; // replace pk with your identifier
-										obj.id = obj.flightnum; // replace pk with your identifier
-										obj.text = obj.takeOffName + '-'
-												+ obj.landingName + ' '
-												+ obj.flightnum + ' '
-												+ obj.takeOffTime + '/'
-												+ obj.landingTime;
+										//obj.id = obj.flightnum; // replace pk with your identifier
+										//obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime;
+										if(obj.zhuanflightnum != undefined){
+											obj.id = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+											obj.text = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+										}else{
+											//obj.id = obj.flightnum; // replace pk with your identifier
+											obj.id = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+											obj.text = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+										}
 										/*obj.text = obj.dictCode;*/
-										returnflightnum = obj.flightnum;
 										return obj;
 									});
 									return {
@@ -1073,8 +1074,8 @@
 					var goDate = $('#goDate').val();
 					var returnDate = $('#returnDate').val();
 					//查询航班接口到缓存
-					initFlightByInterface(goDate, thisval, goArrivedCity);
-					initFlightByInterface(returnDate, goArrivedCity, thisval);
+					//initFlightByInterface(goDate, thisval, goArrivedCity);
+					//initFlightByInterface(returnDate, goArrivedCity, thisval);
 				});
 		$("#goDepartureCity").on("select2:unselect", function(e) {
 			$(this).text('');
@@ -1107,10 +1108,8 @@
 							var goDate = $('#goDate').val();
 							var returnDate = $('#returnDate').val();
 							//查询航班接口到缓存
-							initFlightByInterface(goDate, goDepartureCity,
-									thisval);
-							initFlightByInterface(returnDate, thisval,
-									goDepartureCity);
+							//initFlightByInterface(goDate, goDepartureCity, thisval);
+							//initFlightByInterface(returnDate, thisval, goDepartureCity);
 						});
 		$("#goArrivedCity").on("select2:unselect", function(e) {
 			$(this).text('');
@@ -1134,7 +1133,7 @@
 			}
 			var returnDate = $('#returnDate').val();
 			//查询航班接口到缓存
-			initFlightByInterface(returnDate, thisval, returnArrivedCity);
+			//initFlightByInterface(returnDate, thisval, returnArrivedCity);
 		});
 		$("#returnDepartureCity").on("select2:unselect", function(e) {
 			$(this).text('');
@@ -1157,7 +1156,7 @@
 			}
 			var returnDate = $('#returnDate').val();
 			//查询航班接口到缓存
-			initFlightByInterface(returnDate, returnDepartureCity, thisval);
+			//initFlightByInterface(returnDate, returnDepartureCity, thisval);
 		});
 		$("#returnArrivedCity").on("select2:unselect", function(e) {
 			$(this).text('');
@@ -1169,7 +1168,7 @@
 		function initFlightByInterface(departuredate, departurecity,
 				arrivedcity) {
 			$.ajax({
-				url : '/admin/tripairline/getAirLineByInterfate.html',
+				url : '/admin/tripairline/getAirLineByInterfateUS.html',
 				dataType : "json",
 				data : {
 					date : departuredate,
@@ -1547,19 +1546,6 @@
 		
 		//保存并返回
 		function save(){
-			var goDepartureCity = $('#goDepartureCity').val();
-			var goArrivedCity = $('#goArrivedCity').val();
-			var returnDepartureCity = $('#returnDepartureCity').val();
-			var returnArrivedCity = $('#returnArrivedCity').val();
-			var goflightnum = $('#goFlightNum').val();
-			var returnflightnum = $('#returnFlightNum').val();
-			$('#gocity').val(goDepartureCity);
-			$('#goarrivecity').val(goArrivedCity);
-			$('#goflightnum').val(goflightnum);
-			$('#returncity').val(returnDepartureCity);
-			$('#returnarrivecity').val(returnArrivedCity);
-			$('#returnflightnum').val(returnflightnum);
-			var data = getFormJson("#orderUpdateForm");
 			$.ajax({
 				url : "${base}/admin/orderUS/orderSave",
 				dataType : "json",

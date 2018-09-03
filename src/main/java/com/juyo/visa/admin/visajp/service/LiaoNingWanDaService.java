@@ -46,8 +46,8 @@ import com.juyo.visa.admin.scenic.service.ScenicViewService;
 import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.admin.visajp.util.TtfClassLoader;
 import com.juyo.visa.common.enums.JobStatusEnum;
-import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
+import com.juyo.visa.common.enums.SimpleVisaTypeEnum;
 import com.juyo.visa.common.util.FormatDateUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantWealthJpEntity;
@@ -137,9 +137,6 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 		tempdata.put("mutiltrip", mutiltrip);
 		//准备合并的PDF文件
 		List<ByteArrayOutputStream> pdffiles = Lists.newArrayList();
-		//申请人名单
-		ByteArrayOutputStream applyList = applyList(tempdata);
-		pdffiles.add(applyList);
 		//准备封皮信息
 		ByteArrayOutputStream note = note(tempdata);
 		pdffiles.add(note);
@@ -149,16 +146,19 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 		//滞在予定表
 		ByteArrayOutputStream tripInfo = tripInfo(tempdata);
 		pdffiles.add(tripInfo);
-		ByteArrayOutputStream airticket = airticket(tempdata);
-		pdffiles.add(airticket);
-		//酒店信息
-		ByteArrayOutputStream hotelInfo = hotelInfo(tempdata);
-		pdffiles.add(hotelInfo);
+		//申请人名单
+		ByteArrayOutputStream applyList = applyList(tempdata);
+		pdffiles.add(applyList);
 		//申请人信息
 		for (Record record : applyinfo) {
 			ByteArrayOutputStream apply = applyinfo(record, tempdata);
 			pdffiles.add(apply);
 		}
+		ByteArrayOutputStream airticket = airticket(tempdata);
+		pdffiles.add(airticket);
+		//酒店信息
+		ByteArrayOutputStream hotelInfo = hotelInfo(tempdata);
+		pdffiles.add(hotelInfo);
 		//		ByteArrayOutputStream returnhome = returnhome(tempdata);
 		//		pdffiles.add(returnhome);
 		ByteArrayOutputStream mergePdf = templateUtil.mergePdf(pdffiles);
@@ -192,7 +192,7 @@ public class LiaoNingWanDaService extends BaseService<TOrderJpEntity> {
 		String visatypestr = "";
 		Integer visaType = orderjp.getVisaType();
 		if (!Util.isEmpty(visaType)) {
-			for (MainSaleVisaTypeEnum visatypeEnum : MainSaleVisaTypeEnum.values()) {
+			for (SimpleVisaTypeEnum visatypeEnum : SimpleVisaTypeEnum.values()) {
 				if (visatypeEnum.intKey() == visaType) {
 					visatypestr = visatypeEnum.value();
 				}
