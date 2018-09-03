@@ -266,7 +266,7 @@ $('#uploadFile').change(function() {
 		$.ajax({
 			type : "POST",//提交类型  
 			//dataType : "json",//返回结果格式  
-			url : '/admin/orderJp/passportRecognition',//请求地址  
+			url : '/admin/orderJp/passportRecognitionUS',//请求地址  
 			async : true,
 			processData : false, //当FormData在jquery中使用的时候需要设置此项
 			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )

@@ -59,4 +59,13 @@ public class JapanDijieModule {
 	public Object orderdetail(@Param("orderid") Integer orderid, HttpServletRequest request) {
 		return japanDijieService.orderdetail(orderid, request);
 	}
+
+	/**
+	 * 发招保页面
+	 */
+	@At
+	@Ok("jsp")
+	public Object sendZhaoBao(HttpServletRequest request, @Param("orderid") Long orderid) {
+		return japanDijieService.sendZhaoBao(request, orderid);
+	}
 }

@@ -6762,3 +6762,6 @@ button.close {
   }
 }
 /*# sourceMappingURL=bootstrap.css.map */
+input:focus{
+    border-color: #3087f1!important;
+}

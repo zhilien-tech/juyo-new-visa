@@ -373,7 +373,21 @@ public class OrderJpModule {
 	public Object IDCardRecognition(@Param("image") File file, @Param("applyid") int applyid,
 			@Param("orderid") int orderid, @Param("userid") int userid, HttpServletRequest request,
 			HttpServletResponse response) {
+		System.out.println("applyid:" + applyid + " orderid:" + orderid + " userid:" + userid);
 		return saleViewService.IDCardRecognition(file, applyid, orderid, userid, request, response);
+	}
+
+	/**
+	 * 美国身份证正面上传、扫描
+	 */
+	@At
+	@Ok("json")
+	@Filters
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object IDCardRecognitionUS(@Param("image") File file, @Param("applyid") int applyid,
+			@Param("orderid") int orderid, @Param("userid") int userid, HttpServletRequest request,
+			HttpServletResponse response) {
+		return saleViewService.IDCardRecognitionUS(file, applyid, orderid, userid, request, response);
 	}
 
 	/**
@@ -399,6 +413,19 @@ public class OrderJpModule {
 			@Param("orderid") int orderid, @Param("userid") int userid, HttpServletRequest request,
 			HttpServletResponse response) {
 		return saleViewService.passportRecognitionBack(file, applyid, orderid, userid, request, response);
+	}
+
+	/**
+	 * 美国护照上传、扫描
+	 */
+	@At
+	@Ok("json")
+	@Filters
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object passportRecognitionUS(@Param("image") File file, @Param("applyid") int applyid,
+			@Param("orderid") int orderid, @Param("userid") int userid, HttpServletRequest request,
+			HttpServletResponse response) {
+		return saleViewService.passportRecognitionUS(file, applyid, orderid, userid, request, response);
 	}
 
 	/**
@@ -604,6 +631,15 @@ public class OrderJpModule {
 	@POST
 	public Object getOrderStatus(@Param("orderid") int orderid) {
 		return saleViewService.getOrderStatus(orderid);
+	}
+
+	/**
+	 * 根据出生日期来设置婚姻状况和工作类型
+	 */
+	@At
+	@POST
+	public Object accordingbirtday(@Param("birthday") String birthday) {
+		return saleViewService.accordingbirtday(birthday);
 	}
 
 }

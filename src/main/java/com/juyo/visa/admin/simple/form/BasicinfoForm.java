@@ -200,4 +200,6 @@ public class BasicinfoForm {
 
 	private Integer juzhudicheckbox;
 
+	private Integer isnamedisabled;;
+
 }

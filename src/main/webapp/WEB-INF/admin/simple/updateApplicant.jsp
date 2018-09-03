@@ -24,6 +24,15 @@
 		#juzhudi-text{display: none;}
 		#juzhudi-checkbox{display: none;position: absolute;top: 1px;right: -10px;}
 		.dropdown-menu {top: 284px !important;}
+		#birthAddressEn,#issuedPlaceEn{left: 60px;width: 120px;}
+		#passport-tips{
+			background: url(../../references/public/dist/newvisacss/img/error.png) no-repeat;
+			padding-left: 18px;
+			background-position: 0px 3px;
+			line-height: 18px;
+			display: none; 
+			color: red;
+		}
 	</style>
 </head>
 <body>
@@ -50,7 +59,7 @@
 								name="firstName" 
 								type="text" 
 								class="form-control input-sm" 
-								tabIndex="1" 
+								tabindex="1" 
 								autocomplete="off"
 								value="${obj.passport.firstName }" 
 								onkeyup="this.value=this.value.replace(/^ +| +$/g,'')"
@@ -79,10 +88,11 @@
 								name="lastName" 
 								type="text" 
 								class="form-control input-sm" 
-								tabIndex="2" 
+								tabindex="2" 
 								autocomplete="off"
 								value="${obj.passport.lastName }" 
 								onkeyup="this.value=this.value.replace(/^ +| +$/g,'')"
+								style="width: 345px;"
 							/>
 							<input 
 								type="text" 
@@ -92,6 +102,13 @@
 								name="lastNameEn" 
 								value="${obj.lastNameEn }"
 							/>
+							<input 
+								name="isnamedisabled" 
+								id="lastNamechecked" 
+								value="2"
+								type="checkbox"
+								style="position: absolute;top: 27px;right: 0;width: 20px;height: 20px;"
+							>
 						</div>
 					</div>
 				</div>
@@ -109,10 +126,11 @@
 									class="form-control input-sm" 
 									autocomplete="off" 
 									maxlength="9" 
-									tabIndex="3" 
+									tabindex="3" 
 									value="${obj.passport.passport }"
 									onkeyup="this.value=this.value.replace(/^ +| +$/g,'')"
 								/>
+								<small id="passport-tips">护照号已存在，请重新输入</small>
 							</div>
 						</div>
 						<!-- 性别 -->
@@ -120,7 +138,7 @@
 							<div class="col-sm-8 padding-0">
 								<div class="form-group">
 									<label><span>*</span>性别</label>
-									<select class="form-control input-sm selectHeight" id="sex" name="sex">
+									<select class="form-control input-sm selectHeight" id="sex" name="sex" tabindex="4">
 										<option value="男" ${obj.passport.sex == "男"?"selected":"" }>男</option>
 										<option value="女" ${obj.passport.sex == "女"?"selected":"" }>女</option>
 									</select>
@@ -129,7 +147,7 @@
 							<div class="col-sm-4 pr-0 pl-10">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<input id="sexEn" class="form-control input-sm" autocomplete="off" name="sexEn" tabIndex="4" type="text" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" value="${obj.passport.sexEn }"/>
+									<input id="sexEn" class="form-control input-sm" autocomplete="off" name="sexEn" tabindex="5" type="text" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" value="${obj.passport.sexEn }"/>
 								</div>
 							</div>
 						</div>
@@ -146,7 +164,7 @@
 									autocomplete="off" 
 									type="text" 
 									class="form-control input-sm" 
-									tabIndex="5" 
+									tabindex="5" 
 									value="${obj.passport.birthAddress }"
 								/>
 								<input 
@@ -168,7 +186,7 @@
 									autocomplete="off" 
 									type="text" 
 									class="form-control input-sm" 
-									tabIndex="6" 
+									tabindex="6" 
 									value="${obj.passport.issuedPlace }"
 								/>
 								<input 
@@ -188,7 +206,7 @@
 						<div class="col-sm-6  pl-0 pr-5">
 							<div class="form-group">
 								<label><span>*</span>出生日期</label>
-								<input id="birthday" name="birthday" type="text" autocomplete="off" class="form-control input-sm" tabIndex="7" value="${obj.birthday}"/>
+								<input id="birthday" name="birthday" type="text" autocomplete="off" class="form-control input-sm" tabindex="7" value="${obj.birthday}"/>
 							</div>
 						</div>
 						<!-- 签发日期 -->
@@ -196,13 +214,13 @@
 							<div class="col-sm-8 padding-0">
 								<div class="form-group">
 									<label><span>*</span>签发日期</label>
-									<input id="issuedDate" name="issuedDate" autocomplete="off" type="text" class="form-control input-sm" tabIndex="8" value="${obj.issuedDate }"/>
+									<input id="issuedDate" name="issuedDate" autocomplete="off" type="text" class="form-control input-sm" tabindex="8" value="${obj.issuedDate }"/>
 								</div>
 							</div>
 							<div class="col-sm-4 pr-0 pl-10">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<select id="validType" name="validType" class="form-control input-sm selectHeight" style="padding: 0">
+									<select id="validType" name="validType" class="form-control input-sm selectHeight" style="padding: 0"  tabindex="9">
 										<c:forEach var="map" items="${obj.passportType}">
 											<option value="${map.key}" ${map.key == obj.passport.validType?'selected':'' }>${map.value}</option>
 										</c:forEach>
@@ -216,7 +234,7 @@
 						<div class="col-sm-6 pl-0 pr-5">
 							<div class="form-group">
 								<label><span>*</span>有效期至</label>
-								<input id="validEndDate" name="validEndDate" autocomplete="off" type="text" class="form-control input-sm" tabIndex="9" value="${obj.validEndDate }"/>
+								<input id="validEndDate" name="validEndDate" autocomplete="off" type="text" class="form-control input-sm" tabindex="10" value="${obj.validEndDate }"/>
 							</div>
 						</div>
 						<div class="col-sm-6">
@@ -224,12 +242,30 @@
 						</div>
 					</div>
 				</div>
+				
+				<div class="row"><!-- 签发机关 -->
+					<div class="col-sm-3 pr-5">
+						<div class="form-group">
+							<label><span>*</span>签发机关</label>
+							<input id="issuedOrganization" name="issuedOrganization" tabindex="10" type="text" autocomplete="off" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganization }"/>
+						</div>
+					</div>
+
+					<div class="col-sm-6 pl-5 pr-5">
+						<div class="form-group">
+							<label><span>*</span>Authority</label>
+							<input id="issuedOrganizationEn" name="issuedOrganizationEn" tabindex="10" type="text" autocomplete="off" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedOrganizationEn }"/>
+						</div>
+					</div>
+				</div><!-- end 签发机关 -->
+
+
 				<div class="row">
 					<!-- 公民身份号码 -->
 					<div class="col-sm-6">
 						<div class="form-group">
 							<label><span>*</span>公民身份证</label>
-							<input id="cardId"  onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="cardId" autocomplete="off" type="text" tabIndex="10" class="form-control input-sm" value="${obj.applicant.cardId }"/>
+							<input id="cardId"  onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="cardId" autocomplete="off" type="text" tabindex="10" class="form-control input-sm" value="${obj.applicant.cardId }"/>
 						</div>
 					</div>
 					<div class="col-sm-6">
@@ -240,14 +276,14 @@
 								<input id="issueOrganization"  name="issueOrganization" type="hidden" value="${obj.applicant.issueOrganization }" />
 								<input type="hidden" id="orderid" name="orderid" value="${obj.orderid }" />
 								<input type="hidden" id="id" name="id" value="${obj.applicant.id }" />
-								<input id="telephone" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="telephone" type="text" autocomplete="off" tabIndex="11" class="form-control input-sm" value="${obj.applicant.telephone }" />
+								<input id="telephone" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="telephone" type="text" autocomplete="off" tabindex="11" class="form-control input-sm" value="${obj.applicant.telephone }" />
 							</div>
 						</div>
 						<!-- 邮箱 -->
 						<div class="col-sm-6 pr-0 pl-5">
 							<div class="form-group">
 								<label><span>*</span>邮箱</label>
-								<input id="email" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="email" type="text" tabIndex="12" autocomplete="off" class="form-control input-sm" value="${obj.applicant.email }"/>
+								<input id="email" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="email" type="text" tabindex="12" autocomplete="off" class="form-control input-sm" value="${obj.applicant.email }"/>
 							</div>
 						</div>
 					</div>
@@ -257,21 +293,21 @@
 					<div class="col-sm-3 pr-5">
 						<div class="form-group">
 							<label style="position: relative;"><span>*</span>现居住地<b id="juzhudi-text">（同主申请人）</b><input id="juzhudi-checkbox" name="juzhudicheckbox" type="checkbox" value=""></label>
-							<input id="province"  onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="province" type="text" class="form-control input-sm" tabIndex="13" placeholder="省" value="${obj.applicant.province }"/>
+							<input id="province"  onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="province" type="text" class="form-control input-sm" tabindex="13" placeholder="省" value="${obj.applicant.province }"/>
 						</div>
 					</div>
 					<!-- 详细地址 -->
 					<div class="col-sm-6 pl-5 pr-5">
 						<div class="form-group">
 							<label><span>*</span>详细地址</label>
-							<input id="detailedAddress" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="detailedAddress" type="text" class="form-control input-sm" tabIndex="14" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" autocomplete="off" value="${obj.applicant.detailedAddress }" />
+							<input id="detailedAddress" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="detailedAddress" type="text" class="form-control input-sm" tabindex="14" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" autocomplete="off" value="${obj.applicant.detailedAddress }" />
 						</div>
 					</div>
 					<!-- 婚姻状况 -->
 					<div class="col-sm-3 pl-5">
 						<div class="form-group">
 							<label><span>*</span>婚姻状况</label>
-							<select id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight">
+							<select id="marryStatus" name="marryStatus" class="form-control input-sm selectHeight" tabindex="15">
 								<option value="">请选择</option>
 								<c:forEach var="map" items="${obj.marryStatusEnum}">
 									<option value="${map.key}" ${map.key==obj.applicant.marryStatus?'selected':''}>${map.value}</option>
@@ -304,7 +340,7 @@
 						<div class="nameBeforeHide">
 							<div class="form-group relative">
 								<label><span>*</span>姓 / 拼音</label>
-								<input onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" id="otherFirstName" autocomplete="off" name="otherFirstName" type="text" class="form-control input-sm" value="${obj.applicant.otherFirstName }" />
+								<input onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" tabindex="16" id="otherFirstName" autocomplete="off" name="otherFirstName" type="text" class="form-control input-sm" value="${obj.applicant.otherFirstName }" />
 								<input type="text" id="otherFirstNameEn" autocomplete="off" name="otherFirstNameEn" value="${obj.otherFirstNameEn }" />
 							</div>
 						</div>
@@ -314,7 +350,7 @@
 						<div class="nameBeforeHide">
 							<div class="form-group relative">
 								<label><span>*</span>名 / 拼音</label>
-								<input onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" id="otherLastName" name="otherLastName" autocomplete="off" type="text" class="form-control input-sm otherLastName" value="${obj.applicant.otherLastName }" />
+								<input onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" tabindex="17" id="otherLastName" name="otherLastName" autocomplete="off" type="text" class="form-control input-sm otherLastName" value="${obj.applicant.otherLastName }" />
 								<input type="text" id="otherLastNameEn" autocomplete="off" name="otherLastNameEn" value="${obj.otherLastNameEn }" />
 							</div>
 						</div>
@@ -348,7 +384,7 @@
 						</div>
 						<div class="col-sm-6 padding-0 nationalityHide guoji">
 							<div class="form-group" id="nationalityDiv">
-								<input id="nationality" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="nationality" type="text" class="form-control input-sm" autocomplete="off" value="${obj.applicant.nationality}" />
+								<input id="nationality" tabindex="18" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="nationality" type="text" class="form-control input-sm" autocomplete="off" value="${obj.applicant.nationality}" />
 							</div>
 						</div>
 					</div>
@@ -358,7 +394,7 @@
 						<div class="col-sm-6 pl-0 pr-5">
 							<div class="form-group">
 								<label>紧急联系人姓名</label>
-								<input id="emergencyLinkman" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="emergencyLinkman" type="text" class="form-control input-sm" autocomplete="off" tabIndex="15" value="${obj.applicant.emergencyLinkman }" />
+								<input id="emergencyLinkman" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="emergencyLinkman" type="text" class="form-control input-sm" autocomplete="off" tabindex="19" value="${obj.applicant.emergencyLinkman }" />
 							</div>
 						</div>
 						<div class="col-sm-6 pr-0 pl-5">
@@ -366,7 +402,7 @@
 								<label id="updateApplicantHead">与主申请人的关系</label>
 								</br>
 								<div class="input-box c-input-box">
-									<input type="text" id="mainRelation" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')"  tabIndex="16" name="mainRelation" style="font-size: 10px !important;" class="input" autocomplete="off"
+									<input type="text" id="mainRelation" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')"  tabindex="20" name="mainRelation" style="font-size: 10px !important;" class="input" autocomplete="off"
 									value=" ${obj.orderjp.mainRelation }">
 									<ul class="dropdown c-dropdown" style="font-size: 10px !important;">
 										<li>配偶</li>
@@ -381,7 +417,7 @@
 						<div class="col-sm-6 padding-0">
 							<div class="form-group">
 								<label>紧急联系人手机</label>
-								<input id="emergencyTelephone" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="emergencyTelephone" type="text" class="form-control input-sm" autocomplete="off" tabIndex="17" value="${obj.applicant.emergencyTelephone }" />
+								<input id="emergencyTelephone" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="emergencyTelephone" type="text" class="form-control input-sm" autocomplete="off" tabindex="21" value="${obj.applicant.emergencyTelephone }" />
 							</div>
 						</div>
 					</div>
@@ -391,7 +427,7 @@
 						<div class="col-sm-12 padding-0">
 							<div class="form-group">
 								<label>紧急联系人地址</label>
-								<input id="emergencyaddress" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="emergencyaddress" type="text" class="form-control input-sm" autocomplete="off" tabIndex="18" value="${obj.applicant.emergencyaddress }" />
+								<input id="emergencyaddress" onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="emergencyaddress" type="text" class="form-control input-sm" autocomplete="off" tabindex="22" value="${obj.applicant.emergencyaddress }" />
 							</div>
 						</div>
 					</div>
@@ -415,6 +451,30 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript" src="${base}/admin/simple/validationZh.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
+	
+	let _FLAG = false;
+		(() => {
+			let marryStatus = "${obj.applicant.marryStatus}";
+		      if (!marryStatus || marryStatus == '') {
+		        let birthday =  $('#birthday').val();
+		        $.ajax({
+		          type: 'POST',
+		          data: {
+		            birthday: birthday
+		          },
+		          url: BASE_PATH + '/admin/orderJp/accordingbirtday.html',
+		          success: function (data) {
+		            let _v = 0;
+		            if (data < 25)
+		              _v = 4;
+		            else
+		              _v = 1;
+		            $('#marryStatus').val(_v);
+		          }
+		        });
+		      }
+		})();
+		var passportVali;
 		$(function () {
 
 			var remark = $("#baseRemark").val();
@@ -448,7 +508,54 @@
 			} else {
 				var boxObj = $("input:checkbox[name='addressIsSameWithCard']").attr("checked", false);
 			}
+			
+			
+			
+			(() => {
+				let _url = "${base}/references/public/dist/newvisacss/img/error.png";
+				let smallTemp = '<small id="diySmall" style="display: none;color: #ff1a1a;margin-top:5px; background: url('+_url+') no-repeat;padding-left: 18px;background-position: 0px 3px;line-height: 18px;">日本官网要求英文姓名少于15字母</small>';
+				$('#firstNameEn').parent().append($(smallTemp));
+				$('#lastNameEn').parent().append($(smallTemp));
 
+				let handler = ev => {
+					setTimeout(r => {
+						let fl = $('#firstNameEn').val().length;
+						let ll = $('#lastNameEn').val().length;
+						if ((fl + ll) > 17) {
+							$(ev.target).parent().find('#diySmall').show();
+							_FLAG = true;
+						} else {
+							$('#firstNameEn').parent().find('#diySmall').hide();
+							$('#lastNameEn').parent().find('#diySmall').hide();
+							_FLAG = false;
+						}
+					}, 300)
+				};
+
+				$('#firstNameEn, #firstName').on('input', handler);
+				$('#lastNameEn, #lastName').on('input', handler);
+			})();
+
+			if ("${obj.applicant.marryurltype}" == 1) {
+				$('#lastNamechecked').val(1).attr('checked', 'checked');
+				$('#lastNameEn').attr('disabled', 'disabled').css('opacity', 0);
+				$('#lastName').attr('disabled', 'disabled');
+				$('#lastName').siblings('small').hide();
+			}
+			
+			$('#lastNamechecked').change(e => {
+				if ($('#lastNamechecked').val() == 2) {
+					$('#lastNamechecked').val(1);
+					$('#lastNameEn').val('').attr('disabled', 'disabled').css('opacity', 0);
+					$('#lastName').val('').attr('disabled', 'disabled');
+					$('#lastName').siblings('small').hide();
+				} else {
+					$('#lastNamechecked').val(2);
+					$('#lastName').removeAttr('disabled');
+					$('#lastNameEn').removeAttr('disabled').css('opacity', 1);
+				}
+			});
+		
 			$('#applicantInfo').bootstrapValidator({
 				message: '验证不通过',
 				feedbackIcons: {
@@ -490,22 +597,27 @@
 							stringLength: {
 								min: 1,
 								max: 9,
-								message: '护照号不能超过9位'
+								message: ''
 							},
-							remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
-								url: '${base}/admin/orderJp/checkPassport.html',
-								message: '护照号已存在，请重新输入',//提示消息
-								delay: 2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
-								type: 'POST',//请求方式
-								//自定义提交数据，默认值提交当前input value
-								data: function (validator) {
-									return {
-										passport: $('#passport').val(),
-										adminId: $('#id').val(),
-										orderid: $('#orderid').val()
-									};
-								}
+							regexp: {
+								regexp: /^[0-9a-zA-Z]+$/,
+								message: '护照号格式错误'
 							}
+							// threshold: 6 , //有6字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
+							// remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+							// 	url: '${base}/admin/orderJp/checkPassport.html',
+							// 	message: '护照号已存在，请重新输入',//提示消息
+							// 	delay: 2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+							// 	type: 'POST',//请求方式
+							// 	//自定义提交数据，默认值提交当前input value
+							// 	data: function (validator) {
+							// 		return {
+							// 			passport: $('#passport').val(),
+							// 			adminId: $('#id').val(),
+							// 			orderid: $('#orderid').val()
+							// 		};
+							// 	}
+							// }
 						}
 					},
 					firstName: {
@@ -525,8 +637,16 @@
 					firstNameEn: {
 						trigger: "change keyup",
 						validators: {
+							notEmpty: {
+								message: '姓拼音不能为空'
+							},
+							stringLength: {//检测长度
+                                min: 2,
+                                max: 100,
+                                message: '姓拼音不能为空'
+                            },
 							regexp: {
-								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+								regexp: /^[\/a-zA-Z]{0,}$/,
 								message: '拼音中不能包含汉字或其他特殊符号'
 							},
 						}
@@ -534,9 +654,17 @@
 					lastNameEn: {
 						trigger: "change keyup",
 						validators: {
+							notEmpty: {
+								message: '名拼音不能为空'
+							},
+							stringLength: {// 检测长度
+                                min: 2,
+                                max: 100,
+                                message: '名拼音不能为空'
+                            },
 							regexp: {
 								// regexp: /\/{1}[a-zA-Z]+$/,
-								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+								regexp: /^[\/a-zA-Z]{0,}$/,
 								message: '拼音中不能包含汉字或其他特殊符号'
 							},
 						}
@@ -544,8 +672,16 @@
 					birthAddressEn: {
 						trigger: "change keyup",
 						validators: {
+							notEmpty: {
+								message: '出生地点不能为空'
+							},
+							stringLength: {//检测长度
+                                min: 2,
+                                max: 100,
+                                message: '出生地点不能为空'
+                            },
 							regexp: {
-								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+								regexp: /^[\/a-zA-Z\s]{0,}$/,
 								message: '拼音中不能包含汉字或其他特殊符号'
 							},
 						}
@@ -553,13 +689,52 @@
 					issuedPlaceEn: {
 						trigger: "change keyup",
 						validators: {
+							notEmpty: {
+								message: '签发地点不能为空'
+							},
+							stringLength: {//检测长度
+                                min: 2,
+                                max: 100,
+                                message: '签发地点不能为空'
+                            },
 							regexp: {
-								regexp: /^[\/a-zA-Z0-9_]{0,}$/,
+								regexp: /^[\/a-zA-Z\s]{0,}$/,
 								message: '拼音中不能包含汉字或其他特殊符号'
 							},
 						}
 					}
 				}
+			});
+
+			passportValiFn();
+			function passportValiFn() {
+				var $i = $('#passport').next();
+				var $s = $i.next();
+				$.ajax({
+					type: 'POST',
+					data: {
+						passport: $('#passport').val(),
+						adminId: $('#id').val(),
+						orderid: $('#orderid').val()
+					},
+					url: '${base}/admin/orderJp/checkPassport.html',
+					success(data) {
+						passportVali = data.valid;
+						console.log("*******************************");
+						console.log( data.valid);
+						console.log("*******************************");
+
+						if (!passportVali) {
+							$('#passport-tips').show();
+						} else {
+							$('#passport-tips').hide();
+						}
+					}
+				});
+			}
+			
+			$('#passport').on('input',function() {
+				passportValiFn();
 			});
 
 			var front = $("#cardFront").val();
@@ -923,20 +1098,24 @@
 			saveApplicant(3);
 		}
 		function saveApplicant(status) {
+			if (_FLAG) return 0;
 			var str = "";
 			$("input:checkbox[name='addressIsSameWithCard']:checked").each(function () {
 				str = $(this).val();
 			});
 			var applicantid = '${obj.applicantid}';
+			console.log("updateApplicant的applicantid:"+applicantid+"===========");
 			var orderid = '${obj.orderid}';
 			var applicantInfo = getFormJson('#applicantInfo');
 			if (status != 2) {
 				//得到获取validator对象或实例 
-				var bootstrapValidator = $("#applicantInfo").data(
-					'bootstrapValidator');
+				var bootstrapValidator = $("#applicantInfo").data('bootstrapValidator');
 				// 执行表单验证 
 				bootstrapValidator.validate();
-				if (bootstrapValidator.isValid()) {
+				console.log('-----------------------------------------');
+				console.log(passportVali);
+				console.log('-----------------------------------------');
+				if (bootstrapValidator.isValid() && passportVali) {
 					layer.load(1);
 					ajaxConnection();
 				}
@@ -1081,6 +1260,7 @@
 	<script>
 		(function() {
 			var base = "${base}";
+			
 			$(function () {
 				var issuedOrganization = "${obj.passport.issuedOrganization }";
 				var issuedOrganizationen = "${obj.passport.issuedOrganizationEn }";
@@ -1089,7 +1269,7 @@
 					$("#issuedOrganization").val("公安部出入境管理局");
 				}
 				if (issuedOrganizationen == "") {
-					$("#issuedOrganizationEn").val("Ministry of Public Security");
+					$("#issuedOrganizationEn").val("MPS Exit & Entry Administration");
 				}
 
 				

@@ -99,3 +99,41 @@ FROM
 WHERE
 	tou.id = @id
 	ORDER BY touf.createtime DESC
+	
+	
+/*orderUS_mobile_listdata*/
+SELECT
+tou.id orderusid,
+tou.`status` orderstatus,
+tou.ordernumber,
+tou.cityid,
+tasb.id staffid,
+CONCAT(tasb.firstname,tasb.lastname) staffname
+FROM
+t_order_us tou
+INNER JOIN t_app_staff_order_us tasou ON tasou.orderid = tou.id
+INNER JOIN t_app_staff_basicinfo tasb ON tasou.staffid = tasb.id
+LEFT JOIN t_user tu ON tasb.userid = tu.id
+WHERE
+tu.mobile = @telephone
+ORDER BY tou.createtime DESC
+
+/*orderUS_mobile_getProvince*/
+SELECT
+province
+FROM
+t_idcard
+GROUP BY province
+ORDER BY id
+
+/*orderUS_mobile_getCity*/
+SELECT
+city
+FROM
+t_idcard
+WHERE
+province=@province
+AND
+city!=''
+GROUP BY city
+ORDER BY id

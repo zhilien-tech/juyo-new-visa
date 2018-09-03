@@ -7,6 +7,7 @@
 package com.juyo.visa.admin.dijie.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +22,11 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.alibaba.fastjson.JSONArray;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.dijie.form.DijieOrderListForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
@@ -206,6 +209,28 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 		result.put("multitripjson", JsonUtil.toJson(multitrip));
 		return result;
 
+	}
+
+	public Object sendZhaoBao(HttpServletRequest request, Long orderid) {
+		HttpSession session = request.getSession();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		Integer adminId = loginCompany.getAdminId();
+		JSONArray ja = new JSONArray();
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("orderid", orderid);
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+		TCompanyEntity fetch = dbDao.fetch(TCompanyEntity.class, orderjp.getSendsignid().longValue());
+		ja.add(fetch);
+		result.put("orderjpinfo", orderjp);
+		result.put("songqianlist", ja);
+		//地接社下拉
+		/*List<TCompanyEntity> dijielist = dbDao.query(TCompanyEntity.class,
+				Cnd.where("comType", "=", CompanyTypeEnum.DIJI.intKey()).and("name", "like", "株式会社金通商社"), null);*/
+		List<TCompanyEntity> dijielist = dbDao.query(TCompanyEntity.class,
+				Cnd.where("comType", "=", CompanyTypeEnum.DIJI.intKey()), null);
+		result.put("dijielist", dijielist);
+		return result;
 	}
 
 }

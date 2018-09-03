@@ -24,10 +24,8 @@
 
     var inputBlur = (function () {
         return function (str) {
-            console.log("**************************");
             if (!(/^\/{1}[a-zA-Z]+$/.test(str))) {
                 var s = str.replace(/^\/{1}[A-Z]+/g, '');
-                console.log(s);
                 $.ajax({
                     type: 'POST',
                     data: { characterStr: s },
@@ -61,7 +59,7 @@
     });
 
     $birthAddress.blur(function () {
-        inputBlur($(this).val());
+        inputBlur($birthAddressEn.val());
     });
 
     $birthAddressEn.blur(function () {
@@ -69,7 +67,7 @@
     });
 
     $issuedPlace.blur(function () {
-        inputBlur($(this).val());
+        inputBlur($issuedPlaceEn.val());
     });
 
     $issuedPlaceEn.blur(function () {

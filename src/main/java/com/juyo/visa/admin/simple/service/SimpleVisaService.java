@@ -64,7 +64,6 @@ import com.juyo.visa.admin.visajp.service.TripAirlineService;
 import com.juyo.visa.admin.visajp.service.VisaJapanService;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 import com.juyo.visa.common.base.QrCodeService;
-import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.ApplicantInfoTypeEnum;
@@ -112,7 +111,6 @@ import com.juyo.visa.entities.TApplicantWorkJpEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TCompanyOfCustomerEntity;
-import com.juyo.visa.entities.TConfWxEntity;
 import com.juyo.visa.entities.TCustomerEntity;
 import com.juyo.visa.entities.TCustomerVisainfoEntity;
 import com.juyo.visa.entities.TFlightEntity;
@@ -269,7 +267,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Sql sql = form.sql(sqlManager);
 
 		Integer pageNumber = form.getPageNumber();
-		System.out.println(pageNumber);
 		Integer pageSize = form.getPageSize();
 
 		Pager pager = new OffsetPager((pageNumber - 1) * pageSize, pageSize);
@@ -2377,18 +2374,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
-		System.out.println(newArray.length + "----");
 		List<Integer> randomDates = getRandomDates(newArray, days);
-		System.out.println(randomDates.size() + "!!!!");
 
 		List<Integer> cityidList = Ints.asList(newArray);
-		System.out.println(cityidList.size() + "++++++");
 
 		for (int i = 0; i < cityidList.size(); i++) {
 			List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", cityidList.get(i)),
 					null);
-			System.out.println(scenics.size());
-			System.out.println(randomDates.size() + "======");
 			if (randomDates.size() > 0) {
 				if (randomDates.get(i) > scenics.size()) {
 					randomDates.clear();
@@ -3337,6 +3329,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object saveBasicinfo(BasicinfoForm form, HttpServletRequest request) {
+
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -3348,9 +3341,26 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicantjp.setMainRelation(form.getMainRelation());
 		dbDao.update(applicantjp);
 
+		TApplicantWorkJpEntity workjp = dbDao.fetch(TApplicantWorkJpEntity.class,
+				Cnd.where("applicantId", "=", applicantjp.getId()));
+		//根据出生日期设置签证信息的工作类型
+		if (!Util.isEmpty(form.getBirthday()) && Util.isEmpty(workjp.getCareerStatus())) {
+			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+			int years = orderJpViewService.accordingbirtday(sdf.format(form.getBirthday()));
+			if (years >= 55) {
+				workjp.setCareerStatus(2);
+			}
+			if (years <= 5) {
+				workjp.setCareerStatus(5);
+			}
+			dbDao.update(workjp);
+		}
+
 		applicant.setOpId(loginUser.getId());
 		applicant.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
 		applicant.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+		//marryurltype是闲置字段，用来作为姓名checkbox字段
+		applicant.setMarryurltype(form.getIsnamedisabled());
 		applicant.setAddress(form.getAddress());
 		applicant.setCardId(form.getCardId());
 		if (Util.isEmpty(form.getJuzhudicheckbox())) {
@@ -3389,12 +3399,20 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setEmergencyaddress(form.getEmergencyaddress());
 		applicant.setMarryStatus(form.getMarryStatus());
 		applicant.setFirstName(form.getFirstName());
-		applicant.setLastName(form.getLastName());
+		if (!Util.isEmpty(form.getLastName())) {
+			applicant.setLastName(form.getLastName());
+		} else {
+			applicant.setLastName("");
+		}
 		if (!Util.isEmpty(form.getFirstNameEn())) {
 			applicant.setFirstNameEn(form.getFirstNameEn().substring(1));
+		} else {
+			applicant.setFirstNameEn("");
 		}
 		if (!Util.isEmpty(form.getLastNameEn())) {
 			applicant.setLastNameEn(form.getLastNameEn().substring(1));
+		} else {
+			applicant.setLastNameEn("");
 		}
 		applicant.setSex(form.getSex());
 		applicant.setBirthday(form.getBirthday());
@@ -3426,7 +3444,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		passport.setIssuedOrganizationEn(form.getIssuedOrganizationEn());
 		passport.setIssuedPlace(form.getIssuedPlace());
 		passport.setIssuedPlaceEn(form.getIssuedPlaceEn());
-		passport.setLastName(form.getLastName());
+		if (!Util.isEmpty(form.getLastName())) {
+			passport.setLastName(form.getLastName());
+		} else {
+			passport.setLastName("");
+		}
 		passport.setPassport(form.getPassport());
 		passport.setSex(form.getSex());
 		passport.setSexEn(form.getSexEn());
@@ -3437,9 +3459,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		passport.setUpdateTime(new Date());
 		if (!Util.isEmpty(form.getFirstNameEn())) {
 			passport.setFirstNameEn(form.getFirstNameEn().substring(1));
+		} else {
+			passport.setFirstNameEn("");
 		}
 		if (!Util.isEmpty(form.getLastNameEn())) {
 			passport.setLastNameEn(form.getLastNameEn().substring(1));
+		} else {
+			passport.setLastNameEn("");
 		}
 
 		dbDao.update(passport);
@@ -3992,6 +4018,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		HttpSession session = request.getSession();
 
+		System.out.println("applicantid:" + applicantid + "===============");
+		result.put("applicantid", applicantid);
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userType = loginUser.getUserType();
@@ -4130,21 +4158,19 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						new Long(applicantOrderJpEntity.getApplicantId()).intValue());
 				//applicantEntity.setMarryStatus(form.getMarryStatus());
 				applicantEntity.setMarryUrl(form.getMarryUrl());
-				applicantEntity.setMarryurltype(form.getMarryStatus());
+				//applicantEntity.setMarryurltype(form.getMarryStatus());
 				applicantEntity.setOutboundrecord(form.getOutboundrecord());
 				//更新申请人信息
 				if (Util.eq(form.getApplicant(), MainOrViceEnum.YES.intKey())) {//是主申请人
 					applicantEntity.setMainId(applicantEntity.getId());
 					dbDao.update(applicantEntity);
-				} else {
-					dbDao.update(applicantEntity);
-				}
-				System.out.println("更新申请人信息完毕========");
-				if (Util.eq(applicantEntity.getId(), applicantEntity.getMainId())) {
 					applicantOrderJpEntity.setIsMainApplicant(MainOrViceEnum.YES.intKey());
 				} else {
+					applicantEntity.setMainId(null);
+					dbDao.update(applicantEntity);
 					applicantOrderJpEntity.setIsMainApplicant(MainOrViceEnum.NO.intKey());
 				}
+				System.out.println("更新申请人信息完毕========");
 
 				//更新日本申请人信息
 				if (!Util.isEmpty(form.getSameMainTrip())) {
@@ -5334,6 +5360,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		result.put("userid", loginUser.getId());
 		result.put("orderid", orderid);
 		String localAddr = request.getServerName();
 		request.getServerName();
@@ -5441,6 +5468,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		String page = "pages/Japan/upload/index/index";
 		String scene = "";
+		//因为小程序参数最长为32，所以参数尽量简化，o是订单id,u是userid,a是申请人id
 		scene = "o=" + orderid + "&u=" + loginUser.getId() + "&a=" + applyid;
 		System.out.println("scene:" + scene + "--------------");
 		String accessToken = (String) getAccessToken();
@@ -5452,24 +5480,23 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 	//获取accessToken
 	public Object getAccessToken() {
-		Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
+		/*Map<String, Object> kvConfigProperties = SystemProperties.getKvConfigProperties();
 		String wxConfigStr = String.valueOf(kvConfigProperties.get("T_APP_STAFF_CONF_WX_ID"));
 		Long T_APP_STAFF_CONF_WX_ID = Long.valueOf(wxConfigStr);
 		TConfWxEntity wx = dbDao.fetch(TConfWxEntity.class, T_APP_STAFF_CONF_WX_ID);
 		String WX_APPID = wx.getAppid();
 		String WX_APPSECRET = wx.getAppsecret();
-		String WX_TOKENKEY = wx.getAccesstokenkey();
+		String WX_TOKENKEY = wx.getAccesstokenkey();*/
 
-		String accessTokenUrl;
-		if (wx == null) {
-			accessTokenUrl = "请联系管理员配置微信公众号!";
-		} else {
-			accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
-			String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("APPSECRET", WX_APPSECRET);
-			JSONObject result = HttpUtil.doGet(requestUrl);
-			//redis中设置 access_token
-			accessTokenUrl = result.getString("access_token");
-		}
+		String WX_APPID = "wx17bf0dde91fec324";
+		String WX_APPSECRET = "6cc0aa2089c4ba020297fb23af31081a";
+		String WX_TOKENKEY = "WX_ACCESS_TOKEN_2018";
+
+		String accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+		String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("APPSECRET", WX_APPSECRET);
+		JSONObject result = HttpUtil.doGet(requestUrl);
+		//redis中设置 access_token
+		accessTokenUrl = result.getString("access_token");
 
 		return accessTokenUrl;
 	}
@@ -5585,6 +5612,24 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
 				orderid = generrateorder.get("orderjpid");
 			}
+
+			//设置主申请人信息
+			List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderid), null);
+			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
+
+				applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
+				TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
+						Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()));
+				apply.setMainId(mainApply.getApplicantId());
+				dbDao.update(apply);
+			} else {
+				//设置为主申请人
+				applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+				apply.setMainId(applyid);
+				dbDao.update(apply);
+			}
+
 			applicantjp.setOrderId(orderid);
 			applicantjp.setApplicantId(applyid);
 			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
@@ -5627,6 +5672,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("maininfo", mainapplyinfo);
 
 		return result;
+	}
+
+	public Object autoCalculateStaydays(Date laststartdate, Date lastreturndate) {
+		int daysBetween = DateUtil.daysBetween(laststartdate, lastreturndate);
+		return daysBetween + 1;
 	}
 
 }

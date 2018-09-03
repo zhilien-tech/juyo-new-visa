@@ -64,6 +64,7 @@ import com.juyo.visa.admin.order.entity.PassportJsonEntity;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.order.form.OrderEditDataForm;
 import com.juyo.visa.admin.order.form.OrderJpForm;
+import com.juyo.visa.admin.order.form.RecognitionForm;
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.simple.service.SimpleVisaService;
 import com.juyo.visa.admin.user.form.ApplicantUser;
@@ -134,6 +135,7 @@ import com.juyo.visa.entities.TTouristVisaEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.TApplicantForm;
 import com.juyo.visa.forms.TApplicantPassportForm;
+import com.juyo.visa.websocket.SimpleInfoWSHandler;
 import com.juyo.visa.websocket.VisaInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
@@ -177,6 +179,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	private VisaInfoWSHandler visaInfoWSHandler = (VisaInfoWSHandler) SpringContextUtil.getBean("myVisaInfoHander",
 			VisaInfoWSHandler.class);
+	private SimpleInfoWSHandler simpleInfoWSHandler = (SimpleInfoWSHandler) SpringContextUtil.getBean(
+			"mySimpleInfoHander", SimpleInfoWSHandler.class);
 
 	public Object listData(OrderJpForm queryForm, HttpSession session) {
 		Map<String, Object> result = MapUtil.map();
@@ -2298,17 +2302,23 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object checkPassport(String passport, String adminId, int orderid) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		String passportSqlstr = sqlManager.get("passportInfo_byOrderId");
-		Sql passportSql = Sqls.create(passportSqlstr);
-		Cnd cnd = Cnd.NEW();
-		cnd.and("toj.orderId", "=", orderid);
-		cnd.and("ap.passport", "=", passport);
-		if (!Util.isEmpty(adminId)) {
-			cnd.and("ap.id", "!=", adminId);
+		if (Util.isEmpty(passport)) {
+			result.put("valid", true);
+			return result;
+		} else {
+			String passportSqlstr = sqlManager.get("passportInfo_byOrderId");
+			Sql passportSql = Sqls.create(passportSqlstr);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("toj.id", "=", orderid);
+			cnd.and("ap.passport", "=", passport);
+			if (!Util.isEmpty(adminId)) {
+				cnd.and("ap.id", "!=", adminId);
+			}
+			List<Record> passportInfo = dbDao.query(passportSql, cnd, null);
+			System.out.println(passportInfo.size() <= 0);
+			result.put("valid", passportInfo.size() <= 0);
+			return result;
 		}
-		List<Record> passportInfo = dbDao.query(passportSql, cnd, null);
-		result.put("valid", passportInfo.size() <= 0);
-		return result;
 	}
 
 	public Object checkMobile(String mobile, String adminId) {
@@ -2812,6 +2822,97 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object IDCardRecognition(File file, int applyid, int orderid, int userid, HttpServletRequest request,
 			HttpServletResponse response) {
 
+		System.out.println("applyid:" + applyid + " orderid:" + orderid + " userid:" + userid);
+		long startTime = System.currentTimeMillis();//获取当前时间
+		String imageDataValue = saveDiskImageToDisk(file);
+		Input input = new Input(imageDataValue, "face");
+		RecognizeData rd = new RecognizeData();
+		rd.getInputs().add(input);
+		String content = Json.toJson(rd);
+		String info = (String) appCodeCall(content);//扫描完毕
+		long endTime = System.currentTimeMillis();
+		System.out.println("扫描运行时间：" + (endTime - startTime) + "ms");
+		System.out.println("info:" + info);
+		//解析扫描的结果，结构化成标准json格式
+		ApplicantJsonEntity jsonEntity = new ApplicantJsonEntity();
+		JSONObject resultObj = null;
+		try {
+			resultObj = new JSONObject(info);
+		} catch (JSONException e) {
+			jsonEntity.setSuccess(false);
+			return jsonEntity;
+		}
+		JSONArray outputArray = resultObj.getJSONArray("outputs");
+		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
+		JSONObject out = new JSONObject(output);
+		if (out.getBoolean("success")) {
+			String addr = out.getString("address"); // 获取地址
+			String name = out.getString("name"); // 获取名字
+			String num = out.getString("num"); // 获取身份证号
+			jsonEntity.setAddress(addr);
+			Date date;
+			try {
+				date = new SimpleDateFormat("yyyyMMdd").parse(out.getString("birth"));
+				String dateStr = new SimpleDateFormat("yyyy-MM-dd").format(date);
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				jsonEntity.setBirth(sdf.format(sdf.parse(dateStr)));
+			} catch (JSONException | ParseException e) {
+				e.printStackTrace();
+				jsonEntity.setSuccess(false);
+				return jsonEntity;
+			}
+			jsonEntity.setName(name);
+			jsonEntity.setNationality(out.getString("nationality"));
+			jsonEntity.setNum(num);
+			jsonEntity.setRequest_id(out.getString("request_id"));
+			jsonEntity.setSex(out.getString("sex"));
+			jsonEntity.setSuccess(out.getBoolean("success"));
+			//上传
+			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+			System.out.println("url:" + url);
+			jsonEntity.setUrl(url);
+			if (!Util.isEmpty(jsonEntity.getNum())) {
+				String cardId = jsonEntity.getNum().substring(0, 6);
+				TIdcardEntity IDcardEntity = dbDao.fetch(TIdcardEntity.class, Cnd.where("code", "=", cardId));
+				if (!Util.isEmpty(IDcardEntity)) {
+					jsonEntity.setProvince(IDcardEntity.getProvince());
+					jsonEntity.setCity(IDcardEntity.getCity());
+				}
+			}
+		}
+		long endTime1 = System.currentTimeMillis();
+		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
+
+		if (!Util.isEmpty(jsonEntity)) {
+			Map<String, Object> saveApplicantinfo = saveApplicantinfo(jsonEntity, applyid, orderid, userid);
+			if (!Util.isEmpty(saveApplicantinfo)) {
+				RecognitionForm form = new RecognitionForm();
+				String applyurl = (String) saveApplicantinfo.get("applyurl");
+				Integer oid = (Integer) saveApplicantinfo.get("orderid");
+				Integer aid = (Integer) saveApplicantinfo.get("applyid");
+				System.out.println("aid:" + aid + "============");
+				jsonEntity.setApplyid(aid);
+				jsonEntity.setOrderid(oid);
+				form.setApplyurl(applyurl);
+				form.setApplyid(aid);
+				form.setOrderid(oid);
+				form.setUserid(userid);
+				//消息通知
+				try {
+					simpleInfoWSHandler.broadcast(new TextMessage(JsonUtil.toJson(form)));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		System.out.println("jsonEntity:" + jsonEntity + "---------");
+		return jsonEntity;
+	}
+
+	public Object IDCardRecognitionUS(File file, int applyid, int orderid, int userid, HttpServletRequest request,
+			HttpServletResponse response) {
+
 		long startTime = System.currentTimeMillis();//获取当前时间
 		//将图片进行旋转处理
 		/*ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
@@ -2889,21 +2990,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		long endTime1 = System.currentTimeMillis();
 		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
 
-		if (!Util.isEmpty(jsonEntity)) {
-			Object saveApplicantinfo = saveApplicantinfo(jsonEntity, applyid, orderid, userid);
-			if (!Util.isEmpty(saveApplicantinfo)) {
-				//消息通知
-				try {
-					visaInfoWSHandler.broadcast(new TextMessage(JsonUtil.toJson(saveApplicantinfo)));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
 		return jsonEntity;
 	}
 
-	public Object saveApplicantinfo(ApplicantJsonEntity form, int applyid, int orderid, int userid) {
+	public Map<String, Object> saveApplicantinfo(ApplicantJsonEntity form, int applyid, int orderid, int userid) {
 		TUserEntity loginUser = dbDao.fetch(TUserEntity.class, userid);
 		TCompanyEntity loginCompany = dbDao.fetch(TCompanyEntity.class, loginUser.getComId().longValue());
 		Map<String, Object> result = Maps.newHashMap();
@@ -2957,6 +3047,24 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			//新增日本订单基本信息
 			//applicantjp.setMainRelation(form.getMainRelation());
 			//dbDao.insert(applicantjp);
+
+			//设置主申请人信息
+			List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
+					Cnd.where("orderId", "=", orderid), null);
+			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
+
+				applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
+				TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
+						Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()));
+				insertapplicant.setMainId(mainApply.getApplicantId());
+				dbDao.update(insertapplicant);
+			} else {
+				//设置为主申请人
+				applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+				insertapplicant.setMainId(applyid);
+				dbDao.update(insertapplicant);
+			}
+
 			applicantjp.setOrderId(orderid);
 			applicantjp.setApplicantId(applyid);
 			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
@@ -3349,45 +3457,157 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 	public Object passportRecognitionBack(File file, int applyid, int orderid, int userid, HttpServletRequest request,
 			HttpServletResponse response) {
-
-		HttpSession session = request.getSession();
-		long startTime = System.currentTimeMillis();//获取当前时间
-		//将图片进行旋转处理
-		/*ImageDeal imageDeal = new ImageDeal(file.getPath(), request.getContextPath(), UUID.randomUUID().toString(),
-				"jpeg");
-		File spin = null;
-		try {
-			spin = imageDeal.spin(-90);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}*/
+		System.out.println("applyid:" + applyid + " orderid:" + orderid + " userid:" + userid);
+		//将图片转成流并BASE64加密
 		String imageDataB64 = saveDiskImageToDisk(file);
-
-		long startTime4 = System.currentTimeMillis();//获取当前时间
-		System.out.println("将图片转成流运行时间：" + (startTime4 - startTime) + "ms");
-
-		//上传
-		//Map<String, Object> map = qiniuUploadService.ajaxUploadImage(spin);
-		//file.delete();
-		/*if (!Util.isEmpty(spin)) {
-			spin.delete();
-		}*/
-		//String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
-		//从服务器上获取图片的流，读取扫描
-		//byte[] bytes = saveImageToDisk(url);
-
-		//String imageDataB64 = Base64.encodeBase64String(bytes);
+		//进行扫描识别操作
 		Input input = new Input(imageDataB64);
-
 		RecognizeData rd = new RecognizeData();
 		rd.getInputs().add(input);
-
 		String content = Json.toJson(rd);
-		long endTime3 = System.currentTimeMillis();
-		System.out.println("扫描准备时间：" + (endTime3 - startTime) + "ms");
 		String info = (String) aliPassportOcrAppCodeCall(content);
-		long endTime = System.currentTimeMillis();
-		System.out.println("扫描运行时间：" + (endTime - endTime3) + "ms");
+		System.out.println("info:" + info);
+
+		//解析扫描的结果，结构化成标准json格式
+		PassportJsonEntity jsonEntity = new PassportJsonEntity();
+		JSONObject resultObj = null;
+		try {
+			resultObj = new JSONObject(info);
+		} catch (JSONException e) {
+			jsonEntity.setSuccess(false);
+			return jsonEntity;
+		}
+		JSONArray outputArray = resultObj.getJSONArray("outputs");
+		String output = outputArray.getJSONObject(0).getJSONObject("outputValue").getString("dataValue");
+		JSONObject out = new JSONObject(output);
+		String substring = "";
+		//扫描结果的数据处理
+		if (out.getBoolean("success")) {
+			String type = out.getString("type");
+			if (!Util.isEmpty(type)) {
+				substring = type.substring(0, 1);
+			}
+			jsonEntity.setType(substring);
+			jsonEntity.setNum(out.getString("passport_no"));
+			if (Util.isEmpty(jsonEntity.getNum()) || jsonEntity.getNum().length() != 9) {
+				jsonEntity.setSuccess(false);
+				return jsonEntity;
+			}
+			if (out.getString("sex").equals("F")) {
+				jsonEntity.setSex("女");
+				jsonEntity.setSexEn("F");
+			} else {
+				jsonEntity.setSex("男");
+				jsonEntity.setSexEn("M");
+			}
+			//姓和名分开
+			String nameEn = out.getString("name");//姓名拼音
+			String nameAll = out.getString("name_cn");//姓名汉字
+			char[] nameCnCharArray = nameAll.toCharArray();
+			if (nameEn.contains(".")) {
+				String[] nameEnSplit = nameEn.split("\\.");
+				int lengthEn = nameEnSplit[0].length();
+				int count = 0;
+				int xingLength = 0;
+				PinyinTool tool = new PinyinTool();
+				try {
+					for (int i = 0; i < nameCnCharArray.length; i++) {
+						int length = tool.toPinYin(String.valueOf(nameCnCharArray[i]), "", Type.UPPERCASE).length();
+						count += length;
+						if (Util.eq(count, lengthEn)) {
+							xingLength = i + 1;
+						}
+					}
+					jsonEntity.setXingCn(nameAll.substring(0, xingLength));
+					jsonEntity.setMingCn(nameAll.substring(xingLength));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+			if (Util.isEmpty(jsonEntity.getXingCn()) || Util.isEmpty(jsonEntity.getMingCn())) {
+				jsonEntity.setSuccess(false);
+				return jsonEntity;
+			}
+
+			jsonEntity.setOCRline1(out.getString("line0"));
+			jsonEntity.setOCRline2(out.getString("line1"));
+
+			jsonEntity.setBirthCountry(out.getString("birth_place"));
+			jsonEntity.setVisaCountry(out.getString("issue_place"));
+			//时间相关处理
+			Date birthDay;
+			Date expiryDate;
+			Date issueDate;
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				if (!Util.isEmpty(out.getString("birth_date"))) {
+					birthDay = new SimpleDateFormat("yyyyMMdd").parse(out.getString("birth_date"));
+					String startDateStr = new SimpleDateFormat("yyyy-MM-dd").format(birthDay);
+					jsonEntity.setBirth(sdf.format(sdf.parse(startDateStr)));
+				}
+				if (!Util.isEmpty(out.getString("expiry_date"))) {
+					expiryDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("expiry_date"));
+					String endDateStr = new SimpleDateFormat("yyyy-MM-dd").format(expiryDate);
+					jsonEntity.setExpiryDay(sdf.format(sdf.parse(endDateStr)));
+				}
+				if (!Util.isEmpty(out.getString("issue_date"))) {
+					issueDate = new SimpleDateFormat("yyyyMMdd").parse(out.getString("issue_date"));
+					String issueDateStr = new SimpleDateFormat("yyyy-MM-dd").format(issueDate);
+					jsonEntity.setIssueDate(sdf.format(sdf.parse(issueDateStr)));
+				}
+			} catch (JSONException | ParseException e) {
+
+				e.printStackTrace();
+				jsonEntity.setSuccess(false);
+				return jsonEntity;
+
+			}
+			//将图片上传到七牛云
+			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+
+			jsonEntity.setUrl(url);
+			jsonEntity.setSuccess(out.getBoolean("success"));
+		}
+
+		if (!Util.isEmpty(jsonEntity)) {
+			//存库
+			Map<String, Object> savePassportinfo = savePassportinfo(jsonEntity, applyid, orderid, userid);
+			if (!Util.isEmpty(savePassportinfo)) {
+				RecognitionForm form = new RecognitionForm();
+				String passurl = (String) savePassportinfo.get("passurl");
+				Integer oid = (Integer) savePassportinfo.get("orderid");
+				Integer aid = (Integer) savePassportinfo.get("applyid");
+				System.out.println("aid:" + aid + "============");
+				jsonEntity.setApplyid(aid);
+				jsonEntity.setOrderid(oid);
+				form.setApplyid(aid);
+				form.setOrderid(oid);
+				form.setUserid(userid);
+				form.setPassurl(passurl);
+				System.out.println("passurl:" + passurl);
+				//消息通知
+				try {
+					simpleInfoWSHandler.broadcast(new TextMessage(JsonUtil.toJson(form)));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return jsonEntity;
+	}
+
+	public Object passportRecognitionUS(File file, int applyid, int orderid, int userid, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		String imageDataB64 = saveDiskImageToDisk(file);
+
+		Input input = new Input(imageDataB64);
+		RecognizeData rd = new RecognizeData();
+		rd.getInputs().add(input);
+		String content = Json.toJson(rd);
+		String info = (String) aliPassportOcrAppCodeCall(content);
 		System.out.println("info:" + info);
 
 		//解析扫描的结果，结构化成标准json格式
@@ -3444,14 +3664,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 			long startTime2 = System.currentTimeMillis();//获取当前时间
 			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
-			/*file.delete();
-			if (!Util.isEmpty(spin)) {
-				spin.delete();
-			}*/
 			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
-
-			long startTime3 = System.currentTimeMillis();//获取当前时间
-			System.out.println("将图片上传运行时间：" + (startTime3 - startTime2) + "ms");
 
 			jsonEntity.setUrl(url);
 			jsonEntity.setOCRline1(out.getString("line0"));
@@ -3489,24 +3702,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			jsonEntity.setSuccess(out.getBoolean("success"));
 		}
 
-		if (!Util.isEmpty(jsonEntity)) {
-			//存库
-			Object savePassportinfo = savePassportinfo(jsonEntity, applyid, orderid, userid);
-			if (!Util.isEmpty(savePassportinfo)) {
-				//消息通知
-				try {
-					visaInfoWSHandler.broadcast(new TextMessage(JsonUtil.toJson(savePassportinfo)));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		long endTime1 = System.currentTimeMillis();
-		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
 		return jsonEntity;
 	}
 
-	public Object savePassportinfo(PassportJsonEntity form, int applyid, int orderid, int userid) {
+	public Map<String, Object> savePassportinfo(PassportJsonEntity form, int applyid, int orderid, int userid) {
 
 		Map<String, Object> result = Maps.newHashMap();
 		TUserEntity loginUser = dbDao.fetch(TUserEntity.class, userid);
@@ -3518,9 +3717,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					.getApplicantId().longValue());*/
 			TApplicantOrderJpEntity applicantorder = dbDao.fetch(TApplicantOrderJpEntity.class,
 					Cnd.where("applicantId", "=", passport.getApplicantId().longValue()));
-			result.put("applicantjpid", applicantorder.getApplicantId());
-			result.put("applicantid", applicantorder.getApplicantId());
-			result.put("orderid", applicantorder.getOrderId());
+			result.put("applicantjpid", applicantorder.getId());
 
 		}
 		//TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class, form.getId().longValue());
@@ -3544,11 +3741,22 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				passport.setLastNameEn(tool.toPinYin(form.getMingCn()));
 			}
 			String birthCountry = form.getBirthCountry();
-			passport.setBirthAddressEn(tool.toPinYin(birthCountry));
+			if (Util.eq("陕西", birthCountry)) {
+				passport.setBirthAddressEn("SHAANXI");
+			} else if (Util.eq("内蒙古", birthCountry)) {
+				passport.setBirthAddressEn("NEI MONGOL");
+			} else {
+				passport.setBirthAddressEn(tool.toPinYin(birthCountry));
+			}
 			String issuedPlace = form.getVisaCountry();
-			passport.setIssuedPlaceEn(tool.toPinYin(issuedPlace));
+			if (Util.eq("陕西", issuedPlace)) {
+				passport.setIssuedPlaceEn("SHAANXI");
+			} else if (Util.eq("内蒙古", issuedPlace)) {
+				passport.setIssuedPlaceEn("NEI MONGOL");
+			} else {
+				passport.setIssuedPlaceEn(tool.toPinYin(issuedPlace));
+			}
 		} catch (BadHanyuPinyinOutputFormatCombination e) {
-
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
@@ -3630,6 +3838,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				applicantEntity.setBirthday(DateUtil.string2Date(form.getBirth()));
 			}
 			TApplicantEntity insertapplicant = dbDao.insert(applicantEntity);
+			applyid = insertapplicant.getId();
 			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
 			applicantjp.setApplicantId(insertapplicant.getId());
 			applicantjp.setOrderId(orderid);
@@ -3642,6 +3851,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
 
 				applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
+				TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
+						Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()));
+				insertapplicant.setMainId(mainApply.getApplicantId());
+				dbDao.update(insertapplicant);
 			} else {
 				//设置为主申请人
 				applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
@@ -3649,7 +3862,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 				dbDao.update(insertapplicant);
 			}
 			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
-			applyid = insertappjp.getId();
 			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
 			workJp.setApplicantId(insertappjp.getId());
 			workJp.setCreateTime(new Date());
@@ -3664,14 +3876,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			visaother.setInvitename("同上");
 			visaother.setTraveladvice("推荐");
 			dbDao.insert(visaother);
-			result.put("applicantjpid", applicantjp.getApplicantId());
-			result.put("applicantid", applicantjp.getApplicantId());
-			//result.put("orderid", applicantjp.getOrderId());
+			result.put("applicantjpid", applicantjp.getId());
 
 		}
-		//保存历史信息
-		//		savaOrUpdatePassport(form, request);
-		//int update = dbDao.update(passport);
 		result.put("passurl", form.getUrl());
 		result.put("applyid", applyid);
 		result.put("orderid", orderid);
@@ -4347,5 +4554,14 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		return null;
+	}
+
+	public int accordingbirtday(String birthday) {
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+		int years = -1;
+		if (!Util.isEmpty(birthday) && birthday.length() == 10) {
+			years = DateUtil.yearsBetween(birthday, sdf.format(new Date()));
+		}
+		return years;
 	}
 }

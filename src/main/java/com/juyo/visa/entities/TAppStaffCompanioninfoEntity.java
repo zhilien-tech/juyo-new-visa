@@ -44,6 +44,14 @@ public class TAppStaffCompanioninfoEntity implements Serializable {
 	@Comment("与你的关系(英文)")
 	private Integer relationshipen;
 
+	@Column
+	@Comment("说明")
+	private String explain;
+
+	@Column
+	@Comment("说明(英文)")
+	private String explainen;
+
 	/**
 	 * (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)

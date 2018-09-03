@@ -7,6 +7,11 @@ import lombok.Data;
 @Data
 public class PassportJsonEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
+
+	private Integer orderid;
+
+	private Integer applyid;
+
 	private String url;
 
 	private String type;
