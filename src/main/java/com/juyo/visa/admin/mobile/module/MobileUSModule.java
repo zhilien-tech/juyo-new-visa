@@ -103,6 +103,15 @@ public class MobileUSModule {
 	}
 
 	/**
+	 * 根据省份，城市下拉
+	 */
+	@At
+	@POST
+	public Object getCitys(@Param("encode") String encode, @Param("province") String province) {
+		return mobileUSService.getCitys(encode, province);
+	}
+
+	/**
 	 * 基本信息回显数据接口
 	 */
 	@At

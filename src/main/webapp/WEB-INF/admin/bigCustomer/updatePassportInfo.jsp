@@ -47,10 +47,6 @@
 				<div class="dislogHide"></div>
 				<div class="tab-content row">
 					<div class="col-sm-5 padding-right-0">
-						<div style="text-align: center;">
-							扫描二维码手机上传识别
-							<div class="qrcode"></div>
-						</div>
 						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
 							
 							<div class="col-xs-6 mainWidth">
@@ -59,8 +55,8 @@
 									<span>点击上传护照</span>
 									<input id="passportUrl" name="passporturl" type="hidden" value="${obj.passurl.url }"/>
 									<input id="uploadFile" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
-									<img style="top:-219px;" id="sqImg" alt="" src="${obj.passurl.url }" >
-									<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+									<img style="top:-219px;" id="sqImg" alt="" src="${obj.passporturl }" >
+									<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 								</div>
 							</div>
 						</div>
@@ -72,77 +68,12 @@
 					</div>
 						
 					<div class="col-sm-7 padding-right-0">
-						<div class="row">
-						<!-- 姓/拼音 -->
-							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
-									<div class="form-group" style="position:relative;">
-									<label><span>*</span>姓/拼音</label> <input id="firstName"
-										name="firstname" type="text" class="form-control input-sm " tabIndex="1"
-										placeholder=" " value="${obj.passport.firstname }" />
-										<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstnameen" value="${obj.firstnameen }"/>
-									<!-- <i class="bulb"></i> -->
-								</div>
-									<!-- <i class="bulb"></i> -->
-							</div>
-						</div>
-						<!-- end 姓/拼音 -->
-					<div class="row">
-							<!-- 名/拼音 -->
-							<div class="col-sm-10 col-sm-offset-1 padding-right-0">
-								<div class="form-group" style="position:relative;">
-									<label><span>*</span>名/拼音</label> <input id="lastName"
-										name="lastname" type="text" class="form-control input-sm" tabIndex="2"
-										placeholder=" " value="${obj.passport.lastname }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastnameen" value="${obj.lastnameen }"/>
-
-									<!-- <i class="bulb"></i> -->
-								</div>
-							</div>
-						</div>
-						<!-- end 名/拼音 -->
-						<div class="row"><!-- 类型/护照号 -->
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group groupWidth">
-									<label><span>*</span>护照号</label>
-									<input id="id" name="id" type="hidden" value="${obj.passport.possportid }"/>
-									<input id="orderid" name="orderid" type="hidden" value="${obj.orderid }"/>
-									<input id="OCRline1" name="OCRline1" type="hidden" value="">
-									<input id="OCRline2" name="OCRline2" type="hidden" value="">
-									<input name="userType" type="hidden" value="${obj.usertype }"/>
-									<input id="staffId" name="staffId" type="hidden" value="${obj.passport.staffid }"/>
-									<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.passport }"/>
-								</div>
-							</div>
-						</div><!-- end 类型/护照号 -->
-						<div class="row"><!-- 性别/ 出生地点 拼音 -->
-							<div class="col-sm-3 col-sm-offset-1 padding-right-0 ">
-								<div class="form-group">
-									<label><span>*</span>性别</label>
-									<select class="form-control input-sm selectHeight" id="sex" name="sex">
-										<option value="男" ${obj.passport.sex == "男"?"selected":"" }>男</option>
-										<option value="女" ${obj.passport.sex == "女"?"selected":"" }>女</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
-								<div class="form-group">
-									<label>&nbsp;&nbsp;</label>
-									<input id="sexEn" name="sexen" class="form-control input-sm" type="text" value="${obj.passport.sexen }"/>
-								</div>
-							</div>
-							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-							 	<div class="form-group groupWidth" style="position:relative;">
-									<label><span>*</span>出生地点/拼音</label>
-									<input id="birthAddress" name="birthaddress"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.birthaddress }"/>
-									<input id="birthAddressEn" name="birthaddressen" style="position:absolute;top:32px;border:0px;left:80px; width:120px;" type="text"  placeholder=" " value="${obj.passport.birthaddressen }"/>
-								</div>
-							</div>
-						</div><!-- end 性别/出生地点 拼音 -->
 						<div class="row"><!-- 出生日期/签发地点 拼音 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label><span>*</span>出生日期</label>
-									<input id="birthday" name="birthday" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.birthday}"/>
+									<label><span>*</span>护照号</label>
+									<input type="hidden" name="staffid" value="${obj.staffid }"/>
+									<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.passport}"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
@@ -150,8 +81,8 @@
 									<label>
 										<span>*</span>签发地点/拼音
 									</label>
-									<input id="issuedPlace" name="issuedplace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passport.issuedplace }"/>
-									<input id="issuedPlaceEn" name="issuedplaceen" type="text" style="position:absolute;top:32px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passport.issuedplaceen }"/>
+									<input id="issuedPlace" name="issuedplace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passportinfo.issuedplace }"/>
+									<input id="issuedPlaceEn" name="issuedplaceen" type="text" style="position:absolute;top:32px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passportinfo.issuedplaceen }"/>
 								</div>
 							</div>
 						</div><!-- end 出生日期/签发地点 拼音 -->
@@ -161,7 +92,7 @@
 									<label>
 										<span>*</span>签发日期
 									</label>
-									<input id="issuedDate" name="issueddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issueddate }"/>
+									<input id="issuedDate" name="issueddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.issueddate }"/>
 								</div>
 							</div>
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
@@ -169,7 +100,7 @@
 									<label>&nbsp;&nbsp;</label>
 									<select id="validType" name="validtype" class="form-control input-sm selectHeight" >
 									<c:forEach var="map" items="${obj.passporttype}">
-										<option value="${map.key}" ${map.key == obj.passport.validtype?'selected':'' }>${map.value}</option>
+										<option value="${map.key}" ${map.key == obj.passportinfo.validtype?'selected':'' }>${map.value}</option>
 									</c:forEach>
 								</select>
 								</div>
@@ -179,7 +110,7 @@
 									<label>
 										<span>*</span>有效期至
 									</label>
-									<input id="validEndDate" name="validenddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.validenddate }"/>
+									<input id="validEndDate" name="validenddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.validenddate }"/>
 								</div>
 							</div>
 						</div><!-- end 签发日期/有效期至 -->
@@ -189,7 +120,7 @@
 									<label>
 										<span>*</span>签发机关
 									</label>
-									<input id="issuedOrganization" name="issuedorganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passport.issuedorganization }"/>
+									<input id="issuedOrganization" name="issuedorganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.issuedorganization }"/>
 								</div>
 							</div>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
@@ -197,7 +128,7 @@
 										<label>
 												<span>*</span>Exit & Entry Administration
 											</label>
-									<input id="issuedOrganizationEn" name="issuedorganizationen" type="text" class="form-control input-sm" placeholder="Ministry of Public Security" value="${obj.passport.issuedorganizationen }"/>
+									<input id="issuedOrganizationEn" name="issuedorganizationen" type="text" class="form-control input-sm" placeholder="Ministry of Public Security" value="${obj.passportinfo.issuedorganizationen }"/>
 								</div>
 							</div>
 						</div><!-- end 签发机关 -->
@@ -210,7 +141,7 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
-		var staffId = '${obj.passport.staffId}';
+		var staffId = '${obj.staffid}';
 		var infoType = '${obj.infotype}';
 		var isDisable = '${obj.isDisable}';
 	</script>
@@ -228,44 +159,21 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	
 	<!-- 本页面js -->
-	<script type="text/javascript" src="${base}/admin/bigCustomer/passportInfo.js"></script>
+	<script type="text/javascript" src="${base}/admin/bigCustomer/passportInfo.js?v=<%=System.currentTimeMillis() %>"></script>
 	
 	
 	<script type="text/javascript">
 		
-		$(function(){
+		/* $(function(){
 			//页面不可编辑
 			if(isDisable == 1){
 				$(".modal-body").attr('readonly', true);
 				$(".dislogHide").show();
 				$("#addBtn").hide();
 			}
-		});
+		}); */
 		
-	    var firstname = '${obj.passport.firstname }';
-	    var firstnameen = '${obj.firstnameen }';
-	    var lastname = '${obj.passport.lastname }';
-	    var lastnameen = '${obj.lastnameen }';
-	    if(firstnameen == "" && firstname != ""){
-			$('#firstNameEn').val("/"+getPinYinStr(firstname));
-	    }
-	    if(lastnameen == "" && lastname != ""){
-			$('#lastNameEn').val("/"+getPinYinStr(lastname));
-	    }
 	
-		$("#birthday").datetimepicker({
-			format: 'yyyy-mm-dd',
-			language: 'zh-CN',
-	        weekStart: 1,
-	        todayBtn: 1,
-			autoclose: true,
-			todayHighlight: true,//高亮
-			startView: 4,//从年开始选择
-			forceParse: 0,
-	        showMeridian: false,
-			pickerPosition:"bottom-right",//显示位置
-			minView: "month"//只显示年月日
-		});
 		$("#issuedDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',

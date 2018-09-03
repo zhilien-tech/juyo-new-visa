@@ -335,8 +335,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		sqlp.setParam("staffid", staffId);
 		Record previUSTripInfo = dbDao.fetch(sqlp);
 		//最后一次签证的签发日期
-		String issueddate = previUSTripInfo.getString("issueddate");
-		issueddate = formatDateStr(issueddate, FORMAT_DD_MM_YYYY);
+		String issueddate = "";
+		if (!Util.isEmpty(previUSTripInfo.getString("issueddate"))) {
+			issueddate = previUSTripInfo.getString("issueddate");
+			issueddate = formatDateStr(issueddate, FORMAT_DD_MM_YYYY);
+		}
 		previUSTripInfo.set("issueddate", issueddate);
 		String issueddateen = previUSTripInfo.getString("issueddateen");
 		issueddateen = formatDateStr(issueddateen, FORMAT_DD_MM_YYYY);

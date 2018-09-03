@@ -46,7 +46,7 @@
 				<div class="tab-content row">
 					<input id="comId" name="comid" type="hidden" value="${obj.applicant.comid }">
 					<input id="userId" name="userid" type="hidden" value="${obj.applicant.userid }">
-					<input id="staffId" name="id" type="hidden" value="${obj.staffId }">
+					<input id="staffId" name="staffid" type="hidden" value="${obj.staffid }">
 					<div class="col-sm-12 padding-right-0">
 						<!-- start 身份证 正面 -->
 							<div class="col-xs-4 pictures" style="margin-right: 30px;">
@@ -56,7 +56,7 @@
 										<input id="cardFront" name="cardfront" type="hidden" value="${obj.front.url }"/>
 										<img id="imgShow" name="sqimg" alt="" src="${obj.front.url }" >
 										<input id="uploadFileImg" name="uploadfile" class="btn btn-primary btn-sm" type="file" value="上传" />
-										<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+										<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 									</div>
 								</div>
 								<div class="front has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
@@ -74,7 +74,7 @@
 										<input id="cardInch" name="twoinchphoto" type="hidden" value="${obj.twoinch.url }"/>
 										<img id="imgInch" name="imgInch" alt="" src="${obj.twoinch.url }" >
 										<input id="uploadFileInchImg" name="uploadFileInchImg" class="btn btn-primary btn-sm" type="file"  value="上传"/>
-										<i class="delete" onclick="deleteApplicantInchImg()"></i>
+										<!-- <i class="delete" onclick="deleteApplicantInchImg()"></i> -->
 									</div>
 								</div>
 								 <div class="front has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
@@ -91,7 +91,7 @@
 												<div class="form-group" style="position:relative;">
 												<label><span>*</span>姓/拼音</label> <input id="firstName"
 													name="firstname" type="text" class="form-control input-sm " tabIndex="1"
-													placeholder=" " value="${obj.passport.firstname }" />
+													placeholder=" " value="${obj.basicinfo.firstname }" />
 													<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstnameen" value="${obj.firstnameen }"/>
 												<!-- <i class="bulb"></i> -->
 											</div>
@@ -105,7 +105,7 @@
 								<div class="form-group" style="position:relative;">
 									<label><span>*</span>名/拼音</label> <input id="lastName"
 										name="lastname" type="text" class="form-control input-sm" tabIndex="2"
-										placeholder=" " value="${obj.passport.lastname }" />
+										placeholder=" " value="${obj.basicinfo.lastname }" />
 										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastnameen" value="${obj.lastnameen }"/>
 
 									<!-- <i class="bulb"></i> -->
@@ -118,8 +118,8 @@
 									<div class="form-group">
 										<label><span>*</span>性别</label>
 										<select class="form-control input-sm selectHeight" id="sex" name="sex">
-											<option value="男" ${obj.passport.sex == "男"?"selected":"" }>男</option>
-											<option value="女" ${obj.passport.sex == "女"?"selected":"" }>女</option>
+											<option value="男" ${obj.basicinfo.sex == "男"?"selected":"" }>男</option>
+											<option value="女" ${obj.basicinfo.sex == "女"?"selected":"" }>女</option>
 										</select>
 									</div>
 								</div>
@@ -134,13 +134,13 @@
 									<label>
 										<span>*</span>手机号
 									</label> 
-									<input id="telephone" name="telephone" type="text"  class="form-control input-sm"  tabIndex="4" placeholder=" " value="${obj.applicant.telephone }" />
+									<input id="telephone" name="telephone" type="text"  class="form-control input-sm"  tabIndex="4" placeholder=" " value="${obj.basicinfo.telephone }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>邮箱</label> 
-									<input id="email" name="email" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="5" value="${obj.applicant.email }" />
+									<input id="email" name="email" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="5" value="${obj.basicinfo.email }" />
 								</div>
 							</div>
 						</div>
@@ -152,7 +152,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>公民身份证</label> 
-									<input id="cardId" name="cardId"  type="text" class="form-control input-sm"  tabIndex="6" placeholder=" " value="${obj.applicant.cardId }" />
+									<input id="cardId" name="cardId"  type="text" class="form-control input-sm"  tabIndex="6" placeholder=" " value="${obj.basicinfo.cardId }" />
 								</div>
 							</div>
 						</div>
@@ -162,18 +162,18 @@
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="provinceDiv">
-									<label>现居住地是否与身份证相同</label>
-									<input type="hidden" name="cardprovince" id="cardProvince" value="${obj.applicant.cardprovince }"/>
+									<label>现居住地</label>
+									<%-- <input type="hidden" name="cardprovince" id="cardProvince" value="${obj.applicant.cardprovince }"/>
 									<input type="hidden" name="cardcity" id="cardCity" value="${obj.applicant.cardcity }"/>
 									<input type="hidden" id="sameAddress" value=""/>
-									<input class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" /> 
-									<input id="province" autocomplete="off" name="province" onchange="translateZhToEn(this,'provinceen','')" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.applicant.province }" />
+									<input class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" />  --%>
+									<input id="province" autocomplete="off" name="province" onchange="translateZhToEn(this,'provinceen','')" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.basicinfo.province }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
 									<label>现居住地址城市</label> 
-									<input id="city" name="city" autocomplete="off" type="text" onchange="translateZhToEn(this,'cityen','')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.applicant.city }" />
+									<input id="city" name="city" autocomplete="off" type="text" onchange="translateZhToEn(this,'cityen','')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.basicinfo.city }" />
 								</div>
 							</div>
 						</div>
@@ -183,7 +183,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>详细地址</label> 
-									<input id="detailedAddress" name="detailedaddress" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.applicant.detailedaddress }" />
+									<input id="detailedAddress" name="detailedaddress" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.basicinfo.detailedaddress }" />
 								</div>
 							</div>
 							<!-- <div class="col-sm-12 xx-en">
@@ -202,8 +202,8 @@
 									</label> 
 									<select id="marrystatus" name="marrystatus" class="form-control input-sm selectHeight">
 											<option value="">请选择</option>
-											<c:forEach var="map" items="${obj.marryStatusEnum}">
-												<option value="${map.key}" ${map.key==obj.marryStatus?'selected':''}>${map.value}</option>
+											<c:forEach var="map" items="${obj.marrystatusenum}">
+												<option value="${map.key}" ${map.key==obj.basicinfo.marrystatus?'selected':''}>${map.value}</option>
 											</c:forEach>
 									</select>
 								</div>
@@ -223,7 +223,7 @@
 									<label>
 										<span>*</span>出生日期
 									</label> 
-									<input id="" name="" type="text"  class="form-control input-sm"  tabIndex="" placeholder=" " value="" />
+									<input id="birthday" name="birthday" type="text"  class="form-control input-sm"  tabIndex="" placeholder=" " value="${obj.birthday }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
@@ -231,7 +231,7 @@
 									<label>
 										<span>*</span>出生国家
 									</label>
-									<input id="" name="" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="" value="" />
+									<input id="nationality" name="nationality" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="" value="${obj.basicinfo.nationality }" />
 								</div>
 							</div>
 						</div>
@@ -244,7 +244,7 @@
 									<label>
 										<span>*</span>出生省
 									</label> 
-									<input id="" name="" type="text"  class="form-control input-sm"  tabIndex="" placeholder=" " value="" />
+									<input id="cardprovince" name="cardprovince" type="text"  class="form-control input-sm"  tabIndex="" placeholder=" " value="${obj.basicinfo.cardprovince }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
@@ -252,7 +252,7 @@
 									<label>
 										<span>*</span>出生城市
 									</label>
-									<input id="" name="" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="" value="" />
+									<input id="cardcity" name="cardcity" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="" value="${obj.basicinfo.cardcity }" />
 								</div>
 							</div>
 						</div>
@@ -279,18 +279,18 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>姓</label> 
-									<input id="otherfirstname"  name="otherfirstname" type="text" class="form-control input-sm " value="${obj.applicant.otherfirstname }"/>
+									<input id="otherfirstname"  name="otherfirstname" type="text" class="form-control input-sm " value="${obj.basicinfo.otherfirstname }"/>
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>名</label> 
-									<input id="otherlastname" name="otherlastname"  type="text" class="form-control input-sm" value="${obj.applicant.otherlastname }"/>
+									<input id="otherlastname" name="otherlastname"  type="text" class="form-control input-sm" value="${obj.basicinfo.otherlastname }"/>
 								</div>
 							</div>
 						</div>
 						<!-- 曾用国籍 -->
-						<div class="row">	
+						<%-- <div class="row">	
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>曾有的或另有的国籍(或公民身份)</label> 
@@ -331,7 +331,7 @@
 									<input id="othercountry" name="othercountry" onchange="translateZhToEn(this,'othercountryen','')" type="text" class="form-control input-sm" value="${obj.applicant.othercountry }"/>
 								</div>
 							</div>
-						</div>
+						</div> --%>
 						
 					</div>
 					<!-- 左侧结束 -->
@@ -370,7 +370,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Street Address</label> 
-									<input id="detailedAddressen" name="detailedaddressen" type="text"  tabIndex="14" class="form-control input-sm" placeholder=" " value="${obj.applicant.detailedaddressen }" />
+									<input id="detailedAddressen" name="detailedaddressen" type="text"  tabIndex="14" class="form-control input-sm" placeholder=" " value="${obj.basicinfo.detailedaddressen }" />
 								</div>
 							</div>
 						</div>
@@ -427,18 +427,18 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>Other Surnames Used</label> 
-									<input id="otherfirstnameen" name="otherfirstnameen" type="text" class="form-control input-sm " value="${obj.applicant.otherfirstnameen }" />
+									<input id="otherfirstnameen" name="otherfirstnameen" type="text" class="form-control input-sm " value="${obj.basicinfo.otherfirstnameen }" />
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>Other Given Names Used</label> 
-									<input id="otherlastnameen" name="otherlastnameen" type="text" class="form-control input-sm" value="${obj.applicant.otherlastnameen }" />
+									<input id="otherlastnameen" name="otherlastnameen" type="text" class="form-control input-sm" value="${obj.basicinfo.otherlastnameen }" />
 								</div>
 							</div>
 						</div>
 						<!-- 曾用国籍 -->
-						<div class="row">
+						<%-- <div class="row">
 							<label class="EngLabel">Do you hold or have you held any nationality other than the one indicated above on nationality</label> 	
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
@@ -478,7 +478,7 @@
 									<input id="othercountryen" name="othercountryen" type="text" class="form-control input-sm" value="${obj.applicant.othercountryen }" />
 								</div>
 							</div>
-						</div>
+						</div> --%>
 						
 					</div>
 				</div>
@@ -488,7 +488,7 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
-		var staffId = '${obj.staffId}';
+		var staffId = '${obj.staffid}';
 		var passportId = '${obj.passportId}';
 		var infoType = '${obj.infoType}';
 		var marrystatus = '${obj.marryStatus}';
@@ -508,7 +508,7 @@
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
-	<script type="text/javascript" src="${base}/admin/bigCustomer/updateStaff.js"></script>
+	<script type="text/javascript" src="${base}/admin/bigCustomer/updateStaff.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
 		
 		//返回 
@@ -527,24 +527,14 @@
 			
 			var nation = '${obj.applicant.hasothernationality}';
 			var nationen = '${obj.applicant.hasothernationalityen}';
-			var otherName = '${obj.applicant.hasothername}';
-			var otherNameen = '${obj.applicant.hasothernameen}';
-			var permanent = '${obj.applicant.isothercountrypermanentresident}';
-			var permanenten = '${obj.applicant.isothercountrypermanentresidenten}';
+			var otherName = '${obj.basicinfo.hasothername}';
+			var otherNameen = '${obj.basicinfo.hasothernameen}';
 			var address = '${obj.applicant.addressIssamewithcard}';
 			var addressen = '${obj.applicant.addressIssamewithcarden}';
-			var identification = '${obj.applicant.isidentificationnumberapply}';
-			var identificationen = '${obj.applicant.isidentificationnumberapplyen}';
-			var security = '${obj.applicant.issecuritynumberapply}';
-			var securityen = '${obj.applicant.issecuritynumberapplyen}';
-			var taxpayer = '${obj.applicant.istaxpayernumberapply}';
-			var taxpayeren = '${obj.applicant.istaxpayernumberapplyen}';
 			$("input[name='hasothernationality'][value='"+nation+"']").attr("checked",'checked');
 			$("input[name='hasothername'][value='"+otherName+"']").attr("checked",'checked');
-			$("input[name='isothercountrypermanentresident'][value='"+permanent+"']").attr("checked",'checked');
 			$("input[name='hasothernationalityen'][value='"+nationen+"']").attr("checked",'checked');
 			$("input[name='hasothernameen'][value='"+otherNameen+"']").attr("checked",'checked');
-			$("input[name='isothercountrypermanentresidenten'][value='"+permanenten+"']").attr("checked",'checked');
 			//是否有其他国籍
 			if(nation == 1){
 				$(".nameBeforeTop").css('float','none');
@@ -569,17 +559,6 @@
 			}else {
 				$(".usedBeforeUSTrue").hide();
 			}
-			//是否是其他国家永久居民
-			if(permanent == 1){
-				$(".permanentTrue").show();
-			}else{
-				$(".permanentTrue").hide();
-			}
-			if(permanenten == 1){
-				$(".permanentUSTrue").show();
-			}else{
-				$(".permanentUSTrue").hide();
-			}
 			//地址是否与身份证相同
 			if(address == 1){
 				var boxObj = $("input:checkbox[name='addressIssamewithcard']").attr("checked",true);
@@ -590,45 +569,6 @@
 				var boxObj = $("input:checkbox[name='addressIssamewithcarden']").attr("checked",true);
 			}else{
 				var boxObj = $("input:checkbox[name='addressIssamewithcarden']").attr("checked",false);
-			}
-			//国家注册码
-			if(identification == 1){
-				var boxObj = $("input:checkbox[name='isidentificationnumberapply']").attr("checked",true);
-				$("#nationalidentificationnumber").attr("disabled",true);
-			}else{
-				var boxObj = $("input:checkbox[name='isidentificationnumberapply']").attr("checked",false);
-			}
-			if(identificationen == 1){
-				var boxObj = $("input:checkbox[name='isidentificationnumberapplyen']").attr("checked",true);
-				$("#nationalidentificationnumberen").attr("disabled",true);
-			}else{
-				var boxObj = $("input:checkbox[name='isidentificationnumberapplyen']").attr("checked",false);
-			}
-			//美国社会安全码
-			if(security == 1){
-				var boxObj = $("input:checkbox[name='issecuritynumberapply']").attr("checked",true);
-				$("#socialsecuritynumber").attr("disabled",true);
-			}else{
-				var boxObj = $("input:checkbox[name='issecuritynumberapply']").attr("checked",false);
-			}
-			if(securityen == 1){
-				var boxObj = $("input:checkbox[name='issecuritynumberapplyen']").attr("checked",true);
-				$("#socialsecuritynumberen").attr("disabled",true);
-			}else{
-				var boxObj = $("input:checkbox[name='issecuritynumberapplyen']").attr("checked",false);
-			}
-			//美国纳税人证件号
-			if(taxpayeren == 1){
-				var boxObj = $("input:checkbox[name='istaxpayernumberapplyen']").attr("checked",true);
-				$("#taxpayernumberen").attr("disabled",true);
-			}else{
-				var boxObj = $("input:checkbox[name='istaxpayernumberapplyen']").attr("checked",false);
-			}
-			if(taxpayer == 1){
-				var boxObj = $("input:checkbox[name='istaxpayernumberapply']").attr("checked",true);
-				$("#taxpayernumber").attr("disabled",true);
-			}else{
-				var boxObj = $("input:checkbox[name='istaxpayernumberapply']").attr("checked",false);
 			}
 		});
 		function successCallBack(status){

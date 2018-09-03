@@ -457,7 +457,7 @@
 							<a onclick="baseInfo(${obj.basicinfo.id })">第二步：基本信息</a>
 
 							<span class="icon-line"></span>
-							<a onclick="passport(${obj.passport.id },${obj.orderid})">第三步：护照信息</a>
+							<a onclick="passport(${obj.basicinfo.id })">第三步：护照信息</a>
 							
 							<!-- <span class="icon-line"></span>
 							<a onclick="visa(${obj.basicinfo.id })">第四步：签证信息</a> -->
@@ -1584,12 +1584,12 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content:'/admin/pcVisa/updatePhoto.html?staffid='+staffid+'&flag=0'+'&isDisable'
+				content:'/admin/neworderUS/updatePhoto.html?staffid='+staffid
 			});
 		}
 		
 		//护照信息
-		function passport(id,orderid){
+		function passport(id){
 			layer.open({
 				type: 2,
 				title: false,
@@ -1599,7 +1599,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updatePassportInfo.html?passportId='+id+'&isDisable&orderid='+orderid
+				content: '/admin/neworderUS/updatePassportInfo.html?staffid='+id
 			});
 		}
 		
@@ -1614,7 +1614,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updateBaseInfo.html?staffId='+id+'&isDisable'
+				content: '/admin/neworderUS/updateBaseInfo.html?staffid='+id
 			});
 		}
 		
@@ -1629,7 +1629,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+staffid+'&isDisable'
+				content: '/admin/bigCustomer/updateVisaInfo.html?staffId='+staffid
 			});
 		}
 
@@ -1644,7 +1644,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updateFamilyInfo.html?staffId='+staffid+'&isDisable'
+				content: '/admin/neworderUS/updateFamilyInfo.html?staffid='+staffid
 			});
 		}
 
@@ -1659,7 +1659,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updateWorkInfo.html?staffId='+staffid+'&isDisable'
+				content: '/admin/neworderUS/updateWorkInfo.html?staffId='+staffid
 			});
 		}
 
@@ -1674,7 +1674,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/bigCustomer/updateTravelInfo.html?staffId='+staffid+'&isDisable'
+				content: '/admin/neworderUS/updateTravelInfo.html?staffId='+staffid
 			});
 		}
 		

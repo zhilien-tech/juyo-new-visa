@@ -99,37 +99,20 @@ $(function() {
 	
 	//$('#passportInfo').bootstrapValidator('validate');
 	//护照图片验证
-	var passportUrl = $("#passportUrl").val();
+	/*var passportUrl = $("#passportUrl").val();
 	if(passportUrl == ""){
 		$(".front").attr("class", "info-imgUpload front has-error");  
 		$(".help-blockFront").attr("data-bv-result","INVALID");
 		$("#uploadFile").siblings("i").css("display","none");
-		//$(".help-blockFront").attr("style","display: block;");  
-		//$("#borderColor").attr("style", "border-color:#ff1a1a");
 	}else{
 		$(".front").attr("class", "info-imgUpload front has-success");  
 		$(".help-blockFront").attr("data-bv-result","IVALID");  
 		$(".help-blockFront").attr("style","display: none;");
 		$("#borderColor").attr("style", null);
 		$("#uploadFile").siblings("i").css("display","block");
-	}
-	}
-
-
-	if($("#sex").val() == "男"){
-		$("#sexEn").val("M");
-	}else{
-		$("#sexEn").val("F");
+	}*/
 	}
 
-	$("#sex").change(function(){
-		var sex = $(this).val();
-		if(sex == "男"){
-			$("#sexEn").val("M");
-		}else{
-			$("#sexEn").val("F");
-		}
-	});
 
 	$("#issuedDate").change(function(){
 		if($("#issuedDate").val() != ""){
@@ -152,7 +135,7 @@ $(function() {
 	});
 });
 
-function passportValidate(){
+/*function passportValidate(){
 	//护照图片验证
 	var passportUrl = $("#passportUrl").val();
 	if(passportUrl == ""){
@@ -166,7 +149,7 @@ function passportValidate(){
         $(".help-blockFront").attr("data-bv-result","IVALID");  
         $(".help-blockFront").attr("style","display: none;");  
 	}
-}
+}*/
 
 function getNewDates(dateTemp, days){
 	var d1 = new Date(dateTemp);
@@ -248,102 +231,17 @@ function passValidate(){
 
 /**/
 
-//护照上传,扫描
-
-$('#uploadFile').change(function() {
-	var layerIndex = layer.load(1, {
-		shade : "#000"
-	});
-	$("#addBtn").attr('disabled', true);
-	$("#updateBtn").attr('disabled', true);
-	var file = this.files[0];
-	var reader = new FileReader();
-	reader.onload = function(e) {
-		var dataUrl = e.target.result;
-		var blob = dataURLtoBlob(dataUrl);
-		var formData = new FormData();
-		formData.append("image", blob, file.name);
-		$.ajax({
-			type : "POST",//提交类型  
-			//dataType : "json",//返回结果格式  
-			url : '/admin/orderJp/passportRecognitionUS',//请求地址  
-			async : true,
-			processData : false, //当FormData在jquery中使用的时候需要设置此项
-			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
-			//请求数据  
-			data : formData,
-			success : function(obj) {//请求成功后的函数 
-				//关闭加载层
-				layer.close(layerIndex);
-				if (true === obj.success) {
-					layer.msg("识别成功");
-					$('#firstName').val(obj.xingCn).change();
-					$('#firstNameEn').val("/"+getPinYinStr(obj.xingCn));
-					$('#lastName').val(obj.mingCn).change();
-					$('#lastNameEn').val("/"+getPinYinStr(obj.mingCn));
-					$('#passportUrl').val(obj.url);
-					$('#sqImg').attr('src', obj.url);
-					$("#uploadFile").siblings("i").css("display","block");
-					$(".front").attr("class", "info-imgUpload front has-success");  
-					$(".help-blockFront").attr("data-bv-result","IVALID");  
-					$(".help-blockFront").attr("style","display: none;");
-					$('#type').val(obj.type).change();
-					$('#passport').val(obj.num).change();
-					$('#sex').val(obj.sex);
-					$('#sexEn').val(obj.sexEn);
-					$('#birthAddress').val(obj.birthCountry).change();
-					$('#birthAddressEn').val("/"+getPinYinStr(obj.birthCountry));
-					$('#birthday').val(obj.birth).change();
-					$('#issuedPlace').val(obj.visaCountry).change();
-					$('#issuedPlaceEn').val("/"+getPinYinStr(obj.visaCountry));
-					$('#issuedDate').val(obj.issueDate).change();
-					$('#validEndDate').val(obj.expiryDay).change();
-					$('#OCRline1').val(obj.OCRline1);
-					$('#OCRline2').val(obj.OCRline2);
-					$("#borderColor").attr("style", null);
-					var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
-					if(years == 5){
-						$("#validType").val(2);
-					}else{
-						$("#validType").val(1);
-					}
-
-				}
-				$("#addBtn").attr('disabled', false);
-				$("#updateBtn").attr('disabled', false);
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				layer.close(layerIndex);
-				$("#addBtn").attr('disabled', false);
-				$("#updateBtn").attr('disabled', false);
-			}
-		}); // end of ajaxSubmit
-	};
-	reader.readAsDataURL(file);
-});
-
-//把dataUrl类型的数据转为blob
-function dataURLtoBlob(dataurl) {
-	var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(
-			n);
-	while (n--) {
-		u8arr[n] = bstr.charCodeAt(n);
-	}
-	return new Blob([ u8arr ], {
-		type : mime
-	});
-}
 
 //保存
 function save(status){
 	if(isDisable != 1){
-		passportValidate();
+		//passportValidate();
 		//得到获取validator对象或实例 
 		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');
 		bootstrapValidator.validate();
-		if($(".front").hasClass("has-error")){
+		/*if($(".front").hasClass("has-error")){
 			return;
-		}
+		}*/
 	//延时校验
 	setTimeout(function(){
 		if(bootstrapValidator.isValid()){
@@ -353,7 +251,7 @@ function save(status){
 				$.ajax({
 					type: 'POST',
 					data : passportInfo,
-					url: '/admin/bigCustomer/saveEditPassport',
+					url: '/admin/neworderUS/savePassportinfo',
 					success :function(data) {
 						console.log(data);
 						if(data.status == 200){
@@ -364,23 +262,23 @@ function save(status){
 				});
 
 			}else if(status == 2){
-				//基本信息
-				window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
+				//往右跳家庭信息
+				window.location.href = '/admin/neworderUS/updateFamilyInfo.html?staffid='+staffId;
 				$.ajax({
 					type: 'POST',
 					data : passportInfo,
-					url: '/admin/bigCustomer/saveEditPassport',
+					url: '/admin/neworderUS/savePassportinfo',
 					success :function(data) {
 						parent.successCallback(2);
 					}
 				});
 			}else if(status ==3){
-				//拍摄资料
-				window.location.href = '/admin/pcVisa/updatePhoto.html?staffid='+staffId+'&flag&isDisable='+isDisable;
+				//往左跳基本信息
+				window.location.href = '/admin/neworderUS/updateBaseInfo.html?staffid='+staffId;
 				$.ajax({
 					type: 'POST',
 					data : passportInfo,
-					url: '/admin/orderJp/saveEditPassport',
+					url: '/admin/neworderUS/savePassportinfo',
 					success :function(data) {
 						parent.successCallback(2);
 					}
@@ -395,7 +293,7 @@ function save(status){
 			$.ajax({
 				type: 'POST',
 				data : passportInfo,
-				url: '/admin/bigCustomer/saveEditPassport',
+				url: '/admin/neworderUS/savePassportinfo',
 				success :function(data) {
 					console.log(data);
 					if(data.status == 200){
@@ -406,22 +304,22 @@ function save(status){
 			});
 
 		}else if(status == 2){
-			//基本信息
-			window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
+			//往右跳家庭信息
+			window.location.href = '/admin/neworderUS/updateFamilyInfo.html?staffid='+staffId;
 			$.ajax({
 				type: 'POST',
 				data : passportInfo,
-				url: '/admin/bigCustomer/saveEditPassport',
+				url: '/admin/neworderUS/savePassportinfo',
 				success :function(data) {
 				}
 			});
 		}else if(status ==3){
-			//拍摄资料
-			window.location.href = '/admin/pcVisa/updatePhoto.html?staffid='+staffId+'&flag&isDisable='+isDisable;
+			//往左跳基本信息
+			window.location.href = '/admin/neworderUS/updateBaseInfo.html?staffid='+staffId;
 			$.ajax({
 				type: 'POST',
 				data : passportInfo,
-				url: '/admin/orderJp/saveEditPassport',
+				url: '/admin/neworderUS/savePassportinfo',
 				success :function(data) {
 				}
 			});

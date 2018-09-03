@@ -358,6 +358,28 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	}
 
 	/**
+	 * 根据省份，城市下拉
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param encode
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object getCitys(String encode, String province) {
+		String openid = redisDao.get(encode);
+		if (Util.isEmpty(openid)) {
+			return -1;
+		} else {
+			String sqlStr = sqlManager.get("orderUS_mobile_getCity");
+			Sql orderussql = Sqls.create(sqlStr);
+			orderussql.setParam("province", province);
+			List<Record> cityList = dbDao.query(orderussql, null, null);
+			return cityList;
+		}
+	}
+
+	/**
 	 * 申请人基本信息回显
 	 * TODO(这里用一句话描述这个方法的作用)
 	 * <p>
@@ -794,27 +816,45 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			result.put("workinfo", workinfo);
 			if (!Util.isEmpty(workinfo.getWorkstartdate())) {
 				result.put("workstartdate", format.format(workinfo.getWorkstartdate()));
+			} else {
+				result.put("workstartdate", "");
 			}
 			//上份工作信息
 			TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
 					Cnd.where("staffid", "=", staffid));
 			result.put("beforework", beforework);
-			if (!Util.isEmpty(beforework.getEmploystartdate())) {
-				result.put("employestartdate", format.format(beforework.getEmploystartdate()));
-			}
-			if (!Util.isEmpty(beforework.getEmployenddate())) {
-				result.put("employenddate", format.format(beforework.getEmployenddate()));
+			if (!Util.isEmpty(beforework)) {
+				if (!Util.isEmpty(beforework.getEmploystartdate())) {
+					result.put("employestartdate", format.format(beforework.getEmploystartdate()));
+				} else {
+					result.put("employestartdate", "");
+				}
+				if (!Util.isEmpty(beforework.getEmployenddate())) {
+					result.put("employenddate", format.format(beforework.getEmployenddate()));
+				} else {
+					result.put("employenddate", "");
+				}
 			}
 			//教育信息
 			TAppStaffBeforeeducationEntity beforeeducate = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
 					Cnd.where("staffid", "=", staffid));
 			result.put("beforeeducate", beforeeducate);
-			if (!Util.isEmpty(beforeeducate.getCoursestartdate())) {
-				result.put("coursestartdate", format.format(beforeeducate.getCoursestartdate()));
+			if (!Util.isEmpty(beforeeducate)) {
+				if (!Util.isEmpty(beforeeducate.getCoursestartdate())) {
+					result.put("coursestartdate", format.format(beforeeducate.getCoursestartdate()));
+				} else {
+					result.put("coursestartdate", "");
+				}
+				if (!Util.isEmpty(beforeeducate.getCourseenddate())) {
+					result.put("courseenddate", format.format(beforeeducate.getCourseenddate()));
+				} else {
+					result.put("courseenddate", "");
+				}
 			}
-			if (!Util.isEmpty(beforeeducate.getCourseenddate())) {
-				result.put("courseenddate", format.format(beforeeducate.getCourseenddate()));
-			}
+
+			//国家下拉
+			List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
+			result.put("gocountryfivelist", gocountryFiveList);
 
 			result.put("careersenum", EnumUtil.enum2(VisaCareersEnum.class));
 			result.put("highesteducationenum", EnumUtil.enum2(VisaHighestEducationEnum.class));

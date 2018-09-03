@@ -33,12 +33,14 @@ import com.juyo.visa.admin.mobile.form.FamilyinfoUSForm;
 import com.juyo.visa.admin.mobile.form.PassportinfoUSForm;
 import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
 import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
+import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
+import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.visaProcess.EmigrationreasonEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.TravelCompanionRelationshipEnum;
@@ -125,7 +127,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	//图片上传后连接websocket的地址
 	private static final String SEND_INFO_WEBSPCKET_ADDR = "simplesendinfosocket";
 	private SimpleSendInfoWSHandler simplesendinfosocket = (SimpleSendInfoWSHandler) SpringContextUtil.getBean(
-			"simplesendinfosocket", SimpleSendInfoWSHandler.class);
+			"mySimpleSendInfoWSHandler", SimpleSendInfoWSHandler.class);
 	//微信生成小程序码接口
 	private static String WX_B_CODE_URL = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=ACCESS_TOKEN"; //不限次数 scene长度为32个字符
 
@@ -141,6 +143,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object tofillimage(int staffid, HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
+		result.put("staffid", staffid);
 		String localAddr = request.getServerName();
 		request.getServerName();
 		String serverName = request.getServerName();
@@ -162,7 +165,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			credentials.setUrl(tAppStaffCredentialsEntity.getUrl());
 			result.put(String.valueOf(tAppStaffCredentialsEntity.getType()), credentials);
 		}
-		return JuYouResult.ok(result);
+		return result;
 	}
 
 	/**
@@ -258,9 +261,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("staffid", staffid);
 		SimpleDateFormat sdf = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-		List<TAppStaffCredentialsEntity> photourls = dbDao.query(TAppStaffCredentialsEntity.class,
-				Cnd.where("staffid", "=", staffid).and("type", "in", "3,13,14"), null);
-		result.put("photourls", photourls);
+		TAppStaffCredentialsEntity front = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", 3));
+		TAppStaffCredentialsEntity back = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", 14));
+		TAppStaffCredentialsEntity twoinch = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", 13));
+		result.put("front", front);
+		result.put("back", back);
+		result.put("twoinch", twoinch);
 		result.put("marrystatusenum", EnumUtil.enum2(MarryStatusEnum.class));
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
 		result.put("basicinfo", basicinfo);
@@ -279,7 +288,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			sb.append("/").append(basicinfo.getLastnameen());
 			result.put("lastnameen", sb.toString());
 		}
-		return JuYouResult.ok(result);
+		return result;
 	}
 
 	/**
@@ -345,6 +354,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setCardId(form.getCardId());
 		basicinfo.setProvince(form.getProvince());
 		basicinfo.setCity(form.getCity());
+		basicinfo.setCardprovince(form.getCardprovince());
+		basicinfo.setCardcity(form.getCardcity());
 		basicinfo.setDetailedaddress(form.getDetailedaddress());
 		basicinfo.setDetailedaddressen(form.getDetailedaddressen());
 		basicinfo.setMarrystatus(form.getMarrystatus());
@@ -362,6 +373,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setCardIden(form.getCardId());
 		basicinfo.setProvinceen(translate(form.getProvince()));
 		basicinfo.setCityen(translate(form.getCity()));
+		basicinfo.setCardprovinceen(translate(form.getCardprovince()));
+		basicinfo.setCardcityen(translate(form.getCardcity()));
 		basicinfo.setMarrystatusen(form.getMarrystatus());
 		basicinfo.setNationalityen(translate(form.getNationality()));
 		dbDao.update(basicinfo);
@@ -395,7 +408,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			result.put("validenddate", sdf.format(passportinfo.getValidenddate()));
 		}
 
-		return JuYouResult.ok(result);
+		result.put("passporttype", EnumUtil.enum2(PassportTypeEnum.class));
+		return result;
 	}
 
 	/**
@@ -449,6 +463,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object toFamilyinfo(int staffid) {
 		Map<String, Object> result = Maps.newHashMap();
+		result.put("staffid", staffid);
 		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		result.put("familyinfo", familyinfo);
@@ -463,14 +478,22 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(familyinfo.getMotherbirthday())) {
 			result.put("motherbirthday", sdf.format(familyinfo.getMotherbirthday()));
 		}
+
+		//直系亲属
+		TAppStaffImmediaterelativesEntity immediaterelatives = dbDao.fetch(TAppStaffImmediaterelativesEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		result.put("immediaterelatives", immediaterelatives);
 		//下拉处理
+		//国家下拉
+		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
+		result.put("gocountryfivelist", gocountryFiveList);
 		//身份状态
 		result.put("familyinfoenum", EnumUtil.enum2(VisaFamilyInfoEnum.class));
 		//配偶联系地址
 		result.put("spousecontactaddressenum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
 		//直系亲属---与你的关系
 		result.put("immediaterelationshipenum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));
-		return JuYouResult.ok(result);
+		return result;
 	}
 
 	/**
@@ -657,7 +680,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("careersenum", EnumUtil.enum2(VisaCareersEnum.class));
 		//最高学历
 		result.put("highesteducationenum", EnumUtil.enum2(VisaHighestEducationEnum.class));
-		return JuYouResult.ok(result);
+		return result;
 	}
 
 	/**
@@ -853,7 +876,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		result.put("emigrationreasonenumenum", EnumUtil.enum2(EmigrationreasonEnum.class));
 		result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
-		return JuYouResult.ok(result);
+		return result;
 	}
 
 	/**
@@ -985,15 +1008,44 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object selectCountry(String searchstr) {
-		List<String> countryList = new ArrayList<>();
+		List<TCountryRegionEntity> countryList = new ArrayList<>();
 		List<TCountryRegionEntity> country = dbDao.query(TCountryRegionEntity.class,
 				Cnd.where("chinesename", "like", "%" + Strings.trim(searchstr) + "%"), null);
 		for (TCountryRegionEntity tCountry : country) {
-			if (!countryList.contains(tCountry.getChinesename())) {
-				countryList.add(tCountry.getChinesename());
+			if (!countryList.contains(tCountry)) {
+				countryList.add(tCountry);
 			}
 		}
-		List<String> list = new ArrayList<>();
+		List<TCountryRegionEntity> list = new ArrayList<>();
+		if (!Util.isEmpty(countryList) && countryList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(countryList.get(i));
+			}
+			return list;
+		} else {
+			return countryList;
+		}
+	}
+
+	/**
+	 * 省份模糊查询
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param searchstr
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object selectProvince(String searchstr) {
+		List<TIdcardEntity> countryList = new ArrayList<>();
+		List<TIdcardEntity> country = dbDao.query(TIdcardEntity.class,
+				Cnd.where("province", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		for (TIdcardEntity tCountry : country) {
+			if (!countryList.contains(tCountry)) {
+				countryList.add(tCountry);
+			}
+		}
+		List<TIdcardEntity> list = new ArrayList<>();
 		if (!Util.isEmpty(countryList) && countryList.size() >= 5) {
 			for (int i = 0; i < 5; i++) {
 				list.add(countryList.get(i));

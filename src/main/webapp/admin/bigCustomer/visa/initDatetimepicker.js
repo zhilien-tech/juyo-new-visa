@@ -20,7 +20,23 @@ $("#issueddate").datetimepicker({
 
 //家庭信息---配偶的生日
 $("#spousebirthday").datetimepicker({
-	format: 'dd/mm/yyyy',
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"bottom-right",//显示位置
+	minView: "month"//只显示年月日
+});
+//父亲的生日
+$("#fatherbirthday").datetimepicker({
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"bottom-right",//显示位置
+	minView: "month"//只显示年月日
+});
+//母亲的生日
+$("#motherbirthday").datetimepicker({
+	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"bottom-right",//显示位置

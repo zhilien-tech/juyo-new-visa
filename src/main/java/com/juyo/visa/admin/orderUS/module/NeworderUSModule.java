@@ -6,6 +6,8 @@
 
 package com.juyo.visa.admin.orderUS.module;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -16,6 +18,7 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
+import com.google.common.collect.Maps;
 import com.juyo.visa.admin.mobile.form.BasicinfoUSForm;
 import com.juyo.visa.admin.mobile.form.FamilyinfoUSForm;
 import com.juyo.visa.admin.mobile.form.PassportinfoUSForm;
@@ -49,8 +52,8 @@ public class NeworderUSModule {
 	 */
 	@At
 	@GET
-	@Ok("jsp")
-	public Object tofillimage(@Param("staffid") int staffid, HttpServletRequest request) {
+	@Ok("jsp:admin/pcVisa/updatePhoto")
+	public Object updatePhoto(@Param("staffid") int staffid, HttpServletRequest request) {
 		return neworderUSViewService.tofillimage(staffid, request);
 	}
 
@@ -59,8 +62,8 @@ public class NeworderUSModule {
 	 */
 	@At
 	@GET
-	@Ok("jsp")
-	public Object toBasicinfo(@Param("staffid") int staffid) {
+	@Ok("jsp:admin/bigCustomer/updateBaseInfo")
+	public Object updateBaseInfo(@Param("staffid") int staffid) {
 		return neworderUSViewService.toBasicinfo(staffid);
 	}
 
@@ -78,8 +81,8 @@ public class NeworderUSModule {
 	 */
 	@At
 	@GET
-	@Ok("jsp")
-	public Object toPassportinfo(@Param("staffid") int staffid) {
+	@Ok("jsp:admin/bigCustomer/updatePassportInfo")
+	public Object updatePassportInfo(@Param("staffid") int staffid) {
 		return neworderUSViewService.toPassportinfo(staffid);
 	}
 
@@ -97,8 +100,8 @@ public class NeworderUSModule {
 	 */
 	@At
 	@GET
-	@Ok("jsp")
-	public Object toFamilyinfo(@Param("staffid") int staffid) {
+	@Ok("jsp:admin/bigCustomer/updateFamilyInfo")
+	public Object updateFamilyInfo(@Param("staffid") int staffid) {
 		return neworderUSViewService.toFamilyinfo(staffid);
 	}
 
@@ -116,9 +119,11 @@ public class NeworderUSModule {
 	 */
 	@At
 	@GET
-	@Ok("jsp")
-	public Object toWorkandeducation(@Param("staffid") int staffid) {
-		return neworderUSViewService.toWorkandeducation(staffid);
+	@Ok("jsp:admin/bigCustomer/updateWorkInfo")
+	public Object updateWorkInfo(@Param("staffid") int staffid) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("staffid", staffid);
+		return result;
 	}
 
 	/**
@@ -135,9 +140,11 @@ public class NeworderUSModule {
 	 */
 	@At
 	@GET
-	@Ok("jsp")
-	public Object toTravelinfo(@Param("staffid") int staffid) {
-		return neworderUSViewService.toTravelinfo(staffid);
+	@Ok("jsp:admin/bigCustomer/updateTravelInfo")
+	public Object updateTravelInfo(@Param("staffid") int staffid) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("staffid", staffid);
+		return result;
 	}
 
 	/**
@@ -156,6 +163,15 @@ public class NeworderUSModule {
 	@POST
 	public Object selectCountry(@Param("searchstr") String searchstr) {
 		return neworderUSViewService.selectCountry(searchstr);
+	}
+
+	/**
+	 * 省份模糊查询
+	 */
+	@At
+	@POST
+	public Object selectProvince(@Param("searchstr") String searchstr) {
+		return neworderUSViewService.selectProvince(searchstr);
 	}
 
 	/**

@@ -382,7 +382,7 @@ function deleteApplicantFrontImg() {
 //右箭头跳转
 function saveApplicant(status){
 	if(status == 2){
-		window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+passportId+'&isDisable';
+		window.location.href = '/admin/neworderUS/updateBaseInfo.html?staffid='+staffid;
 		
 		parent.successCallback(2);
 	}

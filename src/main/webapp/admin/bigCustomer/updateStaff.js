@@ -448,7 +448,7 @@ function translateZhToEn(from, to, param){
 
 
 //国籍检索
-$("#nationality").on('input',function(){
+/*$("#nationality").on('input',function(){
 	$("#nationality").nextAll("ul.ui-autocomplete").remove();
 	$.ajax({
 		type : 'POST',
@@ -468,7 +468,7 @@ $("#nationality").on('input',function(){
 			}
 		}
 	});
-});
+});*/
 //国籍上下键控制
 //写成公共方法
 var index = -1;
@@ -697,191 +697,6 @@ $("#cityDiv").mouseleave(function(){
 	$("#city").nextAll("ul.ui-autocomplete").remove();
 });
 
-//正面上传,扫描
-$('#uploadFileImg').change(function() {
-	var layerIndex = layer.load(1, {
-		shade : "#000"
-	});
-	$("#addBtn").attr('disabled', true);
-	$("#updateBtn").attr('disabled', true);
-	var file = this.files[0];
-	var reader = new FileReader();
-	reader.onload = function(e) {
-		var dataUrl = e.target.result;
-		var blob = dataURLtoBlob(dataUrl);
-		var formData = new FormData();
-		formData.append("image", blob, file.name);
-		$.ajax({
-			type : "POST",//提交类型  
-			//dataType : "json",//返回结果格式  
-			url : BASE_PATH + '/admin/orderJp/IDCardRecognitionUS',//请求地址  
-			async : true,
-			processData : false, //当FormData在jquery中使用的时候需要设置此项
-			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
-			//请求数据  
-			data : formData,
-			success : function(obj) {//请求成功后的函数 
-				//关闭加载层
-				layer.close(layerIndex);
-				if (true === obj.success) {
-					layer.msg("识别成功");
-					$('#cardFront').val(obj.url);
-					$('#imgShow').attr('src', obj.url);
-					$("#uploadFileImg").siblings("i").css("display","block");
-//					$(".front").attr("class", "info-imgUpload front has-success");  
-					$(".help-blockFront").attr("data-bv-result","IVALID");  
-					$(".help-blockFront").attr("style","display: none;");
-					$("#borderColorFront").attr("style", null);
-					$('#address').val(obj.address).change();
-					$('#nation').val(obj.nationality).change();
-					$('#cardId').val(obj.num).change();
-					$('#cardIden').val(obj.num).change();
-					var str=""; 
-					var stren="";
-					//是否同身份证相同
-					$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
-						str=$(this).val();     
-					});     
-					if(str == 1){//相同
-						searchByCard(1);
-					}
-					$("input:checkbox[name='addressIssamewithcarden']:checked").each(function(){     
-						stren=$(this).val();     
-					});     
-					if(stren == 1){//相同
-						searchByCard(2);
-					}
-					
-					$('#cardProvince').val(obj.province).change();
-					$('#cardCity').val(obj.city).change();
-					$('#birthday').val(obj.birth).change();
-					$('#sex').val(obj.sex);
-				}
-				$("#addBtn").attr('disabled', false);
-				$("#updateBtn").attr('disabled', false);
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				layer.close(layerIndex);
-				$("#addBtn").attr('disabled', false);
-				$("#updateBtn").attr('disabled', false);
-			}
-		}); // end of ajaxSubmit
-	};
-	reader.readAsDataURL(file);
-});
-
-//背面上传,扫描
-$('#uploadFileImgBack').change(function() {
-	var layerIndex = layer.load(1, {
-		shade : "#000"
-	});
-	$("#addBtn").attr('disabled', true);
-	$("#updateBtn").attr('disabled', true);
-	var file = this.files[0];
-	var reader = new FileReader();
-	reader.onload = function(e) {
-		var dataUrl = e.target.result;
-		var blob = dataURLtoBlob(dataUrl);
-		var formData = new FormData();
-		formData.append("image", blob, file.name);
-		$.ajax({
-			type : "POST",//提交类型  
-			//dataType : "json",//返回结果格式  
-			url : BASE_PATH + '/admin/orderJp/IDCardRecognitionBack',//请求地址  
-			async : true,
-			processData : false, //当FormData在jquery中使用的时候需要设置此项
-			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
-			//请求数据  
-			data : formData,
-			success : function(obj) {//请求成功后的函数 
-				//关闭加载层
-				layer.close(layerIndex);
-				if (true === obj.success) {
-					layer.msg("识别成功");
-					$('#cardBack').val(obj.url);
-					$('#imgShowBack').attr('src', obj.url);
-					$("#uploadFileImgBack").siblings("i").css("display","block");
-//					$(".back").attr("class", "info-imgUpload back has-success");  
-					$(".help-blockBack").attr("data-bv-result","IVALID");  
-					$(".help-blockBack").attr("style","display: none;"); 
-					$("#borderColorBack").attr("style", null);
-					$('#validStartDate').val(obj.starttime).change();
-					$('#validEndDate').val(obj.endtime).change();
-					$('#issueOrganization').val(obj.issue).change();
-				}
-				$("#addBtn").attr('disabled', false);
-				$("#updateBtn").attr('disabled', false);
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				layer.close(layerIndex);
-				$("#addBtn").attr('disabled', false);
-				$("#updateBtn").attr('disabled', false);
-			}
-		}); // end of ajaxSubmit
-	};
-	reader.readAsDataURL(file);
-});
-
-//二寸免冠照片上传
-$('#uploadFileInchImg').change(function() {
-	var layerIndex = layer.load(1, {
-		shade : "#000"
-	});
-	$("#addBtn").attr('disabled', true);
-	$("#updateBtn").attr('disabled', true);
-	var file = this.files[0];
-	var reader = new FileReader();
-	reader.onload = function(e) {
-		var dataUrl = e.target.result;
-		var blob = dataURLtoBlob(dataUrl);
-		var formData = new FormData();
-		formData.append("image", blob, file.name);
-		$.ajax({
-			type : "POST",//提交类型  
-			//dataType : "json",//返回结果格式  
-			url : BASE_PATH + '/admin/company/uploadFile.html',//请求地址  
-			async : true,
-			processData : false, //当FormData在jquery中使用的时候需要设置此项
-			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
-			//请求数据  
-			data : formData,
-			success : function(obj) {//请求成功后的函数 
-				//关闭加载层
-				layer.close(layerIndex);
-				if ('200' === obj.status) {
-					layer.msg("识别成功");
-					$('#cardInch').val(obj.data);
-					$('#imgInch').attr('src', obj.data);
-					$("#uploadFileInchImg").siblings("i").css("display","block");
-//					$(".front").attr("class", "info-imgUpload front has-success");  
-					$(".help-blockInch").attr("data-bv-result","IVALID");  
-					$(".help-blockInch").attr("style","display: none;");
-					//$("#borderColorFront").attr("style", null);
-				}
-				$("#addBtn").attr('disabled', false);
-				$("#updateBtn").attr('disabled', false);
-			},
-			error : function(XMLHttpRequest, textStatus, errorThrown) {
-				layer.close(layerIndex);
-				$("#addBtn").attr('disabled', false);
-				$("#updateBtn").attr('disabled', false);
-			}
-		}); // end of ajaxSubmit
-	};
-	reader.readAsDataURL(file);
-});
-
-//把dataUrl类型的数据转为blob
-function dataURLtoBlob(dataurl) {
-	var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(
-			n);
-	while (n--) {
-		u8arr[n] = bstr.charCodeAt(n);
-	}
-	return new Blob([ u8arr ], {
-		type : mime
-	});
-}
 
 //婚姻状况处理
 //左边
@@ -1042,117 +857,6 @@ $(".nowProvinceen").click(function(){
 		$("#detailedAddressen").val("").change();
 	}
 });
-//国家注册码
-$(".isidentificationnumberapply").click(function(){
-	if(this.checked){
-		$("#nationalidentificationnumber").val("").change();
-		$("#nationalidentificationnumber").attr("disabled",true);
-		$(".isidentificationnumberapplyen").prop("checked",true);
-		$("#nationalidentificationnumberen").val("").change();
-		$("#nationalidentificationnumberen").attr("disabled",true);
-		
-		$(".countryNum").attr("class", "countryNum has-success");  
-	    $(".help-countryNum").attr("data-bv-result","IVALID");  
-	    $(".help-countryNum").attr("style","display: none;");  
-	    $("#nationalidentificationnumber").attr("style", null);
-	    
-	    $(".countryNumen").attr("class", "countryNumen has-success");  
-	    $(".help-countryNumen").attr("data-bv-result","IVALID");  
-	    $(".help-countryNumen").attr("style","display: none;");  
-	    $("#nationalidentificationnumberen").attr("style", null);
-	}else{
-		$("#nationalidentificationnumber").attr("disabled",false);
-		$(".isidentificationnumberapplyen").prop("checked",false);
-		$("#nationalidentificationnumberen").attr("disabled",false);
-	}
-});
-$(".isidentificationnumberapplyen").click(function(){
-	if(this.checked){
-		$("#nationalidentificationnumberen").val("").change();
-		$("#nationalidentificationnumberen").attr("disabled",true);
-		
-		$(".countryNumen").attr("class", "countryNumen has-success");  
-	    $(".help-countryNumen").attr("data-bv-result","IVALID");  
-	    $(".help-countryNumen").attr("style","display: none;");  
-	    $("#nationalidentificationnumberen").attr("style", null);
-	}else{
-		$("#nationalidentificationnumberen").attr("disabled",false);
-	}
-});
-//美国社会安全码
-$(".issecuritynumberapplyen").click(function(){
-	if(this.checked){
-		$("#socialsecuritynumberen").val("").change();
-		$("#socialsecuritynumberen").attr("disabled",true);
-		
-		$(".safeNumen").attr("class", "safeNumen has-success");  
-	    $(".help-blocksafeen").attr("data-bv-result","IVALID");  
-	    $(".help-blocksafeen").attr("style","display: none;");  
-	    $("#socialsecuritynumberen").attr("style", null);
-	}else{
-		$("#socialsecuritynumberen").attr("disabled",false);
-	}
-});
-$(".issecuritynumberapply").click(function(){
-	if(this.checked){
-		$("#socialsecuritynumber").val("").change();
-		$("#socialsecuritynumber").attr("disabled",true);
-		$(".issecuritynumberapplyen").prop("checked",true);
-		$("#socialsecuritynumberen").val("").change();
-		$("#socialsecuritynumberen").attr("disabled",true);
-		
-		$(".safeNum").attr("class", "safeNum has-success");  
-	    $(".help-blocksafe").attr("data-bv-result","IVALID");  
-	    $(".help-blocksafe").attr("style","display: none;");  
-	    $("#socialsecuritynumber").attr("style", null);
-	    
-	    $(".safeNumen").attr("class", "safeNumen has-success");  
-	    $(".help-blocksafeen").attr("data-bv-result","IVALID");  
-	    $(".help-blocksafeen").attr("style","display: none;");  
-	    $("#socialsecuritynumberen").attr("style", null);
-	}else{
-		$("#socialsecuritynumber").attr("disabled",false);
-		$(".issecuritynumberapplyen").prop("checked",false);
-		$("#socialsecuritynumberen").attr("disabled",false);
-	}
-});
-//美国纳税人证件号
-$(".istaxpayernumberapplyen").click(function(){
-	if(this.checked){
-		$("#taxpayernumberen").val("").change();
-		$("#taxpayernumberen").attr("disabled",true);
-		
-		$(".safepayen").attr("class", "safepayen has-success");  
-	    $(".help-ratepayingen").attr("data-bv-result","IVALID");  
-	    $(".help-ratepayingen").attr("style","display: none;");  
-	    $("#taxpayernumberen").attr("style", null);
-	}else{
-		$("#taxpayernumberen").attr("disabled",false);
-	}
-});
-$(".istaxpayernumberapply").click(function(){
-	if(this.checked){
-		$("#taxpayernumber").val("").change();
-		$("#taxpayernumber").attr("disabled",true);
-		$(".istaxpayernumberapplyen").prop("checked",true);
-		$("#taxpayernumberen").val("").change();
-		$("#taxpayernumberen").attr("disabled",true);
-		
-		$(".safepay").attr("class", "safepay has-success");  
-	    $(".help-ratepaying").attr("data-bv-result","IVALID");  
-	    $(".help-ratepaying").attr("style","display: none;");  
-	    $("#taxpayernumber").attr("style", null);
-	    
-	    $(".safepayen").attr("class", "safepayen has-success");  
-	    $(".help-ratepayingen").attr("data-bv-result","IVALID");  
-	    $(".help-ratepayingen").attr("style","display: none;");  
-	    $("#taxpayernumberen").attr("style", null);
-	}else{
-		$("#taxpayernumber").attr("disabled",false);
-		$(".istaxpayernumberapplyen").prop("checked",false);
-		$("#taxpayernumberen").attr("disabled",false);
-	}
-});
 
 function searchByCard(status){
 
@@ -1186,7 +890,8 @@ function searchByCard(status){
 }
 
 //更新保存基本信息
-/*function saveApplicant(status){
+function saveApplicant(status){
+	
 	$("#applicantInfo").data('bootstrapValidator').destroy();
 	$("#applicantInfo").data('bootstrapValidator', null);
 	applyValidate();
@@ -1196,26 +901,36 @@ function searchByCard(status){
 	bootstrapValidator.validate();
 	if (bootstrapValidator.isValid()){
 		var str="";
-		var applicantInfo;
-		$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
-			str=$(this).val();     
-		});
-		if(str != 1){
-			applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
-		}else{
-			applicantInfo = $("#applicantInfo").serialize();
-		}
-		applicantInfo.id = staffId;
+		var	applicantInfo = $("#applicantInfo").serialize();
 
 		if(status == 2){
-			//向右跳转
-
+			//左箭头跳转 
+			window.location.href = '/admin/neworderUS/updatePhoto.html?staffid='+staffId;
+			$.ajax({
+				type: 'POST',
+				data : applicantInfo,
+				url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
+				success :function(data) {
+					parent.successCallback(2);
+				}
+			});
+		}else if(status == 3){
+			//右箭头跳转
+			window.location.href = '/admin/neworderUS/updatePassportInfo.html?staffid='+staffId;
+			$.ajax({
+				type: 'POST',
+				data : applicantInfo,
+				url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
+				success :function(data) {
+					parent.successCallback(2);
+				}
+			});
 		}else{
 			layer.load(1);
 			$.ajax({
 				type: 'POST',
 				data : applicantInfo,
-				url: BASE_PATH + '/admin/bigCustomer/update.html',
+				url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
 				success :function(data) {
 					layer.closeAll("loading");
 					closeWindow();
@@ -1224,9 +939,9 @@ function searchByCard(status){
 			});
 		}
 	}
-}*/
+}
 
-function saveApplicant(status){
+/*function saveApplicant(status){
 	var urlName;
 	if(isDisable != 1){
 	$("#applicantInfo").data('bootstrapValidator').destroy();
@@ -1400,7 +1115,7 @@ function saveApplicant(status){
 	
 	if (bootstrapValidator.isValid()){
 
-		/*var str="";
+		var str="";
 		var applicantInfo;
 		$("input:checkbox[name='addressIssamewithcard']:checked").each(function(){     
 			str=$(this).val();     
@@ -1409,7 +1124,7 @@ function saveApplicant(status){
 			applicantInfo = $.param({"addressIsSameWithCard":0}) + "&" + $("#applicantInfo").serialize();
 		}else{
 			applicantInfo = $("#applicantInfo").serialize();
-		}*/
+		}
 		applicantInfo = $("#applicantInfo").serialize();
 		applicantInfo.id = staffId;
 
@@ -1491,7 +1206,7 @@ function saveApplicant(status){
 		}
 		layer.closeAll("loading");
 	}
-}
+}*/
 
 $("#nationalidentificationnumber").on('input',function(){
 	$(".countryNum").attr("class", "countryNum has-success");  

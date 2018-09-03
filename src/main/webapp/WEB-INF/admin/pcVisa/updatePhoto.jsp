@@ -47,7 +47,6 @@
 	<div class="head">
 		<span>拍摄资料</span>
 		<input id="staffid" type="hidden" value="${obj.staffid }">
-		<input id="passportId" type="hidden" value="${obj.passportId }">
 		<div class="btnGroup">
 			<a class="btnSave" onclick="savePhoto()">保存</a> <a class="btnCancel" onclick="closeWindow()">取消</a>
 		</div>
@@ -160,17 +159,14 @@
 <script src="/appmobileus/js/lrz.bundle.js"></script>
 <script src="/admin/pcVisa/getphoto.js"></script>
 <script>
-	var passportId = $("#passportId").val();
 	var staffid = '${obj.staffid}';
-	var usertype = '${obj.userType}';
-	var isDisable = '${obj.isDisable}';
 	$(function() {
 		//页面不可编辑
-		if(isDisable == 1){
+		/* if(isDisable == 1){
 			$(".section").attr('readonly', true);
 			$(".dislogHide").show();
 			$(".btnSave").hide();
-		}
+		} */
 		
 		twonichphoto(staffid,13);
 		chuqian(staffid,12);
