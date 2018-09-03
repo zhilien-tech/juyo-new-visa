@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/visaDetail.css?v='20180510'">
 <!-- 加载中。。。样式 -->
 <link rel="stylesheet" href="${base}/references/common/css/spinner.css">
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper" id="wrapper">

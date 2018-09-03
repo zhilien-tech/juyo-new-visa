@@ -87,6 +87,51 @@ public class BigCustomerModule {
 		return bigCustomerViewService.getStaffInfo(staffId, isDisable, flag, session);
 	}
 
+	/**
+	 * 家庭信息
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object updateFamilyInfo(
+		@Param("staffId") Integer staffId, 
+		@Param("isDisable") Integer isDisable,
+		@Param("flag") Integer flag,
+		HttpSession session
+	) {
+		return bigCustomerViewService.updateVisaInfo(staffId, isDisable, flag, session);
+	}
+
+	/**
+	 * 工作信息
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object updateWorkInfo(
+		@Param("staffId") Integer staffId, 
+		@Param("isDisable") Integer isDisable,
+		@Param("flag") Integer flag,
+		HttpSession session
+	) {
+		return bigCustomerViewService.updateVisaInfo(staffId, isDisable, flag, session);
+	}
+
+	/**
+	 * 旅行信息
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object updateTravelInfo(
+		@Param("staffId") Integer staffId, 
+		@Param("isDisable") Integer isDisable,
+		@Param("flag") Integer flag,
+		HttpSession session
+	) {
+		return bigCustomerViewService.updateVisaInfo(staffId, isDisable, flag, session);
+	}
+
 
 	/**
 	 * 执行'修改操作'

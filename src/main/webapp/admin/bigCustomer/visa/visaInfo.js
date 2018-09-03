@@ -1,8 +1,11 @@
 //---------------------------------------工具方法 start-------------------------------------------
 //克隆添加多段
 function cloneMoreDiv(divClass){
+	let i = $("."+divClass).eq(0).find('a').attr('data-index');
 	var cloneDiv = $("."+divClass).eq(0).clone();
 	emptyContentByObj(cloneDiv);
+	i++;
+	cloneDiv.find('a').attr('data-index', i);
 	$("."+divClass).last().after(cloneDiv);
 	initDateTimePicker($("."+divClass));
 }
@@ -124,19 +127,15 @@ function getPinYinStr(hanzi){
 //旅伴信息
 $(".companyInfo").change(function(){
 	var companyVal = $(".companyInfo:checked").val();
+
 	if(companyVal == 1){
 		$(".teamture").show();
 		$(".teamnamefalse").show();
+		$('.companysave').show();
 	}else {
 		$(".teamture").hide();
-		deleteBrotherEle($("div.teamnamefalse"));
-		emptyContentByObj($("div.teamnamefalse"));
-		//触发单选按钮的点击事件
-		$(".team").eq(1).click();
-		deleteBrotherEle($("div.teamnamefalseDiv"));
-		emptyContentByObj($("div.teamnamefalse"));
+		$('.companysave').hide();
 	}
-	$(".companyInfoen").eq(companyVal-1).click();
 });
 //旅伴信息英文
 $(".companyInfoen").change(function(){
@@ -192,7 +191,10 @@ $(".teamen").change(function(){
 //旅伴信息多段操作
 $(".companysave").click(function(){
 	cloneMoreDiv("teamaddfalse");
-	$(".companysaveen").trigger("click");
+	// $(".companysaveen").trigger("click");
+});
+$(".saveOutbound").click(ev => {
+	cloneMoreDiv("saveOutboundContent");
 });
 //旅伴信息多段操作英文
 $(".companysaveen").click(function(){
@@ -215,14 +217,15 @@ $(".goUS").change(function(){
 	var goUS = $("input[class=goUS]:checked").val();
 	if(goUS == 1){
 		$(".goUSInfo").show();
+		$('.beforesave').show();
 	}else{
 		$(".goUSInfo").hide();
-		deleteBrotherEle($("div.goUS_CountryDiv"));
-		emptyContentByObj($("div.goUS_CountryDiv"));
-		//触发单选按钮的点击事件
-		$(".license").eq(1).click();
+		$('.beforesave').hide();
+		// deleteBrotherEle($("div.goUS_CountryDiv"));
+		// emptyContentByObj($("div.goUS_CountryDiv"));
+		// //触发单选按钮的点击事件
+		// $(".license").eq(1).click();
 	}
-	$(".goUSen").eq(goUS-1).click();
 });
 //(1)是否去过美国英文
 $(".goUSen").change(function(){
@@ -396,7 +399,7 @@ $(".onceImmigrationen").change(function(){
 //去过美国多段
 $(".beforesave").click(function(){
 	cloneMoreDiv("goUS_CountryDiv");
-	$(".beforesaveen").trigger("click");
+	// $(".beforesaveen").trigger("click");
 });		
 //去过美国多段英文
 $(".beforesaveen").click(function(){
@@ -1106,6 +1109,14 @@ function addSegmentsTranslateZhToEn(from, to, param){
 	}else{
 		toval = $(from).val();
 	}
+
+	if (to === 'relationshipen') {
+		if (toval == 7) {
+			$(from).parent().siblings().show();
+		} else {
+			$(from).parent().siblings().hide();
+		}
+	}
 	
 	$.ajax({
 		//async : false,
@@ -1123,9 +1134,6 @@ function addSegmentsTranslateZhToEn(from, to, param){
 			$("." + to).eq(Index).val(data).change();
 		}
 	});
-	/*$.getJSON("/admin/translate/google", {q: $(from).val()}, function (result) {
-        $("#" + to).val(result.data);
-    });*/
 }
 
 

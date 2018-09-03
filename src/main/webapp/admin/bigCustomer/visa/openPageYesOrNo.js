@@ -4,27 +4,20 @@
 function openYesOrNoPage(){
 	//是否与其他人一起旅游
 	var istravelwithother = visaInfo.travelCompanionInfo.istravelwithother;
+
 	if(istravelwithother == 1){
 		$(".teamture").show();
-		$(".teamnamefalse").show();
-		//是否作为团队或组织的一部分旅游
-		var ispart = visaInfo.travelCompanionInfo.ispart; 
-		
-		if(ispart == 1){
-			$(".teamnameture").show();
-			$(".teamnamefalse").hide();
-		}else {
-			$(".teamnameture").hide();
-			$(".teamnamefalse").show();
-		}
+		$('.companysave').show();	
 	}else {
 		$(".teamture").hide();
+		$('.companysave').hide();
 	}
 	
 	//是否去过美国
 	var goUS = visaInfo.previUSTripInfo.hasbeeninus;
 	if(goUS == 1){
 		$(".goUSInfo").show();
+		$('.beforesave').show();
 		//是否有美国驾照
 		var license = visaInfo.previUSTripInfo.hasdriverlicense;
 		if(license == 1){
@@ -32,8 +25,13 @@ function openYesOrNoPage(){
 		}else{
 			$(".driverInfo").hide();
 		}
+
+		$('.goUS').eq(0).attr('checked','checked');
 	}else{
 		$(".goUSInfo").hide();
+		$('.beforesave').hide();
+		$('.goUS').eq(1).attr('checked','checked');
+
 	}
 	
 	//是否有美国签证
@@ -101,6 +99,7 @@ function openYesOrNoPage(){
 	
 	//除了父母还有没有直系亲属
 	var directUSRelatives = visaInfo.familyInfo.hasimmediaterelatives;
+	console.log(directUSRelatives)
 	if(directUSRelatives == 1){
 		$(".directRelativesYes").show();
 		$(".directRelativesYesen").show();
@@ -142,9 +141,12 @@ function openYesOrNoPage(){
 	
 	//以前是否工作过
 	var isemployed = visaInfo.workEducationInfo.isemployed;
+	console.warn(`isemployed -> ${isemployed}`);
 	if(isemployed == 1){
+		$('#yiqian').css('margin-bottom', '369px');
 		$(".beforeWorkInfo").show();
 	}else {
+		$('#yiqian').css('margin-bottom', '177px');
 		$(".beforeWorkInfo").hide();
 	}
 	
