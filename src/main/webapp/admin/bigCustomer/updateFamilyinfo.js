@@ -1,4 +1,5 @@
 
+//翻译
 function translateZhToEn(from, to, param){
 	var toval = "";
 	if(param != ""){
@@ -26,8 +27,116 @@ function translateZhToEn(from, to, param){
     });*/
 }
 
+//汉字转拼音
+$(document).on("input","#spousefirstname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#spousefirstnameen").val("").change();
+	}else{
+		$("#spousefirstnameen").val(pinyinchar.toUpperCase()).change();
+	}
+});
+$(document).on("input","#spouselastname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#spouselastnameen").val("").change();
+	}else{
+		$("#spouselastnameen").val(pinyinchar.toUpperCase()).change();
+	}
+});
+$(document).on("input","#fatherfirstname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#fatherfirstnameen").val("").change();
+	}else{
+		$("#fatherfirstnameen").val(pinyinchar.toUpperCase()).change();
+	}
+});
+$(document).on("input","#fatherlastname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#fatherlastnameen").val("").change();
+	}else{
+		$("#fatherlastnameen").val(pinyinchar.toUpperCase()).change();
+	}
+});
+$(document).on("input","#motherfirstname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#motherfirstnameen").val("").change();
+	}else{
+		$("#motherfirstnameen").val(pinyinchar.toUpperCase()).change();
+	}
+});
+$(document).on("input","#motherlastname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#motherlastnameen").val("").change();
+	}else{
+		$("#motherlastnameen").val(pinyinchar.toUpperCase()).change();
+	}
+});
+$(document).on("input","#relativesfirstname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#relativesfirstnameen").val("").change();
+	}else{
+		$("#relativesfirstnameen").val(pinyinchar.toUpperCase()).change();
+	}
+});
+$(document).on("input","#relativeslastname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#relativeslastnameen").val("").change();
+	}else{
+		$("#relativeslastnameen").val(pinyinchar.toUpperCase()).change();
+	}
+});
+
+//获取拼音字符串
+function getPinYinStr(hanzi){
+	var onehanzi = hanzi.split('');
+	var pinyinchar = '';
+	for(var i=0;i<onehanzi.length;i++){
+		pinyinchar += PinYin.getPinYin(onehanzi[i]);
+	}
+	return pinyinchar.toUpperCase();
+}
+
 //配偶信息
-function changeSpouseShow(){
+/*function changeSpouseShow(){
 	var opt = $("#spouseaddress").val();
 	if(opt == 5){
 		$(".otherSpouseInfo").show();
@@ -35,10 +144,10 @@ function changeSpouseShow(){
 		$(".otherSpouseInfo").hide();
 		emptyContentByObj($("div.otherSpouseInfo"));
 	}
-}
+}*/
 
 //配偶国籍
-$('#spousenationality').select2({
+$('#spousenationality,#spousecountry').select2({
 	ajax : {
 		url : "/admin/neworderUS/selectCountry.html",
 		dataType : 'json',
@@ -100,7 +209,7 @@ $('#spousecity').select2({
 		processResults : function(data, params) {
 			params.page = params.page || 1;
 			var selectdata = $.map(data, function (obj) {
-				obj.id = obj.id; // replace pk with your identifier
+				obj.id = obj.province; // replace pk with your identifier
 				obj.text = obj.province; // replace pk with your identifier
 				/*obj.text = obj.dictCode;*/
 				return obj;

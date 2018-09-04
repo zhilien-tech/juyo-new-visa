@@ -120,23 +120,23 @@
                 <div class="clear" style="height: 15px;"></div>
                 <div class="floatLeft groupcheckBoxInfo">
                     <label><span class="s">*</span> 配偶出生城市</label>
-                    <select name="spousecity" class="select2" multiple="multiple"  id="spousecity" >
+                    <select name="spousecity" class="form-control input-sm select2" multiple="multiple"  id="spousecity" >
 	                   <option selected="selected" value="${obj.familyinfo.spousecity }">${obj.familyinfo.spousecity}</option>
                     </select>
                 </div>
                 <div class="floatRight groupSelectInfo" >
                     <label><span class="s">*</span> 配偶出生国家</label>
-                    <select style="width: 182px!important;" id="spousecountry"  name="spousecountry" value="${obj.familyinfo.spousecountry }">
-                        <c:forEach items="${obj.gocountryfivelist }" var="country">
-                            <c:choose>
-								<c:when test="${country.id eq obj.familyinfo.spousecountry }">
+                    <select  id="spousecountry"  name="spousecountry" class="form-control input-sm select2" multiple="multiple">
+                     <c:forEach items="${obj.gocountryfivelist }" var="country">
+							<c:choose>
+								<c:when test="${country.id eq obj.familyinfo.spousenationality }">
 									<option value="${country.id }" selected="selected">${country.chinesename }</option>
 								</c:when>
 								<c:otherwise>
 									<option value="${country.id }">${country.chinesename }</option>
 								</c:otherwise>
 							</c:choose>
-                        </c:forEach>
+						</c:forEach>
                     </select>
                 </div>
                 <div class="clear"></div>
@@ -161,26 +161,26 @@
                 <div class="otherSpouseInfo elementHide paddingTop paddingbottom-65" >
                     <div class="groupInputInfo prvPadL">
                         <label>街道地址(首选)</label>
-                        <input name="firstaddress" id="otherfrstaddress" onchange="spouseotherstreet(this,'otherfrstaddressen','')" value="${obj.familyinfo.firstaddress }" type="text" />
+                        <input name="firstaddress" id="otherfrstaddress" onchange="translateZhToEn(this,'otherfrstaddressen','')" value="${obj.familyinfo.firstaddress }" type="text" />
                     </div>
                     <div class="groupInputInfo prvPadLT">
                         <label>街道地址(次要)*可选</label>
-                        <input name="secondaddress" id="othersecondaddress" onchange="spouseotherlaststreet(this,'othersecondaddressen','')" value="${obj.familyinfo.secondaddress }" type="text" />
+                        <input name="secondaddress" id="othersecondaddress" onchange="translateZhToEn(this,'othersecondaddressen','')" value="${obj.familyinfo.secondaddress }" type="text" />
                     </div>
                     <div class="clear"></div>
                     <div class="paddingLeft groupcheckBoxInfo">
                         <label>州/省</label>
-                        <input name="province" value="${obj.familyinfo.province }" id="otherprovince" onchange="spouseotherprovince(this,'otherprovinceen','')" type="text" />
+                        <input name="province" value="${obj.familyinfo.province }" id="otherprovince" onchange="translateZhToEn(this,'otherprovinceen','')" type="text" />
                         <!-- <input id="otherapply" name="otherapply" onchange="AddSingle(this,'otherapplyen')" @click="isotherapply" value="visaInfo.familyInfo.apply" type="checkbox" /> -->
                     </div>
                     <div class="paddingRight groupInputInfo">
                         <label>市</label>
-                        <input name="othercity" value="${obj.familyinfo.city }" id="othercity" onchange="spouseothercity(this,'othercityen','')" type="text"/>
+                        <input name="othercity" value="${obj.familyinfo.city }" id="othercity" onchange="translateZhToEn(this,'othercityen','')" type="text"/>
                     </div>
                     <div class="clear"></div>
                     <div class="groupcheckBoxInfo paddingLeft">
                         <label>邮政编码</label>
-                        <input name="zipcode" value="${obj.familyinfo.zipcode }" id="otherzipcode" onchange="spouseothercode(this,'otherzipcodeen','')" type="text" />
+                        <input name="zipcode" value="${obj.familyinfo.zipcode }" id="otherzipcode"  type="text" />
                        <!--  <input id="selectcodeapply" name="selectcodeapply" onchange="AddSingle(this,'selectcodeapplyen')" @click="isselectcodeapply" value="visaInfo.familyInfo.selectcodeapply" type="checkbox" /> -->
                     </div>
                     <div class="groupSelectInfo paddingRight">
@@ -231,10 +231,10 @@
 				<!--yes-->
 				<div class="fatherUSYes groupSelectInfo" style="padding-left: 15px;margin-top: 10px;">
 					<label><span class="s">*</span> 身份状态</label>
-					<select style="width: 100%!important" id="fatherstatus"  value="${obj.familyinfo.fatherstatus }" name="fatherstatus">
+					<select style="width: 100%!important" id="fatherstatus"  name="fatherstatus">
 						<option value="0">请选择</option>
 						<c:forEach items="${obj.familyinfoenum }" var="map">
-							<option value="${map.key }">${map.value }</option>
+							<option value="${map.key }" ${map.key==obj.familyinfo.fatherstatus?"selected":"" }>${map.value }</option>
 						</c:forEach>
 					</select>
 				</div>
@@ -266,10 +266,10 @@
 				<div class="clear"></div>
 				<div class="motherUSYes paddingNone groupSelectInfo" style="padding-left: 15px;">
 					<label><span class="s">*</span> 身份状态</label>
-					<select id="motherstatus" style="width: 100%;"  name="motherstatus" value="visaInfo.familyInfo.motherstatus">
+					<select id="motherstatus" style="width: 100%;"  name="motherstatus" >
 						<option value="0">请选择</option>
 						<c:forEach items="${obj.familyinfoenum }" var="map">
-							<option value="${map.key }">${map.value }</option>
+							<option value="${map.key }" ${map.key==obj.familyinfo.motherstatus?"selected":"" }>${map.value }</option>
 						</c:forEach>
 					</select>
 				</div>
@@ -285,11 +285,11 @@
 							<div class="directRelativesYes">
 								<div class="floatLeft leftNo groupInputInfo">
 									<label>姓</label>
-									<input name="relativesfirstname" value="${obj.immediaterelatives.relativesfirstname }"  type="text" />
+									<input name="relativesfirstname" id="relativesfirstname" value="${obj.immediaterelatives.relativesfirstname }"  type="text" />
 								</div>
 								<div class="floatRight groupInputInfo">
 									<label>名</label>
-									<input name="relativeslastname" value="${obj.immediaterelatives.relativeslastname }"  type="text" />
+									<input name="relativeslastname" id="relativeslastname" value="${obj.immediaterelatives.relativeslastname }"  type="text" />
 								</div>
 								<div class="clear"></div>
 								<div class="paddingLeft leftNo groupSelectInfo">
@@ -297,7 +297,7 @@
 									<select name="relationship" >
 										<option value="0">请选择</option>
 										<c:forEach items="${obj.immediaterelationshipenum }" var="map">
-											<option value="${map.key }">${map.value }</option>
+											<option value="${map.key }" ${map.key==obj.immediaterelatives.relationship?"selected":"" }>${map.value }</option>
 										</c:forEach>
 									</select>
 								</div>
@@ -306,7 +306,7 @@
 									<select id="relativesstatus"  name="relativesstatus">
 										<option value="0">请选择</option>
 										<c:forEach items="${obj.familyinfoenum }" var="map">
-											<option value="${map.key }">${map.value }</option>
+											<option value="${map.key }" ${map.key==obj.immediaterelatives.relativesstatus?"selected":"" }>${map.value }</option>
 										</c:forEach>
 									</select>
 								</div>
@@ -363,7 +363,7 @@
 							<div class="directRelativesYesen">
 								<div class="floatLeft leftNo groupInputInfo">
 									<label><span class="s">*</span> Surnames</label>
-									<input name="relativesfirstnameen" id="relativesfirtstnameen" value="${obj.immediaterelatives.relativesfirstnameen }" type="text" />
+									<input name="relativesfirstnameen" id="relativesfirstnameen" value="${obj.immediaterelatives.relativesfirstnameen }" type="text" />
 								</div>
 								<div class="floatRight groupInputInfo prvPadL">
 									<label><span class="s">*</span> Given Names</label>
@@ -411,12 +411,13 @@
 	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js --> --%>
 	<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面 初始化时间插件 js -->
 	<script src="${base}/admin/bigCustomer/updateFamilyinfo.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面  js -->
+	<script src="${base}/references/common/js/pinyin.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
 		
-	var spouseaddress = '${obj.familyinfo.spouseaddress}';
+	/* var spouseaddress = '${obj.familyinfo.spouseaddress}';
 	if(spouseaddress == 5){
 		$(".otherSpouseInfo").show();
-	}
+	} */
 	
 		//跳转到护照信息页
 		function passportInfoBtn(){

@@ -41,11 +41,13 @@ import com.juyo.visa.common.enums.orderUS.DistrictEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.EmigrationreasonEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
+import com.juyo.visa.common.enums.visaProcess.NewTimeUnitStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.TravelCompanionRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaCareersEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaFamilyInfoEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaHighestEducationEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.common.util.PinyinTool;
 import com.juyo.visa.common.util.PinyinTool.Type;
@@ -1040,12 +1042,9 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				result.put("issueddate", format.format(previoustripinfo.getIssueddate()));
 			}
 			//去过美国信息
-			TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
-					Cnd.where("staffid", "=", staffid));
-			result.put("staydays", gousinfo.getStaydays());
-			if (!Util.isEmpty(gousinfo.getArrivedate())) {
-				result.put("arrivedate", format.format(gousinfo.getArrivedate()));
-			}
+			List<TAppStaffGousinfoEntity> gousinfoList = dbDao.query(TAppStaffGousinfoEntity.class,
+					Cnd.where("staffid", "=", staffid), null);
+			result.put("gousinfo", gousinfoList);
 
 			//美国的驾照信息
 			TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
@@ -1061,6 +1060,8 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 					Cnd.where("staffid", "=", staffid), null);
 			result.put("gocountry", gocountry);
 
+			result.put("timeunitstatusenum", EnumUtil.enum2(NewTimeUnitStatusEnum.class));
+			result.put("usstatesenum", EnumUtil.enum2(VisaUSStatesEnum.class));
 			result.put("emigrationreasonenumenum", EnumUtil.enum2(EmigrationreasonEnum.class));
 			result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
 			return JuYouResult.ok(result);
@@ -1100,10 +1101,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			updatePrevioustripinfo(form);
 
 			//去过美国信息
-			List<TAppStaffGousinfoEntity> gousinfo_old = dbDao.query(TAppStaffGousinfoEntity.class,
-					Cnd.where("staffid", "=", staffid), null);
-			List<TAppStaffGousinfoEntity> gousinfo_new = form.getGousinfoList();
-			dbDao.updateRelations(gousinfo_old, gousinfo_new);
+			TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			gousinfo.setArrivedate(form.getArrivedate());
+			gousinfo.setArrivedateen(form.getArrivedateen());
+			gousinfo.setDateunit(form.getDateunit());
+			gousinfo.setDateuniten(form.getDateuniten());
+			gousinfo.setStaydays(form.getStaydays());
+			gousinfo.setStaydaysen(form.getStaydaysen());
+			dbDao.update(gousinfo);
 
 			//美国驾照信息
 			TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,

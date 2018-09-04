@@ -187,6 +187,11 @@ public class TravelinfoUSForm {
 
 	private Integer staydaysen;
 
+	/**日期单位*/
+	private Integer dateunit;
+
+	private Integer dateuniten;
+
 	/**过去五年是否去过任何国家旅游*/
 	private Integer istraveledanycountry;
 

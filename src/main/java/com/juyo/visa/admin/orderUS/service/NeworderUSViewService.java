@@ -20,6 +20,9 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
 
 import org.apache.http.HttpResponse;
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
@@ -43,11 +46,13 @@ import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.visaProcess.EmigrationreasonEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
+import com.juyo.visa.common.enums.visaProcess.NewTimeUnitStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.TravelCompanionRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaCareersEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaFamilyInfoEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaHighestEducationEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnum;
+import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.util.HttpUtil;
@@ -71,7 +76,7 @@ import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
-import com.juyo.visa.entities.TStateUsEntity;
+import com.juyo.visa.entities.TUsStateEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
@@ -395,7 +400,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("staffid", staffid);
 		TAppStaffCredentialsEntity passportphoto = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", 1));
-		result.put("passporturl", passportphoto.getUrl());
+		if (!Util.isEmpty(passportphoto)) {
+			result.put("passporturl", passportphoto.getUrl());
+		}
 		TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		result.put("passportinfo", passportinfo);
@@ -645,6 +652,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object toWorkandeducation(int staffid) {
 		Map<String, Object> result = Maps.newHashMap();
+		result.put("staffId", staffid);
 		//职业信息
 		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
 				Cnd.where("staffid", "=", staffid));
@@ -676,6 +684,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			result.put("courseenddate", sdf.format(beforeeducate.getCourseenddate()));
 		}
 
+		//国家下拉
+		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
+		result.put("gocountryfivelist", gocountryFiveList);
 		//主要职业
 		result.put("careersenum", EnumUtil.enum2(VisaCareersEnum.class));
 		//最高学历
@@ -841,6 +852,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object toTravelinfo(int staffid) {
 		Map<String, Object> result = Maps.newHashMap();
+		result.put("staffId", staffid);
 		TAppStaffTravelcompanionEntity travelcompanion = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		result.put("travelwithother", travelcompanion.getIstravelwithother());
@@ -858,9 +870,14 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			result.put("issueddate", sdf.format(tripinfo.getIssueddate()));
 		}
 		//去过美国信息
-		List<TAppStaffGousinfoEntity> gousinfo = dbDao.query(TAppStaffGousinfoEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
+		TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
 		result.put("gousinfo", gousinfo);
+		if (!Util.isEmpty(gousinfo)) {
+			if (!Util.isEmpty(gousinfo.getArrivedate())) {
+				result.put("arrivedate", sdf.format(gousinfo.getArrivedate()));
+			}
+		}
 		//美国驾照信息
 		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
@@ -874,6 +891,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid), null);
 		result.put("gocountry", gocountry);
 
+		result.put("timeunitstatusenum", EnumUtil.enum2(NewTimeUnitStatusEnum.class));
+		result.put("usstatesenum", EnumUtil.enum2(VisaUSStatesEnum.class));
 		result.put("emigrationreasonenumenum", EnumUtil.enum2(EmigrationreasonEnum.class));
 		result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
 		return result;
@@ -897,19 +916,26 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		dbDao.update(travelcompanion);
 
 		//同伴信息
-		List<TAppStaffCompanioninfoEntity> companioninfo_old = dbDao.query(TAppStaffCompanioninfoEntity.class,
+		/*List<TAppStaffCompanioninfoEntity> companioninfo_old = dbDao.query(TAppStaffCompanioninfoEntity.class,
 				Cnd.where("staffid", "=", staffid), null);
 		List<TAppStaffCompanioninfoEntity> companioninfo_new = form.getCompanioninfoList();
-		dbDao.updateRelations(companioninfo_old, companioninfo_new);
+		dbDao.updateRelations(companioninfo_old, companioninfo_new);*/
 
 		//以前的美国旅游信息
 		updatePrevioustripinfo(form);
 
 		//去过美国信息
-		List<TAppStaffGousinfoEntity> gousinfo_old = dbDao.query(TAppStaffGousinfoEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
-		List<TAppStaffGousinfoEntity> gousinfo_new = form.getGousinfoList();
-		dbDao.updateRelations(gousinfo_old, gousinfo_new);
+		TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		if (!Util.isEmpty(form.getArrivedate())) {
+			gousinfo.setArrivedate(form.getArrivedate());
+			gousinfo.setArrivedateen(form.getArrivedateen());
+		}
+		gousinfo.setDateunit(form.getDateunit());
+		gousinfo.setDateuniten(form.getDateuniten());
+		gousinfo.setStaydays(form.getStaydays());
+		gousinfo.setStaydaysen(form.getStaydaysen());
+		dbDao.update(gousinfo);
 
 		//美国驾照
 		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
@@ -926,10 +952,10 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		workinfo.setIstraveledanycountry(form.getIstraveledanycountry());
 		dbDao.update(workinfo);
 
-		List<TAppStaffGocountryEntity> gocountry_old = dbDao.query(TAppStaffGocountryEntity.class,
+		/*List<TAppStaffGocountryEntity> gocountry_old = dbDao.query(TAppStaffGocountryEntity.class,
 				Cnd.where("staffid", "=", staffid), null);
 		List<TAppStaffGocountryEntity> gocountry_new = form.getGocountryList();
-		dbDao.updateRelations(gocountry_old, gocountry_new);
+		dbDao.updateRelations(gocountry_old, gocountry_new);*/
 		return JuYouResult.ok();
 	}
 
@@ -989,11 +1015,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public String translate(String str) {
-		String result = null;
-		try {
-			result = TranslateUtil.translate(str, "en");
-		} catch (Exception e) {
-			e.printStackTrace();
+		String result = "";
+		if (!Util.isEmpty(str)) {
+			try {
+				result = TranslateUtil.translate(str, "en");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("没有内容你让我翻译什么啊，神经病啊o(╥﹏╥)o");
 		}
 		return result;
 	}
@@ -1039,7 +1069,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object selectProvince(String searchstr) {
 		List<TIdcardEntity> countryList = new ArrayList<>();
 		List<TIdcardEntity> country = dbDao.query(TIdcardEntity.class,
-				Cnd.where("province", "like", "%" + Strings.trim(searchstr) + "%"), null);
+				Cnd.where("province", "like", "%" + Strings.trim(searchstr) + "%").groupBy("province"), null);
 		for (TIdcardEntity tCountry : country) {
 			if (!countryList.contains(tCountry)) {
 				countryList.add(tCountry);
@@ -1056,6 +1086,14 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 	}
 
+	public Object selectCity(String province, String searchstr) {
+		String sqlStr = sqlManager.get("orderUS_mobile_getCity");
+		Sql orderussql = Sqls.create(sqlStr);
+		orderussql.setParam("province", province);
+		List<Record> cityList = dbDao.query(orderussql, null, null);
+		return cityList;
+	}
+
 	/**
 	 * 美国州模糊查询
 	 * TODO(这里用一句话描述这个方法的作用)
@@ -1066,15 +1104,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object selectUSstate(String searchstr) {
-		List<String> stateList = new ArrayList<>();
-		List<TStateUsEntity> state = dbDao.query(TStateUsEntity.class,
-				Cnd.where("name", "like", "%" + Strings.trim(searchstr) + "%"), null);
-		for (TStateUsEntity tState : state) {
-			if (!stateList.contains(tState.getName())) {
-				stateList.add(tState.getName());
+		List<TUsStateEntity> stateList = new ArrayList<>();
+		List<TUsStateEntity> state = dbDao.query(TUsStateEntity.class,
+				Cnd.where("statecn", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		for (TUsStateEntity tState : state) {
+			if (!stateList.contains(tState)) {
+				stateList.add(tState);
 			}
 		}
-		List<String> list = new ArrayList<>();
+		List<TUsStateEntity> list = new ArrayList<>();
 		if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
 			for (int i = 0; i < 5; i++) {
 				list.add(stateList.get(i));

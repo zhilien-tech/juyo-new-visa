@@ -1659,7 +1659,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/neworderUS/updateWorkInfo.html?staffId='+staffid
+				content: '/admin/neworderUS/updateWorkInfo.html?staffid='+staffid
 			});
 		}
 
@@ -1674,7 +1674,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/neworderUS/updateTravelInfo.html?staffId='+staffid
+				content: '/admin/neworderUS/updateTravelInfo.html?staffid='+staffid
 			});
 		}
 		

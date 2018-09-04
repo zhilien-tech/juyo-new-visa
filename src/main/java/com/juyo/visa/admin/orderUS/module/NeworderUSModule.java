@@ -6,8 +6,6 @@
 
 package com.juyo.visa.admin.orderUS.module;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -18,7 +16,6 @@ import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
-import com.google.common.collect.Maps;
 import com.juyo.visa.admin.mobile.form.BasicinfoUSForm;
 import com.juyo.visa.admin.mobile.form.FamilyinfoUSForm;
 import com.juyo.visa.admin.mobile.form.PassportinfoUSForm;
@@ -121,9 +118,7 @@ public class NeworderUSModule {
 	@GET
 	@Ok("jsp:admin/bigCustomer/updateWorkInfo")
 	public Object updateWorkInfo(@Param("staffid") int staffid) {
-		Map<String, Object> result = Maps.newHashMap();
-		result.put("staffid", staffid);
-		return result;
+		return neworderUSViewService.toWorkandeducation(staffid);
 	}
 
 	/**
@@ -142,9 +137,7 @@ public class NeworderUSModule {
 	@GET
 	@Ok("jsp:admin/bigCustomer/updateTravelInfo")
 	public Object updateTravelInfo(@Param("staffid") int staffid) {
-		Map<String, Object> result = Maps.newHashMap();
-		result.put("staffid", staffid);
-		return result;
+		return neworderUSViewService.toTravelinfo(staffid);
 	}
 
 	/**
@@ -172,6 +165,12 @@ public class NeworderUSModule {
 	@POST
 	public Object selectProvince(@Param("searchstr") String searchstr) {
 		return neworderUSViewService.selectProvince(searchstr);
+	}
+
+	@At
+	@POST
+	public Object selectCity(@Param("province") String province, @Param("searchstr") String searchstr) {
+		return neworderUSViewService.selectCity(province, searchstr);
 	}
 
 	/**
