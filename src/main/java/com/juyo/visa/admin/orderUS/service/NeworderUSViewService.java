@@ -781,6 +781,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		workinfo.setDuty(form.getDuty());
 		workinfo.setIssecondarylevel(form.getIssecondarylevel());
 		workinfo.setIsemployed(form.getIsemployed());
+		workinfo.setZipcode(getZipcode(form.getCity()));
+		workinfo.setZipcodeen(workinfo.getZipcode());
 		//英文
 		workinfo.setOccupationen(form.getOccupation());
 		workinfo.setTelephoneen(form.getTelephone());
@@ -828,6 +830,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		beforework.setEmployenddate(form.getEmployenddate());
 		beforework.setJobtitle(form.getJobtitle());
 		beforework.setPreviousduty(form.getPreviousduty());
+		beforework.setEmployerzipcode(getZipcode(form.getEmployercity()));
+		beforework.setEmployerzipcodeen(beforework.getEmployerzipcode());
 		//英文
 		beforework.setEmployertelephoneen(form.getEmployertelephone());
 		beforework.setEmployercountryen(form.getEmployercountry());
@@ -840,6 +844,20 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		dbDao.update(beforework);
 		return null;
+	}
+
+	/**
+	 * 根据城市查询邮政编码
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param city
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public String getZipcode(String city) {
+		TIdcardEntity zipcodecity = dbDao.fetch(TIdcardEntity.class, Cnd.where("city", "=", city));
+		return zipcodecity.getCode();
 	}
 
 	/**
@@ -871,6 +889,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		beforeeducation.setInstitutionaddressen(form.getInstitutionaddressen());
 		beforeeducation.setCoursestartdate(form.getCoursestartdate());
 		beforeeducation.setCourseenddate(form.getCourseenddate());
+		beforeeducation.setInstitutionzipcode(getZipcode(form.getInstitutioncity()));
+		beforeeducation.setInstitutionzipcodeen(beforeeducation.getInstitutionzipcode());
 		//英文
 		beforeeducation.setHighesteducationen(form.getHighesteducation());
 		beforeeducation.setCourseen(translate(form.getCourse()));

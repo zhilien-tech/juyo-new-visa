@@ -48,6 +48,19 @@ $(".education").change(function () {
 	}
 });
 
+
+//专业处理
+
+$("#highesteducation").change(function(){
+	var highesteducation = $(this).val();
+	if(highesteducation > 2){
+		$(".courseClass").show();
+	}else{
+		$(".courseClass").hide();
+	}
+})
+
+
 //工作国家
 $('#jobcountry,#employercountry,#institutioncountry').select2({
 	ajax : {

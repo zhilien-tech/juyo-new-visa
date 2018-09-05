@@ -283,7 +283,7 @@
                                             <label><span class="s">*</span>学校名称</label>
 											<input name="institution" onchange="translateZhToEn(this,'institutionen','')" value="${obj.beforeeducate.institution }" type="text"/>
 										</div>                                        
-                                        <div class="paddingLeft leftNo groupInputInfo">
+                                        <div class="paddingLeft leftNo groupInputInfo courseClass">
                                             <label><span class="s">*</span> 专业名称</label>
                                             <input id="course" name="course" value="${obj.beforeeducate.course }" type="text" />
                                         </div>
@@ -489,6 +489,18 @@
 			$(".educationInfo").hide();
 		}
         
+        //专业处理
+        var highesteducation = '${obj.beforeeducate.highesteducation}';
+        if(highesteducation > 2){
+        	$(".courseClass").show();
+        }else{
+        	$(".courseClass").hide();
+        }
+        
+       /*  var country = '${obj.workinfo.country}';
+        if(country == ""){
+        	$("#jobcountry").val(45).trigger('change');
+        } */
         
         //跳转到基本信息页
         function familyInfoBtn(){
