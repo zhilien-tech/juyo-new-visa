@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <title>签证信息</title>
-    <link rel="stylesheet" href="${base}/references/common/js/vue/vue-multiselect.min.css">
     <link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
     <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
@@ -13,8 +12,6 @@
     <!-- 本页样式 -->
     <link rel="stylesheet" href="${base}/references/public/css/updateVisaInfo.css">
     <style>
-            [v-cloak]{display:none;}
-            .vhide{visibility: hidden;}
             .s {
             color: #de4b4b;
             font-weight: 600;
@@ -58,15 +55,16 @@
         </div>
     </div>
     <!-- 左右按钮 -->
-    <a id="toPassport" class="leftNav" onclick="baseInfoBtn();">
+    <a id="toFamilyinfo" class="leftNav" onclick="familyInfoBtn();">
         <i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第四步</i>
         <span></span>
 	</a>
-	<a id="" class="rightNav" onclick="">
+	<a id="toTravelinfo" class="rightNav" onclick="travelInfoBtn();">
 		<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第六步</i>
 		<span></span>
 	</a>
 	<div class="topHide"></div>
+	<form id="workinfo">
 	<div id="section">
 		<div id="wrapper" v-cloak class="section">
 			<div class="dislogHide"></div>
@@ -74,73 +72,78 @@
 			<div class="experience paddingTop">
 				<div class="titleInfo">职业信息</div>
 				<div class="paddingTop groupSelectInfo padding-left" >
+					<input type="hidden" value="${obj.staffId }" name="staffid"/>
 					<label><span class="s">*</span>主要职业</label>
-					<select id="occupation" @change="jobprofession('occupation','occupationen','visaInfo.workEducationInfo.occupationen')" name="occupation" v-model="visaInfo.workEducationInfo.occupation">
+					<select id="occupation"  name="occupation" >
 						<option value="0">请选择</option>
-						<c:forEach items="${obj.VisaCareersEnum }" var="map">
-							<option value="${map.key }">${map.value }</option>
+						<c:forEach items="${obj.careersenum }" var="map">
+							<option value="${map.key }" ${map.key==obj.workinfo.occupation?"selected":"" } >${map.value }</option>
 						</c:forEach>
 					</select>
 				</div>
-				<div class="paddingTop elementHide jobEduLearningInfoDiv">
+				<div class="paddingTop  jobEduLearningInfoDiv">
 					<div class="groupInputInfo draBig">
                         <label><span class="s">*</span>目前的工作单位名称</label>
-						<input name="unitname" id="unitname" @change="jobprofessionunit('unitname','unitnameen','visaInfo.workEducationInfo.unitnameen')" v-model="visaInfo.workEducationInfo.unitname" type="text" />
+						<input name="unitname" id="unitname" onchange="translateZhToEn(this,'unitnameen','')"  type="text" value="${obj.workinfo.unitname }" />
                     </div>
                     <div class="clear"></div>
                     <div class="paddingLeft groupInputInfo">
                         <label><span class="s">*</span>电话号码</label>
-                        <input name="jobtelephone" v-model="visaInfo.workEducationInfo.telephone" id="jobtelphone" @change="jobprofessiontelphone('jobtelphone','jobtelphoneen','visaInfo.workEducationInfo.telephoneen')" type="text" />
+                        <input name="telephone" value="${obj.workinfo.telephone }" id="jobtelphone"  type="text" />
                     </div>
 					<div class="paddingRight groupSelectInfo" >
                         <label><span class="s">*</span>工作国家</label>
-                        <select name="jobcountry" id='jobcountry' @change="jobprofessioncountry('jobcountry','jobcountryen','visaInfo.workEducationInfo.jobcountryen')" v-model="visaInfo.workEducationInfo.country">
-                            <option value="0">请选择</option>
-                            <c:forEach items="${obj.gocountryFiveList }" var="country">
-                                <c:if test="${beforeWork.employercountry != country.id}">
-                                <option value="${country.id }">${country.chinesename }</option>
-                                </c:if>
-                                <c:if test="${beforeWork.employercountry == country.id}">
-                                <option value="${country.id }" selected="selected">${country.chinesename }</option>
-                                </c:if>
-                            </c:forEach>
+                        <select id='jobcountry'  class="form-control input-sm select2" multiple="multiple" name="country">
+                        
+                        	<c:forEach items="${obj.gocountryfivelist }" var="country">
+							<c:choose>
+								<c:when test="${country.id eq obj.workinfo.country }">
+									<option value="${country.id }" selected="selected">${country.chinesename }</option>
+								</c:when>
+								<c:otherwise>
+									<option value="${country.id }">${country.chinesename }</option>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+                        
                         </select>
                     </div>
                     <div class="clear"></div>
                     <div class="paddingLeft groupcheckBoxInfo">
                         <label><span class="s">*</span>单位地址（省）</label>
-                        <input name="province" v-model="visaInfo.workEducationInfo.province" id="jobprovince" @change="jobprofessionprovince('jobprovince','jobprovinceen','visaInfo.workEducationInfo.provinceen')" type="text"/>
-                        <input name="isprovinceapply" id="isprovinceapplywork" onchange="AddSingle(this,'isprovinceapplyworken')" @click="isprovinceapplywork" v-model="visaInfo.workEducationInfo.isprovinceapply" type="checkbox"/>
+                        <select name="province" class="form-control input-sm select2" multiple="multiple"  id="jobprovince" >
+	                   		<option selected="selected" value="${obj.workinfo.province }">${obj.workinfo.province}</option>
+                        </select>
                     </div>
                     <div class="paddingRight groupInputInfo">
                         <label><span class="s">*</span>单位地址（市）</label>
-                        <input name="jobcity" v-model="visaInfo.workEducationInfo.city" id="jobcity" @change="jobprofessioncity('jobcity','jobcityen','visaInfo.workEducationInfo.cityen')" type="text"/>
+                         <select name="city" class="form-control input-sm select2" multiple="multiple"  id="city" >
+	                   		<option selected="selected" value="${obj.workinfo.city }">${obj.workinfo.city}</option>
+                        </select>
                     </div>
                     <div class="clear"></div>
 					<div class="groupInputInfo draBig marginLS">
                         <label><span class="s">*</span>详细地址</label>
-						<input name="address" id="jobaddress" @change="jobprofessionaddress('jobaddress','jobaddressen','visaInfo.workEducationInfo.addressen')" v-model="visaInfo.workEducationInfo.address" type="text" />
+						<input name="address" id="jobaddress" onchange="translateZhToEn(this,'jobaddressen','')" value="${obj.workinfo.address }" type="text" />
 					</div>
 					<div class="clear"></div>
                     <div class="paddingLeft groupInputInfo">
                         <label><span class="s">*</span>入职日期</label>
-                        <input id="workstartdate" onchange="translateZhToEn(this,'workstartdateen','')" name="workstartdate" value="${obj.workstartdate}" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+                        <input id="workstartdate"  name="workstartdate" value="${obj.workstartdate}" class="datetimepickercss form-control" type="text" placeholder="" />
                     </div>
                     <div class=" paddingRight groupcheckBoxInfo">
                         <label><span class="s">*</span>职位</label>
-                        <input name="zipcode" v-model="visaInfo.workEducationInfo.zipcode" id="jobzipcode" @change="jobprofessioncode('jobzipcode','jobzipcodeen','visaInfo.workEducationInfo.zipcodeen')" type="text" />
-                        <input name="jobcodechecked" id="jobcodechecked" onchange="AddSingle(this,'jobcodecheckeden')" @click="isjobcodechecked" v-model="visaInfo.workEducationInfo.iszipcodeapply" type="checkbox" /><!-- iszipcodeapply -->
+                        <input name="position" value="${obj.workinfo.position }" id="position" type="text" />
                     </div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo" >
                         <label><span class="s">*</span>当前月收入</label>
-						<input name="salary" v-model="visaInfo.workEducationInfo.salary" id="salary" type="text" @change="jobprofessionsalary('salary','salaryen','visaInfo.workEducationInfo.salaryen')" onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]" onafterpaste="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"/>
-						<input name="moneychecked" id="moneychecked" onchange="AddSingle(this,'moneycheckeden')" @click="ismoneychecked" v-model="visaInfo.workEducationInfo.issalaryapply" type="checkbox" />
+						<input name="salary" value="${obj.workinfo.salary }" id="salary" type="text"  onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]" onafterpaste="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"/>
 					</div>
 					<div class="clear"></div>
 					<div class="grouptextareaInfo groupPM">
                         <label><span class="s">*</span>简述你的职责</label>
-						<input name="jobduty" class='areaInputPic' id="jobduty" @change="jobprofessionduty('jobduty','jobdutyen','visaInfo.workEducationInfo.dutyen')" v-model="visaInfo.workEducationInfo.duty" />
+						<input name="duty" class='areaInputPic' id="jobduty" value="${obj.workinfo.duty }" />
 					</div>
 				</div>
 				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea"></div>
@@ -154,8 +157,6 @@
 							<input 
 								type="radio" 
 								name="isemployed" 
-								v-model="visaInfo.workEducationInfo.isemployed" 
-								@change="isemployed()" 
 								class="beforeWork" 
 								value="1" 
 							/>是
@@ -163,8 +164,6 @@
 								type="radio" 
 								style="margin-left: 20px;" 
 								name="isemployed" 
-								v-model="visaInfo.workEducationInfo.isemployed" 
-								@change="isemployed()" 
 								class="beforeWork" 
 								value="2" 
 								checked
@@ -173,33 +172,32 @@
 						<!--yes-->
 						<div class="beforeWorkInfo elementHide">
 						  <div class="beforeWorkYes">
-							<c:if test="${!empty obj.beforeWorkList }">
-								<c:forEach var="beforeWork" items="${obj.beforeWorkList }">
 									<div class="workBeforeInfosDiv">
 										<div class="leftNo marginLS groupInputInfo" >
                                             <label><span class="s">*</span>单位名称</label>
-											<input name="employername" style="width: 100%" onchange="addSegmentsTranslateZhToPinYin(this,'employernameen','')" value="${beforeWork.employername }" type="text" />
+											<input name="employername" style="width: 100%" onchange="translateZhToEn(this,'employernameen','')" value="${obj.beforework.employername }" type="text" />
 										</div>
                                       
                                         <div class="clear"></div>
 										<div class="paddingLeft leftNo groupInputInfo">
 
                                             <label><span class="s">*</span>电话号码</label>
-											<input name="employertelephone" onchange="addSegmentsTranslateZhToEn(this,'employertelephoneen','')" value="${beforeWork.employertelephone }" type="text" />
+											<input name="employertelephone"  value="${obj.beforework.employertelephone }" type="text" />
                                         </div>
                                         
                                         <div class="paddingRight groupSelectInfo">
                                             <label><span class="s">*</span>工作国家</label>
-                                            <select name="employercountry" onchange="addSegmentsTranslateZhToEn(this,'employercountryen','')">
-                                                <option value="0">请选择</option>
-                                                <c:forEach items="${obj.gocountryFiveList }" var="country">
-                                                    <c:if test="${beforeWork.employercountry != country.id}">
-                                                        <option value="${country.id }">${country.chinesename }</option>
-                                                    </c:if>
-                                                    <c:if test="${beforeWork.employercountry == country.id}">
-                                                        <option value="${country.id }" selected="selected">${country.chinesename }</option>
-                                                    </c:if>
-                                                </c:forEach>
+                                            <select name="employercountry" class=" select2" multiple="multiple"  id="employercountry">
+                                                <c:forEach items="${obj.gocountryfivelist }" var="country">
+													<c:choose>
+														<c:when test="${country.id eq obj.beforework.employercountry }">
+															<option value="${country.id }" selected="selected">${country.chinesename }</option>
+														</c:when>
+														<c:otherwise>
+															<option value="${country.id }">${country.chinesename }</option>
+														</c:otherwise>
+													</c:choose>
+												</c:forEach>
                                             </select>
                                         </div>
 										
@@ -207,121 +205,46 @@
 										
 										<div class="paddingLeft leftNo groupInputInfo">
                                             <label><span class="s">*</span>单位地址（省）</label>
-											<input name="employerprovince" onchange="addSegmentsTranslateZhToEn(this,'employerprovinceen','')" value="${beforeWork.employerprovince }" type="text" />
+											<select name="employerprovince" class="form-control input-sm select2" multiple="multiple"  id="employerprovince" >
+						                   		<option selected="selected" value="${obj.beforework.employerprovince }">${obj.beforework.employerprovince}</option>
+					                        </select>
 										</div>
 										<div class="paddingRight leftNo groupInputInfo" >
                                             <label><span class="s">*</span>单位地址（市）</label>
-											<input name="employercity" id="employercitybefore" onchange="addSegmentsTranslateZhToEn(this,'employercityen','')" value="${beforeWork.employercity }" type="text" />
-											
+											<select name="employercity" class="form-control input-sm select2" multiple="multiple"  id="employercity" >
+						                   		<option selected="selected" value="${obj.beforework.employercity }">${obj.beforework.employercity}</option>
+					                        </select>
 										</div>
                                         <div class="clear"></div>
                                         
                                         <div class="draBig leftNo marginLS groupInputInfo">
                                             <label><span class="s">*</span>详细地址</label>
-                                            <input name="employeraddress" onchange="addSegmentsTranslateZhToEn(this,'employeraddressen','')" value="${beforeWork.employeraddress }" type="text" />
+                                            <input id="employeraddress" name="employeraddress" onchange="translateZhToEn(this,'employeraddressen','')" value="${obj.beforework.employeraddress }" type="text" />
                                         </div>
 
                                         <div class="paddingLeft leftNo groupInputInfo" >
                                             <label><span class="s">*</span>入职时间</label>
-                                            <input id="employstartdate" onchange="addSegmentsTranslateZhToEn(this,'employstartdateen','')" name="employstartdate" value="<fmt:formatDate value="${beforeWork.employstartdate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+                                            <input id="employstartdate"  name="employstartdate"  value="${obj.employestartdate }"  class="datetimepickercss form-control" type="text" placeholder="" />
                                         </div>
                                         <div class="paddingRight groupInputInfo">
 
                                             <label><span class="s">*</span>离职时间</label>
-                                            <input id="employenddate" onchange="addSegmentsTranslateZhToEn(this,'employenddateen','')" name="employenddate" value="<fmt:formatDate value="${beforeWork.employenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
+                                            <input id="employenddate"  name="employenddate"  value="${obj.employenddate }"  class="datetimepickercss form-control" type="text" placeholder="" />
                                         </div>
 
 										<div class="paddingLeft groupInputInfo" style="padding-left: 0;">
                                             <label><span class="s">*</span>职位</label>
-                                            <input name="jobtitle" value="${beforeWork.jobtitle }" onchange="addSegmentsTranslateZhToEn(this,'jobtitleen','')" type="text"/>
+                                            <input name="jobtitle" value="${obj.beforework.jobtitle }"  type="text"/>
                                         </div>
 										
 										<div class="clear"></div>
 									
 										<div class="draBig leftNo marginLS grouptextareaInfo">
                                             <label><span class="s">*</span>简述你的职责</label>
-											<input type="text" name="previousduty" onchange="addSegmentsTranslateZhToEn(this,'previousdutyen','')" class="areaInputPic previousduty" value="${beforeWork.previousduty }" />
+											<input type="text" name="previousduty"  class="areaInputPic previousduty" value="${obj.beforework.previousduty }" />
 											<%-- <textarea name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }"></textarea> --%>
 										</div>
 									</div>
-								</c:forEach>
-							</c:if>
-							<c:if test="${empty obj.beforeWorkList }">
-								<div class="workBeforeInfosDiv">
-									<div class="leftNo marginLS groupInputInfo" >
-										<label>雇主名字</label>
-										<input name="employername" onchange="addSegmentsTranslateZhToPinYin(this,'employernameen','')" type="text" />
-									</div>
-									<div class="draBig leftNo marginLS groupInputInfo">
-										<label>雇主街道地址(首选)</label>
-										<input name="employeraddress" onchange="addSegmentsTranslateZhToEn(this,'employeraddressen','')" type="text" />
-									</div>
-									<div class="draBig leftNo marginLS groupInputInfo">
-										<label>雇主街道地址(次选)*可选</label>
-										<input name="employeraddressSec" onchange="addSegmentsTranslateZhToEn(this,'employeraddressSecen','')" type="text" />
-									</div>
-									
-									<div class="paddingLeft leftNo groupInputInfo">
-										<label>州/省</label>
-										<input name="employerprovince" onchange="addSegmentsTranslateZhToEn(this,'employerprovinceen','')" type="text" />
-									</div>
-									<div class="paddingRight leftNo groupInputInfo" >
-										<label>市</label>
-										<input name="employercity" type="text" onchange="addSegmentsTranslateZhToEn(this,'employercityen','')" />
-										
-									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft leftNo groupcheckBoxInfo">
-										<label>邮政编码</label>
-										<input name="employerzipcode" type="text" onchange="addSegmentsTranslateZhToEn(this,'employerzipcodeen','')" />
-										<input name="isemployerzipcodeapply" onchange="AddSegment(this,'isemployerzipcodeapplyen')" id="isKonwOrtherZipCode" type="checkbox" />
-									</div>
-									<div class="paddingRight leftNo groupSelectInfo">
-										<label>国家/地区</label>
-										<select name="employercountry" onchange="addSegmentsTranslateZhToEn(this,'employercountryen','')">
-											<option value="0">请选择</option>
-											<c:forEach items="${obj.gocountryFiveList }" var="country">
-												<option value="${country.id }">${country.chinesename }</option>
-											</c:forEach>
-										</select>
-									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft leftNo groupInputInfo">
-										<label>电话号码</label>
-										<input name="employertelephone" onchange="addSegmentsTranslateZhToEn(this,'employertelephoneen','')" type="text" />
-									</div>
-									<div class="paddingRight leftNo groupInputInfo">
-										<label>职称</label>
-										<input name="jobtitle" onchange="addSegmentsTranslateZhToEn(this,'jobtitleen','')"  type="text"/>
-									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft leftNo groupcheckBoxInfo">
-										<label>主管的姓</label>
-										<input name="supervisorfirstname" onchange="addSegmentsTranslateZhToPinYin(this,'isknowsupervisorfirstnamebeforeen','')"  type="text" />
-										<input name="isknowsupervisorfirstname" id="isknowsupervisorfirstnamebefore" onchange="AddSegment(this,'isknowjobfirstnameen')" type="checkbox" />
-									</div>
-									<div class="paddingRight leftNo groupcheckBoxInfo">
-										<label>主管的名</label>
-										<input name="supervisorlastname" onchange="addSegmentsTranslateZhToPinYin(this,'isknowsupervisorlastnamebeforeen','')"  type="text" />
-										<input name="isknowsupervisorlastname" id="isknowsupervisorlastnamebefore" onchange="AddSegment(this,'isknowjoblastnameen')" type="checkbox" />
-									</div>
-									<div class="clear"></div>
-									<div class="paddingLeft leftNo groupInputInfo" >
-										<label>入职时间</label>
-										<input id="employstartdate" onchange="addSegmentsTranslateZhToEn(this,'employstartdateen','')" name="employstartdate" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
-									</div>
-									<div class="paddingRight leftNo groupInputInfo">
-										<label>离职时间</label>
-										<input id="employenddate" onchange="addSegmentsTranslateZhToEn(this,'employenddateen','')" name="employenddate" class="datetimepickercss form-control" type="text" placeholder="日/月/年" />
-									</div>
-									<div class="clear"></div>
-									<div class="draBig leftNo marginLS grouptextareaInfo">
-										<label>简要描述你的职责</label>
-										<input type="text" name="previousduty" onchange="addSegmentsTranslateZhToEn(this,'previousdutyen','')" class="areaInputPic previousduty" />
-										<!-- <textarea class="bigArea" name="previousduty"></textarea> -->
-									</div>
-								</div>
-							</c:if>
 							</div>
 							<div class="clear"></div>
 						</div>
@@ -333,150 +256,90 @@
 						<div class="groupRadioInfo" style="padding-bottom: 10px;">
                             <label><span class="s">*</span> 是否有初中及以上教育经历（最高学历）</label>
                             
-							<input type="radio" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" @change="issecondarylevel()" class="education" value="1" />是
-							<input type="radio" style="margin-left: 20px;" name="issecondarylevel" v-model="visaInfo.workEducationInfo.issecondarylevel" @change="issecondarylevel()" class="education" value="2" checked/>否
+							<input type="radio" name="issecondarylevel" class="education" value="1" />是
+							<input type="radio" style="margin-left: 20px;" name="issecondarylevel"  class="education" value="2" checked/>否
 						</div>
 						<!--yes-->
 						<div class="educationInfo elementHide">
 							<div class="educationYes">
-							<c:if test="${!empty obj.beforeEducationList }">
-								<c:forEach var="education" items="${obj.beforeEducationList }">
                                     <div class="paddingTop groupSelectInfo padding-left" style="padding-top: 0;padding-left: 0;">
                                         <label><span class="s">*</span>最高学历</label>
-                                        <select id="" value="0">请选择</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
+                                        <select id="highesteducation" name="highesteducation" >
+                                            <option value="0">请选择</option>
+                                            <c:forEach items="${obj.highesteducationenum }" var="map">
+					                            <c:choose>
+													<c:when test="${map.key eq obj.beforeeducate.highesteducation }">
+														<option value="${map.key }" selected="selected">${map.value }</option>
+													</c:when>
+													<c:otherwise>
+														<option value="${map.key }">${map.value }</option>
+													</c:otherwise>
+												</c:choose>
+					                        </c:forEach>
                                         </select>
                                     </div>
 									<div class="midSchoolEduDiv margintop-10">
 										<div class="draBig leftNo marginLS groupInputInfo">
                                             <label><span class="s">*</span>学校名称</label>
-											<input name="institution" onchange="addSegmentsTranslateZhToEn(this,'institutionen','')" value="${education.institution }" type="text"/>
+											<input name="institution" onchange="translateZhToEn(this,'institutionen','')" value="${obj.beforeeducate.institution }" type="text"/>
 										</div>                                        
-                                        <div class="paddingLeft leftNo groupInputInfo">
+                                        <div class="paddingLeft leftNo groupInputInfo courseClass">
                                             <label><span class="s">*</span> 专业名称</label>
-                                            <input name="course" onchange="addSegmentsTranslateZhToEn(this,'courseen','')" value="${education.course }" type="text" />
+                                            <input id="course" name="course" value="${obj.beforeeducate.course }" type="text" />
                                         </div>
                                         
                                         
                                         <div class="paddingRight leftNo groupSelectInfo" >
                                             <label><span class="s">*</span> 所在国家</label>
-                                            <select name="institutioncountry" onchange="addSegmentsTranslateZhToEn(this,'institutioncountryen','')">
-                                                <option value="0">请选择</option>
-                                                <c:forEach items="${obj.gocountryFiveList }" var="country">
-                                                    <c:if test="${education.institutioncountry != country.id}">
-                                                        <option value="${country.id }">${country.chinesename }</option>
-                                                    </c:if>
-                                                    <c:if test="${education.institutioncountry == country.id}">
-                                                        <option value="${country.id }" selected="selected">${country.chinesename }</option>
-                                                    </c:if>
-                                                </c:forEach>
+                                            <select name="institutioncountry" class=" select2" multiple="multiple" id="institutioncountry">
+                                            	<c:forEach items="${obj.gocountryfivelist }" var="country">
+													<c:choose>
+														<c:when test="${country.id eq obj.beforeeducate.institutioncountry }">
+															<option value="${country.id }" selected="selected">${country.chinesename }</option>
+														</c:when>
+														<c:otherwise>
+															<option value="${country.id }">${country.chinesename }</option>
+														</c:otherwise>
+													</c:choose>
+												</c:forEach>
                                             </select>
                                         </div>
                                         <div class="clear"></div>
 
 										<div class="paddingLeft leftNo groupcheckBoxInfo" >
                                             <label><span class="s">*</span> 单位地址（省）</label>
-											<input name="institutionprovince" onchange="addSegmentsTranslateZhToEn(this,'institutionprovinceen','')" value="${education.institutionprovince }" type="text" />
-											<c:if test="${education.isinstitutionprovinceapply == 1}">
-												<input name="isinstitutionprovinceapply" onchange="AddSegment(this,'isschoolprovinceen')" value="${education.isinstitutionprovinceapply }"  checked="checked" type="checkbox"/>
-											</c:if>
-											<c:if test="${education.isinstitutionprovinceapply != 1}">
-												<input name="isinstitutionprovinceapply" onchange="AddSegment(this,'isschoolprovinceen')" value="${education.isinstitutionprovinceapply }" type="checkbox" />
-											</c:if>
-											
+                                            
+                                            <select name="institutionprovince" class="form-control input-sm select2" multiple="multiple"  id="institutionprovince" >
+							                   <option selected="selected" value="${obj.beforeeducate.institutionprovince }">${obj.beforeeducate.institutionprovince}</option>
+						                    </select>
 										</div>
 										<div class="paddingRight leftNo groupInputInfo">
                                             <label><span class="s">*</span> 单位地址（市）</label>
-											<input name="institutioncity" onchange="addSegmentsTranslateZhToEn(this,'institutioncityen','')" value="${education.institutioncity }" type="text" />
+                                            <select name="institutioncity" class="form-control input-sm select2" multiple="multiple"  id="institutioncity" >
+							                   <option selected="selected" value="${obj.beforeeducate.institutioncity }">${obj.beforeeducate.institutioncity}</option>
+						                    </select>
 										</div>
 										<div class="clear"></div>
 										
 										<div class="draBig leftNo margintop-10 groupInputInfo">
                                             <label><span class="s">*</span>详细地址</label>
-                                            <input name="institutionaddress" onchange="addSegmentsTranslateZhToEn(this,'institutionaddressen','')" value="${education.institutionaddress }" type="text" />
+                                            <input id="institutionaddress" name="institutionaddress" onchange="translateZhToEn(this,'institutionaddressen','')" value="${obj.beforeeducate.institutionaddress }" type="text" />
                                         </div>
 
 
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupInputInfo">
                                             <label><span class="s">*</span>开始时间</label>
-											<input id="coursestartdate" onchange="addSegmentsTranslateZhToEn(this,'coursestartdateen','')" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
+											<input id="coursestartdate"  name="coursestartdate" value="${obj.coursestartdate }"  class="datetimepickercss form-control margintop-10" type="text" placeholder="" />
 										</div>
 										
 										<div class="paddingRight leftNo groupInputInfo">
                                             <label><span class="s">*</span>结束时间</label>
-											<input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
+											<%-- <input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" /> --%>
+											<input id="courseenddate" name="courseenddate" value="${obj.courseenddate }"  class="datetimepickercss form-control margintop-10" type="text" placeholder="" />
                                         </div>
                                         <div class="clear"></div>
 									</div>
-								</c:forEach>
-							</c:if>
-							<c:if test="${empty obj.beforeEducationList }">
-                                <div class="midSchoolEduDiv margintop-10">
-                                    <div class="draBig leftNo marginLS groupInputInfo">
-                                        <label><span class="s">*</span>学校名称</label>
-                                        <input name="institution" onchange="addSegmentsTranslateZhToEn(this,'institutionen','')" value="${education.institution }" type="text"/>
-                                    </div>                                        
-                                    <div class="paddingLeft leftNo groupInputInfo">
-                                        <label><span class="s">*</span> 专业名称</label>
-                                        <input name="course" onchange="addSegmentsTranslateZhToEn(this,'courseen','')" value="${education.course }" type="text" />
-                                    </div>
-                                    
-                                    
-                                    <div class="paddingRight leftNo groupSelectInfo" >
-                                        <label><span class="s">*</span> 所在国家</label>
-                                        <select name="institutioncountry" onchange="addSegmentsTranslateZhToEn(this,'institutioncountryen','')">
-                                            <option value="0">请选择</option>
-                                            <c:forEach items="${obj.gocountryFiveList }" var="country">
-                                                <c:if test="${education.institutioncountry != country.id}">
-                                                    <option value="${country.id }">${country.chinesename }</option>
-                                                </c:if>
-                                                <c:if test="${education.institutioncountry == country.id}">
-                                                    <option value="${country.id }" selected="selected">${country.chinesename }</option>
-                                                </c:if>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-                                    <div class="clear"></div>
-
-                                    <div class="paddingLeft leftNo groupcheckBoxInfo" >
-                                        <label><span class="s">*</span> 单位地址（省）</label>
-                                        <input name="institutionprovince" onchange="addSegmentsTranslateZhToEn(this,'institutionprovinceen','')" value="${education.institutionprovince }" type="text" />
-                                        <c:if test="${education.isinstitutionprovinceapply == 1}">
-                                            <input name="isinstitutionprovinceapply" onchange="AddSegment(this,'isschoolprovinceen')" value="${education.isinstitutionprovinceapply }"  checked="checked" type="checkbox"/>
-                                        </c:if>
-                                        <c:if test="${education.isinstitutionprovinceapply != 1}">
-                                            <input name="isinstitutionprovinceapply" onchange="AddSegment(this,'isschoolprovinceen')" value="${education.isinstitutionprovinceapply }" type="checkbox" />
-                                        </c:if>
-                                        
-                                    </div>
-                                    <div class="paddingRight leftNo groupInputInfo">
-                                        <label><span class="s">*</span> 单位地址（市）</label>
-                                        <input name="institutioncity" onchange="addSegmentsTranslateZhToEn(this,'institutioncityen','')" value="${education.institutioncity }" type="text" />
-                                    </div>
-                                    <div class="clear"></div>
-                                    
-                                    <div class="draBig leftNo margintop-10 groupInputInfo">
-                                        <label><span class="s">*</span>详细地址</label>
-                                        <input name="institutionaddress" onchange="addSegmentsTranslateZhToEn(this,'institutionaddressen','')" value="${education.institutionaddress }" type="text" />
-                                    </div>
-
-
-                                    <div class="clear"></div>
-                                    <div class="paddingLeft leftNo groupInputInfo">
-                                        <label><span class="s">*</span>开始时间</label>
-                                        <input id="coursestartdate" onchange="addSegmentsTranslateZhToEn(this,'coursestartdateen','')" name="coursestartdate" value="<fmt:formatDate value="${education.coursestartdate }" pattern="dd/MM/yyyy" />"  class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
-                                    </div>
-                                    
-                                    <div class="paddingRight leftNo groupInputInfo">
-                                        <label><span class="s">*</span>结束时间</label>
-                                        <input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" />
-                                    </div>
-                                    <div class="clear"></div>
-                                </div>
-							</c:if>
 							</div>
 							<div class="clear"></div>
 						</div>
@@ -491,14 +354,14 @@
 			<!--工作/教育/培训信息-->
 			<div class="experience paddingTop" style="margin-bottom: 243px;">
 				
-				<div class="paddingTop elementHide jobEduLearningInfoDiv" style="margin-top: 107px;">
+				<div class="paddingTop  jobEduLearningInfoDiv" style="margin-top: 107px;">
 					<div class="groupInputInfo draBig">
                             <label><span class="s">*</span> Present Employer Name</label>
-						<input name="unitnameen" id="unitnameen" v-model="visaInfo.workEducationInfo.unitnameen" type="text" />
+						<input name="unitnameen" id="unitnameen" value="${obj.workinfo.unitnameen }" type="text" />
 					</div>
 					<div class="groupInputInfo draBig marginLS" style="margin-top: 147px;">
 						<label ><span class="s">*</span> Street Address</label>
-						<input name="addressen" id="jobaddressen" v-model="visaInfo.workEducationInfo.addressen" type="text" />
+						<input name="addressen" id="jobaddressen" value="${obj.workinfo.addressen }" type="text" />
 					</div>
 					<div class="clear"></div>
 				</div>
@@ -515,34 +378,17 @@
 						<!--yes-->
 						<div class="beforeWorkInfo beforeWorkInfoen elementHide">
 						  <div class="beforeWorkYes marginbottom-36">
-							<c:if test="${!empty obj.beforeWorkList }">
-								<c:forEach var="beforeWork" items="${obj.beforeWorkList }">
 									<div class="workBeforeInfosDiven">
 										<div class="leftNo marginLS groupInputInfo" >
 											<label><span class="s">*</span>Present Employer Name</label>
-											<input name="employernameen" id="employernameen" class="employernameen" value="${beforeWork.employernameen }" type="text" />
+											<input name="employernameen" id="employernameen" class="employernameen" value="${obj.beforework.employernameen }" type="text" />
 										</div>
 										<div class="draBig leftNo marginLS groupInputInfo" style="margin-top: 148px;">
                                             <label><span class="s">*</span> Street Address</label>
-											<input name="employeraddressen" class="employeraddressen" value="${beforeWork.employeraddressen }" type="text" />
+											<input id="employeraddressen" name="employeraddressen" class="employeraddressen" value="${obj.beforework.employeraddressen }" type="text" />
 										</div>
 										<div class="clear"></div>
 									</div>
-								</c:forEach>
-							</c:if>
-							<c:if test="${empty obj.beforeWorkList }">
-								<div class="workBeforeInfosDiven">
-									<div class="leftNo marginLS groupInputInfo" >
-										<label><span class="s">*</span>Present Employer Name</label>
-										<input name="employernameen" id="employernameen" class="employernameen" value="${beforeWork.employernameen }" type="text" />
-									</div>
-									<div class="draBig leftNo marginLS groupInputInfo" style="margin-top: 145px;">
-										<label><span class="s">*</span> Street Address</label>
-										<input name="employeraddressen" class="employeraddressen" value="${beforeWork.employeraddressen }" type="text" />
-									</div>
-									<div class="clear"></div>
-								</div>
-							</c:if>
 							</div>
 							<div class="clear"></div>
 							<div class="btnGroup companyGroupen marginLS beforeWorkGroup">
@@ -558,37 +404,19 @@
 						<!--yes-->
 						<div class="educationInfo educationInfoen elementHide">
 							<div class="educationYes marginbottom-36">
-							<c:if test="${!empty obj.beforeEducationList }">
-								<c:forEach var="education" items="${obj.beforeEducationList }">
 									<div class="midSchoolEduDiven margintop-10">
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label><span class="s">*</span> School Name</label>
-											<input name="institutionen" class="institutionen" value="${education.institutionen }" type="text"/>
+											<input id="institutionen" name="institutionen" class="institutionen" value="${obj.beforeeducate.institutionen }" type="text"/>
 										</div>
 										<div class="draBig leftNo margintop-10 groupInputInfo" style="margin-top: 145px!important;">
                                             <label><span class="s">*</span> Street Address</label>
-											<input name="institutionaddressen" class="institutionaddressen" value="${education.institutionaddressen }" type="text" />
+											<input id="institutionaddressen" name="institutionaddressen" class="institutionaddressen" value="${obj.beforeeducate.institutionaddressen }" type="text" />
 										</div>
 									
 										<div class="clear"></div>
 									
 									</div>
-								</c:forEach>
-							</c:if>
-							<c:if test="${empty obj.beforeEducationList }">
-								<div class="midSchoolEduDiven margintop-10">
-									<div class="draBig leftNo marginLS groupInputInfo">
-										<label><span class="s">*</span> School Name</label>
-										<input name="institutionen" class="institutionen" type="text"/>
-									</div>
-
-									<div class="draBig leftNo margintop-10 groupInputInfo" style="margin-top: 145px!important;">
-										<label><span class="s">*</span> Street Address</label>
-										<input name="institutionaddressen" class="institutionaddressen" value="${education.institutionaddressen }" type="text" />
-									</div>
-									<div class="clear"></div>
-								</div>
-							</c:if>
 							</div>
 							<div class="clear"></div>
 							<div class="btnGroup companyGroupen educationGroup">
@@ -607,7 +435,7 @@
         <div class="clear"></div>
         <div style="height: 50px;"></div>
 	</div>	
-
+	</form>
     <script type="text/javascript">
         var BASE_PATH = '${base}';
         var staffId   = '${obj.staffId}';
@@ -618,22 +446,21 @@
     <script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
     <script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
     <script src="${base}/references/common/js/layer/layer.js"></script>
-    <script src="${base}/references/common/js/vue/vue.min.js"></script>
     <script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
     <script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
-    <script src="${base}/references/common/js/vue/vue-multiselect.min.js"></script>
     <script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
     <script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
     <script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
     <script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
     <!-- 本页js -->
-    <script src="${base}/admin/bigCustomer/visa/openPageYesOrNo.js"></script><!-- 本页面  打开默认开关 js -->
+    <%-- <script src="${base}/admin/bigCustomer/visa/openPageYesOrNo.js"></script><!-- 本页面  打开默认开关 js -->
     <script src="${base}/admin/bigCustomer/visa/visaGetInfoList.js"></script><!-- 本页面  获取一对多信息 js -->
     <script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script><!-- 本页面 Vue加载页面内容 js -->
-    <script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js -->
+    <script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js --> --%>
     <script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
+    <script src="${base}/admin/bigCustomer/updateWorkinfo.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面 js -->
     <script type="text/javascript">
-        $(function(){
+        /* $(function(){
             //页面不可编辑
             if(isDisable == 1){
                 $(".section").attr('readonly', true);
@@ -643,16 +470,44 @@
             
             openYesOrNoPage();
             
-        });
+        }); */
 
+        //是否有上份工作
+        var beforework='${obj.workinfo.isemployed}';
+        $("input[name='isemployed'][value='" + beforework + "']").attr("checked", 'checked');
+        if (beforework == 1) {
+        	$(".beforeWorkInfo").show();
+		} else {
+			$(".beforeWorkInfo").hide();
+		}
+        //以前的教育信息
+        var beforework='${obj.workinfo.issecondarylevel}';
+        $("input[name='issecondarylevel'][value='" + beforework + "']").attr("checked", 'checked');
+        if (beforework == 1) {
+        	$(".educationInfo").show();
+		} else {
+			$(".educationInfo").hide();
+		}
+        
+        //专业处理
+        var highesteducation = '${obj.beforeeducate.highesteducation}';
+        if(highesteducation > 2){
+        	$(".courseClass").show();
+        }else{
+        	$(".courseClass").hide();
+        }
+        
+       /*  var country = '${obj.workinfo.country}';
+        if(country == ""){
+        	$("#jobcountry").val(45).trigger('change');
+        } */
+        
         //跳转到基本信息页
-        function baseInfoBtn(){
-            if(isDisable == 1){
-                window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable+'&flag='+flag;
-            }else{
-                //保存签证信息
-                save(2);
-            }
+        function familyInfoBtn(){
+        	save(2);
+        }
+        function travelInfoBtn(){
+        	save(3);
         }
         
     </script>

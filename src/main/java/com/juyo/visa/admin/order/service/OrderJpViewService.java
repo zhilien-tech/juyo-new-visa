@@ -3015,7 +3015,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		applicant.setCardId(form.getNum());
 		applicant.setCity(form.getCity());
 		applicant.setDetailedAddress(form.getAddress());
-		applicant.setNationality(form.getNationality());
+		applicant.setNation(form.getNationality());
 		applicant.setCardProvince(form.getProvince());
 		applicant.setCardCity(form.getCity());
 		applicant.setProvince(form.getProvince());

@@ -1402,7 +1402,29 @@ function save(status){
 	}else if(status ==2){
 		layer.closeAll('loading');
 		//左箭头跳转
-		window.location.href = '/admin/bigCustomer/updateBaseInfo.html?staffId='+staffId+'&isDisable='+isDisable;
+		window.location.href = '/admin/neworderUS/updatePassportInfo.html?staffid='+staffId;
+		$.ajax({ 
+			type: 'POST', 
+			data: {
+				data:JSON.stringify(visadata)
+			}, 
+			url: '/admin/bigCustomer/updateVisaInfos.html',
+			success: function (data) { 
+				if(data.status == 200){
+					parent.successCallback();
+				}else{
+					layer.msg("保存失败","", 2000);
+				}
+				layer.closeAll('loading');
+			},
+			error: function (xhr) {
+				layer.msg("保存失败");
+			} 
+		});
+	}else if(status == 3){
+		layer.closeAll('loading');
+		//左箭头跳转
+		window.location.href = '/admin/neworderUS/updateWorkInfo.html?staffid='+staffId;
 		$.ajax({ 
 			type: 'POST', 
 			data: {

@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+
 import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -72,6 +74,8 @@ import com.juyo.visa.common.enums.visaProcess.VisaSpouseContactAddressEnum;
 import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
 import com.juyo.visa.common.util.ExcelReader;
+import com.juyo.visa.common.util.PinyinTool;
+import com.juyo.visa.common.util.PinyinTool.Type;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
 import com.juyo.visa.entities.TAppStaffBeforeworkEntity;
@@ -335,8 +339,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		sqlp.setParam("staffid", staffId);
 		Record previUSTripInfo = dbDao.fetch(sqlp);
 		//最后一次签证的签发日期
-		String issueddate = previUSTripInfo.getString("issueddate");
-		issueddate = formatDateStr(issueddate, FORMAT_DD_MM_YYYY);
+		String issueddate = "";
+		if (!Util.isEmpty(previUSTripInfo.getString("issueddate"))) {
+			issueddate = previUSTripInfo.getString("issueddate");
+			issueddate = formatDateStr(issueddate, FORMAT_DD_MM_YYYY);
+		}
 		previUSTripInfo.set("issueddate", issueddate);
 		String issueddateen = previUSTripInfo.getString("issueddateen");
 		issueddateen = formatDateStr(issueddateen, FORMAT_DD_MM_YYYY);
@@ -1676,6 +1683,16 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		addForm.setIssecuritynumberapplyen(IsYesOrNoEnum.YES.intKey());
 		addForm.setIstaxpayernumberapply(IsYesOrNoEnum.YES.intKey());
 		addForm.setIstaxpayernumberapplyen(IsYesOrNoEnum.YES.intKey());
+
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
+		try {
+			addForm.setFirstnameen((tool.toPinYin(addForm.getFirstname(), "", Type.UPPERCASE)));
+			addForm.setLastnameen((tool.toPinYin(addForm.getLastname(), "", Type.UPPERCASE)));
+		} catch (BadHanyuPinyinOutputFormatCombination e1) {
+			e1.printStackTrace();
+		}
+
 		addForm.setCreatetime(nowDate);
 		addForm.setUpdatetime(nowDate);
 		String telephone = addForm.getTelephone();
@@ -1694,6 +1711,13 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		staffPassport.setUpdatetime(nowDate);
 		staffPassport.setFirstname(addForm.getFirstname());
 		staffPassport.setLastname(addForm.getLastname());
+		try {
+			staffPassport.setFirstnameen((tool.toPinYin(addForm.getFirstname(), "", Type.UPPERCASE)));
+			staffPassport.setLastnameen((tool.toPinYin(addForm.getLastname(), "", Type.UPPERCASE)));
+		} catch (BadHanyuPinyinOutputFormatCombination e1) {
+			e1.printStackTrace();
+		}
+
 		staffPassport.setIslostpassport(2);//创建护照信息时默认设置为2，没有丢失
 		staffPassport.setIslostpassporten(2);//创建护照信息时默认设置为2，没有丢失
 		staffPassport.setIsrememberpassportnum(2);//是否记得丢失的护照号码，默认为2不记得
