@@ -256,7 +256,8 @@
 								<!-- 出发城市 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>出发城市：</label> <select
+										<label><span>*</span>出发城市：</label> 
+										<select
 											id="goDepartureCity" name="godeparturecity"
 											class="form-control select2 select2City departurecity"
 											multiple="multiple">

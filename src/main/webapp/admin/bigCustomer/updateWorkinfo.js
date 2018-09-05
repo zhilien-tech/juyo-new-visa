@@ -301,7 +301,7 @@ function save(status){
 				success :function(data) {
 					layer.closeAll("loading");
 					closeWindow();
-					parent.successCallBack(2);
+					parent.successCallback(2);
 				}
 			});
 		}

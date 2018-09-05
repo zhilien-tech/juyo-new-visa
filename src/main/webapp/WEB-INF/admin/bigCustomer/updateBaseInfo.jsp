@@ -571,15 +571,6 @@
 				var boxObj = $("input:checkbox[name='addressIssamewithcarden']").attr("checked",false);
 			}
 		});
-		function successCallBack(status){
-			if(status == 1){
-				parent.successCallBack(1);
-				closeWindow();
-			}
-		}
-		function cancelCallBack(status){
-			closeWindow();
-		}
 		//图片上的删除按钮
 		var front = $("#cardFront").val();
 		var back = $("#cardBack").val();

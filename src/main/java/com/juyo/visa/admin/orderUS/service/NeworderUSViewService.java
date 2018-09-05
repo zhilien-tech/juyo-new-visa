@@ -728,10 +728,22 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//以前的工作信息
 		if (Util.eq(1, form.getIsemployed())) {
 			updateBeforework(form);
+		} else {
+			TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			if (!Util.isEmpty(beforework)) {
+				dbDao.delete(beforework);
+			}
 		}
 		//教育信息
 		if (Util.eq(1, form.getIssecondarylevel())) {
 			updateBeforeeducation(form);
+		} else {
+			TAppStaffBeforeeducationEntity beforeeducation = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			if (!Util.isEmpty(beforeeducation)) {
+				dbDao.delete(beforeeducation);
+			}
 		}
 
 		return JuYouResult.ok();
@@ -795,6 +807,11 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		Integer staffid = form.getStaffid();
 		TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		if (Util.isEmpty(beforework)) {
+			beforework = new TAppStaffBeforeworkEntity();
+			beforework.setStaffid(staffid);
+			dbDao.insert(beforework);
+		}
 		beforework.setEmployername(form.getEmployername());
 		beforework.setEmployernameen(form.getEmployernameen());
 		beforework.setEmployertelephone(form.getEmployertelephone());
@@ -834,6 +851,11 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		Integer staffid = form.getStaffid();
 		TAppStaffBeforeeducationEntity beforeeducation = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		if (Util.isEmpty(beforeeducation)) {
+			beforeeducation = new TAppStaffBeforeeducationEntity();
+			beforeeducation.setStaffid(staffid);
+			dbDao.insert(beforeeducation);
+		}
 		beforeeducation.setHighesteducation(form.getHighesteducation());
 		beforeeducation.setInstitution(form.getInstitution());
 		beforeeducation.setInstitutionen(form.getInstitutionen());

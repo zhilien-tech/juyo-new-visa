@@ -683,7 +683,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			dbDao.update(familyinfo);
 
 			//其他亲属
-			updateOtherinfo(form);
+			if (form.getHasimmediaterelatives() == 1) {//有其他亲属,则更新或添加
+				updateOtherinfo(form);
+			} else {
+				TAppStaffImmediaterelativesEntity immediaterelatives = dbDao.fetch(
+						TAppStaffImmediaterelativesEntity.class, Cnd.where("staffid", "=", staffid));
+				if (!Util.isEmpty(immediaterelatives)) {
+					dbDao.delete(immediaterelatives);
+				}
+			}
 
 			return JuYouResult.ok();
 		}
@@ -783,6 +791,11 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		Integer staffid = form.getStaffid();
 		TAppStaffImmediaterelativesEntity immediaterelatives = dbDao.fetch(TAppStaffImmediaterelativesEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		if (Util.isEmpty(immediaterelatives)) {//如果为空，则添加，否则更新
+			immediaterelatives = new TAppStaffImmediaterelativesEntity();
+			immediaterelatives.setStaffid(staffid);
+			immediaterelatives = dbDao.insert(immediaterelatives);
+		}
 		immediaterelatives.setRelativesfirstname(form.getRelativesfirstname());
 		immediaterelatives.setRelativesfirstnameen(form.getRelativesfirstnameen());
 		immediaterelatives.setRelativeslastname(form.getRelativeslastname());
@@ -884,11 +897,26 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			//工作教育信息
 			updateWorkinfo(form);
 
-			//上份工作信息
-			updateBeforework(form);
-
+			//以前的工作信息
+			if (Util.eq(1, form.getIsemployed())) {
+				updateBeforework(form);
+			} else {
+				TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
+						Cnd.where("staffid", "=", staffid));
+				if (!Util.isEmpty(beforework)) {
+					dbDao.delete(beforework);
+				}
+			}
 			//教育信息
-			updateBeforeeducation(form);
+			if (Util.eq(1, form.getIssecondarylevel())) {
+				updateBeforeeducation(form);
+			} else {
+				TAppStaffBeforeeducationEntity beforeeducation = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
+						Cnd.where("staffid", "=", staffid));
+				if (!Util.isEmpty(beforeeducation)) {
+					dbDao.delete(beforeeducation);
+				}
+			}
 
 			return JuYouResult.ok();
 		}
@@ -950,6 +978,11 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		Integer staffid = form.getStaffid();
 		TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		if (Util.isEmpty(beforework)) {
+			beforework = new TAppStaffBeforeworkEntity();
+			beforework.setStaffid(staffid);
+			dbDao.insert(beforework);
+		}
 		beforework.setEmployername(form.getEmployername());
 		beforework.setEmployernameen(form.getEmployernameen());
 		beforework.setEmployertelephone(form.getEmployertelephone());
@@ -988,6 +1021,11 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		Integer staffid = form.getStaffid();
 		TAppStaffBeforeeducationEntity beforeeducate = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		if (Util.isEmpty(beforeeducate)) {
+			beforeeducate = new TAppStaffBeforeeducationEntity();
+			beforeeducate.setStaffid(staffid);
+			dbDao.insert(beforeeducate);
+		}
 		beforeeducate.setHighesteducation(form.getHighesteducation());
 		beforeeducate.setInstitution(form.getInstitution());
 		beforeeducate.setInstitutionen(form.getInstitutionen());
@@ -1110,22 +1148,46 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			//去过美国信息
 			TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
 					Cnd.where("staffid", "=", staffid));
-			gousinfo.setArrivedate(form.getArrivedate());
-			gousinfo.setArrivedateen(form.getArrivedateen());
-			gousinfo.setDateunit(form.getDateunit());
-			gousinfo.setDateuniten(form.getDateuniten());
-			gousinfo.setStaydays(form.getStaydays());
-			gousinfo.setStaydaysen(form.getStaydaysen());
-			dbDao.update(gousinfo);
+			if (form.getHasbeeninus() == 1) {//去过美国，则添加或者修改
+				if (Util.isEmpty(gousinfo)) {
+					gousinfo = new TAppStaffGousinfoEntity();
+					gousinfo.setStaffid(staffid);
+					dbDao.insert(gousinfo);
+				}
+				if (!Util.isEmpty(form.getArrivedate())) {
+					gousinfo.setArrivedate(form.getArrivedate());
+					gousinfo.setArrivedateen(form.getArrivedateen());
+				}
+				gousinfo.setDateunit(form.getDateunit());
+				gousinfo.setDateuniten(form.getDateuniten());
+				gousinfo.setStaydays(form.getStaydays());
+				gousinfo.setStaydaysen(form.getStaydaysen());
+				dbDao.update(gousinfo);
+			} else {
+				if (!Util.isEmpty(gousinfo)) {
+					dbDao.delete(gousinfo);
+				}
+			}
 
 			//美国驾照信息
 			TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
 					Cnd.where("staffid", "=", staffid));
-			driverinfo.setDriverlicensenumber(form.getDriverlicensenumber());
-			driverinfo.setWitchstateofdriver(form.getWitchstateofdriver());
-			driverinfo.setDriverlicensenumberen(form.getDriverlicensenumber());
-			driverinfo.setWitchstateofdriveren(form.getWitchstateofdriver());
-			dbDao.update(driverinfo);
+			if (form.getHasdriverlicense() == 1) {//有美国驾照，添加或者修改
+				if (Util.isEmpty(driverinfo)) {
+					driverinfo = new TAppStaffDriverinfoEntity();
+					driverinfo.setStaffid(staffid);
+					dbDao.insert(driverinfo);
+				}
+				driverinfo.setDriverlicensenumber(form.getDriverlicensenumber());
+				driverinfo.setWitchstateofdriver(form.getWitchstateofdriver());
+				driverinfo.setDriverlicensenumberen(form.getDriverlicensenumber());
+				driverinfo.setWitchstateofdriveren(form.getWitchstateofdriver());
+				dbDao.update(driverinfo);
+			} else {
+				if (!Util.isEmpty(driverinfo)) {
+					dbDao.delete(driverinfo);
+				}
+			}
 
 			//是否有出境记录
 			TAppStaffWorkEducationTrainingEntity workeducation = dbDao.fetch(
