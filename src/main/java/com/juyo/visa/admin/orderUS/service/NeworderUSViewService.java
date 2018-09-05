@@ -684,21 +684,25 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		result.put("beforework", beforework);
-		if (!Util.isEmpty(beforework.getEmploystartdate())) {
-			result.put("employestartdate", sdf.format(beforework.getEmploystartdate()));
-		}
-		if (!Util.isEmpty(beforework.getEmployenddate())) {
-			result.put("employenddate", sdf.format(beforework.getEmployenddate()));
+		if (!Util.isEmpty(beforework)) {
+			if (!Util.isEmpty(beforework.getEmploystartdate())) {
+				result.put("employestartdate", sdf.format(beforework.getEmploystartdate()));
+			}
+			if (!Util.isEmpty(beforework.getEmployenddate())) {
+				result.put("employenddate", sdf.format(beforework.getEmployenddate()));
+			}
 		}
 		//教育信息
 		TAppStaffBeforeeducationEntity beforeeducate = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		result.put("beforeeducate", beforeeducate);
-		if (!Util.isEmpty(beforeeducate.getCoursestartdate())) {
-			result.put("coursestartdate", sdf.format(beforeeducate.getCoursestartdate()));
-		}
-		if (!Util.isEmpty(beforeeducate.getCourseenddate())) {
-			result.put("courseenddate", sdf.format(beforeeducate.getCourseenddate()));
+		if (!Util.isEmpty(beforeeducate)) {
+			if (!Util.isEmpty(beforeeducate.getCoursestartdate())) {
+				result.put("coursestartdate", sdf.format(beforeeducate.getCoursestartdate()));
+			}
+			if (!Util.isEmpty(beforeeducate.getCourseenddate())) {
+				result.put("courseenddate", sdf.format(beforeeducate.getCourseenddate()));
+			}
 		}
 
 		//国家下拉

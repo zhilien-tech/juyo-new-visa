@@ -32,9 +32,9 @@ $(".companyInfo").change(function () {
 
 	let checked = $("input[name='istravelwithother']:checked").val();
 	if (checked == 1) {
-		$(".groupInputInfo").show();
+		$(".teamnamefalse").show();
 	} else {
-		$(".groupInputInfo").hide();
+		$(".teamnamefalse").hide();
 	}
 });
 //国家多段操作
@@ -135,9 +135,9 @@ $(".isfiledimmigrantpetition").change(function () {
 $(".istraveledanycountry").change(function () {
 	let checked = $("input[name='istraveledanycountry']:checked").val();
 	if (checked == 1) {
-		$(".saveOutboundContent").show();
+		$(".travelCountry").show();
 	} else {
-		$(".saveOutboundContent").hide();
+		$(".travelCountry").hide();
 	}
 });
 
@@ -149,12 +149,7 @@ $('#traveledcountry').select2({
 		delay : 250,
 		type : 'post',
 		data : function(params) {
-			/*var cArrivalcity = $('#cArrivalcity').val();
-			if(cArrivalcity){
-				cArrivalcity = cArrivalcity.join(',');
-			}*/
 			return {
-				//exname : cArrivalcity,
 				searchstr : params.term, // search term
 				page : params.page
 			};
@@ -164,7 +159,6 @@ $('#traveledcountry').select2({
 			var selectdata = $.map(data, function (obj) {
 				obj.id = obj.id; // replace pk with your identifier
 				obj.text = obj.chinesename; // replace pk with your identifier
-				/*obj.text = obj.dictCode;*/
 				return obj;
 			});
 			return {

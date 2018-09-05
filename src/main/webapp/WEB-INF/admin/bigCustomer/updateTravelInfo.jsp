@@ -519,9 +519,9 @@
 		var istravelwithother = '${obj.travelwithother}';
 		$("input[name='istravelwithother'][value='" + istravelwithother + "']").attr("checked", 'checked');
         if (istravelwithother == 1) {
-        	$(".groupInputInfo").show();
+        	$(".teamnamefalse").show();
 		} else {
-			$(".groupInputInfo").hide();
+			$(".teamnamefalse").hide();
 		}
 		//是否去过美国
 		var hasbeeninus = '${obj.tripinfo.hasbeeninus}';
@@ -579,9 +579,9 @@
         var istraveledanycountry = '${obj.istraveledanycountry}';
 		$("input[name='istraveledanycountry'][value='" + istraveledanycountry + "']").attr("checked", 'checked');
 		if (istraveledanycountry == 1) {
-			$(".saveOutboundContent").show();
+			$(".travelCountry").show();
 		} else {
-			$(".saveOutboundContent").hide();
+			$(".travelCountry").hide();
 		}
 		
 		

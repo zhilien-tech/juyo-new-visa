@@ -129,7 +129,7 @@
                     <select  id="spousecountry"  name="spousecountry" class="form-control input-sm select2" multiple="multiple">
                      <c:forEach items="${obj.gocountryfivelist }" var="country">
 							<c:choose>
-								<c:when test="${country.id eq obj.familyinfo.spousenationality }">
+								<c:when test="${country.id eq obj.familyinfo.spousecountry }">
 									<option value="${country.id }" selected="selected">${country.chinesename }</option>
 								</c:when>
 								<c:otherwise>
