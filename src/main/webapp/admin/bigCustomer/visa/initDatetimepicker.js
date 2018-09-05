@@ -1,6 +1,6 @@
 //以前的美国旅游信息---抵达日期
 $("#arrivedate").datetimepicker({
-	format: 'dd/mm/yyyy',
+	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"bottom-right",//显示位置
@@ -11,7 +11,7 @@ $("#arrivedate").datetimepicker({
 
 //以前的美国旅游信息---最后一次签证的签发日期
 $("#issueddate").datetimepicker({
-	format: 'dd/mm/yyyy',
+	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
 	autoclose: true,//选中日期后 自动关闭
 	pickerPosition:"bottom-right",//显示位置

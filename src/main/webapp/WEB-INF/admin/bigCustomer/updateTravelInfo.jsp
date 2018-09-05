@@ -433,9 +433,23 @@
 					</div>
 					<div class="row saveOutboundContent">
 						<div class="col-sm-3 youRelationship ">
+						
+						
+						
+						
 							<label><span class="s">*</span> 国家名</label> <select id=""
 								class="relationshipSelect" style="margin: 0;">
 								<option value="0">请选择</option>
+								 <c:forEach items="${obj.gocountryfivelist }" var="country">
+													<c:choose>
+														<c:when test="${country.id eq obj.beforework.employercountry }">
+															<option value="${country.id }" selected="selected">${country.chinesename }</option>
+														</c:when>
+														<c:otherwise>
+															<option value="${country.id }">${country.chinesename }</option>
+														</c:otherwise>
+													</c:choose>
+												</c:forEach>
 							</select>
 						</div>
 						<div class="col-sm-3">
@@ -478,7 +492,7 @@
 	<script src="${base}/admin/bigCustomer/visa/visaGetInfoList.js"></script><!-- 本页面  获取一对多信息 js -->
 	<script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script><!-- 本页面 Vue加载页面内容 js -->
 	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js --> --%>
-<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js"></script>
+<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js?v=<%=System.currentTimeMillis() %>"></script>
 <!-- 本页面 初始化时间插件 js -->
 <script
 	src="${base}/admin/bigCustomer/updateTravelinfo.js?v=<%=System.currentTimeMillis() %>"></script>
@@ -539,7 +553,7 @@
 		}
         //是否在申请美国移民
         var isfiledimmigrantpetition = '${obj.tripinfo.isfiledimmigrantpetition}';
-		$("input[name='isrefused'][value='" + isfiledimmigrantpetition + "']").attr("checked", 'checked');
+		$("input[name='isfiledimmigrantpetition'][value='" + isfiledimmigrantpetition + "']").attr("checked", 'checked');
 		if (isfiledimmigrantpetition == 1) {
 			$(".immigrantpetition_US").show();
 		} else {
