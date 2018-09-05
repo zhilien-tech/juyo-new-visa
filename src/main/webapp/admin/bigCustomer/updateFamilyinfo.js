@@ -146,6 +146,34 @@ function getPinYinStr(hanzi){
 	}
 }*/
 
+//母亲是否在美国radio
+$(".motherUS").change(function () {
+	let checked = $("input[name='ismotherinus']:checked").val();
+	if (checked == 1) {
+		$(".motherUSYes").show();
+	} else {
+		$(".motherUSYes").hide();
+	}
+});
+//父亲是否在美国radio
+$(".fatherUS").change(function () {
+	let checked = $("input[name='isfatherinus']:checked").val();
+	if (checked == 1) {
+		$(".fatherUSYes").show();
+	} else {
+		$(".fatherUSYes").hide();
+	}
+});
+//在美国除了父母还有没有直系亲属radio
+$(".directUSRelatives").change(function () {
+	let checked = $("input[name='hasimmediaterelatives']:checked").val();
+	if (checked == 1) {
+		$(".directRelatives").show();
+	} else {
+		$(".directRelatives").hide();
+	}
+});
+
 //配偶国籍
 $('#spousenationality,#spousecountry').select2({
 	ajax : {

@@ -222,8 +222,8 @@
 				<div class="paddingTop paddingRight">
 					<div class="groupRadioInfo" style=" margin-right: 40px; padding-top: 0px;">
 						<label style="margin-bottom: 10px; "><span class="s">*</span> 你的父亲是否在美国</label>
-						<input type="radio" name="isfatherinus" value="${obj.familyinfo.isfatherinus }" onchange="isfatherinus()" class="fatherUS" value="1" />是
-						<input type="radio" style="margin-left: 20px;" name="isfatherinus"  v-on:click="isfatherinus" value="${obj.familyinfo.isfatherinus }" onchange="isfatherinus()" class="fatherUS" value="2" checked />否
+						<input type="radio" name="isfatherinus"  class="fatherUS" value="1" />是
+						<input type="radio" style="margin-left: 20px;" name="isfatherinus"  class="fatherUS" value="2" checked />否
 					</div>
 					
 				</div>
@@ -259,8 +259,8 @@
 				<div class="paddingTop padding-left paddingRight">
 					<div class="groupRadioInfo" style="margin-right: 40px;padding-top: 0px;">
 						<label style="margin-bottom: 10px;"><span class="s">*</span> 你的母亲是否在美国</label>
-						<input type="radio" name="ismotherinus" value="${obj.familyinfo.ismotherinus }" onchange="ismotherinues()" class="motherUS" value="1" />是
-						<input type="radio" style="margin-left: 20px;" name="ismotherinus" v-on:click="ismotherinus" value="${obj.familyinfo.ismotherinus }" onchange="ismotherinues()" class="motherUS" value="2" checked />否
+						<input type="radio" name="ismotherinus"  class="motherUS" value="1" />是
+						<input type="radio" style="margin-left: 20px;" name="ismotherinus"  class="motherUS" value="2" checked />否
 					</div>
 				</div>
 				<div class="clear"></div>
@@ -277,8 +277,8 @@
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label><span class="s">*</span> 在美国除了父母还有没有直系亲属</label>
-						<input type="radio" name="hasimmediaterelatives" value="${obj.familyinfo.hasimmediaterelatives }" onchange="hasimmediaterelatives()" class="directRelatives directUSRelatives" value="1" />是
-						<input type="radio" style="margin-left: 20px;" name="hasimmediaterelatives" value="${obj.familyinfo.hasimmediaterelatives }" onchange="hasimmediaterelatives()" class="directRelatives directUSRelatives" value="2" checked/>否
+						<input type="radio" name="hasimmediaterelatives"  class="directUSRelatives" value="1" />是
+						<input type="radio" style="margin-left: 20px;" name="hasimmediaterelatives"  class="directUSRelatives" value="2" checked/>否
 					</div>
 					<div class="directRelatives margtop">
 						<!--yes-->
@@ -418,6 +418,31 @@
 	if(spouseaddress == 5){
 		$(".otherSpouseInfo").show();
 	} */
+	
+	//母亲是否在美国
+	var ismotherinus = '${obj.familyinfo.ismotherinus}';
+	$("input[name='ismotherinus'][value='" + ismotherinus + "']").attr("checked", 'checked');
+    if (ismotherinus == 1) {
+    	$(".motherUSYes").show();
+	} else {
+		$(".motherUSYes").hide();
+	}
+	//父亲是否在美国
+	var isfatherinus = '${obj.familyinfo.isfatherinus}';
+	$("input[name='isfatherinus'][value='" + isfatherinus + "']").attr("checked", 'checked');
+    if (isfatherinus == 1) {
+    	$(".fatherUSYes").show();
+	} else {
+		$(".fatherUSYes").hide();
+	}
+	//在美国除了父母还有没有直系亲属
+	var hasimmediaterelatives = '${obj.familyinfo.hasimmediaterelatives}';
+	$("input[name='hasimmediaterelatives'][value='" + hasimmediaterelatives + "']").attr("checked", 'checked');
+    if (hasimmediaterelatives == 1) {
+    	$(".directRelatives").show();
+	} else {
+		$(".directRelatives").hide();
+	}
 	
 		//跳转到护照信息页
 		function passportInfoBtn(){

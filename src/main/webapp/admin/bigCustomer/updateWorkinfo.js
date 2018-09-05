@@ -133,38 +133,6 @@ $('#jobprovince,#employerprovince,#institutionprovince').select2({
 	tags : false //设置必须存在的选项 才能选中
 });
 
-//现工作所在市
-
-$("#jobprovince").change(function () {
-    /*var grade= $("#jobprovince").val();
-    $.ajax({
-        url:"/admin/neworderUS/selectCity.html",
-        dataType: "JSON",
-        data: {'province': grade,
-        		'searchstr':$('#city').val()
-        		},
-        type: "post",
-        success:function (data) {
-            var gradeNum= data.length;
-            if(gradeNum>0){
-                for(var i = 0;i<gradeNum;i++){
-                    option += "<option value='"+data[i].city+"'>"+data[i].city+"</option>";
-                }
-            }
-            $("#city").html(option);
-            $("#city").select2({ minimumResultsForSearch: -1 });//加载样式
-        },
-        error:function(e) {
-            layer.alert("系统异常，请稍候重试！");
-        }
-    });*/
-	console.log($('#jobprovince').val());
-	console.log($('#jobprovince').select2('data'));
-	console.log($('#jobprovince').select2('val'));
-});
-
-
-
 
 //现工作所在市
 $('#city').select2({
@@ -174,13 +142,12 @@ $('#city').select2({
 		delay : 250,
 		type : 'post',
 		data : function(params) {
-			var cArrivalcity = $('#cArrivalcity').val();
-			if(cArrivalcity){
-				cArrivalcity = cArrivalcity.join(',');
+		    var province = $('#jobprovince').val();
+		    if(province){
+		    	province = province.join(',');
 			}
 			return {
-				//exname : cArrivalcity,
-				province : $('#jobprovince').select2('val'),
+				province : province,
 				searchstr : params.term, // search term
 				page : params.page
 			};
@@ -190,7 +157,6 @@ $('#city').select2({
 			var selectdata = $.map(data, function (obj) {
 				obj.id = obj.city; // replace pk with your identifier
 				obj.text = obj.city; // replace pk with your identifier
-				obj.text = obj.dictCode;
 				return obj;
 			});
 			return {
@@ -217,13 +183,12 @@ $('#employercity').select2({
 		delay : 250,
 		type : 'post',
 		data : function(params) {
-			var cArrivalcity = $('#cArrivalcity').val();
-			if(cArrivalcity){
-				cArrivalcity = cArrivalcity.join(',');
+			var province = $('#employerprovince').val();
+			if(province){
+				province = province.join(',');
 			}
 			return {
-				//exname : cArrivalcity,
-				province : $('#jobprovince').select2('val'),
+				province : province,
 				searchstr : params.term, // search term
 				page : params.page
 			};
@@ -233,7 +198,6 @@ $('#employercity').select2({
 			var selectdata = $.map(data, function (obj) {
 				obj.id = obj.city; // replace pk with your identifier
 				obj.text = obj.city; // replace pk with your identifier
-				obj.text = obj.dictCode;
 				return obj;
 			});
 			return {
@@ -260,13 +224,12 @@ $('#institutioncity').select2({
 		delay : 250,
 		type : 'post',
 		data : function(params) {
-			var cArrivalcity = $('#cArrivalcity').val();
-			if(cArrivalcity){
-				cArrivalcity = cArrivalcity.join(',');
+			var province = $('#institutionprovince').val();
+			if(province){
+				province = province.join(',');
 			}
 			return {
-				//exname : cArrivalcity,
-				province : $('#jobprovince').select2('val'),
+				province : province,
 				searchstr : params.term, // search term
 				page : params.page
 			};
@@ -276,7 +239,6 @@ $('#institutioncity').select2({
 			var selectdata = $.map(data, function (obj) {
 				obj.id = obj.city; // replace pk with your identifier
 				obj.text = obj.city; // replace pk with your identifier
-				obj.text = obj.dictCode;
 				return obj;
 			});
 			return {

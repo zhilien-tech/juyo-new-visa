@@ -7,13 +7,8 @@
 package com.juyo.visa.admin.mobile.form;
 
 import java.util.Date;
-import java.util.List;
 
 import lombok.Data;
-
-import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
-import com.juyo.visa.entities.TAppStaffGocountryEntity;
-import com.juyo.visa.entities.TAppStaffGousinfoEntity;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -207,10 +202,8 @@ public class TravelinfoUSForm {
 
 	private Integer witchstateofdriver;
 
-	List<TAppStaffCompanioninfoEntity> companioninfoList;
+	private String companioninfoList;
 
-	List<TAppStaffGocountryEntity> gocountryList;
-
-	List<TAppStaffGousinfoEntity> gousinfoList;
+	private String gocountry;
 
 }

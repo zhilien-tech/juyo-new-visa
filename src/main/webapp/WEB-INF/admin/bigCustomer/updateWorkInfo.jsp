@@ -291,7 +291,7 @@
                                         
                                         <div class="paddingRight leftNo groupSelectInfo" >
                                             <label><span class="s">*</span> 所在国家</label>
-                                            <select name="institutioncountry" class="form-control input-sm select2" multiple="multiple" id="institutioncountry">
+                                            <select name="institutioncountry" class=" select2" multiple="multiple" id="institutioncountry">
                                             	<c:forEach items="${obj.gocountryfivelist }" var="country">
 													<c:choose>
 														<c:when test="${country.id eq obj.beforeeducate.institutioncountry }">
@@ -354,7 +354,7 @@
 			<!--工作/教育/培训信息-->
 			<div class="experience paddingTop" style="margin-bottom: 243px;">
 				
-				<div class="paddingTop elementHide jobEduLearningInfoDiv" style="margin-top: 107px;">
+				<div class="paddingTop  jobEduLearningInfoDiv" style="margin-top: 107px;">
 					<div class="groupInputInfo draBig">
                             <label><span class="s">*</span> Present Employer Name</label>
 						<input name="unitnameen" id="unitnameen" value="${obj.workinfo.unitnameen }" type="text" />

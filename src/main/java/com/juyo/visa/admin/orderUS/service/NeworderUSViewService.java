@@ -20,9 +20,6 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
 
 import org.apache.http.HttpResponse;
 import org.nutz.dao.Cnd;
-import org.nutz.dao.Sqls;
-import org.nutz.dao.entity.Record;
-import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
@@ -530,7 +527,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		dbDao.update(familyinfo);
 
 		//其他亲属
-		updateOtherinfo(form);
+		if (form.getHasimmediaterelatives() == 1) {//有其他亲属,则更新或添加
+			updateOtherinfo(form);
+		} else {
+			TAppStaffImmediaterelativesEntity immediaterelatives = dbDao.fetch(TAppStaffImmediaterelativesEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			if (!Util.isEmpty(immediaterelatives)) {
+				dbDao.delete(immediaterelatives);
+			}
+		}
 
 		return JuYouResult.ok();
 	}
@@ -581,10 +586,14 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		familyinfo.setFatherlastname(form.getFatherlastname());
 		familyinfo.setFatherlastnameen(form.getFatherlastnameen());
 		familyinfo.setFatherstatus(form.getFatherstatus());
+		familyinfo.setFatherstatusen(form.getFatherstatus());
 		familyinfo.setIsfatherinus(form.getIsfatherinus());
+		if (form.getIsfatherinus() == 2) {
+			familyinfo.setFatherstatus(null);
+			familyinfo.setFatherstatusen(null);
+		}
 		//英文
 		familyinfo.setFatherbirthdayen(form.getFatherbirthday());
-		familyinfo.setFatherstatusen(form.getFatherstatus());
 		familyinfo.setIsfatherinusen(form.getIsfatherinus());
 		return null;
 	}
@@ -606,10 +615,14 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		familyinfo.setMotherlastname(form.getMotherlastname());
 		familyinfo.setMotherlastnameen(form.getMotherlastnameen());
 		familyinfo.setMotherstatus(form.getMotherstatus());
+		familyinfo.setMotherstatusen(form.getMotherstatus());
 		familyinfo.setIsmotherinus(form.getIsmotherinus());
+		if (form.getIsmotherinus() == 2) {
+			familyinfo.setMotherstatus(null);
+			familyinfo.setMotherstatusen(null);
+		}
 		//英文
 		familyinfo.setMotherbirthdayen(form.getMotherbirthday());
-		familyinfo.setMotherstatusen(form.getMotherstatus());
 		familyinfo.setIsmotherinusen(form.getIsmotherinus());
 		return null;
 	}
@@ -627,6 +640,11 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		Integer staffid = form.getStaffid();
 		TAppStaffImmediaterelativesEntity immediaterelatives = dbDao.fetch(TAppStaffImmediaterelativesEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		if (Util.isEmpty(immediaterelatives)) {//如果为空，则添加，否则更新
+			immediaterelatives = new TAppStaffImmediaterelativesEntity();
+			immediaterelatives.setStaffid(staffid);
+			immediaterelatives = dbDao.insert(immediaterelatives);
+		}
 		immediaterelatives.setRelativesfirstname(form.getRelativesfirstname());
 		immediaterelatives.setRelativesfirstnameen(form.getRelativesfirstnameen());
 		immediaterelatives.setRelativeslastname(form.getRelativeslastname());
@@ -636,7 +654,6 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//英文
 		immediaterelatives.setRelationshipen(form.getRelationship());
 		immediaterelatives.setRelativesstatusen(form.getRelativesstatus());
-
 		dbDao.update(immediaterelatives);
 		return null;
 	}
@@ -891,6 +908,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid), null);
 		result.put("gocountry", gocountry);
 
+		//国家下拉
+		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
+		result.put("gocountryfivelist", gocountryFiveList);
 		result.put("timeunitstatusenum", EnumUtil.enum2(NewTimeUnitStatusEnum.class));
 		result.put("usstatesenum", EnumUtil.enum2(VisaUSStatesEnum.class));
 		result.put("emigrationreasonenumenum", EnumUtil.enum2(EmigrationreasonEnum.class));
@@ -927,24 +947,46 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//去过美国信息
 		TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
-		if (!Util.isEmpty(form.getArrivedate())) {
-			gousinfo.setArrivedate(form.getArrivedate());
-			gousinfo.setArrivedateen(form.getArrivedateen());
+		if (form.getHasbeeninus() == 1) {//去过美国，则添加或者修改
+			if (Util.isEmpty(gousinfo)) {
+				gousinfo = new TAppStaffGousinfoEntity();
+				gousinfo.setStaffid(staffid);
+				dbDao.insert(gousinfo);
+			}
+			if (!Util.isEmpty(form.getArrivedate())) {
+				gousinfo.setArrivedate(form.getArrivedate());
+				gousinfo.setArrivedateen(form.getArrivedateen());
+			}
+			gousinfo.setDateunit(form.getDateunit());
+			gousinfo.setDateuniten(form.getDateuniten());
+			gousinfo.setStaydays(form.getStaydays());
+			gousinfo.setStaydaysen(form.getStaydaysen());
+			dbDao.update(gousinfo);
+		} else {
+			if (!Util.isEmpty(gousinfo)) {
+				dbDao.delete(gousinfo);
+			}
 		}
-		gousinfo.setDateunit(form.getDateunit());
-		gousinfo.setDateuniten(form.getDateuniten());
-		gousinfo.setStaydays(form.getStaydays());
-		gousinfo.setStaydaysen(form.getStaydaysen());
-		dbDao.update(gousinfo);
 
 		//美国驾照
 		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
-		driverinfo.setDriverlicensenumber(form.getDriverlicensenumber());
-		driverinfo.setWitchstateofdriver(form.getWitchstateofdriver());
-		driverinfo.setDriverlicensenumberen(form.getDriverlicensenumber());
-		driverinfo.setWitchstateofdriveren(form.getWitchstateofdriver());
-		dbDao.update(driverinfo);
+		if (form.getHasdriverlicense() == 1) {//有美国驾照，添加或者修改
+			if (Util.isEmpty(driverinfo)) {
+				driverinfo = new TAppStaffDriverinfoEntity();
+				driverinfo.setStaffid(staffid);
+				dbDao.insert(driverinfo);
+			}
+			driverinfo.setDriverlicensenumber(form.getDriverlicensenumber());
+			driverinfo.setWitchstateofdriver(form.getWitchstateofdriver());
+			driverinfo.setDriverlicensenumberen(form.getDriverlicensenumber());
+			driverinfo.setWitchstateofdriveren(form.getWitchstateofdriver());
+			dbDao.update(driverinfo);
+		} else {
+			if (!Util.isEmpty(driverinfo)) {
+				dbDao.delete(driverinfo);
+			}
+		}
 
 		//出境记录
 		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
@@ -1087,11 +1129,20 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	public Object selectCity(String province, String searchstr) {
-		String sqlStr = sqlManager.get("orderUS_mobile_getCity");
-		Sql orderussql = Sqls.create(sqlStr);
-		orderussql.setParam("province", province);
-		List<Record> cityList = dbDao.query(orderussql, null, null);
-		return cityList;
+		List<TIdcardEntity> cityList = dbDao.query(
+				TIdcardEntity.class,
+				Cnd.where("province", "=", province).and("city", "!=", "")
+						.and("city", "like", "%" + Strings.trim(searchstr) + "%").groupBy("city"), null);
+
+		List<TIdcardEntity> list = new ArrayList<>();
+		if (!Util.isEmpty(cityList) && cityList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(cityList.get(i));
+			}
+			return list;
+		} else {
+			return cityList;
+		}
 	}
 
 	/**

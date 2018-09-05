@@ -202,10 +202,10 @@
 						<div class="col-sm-3 youRelationship">
 							<label><span class="s">*</span> 费用支付人</label> <select
 								id="costpayer" class="relationshipSelect"
-								value="${obj.tripinfo.costpayer }" name="costpayer">
-								<option value="1">自己</option>
-								<option value="2">其他人</option>
-								<option value="3">公司组织</option>
+								 name="costpayer">
+								<option value="1" <c:if test="${'1' eq obj.tripinfo.costpayer}">selected</c:if>>自己</option>
+								<option value="2" <c:if test="${'2' eq obj.tripinfo.costpayer}">selected</c:if>>其他人</option>
+								<option value="3" <c:if test="${'3' eq obj.tripinfo.costpayer}">selected</c:if>>公司组织</option>
 							</select>
 						</div>
 					</div>
@@ -428,34 +428,50 @@
 								style="margin-left: 20px;" value="2" checked />否
 						</div>
 						<div style="float: left; margin: 20px 0 0 185px;">
-							<a class="save saveOutbound">添加</a>
+							<a class="save gocountrysave">添加</a>
 						</div>
 					</div>
 					<div class="row saveOutboundContent">
 						<div class="col-sm-3 youRelationship ">
 						
-						
-						
-						
-							<label><span class="s">*</span> 国家名</label> <select id=""
-								class="relationshipSelect" style="margin: 0;">
-								<option value="0">请选择</option>
-								 <c:forEach items="${obj.gocountryfivelist }" var="country">
-													<c:choose>
-														<c:when test="${country.id eq obj.beforework.employercountry }">
-															<option value="${country.id }" selected="selected">${country.chinesename }</option>
-														</c:when>
-														<c:otherwise>
+						<c:if test="${!empty obj.gocountry }">
+								<c:forEach var="gocountry" items="${obj.gocountry }">
+									<div class="travelCountry paddingTop groupInputInfo">
+										<label>国家/地区</label>
+										<div class="groupInputInfo groupSelectInfo">
+										
+											<select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
+												<c:forEach items="${obj.gocountryfivelist }" var="country">
+														<c:if test="${gocountry.traveledcountry != country.id}">
 															<option value="${country.id }">${country.chinesename }</option>
-														</c:otherwise>
-													</c:choose>
+														</c:if>
+														<c:if test="${gocountry.traveledcountry == country.id}">
+															<option value="${country.id }" selected="selected">${country.chinesename }</option>
+														</c:if>
 												</c:forEach>
-							</select>
+											</select>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
+							<c:if test="${empty obj.gocountry }">
+								<div class="paddingTop travelCountry groupInputInfo">
+									<label>国家/地区</label>
+									<div class="groupInputInfo groupSelectInfo">
+										<select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
+											<c:forEach items="${obj.gocountryfivelist }" var="country">
+												<option value="${country.id }">${country.chinesename }</option>
+											</c:forEach>
+										</select>
+									</div>
+								</div>
+							</c:if>
+						
 						</div>
 						<div class="col-sm-3">
-							<a class="removeChuJingJiLu"
+							<a class="removeChuJingJiLu cancel gocountrycancel"
 								style="margin-top: 40px; display: inline-block; border-radius: 6px; font-size: 12px; text-decoration: none; padding: 3px 15px; color: #FFFFFF; background: #ca1818; cursor: pointer;"
-								onclick="removeChuJingJiLu(this)">删除</a>
+								onclick="gocountrycancel">删除</a>
 						</div>
 					</div>
 				</div>

@@ -37,11 +37,22 @@ $(".companyInfo").change(function () {
 		$(".groupInputInfo").hide();
 	}
 });
-//旅伴信息多段操作
-$(".companysave").click(function(){
-	cloneMoreDiv("teamaddfalse");
-	// $(".companysaveen").trigger("click");
+//国家多段操作
+$(".gocountrysave").click(function(){
+	cloneMoreDiv("travelCountry");
+	$(".gocountrysaveen").trigger("click");
 });
+//删除
+$(".gocountrycancel").click(function(){
+	deleteMoreDiv("travelCountry");
+	$(".gocountrycancelen").trigger("click");
+});
+//删除多段
+function deleteMoreDiv(divClass){
+	if($("."+divClass).length>1){
+		$("."+divClass+":last").remove();
+	}
+}
 //清空子元素内容
 function emptyContentByObj(obj){
 	obj.find("input[type='text']").each(function() {
@@ -79,9 +90,9 @@ $(".goUS").change(function () {
 	
 	let checked = $("input[name='hasbeeninus']:checked").val();
 	if (checked == 1) {
-		$(".goUSInfo").show();
+		$(".gotousInfo").show();
 	} else {
-		$(".goUSInfo").hide();
+		$(".gotousInfo").hide();
 	}
 });
 //是否有美国驾照radio
@@ -130,8 +141,8 @@ $(".istraveledanycountry").change(function () {
 	}
 });
 
-//工作国家
-$('#jobcountry,#employercountry,#institutioncountry').select2({
+//去过的国家
+$('#traveledcountry').select2({
 	ajax : {
 		url : "/admin/neworderUS/selectCountry.html",
 		dataType : 'json',
@@ -172,199 +183,7 @@ $('#jobcountry,#employercountry,#institutioncountry').select2({
 	maximumSelectionLength : 1, //设置最多可以选择多少项
 	tags : false //设置必须存在的选项 才能选中
 });
-//省
-$('#jobprovince,#employerprovince,#institutionprovince').select2({
-	ajax : {
-		url : "/admin/neworderUS/selectProvince.html",
-		dataType : 'json',
-		delay : 250,
-		type : 'post',
-		data : function(params) {
-			/*var cArrivalcity = $('#cArrivalcity').val();
-			if(cArrivalcity){
-				cArrivalcity = cArrivalcity.join(',');
-			}*/
-			return {
-				//exname : cArrivalcity,
-				searchstr : params.term, // search term
-				page : params.page
-			};
-		},
-		processResults : function(data, params) {
-			params.page = params.page || 1;
-			var selectdata = $.map(data, function (obj) {
-				obj.id = obj.province; // replace pk with your identifier
-				obj.text = obj.province; // replace pk with your identifier
-				/*obj.text = obj.dictCode;*/
-				return obj;
-			});
-			return {
-				results : selectdata
-			};
-		},
-		cache : false
-	},
-	//templateSelection: formatRepoSelection,
-	escapeMarkup : function(markup) {
-		return markup;
-	}, // let our custom formatter work
-	minimumInputLength : 1,
-	maximumInputLength : 20,
-	language : "zh-CN", //设置 提示语言
-	maximumSelectionLength : 1, //设置最多可以选择多少项
-	tags : false //设置必须存在的选项 才能选中
-});
 
-//现工作所在市
-
-$("#jobprovince").change(function () {
-    /*var grade= $("#jobprovince").val();
-    $.ajax({
-        url:"/admin/neworderUS/selectCity.html",
-        dataType: "JSON",
-        data: {'province': grade,
-        		'searchstr':$('#city').val()
-        		},
-        type: "post",
-        success:function (data) {
-            var gradeNum= data.length;
-            if(gradeNum>0){
-                for(var i = 0;i<gradeNum;i++){
-                    option += "<option value='"+data[i].city+"'>"+data[i].city+"</option>";
-                }
-            }
-            $("#city").html(option);
-            $("#city").select2({ minimumResultsForSearch: -1 });//加载样式
-        },
-        error:function(e) {
-            layer.alert("系统异常，请稍候重试！");
-        }
-    });*/
-	console.log($('#jobprovince').val());
-	console.log($('#jobprovince').select2('data'));
-	console.log($('#jobprovince').select2('val'));
-});
-
-
-
-
-//现工作所在市
-$('#city').select2({
-	ajax : {
-		url : "/admin/neworderUS/selectCity.html",
-		dataType : 'json',
-		delay : 250,
-		type : 'post',
-		data : function(params) {
-			var province = $('#jobprovince').val();
-			return {
-				//exname : cArrivalcity,
-				province : province,
-				searchstr : params.term, // search term
-				page : params.page
-			};
-		},
-		processResults : function(data, params) {
-			params.page = params.page || 1;
-			var selectdata = $.map(data, function (obj) {
-				obj.id = obj.city; // replace pk with your identifier
-				obj.text = obj.city; // replace pk with your identifier
-				return obj;
-			});
-			return {
-				results : selectdata
-			};
-		},
-		cache : false
-	},
-	//templateSelection: formatRepoSelection,
-	escapeMarkup : function(markup) {
-		return markup;
-	}, // let our custom formatter work
-	minimumInputLength : 1,
-	maximumInputLength : 20,
-	language : "zh-CN", //设置 提示语言
-	maximumSelectionLength : 1, //设置最多可以选择多少项
-	tags : false //设置必须存在的选项 才能选中
-});
-//以前工作所在市
-$('#employercity').select2({
-	ajax : {
-		url : "/admin/neworderUS/selectCity.html",
-		dataType : 'json',
-		delay : 250,
-		type : 'post',
-		data : function(params) {
-			var province = $('#jobprovince').val();
-			return {
-				//exname : cArrivalcity,
-				province : province,
-				searchstr : params.term, // search term
-				page : params.page
-			};
-		},
-		processResults : function(data, params) {
-			params.page = params.page || 1;
-			var selectdata = $.map(data, function (obj) {
-				obj.id = obj.city; // replace pk with your identifier
-				obj.text = obj.city; // replace pk with your identifier
-				return obj;
-			});
-			return {
-				results : selectdata
-			};
-		},
-		cache : false
-	},
-	//templateSelection: formatRepoSelection,
-	escapeMarkup : function(markup) {
-		return markup;
-	}, // let our custom formatter work
-	minimumInputLength : 1,
-	maximumInputLength : 20,
-	language : "zh-CN", //设置 提示语言
-	maximumSelectionLength : 1, //设置最多可以选择多少项
-	tags : false //设置必须存在的选项 才能选中
-});
-//以前教育所在市
-$('#institutioncity').select2({
-	ajax : {
-		url : "/admin/neworderUS/selectCity.html",
-		dataType : 'json',
-		delay : 250,
-		type : 'post',
-		data : function(params) {
-			var province = $('#jobprovince').val();
-			return {
-				//exname : cArrivalcity,
-				province : province,
-				searchstr : params.term, // search term
-				page : params.page
-			};
-		},
-		processResults : function(data, params) {
-			params.page = params.page || 1;
-			var selectdata = $.map(data, function (obj) {
-				obj.id = obj.city; // replace pk with your identifier
-				obj.text = obj.city; // replace pk with your identifier
-				return obj;
-			});
-			return {
-				results : selectdata
-			};
-		},
-		cache : false
-	},
-	//templateSelection: formatRepoSelection,
-	escapeMarkup : function(markup) {
-		return markup;
-	}, // let our custom formatter work
-	minimumInputLength : 1,
-	maximumInputLength : 20,
-	language : "zh-CN", //设置 提示语言
-	maximumSelectionLength : 1, //设置最多可以选择多少项
-	tags : false //设置必须存在的选项 才能选中
-});
 //美国州下拉
 $('#witchstateofdriver').select2({
 	ajax : {

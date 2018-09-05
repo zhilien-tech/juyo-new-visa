@@ -73,6 +73,7 @@ import com.juyo.visa.entities.TStateUsEntity;
 import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -1030,7 +1031,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			//同行人信息
 			TAppStaffTravelcompanionEntity travelcompanion = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
 					Cnd.where("staffid", "=", staffid));
-			result.put("travelcompanion", travelcompanion.getIstravelwithother());
+			result.put("istravelwithother", travelcompanion.getIstravelwithother());
 			List<TAppStaffCompanioninfoEntity> companioninfoList = dbDao.query(TAppStaffCompanioninfoEntity.class,
 					Cnd.where("staffid", "=", staffid), null);
 			result.put("companioninfoList", companioninfoList);
@@ -1060,6 +1061,9 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 					Cnd.where("staffid", "=", staffid), null);
 			result.put("gocountry", gocountry);
 
+			//国家下拉
+			List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
+			result.put("gocountryfivelist", gocountryFiveList);
 			result.put("timeunitstatusenum", EnumUtil.enum2(NewTimeUnitStatusEnum.class));
 			result.put("usstatesenum", EnumUtil.enum2(VisaUSStatesEnum.class));
 			result.put("emigrationreasonenumenum", EnumUtil.enum2(EmigrationreasonEnum.class));
@@ -1092,10 +1096,13 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			dbDao.update(travelcompanion);
 
 			//同行人信息
-			List<TAppStaffCompanioninfoEntity> companioninfo_old = dbDao.query(TAppStaffCompanioninfoEntity.class,
+			String companioninfoList = form.getCompanioninfoList();
+
+			List<TAppStaffCompanioninfoEntity> companionList_old = dbDao.query(TAppStaffCompanioninfoEntity.class,
 					Cnd.where("staffid", "=", staffid), null);
-			List<TAppStaffCompanioninfoEntity> companioninfo_new = form.getCompanioninfoList();
-			dbDao.updateRelations(companioninfo_old, companioninfo_new);
+			List<TAppStaffCompanioninfoEntity> companionList_New = JsonUtil.fromJsonAsList(
+					TAppStaffCompanioninfoEntity.class, companioninfoList);
+			dbDao.updateRelations(companionList_old, companionList_New);
 
 			//以前的美国旅游信息
 			updatePrevioustripinfo(form);
@@ -1126,10 +1133,13 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			workeducation.setIstraveledanycountry(form.getIstraveledanycountry());
 
 			//出境记录
-			List<TAppStaffGocountryEntity> gocountry_old = dbDao.query(TAppStaffGocountryEntity.class,
+			String gocountry = form.getGocountry();
+
+			List<TAppStaffGocountryEntity> countryList_old = dbDao.query(TAppStaffGocountryEntity.class,
 					Cnd.where("staffid", "=", staffid), null);
-			List<TAppStaffGocountryEntity> gocountry_new = form.getGocountryList();
-			dbDao.updateRelations(gocountry_old, gocountry_new);
+			List<TAppStaffGocountryEntity> countryList_New = JsonUtil.fromJsonAsList(TAppStaffGocountryEntity.class,
+					gocountry);
+			dbDao.updateRelations(countryList_old, countryList_New);
 			return JuYouResult.ok();
 		}
 	}
