@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import org.apache.commons.lang3.ArrayUtils;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,7 @@ import com.juyo.visa.common.util.TranslateUtil;
 import com.uxuexi.core.common.util.Util;
 
 @IocBean
+@Filters
 @At("/admin/translate")
 public class TranslateController {
 

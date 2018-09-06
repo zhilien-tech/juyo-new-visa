@@ -61,7 +61,7 @@
 		<div class="dislogHide"></div>
 		<div class="QRCode">
 			<span class="text">微信扫描二维码上传识别</span>
-			<img class="scan" src="${obj.encodeQrCode }"  width="100%" height="auto"/>
+			<img class="scan" src="${obj.qrCode }"  width="100%" height="auto"/>
 		</div>
 		<!--二寸免冠照-->
 		<div class="photo">

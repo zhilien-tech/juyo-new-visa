@@ -16,7 +16,7 @@
 	href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 <!-- 本页样式 -->
 <link rel="stylesheet"
-	href="${base}/references/public/css/updateVisaInfo.css">
+	href="${base}/references/public/css/updateVisaInfo.css?v=<%=System.currentTimeMillis() %>">
 <style>
 [v-cloak] {
 	display: none;
@@ -527,9 +527,9 @@
 		var hasbeeninus = '${obj.tripinfo.hasbeeninus}';
 		$("input[name='hasbeeninus'][value='" + hasbeeninus + "']").attr("checked", 'checked');
         if (hasbeeninus == 1) {
-        	$(".goUSInfo").show();
+        	$(".gotousInfo").show();
 		} else {
-			$(".goUSInfo").hide();
+			$(".gotousInfo").hide();
 		}
       	//是否有美国驾照
       	var hasdriverlicense = '${obj.tripinfo.hasdriverlicense}';

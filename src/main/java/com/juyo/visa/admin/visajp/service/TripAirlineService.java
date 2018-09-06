@@ -37,6 +37,7 @@ import com.juyo.visa.entities.TAirportInfoEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TFlightEntity;
 import com.juyo.visa.entities.TFlightHisEntity;
+import com.juyo.visa.entities.TUsStateEntity;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
@@ -1072,15 +1073,25 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 		List<TFlightEntity> result = Lists.newArrayList();
 		String dep = "";
 		if (!Util.isEmpty(param.getGocity())) {
-			TCityEntity gocity = dbDao.fetch(TCityEntity.class, param.getGocity());
-			dep = gocity.getCode();
+			if (param.getFlag() == 1) {
+				TCityEntity gocity = dbDao.fetch(TCityEntity.class, param.getGocity());
+				dep = gocity.getCode();
+			} else {
+				TUsStateEntity gocity = dbDao.fetch(TUsStateEntity.class, param.getGocity());
+				dep = gocity.getCode();
+			}
 		} else {
 			return result;
 		}
 		String arr = "";
 		if (!Util.isEmpty(param.getArrivecity())) {
-			TCityEntity arrivecity = dbDao.fetch(TCityEntity.class, param.getArrivecity());
-			arr = arrivecity.getCode();
+			if (param.getFlag() == 1) {
+				TUsStateEntity arrivecity = dbDao.fetch(TUsStateEntity.class, param.getArrivecity());
+				arr = arrivecity.getCode();
+			} else {
+				TCityEntity arrivecity = dbDao.fetch(TCityEntity.class, param.getArrivecity());
+				arr = arrivecity.getCode();
+			}
 		} else {
 			return result;
 		}
@@ -1089,9 +1100,10 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 			Date string2Date = DateUtil.string2Date(param.getDate(), DateUtil.FORMAT_YYYY_MM_DD);
 			DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYYMMDD);
 			date = format.format(string2Date);
-		} else {
-			return result;
 		}
+		/*else {
+			return result;
+		}*/
 		AirLineResult airLineResult = new AirLineResult();
 
 		//查询接口

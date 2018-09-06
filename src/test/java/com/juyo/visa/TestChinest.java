@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import org.nutz.lang.util.NutMap;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
-import com.juyo.visa.admin.order.entity.TIdcardEntity;
+import com.juyo.visa.common.util.PinyinTool;
+import com.juyo.visa.common.util.PinyinTool.Type;
 
 public class TestChinest {
 
@@ -18,7 +19,19 @@ public class TestChinest {
 
 	public static void main(String[] args) {
 
-		NutMap resultMap = new NutMap();
+		String str = null;
+		PinyinTool tool = new PinyinTool();
+		String result = null;
+		try {
+			result = tool.toPinYin(str, "", Type.UPPERCASE);
+		} catch (BadHanyuPinyinOutputFormatCombination e1) {
+
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+
+		}
+
+		/*NutMap resultMap = new NutMap();
 		TIdcardEntity cardentity = new TIdcardEntity();
 		cardentity.setCity("北京");
 		cardentity.setProvince("北京");
@@ -43,7 +56,7 @@ public class TestChinest {
 
 		for (String key : resultMap.keySet()) {
 			System.out.println(key + ":" + ((TIdcardEntity) resultMap.get(key)).getCounty());
-		}
+		}*/
 
 		/*//转机
 		String goFlightNum = "首都机场-羽田机场-青森机场 CA181//JL141 0800/1300//1400/1600";

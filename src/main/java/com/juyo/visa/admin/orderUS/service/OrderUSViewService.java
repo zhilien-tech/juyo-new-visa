@@ -109,6 +109,7 @@ import com.juyo.visa.entities.TOrderUsFollowupEntity;
 import com.juyo.visa.entities.TOrderUsInfoEntitiy;
 import com.juyo.visa.entities.TOrderUsLogsEntity;
 import com.juyo.visa.entities.TOrderUsTravelinfoEntity;
+import com.juyo.visa.entities.TUsStateEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.OrderUpdateForm;
 import com.juyo.visa.forms.TAppStaffVisaUsAddForm;
@@ -541,14 +542,20 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				orderInfoEntity.setGoDepartureCity(gocity.getCity());
 			}
 			if (!Util.isEmpty(orderTravelInfo.getGoArrivedCity())) {
-				TCityEntity gocity = dbDao.fetch(TCityEntity.class,
+				/*TCityEntity gocity = dbDao.fetch(TCityEntity.class,
 						Cnd.where("id", "=", orderTravelInfo.getGoArrivedCity()));
-				orderInfoEntity.setGoArrivedCity((gocity.getCity()));
+				orderInfoEntity.setGoArrivedCity((gocity.getCity()));*/
+				TUsStateEntity gocity = dbDao.fetch(TUsStateEntity.class, orderTravelInfo.getGoArrivedCity()
+						.longValue());
+				orderInfoEntity.setGoArrivedCity((gocity.getStatecn()));
 			}
 			if (!Util.isEmpty(orderTravelInfo.getReturnDepartureCity())) {
-				TCityEntity gocity = dbDao.fetch(TCityEntity.class,
+				/*TCityEntity gocity = dbDao.fetch(TCityEntity.class,
 						Cnd.where("id", "=", orderTravelInfo.getReturnDepartureCity()));
-				orderInfoEntity.setReturnDepartureCity(gocity.getCity());
+				orderInfoEntity.setReturnDepartureCity(gocity.getCity());*/
+				TUsStateEntity gocity = dbDao.fetch(TUsStateEntity.class, orderTravelInfo.getGoArrivedCity()
+						.longValue());
+				orderInfoEntity.setReturnDepartureCity((gocity.getStatecn()));
 			}
 			if (!Util.isEmpty(orderTravelInfo.getReturnArrivedCity())) {
 				TCityEntity gocity = dbDao.fetch(TCityEntity.class,
@@ -2276,18 +2283,25 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		passportEntity.setSex(passportJsonEntity.getSex());
 		passportEntity.setSexen(passportJsonEntity.getSexEn());
 		passportEntity.setBirthaddress(passportJsonEntity.getBirthCountry());//出生地
+		passportEntity.setIssuedorganization("公安部出入境管理局");
+		passportEntity.setIssuedorganizationen("MPS Exit&Entry Adiministration");
 
-		try {
-			passportEntity.setBirthaddressen("/"
-					+ tool.toPinYin(passportJsonEntity.getBirthCountry(), "", Type.UPPERCASE));
-			passportEntity.setIssuedplaceen("/"
-					+ tool.toPinYin(passportJsonEntity.getVisaCountry(), "", Type.UPPERCASE));
-		} catch (BadHanyuPinyinOutputFormatCombination e1) {
-
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-
+		if (Util.eq("陕西", passportJsonEntity.getBirthCountry())) {
+			passportEntity.setBirthaddressen("SHAANXI");
+		} else if (Util.eq("内蒙古", passportJsonEntity.getBirthCountry())) {
+			passportEntity.setBirthaddressen("NEI MONGOL");
+		} else {
+			passportEntity.setBirthaddressen(translatename(passportJsonEntity.getBirthCountry()));
 		}
+
+		if (Util.eq("陕西", passportJsonEntity.getVisaCountry())) {
+			passportEntity.setIssuedplaceen("SHAANXI");
+		} else if (Util.eq("内蒙古", passportJsonEntity.getVisaCountry())) {
+			passportEntity.setIssuedplaceen("NEI MONGOL");
+		} else {
+			passportEntity.setIssuedplaceen(translatename(passportJsonEntity.getVisaCountry()));
+		}
+
 		//passportEntity.setBirthaddressen(translate(passportJsonEntity.getBirthCountry()));
 		//passportEntity.setIssuedplaceen(translate(passportJsonEntity.getVisaCountry()));
 		passportEntity.setType(passportJsonEntity.getType());

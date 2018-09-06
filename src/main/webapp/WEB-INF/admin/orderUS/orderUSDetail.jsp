@@ -307,10 +307,13 @@
 								<!-- 航班号 -->
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span>*</span>航班号：</label> <select id="goFlightNum" name="goFlightNum"
+										<label><span>*</span>航班号：</label> 
+										<input name="goFlightNum" type="text" value="${obj.travelInfo.goFlightNum }" class="form-control input-sm flightSelect2" />
+										<%-- <select id="goFlightNum" name="goFlightNum"
 											class="form-control input-sm flightSelect2"
 											multiple="multiple">
 											<option selected="selected" value="${obj.travelInfo.goFlightNum }">${obj.travelInfo.goFlightNum}</option>
+										</select> --%>
 											<%-- <c:if test="${!empty obj.goFlightInfo }">
 												<option value="${obj.goFlightInfo.flightnum }"
 													selected="selected">${obj.goFlightInfo.takeOffName }-${obj.goFlightInfo.landingName }
@@ -326,7 +329,7 @@
 														${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
 												</c:if>
 											</c:forEach> --%>
-										</select>
+										
 									</div>
 								</div>
 								<!-- 航班号END -->
@@ -378,10 +381,13 @@
 								<!-- 航班号 -->
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span>*</span>航班号：</label> <select id="returnFlightNum" name="returnFlightNum"
+										<label><span>*</span>航班号：</label> 
+										<input type="text" name="returnFlightNum" value="${obj.travelInfo.returnFlightNum }" class="form-control input-sm flightSelect2"/>
+										<%-- <select id="returnFlightNum" name="returnFlightNum"
 											class="form-control input-sm flightSelect2"
 											multiple="multiple">
 											<option selected="selected" value="${obj.travelInfo.returnFlightNum }">${obj.travelInfo.returnFlightNum}</option>
+											</select> --%>
 											<%-- <c:if test="${!empty obj.returnFlightInfo }">
 												<option value="${obj.returnFlightInfo.flightnum }"
 													selected="selected">${obj.returnFlightInfo.takeOffName }-${obj.returnFlightInfo.landingName }
@@ -397,7 +403,7 @@
 														${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
 												</c:if>
 											</c:forEach> --%>
-										</select>
+										
 									</div>
 								</div>
 								<!-- 航班号END -->
@@ -508,7 +514,7 @@
 										<div class="col-sm-4 colwidthsm">
 											<div class="form-group">
 												<label>姓名/拼音</label> <input id="allname" disabled="true"
-													value="${obj.passport.firstname }${obj.passport.lastname }/${obj.passport.firstnameen } ${obj.passport.lastnameen }" type="text"
+													value="${obj.passport.firstname }${obj.passport.lastname }/${obj.passport.firstnameen }${obj.passport.lastnameen }" type="text"
 													class="form-control input-sm" />
 											</div>
 										</div>
@@ -861,7 +867,7 @@
 		});
 
 		//加载城市的select2
-		$('.select2City').select2({
+		$('#goDepartureCity,#returnArrivedCity').select2({
 			ajax : {
 				url : "/admin/city/getCustomerCitySelect.html",
 				dataType : 'json',
@@ -883,6 +889,49 @@
 					var selectdata = $.map(data, function(obj) {
 						obj.id = obj.id; // replace pk with your identifier
 						obj.text = obj.city; // replace pk with your identifier
+						/*obj.text = obj.dictCode;*/
+						return obj;
+					});
+					return {
+						results : selectdata
+					};
+				},
+				cache : false
+			},
+			//templateSelection: formatRepoSelection,
+			escapeMarkup : function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength : 1,
+			maximumInputLength : 20,
+			language : "zh-CN", //设置 提示语言
+			maximumSelectionLength : 1, //设置最多可以选择多少项
+			tags : false
+		//设置必须存在的选项 才能选中
+		});
+		//加载美国州的select2
+		$('#goArrivedCity,#returnDepartureCity').select2({
+			ajax : {
+				url : "/admin/neworderUS/selectUSstate.html",
+				dataType : 'json',
+				delay : 250,
+				type : 'post',
+				data : function(params) {
+					/*var cArrivalcity = $('#cArrivalcity').val();
+					if(cArrivalcity){
+						cArrivalcity = cArrivalcity.join(',');
+					}*/
+					return {
+						//exname : cArrivalcity,
+						searchstr : params.term, // search term
+						page : params.page
+					};
+				},
+				processResults : function(data, params) {
+					params.page = params.page || 1;
+					var selectdata = $.map(data, function(obj) {
+						obj.id = obj.id; // replace pk with your identifier
+						obj.text = obj.statecn; // replace pk with your identifier
 						/*obj.text = obj.dictCode;*/
 						return obj;
 					});
@@ -933,6 +982,7 @@
 							}
 							var date = $('#goDate').val();
 							return {
+								flag : 1,
 								date : date,
 								//exname : cArrivalcity,
 								gocity : goDepartureCity,
@@ -1009,6 +1059,7 @@
 									var date = $('#returnDate').val();
 									return {
 										//exname : cArrivalcity,
+										flag : 2,
 										date : date,
 										gocity : returnDepartureCity,
 										arrivecity : returnArrivedCity,

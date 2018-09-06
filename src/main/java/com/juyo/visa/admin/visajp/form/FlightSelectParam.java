@@ -26,4 +26,6 @@ public class FlightSelectParam {
 	private Long arrivecity;
 
 	private String date;
+
+	private Integer flag;
 }

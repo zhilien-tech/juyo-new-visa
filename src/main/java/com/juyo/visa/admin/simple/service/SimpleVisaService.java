@@ -5567,7 +5567,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		String host = "https://api.weixin.qq.com";
 		String path = "/wxa/getwxacodeunlimit?access_token=" + accessToken;
 		String method = "POST";
-		String entityStr = "";
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Content-Type", "application/json; charset=UTF-8");
 		Map<String, String> querys = new HashMap<String, String>();
@@ -5579,16 +5578,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		/*try {
-			response = HttpUtils.doPost(host, path, method, headers, querys, json);
-			entityStr = EntityUtils.toString(response.getEntity());
-			System.out.println("POST请求返回的数据：" + entityStr);
-		} catch (Exception e) {
-
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		}*/
 		return inputStream;
 	}
 

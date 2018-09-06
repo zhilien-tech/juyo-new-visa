@@ -571,16 +571,16 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			//英文
 			//中文翻译成拼音并大写工具
 			PinyinTool tool = new PinyinTool();
-			if (Util.isEmpty(form.getIssuedplace())) {
+			if (!Util.isEmpty(form.getIssuedplace())) {
 				String issuedplace = form.getIssuedplace();
 				if (Util.eq("内蒙古", issuedplace)) {
-					passport.setIssuedplaceen("/NEI MONGOL");
+					passport.setIssuedplaceen("NEI MONGOL");
 				} else if (Util.eq("陕西", issuedplace)) {
-					passport.setIssuedplaceen("/SHAANXI");
+					passport.setIssuedplaceen("SHAANXI");
 				} else {
 					try {
 
-						passport.setIssuedplaceen("/" + tool.toPinYin(form.getIssuedplace(), "", Type.UPPERCASE));
+						passport.setIssuedplaceen(tool.toPinYin(form.getIssuedplace(), "", Type.UPPERCASE));
 					} catch (BadHanyuPinyinOutputFormatCombination e1) {
 						e1.printStackTrace();
 					}
@@ -633,7 +633,12 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			}
 			TAppStaffImmediaterelativesEntity immediaterelatives = dbDao.fetch(TAppStaffImmediaterelativesEntity.class,
 					Cnd.where("staffid", "=", staffid));
-			result.put("immediaterelatives", immediaterelatives);
+			if (!Util.isEmpty(immediaterelatives)) {
+				result.put("immediaterelatives", immediaterelatives);
+			} else {
+				TAppStaffImmediaterelativesEntity emptyimmediaterelatives = new TAppStaffImmediaterelativesEntity();
+				result.put("immediaterelatives", emptyimmediaterelatives);
+			}
 
 			//国家下拉
 			List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
@@ -838,8 +843,8 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			//上份工作信息
 			TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
 					Cnd.where("staffid", "=", staffid));
-			result.put("beforework", beforework);
 			if (!Util.isEmpty(beforework)) {
+				result.put("beforework", beforework);
 				if (!Util.isEmpty(beforework.getEmploystartdate())) {
 					result.put("employestartdate", format.format(beforework.getEmploystartdate()));
 				} else {
@@ -850,12 +855,17 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				} else {
 					result.put("employenddate", "");
 				}
+			} else {
+				TAppStaffBeforeworkEntity newbeforework = new TAppStaffBeforeworkEntity();
+				result.put("beforework", newbeforework);
+				result.put("employestartdate", "");
+				result.put("employenddate", "");
 			}
 			//教育信息
 			TAppStaffBeforeeducationEntity beforeeducate = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
 					Cnd.where("staffid", "=", staffid));
-			result.put("beforeeducate", beforeeducate);
 			if (!Util.isEmpty(beforeeducate)) {
+				result.put("beforeeducate", beforeeducate);
 				if (!Util.isEmpty(beforeeducate.getCoursestartdate())) {
 					result.put("coursestartdate", format.format(beforeeducate.getCoursestartdate()));
 				} else {
@@ -866,6 +876,11 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				} else {
 					result.put("courseenddate", "");
 				}
+			} else {
+				TAppStaffBeforeeducationEntity newbeforeeducate = new TAppStaffBeforeeducationEntity();
+				result.put("beforeeducate", newbeforeeducate);
+				result.put("coursestartdate", "");
+				result.put("courseenddate", "");
 			}
 
 			//国家下拉
@@ -1079,11 +1094,23 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			result.put("previoustripinfo", previoustripinfo);
 			if (!Util.isEmpty(previoustripinfo.getIssueddate())) {
 				result.put("issueddate", format.format(previoustripinfo.getIssueddate()));
+			} else {
+				result.put("issueddate", "");
 			}
 			//去过美国信息
 			List<TAppStaffGousinfoEntity> gousinfoList = dbDao.query(TAppStaffGousinfoEntity.class,
 					Cnd.where("staffid", "=", staffid), null);
 			result.put("gousinfo", gousinfoList);
+
+			/*TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			if (!Util.isEmpty(gousinfo)) {
+				result.put("gousinfo", gousinfo);
+			} else {
+				TAppStaffGousinfoEntity newgousinfo = new TAppStaffGousinfoEntity();
+				result.put("gousinfo", newgousinfo);
+
+			}*/
 
 			//美国的驾照信息
 			TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
@@ -1193,6 +1220,8 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			TAppStaffWorkEducationTrainingEntity workeducation = dbDao.fetch(
 					TAppStaffWorkEducationTrainingEntity.class, Cnd.where("staffid", "=", staffid));
 			workeducation.setIstraveledanycountry(form.getIstraveledanycountry());
+			workeducation.setIstraveledanycountryen(form.getIstraveledanycountry());
+			dbDao.update(workeducation);
 
 			//出境记录
 			String gocountry = form.getGocountry();
