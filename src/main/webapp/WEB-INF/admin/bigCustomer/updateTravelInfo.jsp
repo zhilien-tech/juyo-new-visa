@@ -16,7 +16,7 @@
 	href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
 <!-- 本页样式 -->
 <link rel="stylesheet"
-	href="${base}/references/public/css/updateVisaInfo.css?v=<%=System.currentTimeMillis() %>">
+	href="${base}/references/public/css/updateVisaInfo.css">
 <style>
 [v-cloak] {
 	display: none;

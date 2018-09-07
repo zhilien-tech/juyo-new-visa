@@ -37,6 +37,11 @@ $(".companyInfo").change(function () {
 		$(".teamnamefalse").hide();
 	}
 });
+//旅伴信息多段操作
+$(".companysave").click(function(){
+	cloneMoreDiv("teamaddfalse");
+	// $(".companysaveen").trigger("click");
+});
 //国家多段操作
 $(".gocountrysave").click(function(){
 	cloneMoreDiv("travelCountry");

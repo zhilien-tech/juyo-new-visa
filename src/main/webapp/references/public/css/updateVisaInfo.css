@@ -176,7 +176,9 @@ label {
 .goUSPad {
 	padding: 10px 0 10px 0;
 }
-
+.goUSYes {
+	display: none;
+}
 .goUSMain {
 	padding-left:15px;
 }

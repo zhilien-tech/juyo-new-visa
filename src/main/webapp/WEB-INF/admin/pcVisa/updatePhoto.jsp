@@ -133,7 +133,7 @@
 				</div>
 				<div class="uploadReleases" style="margin-right: 10px;">
 					<div>户主页</div>
-					<img id="household" onclick="toUpperPhoto(this)" class="longitudinal" src=""/>
+					<img id="household2" onclick="toUpperPhoto(this)" class="longitudinal" src=""/>
 				</div>
 				
 				<input type="file" class="publicFile" name="" multiple />
@@ -157,9 +157,30 @@
 <script type="text/javascript" src="/admin/common/commonjs.js"></script>
 <script src="/appmobileus/js/jquery-1.10.2.js"></script>
 <script src="/appmobileus/js/lrz.bundle.js"></script>
-<script src="/admin/pcVisa/getphoto.js"></script>
+<!-- <script src="/admin/pcVisa/getphoto.js"></script> -->
 <script>
 	var staffid = '${obj.staffid}';
+	var sss = '${obj.credentials}';
+	
+	console.log(sss);
+	$.each(JSON.parse(sss), function(i, item){
+		if(item.type == 13){
+			$("#twonichphoto").attr("src",item.url);
+		}
+		if(item.type == 4){
+			if(item.sequence == 3){
+				$("#household").attr("src",item.url);
+			}
+			if(item.sequence == 4){
+				$("#household2").attr("src",item.url);
+			}
+		}
+		
+		if(item.type == 1){
+			$("#huzhao").attr("src",item.url);
+		}
+		
+	});
 	$(function() {
 		//页面不可编辑
 		/* if(isDisable == 1){
@@ -168,7 +189,7 @@
 			$(".btnSave").hide();
 		} */
 		
-		twonichphoto(staffid,13);
+		/* twonichphoto(staffid,13);
 		chuqian(staffid,12);
 		huzhao(staffid,1);
 		oldhuzhao(staffid,2);
@@ -180,7 +201,7 @@
 		housecard(staffid,5);
 		household(staffid,4);
 		bankflow(staffid,7);
-		oldsigned(staffid,11);
+		oldsigned(staffid,11); */
 		
 		$(".uploadPhoto").click(function(){
 			$("#uploadFileImg").click();
@@ -243,6 +264,12 @@
 		} else {
 			console.log('Websocket not supported');
 		}
+	}
+	
+	//取消关闭窗口
+	function closeWindow() {
+		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		parent.layer.close(index);
 	}
 	
 	function passportBtn(){

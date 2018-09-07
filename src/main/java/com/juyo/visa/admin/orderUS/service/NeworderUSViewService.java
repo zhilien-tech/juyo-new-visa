@@ -18,6 +18,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.http.HttpResponse;
 import org.nutz.dao.Cnd;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.entity.Record;
+import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
@@ -156,14 +159,12 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("qrCode", qrCode);
 
 		//图片回显
-		List<TAppStaffCredentialsEntity> credentialsList = dbDao.query(TAppStaffCredentialsEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
-		for (TAppStaffCredentialsEntity tAppStaffCredentialsEntity : credentialsList) {
-			TAppStaffCredentialsEntity credentials = new TAppStaffCredentialsEntity();
-			credentials.setType(tAppStaffCredentialsEntity.getType());
-			credentials.setUrl(tAppStaffCredentialsEntity.getUrl());
-			result.put(String.valueOf(tAppStaffCredentialsEntity.getType()), credentials);
-		}
+		String credentsqlStr = sqlManager.get("orderUS_PC_getCredentials");
+		Sql credentsql = Sqls.create(credentsqlStr);
+		credentsql.setParam("staffid", staffid);
+		List<Record> credentialsList = dbDao.query(credentsql, null, null);
+		result.put("credentials", credentialsList);
+
 		return result;
 	}
 
@@ -186,7 +187,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		scene = "a=" + staffid;
 		System.out.println("scene:" + scene + "--------------");
 		String accessToken = (String) getAccessToken();
-		System.out.println("accessToken:" + accessToken + "=================");
+		System.out.println("accessToken:" + accessToken);
 		System.out.println("page:" + page);
 		String url = createBCode(accessToken, page, scene);
 		System.out.println("url:" + url);
@@ -312,10 +313,14 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		passportinfo.setLastname(form.getLastname());
 		if (!Util.isEmpty(form.getFirstnameen())) {
 			passportinfo.setFirstnameen(form.getFirstnameen().substring(1));
+		} else {
+			passportinfo.setFirstnameen("");
 		}
 		passportinfo.setLastname(form.getLastname());
 		if (!Util.isEmpty(form.getLastnameen())) {
 			passportinfo.setLastnameen(form.getLastnameen().substring(1));
+		} else {
+			passportinfo.setLastnameen("");
 		}
 		passportinfo.setSex(form.getSex());
 		if (Util.eq("女", form.getSex())) {
@@ -343,10 +348,14 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setFirstname(form.getFirstname());
 		if (!Util.isEmpty(form.getFirstnameen())) {
 			basicinfo.setFirstnameen(form.getFirstnameen().substring(1));
+		} else {
+			basicinfo.setFirstnameen("");
 		}
 		basicinfo.setLastname(form.getLastname());
 		if (!Util.isEmpty(form.getLastnameen())) {
 			basicinfo.setLastnameen(form.getLastnameen().substring(1));
+		} else {
+			basicinfo.setLastnameen("");
 		}
 		basicinfo.setSex(form.getSex());
 		basicinfo.setTelephone(form.getTelephone());
