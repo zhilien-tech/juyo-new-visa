@@ -44,6 +44,11 @@
 				-webkit-transform: translate(0,-50%) rotate(-135deg);
 				transform: translate(0,-50%) rotate(-135deg);
 			}
+			
+			.select2-container{
+				border: 1px solid #aaa;
+				/* width: 100%!important; */
+			}
 		
      	</style>
 	</head>
@@ -98,7 +103,7 @@
 				</div>
 
 				
-				<div class="floatRight groupSelectInfo">
+				<div class="floatRight groupSelectInfo" style="width: 180px;">
 					<label><span class="s">*</span> 配偶国籍</label>
 					<select id="spousenationality" class="publicMarNone select2" multiple="multiple"  name="spousenationality" >
 						<c:forEach items="${obj.gocountryfivelist }" var="country">
@@ -118,13 +123,13 @@
 
 
                 <div class="clear" style="height: 15px;"></div>
-                <div class="floatLeft groupcheckBoxInfo">
+                <div class="floatLeft groupcheckBoxInfo" style="width: 197px;">
                     <label><span class="s">*</span> 配偶出生城市</label>
                     <select name="spousecity" class="form-control input-sm select2" multiple="multiple"  id="spousecity" >
 	                   <option selected="selected" value="${obj.familyinfo.spousecity }">${obj.familyinfo.spousecity}</option>
                     </select>
                 </div>
-                <div class="floatRight groupSelectInfo" >
+                <div class="floatRight groupSelectInfo" style="width: 180px;">
                     <label><span class="s">*</span> 配偶出生国家</label>
                     <select  id="spousecountry"  name="spousecountry" class="form-control input-sm select2" multiple="multiple">
                      <c:forEach items="${obj.gocountryfivelist }" var="country">
@@ -205,18 +210,18 @@
 				<div class="titleInfo" style="margin-top: 20px;">父亲信息</div>
 				<div class="paddingLeft groupcheckBoxInfo" >
 					<label><span class="s">*</span>	父亲姓</label>
-					<input name="fatherfirstname" id="fatherfirstname" value="${obj.familyinfo.fatherfirstname }"  type="text"/>
+					<input name="fatherfirstname" id="fatherfirstname" value="${obj.familyinfo.fatherfirstname }" style="width: 180px;"  type="text"/>
 					<!-- <input id="isKnowFatherXing" name="isknowfatherfirstname" onchange="AddSingle(this,'isknowfatherfirstnameen')"  v-on:click="isknowfatherfirstname"  value="visaInfo.familyInfo.isknowfatherfirstname" type="checkbox" /> -->
 				</div>
 				<div class="paddingRight groupcheckBoxInfo" >
 					<label><span class="s">*</span> 父亲名</label>
-					<input name="fatherlastname" id="fatherlastname" value="${obj.familyinfo.fatherlastname }"  type="text" />
+					<input name="fatherlastname" id="fatherlastname" value="${obj.familyinfo.fatherlastname }" style="width: 180px;"  type="text" />
 					<!-- <input id="isKnowFatherMing" name="isknowfatherlastname" onchange="AddSingle(this,'isknowfatherlastnameen')" v-on:click="isknowfatherlastname" value="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" /> -->
 				</div>
 				<div class="clear"></div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label><span class="s">*</span> 父亲生日</label>
-					<input type="text" id="fatherbirthday" name="fatherbirthday" onchange="translateZhToEn(this,'fatherbirthdayen','')" value="${obj.fatherbirthday}" class="datetimepickercss form-control" placeholder="" />
+					<input type="text" id="fatherbirthday" style="width: 180px;" name="fatherbirthday" onchange="translateZhToEn(this,'fatherbirthdayen','')" value="${obj.fatherbirthday}" class="datetimepickercss form-control" placeholder="" />
 					<!-- <input id="isknowfatherbirthday" name="isknowfatherbirthday" onchange="AddSingle(this,'isknowfatherbirthdayen')" v-on:click="isknowfatherbirthday" value="visaInfo.familyInfo.isknowfatherbirthday" type="checkbox" /> -->
 				</div>
 				<div class="paddingTop paddingRight">
@@ -241,18 +246,18 @@
 				<div class="titleInfo" style="margin-top: 20px;">母亲信息</div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label><span class="s">*</span> 母亲姓</label>
-					<input id="motherfirstname" name="motherfirstname"  value="${obj.familyinfo.motherfirstname }" type="text" />
+					<input id="motherfirstname" style="width: 180px;" name="motherfirstname"  value="${obj.familyinfo.motherfirstname }" type="text" />
 					<!-- <input id="isKnowMotherXing" name="isknowmotherfirstname" onchange="AddSingle(this,'isknowmotherfirstnameen')" v-on:click="isknowmotherfirstname" value="visaInfo.familyInfo.isknowmotherfirstname" type="checkbox" /> -->
 				</div>
 				<div class="paddingRight groupcheckBoxInfo">
 					<label><span class="s">*</span> 母亲名</label>
-					<input id="motherlastname" name="motherlastname" value="${obj.familyinfo.motherlastname }"  type="text" />
+					<input id="motherlastname" style="width: 180px;" name="motherlastname" value="${obj.familyinfo.motherlastname }"  type="text" />
 					<!-- <input id="isKnowMotherMing" name="isknowmotherlastname" onchange="AddSingle(this,'isknowmotherlastnameen')" v-on:click="isknowmotherlastname" value="visaInfo.familyInfo.isknowmotherlastname" type="checkbox" /> -->
 				</div>
 				<div class="clear"></div>
 				<div class="groupcheckBoxInfo prvPadLT paddingLeft">
 					<label><span class="s">*</span> 母亲生日</label>
-					<input type="text" id="motherbirthday" name="motherbirthday"  value="${obj.motherbirthday}" class="datetimepickercss form-control" placeholder="" />
+					<input type="text" id="motherbirthday" style="width: 180px;" name="motherbirthday"  value="${obj.motherbirthday}" class="datetimepickercss form-control" placeholder="" />
 					<!-- <input id="isknowmotherbirthday" name="isknowmotherbirthday" onchange="AddSingle(this,'isknowmotherbirthdayen')" v-on:click="isknowmotherbirthday" value="visaInfo.familyInfo.isknowmotherbirthday" type="checkbox" /> -->
 				</div>
 
@@ -322,7 +327,7 @@
 		<div class="English">
             <!--家庭信息-->
             <!--配偶-->
-			<div class="paddingTop" style="    margin-top: 45px;margin-bottom: 260px;">
+			<div class="paddingTop" style="    margin-top: 45px;margin-bottom: 264px;">
                 <div class="floatLeft groupInputInfo">
                     <label><span class="s">*</span> Spouse's Surnames </label>
                     <input name="spousefirstnameen" id="spousefirstnameen" value="${obj.familyinfo.spousefirstnameen }" type="text" />
@@ -337,23 +342,23 @@
 			<div class="familyInfo">
 				<div class="paddingLeft groupcheckBoxInfo" >
 					<label><span class="s">*</span> father's Surnames</label>
-					<input name="fatherfirstnameen" id="fatherfirstnameen" value="${obj.familyinfo.fatherfirstnameen }" type="text"/>
+					<input name="fatherfirstnameen" style="width: 180px;" id="fatherfirstnameen" value="${obj.familyinfo.fatherfirstnameen }" type="text"/>
 					<!-- <input id="isKnowFatherXing" name="isknowfatherfirstnameen" class="isknowfatherfirstnameen"   v-on:click="isknowfatherfirstname"  value="visaInfo.familyInfo.isknowfatherfirstnameen" type="checkbox" /> -->
 				</div>
 				<div class="paddingRight groupcheckBoxInfo" >
 					<label><span class="s">*</span> father's Given Names </label>
-					<input name="fatherlastnameen" id="fatherlastnameen" value="${obj.familyinfo.fatherlastnameen }" type="text" />
+					<input name="fatherlastnameen" style="width: 180px;" id="fatherlastnameen" value="${obj.familyinfo.fatherlastnameen }" type="text" />
 					<!-- <input id="isKnowFatherMing" name="isknowfatherlastnameen" class="isknowfatherlastnameen"  v-on:click="isknowfatherlastname" value="visaInfo.familyInfo.isknowfatherlastnameen" type="checkbox" /> -->
 				</div>
 				<div class="clear" style="height: 118px;"></div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label><span class="s">*</span> Mother's Surnames</label>
-					<input id="motherfirstnameen" name="motherfirstnameen" value="${obj.familyinfo.motherfirstnameen }" type="text" />
+					<input id="motherfirstnameen" style="width: 180px;" name="motherfirstnameen" value="${obj.familyinfo.motherfirstnameen }" type="text" />
 					<!-- <input id="isKnowMotherXing" name="isknowmotherfirstnameen" class="isknowmotherfirstnameen"  v-on:click="isknowmotherfirstname" value="visaInfo.familyInfo.isknowmotherfirstnameen" type="checkbox" /> -->
 				</div>
 				<div class="paddingRight groupcheckBoxInfo">
 					<label><span class="s">*</span> Mother's Given Names</label>
-					<input id="motherlastnameen" name="motherlastnameen" value="${obj.familyinfo.motherlastnameen }" type="text" />
+					<input id="motherlastnameen" style="width: 180px;" name="motherlastnameen" value="${obj.familyinfo.motherlastnameen }" type="text" />
 					<!-- <input id="isKnowMotherMing" name="isknowmotherlastnameen" class="isknowmotherlastnameen"  v-on:click="isknowmotherlastname" value="visaInfo.familyInfo.isknowmotherlastnameen" type="checkbox" /> -->
 				</div>
 				<div class="clear"></div>
@@ -424,9 +429,20 @@
 	$("input[name='ismotherinus'][value='" + ismotherinus + "']").attr("checked", 'checked');
     if (ismotherinus == 1) {
     	$(".motherUSYes").show();
+    	$('#fgh').css('margin-top', 250)
 	} else {
 		$(".motherUSYes").hide();
+		$('#fgh').css('margin-top', 183)
 	}
+    
+    $('.fatherUS').change(function() {
+		console.log($(this).val());
+		if ($(this).val() == 1) {
+			$('#asd').height(189);
+		} else {
+			$('#asd').height(120);
+		}
+	});
 	//父亲是否在美国
 	var isfatherinus = '${obj.familyinfo.isfatherinus}';
 	$("input[name='isfatherinus'][value='" + isfatherinus + "']").attr("checked", 'checked');

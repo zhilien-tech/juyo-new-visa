@@ -8,26 +8,30 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
-
-import com.juyo.visa.common.util.PinyinTool;
-import com.juyo.visa.common.util.PinyinTool.Type;
+import com.juyo.visa.common.util.TranslateUtil;
+import com.uxuexi.core.common.util.Util;
 
 public class TestChinest {
 
 	static final int N = 50000;
 
 	public static void main(String[] args) {
+		/*String str = R.sg(5, 18).next();
 
-		String str = null;
-		PinyinTool tool = new PinyinTool();
-		String result = null;
+		System.out.println("str的值:" + str);
+		System.out.println("str的length:" + str.length());*/
+
+		ArrayList<Object> arrayList = new ArrayList<>();
+		System.out.println(arrayList);
+		System.out.println(Util.isEmpty(arrayList));
+
 		try {
-			result = tool.toPinYin(str, "", Type.UPPERCASE);
-		} catch (BadHanyuPinyinOutputFormatCombination e1) {
+			String translate = TranslateUtil.translate("不清楚", "en");
+			System.out.println(translate);
+		} catch (Exception e) {
 
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e.printStackTrace();
 
 		}
 

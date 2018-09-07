@@ -43,7 +43,17 @@
 				-webkit-transform: translate(0,-50%) rotate(-135deg);
 				transform: translate(0,-50%) rotate(-135deg);
 			}
-		
+			.select2 {
+				width: 100%!important;
+			}
+			.select2-container{
+				height: 34px;
+				border: 1px solid #aaa;
+			}
+			.select2-selection,
+			.selection{
+				height: 100%!important;
+			}
     </style>
 </head>
 <body>
@@ -74,10 +84,10 @@
 				<div class="paddingTop groupSelectInfo padding-left" >
 					<input type="hidden" value="${obj.staffId }" name="staffid"/>
 					<label><span class="s">*</span>主要职业</label>
-					<select id="occupation"  name="occupation" >
+					<select id="occupation"  name="occupation" style="width: 100%;">
 						<option value="0">请选择</option>
 						<c:forEach items="${obj.careersenum }" var="map">
-							<option value="${map.key }" ${map.key==obj.workinfo.occupation?"selected":"" } >${map.value }</option>
+							<option value="${map.key}" ${map.key==obj.workinfo.occupation?"selected":"" } >${map.value }</option>
 						</c:forEach>
 					</select>
 				</div>
@@ -91,7 +101,7 @@
                         <label><span class="s">*</span>电话号码</label>
                         <input name="telephone" value="${obj.workinfo.telephone }" id="jobtelphone"  type="text" />
                     </div>
-					<div class="paddingRight groupSelectInfo" >
+					<div class="paddingRight groupSelectInfo" style="width: 190px;padding-left: 15px;">
                         <label><span class="s">*</span>工作国家</label>
                         <select id='jobcountry'  class="form-control input-sm select2" multiple="multiple" name="country">
                         
@@ -109,17 +119,19 @@
                         </select>
                     </div>
                     <div class="clear"></div>
-                    <div class="paddingLeft groupcheckBoxInfo">
+                    <div class="paddingLeft groupcheckBoxInfo" style="width: 200px;">
                         <label><span class="s">*</span>单位地址（省）</label>
-                        <select name="province" class="form-control input-sm select2" multiple="multiple"  id="jobprovince" >
+                        <select name="province" class="form-control input-sm select2" onchange="translateZhToEn(this,'jobprovinceen','select2')" multiple="multiple"  id="jobprovince" >
 	                   		<option selected="selected" value="${obj.workinfo.province }">${obj.workinfo.province}</option>
                         </select>
+                        <input type="hidden" id="jobprovinceen" name="provinceen" value="${obj.workinfo.provinceen }"/>
                     </div>
-                    <div class="paddingRight groupInputInfo">
+                    <div class="paddingRight groupInputInfo" style="width: 180px;">
                         <label><span class="s">*</span>单位地址（市）</label>
-                         <select name="city" class="form-control input-sm select2" multiple="multiple"  id="city" >
+                         <select name="city" class="form-control input-sm select2" onchange="translateZhToEn(this,'cityen','select2')" multiple="multiple"  id="city" >
 	                   		<option selected="selected" value="${obj.workinfo.city }">${obj.workinfo.city}</option>
                         </select>
+                        <input id="cityen" name="cityen" type="hidden" value="${obj.workinfo.cityen }"/>
                     </div>
                     <div class="clear"></div>
 					<div class="groupInputInfo draBig marginLS">
@@ -133,17 +145,19 @@
                     </div>
                     <div class=" paddingRight groupcheckBoxInfo">
                         <label><span class="s">*</span>职位</label>
-                        <input name="position" value="${obj.workinfo.position }" id="position" type="text" />
+                        <input name="position" value="${obj.workinfo.position }" onchange="translateZhToEn(this,'positionen','')" style="width: 180px;" id="position" type="text" />
+                        <input type="hidden" id="positionen" name="positionen" value="${obj.workinfo.positionen }"/>
                     </div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo" >
                         <label><span class="s">*</span>当前月收入</label>
-						<input name="salary" value="${obj.workinfo.salary }" id="salary" type="text"  onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]" onafterpaste="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"/>
+						<input name="salary" value="${obj.workinfo.salary }" style="width: 180px;" id="salary" type="text"  onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]" onafterpaste="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"/>
 					</div>
 					<div class="clear"></div>
 					<div class="grouptextareaInfo groupPM">
                         <label><span class="s">*</span>简述你的职责</label>
-						<input name="duty" class='areaInputPic' id="jobduty" value="${obj.workinfo.duty }" />
+						<input name="duty" class='areaInputPic' id="jobduty" onchange="translateZhToEn(this,'jobdutyen','')" value="${obj.workinfo.duty }" />
+						<input id="jobdutyen" name="dutyen" type="hidden" value="${obj.workinfo.dutyen }"/>
 					</div>
 				</div>
 				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea"></div>
@@ -185,7 +199,7 @@
 											<input name="employertelephone"  value="${obj.beforework.employertelephone }" type="text" />
                                         </div>
                                         
-                                        <div class="paddingRight groupSelectInfo">
+                                        <div class="paddingRight groupSelectInfo" style="width: 180px;">
                                             <label><span class="s">*</span>工作国家</label>
                                             <select name="employercountry" class=" select2" multiple="multiple"  id="employercountry">
                                                 <c:forEach items="${obj.gocountryfivelist }" var="country">
@@ -201,19 +215,21 @@
                                             </select>
                                         </div>
 										
-									
+										<div class="clear"></div>
 										
-										<div class="paddingLeft leftNo groupInputInfo">
+										<div class="paddingLeft leftNo groupInputInfo" style="width: 180px;">
                                             <label><span class="s">*</span>单位地址（省）</label>
-											<select name="employerprovince" class="form-control input-sm select2" multiple="multiple"  id="employerprovince" >
+											<select name="employerprovince" class="form-control input-sm select2" onchange="translateZhToEn(this,'employerprovinceen','select2')" multiple="multiple"  id="employerprovince" >
 						                   		<option selected="selected" value="${obj.beforework.employerprovince }">${obj.beforework.employerprovince}</option>
 					                        </select>
+					                        <input id="employerprovinceen" name="employerprovinceen" type="hidden" value="${obj.beforework.employerprovinceen }"/>
 										</div>
-										<div class="paddingRight leftNo groupInputInfo" >
+										<div class="paddingRight leftNo groupInputInfo" style="width: 180px;">
                                             <label><span class="s">*</span>单位地址（市）</label>
-											<select name="employercity" class="form-control input-sm select2" multiple="multiple"  id="employercity" >
+											<select name="employercity" class="form-control input-sm select2" onchange="translateZhToEn(this,'employercityen','select2')" multiple="multiple"  id="employercity" >
 						                   		<option selected="selected" value="${obj.beforework.employercity }">${obj.beforework.employercity}</option>
 					                        </select>
+					                        <input id="employercityen" name="employercityen" type="hidden" value="${obj.beforework.employercityen }"/>
 										</div>
                                         <div class="clear"></div>
                                         
@@ -234,14 +250,16 @@
 
 										<div class="paddingLeft groupInputInfo" style="padding-left: 0;">
                                             <label><span class="s">*</span>职位</label>
-                                            <input name="jobtitle" value="${obj.beforework.jobtitle }"  type="text"/>
+                                            <input name="jobtitle" value="${obj.beforework.jobtitle }" onchange="translateZhToEn(this,'jobtitleen','')"  type="text"/>
+                                            <input id="jobtitleen" name="jobtitleen" type="hidden" value="${obj.beforework.jobtitleen }"/>
                                         </div>
 										
 										<div class="clear"></div>
 									
 										<div class="draBig leftNo marginLS grouptextareaInfo">
                                             <label><span class="s">*</span>简述你的职责</label>
-											<input type="text" name="previousduty"  class="areaInputPic previousduty" value="${obj.beforework.previousduty }" />
+											<input type="text" name="previousduty"  class="areaInputPic previousduty" onchange="translateZhToEn(this,'previousduty','')" value="${obj.beforework.previousduty }" />
+											<input id="previousdutyen" name="previousdutyen" type="hidden" value="${obj.beforework.previousdutyen }"/>
 											<%-- <textarea name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }"></textarea> --%>
 										</div>
 									</div>
@@ -285,11 +303,12 @@
 										</div>                                        
                                         <div class="paddingLeft leftNo groupInputInfo courseClass">
                                             <label><span class="s">*</span> 专业名称</label>
-                                            <input id="course" name="course" value="${obj.beforeeducate.course }" type="text" />
+                                            <input id="course" name="course" onchange="translateZhToEn(this,'courseen','')" value="${obj.beforeeducate.course }" type="text" />
+                                            <input id="courseen" name="courseen" type="hidden" value="${obj.beforeeducate.courseen }"/>
                                         </div>
                                         
                                         
-                                        <div class="paddingRight leftNo groupSelectInfo" >
+                                        <div class="paddingRight leftNo groupSelectInfo" style="width: 180px;">
                                             <label><span class="s">*</span> 所在国家</label>
                                             <select name="institutioncountry" class=" select2" multiple="multiple" id="institutioncountry">
                                             	<c:forEach items="${obj.gocountryfivelist }" var="country">
@@ -306,18 +325,20 @@
                                         </div>
                                         <div class="clear"></div>
 
-										<div class="paddingLeft leftNo groupcheckBoxInfo" >
+										<div class="paddingLeft leftNo groupcheckBoxInfo" style="width: 180px;">
                                             <label><span class="s">*</span> 单位地址（省）</label>
                                             
-                                            <select name="institutionprovince" class="form-control input-sm select2" multiple="multiple"  id="institutionprovince" >
+                                            <select name="institutionprovince" onchange="translateZhToEn(this,'institutionprovinceen','select2')" class="form-control input-sm select2" multiple="multiple"  id="institutionprovince" >
 							                   <option selected="selected" value="${obj.beforeeducate.institutionprovince }">${obj.beforeeducate.institutionprovince}</option>
 						                    </select>
+						                    <input id="institutionprovinceen" name="institutionprovinceen" type="hidden" value="${obj.beforeeducate.institutionprovinceen }"/>
 										</div>
-										<div class="paddingRight leftNo groupInputInfo">
+										<div class="paddingRight leftNo groupInputInfo" style="width: 180px;">
                                             <label><span class="s">*</span> 单位地址（市）</label>
-                                            <select name="institutioncity" class="form-control input-sm select2" multiple="multiple"  id="institutioncity" >
+                                            <select name="institutioncity" class="form-control input-sm select2" onchange="translateZhToEn(this,'institutioncityen','select2')" multiple="multiple"  id="institutioncity" >
 							                   <option selected="selected" value="${obj.beforeeducate.institutioncity }">${obj.beforeeducate.institutioncity}</option>
 						                    </select>
+						                    <input id="institutioncityen" name="institutioncityen" type="hidden" value="${obj.beforeeducate.institutioncityen }"/>
 										</div>
 										<div class="clear"></div>
 										
@@ -352,12 +373,12 @@
 		<div class="English">
 
 			<!--工作/教育/培训信息-->
-			<div class="experience paddingTop" style="margin-bottom: 243px;">
+			<div class="experience paddingTop" style="margin-bottom: 250px;">
 				
 				<div class="paddingTop  jobEduLearningInfoDiv" style="margin-top: 107px;">
 					<div class="groupInputInfo draBig">
                             <label><span class="s">*</span> Present Employer Name</label>
-						<input name="unitnameen" id="unitnameen" value="${obj.workinfo.unitnameen }" type="text" />
+						<input name="unitnameen" id="unitnameen" style="width: 100%;" value="${obj.workinfo.unitnameen }" type="text" />
 					</div>
 					<div class="groupInputInfo draBig marginLS" style="margin-top: 147px;">
 						<label ><span class="s">*</span> Street Address</label>
@@ -381,7 +402,7 @@
 									<div class="workBeforeInfosDiven">
 										<div class="leftNo marginLS groupInputInfo" >
 											<label><span class="s">*</span>Present Employer Name</label>
-											<input name="employernameen" id="employernameen" class="employernameen" value="${obj.beforework.employernameen }" type="text" />
+											<input name="employernameen" id="employernameen" style="width: 100%;" class="employernameen" value="${obj.beforework.employernameen }" type="text" />
 										</div>
 										<div class="draBig leftNo marginLS groupInputInfo" style="margin-top: 148px;">
                                             <label><span class="s">*</span> Street Address</label>

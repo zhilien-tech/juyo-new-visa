@@ -55,7 +55,7 @@
 										<span class="promptInfo">点击上传身份证正面</span>
 										<input id="cardFront" name="cardfront" type="hidden" value="${obj.front.url }"/>
 										<img id="imgShow" name="sqimg" alt="" src="${obj.front.url }" >
-										<input id="uploadFileImg" name="uploadfile" class="btn btn-primary btn-sm" type="file" value="上传" />
+										<!-- <input id="uploadFileImg" name="uploadfile" class="btn btn-primary btn-sm" type="file" value="上传" /> -->
 										<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 									</div>
 								</div>
@@ -67,13 +67,13 @@
 						<!-- end 身份证 正面 -->
 
 						<!-- start 二寸免冠照片 -->
-							<div class="col-xs-3 picturesInch">
+							<div class="col-xs-3 picturesInch" style="margin-left: 150px;">
 								<div class="form-group pictureTop">
 									<div class="uploadInfo">
 										<span class="inchInfo">二寸免冠照片</span>
 										<input id="cardInch" name="twoinchphoto" type="hidden" value="${obj.twoinch.url }"/>
 										<img id="imgInch" name="imgInch" alt="" src="${obj.twoinch.url }" >
-										<input id="uploadFileInchImg" name="uploadFileInchImg" class="btn btn-primary btn-sm" type="file"  value="上传"/>
+										<!-- <input id="uploadFileInchImg" name="uploadFileInchImg" class="btn btn-primary btn-sm" type="file"  value="上传"/> -->
 										<!-- <i class="delete" onclick="deleteApplicantInchImg()"></i> -->
 									</div>
 								</div>
@@ -168,12 +168,14 @@
 									<input type="hidden" id="sameAddress" value=""/>
 									<input class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" />  --%>
 									<input id="province" autocomplete="off" name="province" onchange="translateZhToEn(this,'provinceen','')" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.basicinfo.province }" />
+									<input id="provinceen" name="provinceen" value="${obj.basicinfo.provinceen }" type="hidden"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
 									<label>现居住地址城市</label> 
 									<input id="city" name="city" autocomplete="off" type="text" onchange="translateZhToEn(this,'cityen','')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.basicinfo.city }" />
+									<input id="cityen" name="cityen" value="${obj.basicinfo.cityen }" type="hidden" />
 								</div>
 							</div>
 						</div>
@@ -211,7 +213,8 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group marryexplain">
 									<label>说明</label> 
-									<input id="marryexplain" onchange="translateZhToEn(this,'marryexplainen','')" name="marryexplain" type="text" class="form-control input-sm" value="${obj.applicant.marryexplain }"/>
+									<input id="marryexplain" onchange="translateZhToEn(this,'marryexplainen','')" name="marryexplain" type="text" class="form-control input-sm" value="${obj.basicinfo.marryexplain }"/>
+									<input id="marryexplainen" name="marryexplainen" value="${obj.basicinfo.marryexplainen }" type="hidden"/>
 								</div>
 							</div>
 						</div>
@@ -231,7 +234,8 @@
 									<label>
 										<span>*</span>出生国家
 									</label>
-									<input id="nationality" name="nationality" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="" value="${obj.basicinfo.nationality }" />
+									<input id="nationality" name="nationality" onchange="translateZhToEn(this,'nationalityen','')" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="" value="${obj.basicinfo.nationality }" />
+									<input name="nationalityen" id="nationalityen" value="${obj.basicinfo.nationalityen }" type="hidden"/>
 								</div>
 							</div>
 						</div>
@@ -244,7 +248,8 @@
 									<label>
 										<span>*</span>出生省
 									</label> 
-									<input id="cardprovince" name="cardprovince" type="text"  class="form-control input-sm"  tabIndex="" placeholder=" " value="${obj.basicinfo.cardprovince }" />
+									<input id="cardprovince" name="cardprovince" onchange="translateZhToEn(this,'cardprovinceen','')" type="text"  class="form-control input-sm"  tabIndex="" placeholder=" " value="${obj.basicinfo.cardprovince }" />
+									<input id="cardprovinceen" name="cardprovinceen" value="${obj.basicinfo.cardprovinceen }" type="hidden"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
@@ -252,7 +257,8 @@
 									<label>
 										<span>*</span>出生城市
 									</label>
-									<input id="cardcity" name="cardcity" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="" value="${obj.basicinfo.cardcity }" />
+									<input id="cardcity" name="cardcity" type="text" onchange="translateZhToEn(this,'cardcityen','')"  class="form-control input-sm" placeholder=" "  tabIndex="" value="${obj.basicinfo.cardcity }" />
+									<input id="cardcityen" name="cardcityen" value="${obj.basicinfo.cardcityen }" type="hidden"/>
 								</div>
 							</div>
 						</div>

@@ -46,7 +46,7 @@
 			<div class="modal-body">
 				<div class="dislogHide"></div>
 				<div class="tab-content row">
-					<div class="col-sm-5 padding-right-0">
+					<div class="col-sm-12">
 						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
 							
 							<div class="col-xs-6 mainWidth">
@@ -54,7 +54,7 @@
 								<div class="cardFront-div">
 									<span>点击上传护照</span>
 									<input id="passportUrl" name="passporturl" type="hidden" value="${obj.passurl.url }"/>
-									<input id="uploadFile" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
+									<!-- <input id="uploadFile" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/> -->
 									<img style="top:-219px;" id="sqImg" alt="" src="${obj.passporturl }" >
 									<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 								</div>
@@ -123,7 +123,7 @@
 									<input id="issuedOrganization" name="issuedorganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.issuedorganization }"/>
 								</div>
 							</div>
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0" style="width: 230px;">
 								<div class="form-group">
 										<label>
 												<span>*</span>Exit & Entry Administration
@@ -133,6 +133,37 @@
 							</div>
 						</div><!-- end 签发机关 -->
 					</div>	
+					<div class="row">
+						<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+							<div class="form-group">
+								<label><span>*</span>是否丢失过护照号</label>
+								<div>
+									<input type="radio" name="islostpassport" value="1" class="is-duishihuzhao">是
+									<input type="radio" name="islostpassport" value="2" class="is-duishihuzhao" style="margin-left: 20px;">否
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row jidehuzhao" style="display: none;">
+						<div class="col-sm-5 col-sm-offset-1 padding-right-0" style="width: 210px;">
+							<div class="form-group">
+								<label><span>*</span>是否记得丢失的护照号</label>
+								<div>
+									<input type="radio" name="isrememberpassportnum" value="1" class="is-jideduishihuzhao ">是
+									<input type="radio" name="isrememberpassportnum" value="2" class="is-jideduishihuzhao is-jideduishihuzhao-2" style="margin-left: 20px;">否
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-5 col-sm-offset-1 padding-right-0 jideduishihuzhao-ipt" style="width: 230px;display: none;">
+							<div class="form-group">
+									<label>
+										<span>*</span>护照号码
+									</label>
+								<input id="lostpassportnum" name="lostpassportnum" type="text" class="form-control input-sm" placeholder="" value="${obj.passportinfo.lostpassportnum }"/>
+							</div>
+						</div>
+					</div><!-- end 签发机关 -->
 						
 				</div>
 			</div>
@@ -164,14 +195,46 @@
 	
 	<script type="text/javascript">
 		
-		/* $(function(){
-			//页面不可编辑
-			if(isDisable == 1){
-				$(".modal-body").attr('readonly', true);
-				$(".dislogHide").show();
-				$("#addBtn").hide();
+		$('.is-duishihuzhao').change(function() {
+			var v = $(this).val();
+			if (v == 1) {
+				$('.jidehuzhao').show();
+			} else {
+				$('.jidehuzhao').hide();
+				$('.is-jideduishihuzhao-2').attr('checked','checked');
+				$('.jideduishihuzhao-ipt').hide();
+				$('.jideduishihuzhao-ipt').val('');
 			}
-		}); */
+		});
+
+		$('.is-jideduishihuzhao').change(function() {
+			var v = $(this).val();
+			if (v == 1) {
+				$('.jideduishihuzhao-ipt').show();
+			} else {
+				$('.jideduishihuzhao-ipt').hide();
+				$('.jideduishihuzhao-ipt').val('');
+			}
+		});
+		
+		//回显radio处理
+		//是否丢失护照
+		var islostpassport = '${obj.passportinfo.islostpassport}';
+		$("input[name='islostpassport'][value='" + islostpassport + "']").attr("checked", 'checked');
+		if(islostpassport == 1){
+			$('.jidehuzhao').show();
+		}else{
+			$('.jidehuzhao').hide();
+		}
+		//是否记得护照号
+		var isrememberpassportnum = '${obj.passportinfo.isrememberpassportnum}';
+		$("input[name='isrememberpassportnum'][value='" + isrememberpassportnum + "']").attr("checked", 'checked');
+		if(isrememberpassportnum == 1){
+			$('.jideduishihuzhao-ipt').show();
+		}else{
+			$('.jideduishihuzhao-ipt').hide();
+		}
+		
 		
 	
 		$("#issuedDate").datetimepicker({

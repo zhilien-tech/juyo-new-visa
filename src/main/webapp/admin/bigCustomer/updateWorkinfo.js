@@ -2,10 +2,17 @@
 //翻译
 function translateZhToEn(from, to, param){
 	var toval = "";
-	if(param != ""){
-		toval = param;
-	}else{
+	if(param == "select2"){
 		toval = $(from).val();
+		if(toval){
+			toval = toval.join(",");
+		}
+	}else{
+		if(param != ""){
+			toval = param;
+		}else{
+			toval = $(from).val();
+		}
 	}
 	$.ajax({
 		//async : false,
@@ -146,6 +153,19 @@ $('#jobprovince,#employerprovince,#institutionprovince').select2({
 	tags : false //设置必须存在的选项 才能选中
 });
 
+/* 取消选中时 */
+$("#jobprovince").on('select2:unselect', function (evt) {
+	//市清空
+	$("#city").val(null).trigger("change");
+});
+$("#employerprovince").on('select2:unselect', function (evt) {
+	//市清空
+	$("#employercity").val(null).trigger("change");
+});
+$("#institutionprovince").on('select2:unselect', function (evt) {
+	//市清空
+	$("#institutioncity").val(null).trigger("change");
+});
 
 //现工作所在市
 $('#city').select2({

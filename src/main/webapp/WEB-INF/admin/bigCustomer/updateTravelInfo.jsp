@@ -38,6 +38,9 @@
 	width: 90%;
 	float: none;
 }
+.select2-container{
+	border: 1px solid #aaa;
+}
 </style>
 </head>
 <body>
@@ -63,6 +66,7 @@
 		<form id="travelinfo">
 			<div id="wrapper" class="section">
 				<div class="dislogHide"></div>
+				
 				<!--旅伴信息-->
 				<div class="companyInfoModule">
 					<div class="companyMain" style="margin-top: 10px;">
@@ -267,6 +271,7 @@
 										<div class="goUS_drivers">
 											<div class="groupcheckBoxInfo driverMain">
 												<label><span class="s">*</span> 驾照号</label> <input
+													style="width: 180px;"
 													id="driverlicensenumber"
 													value="${obj.driverinfo.driverlicensenumber }"
 													name="driverlicensenumber" type="text">
@@ -322,7 +327,8 @@
 									</div>
 									<div class="col-sm-4 groupcheckBoxInfo visaisnumber">
 										<label><span class="s">*</span> 签证号码</label> <input
-											name="visanumber" class="visanumber"
+											style="width: 180px;"
+											name="visanumbervisanumber" class="visanumber"
 											value="${obj.tripinfo.visanumber }" type="text" />
 										<!-- <input id="idknowvisanumber" onchange="AddSingle(this,'idknowvisanumberen')" name="idknowvisanumber" v-on:click="idknowvisanumberChange" value="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/> -->
 									</div>
@@ -433,47 +439,59 @@
 					</div>
 					<div class="row saveOutboundContent">
 						<div class="col-sm-3 youRelationship ">
-						
-						<c:if test="${!empty obj.gocountry }">
-								<c:forEach var="gocountry" items="${obj.gocountry }">
-									<div class="travelCountry paddingTop groupInputInfo">
+								<div class="travelCountry paddingTop groupInputInfo">
+									<label>国家/地区</label>
+									<div class="groupInputInfo groupSelectInfo">
+									
+										<select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
+											
+											<option value="" selected="selected"></option>
+										</select>
+									</div>
+								</div>
+					
+							<!-- <c:if test="${!empty obj.gocountry }">
+									<c:forEach var="gocountry" items="${obj.gocountry }">
+										<div class="travelCountry paddingTop groupInputInfo">
+											<label>国家/地区</label>
+											<div class="groupInputInfo groupSelectInfo">
+											
+												<select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
+													<c:forEach items="${obj.gocountryfivelist }" var="country">
+															<c:if test="${gocountry.traveledcountry != country.id}">
+																<option value="${country.id }">${country.chinesename }</option>
+															</c:if>
+															<c:if test="${gocountry.traveledcountry == country.id}">
+																<option value="${country.id }" selected="selected">${country.chinesename }</option>
+															</c:if>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+									</c:forEach>
+								</c:if> -->
+								<!-- <c:if test="${empty obj.gocountry }">
+									<div class="paddingTop travelCountry groupInputInfo">
 										<label>国家/地区</label>
 										<div class="groupInputInfo groupSelectInfo">
-										
 											<select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
 												<c:forEach items="${obj.gocountryfivelist }" var="country">
-														<c:if test="${gocountry.traveledcountry != country.id}">
-															<option value="${country.id }">${country.chinesename }</option>
-														</c:if>
-														<c:if test="${gocountry.traveledcountry == country.id}">
-															<option value="${country.id }" selected="selected">${country.chinesename }</option>
-														</c:if>
+													<option value="${country.id }">${country.chinesename }</option>
 												</c:forEach>
 											</select>
 										</div>
 									</div>
-								</c:forEach>
-							</c:if>
-							<c:if test="${empty obj.gocountry }">
-								<div class="paddingTop travelCountry groupInputInfo">
-									<label>国家/地区</label>
-									<div class="groupInputInfo groupSelectInfo">
-										<select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
-											<c:forEach items="${obj.gocountryfivelist }" var="country">
-												<option value="${country.id }">${country.chinesename }</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-							</c:if>
+								</c:if> -->
+
+								<!-- <div class="col-sm-3">
+									<a class="removeChuJingJiLu cancel gocountrycancel"
+										style="margin-top: 40px; display: inline-block; border-radius: 6px; font-size: 12px; text-decoration: none; padding: 3px 15px; color: #FFFFFF; background: #ca1818; cursor: pointer;"
+										onclick="gocountrycancel">删除</a>
+								</div> -->
+						</div>
 						
-						</div>
-						<div class="col-sm-3">
-							<a class="removeChuJingJiLu cancel gocountrycancel"
-								style="margin-top: 40px; display: inline-block; border-radius: 6px; font-size: 12px; text-decoration: none; padding: 3px 15px; color: #FFFFFF; background: #ca1818; cursor: pointer;"
-								onclick="gocountrycancel">删除</a>
-						</div>
 					</div>
+					<div style="height: 150px;"></div>
 				</div>
 				<!--以前的美国旅游信息END-->
 				<div style="height: 50px;"></div>
@@ -504,17 +522,16 @@
 	src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"
 	charset="UTF-8"></script>
 <!-- 本页js -->
-<%-- <script src="${base}/admin/bigCustomer/visa/openPageYesOrNo.js"></script><!-- 本页面  打开默认开关 js -->
+<script src="${base}/admin/bigCustomer/visa/openPageYesOrNo.js"></script><!-- 本页面  打开默认开关 js -->
 	<script src="${base}/admin/bigCustomer/visa/visaGetInfoList.js"></script><!-- 本页面  获取一对多信息 js -->
-	<script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script><!-- 本页面 Vue加载页面内容 js -->
-	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js --> --%>
-<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js?v=<%=System.currentTimeMillis() %>"></script>
+	<!--<script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script>--><!-- 本页面 Vue加载页面内容 js -->
+	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js --> 
+	<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js?v=<%=System.currentTimeMillis() %>"></script>
 <!-- 本页面 初始化时间插件 js -->
 <script
 	src="${base}/admin/bigCustomer/updateTravelinfo.js?v=<%=System.currentTimeMillis() %>"></script>
 <!-- 本页面  js -->
 <script type="text/javascript">
-	
 		//是否与其他人同行
 		var istravelwithother = '${obj.travelwithother}';
 		$("input[name='istravelwithother'][value='" + istravelwithother + "']").attr("checked", 'checked');
@@ -527,9 +544,9 @@
 		var hasbeeninus = '${obj.tripinfo.hasbeeninus}';
 		$("input[name='hasbeeninus'][value='" + hasbeeninus + "']").attr("checked", 'checked');
         if (hasbeeninus == 1) {
-        	$(".gotousInfo").show();
+        	$(".goUSInfo").show();
 		} else {
-			$(".gotousInfo").hide();
+			$(".goUSInfo").hide();
 		}
       	//是否有美国驾照
       	var hasdriverlicense = '${obj.tripinfo.hasdriverlicense}';
@@ -596,20 +613,9 @@
             $(self).parent().parent().remove();
         };
 
-        let removeTongXingRen = self => {
-            let len = $('.removeTongXingRen').length;
-            removeFun(self, len);
-        };
-        
-        let removeDiDaDate = self => {
-            let len = $('.removeDiDaDate').length;
-            removeFun(self, len);
-        };
-
-        let removeChuJingJiLu = self => {
-            let len = $('.removeChuJingJiLu').length;
-            removeFun(self, len);
-        };
+        let removeTongXingRen = self => removeFun(self, $('.removeTongXingRen').length);
+        let removeDiDaDate = self => removeFun(self, $('.removeDiDaDate').length);
+        let removeChuJingJiLu = self => removeFun(self, $('.removeChuJingJiLu').length);
 	</script>
 </html>
 

@@ -302,6 +302,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveBasicinfo(BasicinfoUSForm form) {
+		long startTime = System.currentTimeMillis();
 		Integer staffid = form.getStaffid();
 		//基本信息
 		updateBasicinfo(form);
@@ -330,6 +331,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 		passportinfo.setBirthday(form.getBirthday());
 		dbDao.update(passportinfo);
+		long endTime = System.currentTimeMillis();
+		System.out.println("保存用了" + (endTime - startTime) + "ms");
 		return JuYouResult.ok();
 	}
 
@@ -376,16 +379,25 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setOtherlastname(form.getOtherlastname());
 		basicinfo.setOtherlastnameen(form.getOtherlastnameen());
 		//英文
+		long startTime = System.currentTimeMillis();
+		System.out.println("开始保存英文====");
 		basicinfo.setHasothernameen(form.getHasothernameen());
 		basicinfo.setTelephoneen(form.getTelephone());
 		basicinfo.setEmailen(form.getEmail());
 		basicinfo.setCardIden(form.getCardId());
-		basicinfo.setProvinceen(translate(form.getProvince()));
-		basicinfo.setCityen(translate(form.getCity()));
-		basicinfo.setCardprovinceen(translate(form.getCardprovince()));
-		basicinfo.setCardcityen(translate(form.getCardcity()));
-		basicinfo.setMarrystatusen(form.getMarrystatus());
-		basicinfo.setNationalityen(translate(form.getNationality()));
+		basicinfo.setProvinceen(form.getProvinceen());
+		basicinfo.setCityen(form.getCityen());
+		basicinfo.setCardprovinceen(form.getCardprovinceen());
+		basicinfo.setCardcityen(form.getCardcityen());
+		basicinfo.setNationalityen(form.getNationalityen());
+		/*		basicinfo.setProvinceen(translate(form.getProvince()));
+				basicinfo.setCityen(translate(form.getCity()));
+				basicinfo.setCardprovinceen(translate(form.getCardprovince()));
+				basicinfo.setCardcityen(translate(form.getCardcity()));
+				basicinfo.setNationalityen(translate(form.getNationality()));
+		*/basicinfo.setMarrystatusen(form.getMarrystatus());
+		long endTime = System.currentTimeMillis();
+		System.out.println("保存英文用了" + (endTime - startTime) + "ms=====");
 		dbDao.update(basicinfo);
 		return null;
 	}
@@ -451,13 +463,25 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		passportinfo.setIssuedorganization(form.getIssuedorganization());
 		passportinfo.setIssuedorganizationen(form.getIssuedorganizationen());
 		passportinfo.setIslostpassport(form.getIslostpassport());
-		passportinfo.setIsrememberpassportnum(form.getIsrememberpassportnum());
-		passportinfo.setLostpassportnum(form.getLostpassportnum());
+		if (form.getIslostpassport() == 2) {
+			passportinfo.setIsrememberpassportnum(2);
+			passportinfo.setIsrememberpassportnumen(2);
+			passportinfo.setLostpassportnum("不知道");
+			passportinfo.setLostpassportnumen("I do not know");
+		} else {
+			passportinfo.setIsrememberpassportnum(form.getIsrememberpassportnum());
+			passportinfo.setIsrememberpassportnumen(form.getIsrememberpassportnum());
+			if (form.getIsrememberpassportnum() == 2) {
+				passportinfo.setLostpassportnum("不知道");
+				passportinfo.setLostpassportnumen("I do not know");
+			} else {
+				passportinfo.setLostpassportnum(form.getLostpassportnum());
+				passportinfo.setLostpassportnumen(form.getLostpassportnum());
+			}
+		}
 
 		//英文
 		passportinfo.setIslostpassporten(form.getIslostpassport());
-		passportinfo.setIsrememberpassportnumen(form.getIsrememberpassportnum());
-		passportinfo.setLostpassportnumen(form.getLostpassportnum());
 		dbDao.update(passportinfo);
 		return JuYouResult.ok();
 	}
@@ -731,13 +755,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveWorkandeducation(WorkandeducateinfoUSForm form) {
+		long startTime = System.currentTimeMillis();
 		Integer staffid = form.getStaffid();
+		long translateTime = 0;
 		//职业信息
-		updateWorkinfo(form);
+		translateTime += (long) updateWorkinfo(form);
 
 		//以前的工作信息
 		if (Util.eq(1, form.getIsemployed())) {
-			updateBeforework(form);
+			translateTime += (long) updateBeforework(form);
 		} else {
 			TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
 					Cnd.where("staffid", "=", staffid));
@@ -747,7 +773,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 		//教育信息
 		if (Util.eq(1, form.getIssecondarylevel())) {
-			updateBeforeeducation(form);
+			translateTime += (long) updateBeforeeducation(form);
 		} else {
 			TAppStaffBeforeeducationEntity beforeeducation = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
 					Cnd.where("staffid", "=", staffid));
@@ -755,7 +781,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				dbDao.delete(beforeeducation);
 			}
 		}
-
+		long endTime = System.currentTimeMillis();
+		System.out.println("保存用了" + (endTime - startTime) + "ms");
+		System.out.println("translateTime:" + translateTime);
 		return JuYouResult.ok();
 	}
 
@@ -790,20 +818,27 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		workinfo.setZipcode(getZipcode(form.getCity()));
 		workinfo.setZipcodeen(workinfo.getZipcode());
 		//英文
+		long startTime = System.currentTimeMillis();
 		workinfo.setOccupationen(form.getOccupation());
 		workinfo.setTelephoneen(form.getTelephone());
 		workinfo.setCountryen(form.getCountry());
-		workinfo.setProvinceen(translate(form.getProvince()));
-		workinfo.setCityen(translate(form.getCity()));
+		workinfo.setProvinceen(form.getProvinceen());
+		workinfo.setCityen(form.getCityen());
+		workinfo.setPositionen(form.getPositionen());
+		workinfo.setDutyen(form.getDutyen());
+
+		//workinfo.setProvinceen(translate(form.getProvince()));
+		//workinfo.setCityen(translate(form.getCity()));
+		//workinfo.setPositionen(translate(form.getPosition()));
+		//workinfo.setDutyen(translate(form.getDuty()));
 		workinfo.setWorkstartdateen(form.getWorkstartdateen());
-		workinfo.setPositionen(translate(form.getPosition()));
 		workinfo.setSalaryen(form.getSalary());
-		workinfo.setDutyen(translate(form.getDuty()));
 		workinfo.setIssecondarylevelen(form.getIssecondarylevel());
 		workinfo.setIsemployeden(form.getIsemployed());
+		long endTime = System.currentTimeMillis();
 
 		dbDao.update(workinfo);
-		return null;
+		return (endTime - startTime);
 	}
 
 	/**
@@ -839,17 +874,24 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		beforework.setEmployerzipcode(getZipcode(form.getEmployercity()));
 		beforework.setEmployerzipcodeen(beforework.getEmployerzipcode());
 		//英文
+		long startTime = System.currentTimeMillis();
 		beforework.setEmployertelephoneen(form.getEmployertelephone());
 		beforework.setEmployercountryen(form.getEmployercountry());
-		beforework.setEmployerprovinceen(translate(form.getEmployerprovince()));
-		beforework.setEmployercityen(translate(form.getEmployercity()));
 		beforework.setEmploystartdateen(form.getEmploystartdate());
 		beforework.setEmployenddateen(form.getEmployenddate());
-		beforework.setJobtitleen(translate(form.getJobtitle()));
-		beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+
+		/*		beforework.setEmployerprovinceen(translate(form.getEmployerprovince()));
+				beforework.setEmployercityen(translate(form.getEmployercity()));
+				beforework.setJobtitleen(translate(form.getJobtitle()));
+				beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+		*/beforework.setEmployerprovinceen(form.getEmployerprovinceen());
+		beforework.setEmployercityen(form.getEmployercityen());
+		beforework.setJobtitleen(form.getJobtitleen());
+		beforework.setPreviousdutyen(form.getPreviousdutyen());
+		long endTime = System.currentTimeMillis();
 
 		dbDao.update(beforework);
-		return null;
+		return (endTime - startTime);
 	}
 
 	/**
@@ -863,7 +905,11 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public String getZipcode(String city) {
 		TIdcardEntity zipcodecity = dbDao.fetch(TIdcardEntity.class, Cnd.where("city", "=", city));
-		return zipcodecity.getCode();
+		if (!Util.isEmpty(zipcodecity)) {
+			return zipcodecity.getCode();
+		} else {
+			return "";
+		}
 	}
 
 	/**
@@ -898,16 +944,21 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		beforeeducation.setInstitutionzipcode(getZipcode(form.getInstitutioncity()));
 		beforeeducation.setInstitutionzipcodeen(beforeeducation.getInstitutionzipcode());
 		//英文
+		long startTime = System.currentTimeMillis();
 		beforeeducation.setHighesteducationen(form.getHighesteducation());
-		beforeeducation.setCourseen(translate(form.getCourse()));
 		beforeeducation.setInstitutioncountryen(form.getInstitutioncountry());
-		beforeeducation.setInstitutionprovinceen(translate(form.getInstitutionprovince()));
-		beforeeducation.setInstitutioncityen(translate(form.getInstitutioncity()));
 		beforeeducation.setCoursestartdateen(form.getCoursestartdate());
 		beforeeducation.setCourseenddateen(form.getCourseenddate());
+		/*		beforeeducation.setCourseen(translate(form.getCourse()));
+				beforeeducation.setInstitutionprovinceen(translate(form.getInstitutionprovince()));
+				beforeeducation.setInstitutioncityen(translate(form.getInstitutioncity()));
+		*/beforeeducation.setCourseen(form.getCourseen());
+		beforeeducation.setInstitutionprovinceen(form.getInstitutionprovinceen());
+		beforeeducation.setInstitutioncityen(form.getInstitutioncityen());
+		long endTime = System.currentTimeMillis();
 
 		dbDao.update(beforeeducation);
-		return null;
+		return (endTime - startTime);
 	}
 
 	/**
@@ -1052,14 +1103,18 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		dbDao.update(workinfo);
 
 		//出境记录
-
-		String gocountry = form.getGocountry();
-
 		List<TAppStaffGocountryEntity> countryList_old = dbDao.query(TAppStaffGocountryEntity.class,
 				Cnd.where("staffid", "=", staffid), null);
-		List<TAppStaffGocountryEntity> countryList_New = JsonUtil.fromJsonAsList(TAppStaffGocountryEntity.class,
-				gocountry);
-		dbDao.updateRelations(countryList_old, countryList_New);
+		if (form.getIstraveledanycountry() == 2) {
+			if (!Util.isEmpty(countryList_old)) {
+				dbDao.delete(countryList_old);
+			}
+		} else {
+			String gocountry = form.getGocountry();
+			List<TAppStaffGocountryEntity> countryList_New = JsonUtil.fromJsonAsList(TAppStaffGocountryEntity.class,
+					gocountry);
+			dbDao.updateRelations(countryList_old, countryList_New);
+		}
 		return JuYouResult.ok();
 	}
 
@@ -1101,9 +1156,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		tripinfo.setIslosten(form.getIslost());
 		tripinfo.setIscancelleden(form.getIscancelled());
 		tripinfo.setIsrefuseden(form.getIsrefused());
-		tripinfo.setRefusedexplainen(translate(form.getRefusedexplain()));
 		tripinfo.setIsfiledimmigrantpetitionen(form.getIsfiledimmigrantpetition());
 		tripinfo.setEmigrationreasonen(form.getEmigrationreason());
+		tripinfo.setRefusedexplainen(translate(form.getRefusedexplain()));
 		tripinfo.setImmigrantpetitionexplainen(translate(form.getImmigrantpetitionexplain()));
 		dbDao.update(tripinfo);
 		return null;

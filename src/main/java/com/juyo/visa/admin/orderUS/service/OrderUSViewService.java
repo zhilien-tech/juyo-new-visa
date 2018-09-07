@@ -56,6 +56,7 @@ import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.admin.order.entity.PassportJsonEntity;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
+import com.juyo.visa.admin.order.form.RecognitionForm;
 import com.juyo.visa.admin.orderUS.entity.AutofillSearchJsonEntity;
 import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
@@ -1954,7 +1955,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 		//消息通知
 		try {
-			simplesendinfosocket.broadcast(new TextMessage(""));
+			RecognitionForm form = new RecognitionForm();
+			form.setApplyid(staffid);
+			simplesendinfosocket.broadcast(new TextMessage(JsonUtil.toJson(form)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -2046,7 +2049,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 		//消息通知
 		try {
-			simplesendinfosocket.broadcast(new TextMessage(""));
+			RecognitionForm form = new RecognitionForm();
+			form.setApplyid(staffid);
+			simplesendinfosocket.broadcast(new TextMessage(JsonUtil.toJson(form)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -2194,7 +2199,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 		//消息通知
 		try {
-			simplesendinfosocket.broadcast(new TextMessage(""));
+			RecognitionForm form = new RecognitionForm();
+			form.setApplyid(staffid);
+			simplesendinfosocket.broadcast(new TextMessage(JsonUtil.toJson(form)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

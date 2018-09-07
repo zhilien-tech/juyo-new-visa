@@ -1722,6 +1722,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		staffPassport.setIslostpassporten(2);//创建护照信息时默认设置为2，没有丢失
 		staffPassport.setIsrememberpassportnum(2);//是否记得丢失的护照号码，默认为2不记得
 		staffPassport.setIsrememberpassportnumen(2);//是否记得丢失的护照号码，默认为2不记得
+		staffPassport.setLostpassportnum("不知道");
+		staffPassport.setLostpassportnum("I do not know");
 		TAppStaffPassportEntity passportEntity = dbDao.insert(staffPassport);
 		Integer passportId = passportEntity.getId();
 

@@ -33,6 +33,7 @@ import com.juyo.visa.admin.mobile.form.FamilyinfoUSForm;
 import com.juyo.visa.admin.mobile.form.PassportinfoUSForm;
 import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
 import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
+import com.juyo.visa.admin.order.form.RecognitionForm;
 import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
@@ -289,7 +290,9 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 
 			//消息通知
 			try {
-				simplesendinfosocket.broadcast(new TextMessage(""));
+				RecognitionForm form = new RecognitionForm();
+				form.setApplyid(staffid);
+				simplesendinfosocket.broadcast(new TextMessage(JsonUtil.toJson(form)));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
