@@ -1,16 +1,16 @@
 package com.juyo.visa.forms;
 
-import com.uxuexi.core.db.util.EntityUtil;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import org.nutz.dao.Cnd;
 import org.nutz.dao.SqlManager;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import com.juyo.visa.entities.TAppStaffGocountryEntity;
-import com.uxuexi.core.web.form.DataTablesParamForm;
 
-import java.io.Serializable;
+import com.juyo.visa.entities.TAppStaffGocountryEntity;
+import com.uxuexi.core.db.util.EntityUtil;
+import com.uxuexi.core.web.form.DataTablesParamForm;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -18,16 +18,16 @@ public class TAppStaffGocountryForm extends DataTablesParamForm {
 	private static final long serialVersionUID = 1L;
 	/**主键*/
 	private Integer id;
-	
+
 	/**人员id*/
 	private Integer staffid;
-	
+
 	/**去旅游的国家*/
-	private Integer traveledcountry;
-	
+	private String traveledcountry;
+
 	/**去旅游的国家(英文)*/
-	private Integer traveledcountryen;
-	
+	private String traveledcountryen;
+
 	@Override
 	public Sql sql(SqlManager sqlManager) {
 		/**

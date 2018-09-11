@@ -72,7 +72,7 @@ import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
-import com.juyo.visa.entities.TUsStateEntity;
+import com.juyo.visa.entities.TStateUsEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
@@ -1011,6 +1011,17 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid), null);
 		result.put("gocountry", gocountry);
 
+		/*String gocountrysqlStr = sqlManager.get("orderUS_PC_getGocountrys");
+		Sql gocountrysql = Sqls.create(gocountrysqlStr);
+		gocountrysql.setParam("staffid", staffid);
+		List<Record> gocountry = dbDao.query(gocountrysql, null, null);
+		for (Record record : gocountry) {
+			int traveledcountry = record.getInt("traveledcountry");
+			TCountryRegionEntity fetch = dbDao.fetch(TCountryRegionEntity.class, traveledcountry);
+			record.set("traveledcountry", fetch.getChinesename());
+		}
+		result.put("gocountry", gocountry);*/
+
 		//国家下拉
 		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
 		result.put("gocountryfivelist", gocountryFiveList);
@@ -1040,18 +1051,68 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		dbDao.update(travelcompanion);
 
 		//同伴信息
-		String companioninfoList = form.getCompanioninfoList();
-
-		List<TAppStaffCompanioninfoEntity> companionList_old = dbDao.query(TAppStaffCompanioninfoEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
-		List<TAppStaffCompanioninfoEntity> companionList_New = JsonUtil.fromJsonAsList(
-				TAppStaffCompanioninfoEntity.class, companioninfoList);
-		dbDao.updateRelations(companionList_old, companionList_New);
+		//updateCompanioninfo(form);
 
 		//以前的美国旅游信息
 		updatePrevioustripinfo(form);
 
 		//去过美国信息
+		updateGousinfo(form);
+
+		//美国驾照
+		updateDriverinfo(form);
+
+		//是否有出境记录
+		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		workinfo.setIstraveledanycountry(form.getIstraveledanycountry());
+		workinfo.setIstraveledanycountryen(form.getIstraveledanycountry());
+		dbDao.update(workinfo);
+
+		//出境记录
+		updateGocountryinfo(form);
+
+		return JuYouResult.ok();
+	}
+
+	/**
+	 * 同伴信息处理
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateCompanioninfo(TravelinfoUSForm form) {
+		Integer staffid = form.getStaffid();
+		List<TAppStaffCompanioninfoEntity> companionList_old = dbDao.query(TAppStaffCompanioninfoEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		if (form.getIstravelwithother() == 2) {//没有同行人时，需要清掉同行人信息
+			if (!Util.isEmpty(companionList_old)) {
+				dbDao.delete(companionList_old);
+			}
+		} else {
+			String companioninfoList = form.getCompanioninfoList();
+
+			List<TAppStaffCompanioninfoEntity> companionList_New = JsonUtil.fromJsonAsList(
+					TAppStaffCompanioninfoEntity.class, companioninfoList);
+			dbDao.updateRelations(companionList_old, companionList_New);
+		}
+		return null;
+	}
+
+	/**
+	 * 去过美国信息处理
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateGousinfo(TravelinfoUSForm form) {
+		Integer staffid = form.getStaffid();
 		TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		if (form.getHasbeeninus() == 1) {//去过美国，则添加或者修改
@@ -1074,8 +1135,20 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				dbDao.delete(gousinfo);
 			}
 		}
+		return null;
+	}
 
-		//美国驾照
+	/**
+	 * 美国驾照信息处理
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateDriverinfo(TravelinfoUSForm form) {
+		Integer staffid = form.getStaffid();
 		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		if (form.getHasdriverlicense() == 1) {//有美国驾照，添加或者修改
@@ -1094,28 +1167,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				dbDao.delete(driverinfo);
 			}
 		}
-
-		//是否有出境记录
-		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		workinfo.setIstraveledanycountry(form.getIstraveledanycountry());
-		workinfo.setIstraveledanycountryen(form.getIstraveledanycountry());
-		dbDao.update(workinfo);
-
-		//出境记录
-		List<TAppStaffGocountryEntity> countryList_old = dbDao.query(TAppStaffGocountryEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
-		if (form.getIstraveledanycountry() == 2) {
-			if (!Util.isEmpty(countryList_old)) {
-				dbDao.delete(countryList_old);
-			}
-		} else {
-			String gocountry = form.getGocountry();
-			List<TAppStaffGocountryEntity> countryList_New = JsonUtil.fromJsonAsList(TAppStaffGocountryEntity.class,
-					gocountry);
-			dbDao.updateRelations(countryList_old, countryList_New);
-		}
-		return JuYouResult.ok();
+		return null;
 	}
 
 	/**
@@ -1158,9 +1210,47 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		tripinfo.setIsrefuseden(form.getIsrefused());
 		tripinfo.setIsfiledimmigrantpetitionen(form.getIsfiledimmigrantpetition());
 		tripinfo.setEmigrationreasonen(form.getEmigrationreason());
-		tripinfo.setRefusedexplainen(translate(form.getRefusedexplain()));
-		tripinfo.setImmigrantpetitionexplainen(translate(form.getImmigrantpetitionexplain()));
+		tripinfo.setRefusedexplainen(form.getRefusedexplainen());
+		tripinfo.setImmigrantpetitionexplainen(form.getImmigrantpetitionexplainen());
 		dbDao.update(tripinfo);
+		return null;
+	}
+
+	/**
+	 * 出境记录处理
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateGocountryinfo(TravelinfoUSForm form) {
+		Integer staffid = form.getStaffid();
+
+		List<TAppStaffGocountryEntity> countryList_old = dbDao.query(TAppStaffGocountryEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		if (!Util.isEmpty(countryList_old)) {
+			dbDao.delete(countryList_old);
+		}
+		String traveledcountry = form.getTraveledcountry();
+		String[] split = traveledcountry.split(",");
+		for (String string : split) {
+			TAppStaffGocountryEntity tAppStaffGocountryEntity = new TAppStaffGocountryEntity();
+			tAppStaffGocountryEntity.setStaffid(staffid);
+			tAppStaffGocountryEntity.setTraveledcountry(string);
+			dbDao.insert(tAppStaffGocountryEntity);
+		}
+		/*if (form.getIstraveledanycountry() == 2) {
+			if (!Util.isEmpty(countryList_old)) {
+				dbDao.delete(countryList_old);
+			}
+		} else {
+			String gocountry = form.getGocountry();
+			List<TAppStaffGocountryEntity> countryList_New = JsonUtil.fromJsonAsList(TAppStaffGocountryEntity.class,
+					gocountry);
+			dbDao.updateRelations(countryList_old, countryList_New);
+		}*/
 		return null;
 	}
 
@@ -1272,15 +1362,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object selectUSstate(String searchstr) {
-		List<TUsStateEntity> stateList = new ArrayList<>();
-		List<TUsStateEntity> state = dbDao.query(TUsStateEntity.class,
-				Cnd.where("statecn", "like", "%" + Strings.trim(searchstr) + "%"), null);
-		for (TUsStateEntity tState : state) {
+		List<TStateUsEntity> stateList = new ArrayList<>();
+		List<TStateUsEntity> state = dbDao.query(TStateUsEntity.class,
+				Cnd.where("name", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		for (TStateUsEntity tState : state) {
 			if (!stateList.contains(tState)) {
 				stateList.add(tState);
 			}
 		}
-		List<TUsStateEntity> list = new ArrayList<>();
+		List<TStateUsEntity> list = new ArrayList<>();
 		if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
 			for (int i = 0; i < 5; i++) {
 				list.add(stateList.get(i));
@@ -1288,6 +1378,25 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			return list;
 		} else {
 			return stateList;
+		}
+	}
+
+	/**
+	 * 根据国家名称查询对应的国家ID
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param searchstr
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object getCountryid(String searchstr) {
+		TCountryRegionEntity country = dbDao
+				.fetch(TCountryRegionEntity.class, Cnd.where("chinesename", "=", searchstr));
+		if (!Util.isEmpty(country)) {
+			return country.getId();
+		} else {
+			return 0;
 		}
 	}
 }

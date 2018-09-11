@@ -1464,7 +1464,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//访问过的国家(签证信息)
 		List<TAppStaffGocountryEntity> gos = dbDao.query(TAppStaffGocountryEntity.class,
 				Cnd.where("staffid", "=", staffid), null);
-		for (TAppStaffGocountryEntity gocountryEntity : gos) {
+		/*for (TAppStaffGocountryEntity gocountryEntity : gos) {
 			Map<String, Object> VisitedCountry = Maps.newHashMap();
 			if ((!Util.isEmpty(gocountryEntity.getTraveledcountry()) && (gocountryEntity.getTraveledcountry() != 0))) {
 				String country = getCountry(gocountryEntity.getTraveledcountry());
@@ -1473,7 +1473,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				VisitedCountry.put("country", "");
 			}
 			VisitedCountrys.add(VisitedCountry);
-		}
+		}*/
 
 		Supplement.put("VisitedCountry", VisitedCountrys);
 

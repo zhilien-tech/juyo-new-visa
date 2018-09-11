@@ -117,7 +117,7 @@
 							<div class="col-sm-3 col-sm-offset-1 " style="margin-left: 50px;padding-right: 35px;">
 									<div class="form-group">
 										<label><span>*</span>性别</label>
-										<select class="form-control input-sm selectHeight" id="sex" name="sex">
+										<select class="form-control input-sm selectHeight" tabindex="3" id="sex" name="sex">
 											<option value="男" ${obj.basicinfo.sex == "男"?"selected":"" }>男</option>
 											<option value="女" ${obj.basicinfo.sex == "女"?"selected":"" }>女</option>
 										</select>
@@ -167,14 +167,14 @@
 									<input type="hidden" name="cardcity" id="cardCity" value="${obj.applicant.cardcity }"/>
 									<input type="hidden" id="sameAddress" value=""/>
 									<input class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" />  --%>
-									<input id="province" autocomplete="off" name="province" onchange="translateZhToEn(this,'provinceen','')" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.basicinfo.province }" />
+									<input id="province" autocomplete="new-password" name="province" onchange="translateZhToEn(this,'provinceen','')" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.basicinfo.province }" />
 									<input id="provinceen" name="provinceen" value="${obj.basicinfo.provinceen }" type="hidden"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
 									<label>现居住地址城市</label> 
-									<input id="city" name="city" autocomplete="off" type="text" onchange="translateZhToEn(this,'cityen','')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.basicinfo.city }" />
+									<input id="city" name="city" autocomplete="new-password" type="text" onchange="translateZhToEn(this,'cityen','')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.basicinfo.city }" />
 									<input id="cityen" name="cityen" value="${obj.basicinfo.cityen }" type="hidden" />
 								</div>
 							</div>
@@ -185,7 +185,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>详细地址</label> 
-									<input id="detailedAddress" autocomplete="off" name="detailedaddress" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.basicinfo.detailedaddress }" />
+									<input id="detailedAddress" autocomplete="new-password" name="detailedaddress" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.basicinfo.detailedaddress }" />
 								</div>
 							</div>
 							<!-- <div class="col-sm-12 xx-en">
@@ -202,7 +202,7 @@
 									<label>
 										<span>*</span>婚姻状况
 									</label> 
-									<select id="marrystatus" name="marrystatus" class="form-control input-sm selectHeight">
+									<select id="marrystatus" name="marrystatus" tabIndex="14" class="form-control input-sm selectHeight">
 											<option value="">请选择</option>
 											<c:forEach var="map" items="${obj.marrystatusenum}">
 												<option value="${map.key}" ${map.key==obj.basicinfo.marrystatus?'selected':''}>${map.value}</option>
@@ -226,7 +226,7 @@
 									<label>
 										<span>*</span>出生日期
 									</label> 
-									<input id="birthday" name="birthday" type="text"  class="form-control input-sm"  tabIndex="" placeholder=" " value="${obj.birthday }" />
+									<input id="birthday" name="birthday" type="text"  class="form-control input-sm"  tabIndex="14" placeholder=" " value="${obj.birthday }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
@@ -234,7 +234,7 @@
 									<label>
 										<span>*</span>出生国家
 									</label>
-									<input id="nationality" name="nationality" onchange="translateZhToEn(this,'nationalityen','')" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="" value="${obj.basicinfo.nationality }" />
+									<input id="nationality" autocomplete="new-password" name="nationality" onchange="translateZhToEn(this,'nationalityen','')" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="14" value="${obj.basicinfo.nationality }" />
 									<input name="nationalityen" id="nationalityen" value="${obj.basicinfo.nationalityen }" type="hidden"/>
 								</div>
 							</div>
@@ -248,7 +248,7 @@
 									<label>
 										<span>*</span>出生省
 									</label> 
-									<input id="cardprovince" name="cardprovince" onchange="translateZhToEn(this,'cardprovinceen','')" type="text"  class="form-control input-sm"  tabIndex="" placeholder=" " value="${obj.basicinfo.cardprovince }" />
+									<input id="cardprovince" autocomplete="new-password" name="cardprovince" onchange="translateZhToEn(this,'cardprovinceen','')" type="text"  class="form-control input-sm"  tabIndex="14" placeholder=" " value="${obj.basicinfo.cardprovince }" />
 									<input id="cardprovinceen" name="cardprovinceen" value="${obj.basicinfo.cardprovinceen }" type="hidden"/>
 								</div>
 							</div>
@@ -257,7 +257,7 @@
 									<label>
 										<span>*</span>出生城市
 									</label>
-									<input id="cardcity" name="cardcity" type="text" onchange="translateZhToEn(this,'cardcityen','')"  class="form-control input-sm" placeholder=" "  tabIndex="" value="${obj.basicinfo.cardcity }" />
+									<input id="cardcity" autocomplete="new-password" name="cardcity" type="text" onchange="translateZhToEn(this,'cardcityen','')"  class="form-control input-sm" placeholder=" "  tabIndex="14" value="${obj.basicinfo.cardcity }" />
 									<input id="cardcityen" name="cardcityen" value="${obj.basicinfo.cardcityen }" type="hidden"/>
 								</div>
 							</div>
@@ -285,13 +285,13 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>姓</label> 
-									<input id="otherfirstname"  name="otherfirstname" type="text" class="form-control input-sm " value="${obj.basicinfo.otherfirstname }"/>
+									<input id="otherfirstname" tabindex="14"  name="otherfirstname" type="text" class="form-control input-sm " value="${obj.basicinfo.otherfirstname }"/>
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>名</label> 
-									<input id="otherlastname" name="otherlastname"  type="text" class="form-control input-sm" value="${obj.basicinfo.otherlastname }"/>
+									<input id="otherlastname" tabindex="14" name="otherlastname"  type="text" class="form-control input-sm" value="${obj.basicinfo.otherlastname }"/>
 								</div>
 							</div>
 						</div>
@@ -376,7 +376,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Street Address</label> 
-									<input id="detailedAddressen" name="detailedaddressen" type="text"  tabIndex="14" class="form-control input-sm" placeholder=" " value="${obj.basicinfo.detailedaddressen }" />
+									<input id="detailedAddressen" autocomplete="new-password" name="detailedaddressen" type="text"  tabIndex="14" class="form-control input-sm" placeholder=" " value="${obj.basicinfo.detailedaddressen }" />
 								</div>
 							</div>
 						</div>
@@ -433,13 +433,13 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>Other Surnames Used</label> 
-									<input id="otherfirstnameen" name="otherfirstnameen" type="text" class="form-control input-sm " value="${obj.basicinfo.otherfirstnameen }" />
+									<input id="otherfirstnameen" name="otherfirstnameen" tabindex="14" type="text" class="form-control input-sm " value="${obj.basicinfo.otherfirstnameen }" />
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>Other Given Names Used</label> 
-									<input id="otherlastnameen" name="otherlastnameen" type="text" class="form-control input-sm" value="${obj.basicinfo.otherlastnameen }" />
+									<input id="otherlastnameen" name="otherlastnameen" tabindex="14" type="text" class="form-control input-sm" value="${obj.basicinfo.otherlastnameen }" />
 								</div>
 							</div>
 						</div>

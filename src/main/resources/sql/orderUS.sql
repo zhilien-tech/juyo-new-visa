@@ -145,3 +145,12 @@ FROM
 t_app_staff_credentials
 WHERE
 staffid=@staffid
+
+
+/*orderUS_PC_getGocountrys*/
+SELECT
+*
+FROM
+t_app_staff_gocountry
+WHERE
+staffid=@staffid

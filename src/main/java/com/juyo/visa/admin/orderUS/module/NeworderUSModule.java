@@ -182,4 +182,13 @@ public class NeworderUSModule {
 		return neworderUSViewService.selectUSstate(searchstr);
 	}
 
+	/**
+	 * 根据国家名称查询id
+	 */
+	@At
+	@POST
+	public Object getCountryid(@Param("searchstr") String searchstr) {
+		return neworderUSViewService.getCountryid(searchstr);
+	}
+
 }

@@ -506,7 +506,7 @@ $(document).on("input","#sendVisaDate",function(){
 			var d1 = new Date(calDate.replace(/\-/g, "\/"));  
 			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
 			if(d1<d2){
-				alert("预计送签时间必须大于今天");
+				alert("预计送签时间不能早于今天");
 				$(this).val("");
 	        	return;
 			}else{
@@ -541,7 +541,7 @@ $(document).on("input","#sendVisaDate",function(){
 			var d1 = new Date(calDate.replace(/\-/g, "\/"));  
 			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
 			if(d1<d2){
-				alert("预计送签时间必须大于今天");
+				alert("预计送签时间不能早于今天");
 				$(this).val("");
 	        	return;
 			}else{
@@ -588,7 +588,7 @@ $(document).on("input","#outVisaDate",function(){
 			var d1 = new Date(calDate.replace(/\-/g, "\/"));  
 			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
 			if(d1<d2){
-				alert("预计出签时间必须大于今天");
+				alert("预计出签时间不能早于今天");
 				$(this).val("");
 	        	return;
 			}else{
@@ -603,7 +603,7 @@ $(document).on("input","#outVisaDate",function(){
 			var d1 = new Date(calDate.replace(/\-/g, "\/"));  
 			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
 			if(d1<d2){
-				alert("预计出签时间必须大于今天");
+				alert("预计出签时间不能早于今天");
 				$(this).val("");
 	        	return;
 			}else{
@@ -633,12 +633,12 @@ $(document).on("input","#goDate",function(){
 			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
 			
 			if(d1<d2){
-				alert("出行时间必须大于今天");
+				alert("出行时间不能早于今天");
 				$(this).val("");
 	        	return;
 			}
 			if(d1<d3){
-				alert("出行时间必须大于预计出签时间");
+				alert("出行时间不能早于预计出签时间");
 				$(this).val("");
 	        	return;
 			}
@@ -653,12 +653,12 @@ $(document).on("input","#goDate",function(){
 			var d1 = new Date(calDate.replace(/\-/g, "\/"));  
 			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
 			if(d1<d2){
-				alert("出行时间必须大于今天");
+				alert("出行时间不能早于今天");
 				$(this).val("");
 	        	return;
 			}
 			if(d1<d3){
-				alert("出行时间必须大于预计出签时间");
+				alert("出行时间不能早于预计出签时间");
 				$(this).val("");
 	        	return;
 			}

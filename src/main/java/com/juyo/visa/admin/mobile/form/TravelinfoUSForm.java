@@ -193,10 +193,10 @@ public class TravelinfoUSForm {
 	private Integer istraveledanycountryen;
 
 	/**去旅游的国家*/
-	private Integer traveledcountry;
+	private String traveledcountry;
 
 	/**去旅游的国家(英文)*/
-	private Integer traveledcountryen;
+	private String traveledcountryen;
 
 	private String driverlicensenumber;
 

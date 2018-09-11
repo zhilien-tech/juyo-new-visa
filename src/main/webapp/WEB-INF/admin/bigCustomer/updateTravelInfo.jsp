@@ -96,26 +96,26 @@
 														id="firstname" name="firstname"
 														value="${companion.firstname}"
 														onchange="addSegmentsTranslateZhToPinYin(this,'firstnameen','')"
-														type="text" placeholder="同行人姓" />
+														type="text" placeholder="" />
 												</div>
 												<div class="col-sm-3">
 													<label><span class="s">*</span> 同行人名</label> <input
 														id="lastname" name="lastname"
 														value="${companion.lastname}"
 														onchange="addSegmentsTranslateZhToPinYin(this,'lastnameen','')"
-														type="text" placeholder="同行人名" />
+														type="text" placeholder="" />
 												</div>
 												<div class="col-sm-3">
 													<label><span class="s">*</span> Surnames</label> <input
 														id="firstnameen" class="firstnameen"
 														value="${companion.firstnameen}" name="firstnameen"
-														type="text" placeholder="Surnames" />
+														type="text" placeholder="" />
 												</div>
 												<div class="col-sm-3">
 													<label><span class="s">*</span> Given Names</label> <input
 														id="lastnameen" class="lastnameen"
 														value="${companion.lastnameen}" name="lastnameen"
-														type="text" placeholder="Given Names" />
+														type="text" placeholder="" />
 												</div>
 											</div>
 											<div class="row">
@@ -152,22 +152,22 @@
 											<div class="col-sm-3">
 												<label><span class="s">*</span>同行人姓</label> <input
 													id="firstname" name="firstname" type="text"
-													placeholder="同行人姓" />
+													placeholder="" />
 											</div>
 											<div class="col-sm-3">
 												<label><span class="s">*</span> 同行人名</label> <input
 													id="lastname" name="lastname" type="text"
-													placeholder="同行人名" />
+													placeholder="" />
 											</div>
 											<div class="col-sm-3">
 												<label><span class="s">*</span> Surnames</label> <input
 													id="firstnameen" class="firstnameen" name="firstnameen"
-													type="text" placeholder="Surnames" />
+													type="text" placeholder="" />
 											</div>
 											<div class="col-sm-3">
 												<label><span class="s">*</span> Given Names</label> <input
 													id="lastnameen" class="lastnameen" name="lastnameen"
-													type="text" placeholder="Given Names" />
+													type="text" placeholder="" />
 											</div>
 										</div>
 										<div class="row">
@@ -238,7 +238,7 @@
 											<div class="col-sm-3 groupInputInfo">
 												<label><span class="s">*</span> 抵达日期</label> <input
 													type="text" id="arrivedate" value="${obj.arrivedate }"
-													name="arrivedate" class="datetimepickercss form-control"
+													name="arrivedate" class=" form-control"
 													placeholder="">
 											</div>
 											<div class="col-sm-3 groupInputInfo stopDate"
@@ -322,13 +322,13 @@
 									<div class="col-sm-3 groupInputInfo lastVisaDate">
 										<label><span class="s">*</span> 签发日期</label> <input
 											id="issueddate" name="issueddate" value="${obj.issueddate}"
-											class="datetimepickercss form-control" placeholder=""
+											class=" form-control" placeholder=""
 											type="text" />
 									</div>
 									<div class="col-sm-4 groupcheckBoxInfo visaisnumber">
 										<label><span class="s">*</span> 签证号码</label> <input
 											style="width: 180px;"
-											name="visanumbervisanumber" class="visanumber"
+											name="visanumber" class="visanumber"
 											value="${obj.tripinfo.visanumber }" type="text" />
 										<!-- <input id="idknowvisanumber" onchange="AddSingle(this,'idknowvisanumberen')" name="idknowvisanumber" v-on:click="idknowvisanumberChange" value="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/> -->
 									</div>
@@ -381,9 +381,10 @@
 					</div>
 					<div class="refuseExplain grouptextareaInfo paddingTop-9">
 						<label><span class="s">*</span> 说明</label> <input
-							name="refusedexplain" style="width: 182px !important;"
+							name="refusedexplain" onchange="translateZhToEn(this,'refusedexplainen','')" style="width: 182px !important;"
 							class="areaInputPic" id='refusedexplain'
 							value="${obj.tripinfo.refusedexplain }" />
+							<input type="hidden" id="refusedexplainen" name="refusedexplainen" value="${obj.tripinfo.refusedexplainen }"/>
 					</div>
 				</div>
 
@@ -417,9 +418,10 @@
 						</div>
 						<div class="col-sm-3 youRelationship">
 							<label><span class="s">*</span> 其他理由</label> <input
-								style="height: 34px;" id="immigrantpetitionexplain"
+								style="height: 34px;" id="immigrantpetitionexplain" onchange="translateZhToEn(this,'immigrantpetitionexplainen','')"
 								value="${obj.tripinfo.immigrantpetitionexplain }"
 								name="immigrantpetitionexplain" type="text" placeholder="" />
+								<input id="immigrantpetitionexplainen" name="immigrantpetitionexplainen" type="hidden" value="${obj.tripinfo.immigrantpetitionexplainen }"/>
 						</div>
 					</div>
 				</div>
@@ -439,24 +441,22 @@
 					</div>
 					<div class="row saveOutboundContent">
 						<div class="col-sm-3 youRelationship ">
-								<div class="travelCountry paddingTop groupInputInfo">
+								<!-- <div class="travelCountry paddingTop groupInputInfo">
 									<label>国家/地区</label>
 									<div class="groupInputInfo groupSelectInfo">
-									
 										<select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
-											
 											<option value="" selected="selected"></option>
 										</select>
 									</div>
-								</div>
+								</div> -->
 					
-							<!-- <c:if test="${!empty obj.gocountry }">
+							<c:if test="${!empty obj.gocountry }">
 									<c:forEach var="gocountry" items="${obj.gocountry }">
 										<div class="travelCountry paddingTop groupInputInfo">
 											<label>国家/地区</label>
 											<div class="groupInputInfo groupSelectInfo">
-											
-												<select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
+												<input id="traveledcountry"  name="traveledcountry" value="${gocountry.traveledcountry}"/>
+												<%-- <select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
 													<c:forEach items="${obj.gocountryfivelist }" var="country">
 															<c:if test="${gocountry.traveledcountry != country.id}">
 																<option value="${country.id }">${country.chinesename }</option>
@@ -465,29 +465,30 @@
 																<option value="${country.id }" selected="selected">${country.chinesename }</option>
 															</c:if>
 													</c:forEach>
-												</select>
+												</select> --%>
 											</div>
 										</div>
 									</c:forEach>
-								</c:if> -->
-								<!-- <c:if test="${empty obj.gocountry }">
+								</c:if>
+								<c:if test="${empty obj.gocountry }">
 									<div class="paddingTop travelCountry groupInputInfo">
 										<label>国家/地区</label>
 										<div class="groupInputInfo groupSelectInfo">
-											<select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
+											<input name="traveledcountry" id="traveledcountry" type="text"/>
+											<%-- <select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
 												<c:forEach items="${obj.gocountryfivelist }" var="country">
 													<option value="${country.id }">${country.chinesename }</option>
 												</c:forEach>
-											</select>
+											</select> --%>
 										</div>
 									</div>
-								</c:if> -->
+								</c:if>
 
-								<!-- <div class="col-sm-3">
+								<div class="col-sm-3">
 									<a class="removeChuJingJiLu cancel gocountrycancel"
 										style="margin-top: 40px; display: inline-block; border-radius: 6px; font-size: 12px; text-decoration: none; padding: 3px 15px; color: #FFFFFF; background: #ca1818; cursor: pointer;"
 										onclick="gocountrycancel">删除</a>
-								</div> -->
+								</div>
 						</div>
 						
 					</div>
@@ -522,10 +523,10 @@
 	src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js"
 	charset="UTF-8"></script>
 <!-- 本页js -->
-<script src="${base}/admin/bigCustomer/visa/openPageYesOrNo.js"></script><!-- 本页面  打开默认开关 js -->
+<%-- <script src="${base}/admin/bigCustomer/visa/openPageYesOrNo.js"></script><!-- 本页面  打开默认开关 js -->
 	<script src="${base}/admin/bigCustomer/visa/visaGetInfoList.js"></script><!-- 本页面  获取一对多信息 js -->
-	<!--<script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script>--><!-- 本页面 Vue加载页面内容 js -->
-	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js --> 
+	<script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script><!-- 本页面 Vue加载页面内容 js -->
+	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js -->  --%>
 	<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js?v=<%=System.currentTimeMillis() %>"></script>
 <!-- 本页面 初始化时间插件 js -->
 <script
