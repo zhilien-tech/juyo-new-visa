@@ -79,7 +79,7 @@
 									style="margin-left: 20px;" value="2" checked />否
 							</div>
 							<div style="float: left; margin: 20px 0 0 185px;">
-								<a class="save companysave">添加</a>
+								<a class="save companysave" style="display:none;">添加</a>
 							</div>
 						</div>
 						<!--yes-->
@@ -434,7 +434,7 @@
 								style="margin-left: 20px;" value="2" checked />否
 						</div>
 						<div style="float: left; margin: 20px 0 0 185px;">
-							<a class="save gocountrysave">添加</a>
+							<a class="save gocountrysave" style="display:none;">添加</a>
 						</div>
 					</div>
 					<div class="row saveOutboundContent">
@@ -537,6 +537,7 @@
 		$("input[name='istravelwithother'][value='" + istravelwithother + "']").attr("checked", 'checked');
         if (istravelwithother == 1) {
         	$(".teamnamefalse").show();
+        	$(".companysave").show();
 		} else {
 			$(".teamnamefalse").hide();
 		}
@@ -597,6 +598,7 @@
 		$("input[name='istraveledanycountry'][value='" + istraveledanycountry + "']").attr("checked", 'checked');
 		if (istraveledanycountry == 1) {
 			$(".travelCountry").show();
+			$(".gocountrysave").show();
 		} else {
 			$(".travelCountry").hide();
 		}

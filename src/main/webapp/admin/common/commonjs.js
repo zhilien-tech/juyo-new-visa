@@ -500,7 +500,18 @@ $(document).on("input","#sendVisaDate",function(){
 			for(var i = 0;i < tmd.length;i++){
 				result += tmd[i].toString();
 			}
-			$(this).val(getNewDate(result));
+			var calDate = getNewDate(result);
+			var todayDate = getToday();
+			
+			var d1 = new Date(calDate.replace(/\-/g, "\/"));  
+			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
+			if(d1<d2){
+				alert("预计送签时间必须大于今天");
+				$(this).val("");
+	        	return;
+			}else{
+				$(this).val(getNewDate(result));
+			}
 
 			var stayday;
 
@@ -523,7 +534,19 @@ $(document).on("input","#sendVisaDate",function(){
 		}
 	}else{
 		if($(this).val().length == 8){
-			$(this).val(getNewDate(temp));
+			//$(this).val(getNewDate(temp));
+			var calDate = getNewDate(temp);
+			var todayDate = getToday();
+			
+			var d1 = new Date(calDate.replace(/\-/g, "\/"));  
+			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
+			if(d1<d2){
+				alert("预计送签时间必须大于今天");
+				$(this).val("");
+	        	return;
+			}else{
+				$(this).val(getNewDate(temp));
+			}
 
 			var stayday;
 
@@ -558,11 +581,34 @@ $(document).on("input","#outVisaDate",function(){
 			for(var i = 0;i < tmd.length;i++){
 				result += tmd[i].toString();
 			}
-			$(this).val(getNewDate(result));
+			
+			var calDate = getNewDate(result);
+			var todayDate = getToday();
+			
+			var d1 = new Date(calDate.replace(/\-/g, "\/"));  
+			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
+			if(d1<d2){
+				alert("预计出签时间必须大于今天");
+				$(this).val("");
+	        	return;
+			}else{
+				$(this).val(getNewDate(result));
+			}
 		}
 	}else{
 		if($(this).val().length == 8){
-			$(this).val(getNewDate(temp));
+			var calDate = getNewDate(temp);
+			var todayDate = getToday();
+			
+			var d1 = new Date(calDate.replace(/\-/g, "\/"));  
+			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
+			if(d1<d2){
+				alert("预计出签时间必须大于今天");
+				$(this).val("");
+	        	return;
+			}else{
+				$(this).val(getNewDate(temp));
+			}
 		}
 	}
 });
@@ -571,6 +617,8 @@ $(document).on("input","#goDate",function(){
 		return;
 	}
 	var temp = $(this).val();
+	var outDate = $("#outVisaDate").val();
+	var d3 = new Date(outDate.replace(/\-/g, "\/"));
 	if(temp.indexOf("-") > 0){
 		if(temp.length == 10){
 			var tmd = temp.split("-");
@@ -578,11 +626,44 @@ $(document).on("input","#goDate",function(){
 			for(var i = 0;i < tmd.length;i++){
 				result += tmd[i].toString();
 			}
-			$(this).val(getNewDate(result));
+			var calDate = getNewDate(result);
+			var todayDate = getToday();
+			
+			var d1 = new Date(calDate.replace(/\-/g, "\/"));  
+			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
+			
+			if(d1<d2){
+				alert("出行时间必须大于今天");
+				$(this).val("");
+	        	return;
+			}
+			if(d1<d3){
+				alert("出行时间必须大于预计出签时间");
+				$(this).val("");
+	        	return;
+			}
+			$(this).val(getNewDate(temp));
+			
 		}
 	}else{
 		if($(this).val().length == 8){
+			var calDate = getNewDate(temp);
+			var todayDate = getToday();
+			
+			var d1 = new Date(calDate.replace(/\-/g, "\/"));  
+			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
+			if(d1<d2){
+				alert("出行时间必须大于今天");
+				$(this).val("");
+	        	return;
+			}
+			if(d1<d3){
+				alert("出行时间必须大于预计出签时间");
+				$(this).val("");
+	        	return;
+			}
 			$(this).val(getNewDate(temp));
+			
 		}
 	}
 });
@@ -591,6 +672,8 @@ $(document).on("input","#returnDate",function(){
 		return;
 	}
 	var temp = $(this).val();
+	var outDate = $("#outVisaDate").val();
+	var d3 = new Date(outDate.replace(/\-/g, "\/"));
 	if(temp.indexOf("-") > 0){
 		if(temp.length == 10){
 			var tmd = temp.split("-");
@@ -598,11 +681,43 @@ $(document).on("input","#returnDate",function(){
 			for(var i = 0;i < tmd.length;i++){
 				result += tmd[i].toString();
 			}
+			var calDate = getNewDate(result);
+			var todayDate = getToday();
+			
+			var d1 = new Date(calDate.replace(/\-/g, "\/"));  
+			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
+			if(d1<d2){
+				alert("返回时间必须大于今天");
+				$(this).val("");
+	        	return;
+			}
+			if(d1<d3){
+				alert("返回时间必须大于预计出签时间");
+				$(this).val("");
+	        	return;
+			}
 			$(this).val(getNewDate(result));
+			
 		}
 	}else{
 		if($(this).val().length == 8){
+			var calDate = getNewDate(temp);
+			var todayDate = getToday();
+			
+			var d1 = new Date(calDate.replace(/\-/g, "\/"));  
+			var d2 = new Date(todayDate.replace(/\-/g, "\/"));
+			if(d1<d2){
+				alert("返回时间必须大于今天");
+				$(this).val("");
+	        	return;
+			}
+			if(d1<d3){
+				alert("返回时间必须大于预计出签时间");
+				$(this).val("");
+	        	return;
+			}
 			$(this).val(getNewDate(temp));
+			
 		}
 	}
 });
@@ -711,6 +826,23 @@ function getNewDate(temp, fn){
 	var DD = date.getDate();
 	if (DD < 10) DD = "0" + DD;
     return (YYYY+"-"+MM+"-"+DD);
+}
+
+//获取当前日期
+function getToday(){
+    var date = new Date();
+    var seperator1 = "-";
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = year + seperator1 + month + seperator1 + strDate;
+    return currentdate;
 }
 //定义一个触发焦点事件的开关，默认为不开启状态 || 也可以给input设置一个属性，来判断
 	var isBox = false; 

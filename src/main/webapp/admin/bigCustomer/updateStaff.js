@@ -244,7 +244,7 @@ function applyValidate(){
 				trigger:"change keyup",
 				validators : {
 					notEmpty : {
-						message : '国籍不能为空'
+						message : '出生国家不能为空'
 					}
 				}
 			},
@@ -892,53 +892,68 @@ function searchByCard(status){
 //更新保存基本信息
 function saveApplicant(status){
 	
-	$("#applicantInfo").data('bootstrapValidator').destroy();
-	$("#applicantInfo").data('bootstrapValidator', null);
-	applyValidate();
-	//得到获取validator对象或实例 
-	var bootstrapValidator = $("#applicantInfo").data('bootstrapValidator');
-	// 执行表单验证 
-	bootstrapValidator.validate();
-	if (bootstrapValidator.isValid()){
-		var str="";
-		var	applicantInfo = $("#applicantInfo").serialize();
-
-		if(status == 2){
-			//左箭头跳转 
-			window.location.href = '/admin/neworderUS/updatePhoto.html?staffid='+staffId;
-			$.ajax({
-				type: 'POST',
-				data : applicantInfo,
-				url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
-				success :function(data) {
-					parent.successCallback(2);
-				}
-			});
-		}else if(status == 3){
-			//右箭头跳转
-			window.location.href = '/admin/neworderUS/updatePassportInfo.html?staffid='+staffId;
-			$.ajax({
-				type: 'POST',
-				data : applicantInfo,
-				url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
-				success :function(data) {
-					parent.successCallback(2);
-				}
-			});
-		}else{
-			layer.load(1);
-			$.ajax({
-				type: 'POST',
-				data : applicantInfo,
-				url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
-				success :function(data) {
-					layer.closeAll("loading");
-					closeWindow();
-					parent.successCallback(2);
-				}
-			});
+	var str="";
+	var	applicantInfo = $("#applicantInfo").serialize();
+	if(status != 2){
+		$("#applicantInfo").data('bootstrapValidator').destroy();
+		$("#applicantInfo").data('bootstrapValidator', null);
+		applyValidate();
+		//得到获取validator对象或实例 
+		var bootstrapValidator = $("#applicantInfo").data('bootstrapValidator');
+		// 执行表单验证 
+		bootstrapValidator.validate();
+		if (bootstrapValidator.isValid()){
+			
+			if(status == 2){
+				//左箭头跳转 
+				window.location.href = '/admin/neworderUS/updatePhoto.html?staffid='+staffId;
+				$.ajax({
+					type: 'POST',
+					data : applicantInfo,
+					url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
+					success :function(data) {
+						parent.successCallback(2);
+					}
+				});
+			}else if(status == 3){
+				//右箭头跳转
+				window.location.href = '/admin/neworderUS/updatePassportInfo.html?staffid='+staffId;
+				$.ajax({
+					type: 'POST',
+					data : applicantInfo,
+					url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
+					success :function(data) {
+						parent.successCallback(2);
+					}
+				});
+			}else{
+				layer.load(1);
+				$.ajax({
+					type: 'POST',
+					data : applicantInfo,
+					url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
+					success :function(data) {
+						layer.closeAll("loading");
+						closeWindow();
+						parent.successCallback(2);
+					}
+				});
+			}
 		}
+		
+	}else{
+		//左箭头跳转 
+		window.location.href = '/admin/neworderUS/updatePhoto.html?staffid='+staffId;
+		$.ajax({
+			type: 'POST',
+			data : applicantInfo,
+			url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
+			success :function(data) {
+				parent.successCallback(2);
+			}
+		});
 	}
+	
 }
 
 /*function saveApplicant(status){

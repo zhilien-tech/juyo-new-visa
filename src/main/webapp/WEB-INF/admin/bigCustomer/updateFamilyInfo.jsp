@@ -124,7 +124,7 @@
 
                 <div class="clear" style="height: 15px;"></div>
                 <div class="floatLeft groupcheckBoxInfo" style="width: 197px;">
-                    <label><span class="s">*</span> 配偶出生城市</label>
+                    <label><span class="s">*</span> 配偶出生省份</label>
                     <select name="spousecity" class="form-control input-sm select2" multiple="multiple"  id="spousecity" >
 	                   <option selected="selected" value="${obj.familyinfo.spousecity }">${obj.familyinfo.spousecity}</option>
                     </select>

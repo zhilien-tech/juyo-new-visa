@@ -185,7 +185,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>详细地址</label> 
-									<input id="detailedAddress" name="detailedaddress" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.basicinfo.detailedaddress }" />
+									<input id="detailedAddress" autocomplete="off" name="detailedaddress" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.basicinfo.detailedaddress }" />
 								</div>
 							</div>
 							<!-- <div class="col-sm-12 xx-en">
@@ -416,7 +416,7 @@
 							<!-- 是否有曾用名/曾有的或另有的国籍(或公民身份) -->
 							<div class="col-sm-10 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
-									<label>Have you ever used other names</label> 
+									<label>Ever used other names</label> 
 									<div>
 										<span class="nameBeforeYes">
 											<input type="radio" name="hasothernameen" class="usedBeforeUS" value="1"/>yes

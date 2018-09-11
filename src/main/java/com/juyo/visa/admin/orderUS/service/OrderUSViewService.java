@@ -2290,8 +2290,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		passportEntity.setSex(passportJsonEntity.getSex());
 		passportEntity.setSexen(passportJsonEntity.getSexEn());
 		passportEntity.setBirthaddress(passportJsonEntity.getBirthCountry());//出生地
-		passportEntity.setIssuedorganization("公安部出入境管理局");
-		passportEntity.setIssuedorganizationen("MPS Exit&Entry Adiministration");
 
 		if (Util.eq("陕西", passportJsonEntity.getBirthCountry())) {
 			passportEntity.setBirthaddressen("SHAANXI");

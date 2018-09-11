@@ -33,8 +33,10 @@ $(".companyInfo").change(function () {
 	let checked = $("input[name='istravelwithother']:checked").val();
 	if (checked == 1) {
 		$(".teamnamefalse").show();
+		$(".companysave").show();
 	} else {
 		$(".teamnamefalse").hide();
+		$(".companysave").hide();
 	}
 });
 //旅伴信息多段操作
@@ -141,8 +143,10 @@ $(".istraveledanycountry").change(function () {
 	let checked = $("input[name='istraveledanycountry']:checked").val();
 	if (checked == 1) {
 		$(".travelCountry").show();
+		$(".gocountrysave").show();
 	} else {
 		$(".travelCountry").hide();
+		$(".gocountrysave").hide();
 	}
 });
 
