@@ -16,6 +16,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+
 import org.apache.http.HttpResponse;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -54,6 +56,8 @@ import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.util.HttpUtil;
+import com.juyo.visa.common.util.PinyinTool;
+import com.juyo.visa.common.util.PinyinTool.Type;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.common.util.TranslateUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
@@ -374,14 +378,21 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setBirthday(form.getBirthday());
 		basicinfo.setNationality(form.getNationality());
 		basicinfo.setHasothername(form.getHasothername());
-		basicinfo.setOtherfirstname(form.getOtherfirstname());
-		basicinfo.setOtherfirstnameen(form.getOtherfirstnameen());
-		basicinfo.setOtherlastname(form.getOtherlastname());
-		basicinfo.setOtherlastnameen(form.getOtherlastnameen());
+		basicinfo.setHasothernameen(form.getHasothername());
+		if (form.getHasothername() == 2) {
+			basicinfo.setOtherfirstname(null);
+			basicinfo.setOtherfirstnameen(null);
+			basicinfo.setOtherlastname(null);
+			basicinfo.setOtherlastnameen(null);
+		} else {
+			basicinfo.setOtherfirstname(form.getOtherfirstname());
+			basicinfo.setOtherfirstnameen(form.getOtherfirstnameen());
+			basicinfo.setOtherlastname(form.getOtherlastname());
+			basicinfo.setOtherlastnameen(form.getOtherlastnameen());
+		}
 		//英文
 		long startTime = System.currentTimeMillis();
 		System.out.println("开始保存英文====");
-		basicinfo.setHasothernameen(form.getHasothernameen());
 		basicinfo.setTelephoneen(form.getTelephone());
 		basicinfo.setEmailen(form.getEmail());
 		basicinfo.setCardIden(form.getCardId());
@@ -456,7 +467,27 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid));
 		passportinfo.setPassport(form.getPassport());
 		passportinfo.setIssuedplace(form.getIssuedplace());
-		passportinfo.setIssuedplaceen(form.getIssuedplaceen());
+		//passportinfo.setIssuedplaceen(form.getIssuedplaceen());
+
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
+		if (!Util.isEmpty(form.getIssuedplace())) {
+			String issuedplace = form.getIssuedplace();
+			if (Util.eq("内蒙古", issuedplace)) {
+				passportinfo.setIssuedplaceen("NEI MONGOL");
+			} else if (Util.eq("陕西", issuedplace)) {
+				passportinfo.setIssuedplaceen("SHAANXI");
+			} else {
+				try {
+
+					passportinfo.setIssuedplaceen(tool.toPinYin(form.getIssuedplace(), "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
+
 		passportinfo.setIssueddate(form.getIssueddate());
 		passportinfo.setValidtype(form.getValidtype());
 		passportinfo.setValidenddate(form.getValidenddate());

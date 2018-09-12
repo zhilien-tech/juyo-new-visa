@@ -73,7 +73,7 @@
 								<div class="form-group">
 									<label><span>*</span>护照号</label>
 									<input type="hidden" name="staffid" value="${obj.staffid }"/>
-									<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.passport}"/>
+									<input id="passport" name="passport" tabindex="1" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.passport}"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
@@ -81,8 +81,8 @@
 									<label>
 										<span>*</span>签发地点/拼音
 									</label>
-									<input id="issuedPlace" name="issuedplace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passportinfo.issuedplace }"/>
-									<input id="issuedPlaceEn" name="issuedplaceen" type="text" style="position:absolute;top:32px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passportinfo.issuedplaceen }"/>
+									<input id="issuedPlace" tabindex="1" name="issuedplace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passportinfo.issuedplace }"/>
+									<input id="issuedPlaceEn" tabindex="1" name="issuedplaceen" type="text" style="position:absolute;top:32px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passportinfo.issuedplaceen }"/>
 								</div>
 							</div>
 						</div><!-- end 出生日期/签发地点 拼音 -->
@@ -92,13 +92,13 @@
 									<label>
 										<span>*</span>签发日期
 									</label>
-									<input id="issuedDate" name="issueddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.issueddate }"/>
+									<input id="issuedDate" tabindex="1" name="issueddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.issueddate }"/>
 								</div>
 							</div>
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<select id="validType" name="validtype" class="form-control input-sm selectHeight" >
+									<select id="validType" tabindex="1" name="validtype" class="form-control input-sm selectHeight" >
 									<c:forEach var="map" items="${obj.passporttype}">
 										<option value="${map.key}" ${map.key == obj.passportinfo.validtype?'selected':'' }>${map.value}</option>
 									</c:forEach>
@@ -110,7 +110,7 @@
 									<label>
 										<span>*</span>有效期至
 									</label>
-									<input id="validEndDate" name="validenddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.validenddate }"/>
+									<input id="validEndDate" tabindex="1" name="validenddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.validenddate }"/>
 								</div>
 							</div>
 						</div><!-- end 签发日期/有效期至 -->
@@ -120,7 +120,7 @@
 									<label>
 										<span>*</span>签发机关
 									</label>
-									<input id="issuedOrganization" name="issuedorganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.issuedorganization }"/>
+									<input id="issuedOrganization" tabindex="1" name="issuedorganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.issuedorganization }"/>
 								</div>
 							</div>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0" style="width: 230px;">
@@ -128,7 +128,7 @@
 										<label>
 												<span>*</span>Exit & Entry Administration
 											</label>
-									<input id="issuedOrganizationEn" name="issuedorganizationen" type="text" class="form-control input-sm" placeholder="Ministry of Public Security" value="${obj.passportinfo.issuedorganizationen }"/>
+									<input id="issuedOrganizationEn" tabindex="1" name="issuedorganizationen" type="text" class="form-control input-sm" placeholder="Ministry of Public Security" value="${obj.passportinfo.issuedorganizationen }"/>
 								</div>
 							</div>
 						</div><!-- end 签发机关 -->
@@ -160,7 +160,7 @@
 									<label>
 										<span>*</span>护照号码
 									</label>
-								<input id="lostpassportnum" name="lostpassportnum" type="text" class="form-control input-sm" placeholder="" value="${obj.passportinfo.lostpassportnum }"/>
+								<input id="lostpassportnum" tabindex="1" name="lostpassportnum" type="text" class="form-control input-sm" placeholder="" value="${obj.passportinfo.lostpassportnum }"/>
 							</div>
 						</div>
 					</div><!-- end 签发机关 -->

@@ -742,10 +742,12 @@ $(".usedBefore").change(function(){
 	if(usedBeforeVal == 1){
 		
 		$(".usedBeforeTrue").show();
+		$(".usedBeforeUSTrue").show();
 		$("input[name='hasothernameen'][value='1']").trigger("click");
 		//$(".usedBeforeUS1").trigger("click");
 	}else{
 		$(".usedBeforeTrue").hide();
+		$(".usedBeforeUSTrue").hide();
 		$("input[name='hasothernameen'][value='2']").trigger("click");
 		//$(".usedBeforeUS2").trigger("click");
 	}

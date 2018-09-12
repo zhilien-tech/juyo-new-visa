@@ -416,7 +416,7 @@
 							<!-- 是否有曾用名/曾有的或另有的国籍(或公民身份) -->
 							<div class="col-sm-10 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
-									<label>Ever used other names</label> 
+									<!-- <label>Ever used other names</label> 
 									<div>
 										<span class="nameBeforeYes">
 											<input type="radio" name="hasothernameen" class="usedBeforeUS" value="1"/>yes
@@ -424,7 +424,7 @@
 										<span>
 											<input type="radio" name="hasothernameen" class="usedBeforeUS" value="2" checked />No
 										</span>
-									</div>
+									</div> -->
 								</div>
 							</div>
 						</div>
@@ -432,13 +432,13 @@
 							<!-- 姓/名 -->
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
-									<label>Other Surnames Used</label> 
+									<label style="margin-top:55px;">Other Surnames Used</label> 
 									<input id="otherfirstnameen" name="otherfirstnameen" tabindex="14" type="text" class="form-control input-sm " value="${obj.basicinfo.otherfirstnameen }" />
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
-									<label>Other Given Names Used</label> 
+									<label style="margin-top:55px;">Other Given Names Used</label> 
 									<input id="otherlastnameen" name="otherlastnameen" tabindex="14" type="text" class="form-control input-sm" value="${obj.basicinfo.otherlastnameen }" />
 								</div>
 							</div>
@@ -557,8 +557,10 @@
 			//曾用名
 			if(otherName == 1){
 				$(".usedBeforeTrue").show();
+				$(".usedBeforeUSTrue").show();
 			}else {
 				$(".usedBeforeTrue").hide();
+				$(".usedBeforeUSTrue").hide();
 			}
 			if(otherNameen == 1){
 				$(".usedBeforeUSTrue").show();

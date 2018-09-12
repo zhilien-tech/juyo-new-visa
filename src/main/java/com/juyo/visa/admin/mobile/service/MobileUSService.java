@@ -484,15 +484,23 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		basicinfo.setEmail(form.getEmail());
 		basicinfo.setFirstname(form.getFirstname());
 		basicinfo.setFirstnameen(form.getFirstnameen());
-		basicinfo.setHasothername(form.getHasothername());
 		basicinfo.setLastname(form.getLastname());
 		basicinfo.setLastnameen(form.getLastnameen());
 		basicinfo.setMarrystatus(form.getMarrystatus());
 		basicinfo.setNationality(form.getNationality());
-		basicinfo.setOtherfirstname(form.getOtherfirstname());
-		basicinfo.setOtherfirstnameen(form.getOtherfirstnameen());
-		basicinfo.setOtherlastname(form.getOtherlastname());
-		basicinfo.setOtherlastnameen(form.getOtherlastnameen());
+		basicinfo.setHasothername(form.getHasothername());
+		basicinfo.setHasothernameen(form.getHasothername());
+		if (form.getHasothername() == 2) {
+			basicinfo.setOtherfirstname(null);
+			basicinfo.setOtherfirstnameen(null);
+			basicinfo.setOtherlastname(null);
+			basicinfo.setOtherlastnameen(null);
+		} else {
+			basicinfo.setOtherfirstname(form.getOtherfirstname());
+			basicinfo.setOtherfirstnameen(form.getOtherfirstnameen());
+			basicinfo.setOtherlastname(form.getOtherlastname());
+			basicinfo.setOtherlastnameen(form.getOtherlastnameen());
+		}
 		basicinfo.setProvince(form.getProvince());
 		basicinfo.setSex(form.getSex());
 		basicinfo.setUpdatetime(new Date());
@@ -568,8 +576,8 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			passport.setIssuedorganization(form.getIssuedorganization());
 			passport.setIssuedorganizationen(form.getIssuedorganizationen());
 			passport.setIslostpassport(form.getIslostpassport());
-			passport.setIsrememberpassportnum(form.getIsrememberpassportnum());
-			passport.setLostpassportnum(form.getLostpassportnum());
+			//passport.setIsrememberpassportnum(form.getIsrememberpassportnum());
+			//passport.setLostpassportnum(form.getLostpassportnum());
 
 			//英文
 			//中文翻译成拼音并大写工具
@@ -590,9 +598,27 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				}
 
 			}
+
+			if (form.getIslostpassport() == 2) {
+				passport.setIsrememberpassportnum(2);
+				passport.setIsrememberpassportnumen(2);
+				passport.setLostpassportnum("不知道");
+				passport.setLostpassportnumen("I do not know");
+			} else {
+				passport.setIsrememberpassportnum(form.getIsrememberpassportnum());
+				passport.setIsrememberpassportnumen(form.getIsrememberpassportnum());
+				if (form.getIsrememberpassportnum() == 2) {
+					passport.setLostpassportnum("不知道");
+					passport.setLostpassportnumen("I do not know");
+				} else {
+					passport.setLostpassportnum(form.getLostpassportnum());
+					passport.setLostpassportnumen(form.getLostpassportnum());
+				}
+			}
+
 			passport.setIslostpassporten(form.getIslostpassport());
-			passport.setIsrememberpassportnumen(form.getIsrememberpassportnum());
-			passport.setLostpassportnumen(form.getLostpassportnum());
+			//passport.setIsrememberpassportnumen(form.getIsrememberpassportnum());
+			//passport.setLostpassportnumen(form.getLostpassportnum());
 			dbDao.update(passport);
 		}
 		return JuYouResult.ok();
@@ -754,9 +780,14 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		familyinfo.setFatherbirthday(form.getFatherbirthday());
 		familyinfo.setIsfatherinus(form.getIsfatherinus());
 		familyinfo.setFatherstatus(form.getFatherstatus());
+		familyinfo.setFatherstatusen(form.getFatherstatus());
+		if (form.getIsfatherinus() == 2) {
+			familyinfo.setFatherstatus(null);
+			familyinfo.setFatherstatusen(null);
+		}
+
 		//英文
 		familyinfo.setFatherbirthdayen(form.getFatherbirthday());
-		familyinfo.setFatherstatusen(form.getFatherstatus());
 		familyinfo.setIsfatherinusen(form.getIsfatherinus());
 		return null;
 	}
@@ -778,10 +809,14 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		familyinfo.setMotherlastname(form.getMotherlastname());
 		familyinfo.setMotherlastnameen(form.getMotherlastnameen());
 		familyinfo.setMotherstatus(form.getMotherstatus());
+		familyinfo.setMotherstatusen(form.getMotherstatus());
 		familyinfo.setIsmotherinus(form.getIsmotherinus());
+		if (form.getIsmotherinus() == 2) {
+			familyinfo.setMotherstatus(null);
+			familyinfo.setMotherstatusen(null);
+		}
 		//英文
 		familyinfo.setMotherbirthdayen(form.getMotherbirthday());
-		familyinfo.setMotherstatusen(form.getMotherstatus());
 		familyinfo.setIsmotherinusen(form.getIsmotherinus());
 		return null;
 	}
