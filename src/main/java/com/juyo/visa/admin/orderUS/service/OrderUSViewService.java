@@ -1802,6 +1802,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String telephone = staffBaseInfo.getTelephone();
 		String email = staffBaseInfo.getEmail();
 		String sex = staffBaseInfo.getSex();
+		String url = "";
 		String interviewdateStr = "";
 		Date interviewdate = staffBaseInfo.getInterviewdate();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -1823,7 +1824,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			//分享
 			if (Util.eq(sendType, "share")) {
 				smsContent = smsContent.replace("${name}", name).replace("${sex}", sex)
-						.replace("${ordernum}", orderNum).replace("${mobileUrl}", telephone).replace("${email}", email);
+						.replace("${ordernum}", orderNum).replace("${mobileUrl}", telephone).replace("${email}", url);
 				result = sendSMS(telephone, smsContent);
 			}
 			//合格

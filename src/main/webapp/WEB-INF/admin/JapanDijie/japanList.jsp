@@ -39,12 +39,122 @@
 		  display: none;
 		}
 	</style>
+	<style>
+		[class*=" datetimepicker-dropdown"]:before{
+			top:-8px;
+		}
+			.form-control{
+				height: 30px;
+			}
+			.datetimepicker{
+				top:67px!important;
+				position: fixed;
+				
+			}
+			
+			/* 2018_07_30 */
+			/* .card-content {
+	
+			} */
+			.card-content {
+				width: 72%!important;
+			}
+			.card-content .visaListSpan div{
+				width: 19.5%!important;			
+			}
+	
+			.everybody-info div:nth-child(4) {
+				margin-left: 0;
+			}
+	
+			/* .card-content {
+				float: left;
+			} */
+	
+			.card-content-2{
+				top: 0;
+				right: 0;
+				position: absolute;
+				width: 28%;
+				height: 100%;
+			}
+
+			.card-content-2 span {
+				top: 50%;
+				left: 0;
+				position: absolute;
+				margin-top: -12px;
+				height: 24px;
+				line-height: 24px;
+				font-size: 18px;
+			}
+			.card-content-2 span b{
+				font-size: 14px;
+				font-weight: 400;
+			}
+			.everybody-info div:nth-child(3){
+				width: 16.5%!important;
+			}
+			.everybody-info div:nth-child(2){
+				width: 22.5%!important;
+			}
+			
+		</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 				<section class="content">
 					<div class="box-header"><!-- 检索条件 -->
 						<div class="row">
-							<div class="col-md-2 left-5px right-0px">
+						
+							<div class="col-md col-md-2" style="width:12%">
+								<select class="input-class input-sm" style="width:110px;" id="status" name="status" onchange="changestatus()">
+									<option value="">状态</option>
+									<c:forEach items="${obj.orderstatus }" var="orstatus">
+										<option value="${orstatus.key }">${orstatus.value}</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="col-md col-md-2 left-5px right-0px">
+								<select class="input-class input-sm" id="songqianshe" style="width:110px;margin-left:-17px;" name="songqianshe" onchange="changestatus()">
+									<option value="">送签社简称</option>
+									<c:forEach items="${obj.songqianlist }" var="songqianlist">
+										<option value="${songqianlist.id}">${songqianlist.shortName }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="col-md col-md-1 left-5px right-0px">
+								<select class="input-class input-sm" style="margin-left:-79px;" id="employee" name="employee" onchange="changestatus()">
+									<option value="">员工</option>
+									<c:forEach items="${obj.employees }" var="employees">
+										<option value="${employees.userid }">${employees.username }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="col-md col-md-1 left-5px right-0px">
+								<select class="input-class input-sm" style="margin-left:-85px;width:100px;" id="visatype" name="visatype" onchange="changestatus()">
+									<option value="">签证类型</option>
+									<c:forEach items="${obj.mainsalevisatypeenum }" var="visatype">
+										<option value="${visatype.key }">${visatype.value }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%;margin-left:-68px;">
+								<input type="text" class="input-sm input-class form-control" id="orderDate" name="orderDate" placeholder="下单时间" onkeypress="onkeyEnter()"/>
+								<input type="hidden" id="orderstartdate" name="orderstartdate"/>
+								<input type="hidden" id="orderenddate" name="orderenddate"/>
+							</div>
+							<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%;margin-left:-6px;">
+								<input type="text" class="input-sm input-class form-control" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onkeypress="onkeyEnter()"/>
+								<input type="hidden" id="sendstartdate" name="sendstartdate"/>
+								<input type="hidden" id="sendenddate" name="sendenddate"/>
+							</div>
+							<div class="col-md col-md-3 left-5px right-0px" style="margin-left:-6px;">
+								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照号/电话/邮箱/申请人/受付番号" onkeypress="onkeyEnter()"/>
+							</div>
+						
+						
+						
+							<!-- <div class="col-md-2 left-5px right-0px">
 								<select class="input-class input-sm" id="status" name="status">
 									<option value="">状态</option>
 								</select>
@@ -57,7 +167,7 @@
 							</div>
 							<div class="col-md-3 left-5px">
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
-							</div>
+							</div> -->
 						</div>
 					</div><!-- end 检索条件 -->
 					<div class="box-body" id="card" v-cloak><!-- 卡片列表 -->
@@ -292,6 +402,20 @@
 			}
 	　　}
 	});
+	
+	$('#sendSignDate').daterangepicker(null, function(start, end, label) {
+	  	console.log(start.toISOString(), end.toISOString(), label);
+	  	$("#sendstartdate").val(start.toISOString());
+	  	$("#sendenddate").val(end.toISOString());
+	  	search();
+	});
+	$('#orderDate').daterangepicker(null, function(start, end, label) {
+	  	console.log(start.toISOString(), end.toISOString(), label);
+	  	$("#orderstartdate").val(start.toISOString());
+	  	$("#orderenddate").val(end.toISOString());
+	  	search();
+	});
+	
 	</script>
 </body>
 </html>

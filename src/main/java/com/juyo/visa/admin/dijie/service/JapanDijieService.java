@@ -23,15 +23,21 @@ import org.nutz.dao.util.Daos;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.dijie.form.DijieOrderListForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
+import com.juyo.visa.common.enums.JpOrderSimpleEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
+import com.juyo.visa.common.enums.SimpleVisaTypeEnum;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCompanyEntity;
+import com.juyo.visa.entities.TCompanyOfCustomerEntity;
 import com.juyo.visa.entities.TFlightEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
@@ -54,6 +60,75 @@ import com.uxuexi.core.web.base.service.BaseService;
  */
 @IocBean
 public class JapanDijieService extends BaseService<TOrderEntity> {
+
+	public Object toList(HttpServletRequest request) {
+		Map<String, Object> result = Maps.newHashMap();
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		JSONArray ja = new JSONArray();
+
+		//送签社下拉
+		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
+				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+			//如果公司自己有指定番号，说明有送签资质，也需要出现在下拉中
+			if (!Util.isEmpty(loginCompany.getCdesignNum())) {
+				ja.add(loginCompany);
+			}
+			List<TCompanyOfCustomerEntity> list = dbDao.query(TCompanyOfCustomerEntity.class,
+					Cnd.where("comid", "=", loginCompany.getId()), null);
+			for (TCompanyOfCustomerEntity tCompanyOfCustomerEntity : list) {
+				JSONObject jo = new JSONObject();
+				Integer sendcomid = tCompanyOfCustomerEntity.getSendcomid();
+
+				TCompanyEntity sendCompany = dbDao.fetch(TCompanyEntity.class,
+						Cnd.where("id", "=", sendcomid).and("cdesignNum", "!=", ""));
+
+				ja.add(sendCompany);
+			}
+		}
+		result.put("songqianlist", ja);
+
+		//员工下拉
+		Integer comid = loginCompany.getId();
+		Integer adminId = loginCompany.getAdminId();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer userType = loginUser.getUserType();//当前登录用户类型
+
+		//查询拥有某个权限模块的工作人员
+		String sqlstr = sqlManager.get("logs_user_select_list");
+		Sql sql = Sqls.create(sqlstr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tcf.comid", "=", comid);
+		cnd.and("tu.id", "!=", adminId);
+		for (JPOrderProcessTypeEnum typeEnum : JPOrderProcessTypeEnum.values()) {
+			if (1 == typeEnum.intKey()) {
+				cnd.and(" tf.funName", "=", typeEnum.value());
+			}
+		}
+		List<Record> employees = dbDao.query(sql, cnd, null);
+		Cnd usercnd = Cnd.NEW();
+		usercnd.and("comId", "=", loginCompany.getId());
+		if (!loginCompany.getAdminId().equals(loginUser.getId())) {
+			usercnd.and("id", "!=", loginCompany.getAdminId());
+		}
+		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+
+			List<TUserEntity> companyuser = dbDao.query(TUserEntity.class, usercnd, null);
+			List<Record> companyusers = Lists.newArrayList();
+			for (TUserEntity tUserEntity : companyuser) {
+				Record record = new Record();
+				record.put("userid", tUserEntity.getId());
+				record.put("username", tUserEntity.getName());
+				companyusers.add(record);
+			}
+			employees = companyusers;
+		}
+
+		result.put("employees", employees);
+		result.put("mainsalevisatypeenum", EnumUtil.enum2(SimpleVisaTypeEnum.class));
+		result.put("orderstatus", EnumUtil.enum2(JpOrderSimpleEnum.class));
+		return result;
+	}
 
 	/**
 	 * 获取地接社列表数据

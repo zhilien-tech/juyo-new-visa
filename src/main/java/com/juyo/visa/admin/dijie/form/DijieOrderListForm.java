@@ -2,7 +2,7 @@
  * DijieOrderListForm.java
  * com.juyo.visa.admin.dijie.form
  * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
-*/
+ */
 
 package com.juyo.visa.admin.dijie.form;
 
@@ -47,6 +47,21 @@ public class DijieOrderListForm implements SQLParamForm {
 	private Integer userid;
 	//公司管理员id
 	private Integer adminId;
+	//送签社
+	private String songqianshe;
+	//员工
+	private String employee;
+	//送签时间
+	private String sendSignDate;
+	//下单时间
+	private String orderDate;
+	//签证类型
+	private Integer visatype;
+
+	private String sendenddate;
+	private String sendstartdate;
+	private String orderstartdate;
+	private String orderenddate;
 
 	@Override
 	public Sql sql(SqlManager sqlManager) {

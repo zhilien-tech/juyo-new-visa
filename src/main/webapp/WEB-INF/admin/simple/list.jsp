@@ -94,7 +94,7 @@
 		<!-- 切换卡按钮 end -->
 		<div class="row searchMar tab-header">
 			<div class="col-md col-md-2" style="width:12%">
-				<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
+				<select class="input-class input-sm" style="width:110px;" id="status" name="status" onchange="changestatus()">
 					<option value="">状态</option>
 					<c:forEach items="${obj.orderstatus }" var="orstatus">
 						<option value="${orstatus.key }">${orstatus.value}</option>
@@ -102,28 +102,40 @@
 				</select>
 			</div>
 			<div class="col-md col-md-2 left-5px right-0px">
-				<select class="input-class input-sm" id="songqianshe" name="songqianshe" onchange="changestatus()">
-					<option value="">送签社</option>
+				<select class="input-class input-sm" id="songqianshe" style="width:110px;margin-left:-17px;" name="songqianshe" onchange="changestatus()">
+					<option value="">送签社简称</option>
 					<c:forEach items="${obj.songqianlist }" var="songqianlist">
-						<option value="${songqianlist.id}">${songqianlist.name }</option>
+						<option value="${songqianlist.id}">${songqianlist.shortName }</option>
 					</c:forEach>
 				</select>
 			</div>
 			<div class="col-md col-md-1 left-5px right-0px">
-				<select class="input-class input-sm" id="employee" name="employee" onchange="changestatus()">
+				<select class="input-class input-sm" style="margin-left:-79px;" id="employee" name="employee" onchange="changestatus()">
 					<option value="">员工</option>
 					<c:forEach items="${obj.employees }" var="employees">
 						<option value="${employees.userid }">${employees.username }</option>
 					</c:forEach>
 				</select>
 			</div>
-			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%">
+			<div class="col-md col-md-1 left-5px right-0px">
+				<select class="input-class input-sm" style="margin-left:-85px;width:100px;" id="visatype" name="visatype" onchange="changestatus()">
+					<option value="">签证类型</option>
+					<c:forEach items="${obj.mainsalevisatypeenum }" var="visatype">
+						<option value="${visatype.key }">${visatype.value }</option>
+					</c:forEach>
+				</select>
+			</div>
+			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%;margin-left:-68px;">
 				<input type="text" class="input-sm input-class form-control" id="orderDate" name="orderDate" placeholder="下单时间" onkeypress="onkeyEnter()"/>
+				<input type="hidden" id="orderstartdate" name="orderstartdate"/>
+				<input type="hidden" id="orderenddate" name="orderenddate"/>
 			</div>
-			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%">
+			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%;margin-left:-6px;">
 				<input type="text" class="input-sm input-class form-control" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onkeypress="onkeyEnter()"/>
+				<input type="hidden" id="sendstartdate" name="sendstartdate"/>
+				<input type="hidden" id="sendenddate" name="sendenddate"/>
 			</div>
-			<div class="col-md col-md-3 left-5px right-0px">
+			<div class="col-md col-md-3 left-5px right-0px" style="margin-left:-6px;">
 				<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照号/电话/邮箱/申请人/受付番号" onkeypress="onkeyEnter()"/>
 			</div>
 			<div class="col-md col-md-1 ">
@@ -140,10 +152,12 @@
 			<div class = "card-tj">
 				<span>订单总数(单)： {{visaJapanDataS.orderscount}}</span>
 				<span>总人数(人)： {{visaJapanDataS.peopletotal}}</span>
-				<span>作废数(单)： {{visaJapanDataS.disableorder}}</span>
-				<span>作废人数(人)： {{visaJapanDataS.disablepeople}}</span>
+				<!-- <span>作废数(单)： {{visaJapanDataS.disableorder}}</span>
+				<span>作废人数(人)： {{visaJapanDataS.disablepeople}}</span> -->
 				<span>招宝成功(单)： {{visaJapanDataS.zhaobaoorder}}</span>
 				<span>招宝成功(人)： {{visaJapanDataS.zhaobaopeople}}</span>
+				<span>单组单人： {{visaJapanDataS.singleperson}}</span>
+				<span>单组多人： {{visaJapanDataS.multiplayer}}</span>
 			</div>
 			
 			<div style="margin-top:123px!important;" class="box-body" v-cloak><!-- 卡片列表 -->
@@ -320,10 +334,12 @@
             			_self.visaJapanDataS = {
             				orderscount:0,
             				peopletotal:0,
-            				disableorder:0,
-            				disablepeople:0,
+            				/* disableorder:0,
+            				disablepeople:0, */
             				zhaobaoorder:0,
-            				zhaobaopeople:0
+            				zhaobaopeople:0,
+            				singleperson:0,
+            				multiplayer:0
             			}
             		}
             		
@@ -587,6 +603,11 @@
 			//搜索条件
 			var status = $('#status').val();
 			var sendSignDate = $('#sendSignDate').val();
+			var visatype = $("#visatype").val();
+			var sendstartdate = $('#sendstartdate').val();
+			var sendenddate = $('#sendenddate').val();
+			var orderstartdate = $('#orderstartdate').val();
+			var orderenddate = $('#orderenddate').val();
 			
 			var orderDate = $('#orderDate').val();
 			var songqianshe = $("#songqianshe").val();
@@ -607,7 +628,7 @@
 				});
 				$.ajax({ 
 			    	url: url,
-			    	data:{status:status,sendSignDate:sendSignDate,orderDate:orderDate,employee:employee,songqianshe:songqianshe,searchStr:searchStr,pageNumber:pageNumber,orderAuthority:orderAuthority},
+			    	data:{status:status,visatype:visatype,sendstartdate:sendstartdate,sendenddate:sendenddate,orderstartdate:orderstartdate,orderenddate:orderenddate,sendSignDate:sendSignDate,orderDate:orderDate,employee:employee,songqianshe:songqianshe,searchStr:searchStr,pageNumber:pageNumber,orderAuthority:orderAuthority},
 			    	dataType:"json",
 			    	type:'post',
 			    	success: function(data){
@@ -645,6 +666,11 @@
 		$("#status").val("");
 		$("#sendSignDate").val("");
 		$("#searchStr").val("");
+		$("#visatype").val("");
+		$("#sendstartdate").val("");
+		$("#sendenddate").val("");
+		$('#orderstartdate').val("");
+		$('#orderenddate').val("");
 		//分页项
 		$("#pageNumber").val(1);
 		$("#pageTotal").val("");
@@ -654,9 +680,14 @@
 	function search(){
 		var status = $('#status').val();
 		var sendSignDate = $('#sendSignDate').val();
+		var sendstartdate = $('#sendstartdate').val();
+		var sendenddate = $('#sendenddate').val();
 		var orderDate = $('#orderDate').val();
+		var orderstartdate = $('#orderstartdate').val();
+		var orderenddate = $('#orderenddate').val();
 		var songqianshe = $("#songqianshe").val();
 		var employee = $("#employee").val();
+		var visatype = $("#visatype").val();
 		//var signOutDate = $('#signOutDate').val();
 		var searchStr = $('#searchStr').val();
 		var orderAuthority = "allOrder";
@@ -672,11 +703,16 @@
         	url: url,
         	data:{
         		status:status,
+        		visatype:visatype,
         		songqianshe:songqianshe,
         		employee:employee,
         		sendSignDate:sendSignDate,
         		orderDate:orderDate,
         		searchStr:searchStr,
+        		sendstartdate:sendstartdate,
+        		sendenddate:sendenddate,
+        		orderstartdate:orderstartdate,
+        		orderenddate:orderenddate,
         		orderAuthority:orderAuthority
         	},
         	dataType:"json",
@@ -690,10 +726,12 @@
             			_self.visaJapanDataS = {
             				orderscount:0,
             				peopletotal:0,
-            				disableorder:0,
-            				disablepeople:0,
+            				/* disableorder:0,
+            				disablepeople:0, */
             				zhaobaoorder:0,
-            				zhaobaopeople:0
+            				zhaobaopeople:0,
+            				singleperson:0,
+            				multiplayer:0
             			}
             		}
           	}
@@ -730,10 +768,12 @@
             			_self.visaJapanDataS = {
             				orderscount:0,
             				peopletotal:0,
-            				disableorder:0,
-            				disablepeople:0,
+            				/* disableorder:0,
+            				disablepeople:0, */
             				zhaobaoorder:0,
-            				zhaobaopeople:0
+            				zhaobaopeople:0,
+            				singleperson:0,
+            				multiplayer:0
             			}
             		}
           	}
@@ -803,7 +843,7 @@
 			
 		}); */
 		
-		//送签时间
+		/* //送签时间
 		$("#sendSignDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
@@ -835,11 +875,20 @@
 			minView: "month"//只显示年月日
 		}).on("changeDate",function(){  
 			search();
-		});
-		
-		/* $('#sendSignDate').daterangepicker(null, function(start, end, label) {
-		  	console.log(start.toISOString(), end.toISOString(), label);
 		}); */
+		
+		$('#sendSignDate').daterangepicker(null, function(start, end, label) {
+		  	console.log(start.toISOString(), end.toISOString(), label);
+		  	$("#sendstartdate").val(start.toISOString());
+		  	$("#sendenddate").val(end.toISOString());
+		  	search();
+		});
+		$('#orderDate').daterangepicker(null, function(start, end, label) {
+		  	console.log(start.toISOString(), end.toISOString(), label);
+		  	$("#orderstartdate").val(start.toISOString());
+		  	$("#orderenddate").val(end.toISOString());
+		  	search();
+		});
 		//鼠标移入事件
 		$(document).on('mouseover','.showInfo',function(){
 

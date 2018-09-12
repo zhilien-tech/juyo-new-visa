@@ -38,8 +38,8 @@ public class JapanDijieModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object japanList() {
-		return null;
+	public Object japanList(HttpServletRequest request) {
+		return japanDijieService.toList(request);
 	}
 
 	/**
