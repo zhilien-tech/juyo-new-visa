@@ -1,13 +1,30 @@
 /*get_Japan_dijie_list_data*/
 SELECT
 	toj.id,
+	taj.passport,
+	taj.applyname,
 	tr.orderNum japanNumber,
 	toj.acceptDesign number,
 	DATE_FORMAT(tr.sendVisaDate, '%Y-%m-%d') sendingTime,
 	DATE_FORMAT(tr.outVisaDate, '%Y-%m-%d') signingTime,
 	tr.STATUS japanState,
 	tu.name username,
-	tcom.name comname
+	tcom.name comname,
+	(
+	SELECT
+	count(*)
+	FROM
+	t_applicant_order_jp
+	WHERE
+	orderId = toj.id
+	) peopleNumber,
+	tr.isDisabled,
+	tr.zhaobaocomplete,
+	tr.zhaobaoupdate,
+	toj.visastatus visastatus,
+	toj.visaType,
+	toj.acceptDesign,
+	tr.id orderid
 FROM
 	t_order tr
 INNER JOIN t_order_jp toj ON toj.orderId = tr.id
@@ -17,6 +34,7 @@ LEFT JOIN t_company tcom ON toj.sendsignid = tcom.id
 LEFT JOIN (
 	SELECT
 		taoj.orderId,
+		tap.passport,
 		GROUP_CONCAT(
 			CONCAT(ta.firstname, ta.lastname) SEPARATOR 'төл'
 		) applyname,
@@ -26,6 +44,7 @@ LEFT JOIN (
 	FROM
 		t_applicant ta
 	INNER JOIN t_applicant_order_jp taoj ON taoj.applicantId = ta.id
+	LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
 	GROUP BY
 		taoj.orderId
 ) taj ON taj.orderId = toj.id

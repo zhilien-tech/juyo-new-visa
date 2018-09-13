@@ -84,6 +84,20 @@ LEFT JOIN t_company tcom ON tr.comId = tcom.id
 LEFT JOIN t_company tcompany ON toj.sendsignid = tcompany.id
 LEFT JOIN t_user tuser ON tr.salesOpid = tuser.id
 LEFT JOIN t_customer tc ON tr.customerId = tc.id
+LEFT JOIN (
+SELECT
+taoj.orderId,
+tap.passport,
+GROUP_CONCAT(
+CONCAT(ta.firstname, ta.lastname) SEPARATOR 'төл'
+) applyname
+FROM
+t_applicant ta
+INNER JOIN t_applicant_order_jp taoj ON taoj.applicantId = ta.id
+LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
+GROUP BY
+taoj.orderId
+) taj ON taj.orderId = toj.id
 $condition
 /*WHERE 
 comId = @comid AND zhaobaoupdate = 1 

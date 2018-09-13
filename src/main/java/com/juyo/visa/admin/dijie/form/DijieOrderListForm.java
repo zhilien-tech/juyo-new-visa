@@ -6,8 +6,6 @@
 
 package com.juyo.visa.admin.dijie.form;
 
-import java.util.Date;
-
 import lombok.Data;
 
 import org.nutz.dao.Cnd;
@@ -16,7 +14,8 @@ import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.cri.SqlExpressionGroup;
 
-import com.uxuexi.core.common.util.DateUtil;
+import com.juyo.visa.common.enums.IsYesOrNoEnum;
+import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.form.SQLParamForm;
 
@@ -80,21 +79,51 @@ public class DijieOrderListForm implements SQLParamForm {
 			exp.and("tr.orderNum", "like", "%" + searchStr + "%").or("tc.linkman", "like", "%" + searchStr + "%")
 					.or("tc.mobile", "like", "%" + searchStr + "%").or("tc.email", "like", "%" + searchStr + "%")
 					.or("taj.applyname", "like", "%" + searchStr + "%")
-					.or("taj.applynameen", "like", "%" + searchStr + "%");
+					.or("toj.acceptDesign", "like", "%" + searchStr + "%")
+					.or("taj.passport", "like", "%" + searchStr + "%");
 			cnd.and(exp);
 		}
 		if (!Util.isEmpty(status)) {
-			cnd.and("tr.status", "=", status);
+			if (Util.eq(status, JPOrderStatusEnum.DISABLED.intKey())) {
+				cnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
+			} else {
+				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", status).and("tr.isDisabled", "=",
+						IsYesOrNoEnum.NO.intKey());
+				cnd.and(e1);
+			}
 		}
+		if (!Util.isEmpty(sendstartdate) && !Util.isEmpty(sendenddate)) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.sendVisaDate", "between", new Object[] { sendstartdate, sendenddate });
+			cnd.and(exp);
+		}
+		if (!Util.isEmpty(orderstartdate) && !Util.isEmpty(orderenddate)) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			orderstartdate = orderstartdate.replace("Z", " UTC");
+			exp.and("tr.createTime", "between", new Object[] { orderstartdate, orderenddate });
+			cnd.and(exp);
+		}
+		if (!Util.isEmpty(songqianshe)) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("toj.sendsignid", "=", songqianshe);
+			cnd.and(exp);
+		}
+		if (!Util.isEmpty(visatype)) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("toj.visatype", "=", visatype);
+			cnd.and(exp);
+		}
+		/*cnd.orderBy("tr.isDisabled", "ASC");
+		cnd.orderBy("tr.updatetime", "desc");*/
 		//发招保时间
-		if (!Util.isEmpty(zhaobaotime)) {
+		/*if (!Util.isEmpty(zhaobaotime)) {
 			//cnd.and("tr.sendVisaDate", ">=", sendSignDate);
 			String[] split = zhaobaotime.split(" - ");
 			Date sendSignDate = DateUtil.string2Date(split[0], DateUtil.FORMAT_YYYY_MM_DD);
 			Date outSignDate = DateUtil.string2Date(split[1], DateUtil.FORMAT_YYYY_MM_DD);
 			//SqlExpressionGroup exp = new SqlExpressionGroup();
 			cnd.and("toj.zhaobaotime", ">=", sendSignDate).and("toj.zhaobaotime", "<=", outSignDate);
-		}
+		}*/
 		cnd.orderBy("toj.zhaobaotime", "desc");
 		return cnd;
 	}

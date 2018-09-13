@@ -2,7 +2,7 @@
  * JapanDijieService.java
  * com.juyo.visa.admin.dijie.service
  * Copyright (c) 2017, 北京直立人科技有限公司版权所有.
-*/
+ */
 
 package com.juyo.visa.admin.dijie.service;
 
@@ -20,17 +20,17 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
+import org.nutz.dao.util.cri.SqlExpressionGroup;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.dijie.form.DijieOrderListForm;
 import com.juyo.visa.admin.login.util.LoginUtil;
+import com.juyo.visa.admin.simple.entity.StatisticsEntity;
 import com.juyo.visa.common.enums.CompanyTypeEnum;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
-import com.juyo.visa.common.enums.JPOrderProcessTypeEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JpOrderSimpleEnum;
 import com.juyo.visa.common.enums.MainSaleVisaTypeEnum;
@@ -86,10 +86,12 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 				ja.add(sendCompany);
 			}
 		}
-		result.put("songqianlist", ja);
+		List<TCompanyEntity> query = dbDao.query(TCompanyEntity.class,
+				Cnd.where("comType", "=", CompanyTypeEnum.SONGQIANSIMPLE.intKey()).and("cdesignNum", "!=", ""), null);
+		result.put("songqianlist", query);
 
 		//员工下拉
-		Integer comid = loginCompany.getId();
+		/*Integer comid = loginCompany.getId();
 		Integer adminId = loginCompany.getAdminId();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userType = loginUser.getUserType();//当前登录用户类型
@@ -124,7 +126,7 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 			employees = companyusers;
 		}
 
-		result.put("employees", employees);
+		result.put("employees", employees);*/
 		result.put("mainsalevisatypeenum", EnumUtil.enum2(SimpleVisaTypeEnum.class));
 		result.put("orderstatus", EnumUtil.enum2(JpOrderSimpleEnum.class));
 		return result;
@@ -156,6 +158,42 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 
 		Pager pager = new OffsetPager((pageNumber - 1) * pageSize, pageSize);
 		pager.setRecordCount((int) Daos.queryCount(nutDao, sql.toString()));
+
+		sql.setCallback(Sqls.callback.records());
+		nutDao.execute(sql);
+
+		@SuppressWarnings("unchecked")
+		//主sql数据
+		List<Record> totallist = (List<Record>) sql.getResult();
+		int orderscount = totallist.size();
+		int peopletotal = 0;
+		/*int disableorder = 0;
+		int disablepeople = 0;*/
+		int zhaobaoorder = 0;
+		int zhaobaopeople = 0;
+		for (Record record : totallist) {
+			//作废单子、人数
+			/*if (Util.eq(1, record.get("isdisabled"))) {
+				disableorder++;
+				if (!Util.eq(0, record.get("peoplenumber"))) {
+					disablepeople += record.getInt("peoplenumber");
+				}
+			}*/
+
+			//收费单子，人数
+			if (Util.eq(1, record.get("zhaobaoupdate"))) {
+				zhaobaoorder++;
+				if (!Util.eq(0, record.get("peoplenumber"))) {
+					zhaobaopeople += record.getInt("peoplenumber");
+				}
+			}
+
+			//单子人数
+			if (!Util.eq(0, record.get("peoplenumber"))) {
+				peopletotal += record.getInt("peoplenumber");
+			}
+		}
+
 		sql.setPager(pager);
 		sql.setCallback(Sqls.callback.records());
 		nutDao.execute(sql);
@@ -178,9 +216,96 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 				}
 			}
 		}
+
+		//查询单组单人
+		List<Record> singleperson = getSingleperson(form);
+
+		StatisticsEntity entity = new StatisticsEntity();
+		/*entity.setDisableorder(disableorder);
+				entity.setDisablepeople(disablepeople);*/
+		entity.setOrderscount(orderscount);
+		entity.setPeopletotal(peopletotal);
+		entity.setZhaobaoorder(zhaobaoorder);
+		entity.setZhaobaopeople(zhaobaopeople);
+		entity.setSingleperson(singleperson.size());
+		entity.setMultiplayer(zhaobaoorder - singleperson.size());
+		result.put("entity", entity);
+
 		result.put("pagetotal", pager.getPageCount());
 		result.put("visaJapanData", list);
 		return result;
+	}
+
+	/**
+	 * 查询单人单组数据
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public List<Record> getSingleperson(DijieOrderListForm form) {
+		long startTime = System.currentTimeMillis();
+		String singlesqlStr = sqlManager.get("getSingleperson");
+		Sql singlesql = Sqls.create(singlesqlStr);
+
+		Cnd singlecnd = Cnd.NEW();
+		singlecnd.and("toj.groundconnectid", "=", form.getCompanyid());
+		if (!Util.isEmpty(form.getSearchStr())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.orderNum", "like", "%" + form.getSearchStr() + "%")
+					.or("tc.linkman", "like", "%" + form.getSearchStr() + "%")
+					.or("tc.mobile", "like", "%" + form.getSearchStr() + "%")
+					.or("tc.email", "like", "%" + form.getSearchStr() + "%")
+					.or("taj.applyname", "like", "%" + form.getSearchStr() + "%")
+					.or("toj.acceptDesign", "like", "%" + form.getSearchStr() + "%")
+					.or("taj.passport", "like", "%" + form.getSearchStr() + "%");
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getSendstartdate()) && !Util.isEmpty(form.getSendenddate())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.sendVisaDate", "between", new Object[] { form.getSendstartdate(), form.getSendenddate() });
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getOrderstartdate()) && !Util.isEmpty(form.getOrderenddate())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.createTime", "between", new Object[] { form.getOrderstartdate(), form.getOrderenddate() });
+			singlecnd.and(exp);
+		}
+		if (!Util.isEmpty(form.getStatus())) {
+			if (Util.eq(form.getStatus(), JPOrderStatusEnum.DISABLED.intKey())) {
+				singlecnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
+			} else {
+				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).and("tr.isDisabled", "=",
+						IsYesOrNoEnum.NO.intKey());
+				singlecnd.and(e1);
+			}
+		}
+
+		if (!Util.isEmpty(form.getSongqianshe())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("toj.sendsignid", "=", form.getSongqianshe());
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getVisatype())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("toj.visatype", "=", form.getVisatype());
+			singlecnd.and(exp);
+		}
+		singlecnd.and("tr.zhaobaoupdate", "=", 1);
+		singlecnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
+		singlecnd.orderBy("tr.isDisabled", "ASC");
+		singlecnd.orderBy("tr.updatetime", "desc");
+
+		singlesql.setCondition(singlecnd);
+		List<Record> singleperson = dbDao.query(singlesql, singlecnd, null);
+		long endTime = System.currentTimeMillis();
+		System.out.println("查询单组单人所用时间为：" + (endTime - startTime) + "ms");
+		return singleperson;
 	}
 
 	public Object orderdetail(Integer orderid, HttpServletRequest request) {

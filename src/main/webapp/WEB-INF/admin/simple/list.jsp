@@ -125,7 +125,7 @@
 					</c:forEach>
 				</select>
 			</div>
-			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%;margin-left:-68px;">
+			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:18.5%;margin-left:-68px;">
 				<input type="text" class="input-sm input-class form-control" id="orderDate" name="orderDate" placeholder="下单时间" onkeypress="onkeyEnter()"/>
 				<input type="hidden" id="orderstartdate" name="orderstartdate"/>
 				<input type="hidden" id="orderenddate" name="orderenddate"/>
@@ -135,8 +135,8 @@
 				<input type="hidden" id="sendstartdate" name="sendstartdate"/>
 				<input type="hidden" id="sendenddate" name="sendenddate"/>
 			</div>
-			<div class="col-md col-md-3 left-5px right-0px" style="margin-left:-6px;">
-				<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照号/电话/邮箱/申请人/受付番号" onkeypress="onkeyEnter()"/>
+			<div class="col-md col-md-3 left-5px right-0px" style="margin-left:-6px;width:15.5%">
+				<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="护照号/申请人/受付番号" onkeypress="onkeyEnter()"/>
 			</div>
 			<div class="col-md col-md-1 ">
 				<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
@@ -308,7 +308,7 @@
 	<%-- <script src="${base}/admin/visaJapan/visaList.js"></script> --%>
 	<script src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
-	<script src="${base}/admin/simple/listpagejs.js"></script><!--下单 -->
+	<script src="${base}/admin/simple/listpagejs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
 	//异步加载的URL地址
     var url="${base}/admin/simple/listData.html";
@@ -879,16 +879,18 @@
 		
 		$('#sendSignDate').daterangepicker(null, function(start, end, label) {
 		  	console.log(start.toISOString(), end.toISOString(), label);
-		  	$("#sendstartdate").val(start.toISOString());
-		  	$("#sendenddate").val(end.toISOString());
+		  	$("#sendstartdate").val(start.format('YYYY-MM-DD HH:mm:ss'));
+		  	$("#sendenddate").val(end.format('YYYY-MM-DD HH:mm:ss'));
 		  	search();
 		});
 		$('#orderDate').daterangepicker(null, function(start, end, label) {
 		  	console.log(start.toISOString(), end.toISOString(), label);
-		  	$("#orderstartdate").val(start.toISOString());
-		  	$("#orderenddate").val(end.toISOString());
+		  	$("#orderstartdate").val(start.format('YYYY-MM-DD HH:mm:ss'));
+		  	$("#orderenddate").val(end.format('YYYY-MM-DD HH:mm:ss'));
 		  	search();
 		});
+		
+		
 		//鼠标移入事件
 		$(document).on('mouseover','.showInfo',function(){
 
@@ -901,6 +903,10 @@
 			$(".hideInfo").hide();
 		});
 	});
+	
+	function addOrder(){
+		window.location.href = "/admin/simple/addOrder.html";
+	}
 	
 	//连接websocket
 	/* connectWebSocket();

@@ -3,6 +3,7 @@ SELECT
 toj.id,
 toj.errormsg,
 taj.passport,
+taj.applyname,
 tuser.`name` opname,
 tcompany.shortName,
 tr.orderNum japanNumber,
