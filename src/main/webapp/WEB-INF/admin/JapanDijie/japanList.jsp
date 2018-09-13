@@ -496,20 +496,38 @@
 	　　}
 	});
 	
-	$('#sendSignDate').daterangepicker({
-		"autoApply": true,
-		//timePicker: false
-	}, function(start, end, label) {
+	//时间插件处理
+	$('#sendSignDate').daterangepicker(null, function(start, end, label) {
 	  	console.log(start.toISOString(), end.toISOString(), label);
 	  	console.log(start.format('YYYY-MM-DD HH:mm:ss'));
 	  	$("#sendstartdate").val(start.format('YYYY-MM-DD HH:mm:ss'));
 	  	$("#sendenddate").val(end.format('YYYY-MM-DD HH:mm:ss'));
 	  	search();
 	});
+	$('#sendSignDate').on('cancel.daterangepicker', function(ev, picker) {
+		$('#sendSignDate').val('');
+		$("#sendstartdate").val('');
+	  	$("#sendenddate").val('');
+	});
+	$('#sendSignDate').on('apply.daterangepicker', function(ev, picker) {
+		$("#sendstartdate").val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+	  	$("#sendenddate").val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+	  	search();
+	});
 	$('#orderDate').daterangepicker(null, function(start, end, label) {
 	  	console.log(start.toISOString(), end.toISOString(), label);
 	  	$("#orderstartdate").val(start.format('YYYY-MM-DD HH:mm:ss'));
 	  	$("#orderenddate").val(end.format('YYYY-MM-DD HH:mm:ss'));
+	  	search();
+	});
+	$('#orderDate').on('cancel.daterangepicker', function(ev, picker) {
+		$('#orderDate').val('');
+		$("#orderstartdate").val('');
+	  	$("#orderenddate").val('');
+	});
+	$('#orderDate').on('apply.daterangepicker', function(ev, picker) {
+		$("#orderstartdate").val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+	  	$("#orderenddate").val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
 	  	search();
 	});
 	

@@ -142,6 +142,7 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object listData(HttpServletRequest request, DijieOrderListForm form) {
+		long startTime = System.currentTimeMillis();
 		Map<String, Object> result = Maps.newHashMap();
 		HttpSession session = request.getSession();
 		//获取当前公司
@@ -233,6 +234,8 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 
 		result.put("pagetotal", pager.getPageCount());
 		result.put("visaJapanData", list);
+		long endTime = System.currentTimeMillis();
+		System.out.println("方法所用时间为：" + (endTime - startTime) + "ms");
 		return result;
 	}
 
