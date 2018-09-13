@@ -99,15 +99,15 @@ public class TestModule {
 		return null;
 	}*/
 
-	@At("admin/JapanDijie/japanList")
+	/*@At("admin/JapanDijie/japanList")
 	@Ok("jsp")
 	public Object japanList() {
 		return null;
-	}
+	}*/
 
-	@At("admin/receptionJP/listJapan")
+	/*@At("admin/receptionJP/listJapan")
 	@Ok("jsp")
 	public Object listJapan() {
 		return null;
-	}
+	}*/
 }

@@ -508,6 +508,7 @@
 		$('#sendSignDate').val('');
 		$("#sendstartdate").val('');
 	  	$("#sendenddate").val('');
+	  	search();
 	});
 	$('#sendSignDate').on('apply.daterangepicker', function(ev, picker) {
 		$("#sendstartdate").val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
@@ -524,6 +525,7 @@
 		$('#orderDate').val('');
 		$("#orderstartdate").val('');
 	  	$("#orderenddate").val('');
+	  	search();
 	});
 	$('#orderDate').on('apply.daterangepicker', function(ev, picker) {
 		$("#orderstartdate").val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
