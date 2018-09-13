@@ -42,6 +42,19 @@
 		[v-cloak] {
 		  display: none;
 		}
+		.card-djtj{
+		    top: 70px;
+		    left: 1px;
+		    width: 100%;
+		    padding: 0 25px;
+		    height: 50px;
+		    line-height: 50px;
+		    background: #fff;
+		    z-index: 99999;
+		}
+		.card-djtj span {
+			margin-right: 20px;
+		}
 	</style>
 	<!-- <style>
 		[class*=" datetimepicker-dropdown"]:before{
@@ -176,18 +189,18 @@
 							</div> -->
 						</div>
 					</div><!-- end 检索条件 -->
-					<section class="content">
-					<div class="box-body" style="margin-top:62px;" id="card" v-cloak><!-- 卡片列表 -->
-						<div class = "card-tj" style="margin-top:1px;margin-left:6px;">
-							<span>订单总数(单)： {{visaJapanDataS.orderscount}}</span>
-							<span>总人数(人)： {{visaJapanDataS.peopletotal}}</span>
-							<!-- <span>作废数(单)： {{visaJapanDataS.disableorder}}</span>
-							<span>作废人数(人)： {{visaJapanDataS.disablepeople}}</span> -->
-							<span>招宝成功(单)： {{visaJapanDataS.zhaobaoorder}}</span>
-							<span>招宝成功(人)： {{visaJapanDataS.zhaobaopeople}}</span>
-							<span>单组单人： {{visaJapanDataS.singleperson}}</span>
-							<span>单组多人： {{visaJapanDataS.multiplayer}}</span>
-						</div>
+					<section class="content" id="card"  v-cloak>
+					<div class = "card-djtj" style="margin-top:1px;margin-left:6px;">
+						<span>订单总数(单)： {{visaJapanDataS.orderscount}}</span>
+						<span>总人数(人)： {{visaJapanDataS.peopletotal}}</span>
+						<!-- <span>作废数(单)： {{visaJapanDataS.disableorder}}</span>
+						<span>作废人数(人)： {{visaJapanDataS.disablepeople}}</span> -->
+						<span>招宝成功(单)： {{visaJapanDataS.zhaobaoorder}}</span>
+						<span>招宝成功(人)： {{visaJapanDataS.zhaobaopeople}}</span>
+						<span>单组单人： {{visaJapanDataS.singleperson}}</span>
+						<span>单组多人： {{visaJapanDataS.multiplayer}}</span>
+					</div>
+					<div class="box-body" style="margin-top:5px !important;"  v-cloak><!-- 卡片列表 -->
 						<div class="card-list" v-for="data in visaJapanData">
 							<div class="card-head cf">
 								<div><label>订单号：</label><span>{{data.japannumber}}</span></div>	

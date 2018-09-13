@@ -102,7 +102,7 @@
 				</select>
 			</div>
 			<div class="col-md col-md-2 left-5px right-0px">
-				<select class="input-class input-sm" id="songqianshe" style="width:110px;margin-left:-17px;" name="songqianshe" onchange="changestatus()">
+				<select class="input-class input-sm" id="songqianshe" style="width:110px;margin-left:-10%;" name="songqianshe" onchange="changestatus()">
 					<option value="">送签社简称</option>
 					<c:forEach items="${obj.songqianlist }" var="songqianlist">
 						<option value="${songqianlist.id}">${songqianlist.shortName }</option>
@@ -110,7 +110,7 @@
 				</select>
 			</div>
 			<div class="col-md col-md-1 left-5px right-0px">
-				<select class="input-class input-sm" style="margin-left:-79px;" id="employee" name="employee" onchange="changestatus()">
+				<select class="input-class input-sm" style="margin-left:-101%;" id="employee" name="employee" onchange="changestatus()">
 					<option value="">员工</option>
 					<c:forEach items="${obj.employees }" var="employees">
 						<option value="${employees.userid }">${employees.username }</option>
@@ -118,24 +118,24 @@
 				</select>
 			</div>
 			<div class="col-md col-md-1 left-5px right-0px">
-				<select class="input-class input-sm" style="margin-left:-85px;width:100px;" id="visatype" name="visatype" onchange="changestatus()">
+				<select class="input-class input-sm" style="margin-left:-109%;width:100px;" id="visatype" name="visatype" onchange="changestatus()">
 					<option value="">签证类型</option>
 					<c:forEach items="${obj.mainsalevisatypeenum }" var="visatype">
 						<option value="${visatype.key }">${visatype.value }</option>
 					</c:forEach>
 				</select>
 			</div>
-			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:18.5%;margin-left:-68px;">
+			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:18.5%;margin-left:-6.5%;">
 				<input type="text" class="input-sm input-class form-control" id="orderDate" name="orderDate" placeholder="下单时间" onkeypress="onkeyEnter()"/>
 				<input type="hidden" id="orderstartdate" name="orderstartdate"/>
 				<input type="hidden" id="orderenddate" name="orderenddate"/>
 			</div>
-			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%;margin-left:-6px;">
+			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%;margin-left:-0.5%;">
 				<input type="text" class="input-sm input-class form-control" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onkeypress="onkeyEnter()"/>
 				<input type="hidden" id="sendstartdate" name="sendstartdate"/>
 				<input type="hidden" id="sendenddate" name="sendenddate"/>
 			</div>
-			<div class="col-md col-md-3 left-5px right-0px" style="margin-left:-6px;width:15.5%">
+			<div class="col-md col-md-3 left-5px right-0px" style="margin-left:-0.5%;width:15.5%">
 				<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="护照号/申请人/受付番号" onkeypress="onkeyEnter()"/>
 			</div>
 			<div class="col-md col-md-1 ">
