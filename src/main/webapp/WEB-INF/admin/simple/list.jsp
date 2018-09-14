@@ -93,23 +93,23 @@
 
 		<!-- 切换卡按钮 end -->
 		<div class="row searchMar tab-header">
-			<div class="col-md col-md-2" style="width:11%">
-				<select class="input-class input-sm" style="width:110px;" id="status" name="status" onchange="changestatus()">
+			<div class="col-md col-md-2" style="width:10%">
+				<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
 					<option value="">状态</option>
 					<c:forEach items="${obj.orderstatus }" var="orstatus">
 						<option value="${orstatus.key }">${orstatus.value}</option>
 					</c:forEach>
 				</select>
 			</div>
-			<div class="col-md col-md-2 left-5px right-0px" style="width:16%;margin-left:-3.6%;">
-				<select class="input-class input-sm" id="songqianshe" style="width:110px;" name="songqianshe" onchange="changestatus()">
+			<div class="col-md col-md-2 left-5px right-0px" style="width:11%;margin-left:0.4%;">
+				<select class="input-class input-sm" id="songqianshe" name="songqianshe" onchange="changestatus()">
 					<option value="">送签社简称</option>
 					<c:forEach items="${obj.songqianlist }" var="songqianlist">
 						<option value="${songqianlist.id}">${songqianlist.shortName }</option>
 					</c:forEach>
 				</select>
 			</div>
-			<div class="col-md col-md-1 left-5px right-0px" style="width:8.5%;margin-left:-8%;">
+			<div class="col-md col-md-1 left-5px right-0px" style="width:7.5%;margin-left:0;">
 				<select class="input-class input-sm" id="employee" name="employee" onchange="changestatus()">
 					<option value="">员工</option>
 					<c:forEach items="${obj.employees }" var="employees">
@@ -117,31 +117,31 @@
 					</c:forEach>
 				</select>
 			</div>
-			<div class="col-md col-md-1 left-5px right-0px" style="width:2.3%;margin-left:0.5%;">
-				<select class="input-class input-sm" style="width:100px;" id="visatype" name="visatype" onchange="changestatus()">
+			<div class="col-md col-md-1 left-5px right-0px" style="width:10%;margin-left:0%;">
+				<select class="input-class input-sm" id="visatype" name="visatype" onchange="changestatus()">
 					<option value="">签证类型</option>
 					<c:forEach items="${obj.mainsalevisatypeenum }" var="visatype">
 						<option value="${visatype.key }">${visatype.value }</option>
 					</c:forEach>
 				</select>
 			</div>
-			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:18.5%;margin-left:4.5%;">
+			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:16%;margin-left:0%;">
 				<input type="text" class="input-sm input-class form-control" id="orderDate" name="orderDate" placeholder="下单时间" onkeypress="onkeyEnter()"/>
 				<input type="hidden" id="orderstartdate" name="orderstartdate"/>
 				<input type="hidden" id="orderenddate" name="orderenddate"/>
 			</div>
-			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%;margin-left:0.5%;">
+			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:8.5%;margin-left:0%;">
 				<input type="text" class="input-sm input-class form-control" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onkeypress="onkeyEnter()"/>
 				<input type="hidden" id="sendstartdate" name="sendstartdate"/>
 				<input type="hidden" id="sendenddate" name="sendenddate"/>
 			</div>
-			<div class="col-md col-md-3 left-5px right-0px" style="margin-left:0.5%;width:15.5%">
+			<div class="col-md col-md-3 left-5px right-0px" style="margin-left:0%;width:15.5%">
 				<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="护照号/申请人/受付番号" onkeypress="onkeyEnter()"/>
 			</div>
 			<div class="col-md col-md-1 ">
-				<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
+				<a class="btn btn-primary btn-sm pull-left" style="width:6%;" href="javascript:search();" id="searchbtn">搜索</a>
 			</div>
-			<div class="col-md col-md-1  " style="    margin-left: 10px;">
+			<div class="col-md col-md-1  " style="    margin-left: 0%;">
 				<a class="btn btn-primary btn-sm pull-right" onclick="addOrder();">下单</a>
 			</div>
 		</div>
