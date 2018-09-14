@@ -351,7 +351,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			Integer orderid = (Integer) record.get("id");
 			String sqlStr = sqlManager.get("get_simplelist_data_apply");
 			Sql applysql = Sqls.create(sqlStr);
-			List<Record> query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
+			List<Record> query = dbDao.query(applysql,
+					Cnd.where("taoj.orderId", "=", orderid).orderBy("taoj.isMainApplicant", "DESC"), null);
 			/*for (Record apply : query) {
 
 				if (!Util.isEmpty(apply.get("province"))) {
@@ -3479,9 +3480,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setEmail(form.getEmail());
 		if (!Util.isEmpty(form.getOtherLastNameEn())) {
 			applicant.setOtherLastNameEn(form.getOtherLastNameEn().substring(1));
+		} else {
+			applicant.setOtherLastNameEn(form.getOtherLastNameEn());
 		}
 		if (!Util.isEmpty(form.getOtherFirstNameEn())) {
 			applicant.setOtherFirstNameEn(form.getOtherFirstNameEn().substring(1));
+		} else {
+			applicant.setOtherFirstNameEn(form.getOtherFirstNameEn());
 		}
 		applicant.setNationality(form.getNationality());
 		applicant.setHasOtherName(form.getHasOtherName());
@@ -5716,7 +5721,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
 				TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
 						Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()));
-				apply.setMainId(mainApply.getApplicantId());
+				if (!Util.isEmpty(mainApply)) {
+					apply.setMainId(mainApply.getApplicantId());
+				}
 				dbDao.update(apply);
 			} else {
 				//设置为主申请人
@@ -5772,6 +5779,33 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	public Object autoCalculateStaydays(Date laststartdate, Date lastreturndate) {
 		int daysBetween = DateUtil.daysBetween(laststartdate, lastreturndate);
 		return daysBetween + 1;
+	}
+
+	public Object ishaveMainapply(int orderid, int applicantid) {
+		String applicantSqlstr = sqlManager.get("ishaveMainapply");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		applicantSql.setParam("id", orderid);
+		List<Record> query = dbDao.query(applicantSql, null, null);
+		if (query.size() > 1) {
+			return 1;
+		} else if (query.size() == 1) {
+			int mainid = query.get(0).getInt("applicantid");
+			if (mainid != applicantid) {
+				return 1;
+			} else {
+				return 0;
+			}
+		} else {
+			return 0;
+		}
+	}
+
+	public Object saveSendandGround(int orderid, int sendsignid, int groundconnectid) {
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+		orderjp.setSendsignid(sendsignid);
+		orderjp.setGroundconnectid(groundconnectid);
+		dbDao.update(orderjp);
+		return null;
 	}
 
 }

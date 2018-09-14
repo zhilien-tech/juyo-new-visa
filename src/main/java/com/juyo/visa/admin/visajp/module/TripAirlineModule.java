@@ -62,4 +62,13 @@ public class TripAirlineModule {
 	public Object getAirLineByInterfateUS(@Param("..") FlightSelectParam param) {
 		return tripAirlineService.getAirLineByInterfateUS(param);
 	}
+
+	/**
+	 * 根据航班查询出发城市和抵达城市
+	 */
+	@At
+	@POST
+	public Object getGoandReturncity(@Param("airline") String airline) {
+		return tripAirlineService.getGoandReturncity(airline);
+	}
 }

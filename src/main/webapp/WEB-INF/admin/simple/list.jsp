@@ -197,7 +197,7 @@
 							<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 							<!-- <i class="shiShou" v-on:click="revenue(data.id)"> </i> -->
 
-							<span v-if="data.zhaobaocomplete == 0 && data.visatype != 14">
+							<span v-if="data.zhaobaocomplete == 0 && data.visatype != '普通五年多次'">
 								<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
 							</span>
 							<!-- <span v-else>
@@ -208,6 +208,7 @@
 								<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
 								<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
 							</span>
+							<span v-else-if="data.visatype === '普通五年多次'"></span>
 
 							<!-- <span v-else>
 								<i class="theTrial1"> </i>
@@ -215,7 +216,7 @@
 							</span> -->
 
 							<!-- <i class="Refusal" v-on:click=""></i> -->
-							<i class="download" v-on:click="downLoadFile(data.id)"> </i>
+							<i class="download" v-on:click="downLoadFile(data.id,data.visatype)"> </i>
 							<!-- <i class="handoverTable"> </i> -->
 							<!-- 作废按钮 -->
 							<i class="toVoid" v-on:click="disabled(data.id,data.zhaobaoupdate)"> </i>
@@ -533,8 +534,8 @@
     				});
     			});
         	},
-        	downLoadFile:function(orderid){
-        		$.ajax({
+        	downLoadFile:function(orderid,visatype){
+       			$.ajax({
                  	url: '${base}/admin/visaJapan/validateDownLoadInfoIsFull.html',
                  	data:{orderjpid:orderid},
                  	dataType:"json",
@@ -542,7 +543,6 @@
                  	async:false,
                  	success: function(data){
                  		//var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
-                 		console.log(data.data);
                  		if(data.data){
                  			var url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
 			        		layer.open({
@@ -557,16 +557,33 @@
 			        		    content: url
 			        		  });
                  		}else{
-                 			layer.load(1);
-                    		$.fileDownload("${base}/admin/visaJapan/downloadFile.html?orderid=" + orderid, {
-            			         successCallback: function (url) {
-            			        	 layer.closeAll('loading');
-            			         },
-            			         failCallback: function (html, url) {
-            			        	layer.closeAll('loading');
-            			        	layer.msg("下载失败");
-            			         }
-            			     });
+                 			if(visatype == "普通五年多次"){
+                 				var vtype = 14;
+	                 			var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid+'&visatype='+vtype;
+	        	        		layer.open({
+	        	        		    type: 2,
+	        	        		    title: false,
+	        	        		    closeBtn:false,
+	        	        		    fix: false,
+	        	        		    maxmin: false,
+	        	        		    shadeClose: false,
+	        	        		    scrollbar: false,
+	        	        		    area: ['400px', '300px'],
+	        	        		    content: url
+	        	        		  });
+                 				
+                 			}else{
+                 				layer.load(1);
+	                    		$.fileDownload("${base}/admin/visaJapan/downloadFile.html?orderid=" + orderid, {
+	            			         successCallback: function (url) {
+	            			        	 layer.closeAll('loading');
+	            			         },
+	            			         failCallback: function (html, url) {
+	            			        	layer.closeAll('loading');
+	            			        	layer.msg("下载失败");
+	            			         }
+	            			     });
+                 			}
                  		}
                    	}
                  });

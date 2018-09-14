@@ -323,4 +323,17 @@ public class SimpleVisaModule {
 		return simpleVisaService.autoCalculateStaydays(laststartdate, lastreturndate);
 	}
 
+	@At
+	@POST
+	public Object ishaveMainapply(@Param("orderid") int orderid, @Param("applicantid") int applicantid) {
+		return simpleVisaService.ishaveMainapply(orderid, applicantid);
+	}
+
+	@At
+	@POST
+	public Object saveSendandGround(@Param("orderid") int orderid, @Param("sendsignid") int sendsignid,
+			@Param("groundconnectid") int groundconnectid) {
+		return simpleVisaService.saveSendandGround(orderid, sendsignid, groundconnectid);
+	}
+
 }

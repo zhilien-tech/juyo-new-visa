@@ -365,8 +365,9 @@ public class VisaJapanModule {
 	 */
 	@At
 	@Ok("jsp")
-	public Object sendZhaoBao(HttpServletRequest request, @Param("orderid") Long orderid) {
-		return visaJapanService.sendZhaoBao(request, orderid);
+	public Object sendZhaoBao(HttpServletRequest request, @Param("orderid") Long orderid,
+			@Param("visatype") int visatype) {
+		return visaJapanService.sendZhaoBao(request, orderid, visatype);
 	}
 
 	/**

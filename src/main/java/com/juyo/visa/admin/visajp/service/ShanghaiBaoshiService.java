@@ -122,7 +122,8 @@ public class ShanghaiBaoshiService extends BaseService<TOrderJpEntity> {
 		Sql applysql = Sqls.create(applysqlstr);
 		Cnd cnd = Cnd.NEW();
 		cnd.and("taoj.orderId", "=", orderjp.getId());
-		cnd.orderBy("ta.id", "ASC");
+		//cnd.orderBy("ta.id", "ASC");
+		cnd.orderBy("taoj.isMainApplicant", "DESC");
 		List<Record> applyinfo = dbDao.query(applysql, cnd, null);
 		for (Record record : applyinfo) {
 			List<TApplicantWealthJpEntity> query = dbDao.query(TApplicantWealthJpEntity.class,
@@ -608,7 +609,11 @@ public class ShanghaiBaoshiService extends BaseService<TOrderJpEntity> {
 				map.put("homemobile", record.getString("telephone"));
 			}
 			//电子邮箱
-			map.put("homeEmail", "无");
+			if (Util.isEmpty(record.getString("email"))) {
+				map.put("homeEmail", "无");
+			} else {
+				map.put("homeEmail", record.getString("email"));
+			}
 			//工作单位
 			if (Util.isEmpty(record.getString("workname"))) {
 				map.put("workname", "无");

@@ -1024,14 +1024,14 @@
 		//checkbox 曾用名
 		$(".nameBefore").change(function () {
 
+			$("#otherFirstName").val("").change();
+			$("#otherFirstNameEn").val("").change();
+			$("#otherLastName").val("").change();
+			$("#otherLastNameEn").val("").change();
 			let checked = $("input[name='hasOtherName']:checked").val();
 			if (checked == 1) {
 				$(".nameBeforeHide").show();
 				$(".wordSpell").show();
-				$("#otherFirstName").val("").change();
-				$("#otherFirstNameEn").val("");
-				$("#otherLastName").val("").change();
-				$("#otherLastNameEn").val("");
 			} else {
 
 				$(".nameBeforeHide").hide();
@@ -1040,10 +1040,10 @@
 		});
 		//曾用国籍
 		$(".onceID").change(function () {
+			$("#nationality").val("").change();
 			let checked = $("input[name='hasOtherNationality']:checked").val();
 			if (checked == 1) {
 				$(".nationalityHide").show();
-				$("#nationality").val("").change();
 			} else {
 
 				$(".nationalityHide").hide();

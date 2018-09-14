@@ -7,6 +7,7 @@ SELECT
 	ta.province,
 	tap.passport passportNo,
 	taoj.id applicatid,
+	taoj.isMainApplicant,
 	taoj.applicantId applyid,
 	ta.telephone,
 	ta.email
@@ -104,3 +105,15 @@ comId = @comid AND zhaobaoupdate = 1
 GROUP BY tr.orderNum
 HAVING
 ct = 1*/
+
+
+/*ishaveMainapply*/
+SELECT
+taoj.isMainApplicant,
+ta.id applicantid
+FROM
+t_applicant_order_jp taoj
+INNER JOIN t_order_jp toj ON taoj.orderId = toj.id
+INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
+WHERE
+toj.id=@id AND taoj.isMainApplicant = 1

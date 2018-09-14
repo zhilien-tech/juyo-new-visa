@@ -1659,7 +1659,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	 * @param orderid
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object sendZhaoBao(HttpServletRequest request, Long orderid) {
+	public Object sendZhaoBao(HttpServletRequest request, Long orderid, int visatype) {
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -1667,6 +1667,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		JSONArray ja = new JSONArray();
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("orderid", orderid);
+		result.put("visatype", visatype);
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
 		result.put("orderjpinfo", orderjp);
 		//送签社下拉

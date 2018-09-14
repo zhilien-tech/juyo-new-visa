@@ -65,21 +65,31 @@
 					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
 					<!-- <input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/> -->
 					<c:choose>
-						<c:when test="${obj.orderinfo.status ==17 or obj.orderinfo.status == 20 }">
-							<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(22)"/>
-							<input type="button" value="招宝变更" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(19)"/>
-						</c:when>
-						<c:otherwise>
+						<c:when test="${obj.orderjpinfo.visaType == 14 }">
 							<input type="button" value="招宝取消" class="btn btn_del btn-sm pull-right btn-Big" />
 							<input type="button" value="招宝变更" class="btn btn_del btn-sm pull-right btn-Big" />
-						</c:otherwise>
-					</c:choose>
-					<c:choose>
-						<c:when test="${obj.orderinfo.status !=17 && obj.orderinfo.status !=19 and obj.orderinfo.status !=20 and obj.orderinfo.status !=34 and obj.orderinfo.status !=35 and obj.orderinfo.status !=22}">
-							<input type="button" value="发招宝" class="btn btn-primary btn-sm pull-right" onclick="sendzhaobao()"/>
+							<input type="button" value="发招宝" class="btn btn_del btn-sm pull-right"/>
 						</c:when>
 						<c:otherwise>
-							<input type="button" value="发招宝" class="btn btn_del btn-sm pull-right"/>
+							<c:choose>
+								<c:when test="${obj.orderinfo.status ==17 or obj.orderinfo.status == 20 }">
+									<input type="button" value="招宝取消" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(22)"/>
+									<input type="button" value="招宝变更" class="btn btn-primary btn-sm pull-right btn-Big" onclick="sendInsurance(19)"/>
+								</c:when>
+								<c:otherwise>
+									<input type="button" value="招宝取消" class="btn btn_del btn-sm pull-right btn-Big" />
+									<input type="button" value="招宝变更" class="btn btn_del btn-sm pull-right btn-Big" />
+								</c:otherwise>
+							</c:choose>
+							<c:choose>
+								<c:when test="${obj.orderinfo.status !=17 && obj.orderinfo.status !=19 and obj.orderinfo.status !=20 and obj.orderinfo.status !=34 and obj.orderinfo.status !=35 and obj.orderinfo.status !=22}">
+									<input type="button" value="发招宝" class="btn btn-primary btn-sm pull-right" onclick="sendzhaobao()"/>
+								</c:when>
+								<c:otherwise>
+									<input type="button" value="发招宝" class="btn btn_del btn-sm pull-right"/>
+								</c:otherwise>
+							</c:choose>
+						
 						</c:otherwise>
 					</c:choose>
 					<!-- <input type="button" value="实收" class="btn btn-primary btn-sm pull-right" onclick="revenue()"/> -->
@@ -589,6 +599,16 @@
 					$('#returnFlightNum').empty();
 				}
 			}
+			
+			if(vtype == 14){
+				$("input[type=button][value=招宝变更]").attr("class","btn btn_del btn-sm pull-right btn-Big");
+				$("input[type=button][value=招宝取消]").attr("class","btn btn_del btn-sm pull-right btn-Big");
+				$("input[type=button][value=发招宝]").attr("class","btn btn_del btn-sm pull-right");
+			}else{
+				$("input[type=button][value=招宝变更]").attr("class","btn btn-primary btn-sm pull-right btn-Big");
+				$("input[type=button][value=招宝取消]").attr("class","btn btn-primary btn-sm pull-right btn-Big");
+				$("input[type=button][value=发招宝]").attr("class","btn btn-primary btn-sm pull-right");
+			}
 			/* //宫城
 			if(vtype == 3 || vtype == 8){
 				$("#goArrivedCity").html('<option selected="selected" value="'+91+'">'+'宫城'+'</option>');
@@ -641,6 +661,7 @@
 		    		},
 		    	type:'post',
 		    	success: function(data){
+		    		//window.location.reload();
 		      	}
 		    });
 		});
@@ -915,7 +936,7 @@
                  });
 			}
 			function downLoadFile(){
-				
+				var visatype = $("#visatype").val();
 				$.ajax({
                  	url: '${base}/admin/visaJapan/validateDownLoadInfoIsFull.html',
                  	data:{orderjpid:orderid},
@@ -938,19 +959,36 @@
 			        		    content: url
 			        		  });
                  		}else{
-                 			layer.load(1);
-							$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=${obj.orderjpinfo.id}", {
-						        successCallback: function (url) {
-						        	layer.closeAll('loading');
-						        },
-						        failCallback: function (html, url) {
-						        	layer.closeAll('loading');
-						       		layer.msg('下载失败');
-						        }
-						    });
+                 			if(visatype == 14){
+	                 			var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid+'&visatype='+visatype;
+	        	        		layer.open({
+	        	        		    type: 2,
+	        	        		    title: false,
+	        	        		    closeBtn:false,
+	        	        		    fix: false,
+	        	        		    maxmin: false,
+	        	        		    shadeClose: false,
+	        	        		    scrollbar: false,
+	        	        		    area: ['400px', '300px'],
+	        	        		    content: url
+	        	        		  });
+                 				
+                 			}else{
+                 				layer.load(1);
+								$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=${obj.orderjpinfo.id}", {
+							        successCallback: function (url) {
+							        	layer.closeAll('loading');
+							        },
+							        failCallback: function (html, url) {
+							        	layer.closeAll('loading');
+							       		layer.msg('下载失败');
+							        }
+							    });
+                 			}
                  		}
                    	}
                  });
+				
 			}
 			function clearplan(){
 					$( ".select2-selection__choice").val("");
