@@ -105,7 +105,7 @@ public class DijieOrderListForm implements SQLParamForm {
 		}
 		if (!Util.isEmpty(songqianshe)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
-			exp.and("toj.sendsignid", "=", songqianshe);
+			exp.and("tr.comId", "=", songqianshe);
 			cnd.and(exp);
 		}
 		if (!Util.isEmpty(visatype)) {

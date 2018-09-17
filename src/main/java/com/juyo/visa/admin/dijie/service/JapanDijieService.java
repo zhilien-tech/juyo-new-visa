@@ -87,7 +87,7 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 			}
 		}
 		List<TCompanyEntity> query = dbDao.query(TCompanyEntity.class,
-				Cnd.where("comType", "=", CompanyTypeEnum.SONGQIANSIMPLE.intKey()).and("cdesignNum", "!=", ""), null);
+				Cnd.where("comType", "=", CompanyTypeEnum.SONGQIANSIMPLE.intKey()), null);
 		result.put("songqianlist", query);
 
 		//员工下拉
