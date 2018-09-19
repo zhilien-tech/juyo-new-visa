@@ -937,57 +937,60 @@
 			}
 			function downLoadFile(){
 				var visatype = $("#visatype").val();
-				$.ajax({
-                 	url: '${base}/admin/visaJapan/validateDownLoadInfoIsFull.html',
-                 	data:{orderjpid:orderid},
-                 	dataType:"json",
-                 	type:'post',
-                 	async:false,
-                 	success: function(data){
-                 		//var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
-                 		if(data.data){
-                 			var url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
-			        		layer.open({
-			        		    type: 2,
-			        		    title: false,
-			        		    closeBtn:false,
-			        		    fix: false,
-			        		    maxmin: false,
-			        		    shadeClose: false,
-			        		    scrollbar: false,
-			        		    area: ['400px', '300px'],
-			        		    content: url
-			        		  });
-                 		}else{
-                 			if(visatype == 14){
-	                 			var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid+'&visatype='+visatype;
-	        	        		layer.open({
-	        	        		    type: 2,
-	        	        		    title: false,
-	        	        		    closeBtn:false,
-	        	        		    fix: false,
-	        	        		    maxmin: false,
-	        	        		    shadeClose: false,
-	        	        		    scrollbar: false,
-	        	        		    area: ['400px', '300px'],
-	        	        		    content: url
-	        	        		  });
-                 				
-                 			}else{
-                 				layer.load(1);
-								$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=${obj.orderjpinfo.id}", {
-							        successCallback: function (url) {
-							        	layer.closeAll('loading');
-							        },
-							        failCallback: function (html, url) {
-							        	layer.closeAll('loading');
-							       		layer.msg('下载失败');
-							        }
-							    });
-                 			}
-                 		}
-                   	}
-                 });
+				
+				if(visatype == 14){
+         			var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid+'&visatype='+visatype;
+	        		layer.open({
+	        		    type: 2,
+	        		    title: false,
+	        		    closeBtn:false,
+	        		    fix: false,
+	        		    maxmin: false,
+	        		    shadeClose: false,
+	        		    scrollbar: false,
+	        		    area: ['400px', '300px'],
+	        		    content: url
+	        		  });
+     				
+     			}else{
+					$.ajax({
+	                 	url: '${base}/admin/visaJapan/validateDownLoadInfoIsFull.html',
+	                 	data:{orderjpid:orderid},
+	                 	dataType:"json",
+	                 	type:'post',
+	                 	async:false,
+	                 	success: function(data){
+	                 		//var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
+	                 		if(data.data){
+	                 			var url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
+				        		layer.open({
+				        		    type: 2,
+				        		    title: false,
+				        		    closeBtn:false,
+				        		    fix: false,
+				        		    maxmin: false,
+				        		    shadeClose: false,
+				        		    scrollbar: false,
+				        		    area: ['400px', '300px'],
+				        		    content: url
+				        		  });
+	                 		}else{
+	                 				layer.load(1);
+									$.fileDownload("/admin/visaJapan/downloadFile.html?orderid=${obj.orderjpinfo.id}", {
+								        successCallback: function (url) {
+								        	layer.closeAll('loading');
+								        },
+								        failCallback: function (html, url) {
+								        	layer.closeAll('loading');
+								       		layer.msg('下载失败');
+								        }
+								    });
+	                 		}
+	                   	}
+	                 });
+     				
+     			}
+				
 				
 			}
 			function clearplan(){

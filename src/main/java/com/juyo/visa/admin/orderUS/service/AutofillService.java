@@ -32,6 +32,7 @@ import com.juyo.visa.entities.TAppStaffOrganizationEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
+import com.juyo.visa.entities.TStateUsEntity;
 import com.juyo.visa.entities.TUsStateEntity;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -426,36 +427,41 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//BirthplaceInfo
 		Map<String, Object> SpouseAddressInfo = Maps.newHashMap();
 		//街道(签证信息)
-		if (!Util.isEmpty(info.get("firstaddress"))) {
+		SpouseAddressInfo.put("street", "");
+		/*if (!Util.isEmpty(info.get("firstaddress"))) {
 			SpouseAddressInfo.put("street", info.get("firstaddress"));
 		} else {
 			errorMsg += "街道,";
-		}
+		}*/
 		//城市(签证信息)
-		if (!Util.isEmpty(info.get("tasfcity"))) {
+		SpouseAddressInfo.put("city", "");
+		/*if (!Util.isEmpty(info.get("tasfcity"))) {
 			SpouseAddressInfo.put("city", info.get("tasfcity"));
 		} else {
 			errorMsg += "城市,";
-		}
+		}*/
 		//省份(签证信息)
-		if (!Util.isEmpty(info.get("tasfprovince"))) {
+		SpouseAddressInfo.put("province", "");
+		/*if (!Util.isEmpty(info.get("tasfprovince"))) {
 			SpouseAddressInfo.put("province", info.get("tasfprovince"));
 		} else {
 			errorMsg += "省份,";
-		}
+		}*/
 		//国家(签证信息)
-		if (!Util.isEmpty(info.get("tasfcountry")) && !Util.eq(0, info.get("tasfcountry"))) {
+		SpouseAddressInfo.put("country", "");
+		/*if (!Util.isEmpty(info.get("tasfcountry")) && !Util.eq(0, info.get("tasfcountry"))) {
 			String country = getCountry((int) info.get("tasfcountry"));
 			SpouseAddressInfo.put("country", country);
 		} else {
 			errorMsg += "国家,";
-		}
+		}*/
 		//邮编(签证信息)
-		if (!Util.isEmpty(info.get("tasfzipcode"))) {
+		SpouseAddressInfo.put("zip_code", "");
+		/*if (!Util.isEmpty(info.get("tasfzipcode"))) {
 			SpouseAddressInfo.put("zip_code", info.get("tasfzipcode"));
 		} else {
 			errorMsg += "邮编,";
-		}
+		}*/
 
 		SpouseInfo.put("AdderssInfo", SpouseAddressInfo);
 
@@ -641,13 +647,13 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			if (!Util.isEmpty(educationEntity.getInstitutionaddress())) {
 				addressinfo.put("street", educationEntity.getInstitutionaddress());
 			} else {
-				errorMsg += "街道,";
+				errorMsg += "教育信息详细地址,";
 			}
 			//市(签证信息)
 			if (!Util.isEmpty(educationEntity.getInstitutioncity())) {
 				addressinfo.put("city", educationEntity.getInstitutioncity());
 			} else {
-				errorMsg += "城市,";
+				errorMsg += "教育信息学校地址(市),";
 			}
 			//省(签证信息)
 			if (!Util.isEmpty(educationEntity.getInstitutionprovince())) {
@@ -660,7 +666,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				String country = getCountry(educationEntity.getInstitutioncountry());
 				addressinfo.put("country", country);
 			} else {
-				errorMsg += "国家,";
+				errorMsg += "教育信息所在国家,";
 			}
 			//邮政编码(签证信息)
 			if (!Util.isEmpty(educationEntity.getInstitutionzipcode())) {
@@ -720,14 +726,14 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//抵达城市(订单详情)
 		if (!Util.isEmpty(info.get("goArrivedCity"))) {
 			int cityid = (int) info.get("goArrivedCity");
-			travelInfo.put("in_street", getCityName(cityid));
+			travelInfo.put("in_street", getUSState(cityid));
 		} else {
 			errorMsg += "抵达城市,";
 		}
 		//出发城市，第二行(订单详情)
 		if (!Util.isEmpty(info.get("returnDepartureCity"))) {
 			int cityid = (int) info.get("returnDepartureCity");
-			travelInfo.put("leave_street", getCityName(cityid));
+			travelInfo.put("leave_street", getUSState(cityid));
 		} else {
 			errorMsg += "离开城市,";
 		}
@@ -791,7 +797,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//签发地点(护照信息)
 		if (!Util.isEmpty(info.get("issuedplaceen"))) {
 			String issuedplace = (String) info.get("issuedplaceen");
-			passportissuance.put("province", issuedplace.substring(1));
+			passportissuance.put("province", issuedplace);
 		} else {
 			errorMsg += "签发地省份,";
 		}
@@ -897,7 +903,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				AmericaInfo.put("application_site", "GUZ");
 			}
 		} else {
-			errorMsg += "申请地点,";
+			errorMsg += "领区,";
 		}
 		ArrayList<Object> otherNationalitys = new ArrayList<>();
 		ArrayList<Object> greencards = new ArrayList<>();
@@ -1105,7 +1111,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		AmericaInfo.put("RelativesUS", RelativeUS);
 
-		//ResidentialInfo
+		//ResidentialInfo 住宅信息
 		Map<String, Object> ResidentialInfo = Maps.newHashMap();
 
 		//在美国地址  没有？？？
@@ -1203,13 +1209,15 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(info.get("tascaddress"))) {
 			addressinfo.put("street", info.get("tascaddress"));
 		} else {
-			errorMsg += "街道地址,";
+			//errorMsg += "街道地址,";
+			addressinfo.put("street", "");
 		}
 		//城市(签证信息)
 		if (!Util.isEmpty(info.get("tasccity"))) {
 			addressinfo.put("city", info.get("tasccity"));
 		} else {
-			errorMsg += "城市,";
+			//errorMsg += "城市,";
+			addressinfo.put("city", "");
 		}
 		//省份(签证信息)
 		if (!Util.isEmpty(info.get("tascstate")) && !Util.eq(0, info.get("tascstate"))) {
@@ -1372,17 +1380,19 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> LostOrStolen = Maps.newHashMap();
 
 		//丢失年份(签证信息)
-		if (!Util.isEmpty(info.get("lostyear"))) {
+		LostOrStolen.put("year", 0);
+		/*if (!Util.isEmpty(info.get("lostyear"))) {
 			LostOrStolen.put("year", info.get("lostyear"));
 		} else {
 			errorMsg += "丢失年份,";
-		}
+		}*/
 		//说明(签证信息)
-		if (!Util.isEmpty(info.get("lostexplain"))) {
+		LostOrStolen.put("explain", "");
+		/*if (!Util.isEmpty(info.get("lostexplain"))) {
 			LostOrStolen.put("explain", info.get("lostexplain"));
 		} else {
 			errorMsg += "说明,";
-		}
+		}*/
 
 		LastUSVisa.put("LostOrStolen", LostOrStolen);
 
@@ -1444,7 +1454,20 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		//PayParty
 		Map<String, Object> PayParty = Maps.newHashMap();
+		//待完善
 		//PayParty 没有？？？
+		if (!Util.isEmpty(info.getInt("costpayer"))) {
+			int costpayer = info.getInt("costpayer");
+			if (costpayer == 1) {
+				PayParty.put("payer", "S");
+			}
+			if (costpayer == 2) {
+				PayParty.put("payer", "O");
+			}
+			if (costpayer == 3) {
+				PayParty.put("payer", "C");
+			}
+		}
 
 		AmericaInfo.put("PayParty", PayParty);
 
@@ -1547,6 +1570,12 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		return gocity.getCity();
 	}
 
+	//根据id查询美国州
+	public String getUSState(int id) {
+		TStateUsEntity fetch = dbDao.fetch(TStateUsEntity.class, id);
+		return fetch.getName();
+	}
+
 	//根据id查询美国所在州的代码
 	public String getStatecode(int id) {
 		TUsStateEntity stateEntity = dbDao.fetch(TUsStateEntity.class, id);
@@ -1627,13 +1656,13 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 	//出行目的
 	public String getPurpose(String type) {
 		String result = "";
-		if (Util.eq("商务旅游游客(B)", type)) {
+		if (Util.eq("TEMP. BUSINESS PLEASURE VISITOR(B)", type)) {
 			result = "B";
 		}
-		if (Util.eq("交流访问者", type)) {
+		if (Util.eq("EXCHANGE VISITOR(J)", type)) {
 			result = "J";
 		}
-		if (Util.eq("学术或语言学生(F)", type)) {
+		if (Util.eq("ACADEMIC OR LANGUAGE STUDENT(F)", type)) {
 			result = "F";
 		}
 		return result;

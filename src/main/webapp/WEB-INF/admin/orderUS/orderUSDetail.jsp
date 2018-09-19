@@ -931,7 +931,7 @@
 					params.page = params.page || 1;
 					var selectdata = $.map(data, function(obj) {
 						obj.id = obj.id; // replace pk with your identifier
-						obj.text = obj.statecn; // replace pk with your identifier
+						obj.text = obj.name; // replace pk with your identifier
 						/*obj.text = obj.dictCode;*/
 						return obj;
 					});
@@ -1398,7 +1398,7 @@
 		}
 		
 		//自动填表
-		function autofill(){
+		/* function autofill(){
 			var orderid = '${obj.orderid}';
 			$.ajax({
 				url : '/admin/orderUS/validateInfoIsFull.html',
@@ -1435,8 +1435,8 @@
 					}
 				}
 			});
-		}
-/* 		function autofill(){
+		} */
+ 		function autofill(){
 			var orderid = '${obj.orderid}';
 			$.ajax({
 				url : '/admin/orderUS/validateInfoIsFull.html',
@@ -1467,13 +1467,13 @@
 							dataType : "json",
 							type : 'POST',
 							success : function(data) {
-								
+								//alert("申请人识别码为："+data);
 							}
 						});
 					}
 				}
 			});
-		} */
+		}
 		
 		//通过
 		function pass(){

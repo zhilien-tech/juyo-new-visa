@@ -1,6 +1,7 @@
 package com.juyo.visa;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -8,20 +9,28 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import com.juyo.visa.common.util.TranslateUtil;
-import com.uxuexi.core.common.util.Util;
-
 public class TestChinest {
 
 	static final int N = 50000;
 
 	public static void main(String[] args) {
+
+		String code = "QFmcqNtSVfyt5nINFegOXL8D9GOe4CcWCw7H8OAV7YloccdRUTYhFTHkESkk//N13YC6IJ6Hmunkwv6U6nKW/w==";
+		try {
+			String encode = URLEncoder.encode(code, "utf-8");
+			System.out.println(encode);
+		} catch (UnsupportedEncodingException e1) {
+
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+
+		}
 		/*String str = R.sg(5, 18).next();
 
 		System.out.println("str的值:" + str);
 		System.out.println("str的length:" + str.length());*/
 
-		ArrayList<Object> arrayList = new ArrayList<>();
+		/*ArrayList<Object> arrayList = new ArrayList<>();
 		System.out.println(arrayList);
 		System.out.println(Util.isEmpty(arrayList));
 
@@ -34,7 +43,7 @@ public class TestChinest {
 			e.printStackTrace();
 
 		}
-
+		*/
 		/*NutMap resultMap = new NutMap();
 		TIdcardEntity cardentity = new TIdcardEntity();
 		cardentity.setCity("北京");

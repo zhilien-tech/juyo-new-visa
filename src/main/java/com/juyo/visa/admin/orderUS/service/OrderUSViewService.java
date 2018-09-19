@@ -12,10 +12,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -1168,6 +1170,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return null;
 	}
 
+	//自动填表
 	public Object autofill(int orderid, HttpSession session) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		//改变订单状态
@@ -1177,19 +1180,247 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			dbDao.update(orderus);
 		}
 
-		//code=99fee3e5
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("search", "E72073527");
-		List<AutofillSearchJsonEntity> searchInterface = searchInterface(jsonObject);
-
-		//调用 优签易接口进行自动填表 TODO
-		/*Map<String, Object> result = autofillService.getData(orderid);
-		if (!Util.isEmpty(result)) {
-			String aacode = toGetAAcode(result.get("resultData"));
-		}
+		//调用第一个接口
+		//selectApplyinfo();
+		//调用第二个，第三个接口
+		//insertandupdateApplyinfo(orderid);
+		//调用第四个接口
+		getApplyinfo();
+		//调用第五个接口
+		String imgurl = "http://oyu1xyxxk.bkt.clouddn.com/372ea340-3280-48dc-aaa4-6c8bf43f8064.jpg";
+		String applyidcode = "baa996b5";
+		//int successStatus = (int) uploadImgtoUS(imgurl, applyidcode);
+		//System.out.println("successStatus:" + successStatus);
 		//记录日志
-		insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());*/
+		insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
 		return null;
+	}
+
+	//第一个接口，查询
+	public Object selectApplyinfo() {
+		//JSONObject jsonObject = new JSONObject();
+		Map<String, Object> resultData = Maps.newHashMap();
+		resultData.put("search", "E46544654");
+
+		//List<AutofillSearchJsonEntity> searchInterface = searchInterface(resultData);
+		JSONArray array = (JSONArray) searchInterface(resultData);
+		List<AutofillSearchJsonEntity> searchList = com.alibaba.fastjson.JSONObject.parseArray(array.toString(),
+				AutofillSearchJsonEntity.class);
+		return searchList;
+	}
+
+	//第二个，第三个接口，创建和更改申请人数据，只是请求方式不同，一个为POST,一个为PATCH
+	public Object insertandupdateApplyinfo(int orderid) {
+		String applyidcode = "";
+		Map<String, Object> result = autofillService.getData(orderid);
+		if (!Util.isEmpty(result)) {
+			//第二个，第三个接口，创建和更改申请人数据，只是请求方式不同，一个为POST,一个为PATCH
+			applyidcode = toGetApplyidcode(result.get("resultData"));
+		}
+		System.out.println("申请人识别码为：" + applyidcode);
+		return applyidcode;
+	}
+
+	//第四个接口，申请人数据详情
+	public Object getApplyinfo() {
+		Map<String, Object> applycode = Maps.newHashMap();
+		//applycode.put("code", "d19eb111");//code为第二个接口返回
+		Object searchInterface = searchInterface(applycode);
+		return null;
+	}
+
+	//第五个接口，上传美签申请人头像
+	public Object uploadImgtoUS(String imgurl, String applyidcode) {
+		String imgbase64 = imgToBse64(imgurl);
+		Map<String, Object> resultData = Maps.newHashMap();
+		resultData.put("file", imgbase64);
+
+		int successStatus = 0;
+		WXBizMsgCrypt pc;
+		String json = encrypt(resultData);
+
+		try {
+			//发送POST请求
+			String returnResult = toPostRequest(json, applyidcode);
+			//String returnResult = toPatchRequest(json);
+			JSONObject resultObj = new JSONObject(returnResult);
+			String encrypt = (String) resultObj.get("encrypt");
+			//对请求返回来的encrypt解密
+			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
+			String resultStr = pc.decrypt(encrypt);
+			System.out.println("toGetApplyidcode解密后明文: " + resultStr);
+
+			//从解密之后的字符串获取applyidcode
+			JSONObject aacodeObj = new JSONObject(resultStr);
+			successStatus = (int) aacodeObj.get("success");
+			System.out.println("msg: " + applyidcode);
+		} catch (AesException e) {
+			e.printStackTrace();
+		}
+
+		return successStatus;
+	}
+
+	public Object imageUpload(Object result, String applyidcode) {
+		//先加密，获取加密之后的数据
+		String encrypt = encrypt(result);
+		JSONObject encryptObj = new JSONObject(encrypt);
+		String timestamp = (String) encryptObj.get("timeStamp");
+		String signature = (String) encryptObj.get("msg_signature");
+		String nonce = (String) encryptObj.get("nonce");
+		encrypt = (String) encryptObj.get("encrypt");
+		/*System.out.println("encode之前的encrypt:" + encrypt);
+		try {
+			encrypt = URLEncoder.encode(encrypt, "utf-8");
+			System.out.println("encode之后的encrypt:" + encrypt);
+		} catch (UnsupportedEncodingException e1) {
+
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+
+		}*/
+		//encrypt = com.alibaba.dubbo.common.URL.encode(encrypt);
+		//GET请求拼凑URL
+		String url = "/visae/america/lg/save/data/" + applyidcode
+				+ "upload_photo/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&timeStamp=" + timestamp + "&msg_signature="
+				+ signature + "&nonce=" + nonce + "&encrypt=" + encrypt;
+		System.out.println("encode之后的url:" + url);
+		return null;
+	}
+
+	//创建申请人数据接口
+	public String toGetApplyidcode(Object result) {
+
+		WXBizMsgCrypt pc;
+		String applyidcode = "";
+		String json = encrypt(result);
+		try {
+			//发送POST请求
+			String returnResult = toPostRequest(json, "");
+			//String returnResult = toPatchRequest(json);
+			JSONObject resultObj = new JSONObject(returnResult);
+			String encrypt = (String) resultObj.get("encrypt");
+			//对请求返回来的encrypt解密
+			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
+			String resultStr = pc.decrypt(encrypt);
+			System.out.println("toGetApplyidcode解密后明文: " + resultStr);
+
+			//从解密之后的字符串获取applyidcode
+			JSONObject aacodeObj = new JSONObject(resultStr);
+			applyidcode = (String) aacodeObj.get("code");
+			System.out.println("applyidcode: " + applyidcode);
+		} catch (AesException e) {
+			e.printStackTrace();
+		}
+
+		return applyidcode;
+	}
+
+	//发送POST请求
+	public String toPostRequest(String json, String applyidcode) {
+		String path = "";
+		String host = "https://open.visae.net";
+		if (!Util.isEmpty(applyidcode)) {
+			path = "/visae/america/lg/save/data/" + applyidcode + "/upload_photo/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
+		} else {
+			path = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
+		}
+		String method = "POST";
+		String entityStr = "";
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Content-Type", "application/json; charset=UTF-8");
+		Map<String, String> querys = new HashMap<String, String>();
+		HttpResponse response;
+		try {
+			response = HttpUtils.doPost(host, path, method, headers, querys, json);
+			entityStr = EntityUtils.toString(response.getEntity());
+			System.out.println("POST请求返回的数据：" + entityStr);
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		return entityStr;
+	}
+
+	//查询接口
+	public Object searchInterface(Object result) {
+		List<AutofillSearchJsonEntity> searchList = new ArrayList<AutofillSearchJsonEntity>();
+		//先加密，获取加密之后的数据
+		String encrypt = encrypt(result);
+		JSONObject encryptObj = new JSONObject(encrypt);
+		String timestamp = (String) encryptObj.get("timeStamp");
+		String signature = (String) encryptObj.get("msg_signature");
+		String nonce = (String) encryptObj.get("nonce");
+		encrypt = (String) encryptObj.get("encrypt");
+		System.out.println("encode之前的encrypt:" + encrypt);
+		try {
+			encrypt = URLEncoder.encode(encrypt, "utf-8");
+			System.out.println("encode之后的encrypt:" + encrypt);
+		} catch (UnsupportedEncodingException e1) {
+
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+
+		}
+		//encrypt = com.alibaba.dubbo.common.URL.encode(encrypt);
+		//GET请求拼凑URL
+		String url = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&timeStamp=" + timestamp
+				+ "&msg_signature=" + signature + "&nonce=" + nonce + "&encrypt=" + encrypt;
+		System.out.println("encode之后的url:" + url);
+		//发送请求，并对返回的结果解密
+		String getRequest = toGetRequest(url);
+		JSONObject jsonObject = new JSONObject(getRequest);
+		encrypt = (String) jsonObject.get("encrypt");
+		System.out.println("encrypt:" + encrypt);
+		//解密
+		WXBizMsgCrypt pc;
+		JSONArray array = null;
+		try {
+			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
+			String resultStr = pc.decrypt(encrypt);
+			System.out.println("searchInterface解密后明文: " + resultStr);
+			//从解密之后的数据中获取所查询的数据，并最终转化成list
+			JSONObject searchObj = new JSONObject(resultStr);
+			array = (JSONArray) searchObj.get("data");
+			//将JSONArray转成list集合
+			//searchList = com.alibaba.fastjson.JSONObject.parseArray(array.toString(), AutofillSearchJsonEntity.class);
+			//List<?> list2 = JSONArray.toList(array, new AutofillSearchJsonEntity(), new JsonConfig());
+		} catch (AesException e) {
+			e.printStackTrace();
+		}
+		return array;
+	}
+
+	//将图片转成base64
+	public String imgToBse64(String filePath) {
+		InputStream inputStream = null;
+		HttpURLConnection httpURLConnection = null;
+		byte[] data = null;
+		try {
+			URL url = new URL(filePath);//创建的URL  
+			if (url != null) {
+				httpURLConnection = (HttpURLConnection) url.openConnection();//打开链接  
+				httpURLConnection.setConnectTimeout(3000);//设置网络链接超时时间，3秒，链接失败后重新链接  
+				httpURLConnection.setDoInput(true);//打开输入流  
+				httpURLConnection.setRequestMethod("GET");//表示本次Http请求是GET方式  
+				int responseCode = httpURLConnection.getResponseCode();//获取返回码  
+				if (responseCode == 200) {//成功为200  
+					//从服务器获得一个输入流  
+					inputStream = httpURLConnection.getInputStream();
+					data = new byte[inputStream.available()];
+					inputStream.read(data);
+					inputStream.close();
+				}
+			}
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Base64.encodeBase64String(data);
 	}
 
 	//将数据加密
@@ -1201,6 +1432,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String appId = APPID;
 
 		String jsonResult = JsonUtil.toJson(result);
+		System.out.println("jsonResult:" + jsonResult);
 
 		//加密
 		WXBizMsgCrypt pc;
@@ -1215,69 +1447,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 
 		return json;
-	}
-
-	//查询接口
-	public List<AutofillSearchJsonEntity> searchInterface(Object result) {
-		List<AutofillSearchJsonEntity> searchList = new ArrayList<AutofillSearchJsonEntity>();
-		//先加密，获取加密之后的数据
-		String encrypt = encrypt(result);
-		JSONObject encryptObj = new JSONObject(encrypt);
-		String timestamp = (String) encryptObj.get("timeStamp");
-		String signature = (String) encryptObj.get("msg_signature");
-		String nonce = (String) encryptObj.get("nonce");
-		encrypt = (String) encryptObj.get("encrypt");
-		encrypt = com.alibaba.dubbo.common.URL.encode(encrypt);
-		//GET请求拼凑URL
-		String url = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&timeStamp=" + timestamp
-				+ "&msg_signature=" + signature + "&nonce=" + nonce + "&encrypt=" + encrypt;
-		//发送请求，并对返回的结果解密
-		String getRequest = toGetRequest(url);
-		JSONObject jsonObject = new JSONObject(getRequest);
-		encrypt = (String) jsonObject.getString("encrypt");
-		//解密
-		WXBizMsgCrypt pc;
-		try {
-			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
-			String resultStr = pc.decrypt(encrypt);
-			System.out.println("解密后明文: " + resultStr);
-			//从解密之后的数据中获取所查询的数据，并最终转化成list
-			JSONObject searchObj = new JSONObject(resultStr);
-			JSONArray array = (JSONArray) searchObj.get("data");
-			//将JSONArray转成list集合
-			searchList = com.alibaba.fastjson.JSONObject.parseArray(array.toString(), AutofillSearchJsonEntity.class);
-			//List<?> list2 = JSONArray.toList(array, new AutofillSearchJsonEntity(), new JsonConfig());
-		} catch (AesException e) {
-			e.printStackTrace();
-		}
-		return searchList;
-	}
-
-	//创建申请人数据接口
-	public String toGetAAcode(Object result) {
-
-		WXBizMsgCrypt pc;
-		String aacode = "";
-		String json = encrypt(result);
-		try {
-			//发送POST请求
-			String returnResult = toPostRequest(json);
-			JSONObject resultObj = new JSONObject(returnResult);
-			String encrypt = (String) resultObj.get("encrypt");
-			//对请求返回来的encrypt解密
-			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
-			String resultStr = pc.decrypt(encrypt);
-			System.out.println("解密后明文: " + resultStr);
-
-			//从解密之后的字符串获取aacode
-			JSONObject aacodeObj = new JSONObject(resultStr);
-			aacode = (String) aacodeObj.get("code");
-			System.out.println("aacode: " + aacode);
-		} catch (AesException e) {
-			e.printStackTrace();
-		}
-
-		return aacode;
 	}
 
 	/**
@@ -1341,20 +1510,21 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return entityStr;
 	}
 
-	//发送POST请求
-	public String toPostRequest(String json) {
+	//发送PATCH请求
+	public String toPatchRequest(String json) {
 		String host = "https://open.visae.net";
 		String path = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
 		String method = "POST";
 		String entityStr = "";
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Content-Type", "application/json; charset=UTF-8");
+		headers.put(" x-http-method-override", "PATCH");
 		Map<String, String> querys = new HashMap<String, String>();
 		HttpResponse response;
 		try {
 			response = HttpUtils.doPost(host, path, method, headers, querys, json);
 			entityStr = EntityUtils.toString(response.getEntity());
-			System.out.println("POST请求返回的数据：" + entityStr);
+			System.out.println("PATCH请求返回的数据：" + entityStr);
 		} catch (Exception e) {
 
 			// TODO Auto-generated catch block
@@ -1489,6 +1659,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		if (Util.isEmpty(orderTravelInfo)) {
 			orderTravelInfo = new TOrderUsTravelinfoEntity();
 			orderTravelInfo.setOrderid(orderid);
+			orderTravelInfo.setTravelpurpose("TEMP. BUSINESS PLEASURE VISITOR(B)");
 			orderTravelInfo = dbDao.insert(orderTravelInfo);
 		}
 		if (!Util.isEmpty(form.getGodate()))
@@ -1509,6 +1680,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			String travelpurpose = form.getTravelpurpose();
 			String key = TravelpurposeEnum.getEnum(travelpurpose).getKey();
 			orderTravelInfo.setTravelpurpose(key);
+		} else {
+			orderTravelInfo.setTravelpurpose("TEMP. BUSINESS PLEASURE VISITOR(B)");
 		}
 		orderTravelInfo.setHastripplan(form.getHastripplan());
 		orderTravelInfo.setGodeparturecity(form.getGodeparturecity());
