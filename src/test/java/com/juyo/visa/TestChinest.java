@@ -1,9 +1,10 @@
 package com.juyo.visa;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -15,7 +16,13 @@ public class TestChinest {
 
 	public static void main(String[] args) {
 
-		String code = "QFmcqNtSVfyt5nINFegOXL8D9GOe4CcWCw7H8OAV7YloccdRUTYhFTHkESkk//N13YC6IJ6Hmunkwv6U6nKW/w==";
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-mm-dd");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("YYYY-MM-dd");
+		System.out.println(sdf.format(date));
+		System.out.println(sdf2.format(date));
+
+		/*String code = "QFmcqNtSVfyt5nINFegOXL8D9GOe4CcWCw7H8OAV7YloccdRUTYhFTHkESkk//N13YC6IJ6Hmunkwv6U6nKW/w==";
 		try {
 			String encode = URLEncoder.encode(code, "utf-8");
 			System.out.println(encode);
@@ -24,7 +31,7 @@ public class TestChinest {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 
-		}
+		}*/
 		/*String str = R.sg(5, 18).next();
 
 		System.out.println("str的值:" + str);

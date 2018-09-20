@@ -1179,20 +1179,26 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			orderus.setStatus(USOrderListStatusEnum.AUTOFILL.intKey());
 			dbDao.update(orderus);
 		}
+		//String applyidcode = "baa996b5";
 
 		//调用第一个接口
 		//selectApplyinfo();
-		//调用第二个，第三个接口
-		//insertandupdateApplyinfo(orderid);
+		//调用第二个，第三个接口,获取申请人识别码
+		/*String applyidcode = (String) insertandupdateApplyinfo(orderid);
 		//调用第四个接口
-		String applyidcode = "baa996b5";
 		//Object applyinfo = getApplyinfo(applyidcode);
-		//调用第五个接口
+		//调用第五个接口,上传图片
 		String imgurl = "http://oyu1xyxxk.bkt.clouddn.com/372ea340-3280-48dc-aaa4-6c8bf43f8064.jpg";
-		//int successStatus = (int) uploadImgtoUS(imgurl, applyidcode);
-		//System.out.println("successStatus:" + successStatus);
-		//第六个接口
-		submittoDS160(applyidcode);
+		int successStatus = (int) uploadImgtoUS(imgurl, applyidcode);
+		System.out.println("imgsuccessStatus:" + successStatus);
+		//调用第六个接口，向DS160官网提交申请
+		successStatus = (int) submittoDS160(applyidcode);
+		System.out.println("ds160successStatus:" + successStatus);
+		//调用第四个接口,查询
+		//be3d1654
+		String appid = (String) getApplyinfo(applyidcode);*/
+		String appid = (String) getApplyinfo("77d68168");
+		System.out.println("appid:" + appid);
 		//记录日志
 		insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
 		return null;
@@ -1217,7 +1223,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> result = autofillService.getData(orderid);
 		if (!Util.isEmpty(result)) {
 			//第二个，第三个接口，创建和更改申请人数据，只是请求方式不同，一个为POST,一个为PATCH
-			applyidcode = toGetApplyidcode(result.get("resultData"));
+			//applyidcode = toGetApplyidcode(result.get("resultData"));
+			String resultStr = (String) toGetEncrypt(result.get("resultData"), applyidcode, "");
+			//从解密之后的字符串获取applyidcode
+			JSONObject aacodeObj = new JSONObject(resultStr);
+			applyidcode = (String) aacodeObj.get("code");
+			System.out.println("applyidcode: " + applyidcode);
 		}
 		System.out.println("申请人识别码为：" + applyidcode);
 		return applyidcode;
@@ -1226,9 +1237,17 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	//第四个接口，申请人数据详情
 	public Object getApplyinfo(String applyidcode) {
 		Map<String, Object> applycode = Maps.newHashMap();
+		String appid = "";
 		//applycode.put("code", "d19eb111");//code为第二个接口返回
-		Object searchInterface = searchInterface(applycode, applyidcode);
-		return searchInterface;
+		JSONObject applyinfo = (JSONObject) searchInterface(applycode, applyidcode);
+		JSONObject applystatus = (JSONObject) applyinfo.get("status");
+		String statusname = (String) applystatus.get("name");
+		if (Util.eq("申请失败", statusname) || Util.eq("申请成功", statusname)) {
+			appid = (String) applyinfo.get("app_id");
+		} else {
+			appid = "别着急，正在申请呢。。。";
+		}
+		return appid;
 	}
 
 	//第五个接口，上传美签申请人头像
@@ -1237,35 +1256,45 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> resultData = Maps.newHashMap();
 		resultData.put("file", imgbase64);
 
-		int successStatus = 0;
-		WXBizMsgCrypt pc;
-		String json = encrypt(resultData);
+		String resultStr = (String) toGetEncrypt(resultData, applyidcode, "image");
+		//从解密之后的字符串获取applyidcode
+		JSONObject aacodeObj = new JSONObject(resultStr);
+		int successStatus = (int) aacodeObj.get("success");
+		System.out.println("msg: " + applyidcode);
+		return successStatus;
+	}
 
+	//第六个接口,递交DS160官网数据
+	public Object submittoDS160(String applyidcode) {
+		Map<String, Object> resultData = Maps.newHashMap();
+		resultData.put("action", "applying");
+		String resultStr = (String) toGetEncrypt(resultData, applyidcode, "applying");
+		JSONObject aacodeObj = new JSONObject(resultStr);
+		int successStatus = (int) aacodeObj.get("success");
+		System.out.println("msg: " + applyidcode);
+		return successStatus;
+	}
+
+	//将enctrypt加密，发送请求，然后解密拿到解密之后的enctrypt
+	public Object toGetEncrypt(Object result, String applyidcode, String type) {
+		WXBizMsgCrypt pc;
+		String resultStr = "";
+		String json = encrypt(result);
 		try {
 			//发送POST请求
-			String returnResult = toPostRequest(json, applyidcode);
+			String returnResult = toPostRequest(json, applyidcode, type);
 			//String returnResult = toPatchRequest(json);
 			JSONObject resultObj = new JSONObject(returnResult);
 			String encrypt = (String) resultObj.get("encrypt");
 			//对请求返回来的encrypt解密
 			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
-			String resultStr = pc.decrypt(encrypt);
-			System.out.println("toGetApplyidcode解密后明文: " + resultStr);
-
-			//从解密之后的字符串获取applyidcode
-			JSONObject aacodeObj = new JSONObject(resultStr);
-			successStatus = (int) aacodeObj.get("success");
-			System.out.println("msg: " + applyidcode);
+			resultStr = pc.decrypt(encrypt);
+			System.out.println("toGetEncrypt解密后明文: " + resultStr);
 		} catch (AesException e) {
 			e.printStackTrace();
 		}
 
-		return successStatus;
-	}
-
-	//第六个接口
-	public Object submittoDS160(String applyidcode) {
-		return null;
+		return resultStr;
 	}
 
 	public Object imageUpload(Object result, String applyidcode) {
@@ -1296,7 +1325,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//创建申请人数据接口
-	public String toGetApplyidcode(Object result) {
+	/*public String toGetApplyidcode(Object result) {
 
 		WXBizMsgCrypt pc;
 		String applyidcode = "";
@@ -1321,14 +1350,20 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 
 		return applyidcode;
-	}
+	}*/
 
 	//发送POST请求
-	public String toPostRequest(String json, String applyidcode) {
+	public String toPostRequest(String json, String applyidcode, String type) {
 		String path = "";
 		String host = "https://open.visae.net";
 		if (!Util.isEmpty(applyidcode)) {
-			path = "/visae/america/lg/save/data/" + applyidcode + "/upload_photo/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
+			if (Util.eq("image", type)) {
+				path = "/visae/america/lg/save/data/" + applyidcode
+						+ "/upload_photo/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
+			} else {
+				path = "/visae/america/lg/save/data/" + applyidcode
+						+ "/submit_ds160/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
+			}
 		} else {
 			path = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
 		}
