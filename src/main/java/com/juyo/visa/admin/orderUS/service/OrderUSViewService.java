@@ -1185,12 +1185,14 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//调用第二个，第三个接口
 		//insertandupdateApplyinfo(orderid);
 		//调用第四个接口
-		getApplyinfo();
+		String applyidcode = "baa996b5";
+		//Object applyinfo = getApplyinfo(applyidcode);
 		//调用第五个接口
 		String imgurl = "http://oyu1xyxxk.bkt.clouddn.com/372ea340-3280-48dc-aaa4-6c8bf43f8064.jpg";
-		String applyidcode = "baa996b5";
 		//int successStatus = (int) uploadImgtoUS(imgurl, applyidcode);
 		//System.out.println("successStatus:" + successStatus);
+		//第六个接口
+		submittoDS160(applyidcode);
 		//记录日志
 		insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
 		return null;
@@ -1203,7 +1205,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		resultData.put("search", "E46544654");
 
 		//List<AutofillSearchJsonEntity> searchInterface = searchInterface(resultData);
-		JSONArray array = (JSONArray) searchInterface(resultData);
+		JSONArray array = (JSONArray) searchInterface(resultData, "");
 		List<AutofillSearchJsonEntity> searchList = com.alibaba.fastjson.JSONObject.parseArray(array.toString(),
 				AutofillSearchJsonEntity.class);
 		return searchList;
@@ -1222,11 +1224,11 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//第四个接口，申请人数据详情
-	public Object getApplyinfo() {
+	public Object getApplyinfo(String applyidcode) {
 		Map<String, Object> applycode = Maps.newHashMap();
 		//applycode.put("code", "d19eb111");//code为第二个接口返回
-		Object searchInterface = searchInterface(applycode);
-		return null;
+		Object searchInterface = searchInterface(applycode, applyidcode);
+		return searchInterface;
 	}
 
 	//第五个接口，上传美签申请人头像
@@ -1259,6 +1261,11 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 
 		return successStatus;
+	}
+
+	//第六个接口
+	public Object submittoDS160(String applyidcode) {
+		return null;
 	}
 
 	public Object imageUpload(Object result, String applyidcode) {
@@ -1345,8 +1352,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//查询接口
-	public Object searchInterface(Object result) {
+	public Object searchInterface(Object result, String applyidcode) {
 		List<AutofillSearchJsonEntity> searchList = new ArrayList<AutofillSearchJsonEntity>();
+		String url = "";
 		//先加密，获取加密之后的数据
 		String encrypt = encrypt(result);
 		JSONObject encryptObj = new JSONObject(encrypt);
@@ -1366,8 +1374,14 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 		//encrypt = com.alibaba.dubbo.common.URL.encode(encrypt);
 		//GET请求拼凑URL
-		String url = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&timeStamp=" + timestamp
-				+ "&msg_signature=" + signature + "&nonce=" + nonce + "&encrypt=" + encrypt;
+		if (!Util.isEmpty(applyidcode)) {
+
+			url = "/visae/america/lg/save/data/" + applyidcode + "/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&timeStamp="
+					+ timestamp + "&msg_signature=" + signature + "&nonce=" + nonce + "&encrypt=" + encrypt;
+		} else {
+			url = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&timeStamp=" + timestamp
+					+ "&msg_signature=" + signature + "&nonce=" + nonce + "&encrypt=" + encrypt;
+		}
 		System.out.println("encode之后的url:" + url);
 		//发送请求，并对返回的结果解密
 		String getRequest = toGetRequest(url);
@@ -1377,20 +1391,30 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//解密
 		WXBizMsgCrypt pc;
 		JSONArray array = null;
+		JSONObject resultdata = null;
 		try {
 			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
 			String resultStr = pc.decrypt(encrypt);
 			System.out.println("searchInterface解密后明文: " + resultStr);
-			//从解密之后的数据中获取所查询的数据，并最终转化成list
 			JSONObject searchObj = new JSONObject(resultStr);
-			array = (JSONArray) searchObj.get("data");
+			if (!Util.isEmpty(applyidcode)) {
+				//{"msg": null, "data": {"id": 3402, "status": {"number": 1, "name": "已保存"}, "create_by": {"id": 36849, "name": "ysgj"}, "submit_time": null, "get_time": null, "create_date": "2018-09-19 17:23", "update_date": "2018-09-19 17:23", "date_of_birth": "2018-09-03", "apply_info": {"id": 2576640, "code": "baa996b5", "base_info": {"InforMation": {"WorkEducation": {"Education": [{"unit_name_cn": "北电", "AdderssInfo": {"province": "北京市", "country": "ANGL", "street": "大学", "city": "北京市", "zip_code": "110200"}, "major": "发顺丰色鬼", "end_date": "2018-09-10", "unit_name_en": "Nortel", "start_date": "2018-09-06"}], "Works": [{"unit_name_cn": "水电费第三方", "AdderssInfo": {"province": "北京市", "country": "ASMO", "street": "舒服舒服的", "city": "北京市", "zip_code": "110200"}, "DirectorsName": {"given_names_cn": "", "surnames_cn": "", "given_names_en": "", "surnames_en": ""}, "end_date": "2018-09-13", "monthly_income": "", "phone": "265646", "unit_name_en": "Water and electricity fee third party", "job_description": "水电费", "start_date": "2018-09-14", "job_title": "水电费"}], "describe": "", "current_status": "CM"}, "ExitInfo": {"OldPassport": [], "Language": []}, "TravelInfo": {"arrival_date": "2018-10-12", "go_country": "USA", "first_country": "", "Passport": {"passport_no": "E72073528", "issuance_date": "2016-05-31", "passport_type": "R", "PassportIssuance": {"province": "XINJIANG", "country": "CHIN", "city": ""}, "expiration_date": "2021-06-05", "country": "CHIN"}, "airways": "首都国际机场-羽田国际机场 NH964 0825/1250", "leave_airways": "成田国际机场-首都国际机场 CA6652 1820/2120", "travel_agency": "", "purpose_explanation": "", "purpose": "", "leave_date": "2018-10-18", "Peer": [], "leave_street": "密歇根州", "in_street": "密歇根州"}, "FamilyInfo": {"FatherInfo": {"date_of_birth": "2018-09-04", "NameInfo": {"given_names_cn": "水电", "surnames_cn": "水电费", "given_names_en": "SHUIDIAN", "surnames_en": "SHUIDIANFEI"}}, "AdderssInfo": {"province": "河北", "country": "CHIN", "street": "山西省大同市", "city": "张家口", "zip_code": ""}, "MotherInfo": {"date_of_birth": "2018-09-06", "NameInfo": {"given_names_cn": "水", "surnames_cn": "阿斯蒂芬", "given_names_en": "SHUI", "surnames_en": "ASIDIFEN"}}, "SpouseInfo": {"AdderssInfo": {"province": "", "country": "", "street": "", "city": "", "zip_code": ""}, "NameInfo": {"given_names_cn": "水电费", "surnames_cn": "水电水电都是", "given_names_en": "SHUIDIANFEI", "surnames_en": "SHUIDIANSHUIDIANDOUSHI"}, "end_date": "", "BirthplaceInfo": {"province": "", "country": "ASMO", "city": "内蒙古自治区"}, "date_of_birth": "2018-09-13", "divorced_reason": "", "nationality": "ALGR", "address_type": 5, "start_date": "", "divorced_country": ""}, "family_phone": ""}, "BaseInfo": {"NameInfo": {"old_given_names_en": "SIASADE", "old_surnames_en": "LISHUIDIANFEISHIDEFEN", "surnames_en": "LIU", "old_given_names_cn": "四阿萨德", "given_names_code_cn": "", "given_names_en": "YUFEI1", "given_names_cn": "宇飞1", "surnames_cn": "刘", "surnames_code_cn": "", "old_surnames_cn": "里水电费实得分"}, "photo": "https://upload.visae.net/visae/us/ds160/2018/09/19/photo/e7616438-d142-496b-8950-465373fcbe08.jpeg", "sex": 1, "phone": "18612131435", "BirthplaceInfo": {"province": "山西", "country": "CHIN", "city": "临汾"}, "date_of_birth": "2018-09-03", "Marriage": "W", "PHOTO_MD5_URL": "https://upload.visae.net/https://upload.visae.net/visae/us/ds160/2018/09/19/photo/e7616438-d142-496b-8950-465373fcbe08.jpeg?qhash/md5&e=1537422458&token=Kcgo66ixdBsRf20QIHsITR-5xOdxwpk8793v9-Ym:Iff3zB88RrcyuAKCfkWr-R5P5ck=", "nationality": "CHIN", "ic": "1104964189498", "email": "110@qq.com", "photo_url": "https://upload.visae.net/https://upload.visae.net/visae/us/ds160/2018/09/19/photo/e7616438-d142-496b-8950-465373fcbe08.jpeg?e=1537422458&token=Kcgo66ixdBsRf20QIHsITR-5xOdxwpk8793v9-Ym:7MfWtWK3Gq9prNU3pV9aO7LQK6Y="}}}, "visa_info": {"AmericaInfo": {"us_social_security_number": "", "united_states_citizen": "", "PayParty": {"payer": "S"}, "Contacts": {"AdderssInfo": {"province": "AK", "country": "USA", "street": "国为不产有产人在在地一有在要工", "zip_code": "", "city": "4233432423"}, "NameInfo": {"given_names_cn": "先哲", "surnames_cn": "孙", "given_names_en": "XIANZHE", "surnames_en": "SUN"}, "relationship": "C", "phone": "132432432423", "organization": "4324243242", "email": "18612131435@163.com"}, "MailingAddress": {"province": "CHN", "country": "CHN", "street": "CHN", "zip_code": "", "city": "CHN"}, "RelativesUS": {"Father": {"status": "C", "in_the_us": 1}, "other_in_us": false, "Immediate": [{"NameInfo": {"given_names_cn": "的", "surnames_cn": "的", "given_names_en": "的", "surnames_en": "DEDSDS"}}], "Mother": {"status": "P", "in_the_us": 1}}, "apply_for_emigrant": "水个个人然后", "school_in_america": "", "ResidenceTime": {"date_type": "", "number": ""}, "esta": "", "sevis_id": "", "OtherNationality": [{"country": "", "passport": ""}], "StayCity": [], "GreenCard": [{"country": ""}], "work_phone_number": "", "principal_applicant_sevis_id": "", "EverGoToAmerica": {"USDriverLicense": [{"state": "AR", "number": "345345"}], "LastUSVisa": {"LostOrStolen": {"explain": "", "year": 0}, "revoked": "32432432434232", "finger_fingerprint": 1, "number": "165156", "date": "2018-09-19", "same_place": 1, "same_visa": 1}, "InformationUSVisit": [{"date": "2018-09-20", "ResidenceTime": {"date_type": "D", "number": 2}}]}, "Security": {"q20": "", "q21": "", "q22": "", "q23": "", "q24": "", "q25": "", "q26": "", "q27": "", "q28": "", "q29": "", "q1": "", "q3": "", "q2": "", "q5": "", "q4": "", "q7": "", "q6": "", "q9": "", "q8": "", "q15": "", "q14": "", "q17": "", "q16": "", "q11": "", "q10": "", "q13": "", "q12": "", "q19": "", "q18": ""}, "refuse_entry": "第三方围观围观双方各是", "program_number": "", "ResidentialInfo": {"province": "", "country": "", "street": "", "zip_code": "", "city": ""}, "national_identification_number": "", "Supplement": {"paramilitary": "", "religion": "", "special_skills": "", "Charitable": [], "MilitaryService": {"armed_services": "", "end_date": "", "level": "", "country": "", "specialty": "", "start_date": ""}, "VisitedCountry": [{"country": "日本"}, {"country": "中国"}]}, "application_site": "BEJ", "us_taxpayerid_number": ""}}, "status": 1, "visa_type": 175, "create_by": 36849}, "app_id": null, "error_msg": null, "name": "刘宇飞1", "name_en": "LIU YUFEI1", "passport_num": "E72073528", "review_url": null, "pdf_url": null, "avator_url": null, "error_url": null, "dat_url": null}, "success": 1}
+				resultdata = (JSONObject) searchObj.get("data");
+			} else {
+				//从解密之后的数据中获取所查询的数据，并最终转化成list
+				array = (JSONArray) searchObj.get("data");
+			}
 			//将JSONArray转成list集合
 			//searchList = com.alibaba.fastjson.JSONObject.parseArray(array.toString(), AutofillSearchJsonEntity.class);
 			//List<?> list2 = JSONArray.toList(array, new AutofillSearchJsonEntity(), new JsonConfig());
 		} catch (AesException e) {
 			e.printStackTrace();
 		}
-		return array;
+		if (!Util.isEmpty(applyidcode)) {
+			return resultdata;
+		} else {
+			return array;
+		}
 	}
 
 	//将图片转成base64

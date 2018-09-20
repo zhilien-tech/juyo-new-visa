@@ -99,6 +99,7 @@ import com.juyo.visa.common.newairline.ResultflyEntity;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
+import com.juyo.visa.common.util.TokenUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
@@ -351,8 +352,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			Integer orderid = (Integer) record.get("id");
 			String sqlStr = sqlManager.get("get_simplelist_data_apply");
 			Sql applysql = Sqls.create(sqlStr);
-			List<Record> query = dbDao.query(applysql,
-					Cnd.where("taoj.orderId", "=", orderid).orderBy("taoj.isMainApplicant", "DESC"), null);
+			List<Record> query = dbDao.query(
+					applysql,
+					Cnd.where("taoj.orderId", "=", orderid).orderBy("taoj.isMainApplicant", "DESC")
+							.orderBy("ta.id", "ASC"), null);
 			/*for (Record apply : query) {
 
 				if (!Util.isEmpty(apply.get("province"))) {
@@ -5469,6 +5472,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		HttpSession session = request.getSession();
 		Map<String, Object> result = Maps.newHashMap();
+		String token = TokenUtil.getInstance().makeToken();//创建令牌
+		System.out.println("在FormServlet中生成的token：" + token);
+		request.getSession().setAttribute("token", token);
+		//result.put("token", token);
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		result.put("userid", loginUser.getId());
@@ -5692,77 +5699,121 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return inputStream;
 	}
 
-	public Object hasApplyInfo(int applyid, int orderid, HttpSession session) {
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		Map<String, Object> result = Maps.newHashMap();
-		if (Util.isEmpty(applyid) || applyid == 0) {
-			//新建申请人表
-			TApplicantEntity apply = new TApplicantEntity();
-			apply.setOpId(loginUser.getId());
-			apply.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
-			apply.setIsPrompted(IsYesOrNoEnum.NO.intKey());
-			apply.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
-			apply.setCreateTime(new Date());
-			TApplicantEntity insertApply = dbDao.insert(apply);
-			applyid = insertApply.getId();
-			//新建日本申请人表
-			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
-			if (Util.isEmpty(orderid) || orderid == 0) {
-				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
-				orderid = generrateorder.get("orderjpid");
-			}
+	public Object hasApplyInfo(int applyid, int orderid, String token, HttpServletRequest request) {
 
-			//设置主申请人信息
-			List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
-					Cnd.where("orderId", "=", orderid), null);
-			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
-
-				applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
-				TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
-						Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()));
-				if (!Util.isEmpty(mainApply)) {
-					apply.setMainId(mainApply.getApplicantId());
+		boolean isRepeat = isRepeatSubmit(token, request);//判断用户是否是重复提交
+		if (isRepeat == true) {
+			System.out.println("请不要重复提交");
+			return null;
+		} else {
+			request.getSession().removeAttribute("token");//移除session中的token
+			System.out.println("处理用户提交请求！！");
+			HttpSession session = request.getSession();
+			TUserEntity loginUser = LoginUtil.getLoginUser(session);
+			TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+			Map<String, Object> result = Maps.newHashMap();
+			if (Util.isEmpty(applyid) || applyid == 0) {
+				//新建申请人表
+				TApplicantEntity apply = new TApplicantEntity();
+				apply.setOpId(loginUser.getId());
+				apply.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+				apply.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+				apply.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+				apply.setCreateTime(new Date());
+				TApplicantEntity insertApply = dbDao.insert(apply);
+				applyid = insertApply.getId();
+				//新建日本申请人表
+				TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+				if (Util.isEmpty(orderid) || orderid == 0) {
+					Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
+					orderid = generrateorder.get("orderjpid");
 				}
-				dbDao.update(apply);
-			} else {
-				//设置为主申请人
-				applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
-				apply.setMainId(applyid);
-				dbDao.update(apply);
+
+				//设置主申请人信息
+				List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
+						Cnd.where("orderId", "=", orderid), null);
+				if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
+
+					applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
+					TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
+							Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()));
+					if (!Util.isEmpty(mainApply)) {
+						apply.setMainId(mainApply.getApplicantId());
+					}
+					dbDao.update(apply);
+				} else {
+					//设置为主申请人
+					applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+					apply.setMainId(applyid);
+					dbDao.update(apply);
+				}
+
+				applicantjp.setOrderId(orderid);
+				applicantjp.setApplicantId(applyid);
+				applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+				applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+				applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+				TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
+
+				//日本工作信息
+				TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
+				workJp.setApplicantId(insertappjp.getId());
+				workJp.setCreateTime(new Date());
+				workJp.setOpId(loginUser.getId());
+				dbDao.insert(workJp);
+				//护照信息
+				TApplicantPassportEntity passport = new TApplicantPassportEntity();
+				passport.setIssuedOrganization("公安部出入境管理局");
+				passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
+				passport.setApplicantId(applyid);
+				dbDao.insert(passport);
+
+				TApplicantVisaOtherInfoEntity visaother = new TApplicantVisaOtherInfoEntity();
+				visaother.setApplicantid(insertappjp.getId());
+				visaother.setHotelname("参照'赴日予定表'");
+				visaother.setVouchname("参照'身元保证书'");
+				visaother.setInvitename("同上");
+				visaother.setTraveladvice("推荐");
+				dbDao.insert(visaother);
 			}
-
-			applicantjp.setOrderId(orderid);
-			applicantjp.setApplicantId(applyid);
-			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
-			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
-			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
-			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
-
-			//日本工作信息
-			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
-			workJp.setApplicantId(insertappjp.getId());
-			workJp.setCreateTime(new Date());
-			workJp.setOpId(loginUser.getId());
-			dbDao.insert(workJp);
-			//护照信息
-			TApplicantPassportEntity passport = new TApplicantPassportEntity();
-			passport.setIssuedOrganization("公安部出入境管理局");
-			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
-			passport.setApplicantId(applyid);
-			dbDao.insert(passport);
-
-			TApplicantVisaOtherInfoEntity visaother = new TApplicantVisaOtherInfoEntity();
-			visaother.setApplicantid(insertappjp.getId());
-			visaother.setHotelname("参照'赴日予定表'");
-			visaother.setVouchname("参照'身元保证书'");
-			visaother.setInvitename("同上");
-			visaother.setTraveladvice("推荐");
-			dbDao.insert(visaother);
+			result.put("applyid", applyid);
+			result.put("orderid", orderid);
+			return result;
 		}
-		result.put("applyid", applyid);
-		result.put("orderid", orderid);
-		return result;
+
+	}
+
+	/**
+	 * 判断是否重复提交
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param client_token
+	 * @param request
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public boolean isRepeatSubmit(String client_token, HttpServletRequest request) {
+
+		System.out.println("client_token:" + client_token);
+		//String client_token = request.getParameter("token");
+		//1、如果用户提交的表单数据中没有token，则用户是重复提交了表单
+		if (client_token == null) {
+			return true;
+		}
+		//取出存储在Session中的token
+		String server_token = (String) request.getSession().getAttribute("token");
+		System.out.println("server_token:" + server_token);
+		//2、如果当前用户的Session中不存在Token(令牌)，则用户是重复提交了表单
+		if (server_token == null) {
+			return true;
+		}
+		//3、存储在Session中的Token(令牌)与表单提交的Token(令牌)不同，则用户是重复提交了表单
+		if (!client_token.equals(server_token)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public Object isSamewithMainapply(int orderid) {

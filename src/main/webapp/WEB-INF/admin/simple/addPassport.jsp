@@ -92,6 +92,7 @@
 			<input type="hidden" id="applyid">
 			<div class="modal-header">
 				<span class="heading">资料上传</span>
+				<input type="hidden" name="token" value="${token}" id="token"/>
 				<input id="backBtn" type="button" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" />
 				<input id="addBtn" type="button" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存"/>
 			</div>
@@ -175,17 +176,23 @@
 			});
 		});
 		$('#addBtn').on('click', () => {
+			var flag = 1;
 			$.ajax({
 				type: 'POST',
 				data: {
 					applyid: $("#applyid").val(),
-					orderid: $("#orderid").val()
+					orderid: $("#orderid").val(),
+					token : $("#token").val()
 				},
 				url: '/admin/simple/hasApplyInfo.html',
 				success: function (data) {
-					layerFn.close(() => {
-						socket.close();
-					});
+					if(data == null){
+						console.log("111");
+					}else{
+						layerFn.close(() => {
+							socket.close();
+						});
+					}
 				}
 			});
 		});
@@ -195,19 +202,24 @@
 				type: 'POST',
 				data: {
 					applyid: $("#applyid").val(),
-					orderid: $("#orderid").val()
+					orderid: $("#orderid").val(),
+					token : $("#token").val()
 				},
 				url: '/admin/simple/hasApplyInfo.html',
 				success: function (data) {
-					window.parent.document.getElementById('orderid').value = data.orderid;
-					console.log(data.orderid);
-					console.log(data.applyid);
-					window.document.getElementById('orderid').value = data.orderid;
-					window.document.getElementById('applyid').value = data.applyid;
-					socket.close();
-					console.log($("#applyid").val());
-					console.log($("#orderid").val());
-					window.location.href = '/admin/simple/updateApplicant.html?applicantid=' + $("#applyid").val() + '&orderid=' + $("#orderid").val();
+					if(data == null){
+						console.log("222");
+					}else{
+						window.parent.document.getElementById('orderid').value = data.orderid;
+						console.log(data.orderid);
+						console.log(data.applyid);
+						window.document.getElementById('orderid').value = data.orderid;
+						window.document.getElementById('applyid').value = data.applyid;
+						socket.close();
+						console.log($("#applyid").val());
+						console.log($("#orderid").val());
+						window.location.href = '/admin/simple/updateApplicant.html?applicantid=' + $("#applyid").val() + '&orderid=' + $("#orderid").val();
+					}
 				}
 			});
 		});

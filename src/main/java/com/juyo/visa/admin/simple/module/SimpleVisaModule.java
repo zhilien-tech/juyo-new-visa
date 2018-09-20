@@ -306,8 +306,9 @@ public class SimpleVisaModule {
 
 	@At
 	@POST
-	public Object hasApplyInfo(@Param("applyid") int applyid, @Param("orderid") int orderid, HttpSession session) {
-		return simpleVisaService.hasApplyInfo(applyid, orderid, session);
+	public Object hasApplyInfo(@Param("applyid") int applyid, @Param("orderid") int orderid,
+			@Param("token") String token, HttpServletRequest request) {
+		return simpleVisaService.hasApplyInfo(applyid, orderid, token, request);
 	}
 
 	@At
