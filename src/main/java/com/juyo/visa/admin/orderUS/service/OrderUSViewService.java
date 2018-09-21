@@ -1182,7 +1182,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//String applyidcode = "baa996b5";
 
 		//调用第一个接口
-		//selectApplyinfo();
+		selectApplyinfo();
 		//调用第二个，第三个接口,获取申请人识别码
 		/*String applyidcode = (String) insertandupdateApplyinfo(orderid);
 		//调用第四个接口
@@ -1197,8 +1197,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//调用第四个接口,查询
 		//be3d1654
 		String appid = (String) getApplyinfo(applyidcode);*/
-		String appid = (String) getApplyinfo("77d68168");
-		System.out.println("appid:" + appid);
+		//String appid = (String) getApplyinfo("77d68168");
+		//System.out.println("appid:" + appid);
 		//记录日志
 		insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
 		return null;
@@ -1208,7 +1208,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object selectApplyinfo() {
 		//JSONObject jsonObject = new JSONObject();
 		Map<String, Object> resultData = Maps.newHashMap();
-		resultData.put("search", "E46544654");
+		resultData.put("search", "E72073528");
 
 		//List<AutofillSearchJsonEntity> searchInterface = searchInterface(resultData);
 		JSONArray array = (JSONArray) searchInterface(resultData, "");

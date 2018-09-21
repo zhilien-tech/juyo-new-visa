@@ -26,7 +26,7 @@ var ioc = {
 			minIdle : 5,
 			
 			/*最大连接池数量*/
-			maxActive : 20,
+			maxActive : 50,
 			
 			/*获取连接时最大等待时间，单位毫秒。配置了maxWait之后，缺省启用公平锁，并发效率会有所下降，如果需要可以通过配置useUnfairLock属性为true使用非公平锁*/
 			/*maxWait:5000,*/
