@@ -159,7 +159,7 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 		//准备合并的PDF文件
 		List<ByteArrayOutputStream> pdffiles = Lists.newArrayList();
 		//准备封皮信息
-		/*ByteArrayOutputStream note = note(tempdata);
+		ByteArrayOutputStream note = note(tempdata);
 		pdffiles.add(note);
 		//査 証 申 請 人 名 簿
 		ByteArrayOutputStream book = book(tempdata);
@@ -169,13 +169,12 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 		pdffiles.add(tripInfo);
 		//申请人名单
 		ByteArrayOutputStream applyList = applyList(tempdata);
-		pdffiles.add(applyList);*/
+		pdffiles.add(applyList);
 		//申请人信息（赴日签证申请表）
 		int count = 1;
-		//Collections.reverse(applyinfo);
 		for (Record record : applyinfo) {
 			/*int applyid = record.getInt("id");
-			if (applyid >= 6346 && applyid <= 6353) {*/
+			if (applyid == 6133) {*/
 			ByteArrayOutputStream apply = applyinfo(record, tempdata, request, count);
 			pdffiles.add(apply);
 			count++;
@@ -183,19 +182,12 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 
 		}
 		//电子客票行程单
-		/*ByteArrayOutputStream flightinfo = flightinfo(tempdata);
+		ByteArrayOutputStream flightinfo = flightinfo(tempdata);
 		pdffiles.add(flightinfo);
-
-		ByteArrayOutputStream airticket = airticket(tempdata);
-		pdffiles.add(airticket);
 		//酒店信息
 		ByteArrayOutputStream hotelInfo = hotelInfo(tempdata);
-		pdffiles.add(hotelInfo);*/
-		//		ByteArrayOutputStream returnhome = returnhome(tempdata);
-		//		pdffiles.add(returnhome);
+		pdffiles.add(hotelInfo);
 		ByteArrayOutputStream mergePdf = templateUtil.mergePdf(pdffiles);
-		//申请人信息
-		//return stream;
 		//新需求修改为只下载pdf文件
 		return mergePdf;
 	}
