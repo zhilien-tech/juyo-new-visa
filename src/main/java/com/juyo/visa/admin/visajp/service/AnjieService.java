@@ -171,15 +171,15 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 		ByteArrayOutputStream applyList = applyList(tempdata);
 		pdffiles.add(applyList);*/
 		//申请人信息（赴日签证申请表）
-		int count = 37;
+		int count = 1;
 		//Collections.reverse(applyinfo);
 		for (Record record : applyinfo) {
-			int applyid = record.getInt("id");
-			if (applyid >= 6346 && applyid <= 6353) {
-				ByteArrayOutputStream apply = applyinfo(record, tempdata, request, count);
-				pdffiles.add(apply);
-				count++;
-			}
+			/*int applyid = record.getInt("id");
+			if (applyid >= 6346 && applyid <= 6353) {*/
+			ByteArrayOutputStream apply = applyinfo(record, tempdata, request, count);
+			pdffiles.add(apply);
+			count++;
+			//}
 
 		}
 		//电子客票行程单
