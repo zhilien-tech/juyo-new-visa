@@ -254,7 +254,11 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 		Sql singlesql = Sqls.create(singlesqlStr);
 
 		Cnd singlecnd = Cnd.NEW();
-		singlecnd.and("toj.groundconnectid", "=", form.getCompanyid());
+		if (!Util.isEmpty(form.getSongqianshe())) {
+			singlecnd.and("tr.comId", "=", form.getSongqianshe());
+		} else {
+			singlecnd.and("toj.groundconnectid", "=", form.getCompanyid());
+		}
 		if (!Util.isEmpty(form.getSearchStr())) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("tr.orderNum", "like", "%" + form.getSearchStr() + "%")
@@ -288,11 +292,11 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 			}
 		}
 
-		if (!Util.isEmpty(form.getSongqianshe())) {
+		/*if (!Util.isEmpty(form.getSongqianshe())) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("toj.sendsignid", "=", form.getSongqianshe());
 			singlecnd.and(exp);
-		}
+		}*/
 
 		if (!Util.isEmpty(form.getVisatype())) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();

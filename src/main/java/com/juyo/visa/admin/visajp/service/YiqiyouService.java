@@ -585,7 +585,11 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 				map.put("fill_26", lastinfo + "天");
 			}
 			//在日担保人信息
-			map.put("danbaoname", record.getString("vouchname"));
+			if (!Util.isEmpty(record.getString("vouchname"))) {
+				map.put("danbaoname", record.getString("vouchname"));
+			} else {
+				map.put("danbaoname", "参照'身元保证书'");
+			}
 			int lastIndexOf = record.getString("vouchname").lastIndexOf("-");
 			//因为没有处理，暂时先空着
 			map.put("danbaonameen", "");
@@ -731,7 +735,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			document.open();
 			TtfClassLoader ttf = new TtfClassLoader();
 			Font font = ttf.getFont();
-			font.setSize(12f);
+			font.setSize(18f);
 			font.setFamily("宋体");
 			String dijie = "";
 			if (!Util.isEmpty(orderjp.getGroundconnectid())) {
@@ -762,7 +766,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 				np2.setSpacingAfter(5);
 				np2.setAlignment(Paragraph.ALIGN_CENTER);
 				document.add(np2);
-				//第四个
+				/*//第四个
 				font.setSize(7.96f);
 				Paragraph np3 = new Paragraph("                   收件人：" + mainApplyname
 						+ "                                                                              发件人：万菲", font);
@@ -802,8 +806,117 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 				np7.setSpacingBefore(5);
 				np7.setSpacingAfter(10);
 				np7.setAlignment(Paragraph.ALIGN_LEFT);
-				document.add(np7);
+				document.add(np7);*/
 			}
+
+			//表格上方内容
+			font.setSize(10f);
+			float[] topcolumns = { 7, 3 };
+			PdfPTable toptable = new PdfPTable(topcolumns);
+			toptable.setWidthPercentage(75);
+			toptable.setTotalWidth(PageSize.A4.getWidth());
+
+			PdfPCell topcell;
+			//第一行，第一列
+			topcell = new PdfPCell(new Paragraph("收件人：" + mainApplyname, font));
+			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			topcell.setFixedHeight(20);
+			topcell.setBorder(0);
+			toptable.addCell(topcell);
+			//第一行，第二列
+			topcell = new PdfPCell(new Paragraph("发件人：万菲", font));
+			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			topcell.setFixedHeight(20);
+			topcell.setBorder(0);
+			toptable.addCell(topcell);
+
+			//第二行，第一列
+			topcell = new PdfPCell(new Paragraph("传真：", font));
+			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			topcell.setFixedHeight(20);
+			topcell.setBorder(0);
+			toptable.addCell(topcell);
+			//第二行，第二列
+			topcell = new PdfPCell(new Paragraph("电话：60390721", font));
+			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			topcell.setFixedHeight(20);
+			topcell.setBorder(0);
+			toptable.addCell(topcell);
+
+			//第三行，第一列
+			topcell = new PdfPCell(new Paragraph("电话：", font));
+			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			topcell.setFixedHeight(20);
+			topcell.setBorder(0);
+			toptable.addCell(topcell);
+			//第三行，第二列
+			topcell = new PdfPCell(new Paragraph("日期：" + sendDate, font));
+			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			topcell.setFixedHeight(20);
+			topcell.setBorder(0);
+			toptable.addCell(topcell);
+
+			//第四行，第一列
+			topcell = new PdfPCell(new Paragraph("关于：ホテル予約確認書", font));
+			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			topcell.setFixedHeight(20);
+			topcell.setBorder(0);
+			toptable.addCell(topcell);
+			//第四行，第二列
+			topcell = new PdfPCell(new Paragraph("", font));
+			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			topcell.setFixedHeight(20);
+			topcell.setBorder(0);
+			toptable.addCell(topcell);
+
+			//第五行，第一列
+			topcell = new PdfPCell(new Paragraph("", font));
+			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			topcell.setFixedHeight(20);
+			topcell.setBorder(0);
+			toptable.addCell(topcell);
+			//第五行，第二列
+			topcell = new PdfPCell(new Paragraph("", font));
+			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			topcell.setFixedHeight(20);
+			topcell.setBorder(0);
+			toptable.addCell(topcell);
+
+			//第六行，第一列
+			font.setSize(12f);
+			topcell = new PdfPCell(new Paragraph("以下为预定内容：", font));
+			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			topcell.setFixedHeight(20);
+			topcell.setBorder(0);
+			toptable.addCell(topcell);
+			//第六行，第二列
+			topcell = new PdfPCell(new Paragraph("", font));
+			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			topcell.setFixedHeight(20);
+			topcell.setBorder(0);
+			toptable.addCell(topcell);
+			document.add(toptable);
+
+			/*{
+				font.setSize(12f);
+				Paragraph np7 = new Paragraph("                   以下为预定内容：", font);
+				np7.setSpacingBefore(5);
+				np7.setSpacingAfter(10);
+				np7.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(np7);
+			}*/
 
 			//表格，表头
 
@@ -814,7 +927,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 
 			//设置表头
 			String titles[] = { "时间", "ホテル", "住所", "电话", };
-			font.setSize(7.96f);
+			font.setSize(12f);
 			for (String title : titles) {
 				PdfPCell cell = new PdfPCell(new Paragraph(title, font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1465,24 +1578,25 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 
 			document.add(maintable);
 
+			font.setSize(10f);
+
 			{
 				//第一行
-				Paragraph p = new Paragraph(
-						"                   注意事项：                     1.分房单：        必须在客人入住6天前确认传给我公司，并付清全款", font);
+				Paragraph p = new Paragraph("               注意事项：              1.分房单：        必须在客人入住6天前确认传给我公司，并付清全款",
+						font);
 				p.setSpacingBefore(5);
 				p.setSpacingAfter(5);
 				p.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(p);
 				//第二行
 				Paragraph np = new Paragraph(
-						"                                                  2.取消金：        入住日期的6天前取消订房不需要支付取消金", font);
+						"                                       2.取消金：        入住日期的6天前取消订房不需要支付取消金", font);
 				np.setSpacingAfter(5);
 				np.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(np);
 				//第三行
 				Paragraph np2 = new Paragraph(
-						"                                                                    若距离入住日期的5天内取消订房，则需支付取消金",
-						font);
+						"                                                         若距离入住日期的5天内取消订房，则需支付取消金", font);
 				np2.setSpacingAfter(5);
 				np2.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(np2);
@@ -1604,19 +1718,19 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			{
 				//第四行
 				Paragraph p = new Paragraph(
-						"                                                  3.以上规定适用于一般情况，若有特殊情况请以我方确认单上注册信息为准。", font);
+						"                                       3.以上规定适用于一般情况，若有特殊情况请以我方确认单上注册信息为准。", font);
 				p.setSpacingBefore(5);
 				p.setSpacingAfter(5);
 				p.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(p);
 				//第五行
-				Paragraph np = new Paragraph(
-						"                                                  确认上述内容和注意事项后请签字或加盖公司印章，并立即传回我公司。", font);
+				Paragraph np = new Paragraph("                                       确认上述内容和注意事项后请签字或加盖公司印章，并立即传回我公司。",
+						font);
 				np.setSpacingAfter(5);
 				np.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(np);
 				//第六行
-				Paragraph np2 = new Paragraph("                   确认签字和盖章", font);
+				Paragraph np2 = new Paragraph("               确认签字和盖章", font);
 				np2.setSpacingBefore(15);
 				np2.setSpacingAfter(5);
 				np2.setAlignment(Paragraph.ALIGN_LEFT);

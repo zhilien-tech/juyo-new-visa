@@ -591,7 +591,11 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 				map.put("fill_26", lastinfo + "天");
 			}
 			//在日担保人信息
-			map.put("danbaoname", record.getString("vouchname"));
+			if (!Util.isEmpty(record.getString("vouchname"))) {
+				map.put("danbaoname", record.getString("vouchname"));
+			} else {
+				map.put("danbaoname", "参照'身元保证书'");
+			}
 			int lastIndexOf = record.getString("vouchname").lastIndexOf("-");
 			//因为没有处理，暂时先空着
 			map.put("danbaonameen", "");

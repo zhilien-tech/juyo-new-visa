@@ -568,7 +568,7 @@
 						trigger: "change keyup",
 						validators: {
 							regexp: {
-								regexp: /^[1][345789][0-9]{9}$/,
+								regexp: /^[1][3456789][0-9]{9}$/,
 								message: '手机号格式错误'
 							}
 						}
