@@ -190,8 +190,8 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 	private ByteArrayOutputStream note(Map<String, Object> tempdata) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日");
-		DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy 年 MM 月 dd 日");
+		DateFormat dateFormat1 = new SimpleDateFormat("MM 月 dd 日");
 		//公司信息
 		TCompanyEntity company = (TCompanyEntity) tempdata.get("company");
 		//出行信息
@@ -238,7 +238,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 		content.append("　　" + companyname).append("(").append(cdesignnum).append(")根据与").append(dijie).append("(")
 				.append(dijiecdesignnum).append(")的合同约定,组织").append(applyinfo.size()).append("人访日旅游团，请协助办理赴日本旅游签证。");
 		map.put("Text1", content.toString());
-		//map.put("Text8", company.getName());
+		map.put("Text9", company.getName());
 		if (!Util.isEmpty(ordertripjp)) {
 			if (ordertripjp.getTripType().equals(1)) {
 				if (!Util.isEmpty(ordertripjp.getGoDate())) {
@@ -343,8 +343,8 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 				}
 			}
 		}
-		//map.put("Text6", company.getLinkman());
-		//map.put("Text7", company.getMobile());
+		map.put("Text7", company.getLinkman());
+		map.put("Text8", company.getMobile());
 		Date sendVisaDate = orderinfo.getSendVisaDate();
 		if (!Util.isEmpty(sendVisaDate)) {
 			map.put("Text6", dateFormat.format(sendVisaDate));
@@ -688,6 +688,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 		DateFormat hoteldateformat = new SimpleDateFormat("yyyy/MM/dd hh:mm");
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		try {
 			//公司信息
 			TCompanyEntity company = (TCompanyEntity) tempdata.get("company");
@@ -709,6 +710,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			String passportNo = "";
 			//主申请人名
 			StringBuffer strb = new StringBuffer("");
+			StringBuffer strben = new StringBuffer("");
 			Collections.reverse(applyinfo);
 
 			for (Record record : applyinfo) {
@@ -720,6 +722,13 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 					if (!Util.isEmpty(record.get("lastname"))) {
 						strb.append(record.getString("lastname"));
 					}
+					if (!Util.isEmpty(record.get("firstnameen"))) {
+						strben.append(record.getString("firstnameen"));
+						strben.append(" ");
+					}
+					if (!Util.isEmpty(record.get("lastnameen"))) {
+						strben.append(record.getString("lastnameen"));
+					}
 					if (!Util.isEmpty(record.get("passportno"))) {
 						passportNo = (String) record.get("passportno");
 					}
@@ -727,6 +736,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 				}
 			}
 			String mainApplyname = strb.toString();
+			String mainApplynameen = strben.toString();
 
 			//PDF操作开始
 			//五个表格组成
@@ -766,47 +776,6 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 				np2.setSpacingAfter(5);
 				np2.setAlignment(Paragraph.ALIGN_CENTER);
 				document.add(np2);
-				/*//第四个
-				font.setSize(7.96f);
-				Paragraph np3 = new Paragraph("                   收件人：" + mainApplyname
-						+ "                                                                              发件人：万菲", font);
-				np3.setSpacingBefore(5);
-				np3.setSpacingAfter(10);
-				np3.setAlignment(Paragraph.ALIGN_LEFT);
-				document.add(np3);
-				//第五个
-				font.setSize(7.96f);
-				Paragraph np4 = new Paragraph(
-						"                   传真：                                                                                      电话：60390721",
-						font);
-				np4.setSpacingBefore(5);
-				np4.setSpacingAfter(10);
-				np4.setAlignment(Paragraph.ALIGN_LEFT);
-				document.add(np4);
-				//第六个
-				font.setSize(7.96f);
-				Paragraph np5 = new Paragraph(
-						"                   电话：                                                                                      日期："
-								+ sendDate, font);
-				np5.setSpacingBefore(5);
-				np5.setSpacingAfter(10);
-				np5.setAlignment(Paragraph.ALIGN_LEFT);
-				document.add(np5);
-				//第七个
-				font.setSize(7.96f);
-				Paragraph np6 = new Paragraph("                   关于：ホテル予約確認書", font);
-				np6.setSpacingBefore(5);
-				np6.setSpacingAfter(10);
-				np6.setAlignment(Paragraph.ALIGN_LEFT);
-				document.add(np6);
-
-				//第八个
-				font.setSize(7.96f);
-				Paragraph np7 = new Paragraph("                   以下为预定内容：", font);
-				np7.setSpacingBefore(5);
-				np7.setSpacingAfter(10);
-				np7.setAlignment(Paragraph.ALIGN_LEFT);
-				document.add(np7);*/
 			}
 
 			//表格上方内容
@@ -825,7 +794,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			topcell.setBorder(0);
 			toptable.addCell(topcell);
 			//第一行，第二列
-			topcell = new PdfPCell(new Paragraph("发件人：万菲", font));
+			topcell = new PdfPCell(new Paragraph("发件人：" + company.getLinkman(), font));
 			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			topcell.setFixedHeight(20);
@@ -840,7 +809,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			topcell.setBorder(0);
 			toptable.addCell(topcell);
 			//第二行，第二列
-			topcell = new PdfPCell(new Paragraph("电话：60390721", font));
+			topcell = new PdfPCell(new Paragraph("电话：" + company.getMobile(), font));
 			topcell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			topcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			topcell.setFixedHeight(20);
@@ -909,15 +878,6 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			toptable.addCell(topcell);
 			document.add(toptable);
 
-			/*{
-				font.setSize(12f);
-				Paragraph np7 = new Paragraph("                   以下为预定内容：", font);
-				np7.setSpacingBefore(5);
-				np7.setSpacingAfter(10);
-				np7.setAlignment(Paragraph.ALIGN_LEFT);
-				document.add(np7);
-			}*/
-
 			//表格，表头
 
 			float[] tcolumns = { 2, 2, 4, 2 };
@@ -926,7 +886,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			titable.setTotalWidth(PageSize.A4.getWidth());
 
 			//设置表头
-			String titles[] = { "时间", "ホテル", "住所", "电话", };
+			String titles[] = { "時間", "ホテル", "住所", "電話", };
 			font.setSize(12f);
 			for (String title : titles) {
 				PdfPCell cell = new PdfPCell(new Paragraph(title, font));
@@ -938,7 +898,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			document.add(titable);
 
 			//主要数据表格
-			float[] maincolumns = { 2, 2, 2, 1, 1, 2 };
+			float[] maincolumns = { 2, 2, 1.8f, 0.7f, 1.5f, 2 };
 			PdfPTable maintable = new PdfPTable(maincolumns);
 			maintable.setWidthPercentage(75);
 			maintable.setTotalWidth(PageSize.A4.getWidth());
@@ -978,6 +938,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 								String timeStampStr = simpleDateFormat.format(outDate);
 								String addtimeStampStr = simpleDateFormat.format(addDay);
 								String timeStr = timeStampStr + "-" + addtimeStampStr;
+								String timeStr2 = sdf.format(outDate);
 								cell = new PdfPCell(new Paragraph(timeStr, font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1043,7 +1004,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 								maintable.addCell(cell);
 
 								//第五列
-								cell = new PdfPCell(new Paragraph("部屋", font));
+								cell = new PdfPCell(new Paragraph("部屋タイプ", font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 								cell.setFixedHeight(20);
@@ -1065,15 +1026,15 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 								maintable.addCell(cell);
 
 								//第二列
-								String mainapplyinfo = mainApplyname + "-" + "\n" + passportNo;
+								String mainapplyinfo = mainApplynameen + "-" + passportNo;
 								cell = new PdfPCell(new Paragraph(mainapplyinfo, font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(30);
+								cell.setFixedHeight(50);
 								maintable.addCell(cell);
 
 								//第三列
-								cell = new PdfPCell(new Paragraph(timeStr, font));
+								cell = new PdfPCell(new Paragraph(timeStr2, font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 								cell.setFixedHeight(30);
@@ -1101,7 +1062,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 										room = String.valueOf(applyinfo.size() / 2);
 									}
 								}
-								room = room + "SDF";
+								room = room + "TWN";
 								cell = new PdfPCell(new Paragraph(room, font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1127,6 +1088,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 							String timeStampStr = simpleDateFormat.format(outDate);
 							String addtimeStampStr = simpleDateFormat.format(addDay);
 							String timeStr = timeStampStr + "-" + addtimeStampStr;
+							String timeStr2 = sdf.format(outDate);
 							cell = new PdfPCell(new Paragraph(timeStr, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1192,7 +1154,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 							maintable.addCell(cell);
 
 							//第五列
-							cell = new PdfPCell(new Paragraph("部屋", font));
+							cell = new PdfPCell(new Paragraph("部屋タイプ", font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 							cell.setFixedHeight(20);
@@ -1214,15 +1176,15 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 							maintable.addCell(cell);
 
 							//第二列
-							String mainapplyinfo = mainApplyname + "-" + "\n" + passportNo;
+							String mainapplyinfo = mainApplynameen + "-" + passportNo;
 							cell = new PdfPCell(new Paragraph(mainapplyinfo, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(30);
+							cell.setFixedHeight(50);
 							maintable.addCell(cell);
 
 							//第三列
-							cell = new PdfPCell(new Paragraph(timeStr, font));
+							cell = new PdfPCell(new Paragraph(timeStr2, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 							cell.setFixedHeight(30);
@@ -1244,7 +1206,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 									room = String.valueOf(applyinfo.size() / 2);
 								}
 							}
-							room = room + "SDF";
+							room = room + "TWN";
 							cell = new PdfPCell(new Paragraph(room, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1288,6 +1250,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 								}
 								String timeStampStr1 = simpleDateFormat.format(outDate1);
 								String timeStr1 = timeStampStr1 + "-" + addtimeStampStr1;
+								String timeStr3 = sdf.format(outDate1);
 								cell = new PdfPCell(new Paragraph(timeStr1, font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1353,7 +1316,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 								maintable.addCell(cell);
 
 								//第五列
-								cell = new PdfPCell(new Paragraph("部屋", font));
+								cell = new PdfPCell(new Paragraph("部屋タイプ", font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 								cell.setFixedHeight(20);
@@ -1375,15 +1338,15 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 								maintable.addCell(cell);
 
 								//第二列
-								String mainapplyinfo1 = mainApplyname + "-" + "\n" + passportNo;
+								String mainapplyinfo1 = mainApplynameen + "-" + passportNo;
 								cell = new PdfPCell(new Paragraph(mainapplyinfo1, font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(30);
+								cell.setFixedHeight(50);
 								maintable.addCell(cell);
 
 								//第三列
-								cell = new PdfPCell(new Paragraph(timeStr, font));
+								cell = new PdfPCell(new Paragraph(timeStr3, font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 								cell.setFixedHeight(30);
@@ -1411,7 +1374,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 										room1 = String.valueOf(applyinfo.size() / 2);
 									}
 								}
-								room1 = room1 + "SDF";
+								room1 = room1 + "TWN";
 								cell = new PdfPCell(new Paragraph(room1, font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1439,6 +1402,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 						String timeStampStr = simpleDateFormat.format(outDate);
 						String addtimeStampStr = simpleDateFormat.format(addDay);
 						String timeStr = timeStampStr + "-" + addtimeStampStr;
+						String timeStr2 = sdf.format(outDate);
 						cell = new PdfPCell(new Paragraph(timeStr, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1505,7 +1469,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 						maintable.addCell(cell);
 
 						//第五列
-						cell = new PdfPCell(new Paragraph("部屋", font));
+						cell = new PdfPCell(new Paragraph("部屋タイプ", font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 						cell.setFixedHeight(20);
@@ -1527,15 +1491,15 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 						maintable.addCell(cell);
 
 						//第二列
-						String mainapplyinfo = mainApplyname + "-" + "\n" + passportNo;
+						String mainapplyinfo = mainApplynameen + "-" + passportNo;
 						cell = new PdfPCell(new Paragraph(mainapplyinfo, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-						cell.setFixedHeight(30);
+						cell.setFixedHeight(50);
 						maintable.addCell(cell);
 
 						//第三列
-						cell = new PdfPCell(new Paragraph(timeStr, font));
+						cell = new PdfPCell(new Paragraph(timeStr2, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 						cell.setFixedHeight(30);
@@ -1558,7 +1522,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 								room = String.valueOf(applyinfo.size() / 2);
 							}
 						}
-						room = room + "SDF";
+						room = room + "TWN";
 						cell = new PdfPCell(new Paragraph(room, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1782,7 +1746,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			table.setTotalWidth(PageSize.A4.rotate().getWidth());
 
 			//设置表头
-			String titles[] = { "编号", "姓名(中文)", "姓名(英文)", "性别", "护照发行地", "居住地点", "出生年月日", "职业", "出境记录", "婚姻", "身份确认",
+			String titles[] = { "编号", "姓名(中文)", "姓名(英文)", "性别", "护照签发地", "居住地", "出生年月日", "职业", "出境记录", "婚姻", "身份确认",
 					"经济能力确认", "金额", "备注", "旅行社意见", };
 			for (String title : titles) {
 				PdfPCell cell = new PdfPCell(new Paragraph(title, font));
@@ -2223,6 +2187,9 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			//String pattern = "yy年MM月dd日";
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat pattern = new SimpleDateFormat("yy年MM月dd日");
+			String pingcheng = "yy年MM月dd日";
+			String pingcheng2 = "MM月dd日";
+
 			String applyname = "";
 			int dengsize = 0;
 			int boysize = 0;
@@ -2244,7 +2211,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			}
 			//副标题1
 			{
-				String text = applyname + " ， 他 " + dengsize + " 名(男" + boysize + " / 女" + grilsize + ")";
+				String text = applyname + "，他" + dengsize + "名(男" + boysize + "/女" + grilsize + ")";
 				Paragraph p = new Paragraph(text, font);
 				//				p.setSpacingAfter(5);
 				p.setIndentationRight(13);
@@ -2257,23 +2224,27 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(ordertripjp)) {
 				if (ordertripjp.getTripType().equals(1)) {
 					if (!Util.isEmpty(ordertripjp.getGoDate())) {
-						godatestr = pattern.format(ordertripjp.getGoDate());
+						//godatestr = pattern.format(ordertripjp.getGoDate());
+						godatestr = format(ordertripjp.getGoDate(), pingcheng);
 					}
 					if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-						returndatestr = pattern.format(ordertripjp.getReturnDate());
+						//returndatestr = pattern.format(ordertripjp.getReturnDate());
+						returndatestr = format(ordertripjp.getReturnDate(), pingcheng2);
 					}
 				} else if (ordertripjp.getTripType().equals(2)) {
 					if (!Util.isEmpty(mutiltrip)) {
 						//多程第一程为出发日期
 						TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
 						if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-							godatestr = pattern.format(entrytrip.getDepartureDate());
+							//godatestr = pattern.format(entrytrip.getDepartureDate());
+							godatestr = format(entrytrip.getDepartureDate(), pingcheng);
 						}
 						//最后一程作为返回日期
 						TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
 						if (!Util.isEmpty(returntrip.getDepartureDate())) {
 							//截取月 日
-							returndatestr = pattern.format(returntrip.getDepartureDate());
+							//returndatestr = pattern.format(returntrip.getDepartureDate());
+							returndatestr = format(returntrip.getDepartureDate(), pingcheng2);
 						}
 					}
 				}
@@ -2281,7 +2252,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 
 			{
 				//				String subtitle = "（平成" + godatestr + "から平成" + returndatestr + "）";
-				String subtitle = "(平成" + godatestr + " - 平成" + returndatestr + ")";
+				String subtitle = "(平成" + godatestr + "～" + returndatestr + ")";
 				Paragraph p = new Paragraph(subtitle, font);
 				//				p.setSpacingBefore(5);
 				p.setIndentationRight(13);
@@ -2400,7 +2371,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 								hotel = hotelentity.getNamejp() + "\n" + hotelentity.getAddressjp() + "\n"
 										+ hotelentity.getMobile();
 							} else {
-								hotel = "同上";
+								hotel = "同上連泊";
 							}
 						} else {
 							hotel = "";
@@ -2412,7 +2383,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 					}
 
 				}
-				String[] datas = { sdf.format(ordertravelplan.getOutDate()), scenic, hotel };
+				String[] datas = { "平成" + format(ordertravelplan.getOutDate(), pingcheng), scenic, hotel };
 				for (String title : datas) {
 					PdfPCell cell = new PdfPCell(new Paragraph(title, font));
 					if (Util.eq(datas[1], title)) {
@@ -3262,6 +3233,9 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			//String pattern = "yy年MM月dd日";
 			SimpleDateFormat tableformat = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat pattern = new SimpleDateFormat("yy年MM月dd日");
+			String pingcheng = "yy年MM月dd日";
+			String pingcheng2 = "MM月dd日";
+
 			String applyname = "";
 			int nansize = 0;
 			int nvsize = 0;
@@ -3280,50 +3254,56 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 					}
 				}
 			}
+
 			//副标题1
-			{
-				String text = applyname + " , 他 " + (totalsize - 1) + " 名(男" + nansize + " / 女" + nvsize + ")";
-				Paragraph p = new Paragraph(text, font);
-				p.setSpacingAfter(5);
-				p.setIndentationRight(20);
-				p.setAlignment(Paragraph.ALIGN_RIGHT);
-				document.add(p);
-			}
-			//副标题2
 			String godatestr = "";
 			String returndatestr = "";
 			if (!Util.isEmpty(ordertripjp)) {
 				if (ordertripjp.getTripType().equals(1)) {
 					if (!Util.isEmpty(ordertripjp.getGoDate())) {
-						godatestr = pattern.format(ordertripjp.getGoDate());
+						//godatestr = pattern.format(ordertripjp.getGoDate());
+						godatestr = format(ordertripjp.getGoDate(), pingcheng);
 					}
 					if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-						returndatestr = pattern.format(ordertripjp.getReturnDate());
+						//returndatestr = pattern.format(ordertripjp.getReturnDate());
+						returndatestr = format(ordertripjp.getReturnDate(), pingcheng2);
 					}
 				} else if (ordertripjp.getTripType().equals(2)) {
 					if (!Util.isEmpty(mutiltrip)) {
 						//多程第一程为出发日期
 						TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
 						if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-							godatestr = pattern.format(entrytrip.getDepartureDate());
+							//godatestr = pattern.format(entrytrip.getDepartureDate());
+							godatestr = format(entrytrip.getDepartureDate(), pingcheng);
 						}
 						//最后一程作为返回日期
 						TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
 						if (!Util.isEmpty(returntrip.getDepartureDate())) {
-							returndatestr = pattern.format(returntrip.getDepartureDate());
+							//returndatestr = pattern.format(returntrip.getDepartureDate());
+							returndatestr = format(returntrip.getDepartureDate(), pingcheng2);
 						}
 					}
 				}
 			}
 			{
 				//				String subtitle = "（平成" + godatestr + "から平成" + returndatestr + "）";
-				String subtitle = "（平成" + godatestr + " - 平成" + returndatestr + ")";
+				String subtitle = "（平成" + godatestr + "～" + returndatestr + ")";
 				Paragraph p = new Paragraph(subtitle, font);
 				p.setSpacingBefore(5);
 				p.setSpacingAfter(5);
 				p.setIndentationRight(20);
 				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				//添加副标题1
+				document.add(p);
+			}
+
+			//副标题2
+			{
+				String text = "(旅行参加者" + totalsize + "名、計" + totalsize + "名)";
+				Paragraph p = new Paragraph(text, font);
+				p.setSpacingAfter(5);
+				p.setIndentationRight(20);
+				p.setAlignment(Paragraph.ALIGN_RIGHT);
 				document.add(p);
 			}
 
@@ -3334,7 +3314,7 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			table.setTotalWidth(PageSize.A4.getWidth());
 
 			//设置表头
-			String titles[] = { "番号", "氏名（中文）", "氏名（英文）", "性別", "生年月日", "旅券番号", "居住地域", "职业", };
+			String titles[] = { "番号", "氏名（中文）", "氏名（英文）", "性別", "生年月日", "旅券番号", "居住地域", "職業", };
 			for (int i = 0; i < titles.length; i++) {
 				String title = titles[i];
 				PdfPCell cell = new PdfPCell(new Paragraph(title, font));

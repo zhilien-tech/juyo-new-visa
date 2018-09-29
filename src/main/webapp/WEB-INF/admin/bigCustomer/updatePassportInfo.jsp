@@ -73,7 +73,7 @@
 								<div class="form-group">
 									<label><span>*</span>护照号</label>
 									<input type="hidden" name="staffid" value="${obj.staffid }"/>
-									<input id="passport" name="passport" tabindex="1" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.passport}"/>
+									<input id="passport" name="passport" maxlength="9"  tabindex="1" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.passport}" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">

@@ -2077,6 +2077,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 			//String pattern = "yy年MM月dd日";
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat pattern = new SimpleDateFormat("yy年MM月dd日");
+			String pingcheng = "yy年MM月dd日";
 			String applyname = "";
 			int dengsize = 0;
 			int boysize = 0;
@@ -2111,23 +2112,27 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(ordertripjp)) {
 				if (ordertripjp.getTripType().equals(1)) {
 					if (!Util.isEmpty(ordertripjp.getGoDate())) {
-						godatestr = pattern.format(ordertripjp.getGoDate());
+						//godatestr = pattern.format(ordertripjp.getGoDate());
+						godatestr = format(ordertripjp.getGoDate(), pingcheng);
 					}
 					if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-						returndatestr = pattern.format(ordertripjp.getReturnDate());
+						//returndatestr = pattern.format(ordertripjp.getReturnDate());
+						returndatestr = format(ordertripjp.getReturnDate(), pingcheng);
 					}
 				} else if (ordertripjp.getTripType().equals(2)) {
 					if (!Util.isEmpty(mutiltrip)) {
 						//多程第一程为出发日期
 						TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
 						if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-							godatestr = pattern.format(entrytrip.getDepartureDate());
+							//godatestr = pattern.format(entrytrip.getDepartureDate());
+							godatestr = format(entrytrip.getDepartureDate(), pingcheng);
 						}
 						//最后一程作为返回日期
 						TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
 						if (!Util.isEmpty(returntrip.getDepartureDate())) {
 							//截取月 日
-							returndatestr = pattern.format(returntrip.getDepartureDate());
+							//returndatestr = pattern.format(returntrip.getDepartureDate());
+							returndatestr = format(returntrip.getDepartureDate(), pingcheng);
 						}
 					}
 				}
@@ -3087,6 +3092,7 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 			//String pattern = "yy年MM月dd日";
 			SimpleDateFormat tableformat = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat pattern = new SimpleDateFormat("yy年MM月dd日");
+			String pingcheng = "yy年MM月dd日";
 			String applyname = "";
 			int nansize = 0;
 			int nvsize = 0;
@@ -3120,22 +3126,26 @@ public class ShanghaiBaichengService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(ordertripjp)) {
 				if (ordertripjp.getTripType().equals(1)) {
 					if (!Util.isEmpty(ordertripjp.getGoDate())) {
-						godatestr = pattern.format(ordertripjp.getGoDate());
+						//godatestr = pattern.format(ordertripjp.getGoDate());
+						godatestr = format(ordertripjp.getGoDate(), pingcheng);
 					}
 					if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-						returndatestr = pattern.format(ordertripjp.getReturnDate());
+						//returndatestr = pattern.format(ordertripjp.getReturnDate());
+						returndatestr = format(ordertripjp.getReturnDate(), pingcheng);
 					}
 				} else if (ordertripjp.getTripType().equals(2)) {
 					if (!Util.isEmpty(mutiltrip)) {
 						//多程第一程为出发日期
 						TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
 						if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-							godatestr = pattern.format(entrytrip.getDepartureDate());
+							//godatestr = pattern.format(entrytrip.getDepartureDate());
+							godatestr = format(entrytrip.getDepartureDate(), pingcheng);
 						}
 						//最后一程作为返回日期
 						TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
 						if (!Util.isEmpty(returntrip.getDepartureDate())) {
-							returndatestr = pattern.format(returntrip.getDepartureDate());
+							//returndatestr = pattern.format(returntrip.getDepartureDate());
+							returndatestr = format(returntrip.getDepartureDate(), pingcheng);
 						}
 					}
 				}

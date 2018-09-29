@@ -70,10 +70,10 @@
 				<c:otherwise>
 					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
-					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" onclick="download()" value="下载" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="refuse()" value="拒签" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="pass()" value="通过" class="btn btn-primary btn-sm pull-right" />
-					<input type="button" onclick="autofill()" value="自动填表" class="btn btn-primary btn-sm pull-right btn-Big" />
+					<input type="button" id="autofill" onclick="autofill()" value="自动填表" class="btn btn-primary btn-sm pull-right btn-Big" />
 					<input type="button" value="通知" onclick="sendEmailUS()" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="日志" onclick="toLog()" class="btn btn-primary btn-sm pull-right" />
 				</c:otherwise>
@@ -1436,6 +1436,7 @@
 				}
 			});
 		} */
+		var count = 0;
  		function autofill(){
 			var orderid = '${obj.orderid}';
 			$.ajax({
@@ -1459,6 +1460,7 @@
 		        		    content: '${base}/admin/orderUS/autofillError.html?errData='+data.errMsg
 		        		  });
 					}else{
+						$("#autofill").attr("disabled",true);
 						$.ajax({
 							url : '/admin/orderUS/autofill.html',
 							data : {
@@ -1468,11 +1470,54 @@
 							type : 'POST',
 							success : function(data) {
 								//alert("申请人识别码为："+data);
+								count++;
+								if(data.errorMsg == ""){
+									console.log("走了"+count+"次终于成功了☺");
+									console.log("applyidcode:"+data.applyidcode);
+									console.log("AAcode:"+data.AAcode);
+									console.log("reviewurl:"+data.reviewurl);
+									console.log("pdfurl:"+data.pdfurl);
+									console.log("avatorurl:"+data.avatorurl);
+									console.log("daturl:"+data.daturl);
+									$("#autofill").attr("disabled",false);
+								}else{
+									console.log(data.errorMsg+count);
+									autofill();
+								}
 							}
 						});
 					}
 				}
 			});
+		}
+		
+		//下载
+		function download(){
+			var orderid = '${obj.orderid}';
+			
+			layer.load(1);
+    		$.fileDownload("${base}/admin/orderUS/downloadFile.html?orderid=" + orderid, {
+		         successCallback: function (url) {
+		        	 layer.closeAll('loading');
+		         },
+		         failCallback: function (html, url) {
+		        	layer.closeAll('loading');
+		        	layer.msg("下载失败");
+		         }
+		     });
+			
+			
+			/* $.ajax({
+				url : '/admin/orderUS/downloadFile.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'GET',
+				success : function(data) {
+					
+				}
+			}); */
 		}
 		
 		//通过

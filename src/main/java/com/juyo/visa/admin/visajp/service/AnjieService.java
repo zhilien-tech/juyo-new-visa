@@ -174,10 +174,12 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 		int count = 1;
 		for (Record record : applyinfo) {
 			/*int applyid = record.getInt("id");
-			if (applyid == 6133) {*/
+			if (applyid >= 6122 && applyid <= 6132) {*/
+			//if (count < 9) {
 			ByteArrayOutputStream apply = applyinfo(record, tempdata, request, count);
 			pdffiles.add(apply);
 			count++;
+			//}
 			//}
 
 		}

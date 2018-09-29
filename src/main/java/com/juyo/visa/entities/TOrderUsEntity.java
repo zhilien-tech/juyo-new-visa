@@ -38,6 +38,18 @@ public class TOrderUsEntity implements Serializable {
 	private String ordernumber;
 
 	@Column
+	@Comment("DS160预览页面截图")
+	private String reviewurl;
+
+	@Column
+	@Comment("DS160确认页PDF链接")
+	private String pdfurl;
+
+	@Column
+	@Comment("DS160申请成功后的DAT文件")
+	private String daturl;
+
+	@Column
 	@Comment("领区")
 	private Integer cityid;
 

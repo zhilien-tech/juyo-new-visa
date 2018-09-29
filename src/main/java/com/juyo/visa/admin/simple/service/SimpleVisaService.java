@@ -4320,7 +4320,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 									String wealthtype = wealthEntity.getWealthtype();
 									String wealthname = wealthEntity.getWealthname();
 
-									if (!Util.isEmpty(wealthvalue)) {
+									if (Util.isEmpty(wealthtype)
+											|| (!Util.isEmpty(wealthtype) && !Util.isEmpty(wealthvalue))) {
 										TApplicantWealthJpEntity wealthjp = new TApplicantWealthJpEntity();
 										wealthjp.setSequence(Integer.valueOf(sequence));
 										wealthjp.setBankflowfree(wealthtitle);

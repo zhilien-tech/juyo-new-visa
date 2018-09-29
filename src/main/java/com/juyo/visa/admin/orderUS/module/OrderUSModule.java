@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -419,5 +420,14 @@ public class OrderUSModule {
 			@Param("sessionid") String sessionid, @Param("type") Integer type) {
 		return orderUSViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
 	}*/
+
+	/**
+	 * 下载文件
+	 */
+	@At
+	@GET
+	public Object downloadFile(@Param("orderid") int orderid, HttpServletResponse response) {
+		return orderUSViewService.downloadFile(orderid, response);
+	}
 
 }

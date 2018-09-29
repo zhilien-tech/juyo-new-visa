@@ -8,6 +8,7 @@ package com.juyo.visa.admin.orderUS.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,7 @@ import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TStateUsEntity;
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
@@ -73,11 +75,17 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			}
 		}
 		//出生日期，从护照信息里取
+		//计算年龄，未满14周岁的不需要面签，不用具体离开美国的日期
+		String date2String = sdf.format(new Date());
+		int yearsBetween = 0;
+
 		if (!Util.isEmpty(info.get("taspbirthday"))) {
 			BaseInfo.put("date_of_birth", sdf.format(info.get("taspbirthday")));
+			yearsBetween = DateUtil.yearsBetween(sdf.format(info.get("taspbirthday")), date2String);
 		} else {
 			errorMsg += "护照出生日期,";
 		}
+		System.out.println("yearsBetween:" + yearsBetween);
 		//国籍，默认为中国
 		BaseInfo.put("nationality", "CHIN");
 		//身份证号
@@ -784,10 +792,15 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			errorMsg += "抵达时间,";
 		}
 		//离开美国日期(订单详情)
-		if (!Util.isEmpty(info.get("toutleavedate"))) {
-			travelInfo.put("leave_date", sdf.format(info.get("toutleavedate")));
-		} else {
+		//未满14岁，不需要离开时间
+		if (yearsBetween < 14) {
 			travelInfo.put("leave_date", "");
+		} else {
+			if (!Util.isEmpty(info.get("toutleavedate"))) {
+				travelInfo.put("leave_date", sdf.format(info.get("toutleavedate")));
+			} else {
+				travelInfo.put("leave_date", "");
+			}
 		}
 		//航班号，第二行(订单详情)
 		if (!Util.isEmpty(info.get("returnFlightNum"))) {
@@ -809,7 +822,16 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//签发机构(护照信息)
 		passport.put("country", "CHIN");
 		//护照类型(护照信息)
-		passport.put("passport_type", "R");
+		if (!Util.isEmpty(info.get("passporttype"))) {
+			String passporttype = info.getString("passporttype");
+			if (Util.eq("P", passporttype)) {
+				passport.put("passport_type", "R");
+			} else {
+				passport.put("passport_type", passporttype);
+			}
+		} else {
+			passport.put("passport_type", "R");
+		}
 		//护照号(护照信息)
 		if (!Util.isEmpty(info.get("passport"))) {
 			passport.put("passport_no", info.get("passport"));
@@ -1196,13 +1218,15 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Contacts.put("NameInfo", contactnameinfo);
 
 		//组织名称(签证信息)
-		if (!Util.isEmpty(info.get("organizationname"))) {
+		Contacts.put("organization", "FSFSG");
+		/*if (!Util.isEmpty(info.get("organizationname"))) {
 			Contacts.put("organization", info.get("organizationname"));
 		} else {
 			Contacts.put("organization", "");
-		}
+		}*/
 		//与你的关系(签证信息)
-		if (!Util.isEmpty(info.get("ralationship"))) {
+		Contacts.put("relationship", "B");
+		/*if (!Util.isEmpty(info.get("ralationship"))) {
 			int relation = (int) info.get("ralationship");
 			if (relation == 1) {
 				Contacts.put("relationship", "R");
@@ -1228,13 +1252,14 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		} else {
 			//errorMsg += "与你的关系,";
 			Contacts.put("relationship", "");
-		}
+		}*/
 		//电话号码(签证信息)
-		if (!Util.isEmpty(info.get("tasctelephone"))) {
+		Contacts.put("phone", "14654165");
+		/*if (!Util.isEmpty(info.get("tasctelephone"))) {
 			Contacts.put("phone", info.get("tasctelephone"));
 		} else {
 			Contacts.put("phone", "");
-		}
+		}*/
 		//邮箱
 		if (!Util.isEmpty(info.get("tascemail"))) {
 			Contacts.put("email", info.get("tascemail"));
@@ -1246,26 +1271,29 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> addressinfo = Maps.newHashMap();
 
 		//街道地址(签证信息)
-		if (!Util.isEmpty(info.get("tascaddress"))) {
+		addressinfo.put("street", "SGGEWGEG");
+		/*if (!Util.isEmpty(info.get("tascaddress"))) {
 			addressinfo.put("street", info.get("tascaddress"));
 		} else {
 			//errorMsg += "街道地址,";
 			addressinfo.put("street", "");
-		}
+		}*/
 		//城市(签证信息)
-		if (!Util.isEmpty(info.get("tasccity"))) {
+		addressinfo.put("city", "SDFE");
+		/*if (!Util.isEmpty(info.get("tasccity"))) {
 			addressinfo.put("city", info.get("tasccity"));
 		} else {
 			//errorMsg += "城市,";
 			addressinfo.put("city", "");
-		}
+		}*/
 		//省份(签证信息)
-		if (!Util.isEmpty(info.get("tascstate")) && !Util.eq(0, info.get("tascstate"))) {
+		addressinfo.put("province", "AL");
+		/*if (!Util.isEmpty(info.get("tascstate")) && !Util.eq(0, info.get("tascstate"))) {
 			int state = (int) info.get("tascstate");
 			addressinfo.put("province", getStatecode(state));
 		} else {
 			addressinfo.put("province", "");
-		}
+		}*/
 		addressinfo.put("country", "USA");
 		//邮编(签证信息)
 		if (!Util.isEmpty(info.get("zipcode"))) {
@@ -1639,7 +1667,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 	//根据id查询美国州
 	public String getUSState(int id) {
 		TStateUsEntity fetch = dbDao.fetch(TStateUsEntity.class, id);
-		return fetch.getName();
+		return fetch.getCode();
 	}
 
 	//根据id查询美国所在州的代码
