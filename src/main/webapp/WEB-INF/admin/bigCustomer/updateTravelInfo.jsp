@@ -119,14 +119,12 @@ input:focus{
 													<label><span class="s">*</span>同行人姓</label> <input autocomplete="new-password"
 														id="firstname" name="firstname"
 														value="${companion.firstname}"
-														onchange="addSegmentsTranslateZhToPinYin(this,'firstnameen','')"
 														type="text" placeholder="" />
 												</div>
 												<div class="col-sm-3">
 													<label><span class="s">*</span> 同行人名</label> <input autocomplete="new-password"
 														id="lastname" name="lastname"
 														value="${companion.lastname}"
-														onchange="addSegmentsTranslateZhToPinYin(this,'lastnameen','')"
 														type="text" placeholder="" />
 												</div>
 												<div class="col-sm-3">
@@ -552,6 +550,7 @@ input:focus{
 <!-- 本页面 初始化时间插件 js -->
 <script
 	src="${base}/admin/bigCustomer/updateTravelinfo.js?v=<%=System.currentTimeMillis() %>"></script>
+	<script src="${base}/references/common/js/pinyin.js?v=<%=System.currentTimeMillis() %>"></script>
 <!-- 本页面  js -->
 <script type="text/javascript">
 		

@@ -1082,7 +1082,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		dbDao.update(travelcompanion);
 
 		//同伴信息
-		updateCompanioninfo(form);
+		//updateCompanioninfo(form);
 
 		//以前的美国旅游信息
 		updatePrevioustripinfo(form);
@@ -1264,13 +1264,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(countryList_old)) {
 			dbDao.delete(countryList_old);
 		}
-		String traveledcountry = form.getTraveledcountry();
-		String[] split = traveledcountry.split(",");
-		for (String string : split) {
-			TAppStaffGocountryEntity tAppStaffGocountryEntity = new TAppStaffGocountryEntity();
-			tAppStaffGocountryEntity.setStaffid(staffid);
-			tAppStaffGocountryEntity.setTraveledcountry(string);
-			dbDao.insert(tAppStaffGocountryEntity);
+		if (form.getIstraveledanycountry() == 1) {
+			String traveledcountry = form.getTraveledcountry();
+			String[] split = traveledcountry.split(",");
+			for (String string : split) {
+				TAppStaffGocountryEntity tAppStaffGocountryEntity = new TAppStaffGocountryEntity();
+				tAppStaffGocountryEntity.setStaffid(staffid);
+				tAppStaffGocountryEntity.setTraveledcountry(string);
+				dbDao.insert(tAppStaffGocountryEntity);
+			}
 		}
 		/*if (form.getIstraveledanycountry() == 2) {
 			if (!Util.isEmpty(countryList_old)) {

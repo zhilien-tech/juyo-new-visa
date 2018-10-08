@@ -251,6 +251,58 @@ $(".istraveledanycountry").change(function () {
 	tags : false //设置必须存在的选项 才能选中
 });*/
 
+$(document).on("input","#firstname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var Index = $(this).parent().parent().parent().index();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$(".firstnameen").eq(Index).val("").change();
+	}else{
+		$(".firstnameen").eq(Index).val(pinyinchar).change();
+	}
+});
+$(document).on("input","#lastname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var Index = $(this).parent().parent().parent().index();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$(".lastnameen").eq(Index).val("").change();
+	}else{
+		$(".lastnameen").eq(Index).val(pinyinchar).change();
+	}
+});
+
+
+/*function addSegmentsTranslateZhToPinYin(from, to, param){
+	var toval = "";
+	
+	var Index = $(from).parent().parent().parent().index();
+	//var Indexen = $("#"+to).parent().parent().index();
+	if(param != ""){
+		toval = param;
+	}else{
+		toval = $(from).val();
+	}
+	var pinyinchar = getPinYinStr(toval);
+	$("." + to).eq(Index).val(pinyinchar).change();
+}*/
+
+//获取拼音字符串
+function getPinYinStr(hanzi){
+	var onehanzi = hanzi.split('');
+	var pinyinchar = '';
+	for(var i=0;i<onehanzi.length;i++){
+		pinyinchar += PinYin.getPinYin(onehanzi[i]);
+	}
+	return pinyinchar.toUpperCase();
+}
+
 //美国州下拉
 $('#witchstateofdriver').select2({
 	ajax : {
