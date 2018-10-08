@@ -1468,6 +1468,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				System.out.println("pdfurl:" + pdfurl);
 				daturl = applyResult.getDat_url();
 				System.out.println("daturl:" + daturl);
+				AAcode = applyResult.getApp_id();
+				System.out.println("AAcode:" + AAcode);
 				orderus.setReviewurl(reviewurl);
 				orderus.setPdfurl(pdfurl);
 				orderus.setDaturl(daturl);
@@ -1572,8 +1574,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					applyResult = applyinfoList.get(0);
 					statusname = applyResult.getStatus();
 					AAcode = applyResult.getApp_id();
-					System.out.println("while循环里statusname:" + statusname);
-					System.out.println("while循环里AAcode:" + AAcode);
+					System.out.println("while循环里申请statusname:" + statusname);
+					System.out.println("while循环里申请AAcode:" + AAcode);
 				}
 			}
 			if (Util.eq("申请失败", statusname)) {
@@ -1593,8 +1595,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					applyResult = applyinfoList.get(0);
 					statusname = applyResult.getStatus();
 					AAcode = applyResult.getApp_id();
-					System.out.println("while循环里statusname:" + statusname);
-					System.out.println("while循环里AAcode:" + AAcode);
+					System.out.println("while循环里提交statusname:" + statusname);
+					System.out.println("while循环里提交AAcode:" + AAcode);
 				}
 			}
 			if (Util.eq("提交失败", statusname)) {
@@ -1605,7 +1607,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				System.out.println("提交失败原因：" + errorMsg);
 			}
 		}
-		applyResult.setAAcode(AAcode);
 		applyResult.setErrorMsg(errorMsg);
 		return applyResult;
 	}
@@ -3197,6 +3198,16 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			return null;
 		}*/
 
+	/**
+	 * 文件下载
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @param response
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object downloadFile(int orderid, HttpServletResponse response) {
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		String reviewurl = orderus.getReviewurl();
@@ -3206,24 +3217,11 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		byte[] pdfurlbyteArray = saveImageToDisk(pdfurl);//PDF
 		byte[] daturlbyteArray = saveImageToDisk(daturl);//DAT,TXT
 
-		/*byte[] result = new byte[reviewurlbyteArray.length + pdfurlbyteArray.length + daturlbyteArray.length];
-		int i = 0;
-		for (byte bt : reviewurlbyteArray) {
-			result[i] = bt;
-			i++;
-		}
-
-		for (byte bt : pdfurlbyteArray) {
-			result[i] = bt;
-			i++;
-		}
-		for (byte bt : daturlbyteArray) {
-			result[i] = bt;
-			i++;
-		}*/
-
 		String filename = orderus.getOrdernumber();
-		try {
+		downloadType(filename + ".PNG", reviewurlbyteArray, response);
+		downloadType(filename + ".PDF", pdfurlbyteArray, response);
+		downloadType(filename + ".TXT", daturlbyteArray, response);
+		/*try {
 			//下载PDF文件
 			filename += ".TXT";
 			// 将文件进行编码
@@ -3236,6 +3234,26 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
 			// 将字节流相应到浏览器（下载）
 			IOUtils.write(daturlbyteArray, response.getOutputStream());
+			response.flushBuffer();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
+		return null;
+	}
+
+	public Object downloadType(String filename, byte[] type, HttpServletResponse response) {
+		try {
+			// 将文件进行编码
+			String fileName = URLEncoder.encode(filename, "UTF-8");
+			// 设置下载的响应头
+			// response.setContentType("application/zip");
+			//通过response.reset()刷新可能存在一些未关闭的getWriter(),避免可能出现未关闭的getWriter()
+			response.setContentType("application/octet-stream");
+			response.setHeader("Set-Cookie", "fileDownload=true; path=/");
+			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
+			// 将字节流相应到浏览器（下载）
+			IOUtils.write(type, response.getOutputStream());
 			response.flushBuffer();
 
 		} catch (Exception e) {
