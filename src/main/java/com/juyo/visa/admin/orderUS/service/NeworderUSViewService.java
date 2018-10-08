@@ -1082,7 +1082,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		dbDao.update(travelcompanion);
 
 		//同伴信息
-		//updateCompanioninfo(form);
+		updateCompanioninfo(form);
 
 		//以前的美国旅游信息
 		updatePrevioustripinfo(form);
@@ -1392,7 +1392,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @param searchstr
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
- 	public Object selectUSstate(String searchstr) {
+	public Object selectUSstate(String searchstr) {
 		List<TStateUsEntity> stateList = new ArrayList<>();
 		List<TStateUsEntity> state = dbDao.query(TStateUsEntity.class,
 				Cnd.where("name", "like", "%" + Strings.trim(searchstr) + "%"), null);

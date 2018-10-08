@@ -25,6 +25,9 @@
 			height: 150px;
 			background: oldlace;
 		}
+		.datetimepicker {
+			top: 494.563px!important;
+		}
 	</style>
 </head>
 <body>
@@ -40,8 +43,8 @@
 		<form id="passportInfo">
 			<div class="modal-header">
 				<span class="heading">护照信息</span> 
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
+				<input autocomplete="new-password" id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
+				<input autocomplete="new-password" id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 			</div>
 			<div class="modal-body">
 				<div class="dislogHide"></div>
@@ -53,9 +56,9 @@
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传护照</span>
-									<input id="passportUrl" name="passporturl" type="hidden" value="${obj.passurl.url }"/>
-									<!-- <input id="uploadFile" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/> -->
-									<img style="top:-29px;" id="sqImg" alt="" src="${obj.passporturl }" >
+									<input autocomplete="new-password" id="passportUrl" name="passporturl" type="hidden" value="${obj.passurl.url }"/>
+									<input autocomplete="new-password" id="uploadFile" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
+									<img style="top:-219px;" id="sqImg" alt="" src="${obj.passporturl }" >
 									<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 								</div>
 							</div>
@@ -72,8 +75,8 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>护照号</label>
-									<input type="hidden" name="staffid" value="${obj.staffid }"/>
-									<input id="passport" name="passport" maxlength="9"  tabindex="1" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.passport}" />
+									<input autocomplete="new-password" type="hidden" name="staffid" value="${obj.staffid }"/>
+									<input autocomplete="new-password" id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.passport}"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
@@ -81,8 +84,8 @@
 									<label>
 										<span>*</span>签发地点/拼音
 									</label>
-									<input id="issuedPlace" tabindex="1" name="issuedplace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passportinfo.issuedplace }"/>
-									<input id="issuedPlaceEn" tabindex="1" name="issuedplaceen" type="text" style="position:absolute;top:32px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passportinfo.issuedplaceen }"/>
+									<input autocomplete="new-password" id="issuedPlace" name="issuedplace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passportinfo.issuedplace }"/>
+									<input autocomplete="new-password" id="issuedPlaceEn" name="issuedplaceen" type="text" style="position:absolute;top:32px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passportinfo.issuedplaceen }"/>
 								</div>
 							</div>
 						</div><!-- end 出生日期/签发地点 拼音 -->
@@ -92,13 +95,13 @@
 									<label>
 										<span>*</span>签发日期
 									</label>
-									<input id="issuedDate" tabindex="1" name="issueddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.issueddate }"/>
+									<input autocomplete="new-password" id="issuedDate" name="issueddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.issueddate }"/>
 								</div>
 							</div>
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
 								<div class="form-group">
 									<label>&nbsp;&nbsp;</label>
-									<select id="validType" tabindex="1" name="validtype" class="form-control input-sm selectHeight" >
+									<select id="validType" name="validtype" class="form-control input-sm selectHeight" >
 									<c:forEach var="map" items="${obj.passporttype}">
 										<option value="${map.key}" ${map.key == obj.passportinfo.validtype?'selected':'' }>${map.value}</option>
 									</c:forEach>
@@ -110,7 +113,7 @@
 									<label>
 										<span>*</span>有效期至
 									</label>
-									<input id="validEndDate" tabindex="1" name="validenddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.validenddate }"/>
+									<input autocomplete="new-password" id="validEndDate" name="validenddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.validenddate }"/>
 								</div>
 							</div>
 						</div><!-- end 签发日期/有效期至 -->
@@ -120,7 +123,7 @@
 									<label>
 										<span>*</span>签发机关
 									</label>
-									<input id="issuedOrganization" tabindex="1" name="issuedorganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.issuedorganization }"/>
+									<input autocomplete="new-password" id="issuedOrganization" name="issuedorganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.issuedorganization }"/>
 								</div>
 							</div>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0" style="width: 230px;">
@@ -128,7 +131,7 @@
 										<label>
 												<span>*</span>Exit & Entry Administration
 											</label>
-									<input id="issuedOrganizationEn" tabindex="1" name="issuedorganizationen" type="text" class="form-control input-sm" placeholder="Ministry of Public Security" value="${obj.passportinfo.issuedorganizationen }"/>
+									<input autocomplete="new-password" id="issuedOrganizationEn" name="issuedorganizationen" type="text" class="form-control input-sm" placeholder="Ministry of Public Security" value="${obj.passportinfo.issuedorganizationen }"/>
 								</div>
 							</div>
 						</div><!-- end 签发机关 -->
@@ -234,7 +237,6 @@
 		}else{
 			$('.jideduishihuzhao-ipt').hide();
 		}
-		
 		
 	
 		$("#issuedDate").datetimepicker({

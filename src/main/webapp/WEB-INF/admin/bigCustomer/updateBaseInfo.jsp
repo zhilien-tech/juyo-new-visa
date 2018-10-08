@@ -22,6 +22,9 @@
 			left: 425px;
 			position: absolute;
 		}
+		.datetimepicker {
+			top: 982.672px!important;
+		}
 	</style>
 </head>
 <body>
@@ -38,24 +41,24 @@
 		<form id="applicantInfo">
 			<div class="modal-header">
 				<span class="heading">基本信息</span> 
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" onclick="saveApplicant(1)" />
+				<input autocomplete="new-password" id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
+				<input autocomplete="new-password" id="addBtn" type="button" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" onclick="saveApplicant(1)" />
 			</div>
 			<div class="modal-body">
 				<div class="dislogHide"></div>
 				<div class="tab-content row">
-					<input id="comId" name="comid" type="hidden" value="${obj.applicant.comid }">
-					<input id="userId" name="userid" type="hidden" value="${obj.applicant.userid }">
-					<input id="staffId" name="staffid" type="hidden" value="${obj.staffid }">
+					<input autocomplete="new-password" id="comId" name="comid" type="hidden" value="${obj.applicant.comid }">
+					<input autocomplete="new-password" id="userId" name="userid" type="hidden" value="${obj.applicant.userid }">
+					<input autocomplete="new-password" id="staffId" name="staffid" type="hidden" value="${obj.staffid }">
 					<div class="col-sm-12 padding-right-0">
 						<!-- start 身份证 正面 -->
 							<div class="col-xs-4 pictures" style="margin-right: 30px;">
 								<div class="form-group pictureTop">
 									<div class="uploadInfo">
 										<span class="promptInfo">点击上传身份证正面</span>
-										<input id="cardFront" name="cardfront" type="hidden" value="${obj.front.url }"/>
+										<input autocomplete="new-password" id="cardFront" name="cardfront" type="hidden" value="${obj.front.url }"/>
 										<img id="imgShow" name="sqimg" alt="" src="${obj.front.url }" >
-										<!-- <input id="uploadFileImg" name="uploadfile" class="btn btn-primary btn-sm" type="file" value="上传" /> -->
+										<!-- <input autocomplete="new-password" id="uploadFileImg" name="uploadfile" class="btn btn-primary btn-sm" type="file" value="上传" /> -->
 										<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 									</div>
 								</div>
@@ -71,9 +74,9 @@
 								<div class="form-group pictureTop">
 									<div class="uploadInfo">
 										<span class="inchInfo">二寸免冠照片</span>
-										<input id="cardInch" name="twoinchphoto" type="hidden" value="${obj.twoinch.url }"/>
+										<input autocomplete="new-password" id="cardInch" name="twoinchphoto" type="hidden" value="${obj.twoinch.url }"/>
 										<img id="imgInch" name="imgInch" alt="" src="${obj.twoinch.url }" >
-										<!-- <input id="uploadFileInchImg" name="uploadFileInchImg" class="btn btn-primary btn-sm" type="file"  value="上传"/> -->
+										<!-- <input autocomplete="new-password" id="uploadFileInchImg" name="uploadFileInchImg" class="btn btn-primary btn-sm" type="file"  value="上传"/> -->
 										<!-- <i class="delete" onclick="deleteApplicantInchImg()"></i> -->
 									</div>
 								</div>
@@ -89,10 +92,10 @@
 									<!-- 姓/拼音 -->
 										<div class="col-sm-6">
 												<div class="form-group" style="position:relative;">
-												<label><span>*</span>姓/拼音</label> <input id="firstName"
+												<label><span>*</span>姓/拼音</label> <input autocomplete="new-password" id="firstName"
 													name="firstname" type="text" class="form-control input-sm " tabIndex="1"
 													placeholder=" " value="${obj.basicinfo.firstname }" />
-													<input type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstnameen" value="${obj.firstnameen }"/>
+													<input autocomplete="new-password" type="text" id="firstNameEn" style="position:absolute;top:32px;border:none;left:150px;"  name="firstnameen" value="${obj.firstnameen }"/>
 												<!-- <i class="bulb"></i> -->
 											</div>
 												<!-- <i class="bulb"></i> -->
@@ -103,10 +106,10 @@
 							<!-- 名/拼音 -->
 							<div class="col-sm-6">
 								<div class="form-group" style="position:relative;">
-									<label><span>*</span>名/拼音</label> <input id="lastName"
+									<label><span>*</span>名/拼音</label> <input autocomplete="new-password" id="lastName"
 										name="lastname" type="text" class="form-control input-sm" tabIndex="2"
 										placeholder=" " value="${obj.basicinfo.lastname }" />
-										<input type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastnameen" value="${obj.lastnameen }"/>
+										<input autocomplete="new-password" type="text" id="lastNameEn" style="position:absolute;top:32px;border:none;left:150px;" name="lastnameen" value="${obj.lastnameen }"/>
 
 									<!-- <i class="bulb"></i> -->
 								</div>
@@ -116,8 +119,8 @@
 					<div class="row">
 							<div class="col-sm-3 col-sm-offset-1 " style="margin-left: 50px;padding-right: 35px;">
 									<div class="form-group">
-										<label><span>*</span>性别</label>
-										<select class="form-control input-sm selectHeight" tabindex="3" id="sex" name="sex">
+										<label ><span>*</span>性别</label>
+										<select class="form-control input-sm selectHeight" id="sex" name="sex"  tabIndex="3">
 											<option value="男" ${obj.basicinfo.sex == "男"?"selected":"" }>男</option>
 											<option value="女" ${obj.basicinfo.sex == "女"?"selected":"" }>女</option>
 										</select>
@@ -134,13 +137,13 @@
 									<label>
 										<span>*</span>手机号
 									</label> 
-									<input id="telephone" name="telephone" type="text"  class="form-control input-sm"  tabIndex="4" placeholder=" " value="${obj.basicinfo.telephone }" />
+									<input autocomplete="new-password" id="telephone" name="telephone" type="text"  class="form-control input-sm"  tabIndex="4" placeholder=" " value="${obj.basicinfo.telephone }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>邮箱</label> 
-									<input id="email" name="email" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="5" value="${obj.basicinfo.email }" />
+									<input autocomplete="new-password" id="email" name="email" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="5" value="${obj.basicinfo.email }" />
 								</div>
 							</div>
 						</div>
@@ -152,7 +155,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>公民身份证</label> 
-									<input id="cardId" name="cardId"  type="text" class="form-control input-sm"  tabIndex="6" placeholder=" " value="${obj.basicinfo.cardId }" />
+									<input autocomplete="new-password" id="cardId" name="cardId"  type="text" class="form-control input-sm"  tabIndex="6" placeholder=" " value="${obj.basicinfo.cardId }" />
 								</div>
 							</div>
 						</div>
@@ -163,19 +166,17 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="provinceDiv">
 									<label>现居住地</label>
-									<%-- <input type="hidden" name="cardprovince" id="cardProvince" value="${obj.applicant.cardprovince }"/>
-									<input type="hidden" name="cardcity" id="cardCity" value="${obj.applicant.cardcity }"/>
-									<input type="hidden" id="sameAddress" value=""/>
-									<input class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" />  --%>
-									<input id="province" autocomplete="new-password" name="province" onchange="translateZhToEn(this,'provinceen','')" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.basicinfo.province }" />
-									<input id="provinceen" name="provinceen" value="${obj.basicinfo.provinceen }" type="hidden"/>
+									<%-- <input autocomplete="new-password" type="hidden" name="cardprovince" id="cardProvince" value="${obj.applicant.cardprovince }"/>
+									<input autocomplete="new-password" type="hidden" name="cardcity" id="cardCity" value="${obj.applicant.cardcity }"/>
+									<input autocomplete="new-password" type="hidden" id="sameAddress" value=""/>
+									<input autocomplete="new-password" class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" />  --%>
+									<input autocomplete="new-password" id="province" autocomplete="new-password" name="province" onchange="translateZhToEn(this,'provinceen','')" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.basicinfo.province }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
 									<label>现居住地址城市</label> 
-									<input id="city" name="city" autocomplete="new-password" type="text" onchange="translateZhToEn(this,'cityen','')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.basicinfo.city }" />
-									<input id="cityen" name="cityen" value="${obj.basicinfo.cityen }" type="hidden" />
+									<input autocomplete="new-password" id="city" name="city" autocomplete="new-password" type="text" onchange="translateZhToEn(this,'cityen','')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.basicinfo.city }" />
 								</div>
 							</div>
 						</div>
@@ -185,13 +186,13 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>详细地址</label> 
-									<input id="detailedAddress" autocomplete="new-password" name="detailedaddress" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.basicinfo.detailedaddress }" />
+									<input autocomplete="new-password" id="detailedAddress" name="detailedaddress" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.basicinfo.detailedaddress }" />
 								</div>
 							</div>
 							<!-- <div class="col-sm-12 xx-en">
 								<div class="form-group">
 									<label><span>*</span>Street Address</label>
-									<input id="" name="" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="Street Address" value="" />
+									<input autocomplete="new-password" id="" name="" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="Street Address" value="" />
 								</div>
 							</div> -->
 						</div>
@@ -202,7 +203,7 @@
 									<label>
 										<span>*</span>婚姻状况
 									</label> 
-									<select id="marrystatus" name="marrystatus" tabIndex="14" class="form-control input-sm selectHeight">
+									<select id="marrystatus" name="marrystatus" class="form-control input-sm selectHeight"  tabIndex="15">
 											<option value="">请选择</option>
 											<c:forEach var="map" items="${obj.marrystatusenum}">
 												<option value="${map.key}" ${map.key==obj.basicinfo.marrystatus?'selected':''}>${map.value}</option>
@@ -213,8 +214,7 @@
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group marryexplain">
 									<label>说明</label> 
-									<input id="marryexplain" onchange="translateZhToEn(this,'marryexplainen','')" name="marryexplain" type="text" class="form-control input-sm" value="${obj.basicinfo.marryexplain }"/>
-									<input id="marryexplainen" name="marryexplainen" value="${obj.basicinfo.marryexplainen }" type="hidden"/>
+									<input autocomplete="new-password" id="marryexplain" onchange="translateZhToEn(this,'marryexplainen','')" name="marryexplain" type="text" class="form-control input-sm" value="${obj.applicant.marryexplain }"/>
 								</div>
 							</div>
 						</div>
@@ -226,7 +226,7 @@
 									<label>
 										<span>*</span>出生日期
 									</label> 
-									<input id="birthday" name="birthday" type="text"  class="form-control input-sm"  tabIndex="14" placeholder=" " value="${obj.birthday }" />
+									<input autocomplete="new-password" id="birthday" name="birthday" type="text"  class="form-control input-sm" tabIndex="16" placeholder=" " value="${obj.birthday }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
@@ -234,8 +234,7 @@
 									<label>
 										<span>*</span>出生国家
 									</label>
-									<input id="nationality" autocomplete="new-password" name="nationality" onchange="translateZhToEn(this,'nationalityen','')" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="14" value="${obj.basicinfo.nationality }" />
-									<input name="nationalityen" id="nationalityen" value="${obj.basicinfo.nationalityen }" type="hidden"/>
+									<input autocomplete="new-password" id="nationality" name="nationality" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="17" value="${obj.basicinfo.nationality }" />
 								</div>
 							</div>
 						</div>
@@ -248,8 +247,7 @@
 									<label>
 										<span>*</span>出生省
 									</label> 
-									<input id="cardprovince" autocomplete="new-password" name="cardprovince" onchange="translateZhToEn(this,'cardprovinceen','')" type="text"  class="form-control input-sm"  tabIndex="14" placeholder=" " value="${obj.basicinfo.cardprovince }" />
-									<input id="cardprovinceen" name="cardprovinceen" value="${obj.basicinfo.cardprovinceen }" type="hidden"/>
+									<input autocomplete="new-password" id="cardprovince" name="cardprovince" type="text"  class="form-control input-sm"  tabIndex="18" placeholder=" " value="${obj.basicinfo.cardprovince }" />
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
@@ -257,8 +255,7 @@
 									<label>
 										<span>*</span>出生城市
 									</label>
-									<input id="cardcity" autocomplete="new-password" name="cardcity" type="text" onchange="translateZhToEn(this,'cardcityen','')"  class="form-control input-sm" placeholder=" "  tabIndex="14" value="${obj.basicinfo.cardcity }" />
-									<input id="cardcityen" name="cardcityen" value="${obj.basicinfo.cardcityen }" type="hidden"/>
+									<input autocomplete="new-password" id="cardcity" name="cardcity" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="19" value="${obj.basicinfo.cardcity }" />
 								</div>
 							</div>
 						</div>
@@ -271,10 +268,10 @@
 									<label>是否有曾用名</label> 
 									<div>
 										<span class="nameBeforeYes">
-											<input type="radio" name="hasothername" class="usedBefore" value="1"/>是
+											<input autocomplete="new-password" type="radio" name="hasothername" class="usedBefore" value="1"/>是
 										</span>
 										<span>
-											<input type="radio" name="hasothername" class="usedBefore" value="2" checked />否
+											<input autocomplete="new-password" type="radio" name="hasothername" class="usedBefore" value="2" checked />否
 										</span>
 									</div>
 								</div>
@@ -285,13 +282,13 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>姓</label> 
-									<input id="otherfirstname" tabindex="14"  name="otherfirstname" type="text" class="form-control input-sm " value="${obj.basicinfo.otherfirstname }"/>
+									<input autocomplete="new-password" id="otherfirstname"  name="otherfirstname" type="text" class="form-control input-sm " tabIndex="20" value="${obj.basicinfo.otherfirstname }"/>
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label>名</label> 
-									<input id="otherlastname" tabindex="14" name="otherlastname"  type="text" class="form-control input-sm" value="${obj.basicinfo.otherlastname }"/>
+									<input autocomplete="new-password" id="otherlastname" name="otherlastname"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.otherlastname }"/>
 								</div>
 							</div>
 						</div>
@@ -302,10 +299,10 @@
 									<label>曾有的或另有的国籍(或公民身份)</label> 
 									<div>
 										<span class="onceIDYes">
-											<input type="radio" name="hasothernationality" class="usedNationality" value="1" />是
+											<input autocomplete="new-password" type="radio" name="hasothernationality" class="usedNationality" value="1" />是
 										</span>
 										<span>
-											<input type="radio" name="hasothernationality" class="usedNationality"  value="2" checked />否
+											<input autocomplete="new-password" type="radio" name="hasothernationality" class="usedNationality"  value="2" checked />否
 										</span>
 									</div>
 								</div>
@@ -313,7 +310,7 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1 usedNationalityTrue">
 								<div class="form-group" id="">
 									<label>国籍</label> 
-									<input id="nationality" name="nationality" autocomplete="off" onchange="translateZhToEn(this,'nationalityen','')" class="form-control input-sm" value="${obj.applicant.nationality }"/>
+									<input autocomplete="new-password" id="nationality" name="nationality" autocomplete="new-password" onchange="translateZhToEn(this,'nationalityen','')" class="form-control input-sm" value="${obj.applicant.nationality }"/>
 								</div>
 							</div>
 						</div>
@@ -324,17 +321,17 @@
 								<div class="form-group">
 									<div>
 										<span class="onceIDYes">
-											<input type="radio" name="isothercountrypermanentresident" class="permanent" value="1" />是
+											<input autocomplete="new-password" type="radio" name="isothercountrypermanentresident" class="permanent" value="1" />是
 										</span>
 										<span>
-											<input type="radio" name="isothercountrypermanentresident" class="permanent"  value="2" checked />否
+											<input autocomplete="new-password" type="radio" name="isothercountrypermanentresident" class="permanent"  value="2" checked />否
 										</span>
 									</div>
 								</div>
 							</div>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0 permanentTrue">
 								<div class="form-group">
-									<input id="othercountry" name="othercountry" onchange="translateZhToEn(this,'othercountryen','')" type="text" class="form-control input-sm" value="${obj.applicant.othercountry }"/>
+									<input autocomplete="new-password" id="othercountry" name="othercountry" onchange="translateZhToEn(this,'othercountryen','')" type="text" class="form-control input-sm" value="${obj.applicant.othercountry }"/>
 								</div>
 							</div>
 						</div> --%>
@@ -371,12 +368,12 @@
 						</div>
 						
 						<!-- 详细地址 -->
-						<div class="row">
+						<div class="row" style="    margin-top: 8px;">
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label>Street Address</label> 
-									<input id="detailedAddressen" autocomplete="new-password" name="detailedaddressen" type="text"  tabIndex="14" class="form-control input-sm" placeholder=" " value="${obj.basicinfo.detailedaddressen }" />
+									<input autocomplete="new-password" id="detailedAddressen" name="detailedaddressen" type="text" class="form-control input-sm" placeholder=" " value="${obj.basicinfo.detailedaddressen }" />
 								</div>
 							</div>
 						</div>
@@ -416,15 +413,15 @@
 							<!-- 是否有曾用名/曾有的或另有的国籍(或公民身份) -->
 							<div class="col-sm-10 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
-									<!-- <label>Ever used other names</label> 
+									<label>Have you ever used other names</label> 
 									<div>
 										<span class="nameBeforeYes">
-											<input type="radio" name="hasothernameen" class="usedBeforeUS" value="1"/>yes
+											<input autocomplete="new-password" type="radio" name="hasothernameen" class="usedBeforeUS" value="1"/>yes
 										</span>
 										<span>
-											<input type="radio" name="hasothernameen" class="usedBeforeUS" value="2" checked />No
+											<input autocomplete="new-password" type="radio" name="hasothernameen" class="usedBeforeUS" value="2" checked />No
 										</span>
-									</div> -->
+									</div>
 								</div>
 							</div>
 						</div>
@@ -432,14 +429,14 @@
 							<!-- 姓/名 -->
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
-									<label style="margin-top:55px;">Other Surnames Used</label> 
-									<input id="otherfirstnameen" name="otherfirstnameen" tabindex="14" type="text" class="form-control input-sm " value="${obj.basicinfo.otherfirstnameen }" />
+									<label>Other Surnames Used</label> 
+									<input autocomplete="new-password" id="otherfirstnameen" name="otherfirstnameen" type="text" class="form-control input-sm " value="${obj.basicinfo.otherfirstnameen }" />
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
-									<label style="margin-top:55px;">Other Given Names Used</label> 
-									<input id="otherlastnameen" name="otherlastnameen" tabindex="14" type="text" class="form-control input-sm" value="${obj.basicinfo.otherlastnameen }" />
+									<label>Other Given Names Used</label> 
+									<input autocomplete="new-password" id="otherlastnameen" name="otherlastnameen" type="text" class="form-control input-sm" value="${obj.basicinfo.otherlastnameen }" />
 								</div>
 							</div>
 						</div>
@@ -450,17 +447,17 @@
 								<div class="form-group">
 									<div>
 										<span class="onceIDYes">
-											<input type="radio" name="hasothernationalityen" class="usedNationalityUS" value="1" />yes
+											<input autocomplete="new-password" type="radio" name="hasothernationalityen" class="usedNationalityUS" value="1" />yes
 										</span>
 										<span>
-											<input type="radio" name="hasothernationalityen" class="usedNationalityUS"  value="2" checked />No
+											<input autocomplete="new-password" type="radio" name="hasothernationalityen" class="usedNationalityUS"  value="2" checked />No
 										</span>
 									</div>
 								</div>
 							</div>
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1 usedNationalityUSTrue">
 								<div class="form-group" id="">
-									<input id="nationalityen" autocomplete="off" name="nationalityen" class="form-control input-sm" value="${obj.applicant.nationalityen }"/>
+									<input autocomplete="new-password" id="nationalityen" autocomplete="new-password" name="nationalityen" class="form-control input-sm" value="${obj.applicant.nationalityen }"/>
 								</div>
 							</div>
 						</div>
@@ -471,17 +468,17 @@
 								<div class="form-group">
 									<div>
 										<span class="onceIDYes">
-											<input type="radio" name="isothercountrypermanentresidenten" class="permanentUS" value="1" />yes
+											<input autocomplete="new-password" type="radio" name="isothercountrypermanentresidenten" class="permanentUS" value="1" />yes
 										</span>
 										<span>
-											<input type="radio" name="isothercountrypermanentresidenten" class="permanentUS"  value="2" checked />No
+											<input autocomplete="new-password" type="radio" name="isothercountrypermanentresidenten" class="permanentUS"  value="2" checked />No
 										</span>
 									</div>
 								</div>
 							</div>
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0 permanentUSTrue">
 								<div class="form-group">
-									<input id="othercountryen" name="othercountryen" type="text" class="form-control input-sm" value="${obj.applicant.othercountryen }" />
+									<input autocomplete="new-password" id="othercountryen" name="othercountryen" type="text" class="form-control input-sm" value="${obj.applicant.othercountryen }" />
 								</div>
 							</div>
 						</div> --%>
@@ -516,7 +513,6 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
 	<script type="text/javascript" src="${base}/admin/bigCustomer/updateStaff.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
-		
 		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -557,10 +553,8 @@
 			//曾用名
 			if(otherName == 1){
 				$(".usedBeforeTrue").show();
-				$(".usedBeforeUSTrue").show();
 			}else {
 				$(".usedBeforeTrue").hide();
-				$(".usedBeforeUSTrue").hide();
 			}
 			if(otherNameen == 1){
 				$(".usedBeforeUSTrue").show();
