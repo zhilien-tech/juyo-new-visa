@@ -171,12 +171,14 @@
 									<input autocomplete="new-password" type="hidden" id="sameAddress" value=""/>
 									<input autocomplete="new-password" class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" />  --%>
 									<input autocomplete="new-password" id="province" autocomplete="new-password" name="province" onchange="translateZhToEn(this,'provinceen','')" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.basicinfo.province }" />
+									<input id="provinceen" name="provinceen" value="${obj.basicinfo.provinceen }" type="hidden"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
 									<label>现居住地址城市</label> 
 									<input autocomplete="new-password" id="city" name="city" autocomplete="new-password" type="text" onchange="translateZhToEn(this,'cityen','')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.basicinfo.city }" />
+									<input id="cityen" name="cityen" value="${obj.basicinfo.cityen }" type="hidden" />
 								</div>
 							</div>
 						</div>
@@ -234,7 +236,8 @@
 									<label>
 										<span>*</span>出生国家
 									</label>
-									<input autocomplete="new-password" id="nationality" name="nationality" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="17" value="${obj.basicinfo.nationality }" />
+									<input autocomplete="new-password" id="nationality" onchange="translateZhToEn(this,'nationalityen','')" name="nationality" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="17" value="${obj.basicinfo.nationality }" />
+									<input name="nationalityen" id="nationalityen" value="${obj.basicinfo.nationalityen }" type="hidden"/>
 								</div>
 							</div>
 						</div>
@@ -247,7 +250,8 @@
 									<label>
 										<span>*</span>出生省
 									</label> 
-									<input autocomplete="new-password" id="cardprovince" name="cardprovince" type="text"  class="form-control input-sm"  tabIndex="18" placeholder=" " value="${obj.basicinfo.cardprovince }" />
+									<input autocomplete="new-password" onchange="translateZhToEn(this,'cardprovinceen','')" id="cardprovince" name="cardprovince" type="text"  class="form-control input-sm"  tabIndex="18" placeholder=" " value="${obj.basicinfo.cardprovince }" />
+									<input id="cardprovinceen" name="cardprovinceen" value="${obj.basicinfo.cardprovinceen }" type="hidden"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
@@ -255,7 +259,8 @@
 									<label>
 										<span>*</span>出生城市
 									</label>
-									<input autocomplete="new-password" id="cardcity" name="cardcity" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="19" value="${obj.basicinfo.cardcity }" />
+									<input autocomplete="new-password" onchange="translateZhToEn(this,'cardcityen','')" id="cardcity" name="cardcity" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="19" value="${obj.basicinfo.cardcity }" />
+									<input id="cardcityen" name="cardcityen" value="${obj.basicinfo.cardcityen }" type="hidden"/>
 								</div>
 							</div>
 						</div>

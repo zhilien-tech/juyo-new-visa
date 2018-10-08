@@ -156,7 +156,7 @@ input:focus{
 												<div class="col-sm-3 youRelationship" style="display: none;">
 													<label><span class="s">*</span> 说明</label> <input autocomplete="new-password"
 														style="height: 34px;padding-left:10px;" id="explain" name="explain"
-														value="${companion.explain }" type="text" placeholder="" />
+														value="${companion.companionexplain }" type="text" placeholder="" />
 												</div>
 											</div>
 											<div>

@@ -719,7 +719,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 		// 获取操作的页面
 		PdfContentByte under = stamper.getOverContent(1);
 		// 根据域的大小缩放图片
-		image.scaleToFit(65, 60);
+		image.scaleToFit(75, 70);
 		// 添加图片
 		image.setAbsolutePosition(70, 670);
 		under.addImage(image);
@@ -775,6 +775,9 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 		//二维码显示内容  序号，护照号，护照截止日期，姓 ，名，性别，出生日期，固定CHN，身份证号
 		String passporturl = count + "," + passport + "," + validEndDate + "," + firstNameEn + "," + lastNameEn + ","
 				+ sex + "," + birthday + "," + "CHN" + "," + cardId + "," + " " + "," + " ";
+
+		/*String passporturl = count + "," + passport + "," + validEndDate + "," + firstNameEn + "," + lastNameEn + ","
+				+ sex + "," + birthday + "," + "CHN" + "," + cardId + "," + "\"" + "\"" + ",," + "\"" + "\"";*/
 		//生成二维码
 		String qrCode = qrCodeService.encodeQrCode(request, passporturl);
 		return qrCode;

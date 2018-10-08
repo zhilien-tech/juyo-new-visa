@@ -670,7 +670,7 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 		// 获取操作的页面
 		PdfContentByte under = stamper.getOverContent(1);
 		// 根据域的大小缩放图片
-		image.scaleToFit(65, 60);
+		image.scaleToFit(75, 70);
 		// 添加图片
 		image.setAbsolutePosition(70, 670);
 		under.addImage(image);

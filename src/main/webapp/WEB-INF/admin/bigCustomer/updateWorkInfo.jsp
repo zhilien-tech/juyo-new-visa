@@ -171,7 +171,8 @@
                     </div>
                     <div class=" paddingRight groupcheckBoxInfo">
                         <label><span class="s">*</span>职位</label>
-                        <input autocomplete="new-password" name="position" value="${obj.workinfo.position }" style="width: 180px;" id="position" type="text" />
+                        <input autocomplete="new-password" onchange="translateZhToEn(this,'positionen','')" name="position" value="${obj.workinfo.position }" style="width: 180px;" id="position" type="text" />
+                        <input type="hidden" id="positionen" name="positionen" value="${obj.workinfo.positionen }"/>
                     </div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo" >
@@ -279,14 +280,16 @@
 
 										<div class="paddingLeft groupInputInfo" style="padding-left: 0;">
                                             <label><span class="s">*</span>职位</label>
-                                            <input autocomplete="new-password" name="jobtitle" value="${obj.beforework.jobtitle }"  type="text"/>
+                                            <input autocomplete="new-password" onchange="translateZhToEn(this,'jobtitleen','')" name="jobtitle" value="${obj.beforework.jobtitle }"  type="text"/>
+                                            <input id="jobtitleen" name="jobtitleen" type="hidden" value="${obj.beforework.jobtitleen }"/>
                                         </div>
 										
 										<div class="clear"></div>
 									
 										<div class="draBig leftNo marginLS grouptextareaInfo">
                                             <label><span class="s">*</span>简述你的职责</label>
-											<input autocomplete="new-password" type="text" name="previousduty"  class="areaInputPic previousduty" value="${obj.beforework.previousduty }" />
+											<input autocomplete="new-password" type="text" onchange="translateZhToEn(this,'previousdutyen','')" name="previousduty"  class="areaInputPic previousduty" value="${obj.beforework.previousduty }" />
+											<input id="previousdutyen" name="previousdutyen" type="hidden" value="${obj.beforework.previousdutyen }"/>
 											<%-- <textarea name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }"></textarea> --%>
 										</div>
 									</div>
@@ -330,7 +333,8 @@
 										</div>                                        
                                         <div class="paddingLeft leftNo groupInputInfo courseClass" style="margin-right: 20px;">
                                             <label><span class="s">*</span> 专业名称</label>
-                                            <input autocomplete="new-password" id="course" name="course" value="${obj.beforeeducate.course }" type="text" />
+                                            <input autocomplete="new-password" onchange="translateZhToEn(this,'courseen','')" id="course" name="course" value="${obj.beforeeducate.course }" type="text" />
+                                            <input id="courseen" name="courseen" type="hidden" value="${obj.beforeeducate.courseen }"/>
                                         </div>
                                         
                                         
@@ -354,15 +358,19 @@
 										<div class="paddingLeft leftNo groupcheckBoxInfo" style="width: 180px;">
                                             <label><span class="s">*</span> 学校地址（省）</label>
                                             
-                                            <select name="institutionprovince" class="form-control input-sm select2" multiple="multiple"  id="institutionprovince" >
+                                            <%-- <select name="institutionprovince" class="form-control input-sm select2" multiple="multiple"  id="institutionprovince" >
 							                   <option selected="selected" value="${obj.beforeeducate.institutionprovince }">${obj.beforeeducate.institutionprovince}</option>
-						                    </select>
+						                    </select> --%>
+						                    <input id="insprovince" style="width:182px;" name="institutionprovince" onchange="translateZhToEn(this,'institutionprovinceen','')" type="text" value="${obj.beforeeducate.institutionprovince }"/>
+						                    <input id="institutionprovinceen" name="institutionprovinceen" type="hidden" value="${obj.beforeeducate.institutionprovinceen }"/>
 										</div>
 										<div class="paddingRight leftNo groupInputInfo aaa" style="width: 180px;">
                                             <label><span class="s">*</span> 学校地址（市）</label>
-                                            <select name="institutioncity" class="form-control input-sm select2" multiple="multiple"  id="institutioncity" >
+                                            <%-- <select name="institutioncity" class="form-control input-sm select2" multiple="multiple"  id="institutioncity" >
 							                   <option selected="selected" value="${obj.beforeeducate.institutioncity }">${obj.beforeeducate.institutioncity}</option>
-						                    </select>
+						                    </select> --%>
+						                    <input id="inscity" style="width:182px;" name="institutioncity" onchange="translateZhToEn(this,'institutioncityen','')" type="text" value="${obj.beforeeducate.institutioncity }"/>
+						                    <input id="institutioncityen" name="institutioncityen" type="hidden" value="${obj.beforeeducate.institutioncityen }"/>
 										</div>
 										<div class="clear"></div>
 										

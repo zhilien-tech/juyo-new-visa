@@ -81,7 +81,6 @@ import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.websocket.SimpleSendInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
-import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -1082,7 +1081,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		dbDao.update(travelcompanion);
 
 		//同伴信息
-		//updateCompanioninfo(form);
+		updateCompanioninfo(form);
 
 		//以前的美国旅游信息
 		updatePrevioustripinfo(form);
@@ -1125,10 +1124,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 		} else {
 			String companioninfoList = form.getCompanioninfoList();
-
-			List<TAppStaffCompanioninfoEntity> companionList_New = JsonUtil.fromJsonAsList(
-					TAppStaffCompanioninfoEntity.class, companioninfoList);
-			dbDao.updateRelations(companionList_old, companionList_New);
+			List<TAppStaffCompanioninfoEntity> companionList = form.getCompanionList();
+			System.out.println("companioninfoList:" + companioninfoList);
+			dbDao.updateRelations(companionList_old, companionList);
 		}
 		return null;
 	}

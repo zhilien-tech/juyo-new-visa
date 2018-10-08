@@ -351,10 +351,68 @@ function closeWindow() {
 	parent.layer.close(index);
 }
 
+//获取旅伴信息集合
+function getCompanionList(){
+	var companionList = [];
+	$('.teamnamefalseDivzh').each(function(index,i){
+		
+		var companionLength = '';
+		var companion = {};
+		var firstname = $(this).find('[name=firstname]').val();
+		var lastname = $(this).find('[name=lastname]').val();
+		var relationship = $(this).find('[name=relationship]').val();
+		
+		companionLength += firstname;
+		companionLength += lastname;
+		//下拉框
+		if (relationship != 0) {
+			companionLength += relationship;
+		}else{
+			companionLength += '';
+		}
+		
+		//英文
+		var firstnameen = $(".firstnameen").eq(index).val();
+		var lastnameen = $(".lastnameen").eq(index).val();
+		//var relationshipen = $(".relationship").eq(index).val();
+		
+		/*if (relationshipen != 0) {
+			companionLength += relationshipen;
+		}else{
+			companionLength += '';
+		}*/
+		
+		companionLength += firstnameen;
+		companionLength += lastnameen;
+		//companionLength += relationshipen;
+		
+		if(companionLength.length > 0){
+			companion.staffid = staffId;
+			companion.firstname = firstname;
+			companion.lastname = lastname;
+			companion.relationship = relationship;
+			companion.companionexplain = "";
+			
+			//英文
+			companion.firstnameen = firstnameen;
+			companion.lastnameen = lastnameen;
+			companion.relationshipen = relationship;
+			companion.companionexplainen = "";
+			
+			
+			companionList.push(companion);
+		}
+	});
+	console.log(JSON.stringify(companionList));
+	return companionList;
+}
+
 //保存工作信息
 function save(status){
 	
-		var	familyinfo = $("#travelinfo").serialize();
+		var companioninfoList = getCompanionList();
+		var	familyinfo = $.param({companionList:JSON.stringify(companioninfoList)}) + "&" +  $("#travelinfo").serialize();
+		//familyinfo.companioninfoList = JSON.stringify(getCompanionList());
 		console.log(familyinfo);
 		if(status == 2){
 			//左箭头跳转 
