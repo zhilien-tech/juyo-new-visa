@@ -161,9 +161,9 @@ $(".goUS").change(function () {
 	
 	let checked = $("input[name='hasbeeninus']:checked").val();
 	if (checked == 1) {
-		$(".gotousInfo").show();
+		$(".goUSInfo").show();
 	} else {
-		$(".gotousInfo").hide();
+		$(".goUSInfo").hide();
 	}
 });
 //是否有美国驾照radio
