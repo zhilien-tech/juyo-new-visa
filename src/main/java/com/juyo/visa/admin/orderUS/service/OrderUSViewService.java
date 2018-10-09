@@ -64,6 +64,7 @@ import com.juyo.visa.admin.orderUS.entity.AutofillSearchJsonEntity;
 import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
+import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
@@ -3119,6 +3120,42 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
+	//这个函数负责把获取到的InputStream流保存到本地。  
+	public static ByteArrayOutputStream saveImageToOutputStream(String filePath) {
+		InputStream inputStream = null;
+		inputStream = getInputStream(filePath);//调用getInputStream()函数。  
+		byte[] data = new byte[1024];
+		ByteArrayOutputStream result = new ByteArrayOutputStream();
+		int len = -1;
+		ByteArrayOutputStream fileOutputStream = new ByteArrayOutputStream();
+		try {
+			while ((len = inputStream.read(data)) != -1) {//循环读取inputStream流中的数据，存入文件流fileOutputStream  
+				fileOutputStream.write(data, 0, len);
+			}
+			result = fileOutputStream;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {//finally函数，不管有没有异常发生，都要调用这个函数下的代码  
+			if (fileOutputStream != null) {
+				try {
+					fileOutputStream.close();//记得及时关闭文件流  
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (inputStream != null) {
+				try {
+					inputStream.close();//关闭输入流  
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
+	}
+
 	public static InputStream getInputStream(String filePath) {
 		InputStream inputStream = null;
 		HttpURLConnection httpURLConnection = null;
@@ -3209,36 +3246,50 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object downloadFile(int orderid, HttpServletResponse response) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		Map<String, File> fileMap = new HashMap<String, File>();
+		TemplateUtil templateUtil = new TemplateUtil();
+		byte[] byteArray = null;
+
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		String reviewurl = orderus.getReviewurl();
 		String pdfurl = orderus.getPdfurl();
 		String daturl = orderus.getDaturl();
-		byte[] reviewurlbyteArray = saveImageToDisk(reviewurl);//PNG
+		/*byte[] reviewurlbyteArray = saveImageToDisk(reviewurl);//PNG
 		byte[] pdfurlbyteArray = saveImageToDisk(pdfurl);//PDF
 		byte[] daturlbyteArray = saveImageToDisk(daturl);//DAT,TXT
 
 		String filename = orderus.getOrdernumber();
 		downloadType(filename + ".PNG", reviewurlbyteArray, response);
 		downloadType(filename + ".PDF", pdfurlbyteArray, response);
-		downloadType(filename + ".TXT", daturlbyteArray, response);
-		/*try {
-			//下载PDF文件
-			filename += ".TXT";
-			// 将文件进行编码
-			String fileName = URLEncoder.encode(filename, "UTF-8");
+		downloadType(filename + ".TXT", daturlbyteArray, response);*/
+
+		ByteArrayOutputStream reviewurlbyteArray = saveImageToOutputStream(reviewurl);
+		ByteArrayOutputStream pdfurlbyteArray = saveImageToOutputStream(pdfurl);
+		ByteArrayOutputStream daturlbyteArray = saveImageToOutputStream(daturl);
+
+		fileMap.put("预览.PNG", templateUtil.createTempFile(reviewurlbyteArray));
+		fileMap.put("确认.PDF", templateUtil.createTempFile(pdfurlbyteArray));
+		fileMap.put("DAT文件.TXT", templateUtil.createTempFile(daturlbyteArray));
+		stream = templateUtil.mergeToZip(fileMap);
+
+		byteArray = stream.toByteArray();
+		try {
+			String fileName = URLEncoder.encode("测试.zip", "UTF-8");
 			// 设置下载的响应头
-			// response.setContentType("application/zip");
+			response.setContentType("application/zip");
 			//通过response.reset()刷新可能存在一些未关闭的getWriter(),避免可能出现未关闭的getWriter()
-			response.setContentType("application/octet-stream");
+			//response.setContentType("application/octet-stream");
 			response.setHeader("Set-Cookie", "fileDownload=true; path=/");
 			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
 			// 将字节流相应到浏览器（下载）
-			IOUtils.write(daturlbyteArray, response.getOutputStream());
+			IOUtils.write(byteArray, response.getOutputStream());
 			response.flushBuffer();
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		}*/
+		}
 		return null;
 	}
 

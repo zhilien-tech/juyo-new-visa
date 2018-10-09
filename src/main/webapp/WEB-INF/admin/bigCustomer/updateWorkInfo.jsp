@@ -361,7 +361,7 @@
                                             <%-- <select name="institutionprovince" class="form-control input-sm select2" multiple="multiple"  id="institutionprovince" >
 							                   <option selected="selected" value="${obj.beforeeducate.institutionprovince }">${obj.beforeeducate.institutionprovince}</option>
 						                    </select> --%>
-						                    <input id="insprovince" style="width:182px;" name="institutionprovince" onchange="translateZhToEn(this,'institutionprovinceen','')" type="text" value="${obj.beforeeducate.institutionprovince }"/>
+						                    <input id="insprovince" autocomplete="new-password" style="width:182px;" name="institutionprovince" onchange="translateZhToEn(this,'institutionprovinceen','')" type="text" value="${obj.beforeeducate.institutionprovince }"/>
 						                    <input id="institutionprovinceen" name="institutionprovinceen" type="hidden" value="${obj.beforeeducate.institutionprovinceen }"/>
 										</div>
 										<div class="paddingRight leftNo groupInputInfo aaa" style="width: 180px;">
@@ -369,7 +369,7 @@
                                             <%-- <select name="institutioncity" class="form-control input-sm select2" multiple="multiple"  id="institutioncity" >
 							                   <option selected="selected" value="${obj.beforeeducate.institutioncity }">${obj.beforeeducate.institutioncity}</option>
 						                    </select> --%>
-						                    <input id="inscity" style="width:182px;" name="institutioncity" onchange="translateZhToEn(this,'institutioncityen','')" type="text" value="${obj.beforeeducate.institutioncity }"/>
+						                    <input id="inscity" autocomplete="new-password" style="width:182px;" name="institutioncity" onchange="translateZhToEn(this,'institutioncityen','')" type="text" value="${obj.beforeeducate.institutioncity }"/>
 						                    <input id="institutioncityen" name="institutioncityen" type="hidden" value="${obj.beforeeducate.institutioncityen }"/>
 										</div>
 										<div class="clear"></div>

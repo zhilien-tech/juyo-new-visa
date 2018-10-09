@@ -394,7 +394,7 @@
 					<!-- end 财产信息 -->
 					<!-- 在日拟入住九点名称或友人姓名及地址 -->
 					<div class='info'>
-						<div class="info-head">在日拟入住九点名称或友人姓名及地址</div>
+						<div class="info-head">在日拟入住酒店名称或友人姓名及地址</div>
 						<div class="info-body-from cf ">
 							<div class="row ">
 								<div class="col-sm-4">

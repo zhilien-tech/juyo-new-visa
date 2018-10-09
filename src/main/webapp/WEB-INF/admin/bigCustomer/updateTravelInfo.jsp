@@ -350,7 +350,7 @@ input:focus{
 									<div class="col-sm-4 groupcheckBoxInfo visaisnumber">
 										<label><span class="s">*</span> 签证号码</label> <input autocomplete="new-password"
 											style="width: 180px;"
-											name="visanumbervisanumber" class="visanumber"
+											name="visanumber" class="visanumber"
 											value="${obj.tripinfo.visanumber }" type="text" />
 										<!-- <input autocomplete="new-password" id="idknowvisanumber" onchange="AddSingle(this,'idknowvisanumberen')" name="idknowvisanumber" v-on:click="idknowvisanumberChange" value="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/> -->
 									</div>
