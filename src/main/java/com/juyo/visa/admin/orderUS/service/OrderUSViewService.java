@@ -6,6 +6,10 @@
 
 package com.juyo.visa.admin.orderUS.service;
 
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,9 +32,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
@@ -1174,6 +1181,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	//自动填表
 	public Object autofill(int orderid, HttpSession session) {
+		System.out.println("=====orderid:" + orderid);
 		Map<String, Object> result = Maps.newHashMap();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		//改变订单状态
@@ -1195,6 +1203,15 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		String passportnum = passportinfo.getPassport();
+
+		int height = 300;
+		int width = 300;
+		Icon icon = null;
+		try {
+			icon = getFixedIcon(passportnum, width, height);
+		} catch (Exception e) {
+			System.out.println("exception : " + e);
+		}
 
 		//调用第一个接口
 		//selectApplyinfo();
@@ -1224,150 +1241,56 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String avatorurl = "";
 		String daturl = "";
 		String errorurl = "";
-		/*try {
-			applyidcode = (String) insertandupdateApplyinfo(orderid);
-			while (Util.isEmpty(applyidcode)) {
-				applyidcode = (String) insertandupdateApplyinfo(orderid);
-			}
-			if (!Util.isEmpty(applyidcode)) {
-				try {
-					successStatus = (int) uploadImgtoUS(imgurl, applyidcode);
-					System.out.println("上传头像imgsuccessStatus:" + successStatus);
-					while (successStatus != 1) {
-						successStatus = (int) uploadImgtoUS(imgurl, applyidcode);
-						System.out.println("上传头像imgsuccessStatus在while循环里:" + successStatus);
-					}
-					if (successStatus == 1) {
-						successStatus = (int) submittoDS160(applyidcode, "applying");
-						System.out.println("申请DS160官网ds160successStatus:" + successStatus);
-						while (successStatus != 1) {
-							successStatus = (int) submittoDS160(applyidcode, "applying");
-							System.out.println("申请DS160官网ds160successStatus在while循环里:" + successStatus);
-						}
-
-						if (successStatus == 1) {
-							AAcodeinfo = getApplyinfo(applyidcode);
-							statusname = (String) AAcodeinfo.get("statusname");
-							AAcode = (String) AAcodeinfo.get("AAcode");
-							System.out.println("statusname:" + statusname);
-							System.out.println("AAcode:" + AAcode);
-							Date firstDate = DateUtil.nowDate();
-							while (Util.eq("正在申请", statusname)) {
-								Date nowDate = DateUtil.nowDate();
-								long millisBetween = DateUtil.millisBetween(firstDate, nowDate);
-								if (millisBetween != 0 && millisBetween % 30000 == 0) {
-									AAcodeinfo = getApplyinfo(applyidcode);
-									statusname = (String) AAcodeinfo.get("statusname");
-									AAcode = (String) AAcodeinfo.get("AAcode");
-									System.out.println("while循环里statusname:" + statusname);
-									System.out.println("while循环里AAcode:" + AAcode);
-								}
-							}
-							if (Util.eq("申请失败", statusname)) {
-								errorMsg = (String) AAcodeinfo.get("errorMsg");
-								System.out.println("申请失败原因：" + errorMsg);
-								result.put("errorMsg", errorMsg);
-								return result;
-							}
-						}
-
-						successStatus = (int) submittoDS160(applyidcode, "submitting");
-						System.out.println("递交DS160官网ds160successStatus:" + successStatus);
-						while (successStatus != 1) {
-							successStatus = (int) submittoDS160(applyidcode, "submitting");
-							System.out.println("递交DS160官网ds160successStatus在while循环里:" + successStatus);
-						}
-						if (successStatus == 1) {
-							AAcodeinfo = getApplyinfo(applyidcode);
-							statusname = (String) AAcodeinfo.get("statusname");
-							AAcode = (String) AAcodeinfo.get("AAcode");
-							System.out.println("statusname:" + statusname);
-							System.out.println("AAcode:" + AAcode);
-							Date firstDate = DateUtil.nowDate();
-							while (Util.eq("正在提交", statusname)) {
-								Date nowDate = DateUtil.nowDate();
-								long millisBetween = DateUtil.millisBetween(firstDate, nowDate);
-								if (millisBetween != 0 && millisBetween % 30000 == 0) {
-									AAcodeinfo = getApplyinfo(applyidcode);
-									statusname = (String) AAcodeinfo.get("statusname");
-									AAcode = (String) AAcodeinfo.get("AAcode");
-									System.out.println("while循环里statusname:" + statusname);
-									System.out.println("while循环里AAcode:" + AAcode);
-								}
-							}
-							if (Util.eq("提交失败", statusname)) {
-								errorMsg = (String) AAcodeinfo.get("errorMsg");
-								System.out.println("提交失败原因：" + errorMsg);
-								result.put("errorMsg", errorMsg);
-								return result;
-							}
-							reviewurl = (String) AAcodeinfo.get("reviewurl");
-							pdfurl = (String) AAcodeinfo.get("pdfurl");
-							avatorurl = (String) AAcodeinfo.get("avatorurl");
-							daturl = (String) AAcodeinfo.get("daturl");
-							if (!Util.isEmpty(AAcodeinfo.get("AAcode"))) {
-								basicinfo.setAacode((String) AAcodeinfo.get("AAcode"));
-								dbDao.update(basicinfo);
-							}
-						}
-					}
-				} catch (Exception e) {
-					System.out.println("里边失败了~~");
-				}
-			}
-
-		} catch (Exception e) {
-			System.out.println("外边失败了~~");
-		}
-
-		result.put("applyidcode", applyidcode);
-		result.put("AAcode", AAcode);
-		result.put("errorMsg", errorMsg);
-		result.put("daturl", daturl);
-		result.put("reviewurl", reviewurl);
-		result.put("pdfurl", pdfurl);
-		result.put("avatorurl", avatorurl);*/
 		List<AutofillSearchJsonEntity> applyinfoList = new ArrayList<>();
 		AutofillSearchJsonEntity applyResult = new AutofillSearchJsonEntity();
 
-		//try {
-
-		repeatResult = repeatInsertandupdate(imgurl, orderid);
+		//创建申请人信息，并上传头像
+		repeatResult = repeatInsertandupdate(imgurl, orderid, staffid);
 		successStatus = (int) repeatResult.get("successStatus");
 		applyidcode = (String) repeatResult.get("applyidcode");
 
-		/*applyidcode = (String) insertandupdateApplyinfo(orderid);
-		while (Util.isEmpty(applyidcode)) {
-			applyidcode = (String) insertandupdateApplyinfo(orderid);
-		}
-			//try {
-			successStatus = (int) uploadImgtoUS(imgurl, applyidcode);
-			System.out.println("上传头像imgsuccessStatus:" + successStatus);
-			while (successStatus != 1) {
-				successStatus = (int) uploadImgtoUS(imgurl, applyidcode);
-				System.out.println("上传头像imgsuccessStatus在while循环里:" + successStatus);
-			}*/
 		if (successStatus == 1) {
+			//向DS160官网申请，参数1代表申请
 			successStatus = (int) applyorsubmit(applyidcode, 1);
 
-			/*successStatus = (int) submittoDS160(applyidcode, "applying");
-				System.out.println("申请DS160官网ds160successStatus:" + successStatus);
-				while (successStatus != 1) {
-					successStatus = (int) submittoDS160(applyidcode, "applying");
-					System.out.println("申请DS160官网ds160successStatus在while循环里:" + successStatus);
-				}*/
-
 			if (successStatus == 1) {
+				//根据护照号查询,参数1代表申请，参数2代表递交
 				applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 1);
 				statusname = applyResult.getStatus();
 				int countnum = 0;
 				while (Util.eq("申请失败", statusname)) {
 					countnum++;
-					if (countnum == 3) {
-						System.out.println("第" + countnum + "次申请失败！！！");
+					errorMsg = applyResult.getErrorMsg();
+					if (errorMsg.contains("Connection") || errorMsg.contains("打码工超时未打码")
+							|| errorMsg.contains("图片服务器连接错误")) {
+						repeatResult = repeatInsertandupdate(imgurl, orderid, staffid);
+						successStatus = (int) repeatResult.get("successStatus");
+						applyidcode = (String) repeatResult.get("applyidcode");
+						if (successStatus == 1) {
+							successStatus = (int) applyorsubmit(applyidcode, 1);
+							if (successStatus == 1) {
+								applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 1);
+								statusname = applyResult.getStatus();
+								System.out.println("申请失败的while循环里:" + statusname);
+							}
+						}
+					} else {
+						orderus.setErrorurl(applyResult.getError_url());
+						orderus.setApplyidcode(applyidcode);
+						orderus.setErrormsg(applyResult.getErrorMsg());
+						dbDao.update(orderus);
 						return applyResult;
 					}
-					repeatResult = repeatInsertandupdate(imgurl, orderid);
+					/*if (countnum == 3) {
+						if (countnum == 3) {
+						System.out.println("第" + countnum + "次申请失败！！！");
+						orderus.setErrorurl(applyResult.getError_url());
+						orderus.setApplyidcode(applyidcode);
+						orderus.setErrormsg(applyResult.getErrorMsg());
+						dbDao.update(orderus);
+						return applyResult;
+					}*/
+					/*repeatResult = repeatInsertandupdate(imgurl, orderid);
 					successStatus = (int) repeatResult.get("successStatus");
 					applyidcode = (String) repeatResult.get("applyidcode");
 					if (successStatus == 1) {
@@ -1377,52 +1300,17 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 							statusname = applyResult.getStatus();
 							System.out.println("申请失败的while循环里:" + statusname);
 						}
-					}
+					}*/
 
 				}
 				reviewurl = applyResult.getReview_url();
 
-				/*applyinfoList = selectApplyinfo(passportnum);
-					applyResult = applyinfoList.get(0);
-					statusname = applyResult.getStatus();
-					AAcode = applyResult.getApp_id();
-
-					System.out.println("statusname:" + statusname);
-					System.out.println("AAcode:" + AAcode);
-					Date firstDate = DateUtil.nowDate();
-					while (Util.eq("正在申请", statusname)) {
-						Date nowDate = DateUtil.nowDate();
-						long millisBetween = DateUtil.millisBetween(firstDate, nowDate);
-						if (millisBetween != 0 && millisBetween % 30000 == 0) {
-							applyinfoList = selectApplyinfo(passportnum);
-							applyResult = applyinfoList.get(0);
-							statusname = applyResult.getStatus();
-							AAcode = applyResult.getApp_id();
-							System.out.println("while循环里statusname:" + statusname);
-							System.out.println("while循环里AAcode:" + AAcode);
-						}
-					}
-					if (Util.eq("申请失败", statusname)) {
-						errorurl = applyResult.getError_url();
-						System.out.println("申请失败原因网址:" + errorurl);
-						AAcodeinfo = getApplyinfo(applyidcode);
-						errorMsg = (String) AAcodeinfo.get("errorMsg");
-						System.out.println("申请失败原因：" + errorMsg);
-						result.put("errorMsg", errorMsg);
-						result.put("errorurl", errorurl);
-						return result;
-					}*/
 			}
 
-			/*successStatus = (int) submittoDS160(applyidcode, "submitting");
-				System.out.println("递交DS160官网ds160successStatus:" + successStatus);
-				while (successStatus != 1) {
-					successStatus = (int) submittoDS160(applyidcode, "submitting");
-					System.out.println("递交DS160官网ds160successStatus在while循环里:" + successStatus);
-				}*/
+			//向DS160官网递交，参数1代表递交
 			successStatus = (int) applyorsubmit(applyidcode, 2);
 			if (successStatus == 1) {
-
+				//根据护照号查询,参数1代表申请，参数2代表递交
 				applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 2);
 				statusname = applyResult.getStatus();
 				while (Util.eq("提交失败", statusname)) {
@@ -1433,37 +1321,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					}
 				}
 
-				/*applyinfoList = selectApplyinfo(passportnum);
-					applyResult = applyinfoList.get(0);
-					statusname = applyResult.getStatus();
-					AAcode = applyResult.getApp_id();
-
-					System.out.println("statusname:" + statusname);
-					System.out.println("AAcode:" + AAcode);
-					Date firstDate = DateUtil.nowDate();
-					while (Util.eq("正在提交", statusname)) {
-						Date nowDate = DateUtil.nowDate();
-						long millisBetween = DateUtil.millisBetween(firstDate, nowDate);
-						if (millisBetween != 0 && millisBetween % 30000 == 0) {
-							applyinfoList = selectApplyinfo(passportnum);
-							applyResult = applyinfoList.get(0);
-							statusname = applyResult.getStatus();
-							AAcode = applyResult.getApp_id();
-							System.out.println("while循环里statusname:" + statusname);
-							System.out.println("while循环里AAcode:" + AAcode);
-						}
-					}
-					if (Util.eq("提交失败", statusname)) {
-						errorurl = applyResult.getError_url();
-						System.out.println("提交失败图片网址:" + errorurl);
-						AAcodeinfo = getApplyinfo(applyidcode);
-						errorMsg = (String) AAcodeinfo.get("errorMsg");
-						System.out.println("提交失败原因：" + errorMsg);
-						result.put("errorMsg", errorMsg);
-						result.put("errorurl", errorurl);
-						return result;
-					}*/
-				//reviewurl = applyResult.getReview_url();
 				System.out.println("reviewurl:" + reviewurl);
 				pdfurl = applyResult.getPdf_url();
 				System.out.println("pdfurl:" + pdfurl);
@@ -1471,9 +1328,13 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				System.out.println("daturl:" + daturl);
 				AAcode = applyResult.getApp_id();
 				System.out.println("AAcode:" + AAcode);
+				errorurl = applyResult.getError_url();
+				System.out.println("errorurl:" + errorurl);
 				orderus.setReviewurl(reviewurl);
 				orderus.setPdfurl(pdfurl);
 				orderus.setDaturl(daturl);
+				orderus.setApplyidcode(applyidcode);
+				orderus.setErrorurl(errorurl);
 				dbDao.update(orderus);
 				if (!Util.isEmpty(applyResult.getApp_id())) {
 					basicinfo.setAacode(applyResult.getApp_id());
@@ -1481,13 +1342,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				}
 			}
 		}
-		/*} catch (Exception e) {
-				System.out.println("里边失败了~~");
-			}*/
-
-		/*} catch (Exception e) {
-			System.out.println("外边失败了~~");
-		}*/
 
 		result.put("applyidcode", applyidcode);
 		result.put("AAcode", AAcode);
@@ -1504,12 +1358,45 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
-	public Map<String, Object> repeatInsertandupdate(String imgurl, int orderid) {
+	public static Icon getFixedIcon(String filePath, int width, int height) throws Exception {
+		File f = new File(filePath);
+		BufferedImage bi = ImageIO.read(f);
+		double wRatio = (new Integer(width)).doubleValue() / bi.getWidth(); //宽度的比例		
+		double hRatio = (new Integer(height)).doubleValue() / bi.getHeight(); //高度的比例		
+		Image image = bi.getScaledInstance(width, height, Image.SCALE_SMOOTH); //设置图像的缩放大小		
+		AffineTransformOp op = new AffineTransformOp(AffineTransform.getScaleInstance(wRatio, hRatio), null); //设置图像的缩放比例		
+		image = op.filter(bi, null);
+		int lastLength = filePath.lastIndexOf(".");
+		String subFilePath = filePath.substring(0, lastLength); //得到图片输出路径    
+		String fileType = filePath.substring(lastLength); //图片类型   
+		File zoomFile = new File(subFilePath + "_" + width + "_" + height + fileType);
+		Icon ret = null;
+		try {
+			ImageIO.write((BufferedImage) image, "jpg", zoomFile);
+			ret = new ImageIcon(zoomFile.getPath());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	/**
+	 * 上传申请人数据并上传头像
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param imgurl
+	 * @param orderid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Map<String, Object> repeatInsertandupdate(String imgurl, int orderid, int staffid) {
 		Map<String, Object> result = Maps.newHashMap();
 		int successStatus = 0;
-		String applyidcode = (String) insertandupdateApplyinfo(orderid);
+		//创建申请人数据
+		String applyidcode = (String) insertandupdateApplyinfo(orderid, staffid);
 		while (Util.isEmpty(applyidcode)) {
-			applyidcode = (String) insertandupdateApplyinfo(orderid);
+			applyidcode = (String) insertandupdateApplyinfo(orderid, staffid);
 		}
 		if (!Util.isEmpty(applyidcode)) {
 			//try {
@@ -1525,6 +1412,16 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
+	/**
+	 * 向DS160官网申请或递交
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param applyidcode
+	 * @param type 1代表申请，2代表递交
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object applyorsubmit(String applyidcode, int type) {
 		int successStatus = 0;
 		try {
@@ -1549,6 +1446,17 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return successStatus;
 	}
 
+	/**
+	 * 查询申请人数据
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param applyidcode
+	 * @param passportnum
+	 * @param type
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object infinitQuery(String applyidcode, String passportnum, int type) {
 		Map<String, Object> result = Maps.newHashMap();
 		List<AutofillSearchJsonEntity> applyinfoList = new ArrayList<>();
@@ -1626,9 +1534,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//第二个，第三个接口，创建和更改申请人数据，只是请求方式不同，一个为POST,一个为PATCH
-	public Object insertandupdateApplyinfo(int orderid) {
+	public Object insertandupdateApplyinfo(int orderid, int staffid) {
 		String applyidcode = "";
-		Map<String, Object> result = autofillService.getData(orderid);
+		Map<String, Object> result = autofillService.getData(orderid, staffid);
 		if (!Util.isEmpty(result)) {
 			//第二个，第三个接口，创建和更改申请人数据，只是请求方式不同，一个为POST,一个为PATCH
 			//applyidcode = toGetApplyidcode(result.get("resultData"));

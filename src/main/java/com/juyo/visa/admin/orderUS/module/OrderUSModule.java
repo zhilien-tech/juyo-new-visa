@@ -272,8 +272,8 @@ public class OrderUSModule {
 	 */
 	@At
 	@POST
-	public Object validateInfoIsFull(@Param("orderid") int orderid, HttpSession session) {
-		return autofillService.getData(orderid);
+	public Object validateInfoIsFull(@Param("orderid") int orderid, @Param("staffid") int staffid, HttpSession session) {
+		return autofillService.getData(orderid, staffid);
 	}
 
 	@At

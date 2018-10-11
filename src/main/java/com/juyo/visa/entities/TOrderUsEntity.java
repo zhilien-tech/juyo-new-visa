@@ -50,6 +50,18 @@ public class TOrderUsEntity implements Serializable {
 	private String daturl;
 
 	@Column
+	@Comment("错误信息图片")
+	private String errorurl;
+
+	@Column
+	@Comment("错误信息")
+	private String errormsg;
+
+	@Column
+	@Comment("申请人识别码")
+	private String applyidcode;
+
+	@Column
 	@Comment("领区")
 	private Integer cityid;
 

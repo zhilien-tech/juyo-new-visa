@@ -28,7 +28,6 @@ import com.juyo.visa.entities.TAppStaffGocountryEntity;
 import com.juyo.visa.entities.TAppStaffGousinfoEntity;
 import com.juyo.visa.entities.TAppStaffImmediaterelativesEntity;
 import com.juyo.visa.entities.TAppStaffLanguageEntity;
-import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffOrganizationEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCountryRegionEntity;
@@ -41,7 +40,7 @@ import com.uxuexi.core.web.base.service.BaseService;
 @IocBean
 public class AutofillService extends BaseService<TOrderUsEntity> {
 
-	public Map<String, Object> getData(int orderid) {
+	public Map<String, Object> getData(int orderid, int staffid) {
 		//最终接收数据Map(包括所需数据和错误信息)
 		Map<String, Object> result = Maps.newHashMap();
 		//所需数据Map
@@ -50,10 +49,6 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		String errorMsg = "";
 		//格式化日期
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		TAppStaffOrderUsEntity stafforderus = dbDao.fetch(TAppStaffOrderUsEntity.class,
-				Cnd.where("orderid", "=", orderid));
-		//人员id
-		Integer staffid = stafforderus.getStaffid();
 		//查询所需数据（除了一对多）
 		String sqlStr = sqlManager.get("getAutofilldata");
 		Sql infosql = Sqls.create(sqlStr);
@@ -1513,9 +1508,9 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(info.get("province"))) {
 			MailingAddress.put("province", info.get("province"));
 		}*/
-		MailingAddress.put("street", "CHIN");
-		MailingAddress.put("city", "CHIN");
-		MailingAddress.put("province", "CHIN");
+		MailingAddress.put("street", "ERHERHFWWEG");
+		MailingAddress.put("city", "CHENGDE");
+		MailingAddress.put("province", "HEBEI");
 		MailingAddress.put("country", "CHIN");
 		MailingAddress.put("zip_code", "");
 

@@ -1437,17 +1437,36 @@
 			});
 		} */
 		var count = 0;
- 		function autofill(){
+		
+		/* function autofill(){
+			var interval = setInterval("autofill1()","1");
+			
+		} */
+		
+		function autofill1(){
+			/* autofill1(4750, 4777);
+			autofill1(4751, 4778);
+			autofill1(4756, 4783); 
+			autofill1(4754, 4781);*/
+			autofill1(4752, 4779);
+		}
+		
+ 		function autofill(orderid, staffid){
+ 			//$("#autofill").attr("disabled",true);
 			var orderid = '${obj.orderid}';
+			var staffid = '${obj.basicinfo.id}';
+			console.log(count);
 			$.ajax({
 				url : '/admin/orderUS/validateInfoIsFull.html',
 				data : {
-					orderid : orderid
+					orderid : orderid,
+					staffid : staffid
 				},
 				dataType : "json",
 				type : 'POST',
 				success : function(data) {
 					if(data.errMsg){
+						$("#autofill").attr("disabled",false);
 						layer.open({
 		        		    type: 2,
 		        		    title: false,
@@ -1460,7 +1479,7 @@
 		        		    content: '${base}/admin/orderUS/autofillError.html?errData='+data.errMsg
 		        		  });
 					}else{
-						$("#autofill").attr("disabled",true);
+						
 						$.ajax({
 							url : '/admin/orderUS/autofill.html',
 							data : {
@@ -1481,8 +1500,10 @@
 									console.log("daturl:"+data.daturl);
 									$("#autofill").attr("disabled",false);
 								}else{
-									console.log(data.errorMsg+count);
-									autofill();
+									console.log(data.errorMsg);
+									console.log(data.error_url);
+									console.log(data.code);
+									$("#autofill").attr("disabled",false);
 								}
 							}
 						});
