@@ -216,11 +216,11 @@ public class WXBizMsgCrypt {
 		Map<String, String> result = new HashMap<String, String>();
 		// 加密
 		String encrypt = encrypt(getRandomStr(), replyMsg);
-		System.out.println("密文为：" + encrypt);
+		//System.out.println("密文为：" + encrypt);
 
 		// 生成安全签名
 		String signature = MsgCryptUtil.getSignature(token, timeStamp, nonce, encrypt);
-		System.out.println("签名为：" + signature);
+		//System.out.println("签名为：" + signature);
 
 		//封装body数据，并转成json字符串返回
 		result.put("msg_signature", signature);

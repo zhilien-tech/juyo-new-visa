@@ -1443,7 +1443,7 @@
 			
 		} */
 		
-		function autofill1(){
+		function autofill(){
 			/* autofill1(4750, 4777);
 			autofill1(4751, 4778);
 			autofill1(4756, 4783); 
@@ -1451,10 +1451,10 @@
 			autofill1(4752, 4779);
 		}
 		
- 		function autofill(orderid, staffid){
+ 		function autofill1(orderid, staffid){
  			//$("#autofill").attr("disabled",true);
-			var orderid = '${obj.orderid}';
-			var staffid = '${obj.basicinfo.id}';
+			//var orderid = '${obj.orderid}';
+			//var staffid = '${obj.basicinfo.id}';
 			console.log(count);
 			$.ajax({
 				url : '/admin/orderUS/validateInfoIsFull.html',
