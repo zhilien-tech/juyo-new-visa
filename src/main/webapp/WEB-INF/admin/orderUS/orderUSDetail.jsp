@@ -673,6 +673,11 @@
 		var orderid = '${obj.orderid}';
 		var addorder = '${obj.isaddorder}';
 		
+		var isautofilling = '${obj.orderinfo.isautofilling}';
+		if(isautofilling == 1){
+			$("#autofill").attr("disabled",true);
+		}
+		
 		//将汉字转为拼音
 		function getPinyinStr(hanzi){
 			var onehanzi = hanzi.split('');
@@ -1350,6 +1355,10 @@
 						$('#cardnum').val(data.basicinfo.cardnum);
 						$('#passport').val(data.passport.passport);
 						$('#interviewdate2').val(data.Interviewdate);
+						
+						if(data.orderinfo.isautofilling == 1){
+							$("#autofill").attr("disabled",true);
+						}
 						//姓名处理
 						var firstname = data.passport.firstname;
 						var lastname = data.passport.lastname;
@@ -1443,18 +1452,19 @@
 			
 		} */
 		
-		function autofill(){
-			/* autofill1(4750, 4777);
-			autofill1(4751, 4778);
-			autofill1(4756, 4783); 
-			autofill1(4754, 4781);*/
+		function autofill1(){
+			autofill1(4749, 4776);
+			autofill1(4750, 4777);
+			autofill1(4751, 4778); 
 			autofill1(4752, 4779);
+			autofill1(4756, 4783);
+			
 		}
 		
- 		function autofill1(orderid, staffid){
- 			//$("#autofill").attr("disabled",true);
-			//var orderid = '${obj.orderid}';
-			//var staffid = '${obj.basicinfo.id}';
+ 		function autofill(orderid, staffid){
+ 			$("#autofill").attr("disabled",true);
+			var orderid = '${obj.orderid}';
+			var staffid = '${obj.basicinfo.id}';
 			console.log(count);
 			$.ajax({
 				url : '/admin/orderUS/validateInfoIsFull.html',

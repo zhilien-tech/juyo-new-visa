@@ -62,6 +62,10 @@ public class TOrderUsEntity implements Serializable {
 	private String applyidcode;
 
 	@Column
+	@Comment("是否正在自动填表")
+	private Integer isautofilling;
+
+	@Column
 	@Comment("领区")
 	private Integer cityid;
 

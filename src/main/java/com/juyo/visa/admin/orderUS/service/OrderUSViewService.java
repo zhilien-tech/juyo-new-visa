@@ -62,6 +62,7 @@ import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.RateLimiter;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.admin.order.entity.PassportJsonEntity;
@@ -1179,17 +1180,67 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return null;
 	}
 
+	public Object getAutofillOrder(int orderid, HttpSession session) {
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
+		RateLimiter rateLimiter = RateLimiter.create(1);
+		List<TOrderUsEntity> query = dbDao.query(TOrderUsEntity.class, Cnd.where("status", "=", 5), null);
+		Integer orderusid = query.get(0).getId();
+		int count = 0;
+		while (true) {
+			count++;
+			rateLimiter.acquire();
+			ThreadDemo1 aDemo = new ThreadDemo1();
+			new Thread(aDemo).start();
+
+			System.out.println(simpleDateFormat.format(new Date()));
+			if (count == 10) {
+				break;
+			}
+		}
+		System.out.println("出循环了~~~~~~~~~~~");
+		return null;
+	}
+
+	class ThreadDemo1 implements Runnable {
+		private HttpSession session;
+
+		public void setSession(HttpSession session) {
+			this.session = session;
+		}
+
+		@SuppressWarnings("synthetic-access")
+		@Override
+		public void run() {
+			try {
+				List<TOrderUsEntity> query = dbDao.query(TOrderUsEntity.class, Cnd.where("status", "=", 5), null);
+				RateLimiter rateLimiter = RateLimiter.create(1);
+				for (int i = 0; i < query.size(); i++) {
+					rateLimiter.acquire();
+					autofill(query.get(i).getId(), this.session);
+				}
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("thread_01");
+		}
+	}
+
 	//自动填表
 	public Object autofill(int orderid, HttpSession session) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
+		System.out.println(simpleDateFormat.format(new Date()) + "============");
 		System.out.println("=====orderid:" + orderid);
 		Map<String, Object> result = Maps.newHashMap();
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		//TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		//改变订单状态
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		orderus.setIsautofilling(1);
 		if (orderus.getStatus() < USOrderListStatusEnum.AUTOFILL.intKey()) {
 			orderus.setStatus(USOrderListStatusEnum.AUTOFILL.intKey());
-			dbDao.update(orderus);
 		}
+		dbDao.update(orderus);
 		//根据订单id查询对应申请人，根据申请人查询二寸照片
 		TAppStaffOrderUsEntity staffOrderUS = dbDao.fetch(TAppStaffOrderUsEntity.class,
 				Cnd.where("orderid", "=", orderid));
@@ -1208,7 +1259,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		int width = 300;
 		Icon icon = null;
 		try {
-			icon = getFixedIcon(passportnum, width, height);
+			icon = getFixedIcon(imgurl, width, height);
 		} catch (Exception e) {
 			System.out.println("exception : " + e);
 		}
@@ -1275,10 +1326,13 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 							}
 						}
 					} else {
+						System.out.println("申请失败了~~~~~~~~~~~~~~~~~~~~");
 						orderus.setErrorurl(applyResult.getError_url());
 						orderus.setApplyidcode(applyidcode);
 						orderus.setErrormsg(applyResult.getErrorMsg());
+						orderus.setIsautofilling(0);
 						dbDao.update(orderus);
+						System.out.println("申请失败:" + simpleDateFormat.format(new Date()));
 						return applyResult;
 					}
 					/*if (countnum == 3) {
@@ -1313,13 +1367,24 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				//根据护照号查询,参数1代表申请，参数2代表递交
 				applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 2);
 				statusname = applyResult.getStatus();
-				while (Util.eq("提交失败", statusname)) {
+				errorMsg = applyResult.getErrorMsg();
+				if (Util.eq("提交失败", statusname)) {
+					System.out.println("提交失败了~~~~~~~~~~~~~~~~~~~~");
+					orderus.setErrorurl(applyResult.getError_url());
+					orderus.setApplyidcode(applyidcode);
+					orderus.setErrormsg(applyResult.getErrorMsg());
+					orderus.setIsautofilling(0);
+					dbDao.update(orderus);
+					System.out.println("提交失败:" + simpleDateFormat.format(new Date()));
+					return applyResult;
+				}
+				/*while (Util.eq("提交失败", statusname)) {
 					successStatus = (int) applyorsubmit(applyidcode, 2);
 					if (successStatus == 1) {
 						applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 2);
 						statusname = applyResult.getStatus();
 					}
-				}
+				}*/
 
 				System.out.println("reviewurl:" + reviewurl);
 				pdfurl = applyResult.getPdf_url();
@@ -1335,6 +1400,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				orderus.setDaturl(daturl);
 				orderus.setApplyidcode(applyidcode);
 				orderus.setErrorurl(errorurl);
+				orderus.setIsautofilling(0);
 				dbDao.update(orderus);
 				if (!Util.isEmpty(applyResult.getApp_id())) {
 					basicinfo.setAacode(applyResult.getApp_id());
@@ -1475,14 +1541,22 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		System.out.println("AAcode:" + AAcode);
 		if (type == 1) {
 			Date firstDate = DateUtil.nowDate();
-			while (Util.eq("正在申请", statusname)) {
-				Date nowDate = DateUtil.nowDate();
-				long millisBetween = DateUtil.millisBetween(firstDate, nowDate);
+			Date nowDate = null;
+			while (Util.eq("正在申请", statusname) || Util.eq("已保存", statusname)) {
+				nowDate = DateUtil.nowDate();
+				long millisBetween = DateUtil.twoDatebetweenMillis(firstDate, nowDate);
+				//long millisBetween = DateUtil.millisBetween(firstDate, nowDate) + 1000;
+				//System.out.println("millisBetween:" + millisBetween);
 				if (millisBetween != 0 && millisBetween % 30000 == 0) {
+					System.out.println("进循环前millisBetween:" + millisBetween);
+					System.out.println("进入循环了~~~~~~~~~~~");
 					applyinfoList = selectApplyinfo(passportnum);
 					applyResult = applyinfoList.get(0);
 					statusname = applyResult.getStatus();
 					AAcode = applyResult.getApp_id();
+					nowDate = DateUtil.nowDate();
+					millisBetween = DateUtil.twoDatebetweenMillis(firstDate, nowDate);
+					System.out.println("millisBetween:" + millisBetween);
 					System.out.println("while循环里申请statusname:" + statusname);
 					System.out.println("while循环里申请AAcode:" + AAcode);
 				}
@@ -1496,14 +1570,18 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 		} else {
 			Date firstDate = DateUtil.nowDate();
+			Date nowDate = null;
 			while (Util.eq("正在提交", statusname)) {
-				Date nowDate = DateUtil.nowDate();
-				long millisBetween = DateUtil.millisBetween(firstDate, nowDate);
+				nowDate = DateUtil.nowDate();
+				//long millisBetween = DateUtil.millisBetween(firstDate, nowDate);
+				long millisBetween = DateUtil.twoDatebetweenMillis(firstDate, nowDate);
 				if (millisBetween != 0 && millisBetween % 30000 == 0) {
 					applyinfoList = selectApplyinfo(passportnum);
 					applyResult = applyinfoList.get(0);
 					statusname = applyResult.getStatus();
 					AAcode = applyResult.getApp_id();
+					nowDate = DateUtil.nowDate();
+					millisBetween = DateUtil.twoDatebetweenMillis(firstDate, nowDate);
 					System.out.println("while循环里提交statusname:" + statusname);
 					System.out.println("while循环里提交AAcode:" + AAcode);
 				}
@@ -1523,13 +1601,17 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	//第一个接口，查询
 	public List<AutofillSearchJsonEntity> selectApplyinfo(String passportnum) {
 		//JSONObject jsonObject = new JSONObject();
+		long startTime = System.currentTimeMillis();
 		Map<String, Object> resultData = Maps.newHashMap();
 		resultData.put("search", passportnum);
 
+		System.out.println("passportJSON:" + resultData);
 		//List<AutofillSearchJsonEntity> searchInterface = searchInterface(resultData);
 		JSONArray array = (JSONArray) searchInterface(resultData, "");
 		List<AutofillSearchJsonEntity> searchList = com.alibaba.fastjson.JSONObject.parseArray(array.toString(),
 				AutofillSearchJsonEntity.class);
+		long endTime = System.currentTimeMillis();
+		System.out.println("第一个接口所用时间为：" + (endTime - startTime) + "ms");
 		return searchList;
 	}
 
@@ -1628,9 +1710,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	//第五个接口，上传美签申请人头像
 	public Object uploadImgtoUS(String imgurl, String applyidcode) {
-		String imgbase64 = imgToBse64(imgurl);
+		//String imgbase64 = imgToBse64(imgurl);
+		String imgbase64 = ImageToBase64ByOnline(imgurl);
 		Map<String, Object> resultData = Maps.newHashMap();
 		resultData.put("file", imgbase64);
+		//resultData.put("file", imgurl);
+		System.out.println("base64imgurl:" + resultData);
 
 		String resultStr = (String) toGetEncrypt(resultData, applyidcode, "image");
 		//从解密之后的字符串获取applyidcode
@@ -1656,6 +1741,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		WXBizMsgCrypt pc;
 		String resultStr = "";
 		String json = encrypt(result);
+		//System.out.println("json:" + json);
 		try {
 			//发送POST请求
 			String returnResult = toPostRequest(json, applyidcode, type);
@@ -1698,7 +1784,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		Map<String, String> querys = new HashMap<String, String>();
 		HttpResponse response;
 		System.out.println("httpurl:" + (host + path));
-		//System.out.println("json:" + json);
+		System.out.println("json:" + json);
 		try {
 			response = HttpUtils.doPost(host, path, method, headers, querys, json);
 			entityStr = EntityUtils.toString(response.getEntity());
@@ -1780,7 +1866,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		try {
 			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
 			String resultStr = pc.decrypt(encrypt);
-			//System.out.println("searchInterface解密后明文: " + resultStr);
+			System.out.println("searchInterface解密后明文: " + resultStr);
 			JSONObject searchObj = new JSONObject(resultStr);
 			if (!Util.isEmpty(applyidcode)) {
 				//{"msg": null, "data": {"id": 3402, "status": {"number": 1, "name": "已保存"}, "create_by": {"id": 36849, "name": "ysgj"}, "submit_time": null, "get_time": null, "create_date": "2018-09-19 17:23", "update_date": "2018-09-19 17:23", "date_of_birth": "2018-09-03", "apply_info": {"id": 2576640, "code": "baa996b5", "base_info": {"InforMation": {"WorkEducation": {"Education": [{"unit_name_cn": "北电", "AdderssInfo": {"province": "北京市", "country": "ANGL", "street": "大学", "city": "北京市", "zip_code": "110200"}, "major": "发顺丰色鬼", "end_date": "2018-09-10", "unit_name_en": "Nortel", "start_date": "2018-09-06"}], "Works": [{"unit_name_cn": "水电费第三方", "AdderssInfo": {"province": "北京市", "country": "ASMO", "street": "舒服舒服的", "city": "北京市", "zip_code": "110200"}, "DirectorsName": {"given_names_cn": "", "surnames_cn": "", "given_names_en": "", "surnames_en": ""}, "end_date": "2018-09-13", "monthly_income": "", "phone": "265646", "unit_name_en": "Water and electricity fee third party", "job_description": "水电费", "start_date": "2018-09-14", "job_title": "水电费"}], "describe": "", "current_status": "CM"}, "ExitInfo": {"OldPassport": [], "Language": []}, "TravelInfo": {"arrival_date": "2018-10-12", "go_country": "USA", "first_country": "", "Passport": {"passport_no": "E72073528", "issuance_date": "2016-05-31", "passport_type": "R", "PassportIssuance": {"province": "XINJIANG", "country": "CHIN", "city": ""}, "expiration_date": "2021-06-05", "country": "CHIN"}, "airways": "首都国际机场-羽田国际机场 NH964 0825/1250", "leave_airways": "成田国际机场-首都国际机场 CA6652 1820/2120", "travel_agency": "", "purpose_explanation": "", "purpose": "", "leave_date": "2018-10-18", "Peer": [], "leave_street": "密歇根州", "in_street": "密歇根州"}, "FamilyInfo": {"FatherInfo": {"date_of_birth": "2018-09-04", "NameInfo": {"given_names_cn": "水电", "surnames_cn": "水电费", "given_names_en": "SHUIDIAN", "surnames_en": "SHUIDIANFEI"}}, "AdderssInfo": {"province": "河北", "country": "CHIN", "street": "山西省大同市", "city": "张家口", "zip_code": ""}, "MotherInfo": {"date_of_birth": "2018-09-06", "NameInfo": {"given_names_cn": "水", "surnames_cn": "阿斯蒂芬", "given_names_en": "SHUI", "surnames_en": "ASIDIFEN"}}, "SpouseInfo": {"AdderssInfo": {"province": "", "country": "", "street": "", "city": "", "zip_code": ""}, "NameInfo": {"given_names_cn": "水电费", "surnames_cn": "水电水电都是", "given_names_en": "SHUIDIANFEI", "surnames_en": "SHUIDIANSHUIDIANDOUSHI"}, "end_date": "", "BirthplaceInfo": {"province": "", "country": "ASMO", "city": "内蒙古自治区"}, "date_of_birth": "2018-09-13", "divorced_reason": "", "nationality": "ALGR", "address_type": 5, "start_date": "", "divorced_country": ""}, "family_phone": ""}, "BaseInfo": {"NameInfo": {"old_given_names_en": "SIASADE", "old_surnames_en": "LISHUIDIANFEISHIDEFEN", "surnames_en": "LIU", "old_given_names_cn": "四阿萨德", "given_names_code_cn": "", "given_names_en": "YUFEI1", "given_names_cn": "宇飞1", "surnames_cn": "刘", "surnames_code_cn": "", "old_surnames_cn": "里水电费实得分"}, "photo": "https://upload.visae.net/visae/us/ds160/2018/09/19/photo/e7616438-d142-496b-8950-465373fcbe08.jpeg", "sex": 1, "phone": "18612131435", "BirthplaceInfo": {"province": "山西", "country": "CHIN", "city": "临汾"}, "date_of_birth": "2018-09-03", "Marriage": "W", "PHOTO_MD5_URL": "https://upload.visae.net/https://upload.visae.net/visae/us/ds160/2018/09/19/photo/e7616438-d142-496b-8950-465373fcbe08.jpeg?qhash/md5&e=1537422458&token=Kcgo66ixdBsRf20QIHsITR-5xOdxwpk8793v9-Ym:Iff3zB88RrcyuAKCfkWr-R5P5ck=", "nationality": "CHIN", "ic": "1104964189498", "email": "110@qq.com", "photo_url": "https://upload.visae.net/https://upload.visae.net/visae/us/ds160/2018/09/19/photo/e7616438-d142-496b-8950-465373fcbe08.jpeg?e=1537422458&token=Kcgo66ixdBsRf20QIHsITR-5xOdxwpk8793v9-Ym:7MfWtWK3Gq9prNU3pV9aO7LQK6Y="}}}, "visa_info": {"AmericaInfo": {"us_social_security_number": "", "united_states_citizen": "", "PayParty": {"payer": "S"}, "Contacts": {"AdderssInfo": {"province": "AK", "country": "USA", "street": "国为不产有产人在在地一有在要工", "zip_code": "", "city": "4233432423"}, "NameInfo": {"given_names_cn": "先哲", "surnames_cn": "孙", "given_names_en": "XIANZHE", "surnames_en": "SUN"}, "relationship": "C", "phone": "132432432423", "organization": "4324243242", "email": "18612131435@163.com"}, "MailingAddress": {"province": "CHN", "country": "CHN", "street": "CHN", "zip_code": "", "city": "CHN"}, "RelativesUS": {"Father": {"status": "C", "in_the_us": 1}, "other_in_us": false, "Immediate": [{"NameInfo": {"given_names_cn": "的", "surnames_cn": "的", "given_names_en": "的", "surnames_en": "DEDSDS"}}], "Mother": {"status": "P", "in_the_us": 1}}, "apply_for_emigrant": "水个个人然后", "school_in_america": "", "ResidenceTime": {"date_type": "", "number": ""}, "esta": "", "sevis_id": "", "OtherNationality": [{"country": "", "passport": ""}], "StayCity": [], "GreenCard": [{"country": ""}], "work_phone_number": "", "principal_applicant_sevis_id": "", "EverGoToAmerica": {"USDriverLicense": [{"state": "AR", "number": "345345"}], "LastUSVisa": {"LostOrStolen": {"explain": "", "year": 0}, "revoked": "32432432434232", "finger_fingerprint": 1, "number": "165156", "date": "2018-09-19", "same_place": 1, "same_visa": 1}, "InformationUSVisit": [{"date": "2018-09-20", "ResidenceTime": {"date_type": "D", "number": 2}}]}, "Security": {"q20": "", "q21": "", "q22": "", "q23": "", "q24": "", "q25": "", "q26": "", "q27": "", "q28": "", "q29": "", "q1": "", "q3": "", "q2": "", "q5": "", "q4": "", "q7": "", "q6": "", "q9": "", "q8": "", "q15": "", "q14": "", "q17": "", "q16": "", "q11": "", "q10": "", "q13": "", "q12": "", "q19": "", "q18": ""}, "refuse_entry": "第三方围观围观双方各是", "program_number": "", "ResidentialInfo": {"province": "", "country": "", "street": "", "zip_code": "", "city": ""}, "national_identification_number": "", "Supplement": {"paramilitary": "", "religion": "", "special_skills": "", "Charitable": [], "MilitaryService": {"armed_services": "", "end_date": "", "level": "", "country": "", "specialty": "", "start_date": ""}, "VisitedCountry": [{"country": "日本"}, {"country": "中国"}]}, "application_site": "BEJ", "us_taxpayerid_number": ""}}, "status": 1, "visa_type": 175, "create_by": 36849}, "app_id": null, "error_msg": null, "name": "刘宇飞1", "name_en": "LIU YUFEI1", "passport_num": "E72073528", "review_url": null, "pdf_url": null, "avator_url": null, "error_url": null, "dat_url": null}, "success": 1}
@@ -1832,6 +1918,31 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return Base64.encodeBase64String(data);
 	}
 
+	public static String ImageToBase64ByOnline(String imgURL) {
+		ByteArrayOutputStream data = new ByteArrayOutputStream();
+		try {
+			// 创建URL
+			URL url = new URL(imgURL);
+			byte[] by = new byte[1024];
+			// 创建链接
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setConnectTimeout(5000);
+			InputStream is = conn.getInputStream();
+			// 将内容读取内存中
+			int len = -1;
+			while ((len = is.read(by)) != -1) {
+				data.write(by, 0, len);
+			}
+			// 关闭流
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// 对字节数组Base64编码
+		return Base64.encodeBase64String(data.toByteArray());
+	}
+
 	//将数据加密
 	public String encrypt(Object result) {
 		String encodingAesKey = ENCODINGAESKEY;
@@ -1841,7 +1952,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String appId = APPID;
 
 		String jsonResult = JsonUtil.toJson(result);
-		//System.out.println("jsonResult:" + jsonResult);
+		System.out.println("jsonResult:" + jsonResult);
 
 		//加密
 		WXBizMsgCrypt pc;
@@ -1849,7 +1960,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		try {
 			pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
 			json = pc.encryptMsg(jsonResult, timestamp, nonce);
-			//System.out.println("body:" + json);
+			System.out.println("body:" + json);
 
 		} catch (AesException e) {
 			e.printStackTrace();

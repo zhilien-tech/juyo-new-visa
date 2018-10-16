@@ -5726,6 +5726,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				//新建日本申请人表
 				TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
 				if (Util.isEmpty(orderid) || orderid == 0) {
+					//创建订单表
 					Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
 					orderid = generrateorder.get("orderjpid");
 				}
