@@ -430,4 +430,10 @@ public class OrderUSModule {
 		return orderUSViewService.downloadFile(orderid, response);
 	}
 
+	@At
+	@GET
+	@Ok("jsp")
+	public Object toErrorphoto(@Param("errorurl") String errorurl) {
+		return errorurl;
+	}
 }

@@ -51,8 +51,8 @@
 						</c:otherwise>
 					</c:choose>
 				
-				
 				</span>
+					<a id="errorimgPhoto" onclick="toErrorphoto()">错误信息图片</a>
 				<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
 				<%-- <span class="state">状态： 
 					<c:if test="${obj.orderInfo.status == '1'}">
@@ -1457,6 +1457,7 @@
 			autofill1(4750, 4777);
 			autofill1(4751, 4778); 
 			autofill1(4752, 4779);
+			autofill1(4755, 4782);
 			autofill1(4756, 4783);
 			
 		}
@@ -1803,6 +1804,22 @@
 				scrollbar: false,
 				area: ['900px', '80%'],
 				content: '/admin/neworderUS/updateTravelInfo.html?staffid='+staffid
+			});
+		}
+		
+		//错误图片信息
+		function toErrorphoto(){
+			var errorurl = '${obj.orderinfo.errorurl }';
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content: '/admin/orderUS/toErrorphoto.html?errorurl='+errorurl
 			});
 		}
 		

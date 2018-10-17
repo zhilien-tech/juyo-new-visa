@@ -1395,11 +1395,15 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				System.out.println("AAcode:" + AAcode);
 				errorurl = applyResult.getError_url();
 				System.out.println("errorurl:" + errorurl);
+				errorMsg = applyResult.getErrorMsg();
+				System.out.println("errorMsg:" + errorMsg);
 				orderus.setReviewurl(reviewurl);
 				orderus.setPdfurl(pdfurl);
 				orderus.setDaturl(daturl);
 				orderus.setApplyidcode(applyidcode);
 				orderus.setErrorurl(errorurl);
+				//成功时不更新错误信息，这样可以看到之前的错误信息
+				//orderus.setErrormsg(errorMsg);
 				orderus.setIsautofilling(0);
 				dbDao.update(orderus);
 				if (!Util.isEmpty(applyResult.getApp_id())) {
@@ -3275,14 +3279,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String reviewurl = orderus.getReviewurl();
 		String pdfurl = orderus.getPdfurl();
 		String daturl = orderus.getDaturl();
-		/*byte[] reviewurlbyteArray = saveImageToDisk(reviewurl);//PNG
-		byte[] pdfurlbyteArray = saveImageToDisk(pdfurl);//PDF
-		byte[] daturlbyteArray = saveImageToDisk(daturl);//DAT,TXT
-
-		String filename = orderus.getOrdernumber();
-		downloadType(filename + ".PNG", reviewurlbyteArray, response);
-		downloadType(filename + ".PDF", pdfurlbyteArray, response);
-		downloadType(filename + ".TXT", daturlbyteArray, response);*/
 
 		ByteArrayOutputStream reviewurlbyteArray = saveImageToOutputStream(reviewurl);
 		ByteArrayOutputStream pdfurlbyteArray = saveImageToOutputStream(pdfurl);
@@ -3294,21 +3290,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		stream = templateUtil.mergeToZip(fileMap);
 
 		byteArray = stream.toByteArray();
-		try {
-			String fileName = URLEncoder.encode("测试.zip", "UTF-8");
-			// 设置下载的响应头
-			response.setContentType("application/zip");
-			//通过response.reset()刷新可能存在一些未关闭的getWriter(),避免可能出现未关闭的getWriter()
-			//response.setContentType("application/octet-stream");
-			response.setHeader("Set-Cookie", "fileDownload=true; path=/");
-			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
-			// 将字节流相应到浏览器（下载）
-			IOUtils.write(byteArray, response.getOutputStream());
-			response.flushBuffer();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		String filename = orderus.getOrdernumber() + ".zip";
+		downloadType(filename, byteArray, response);
 		return null;
 	}
 
@@ -3317,9 +3300,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			// 将文件进行编码
 			String fileName = URLEncoder.encode(filename, "UTF-8");
 			// 设置下载的响应头
-			// response.setContentType("application/zip");
+			response.setContentType("application/zip");
 			//通过response.reset()刷新可能存在一些未关闭的getWriter(),避免可能出现未关闭的getWriter()
-			response.setContentType("application/octet-stream");
+			//response.setContentType("application/octet-stream");
 			response.setHeader("Set-Cookie", "fileDownload=true; path=/");
 			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
 			// 将字节流相应到浏览器（下载）

@@ -1185,42 +1185,17 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//contactnameinfo
 		Map<String, Object> contactnameinfo = Maps.newHashMap();
 
-		//姓(签证信息)
-		if (!Util.isEmpty(info.get("tascfirstname"))) {
-			contactnameinfo.put("surnames_cn", info.get("tascfirstname"));
-		} else {
-			contactnameinfo.put("surnames_cn", "");
-		}
-		//姓 拼音(签证信息)
-		if (!Util.isEmpty(info.get("tascfirstnameen"))) {
-			contactnameinfo.put("surnames_en", info.get("tascfirstnameen"));
-		} else {
-			contactnameinfo.put("surnames_en", "");
-		}
-		//名(签证信息)
-		if (!Util.isEmpty(info.get("tasclastname"))) {
-			contactnameinfo.put("given_names_cn", info.get("tasclastname"));
-		} else {
-			contactnameinfo.put("given_names_cn", "");
-		}
-		//名 拼音(签证信息)
-		if (!Util.isEmpty(info.get("tasclastnameen"))) {
-			contactnameinfo.put("given_names_en", info.get("tasclastnameen"));
-		} else {
-			contactnameinfo.put("given_names_en", "");
-		}
-
 		Contacts.put("NameInfo", contactnameinfo);
 
 		//组织名称(签证信息)
-		Contacts.put("organization", "FSFSG");
+		//Contacts.put("organization", "FSFSG");
 		/*if (!Util.isEmpty(info.get("organizationname"))) {
 			Contacts.put("organization", info.get("organizationname"));
 		} else {
 			Contacts.put("organization", "");
 		}*/
 		//与你的关系(签证信息)
-		Contacts.put("relationship", "B");
+		//Contacts.put("relationship", "B");
 		/*if (!Util.isEmpty(info.get("ralationship"))) {
 			int relation = (int) info.get("ralationship");
 			if (relation == 1) {
@@ -1249,18 +1224,18 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			Contacts.put("relationship", "");
 		}*/
 		//电话号码(签证信息)
-		Contacts.put("phone", "14654165");
+		//Contacts.put("phone", "14654165");
 		/*if (!Util.isEmpty(info.get("tasctelephone"))) {
 			Contacts.put("phone", info.get("tasctelephone"));
 		} else {
 			Contacts.put("phone", "");
 		}*/
 		//邮箱
-		if (!Util.isEmpty(info.get("tascemail"))) {
+		/*if (!Util.isEmpty(info.get("tascemail"))) {
 			Contacts.put("email", info.get("tascemail"));
 		} else {
 			Contacts.put("email", "");
-		}
+		}*/
 
 		//addressinfo
 		Map<String, Object> addressinfo = Maps.newHashMap();
@@ -1274,7 +1249,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			addressinfo.put("street", "");
 		}*/
 		//城市(签证信息)
-		addressinfo.put("city", "SDFE");
+		//addressinfo.put("city", "SDFE");
 		/*if (!Util.isEmpty(info.get("tasccity"))) {
 			addressinfo.put("city", info.get("tasccity"));
 		} else {
@@ -1282,20 +1257,20 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			addressinfo.put("city", "");
 		}*/
 		//省份(签证信息)
-		addressinfo.put("province", "AL");
+		//addressinfo.put("province", "AL");
 		/*if (!Util.isEmpty(info.get("tascstate")) && !Util.eq(0, info.get("tascstate"))) {
 			int state = (int) info.get("tascstate");
 			addressinfo.put("province", getStatecode(state));
 		} else {
 			addressinfo.put("province", "");
 		}*/
-		addressinfo.put("country", "USA");
+		//addressinfo.put("country", "USA");
 		//邮编(签证信息)
-		if (!Util.isEmpty(info.get("zipcode"))) {
+		/*if (!Util.isEmpty(info.get("zipcode"))) {
 			addressinfo.put("zip_code", info.get("tasczipcode"));
 		} else {
 			addressinfo.put("zip_code", "");
-		}
+		}*/
 
 		Contacts.put("AdderssInfo", addressinfo);
 
