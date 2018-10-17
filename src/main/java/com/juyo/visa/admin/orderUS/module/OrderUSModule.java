@@ -430,10 +430,14 @@ public class OrderUSModule {
 		return orderUSViewService.downloadFile(orderid, response);
 	}
 
+	/**
+	 * 获取错误信息图片
+	 */
 	@At
 	@GET
 	@Ok("jsp")
 	public Object toErrorphoto(@Param("errorurl") String errorurl) {
 		return errorurl;
+		//return orderUSViewService.toErrorphoto(errorurl);
 	}
 }

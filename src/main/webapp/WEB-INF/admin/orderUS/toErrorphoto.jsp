@@ -24,12 +24,15 @@
 </head>
 <body>
 	<div class="head">
+	<span>错误信息图片</span>
 		<div class="btnGroup">
 			<a class="btnCancel" onclick="closeWindow()">确定</a>
 		</div>
 	</div>
-		<div class="scan" style="margin-top: 50px;width:100%">
+		<div class="scan1" style="margin-top: 50px;width:100%">
+			<center>
 			<img style="background-size:cover;" src="${obj }" width="100%"  />
+			</center>
 		</div>
 
 	<script type="text/javascript">

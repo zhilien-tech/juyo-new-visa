@@ -52,7 +52,14 @@
 					</c:choose>
 				
 				</span>
-					<a id="errorimgPhoto" onclick="toErrorphoto()">错误信息图片</a>
+				<c:choose>
+					<c:when test="${!empty obj.orderinfo.errorurl }">
+						<a id="errorimgPhoto" onclick="toErrorphoto()">错误信息图片</a>
+					</c:when>
+					<c:otherwise>
+						
+					</c:otherwise>
+				</c:choose>
 				<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
 				<%-- <span class="state">状态： 
 					<c:if test="${obj.orderInfo.status == '1'}">

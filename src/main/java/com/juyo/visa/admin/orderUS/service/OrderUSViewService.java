@@ -1327,9 +1327,30 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 						}
 					} else {
 						System.out.println("申请失败了~~~~~~~~~~~~~~~~~~~~");
-						orderus.setErrorurl(applyResult.getError_url());
+						errorurl = applyResult.getError_url();
+						if (!Util.isEmpty(errorurl)) {
+							try {
+								// 创建URL
+								URL url = new URL(errorurl);
+								// 创建链接
+								HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+								conn.setRequestMethod("GET");
+								conn.setConnectTimeout(5000);
+								InputStream is = conn.getInputStream();
+								errorurl = CommonConstants.IMAGES_SERVER_ADDR
+										+ qiniuUploadService.uploadImage(is, "", "");
+								is.close();
+
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+						orderus.setErrorurl(errorurl);
 						orderus.setApplyidcode(applyidcode);
 						orderus.setErrormsg(applyResult.getErrorMsg());
+						orderus.setReviewurl("");
+						orderus.setPdfurl("");
+						orderus.setDaturl("");
 						orderus.setIsautofilling(0);
 						dbDao.update(orderus);
 						System.out.println("申请失败:" + simpleDateFormat.format(new Date()));
@@ -1404,6 +1425,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				orderus.setErrorurl(errorurl);
 				//成功时不更新错误信息，这样可以看到之前的错误信息
 				//orderus.setErrormsg(errorMsg);
+				orderus.setErrormsg("");
+				orderus.setErrorurl("");
 				orderus.setIsautofilling(0);
 				dbDao.update(orderus);
 				if (!Util.isEmpty(applyResult.getApp_id())) {
@@ -3313,6 +3336,25 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public Object toErrorphoto(String errorurl) {
+		String imgurl = "";
+		try {
+			// 创建URL
+			URL url = new URL(errorurl);
+			// 创建链接
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setConnectTimeout(5000);
+			InputStream is = conn.getInputStream();
+			imgurl = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(is, "", "");
+			is.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return imgurl;
 	}
 
 }
