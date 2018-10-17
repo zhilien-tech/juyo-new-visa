@@ -1182,7 +1182,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	public Object getAutofillOrder(int orderid, HttpSession session) {
 
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
+		/*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
 		RateLimiter rateLimiter = RateLimiter.create(1);
 		List<TOrderUsEntity> query = dbDao.query(TOrderUsEntity.class, Cnd.where("status", "=", 5), null);
 		Integer orderusid = query.get(0).getId();
@@ -1198,7 +1198,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				break;
 			}
 		}
-		System.out.println("出循环了~~~~~~~~~~~");
+		System.out.println("出循环了~~~~~~~~~~~");*/
+		Object applyinfo = getApplyinfo("3ea2a02d");
+		selectApplyinfo("E49878974");
 		return null;
 	}
 

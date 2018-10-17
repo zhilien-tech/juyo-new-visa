@@ -1215,8 +1215,13 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		tripinfo.setHasbeeninus(form.getHasbeeninus());
 		tripinfo.setHasdriverlicense(form.getHasdriverlicense());
 		tripinfo.setIsissuedvisa(form.getIsissuedvisa());
-		tripinfo.setIssueddate(form.getIssueddate());
-		tripinfo.setVisanumber(form.getVisanumber());
+		if (form.getIsissuedvisa() == 1) {
+			tripinfo.setIssueddate(form.getIssueddate());
+			tripinfo.setVisanumber(form.getVisanumber());
+		} else {
+			tripinfo.setIssueddate(null);
+			tripinfo.setVisanumber("");
+		}
 		tripinfo.setIsapplyingsametypevisa(form.getIsapplyingsametypevisa());
 		tripinfo.setIstenprinted(form.getIstenprinted());
 		tripinfo.setIslost(form.getIslost());
@@ -1231,7 +1236,6 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		tripinfo.setHasbeeninusen(form.getHasbeeninus());
 		tripinfo.setHasdriverlicenseen(form.getHasdriverlicense());
 		tripinfo.setIsissuedvisaen(form.getIsissuedvisa());
-		tripinfo.setVisanumberen(form.getVisanumber());
 		tripinfo.setIsapplyingsametypevisaen(form.getIsapplyingsametypevisa());
 		tripinfo.setIstenprinteden(form.getIstenprinted());
 		tripinfo.setIslosten(form.getIslost());
