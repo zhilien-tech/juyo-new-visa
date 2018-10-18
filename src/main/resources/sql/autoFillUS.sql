@@ -78,6 +78,7 @@ tout.city plancity,
 tout.address planaddress,
 tout.leavedate toutleavedate,
 tout.returnFlightNum,
+tout.hastripplan,
 tast.groupname,
 tasb.socialsecuritynumber,
 tasb.taxpayernumber,
@@ -87,6 +88,7 @@ tasf.fatherstatus,
 tasf.ismotherinus,
 tasf.motherstatus,
 tasf.hasotherrelatives,
+tasf.hasimmediaterelatives,
 tasc.firstname tascfirstname,
 tasc.firstnameen tascfirstnameen,
 tasc.lastname tasclastname,
@@ -117,7 +119,9 @@ taspt.permanentresidentexplain,
 taspt.isfiledimmigrantpetition,
 taspt.immigrantpetitionexplain,
 taswet.clanname,
-taswet.skillexplain
+taswet.skillexplain,
+taswet.isemployed,
+taswet.issecondarylevel
 FROM
 t_order_us tou
 INNER JOIN

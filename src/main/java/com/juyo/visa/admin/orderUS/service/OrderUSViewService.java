@@ -2187,20 +2187,13 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			orderTravelInfo.setTravelpurpose("TEMP. BUSINESS PLEASURE VISITOR(B)");
 			orderTravelInfo = dbDao.insert(orderTravelInfo);
 		}
-		if (!Util.isEmpty(form.getGodate()))
-			orderTravelInfo.setGodate(form.getGodate());
-		if (!Util.isEmpty(form.getLeavedate()))
-			orderTravelInfo.setLeavedate(form.getLeavedate());
-		if (!Util.isEmpty(form.getArrivedate()))
-			orderTravelInfo.setArrivedate(form.getArrivedate());
-		if (!Util.isEmpty(form.getStaydays()))
-			orderTravelInfo.setStaydays(form.getStaydays());
-		if (!Util.isEmpty(form.getPlanaddress()))
-			orderTravelInfo.setAddress(form.getPlanaddress());
-		if (!Util.isEmpty(form.getPlancity()))
-			orderTravelInfo.setCity(form.getPlancity());
-		if (!Util.isEmpty(form.getPlanstate()))
-			orderTravelInfo.setState(form.getPlanstate());
+		orderTravelInfo.setGodate(form.getGodate());
+		orderTravelInfo.setLeavedate(form.getLeavedate());
+		orderTravelInfo.setArrivedate(form.getArrivedate());
+		orderTravelInfo.setStaydays(form.getStaydays());
+		orderTravelInfo.setAddress(form.getPlanaddress());
+		orderTravelInfo.setCity(form.getPlancity());
+		orderTravelInfo.setState(form.getPlanstate());
 		if (!Util.isEmpty(form.getTravelpurpose())) {
 			String travelpurpose = form.getTravelpurpose();
 			String key = TravelpurposeEnum.getEnum(travelpurpose).getKey();
@@ -2211,10 +2204,15 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderTravelInfo.setHastripplan(form.getHastripplan());
 		orderTravelInfo.setGodeparturecity(form.getGodeparturecity());
 		orderTravelInfo.setGoArrivedCity(form.getGoArrivedCity());
-		orderTravelInfo.setGoFlightNum(form.getGoFlightNum());
+		if (form.getHastripplan() == 1) {
+			orderTravelInfo.setGoFlightNum(form.getGoFlightNum());
+			orderTravelInfo.setReturnFlightNum(form.getReturnFlightNum());
+		} else {
+			orderTravelInfo.setGoFlightNum("");
+			orderTravelInfo.setReturnFlightNum("");
+		}
 		orderTravelInfo.setReturnDepartureCity(form.getReturnDepartureCity());
 		orderTravelInfo.setReturnArrivedCity(form.getReturnArrivedCity());
-		orderTravelInfo.setReturnFlightNum(form.getReturnFlightNum());
 		//修改订单信息
 		int orderUpdateNum = dbDao.update(orderTravelInfo);
 
