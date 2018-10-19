@@ -314,6 +314,54 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	private String nationalityen;
 
 	@Column
+	@Comment("出生国家")
+	private String birthcountry;
+
+	@Column
+	@Comment("出生国家(英文)")
+	private String birthcountryen;
+
+	@Column
+	@Comment("现居住国家(英文)")
+	private String nowcountry;
+
+	@Column
+	@Comment("现居住国家(英文)")
+	private String nowcountryen;
+
+	@Column
+	@Comment("邮寄城市")
+	private String mailcity;
+
+	@Column
+	@Comment("邮寄城市(英文)")
+	private String mailcityen;
+
+	@Column
+	@Comment("邮寄省份")
+	private String mailprovince;
+
+	@Column
+	@Comment("邮寄省份(英文)")
+	private String mailprovinceen;
+
+	@Column
+	@Comment("邮寄国家")
+	private String mailcountry;
+
+	@Column
+	@Comment("邮寄国家(英文)")
+	private String mailcountryen;
+
+	@Column
+	@Comment("邮寄地址")
+	private String mailaddress;
+
+	@Column
+	@Comment("邮寄地址(英文)")
+	private String mailaddressen;
+
+	@Column
 	@Comment("国家注册码")
 	private String nationalidentificationnumber;
 

@@ -375,7 +375,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setDetailedaddressen(form.getDetailedaddressen());
 		basicinfo.setMarrystatus(form.getMarrystatus());
 		basicinfo.setBirthday(form.getBirthday());
-		basicinfo.setNationality(form.getNationality());
+		basicinfo.setBirthcountry(form.getBirthcountry());
+		//basicinfo.setNationality(form.getNationality());
 		basicinfo.setHasothername(form.getHasothername());
 		basicinfo.setHasothernameen(form.getHasothername());
 		if (form.getHasothername() == 2) {
@@ -399,7 +400,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setCityen(form.getCityen());
 		basicinfo.setCardprovinceen(form.getCardprovinceen());
 		basicinfo.setCardcityen(form.getCardcityen());
-		basicinfo.setNationalityen(form.getNationalityen());
+		basicinfo.setBirthcountryen(form.getBirthcountryen());
+		//basicinfo.setNationalityen(form.getNationalityen());
 		/*		basicinfo.setProvinceen(translate(form.getProvince()));
 				basicinfo.setCityen(translate(form.getCity()));
 				basicinfo.setCardprovinceen(translate(form.getCardprovince()));

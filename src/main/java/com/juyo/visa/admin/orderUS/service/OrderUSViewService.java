@@ -1257,14 +1257,14 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid));
 		String passportnum = passportinfo.getPassport();
 
-		int height = 300;
+		/*int height = 300;
 		int width = 300;
 		Icon icon = null;
 		try {
 			icon = getFixedIcon(imgurl, width, height);
 		} catch (Exception e) {
 			System.out.println("exception : " + e);
-		}
+		}*/
 
 		//调用第一个接口
 		//selectApplyinfo();
@@ -1298,21 +1298,123 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		AutofillSearchJsonEntity applyResult = new AutofillSearchJsonEntity();
 
 		//创建申请人信息，并上传头像
+		/*repeatResult = repeatInsertandupdate(imgurl, orderid, staffid);
+		successStatus = (int) repeatResult.get("successStatus");
+		applyidcode = (String) repeatResult.get("applyidcode");*/
+
+		//创建申请人，上传头像，向官网申请
+		applyResult = (AutofillSearchJsonEntity) applyToDS160(passportnum, imgurl, orderid, staffid, orderus);
+		if (Util.isEmpty(applyResult.getReview_url())) {
+			return applyResult;
+		}
+
+		applyidcode = applyResult.getCode();
+		//向DS160官网递交，参数1代表申请，参数2代表递交
+		successStatus = (int) applyorsubmit(applyidcode, 2);
+		int count = 0;
+		if (successStatus == 1) {
+			//根据护照号查询,参数1代表申请，参数2代表递交
+			applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 2);
+			statusname = applyResult.getStatus();
+			errorMsg = applyResult.getErrorMsg();
+			/*if (Util.eq("提交失败", statusname)) {
+				System.out.println("提交失败了~~~~~~~~~~~~~~~~~~~~");
+				orderus.setErrorurl(applyResult.getError_url());
+				orderus.setApplyidcode(applyidcode);
+				orderus.setErrormsg(applyResult.getErrorMsg());
+				orderus.setIsautofilling(0);
+				dbDao.update(orderus);
+				System.out.println("提交失败:" + simpleDateFormat.format(new Date()));
+				return applyResult;
+			}*/
+			while (Util.eq("提交失败", statusname)) {
+				count++;
+				System.out.println("count===========:" + count);
+				if (count == 4) {
+					System.out.println("提交还是失败了o(╥﹏╥)o");
+					orderus.setIsautofilling(0);
+					orderus.setErrormsg("提交失败");
+					dbDao.update(orderus);
+					return applyResult;
+				}
+				applyResult = (AutofillSearchJsonEntity) applyToDS160(passportnum, imgurl, orderid, staffid, orderus);
+				if (Util.isEmpty(applyResult.getReview_url())) {
+					return applyResult;
+				}
+				applyidcode = applyResult.getCode();
+				successStatus = (int) applyorsubmit(applyidcode, 2);
+				if (successStatus == 1) {
+					applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 2);
+					statusname = applyResult.getStatus();
+				}
+			}
+
+			System.out.println("reviewurl:" + reviewurl);
+			pdfurl = applyResult.getPdf_url();
+			System.out.println("pdfurl:" + pdfurl);
+			daturl = applyResult.getDat_url();
+			System.out.println("daturl:" + daturl);
+			AAcode = applyResult.getApp_id();
+			System.out.println("AAcode:" + AAcode);
+			errorurl = applyResult.getError_url();
+			System.out.println("errorurl:" + errorurl);
+			errorMsg = applyResult.getErrorMsg();
+			System.out.println("errorMsg:" + errorMsg);
+			orderus.setReviewurl(reviewurl);
+			orderus.setPdfurl(pdfurl);
+			orderus.setDaturl(daturl);
+			orderus.setApplyidcode(applyidcode);
+			//orderus.setErrorurl(errorurl);
+			//成功时不更新错误信息，这样可以看到之前的错误信息
+			//orderus.setErrormsg(errorMsg);
+			orderus.setErrormsg("");
+			orderus.setErrorurl("");
+			orderus.setIsautofilling(0);
+			dbDao.update(orderus);
+			if (!Util.isEmpty(applyResult.getApp_id())) {
+				basicinfo.setAacode(applyResult.getApp_id());
+				dbDao.update(basicinfo);
+			}
+		}
+
+		result.put("applyidcode", applyidcode);
+		result.put("AAcode", AAcode);
+		result.put("errorMsg", errorMsg);
+		result.put("daturl", daturl);
+		result.put("reviewurl", reviewurl);
+		result.put("pdfurl", pdfurl);
+		result.put("avatorurl", avatorurl);
+
+		//uploadImgtoUS(imgurl, "9667808b");
+		//submittoDS160("9667808b", "cover");
+		//记录日志
+		//insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
+		return result;
+	}
+
+	public Object applyToDS160(String passportnum, String imgurl, int orderid, int staffid, TOrderUsEntity orderus) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
+		Map<String, Object> repeatResult = Maps.newHashMap();
+		AutofillSearchJsonEntity applyResult = new AutofillSearchJsonEntity();
+		int successStatus = 0;
+		String statusname = "";
+		String errorMsg = "";
+		String reviewurl = "";
+		String errorurl = "";
+
+		//创建申请人信息，并上传头像
 		repeatResult = repeatInsertandupdate(imgurl, orderid, staffid);
 		successStatus = (int) repeatResult.get("successStatus");
-		applyidcode = (String) repeatResult.get("applyidcode");
+		String applyidcode = (String) repeatResult.get("applyidcode");
 
 		if (successStatus == 1) {
 			//向DS160官网申请，参数1代表申请
 			successStatus = (int) applyorsubmit(applyidcode, 1);
-
 			if (successStatus == 1) {
 				//根据护照号查询,参数1代表申请，参数2代表递交
 				applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 1);
 				statusname = applyResult.getStatus();
-				int countnum = 0;
 				while (Util.eq("申请失败", statusname)) {
-					countnum++;
 					errorMsg = applyResult.getErrorMsg();
 					if (errorMsg.contains("Connection") || errorMsg.contains("打码工超时未打码")
 							|| errorMsg.contains("图片服务器连接错误")) {
@@ -1347,6 +1449,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 								e.printStackTrace();
 							}
 						}
+						applyResult.setError_url(errorurl);
 						orderus.setErrorurl(errorurl);
 						orderus.setApplyidcode(applyidcode);
 						orderus.setErrormsg(applyResult.getErrorMsg());
@@ -1359,98 +1462,33 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 						return applyResult;
 					}
 					/*if (countnum == 3) {
-						if (countnum == 3) {
-						System.out.println("第" + countnum + "次申请失败！！！");
-						orderus.setErrorurl(applyResult.getError_url());
-						orderus.setApplyidcode(applyidcode);
-						orderus.setErrormsg(applyResult.getErrorMsg());
-						dbDao.update(orderus);
-						return applyResult;
+					if (countnum == 3) {
+					System.out.println("第" + countnum + "次申请失败！！！");
+					orderus.setErrorurl(applyResult.getError_url());
+					orderus.setApplyidcode(applyidcode);
+					orderus.setErrormsg(applyResult.getErrorMsg());
+					dbDao.update(orderus);
+					return applyResult;
 					}*/
 					/*repeatResult = repeatInsertandupdate(imgurl, orderid);
 					successStatus = (int) repeatResult.get("successStatus");
 					applyidcode = (String) repeatResult.get("applyidcode");
 					if (successStatus == 1) {
-						successStatus = (int) applyorsubmit(applyidcode, 1);
-						if (successStatus == 1) {
-							applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 1);
-							statusname = applyResult.getStatus();
-							System.out.println("申请失败的while循环里:" + statusname);
-						}
+					successStatus = (int) applyorsubmit(applyidcode, 1);
+					if (successStatus == 1) {
+						applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 1);
+						statusname = applyResult.getStatus();
+						System.out.println("申请失败的while循环里:" + statusname);
+					}
 					}*/
 
 				}
-				reviewurl = applyResult.getReview_url();
 
 			}
 
-			//向DS160官网递交，参数1代表递交
-			successStatus = (int) applyorsubmit(applyidcode, 2);
-			if (successStatus == 1) {
-				//根据护照号查询,参数1代表申请，参数2代表递交
-				applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 2);
-				statusname = applyResult.getStatus();
-				errorMsg = applyResult.getErrorMsg();
-				if (Util.eq("提交失败", statusname)) {
-					System.out.println("提交失败了~~~~~~~~~~~~~~~~~~~~");
-					orderus.setErrorurl(applyResult.getError_url());
-					orderus.setApplyidcode(applyidcode);
-					orderus.setErrormsg(applyResult.getErrorMsg());
-					orderus.setIsautofilling(0);
-					dbDao.update(orderus);
-					System.out.println("提交失败:" + simpleDateFormat.format(new Date()));
-					return applyResult;
-				}
-				/*while (Util.eq("提交失败", statusname)) {
-					successStatus = (int) applyorsubmit(applyidcode, 2);
-					if (successStatus == 1) {
-						applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 2);
-						statusname = applyResult.getStatus();
-					}
-				}*/
-
-				System.out.println("reviewurl:" + reviewurl);
-				pdfurl = applyResult.getPdf_url();
-				System.out.println("pdfurl:" + pdfurl);
-				daturl = applyResult.getDat_url();
-				System.out.println("daturl:" + daturl);
-				AAcode = applyResult.getApp_id();
-				System.out.println("AAcode:" + AAcode);
-				errorurl = applyResult.getError_url();
-				System.out.println("errorurl:" + errorurl);
-				errorMsg = applyResult.getErrorMsg();
-				System.out.println("errorMsg:" + errorMsg);
-				orderus.setReviewurl(reviewurl);
-				orderus.setPdfurl(pdfurl);
-				orderus.setDaturl(daturl);
-				orderus.setApplyidcode(applyidcode);
-				orderus.setErrorurl(errorurl);
-				//成功时不更新错误信息，这样可以看到之前的错误信息
-				//orderus.setErrormsg(errorMsg);
-				orderus.setErrormsg("");
-				orderus.setErrorurl("");
-				orderus.setIsautofilling(0);
-				dbDao.update(orderus);
-				if (!Util.isEmpty(applyResult.getApp_id())) {
-					basicinfo.setAacode(applyResult.getApp_id());
-					dbDao.update(basicinfo);
-				}
-			}
 		}
-
-		result.put("applyidcode", applyidcode);
-		result.put("AAcode", AAcode);
-		result.put("errorMsg", errorMsg);
-		result.put("daturl", daturl);
-		result.put("reviewurl", reviewurl);
-		result.put("pdfurl", pdfurl);
-		result.put("avatorurl", avatorurl);
-
-		//uploadImgtoUS(imgurl, "9667808b");
-		//submittoDS160("9667808b", "cover");
-		//记录日志
-		//insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
-		return result;
+		applyResult.setCode(applyidcode);
+		return applyResult;
 	}
 
 	public static Icon getFixedIcon(String filePath, int width, int height) throws Exception {
@@ -2185,6 +2223,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			orderTravelInfo = new TOrderUsTravelinfoEntity();
 			orderTravelInfo.setOrderid(orderid);
 			orderTravelInfo.setTravelpurpose("TEMP. BUSINESS PLEASURE VISITOR(B)");
+			orderTravelInfo.setSpecify(1);
 			orderTravelInfo = dbDao.insert(orderTravelInfo);
 		}
 		orderTravelInfo.setGodate(form.getGodate());
@@ -2192,7 +2231,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderTravelInfo.setArrivedate(form.getArrivedate());
 		orderTravelInfo.setStaydays(form.getStaydays());
 		orderTravelInfo.setAddress(form.getPlanaddress());
+		orderTravelInfo.setAddressen(form.getPlanaddressen());
 		orderTravelInfo.setCity(form.getPlancity());
+		orderTravelInfo.setCityen(form.getPlancityen());
 		orderTravelInfo.setState(form.getPlanstate());
 		if (!Util.isEmpty(form.getTravelpurpose())) {
 			String travelpurpose = form.getTravelpurpose();

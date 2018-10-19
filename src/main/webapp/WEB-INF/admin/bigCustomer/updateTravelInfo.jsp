@@ -404,8 +404,9 @@ input:focus{
 					<div class="refuseExplain grouptextareaInfo paddingTop-9">
 						<label><span class="s">*</span> 说明</label> <input autocomplete="new-password"
 							name="refusedexplain" style="padding-left: 10px; width: 182px !important;"
-							class="areaInputPic" id='refusedexplain'
+							class="areaInputPic" onchange="translateZhToEn(this,'refusedexplainen','')" id='refusedexplain'
 							value="${obj.tripinfo.refusedexplain }" />
+							<input type="hidden" id="refusedexplainen" name="refusedexplainen" value="${obj.tripinfo.refusedexplainen }"/>
 					</div>
 				</div>
 
@@ -439,9 +440,10 @@ input:focus{
 						</div>
 						<div class="col-sm-3 youRelationship">
 							<label><span class="s">*</span> 其他理由</label> <input autocomplete="new-password"
-								style="height: 34px;padding-left: 10px" id="immigrantpetitionexplain"
+								style="height: 34px;padding-left: 10px" id="immigrantpetitionexplain" onchange="translateZhToEn(this,'immigrantpetitionexplainen','')"
 								value="${obj.tripinfo.immigrantpetitionexplain }"
 								name="immigrantpetitionexplain" type="text" placeholder="" />
+								<input id="immigrantpetitionexplainen" name="immigrantpetitionexplainen" type="hidden" value="${obj.tripinfo.immigrantpetitionexplainen }"/>
 						</div>
 					</div>
 				</div>

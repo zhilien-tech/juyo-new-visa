@@ -74,6 +74,26 @@ public class TAppStaffFamilyinfoEntity implements Serializable {
 	private Date motherbirthday;
 
 	@Column
+	@Comment("结婚日期")
+	private Date marrieddate;
+
+	@Column
+	@Comment("离婚日期")
+	private Date divorcedate;
+
+	@Column
+	@Comment("离婚国家")
+	private Date divorcecountry;
+
+	@Column
+	@Comment("离婚国家(英文)")
+	private Date divorcecountryen;
+
+	@Column
+	@Comment("离婚原因")
+	private Date divorcereason;
+
+	@Column
 	@Comment("是否知道母亲的出生日期")
 	private Integer isknowmotherbirthday;
 

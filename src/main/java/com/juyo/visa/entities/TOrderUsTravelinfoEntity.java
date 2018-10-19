@@ -46,8 +46,16 @@ public class TOrderUsTravelinfoEntity implements Serializable {
 	private String address;
 
 	@Column
+	@Comment("美国地址(英文)")
+	private String addressen;
+
+	@Column
 	@Comment("市")
 	private String city;
+
+	@Column
+	@Comment("市(英文)")
+	private String cityen;
 
 	@Column
 	@Comment("州")

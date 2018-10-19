@@ -236,8 +236,8 @@
 									<label>
 										<span>*</span>出生国家
 									</label>
-									<input autocomplete="new-password" id="nationality" onchange="translateZhToEn(this,'nationalityen','')" name="nationality" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="17" value="${obj.basicinfo.nationality }" />
-									<input name="nationalityen" id="nationalityen" value="${obj.basicinfo.nationalityen }" type="hidden"/>
+									<input autocomplete="new-password" id="birthcountry" onchange="translateZhToEn(this,'birthcountryen','')" name="birthcountry" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="17" value="${obj.basicinfo.birthcountry }" />
+									<input name="birthcountryen" id="birthcountryen" value="${obj.basicinfo.birthcountryen }" type="hidden"/>
 								</div>
 							</div>
 						</div>

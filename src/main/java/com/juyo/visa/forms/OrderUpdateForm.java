@@ -47,10 +47,14 @@ public class OrderUpdateForm {
 	 */
 	private String planaddress;
 
+	private String planaddressen;
+
 	/*
 	 * 市
 	 */
 	private String plancity;
+
+	private String plancityen;
 
 	/*
 	 * 州

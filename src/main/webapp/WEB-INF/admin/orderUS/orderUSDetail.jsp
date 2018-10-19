@@ -173,7 +173,7 @@
 											<c:if test="${empty obj.travelInfo.travelpurpose}">
 												<option value="">商务旅游游客(B)</option>
 											</c:if>
-											<option>外国政府官员（A）</option>
+											<!-- <option>外国政府官员（A）</option>
 											<option>商务旅游游客(B)</option>
 											<option>过境的外国公民(C)</option>
 											<option>CNMI工作者或投资者(CW/E2C)</option>
@@ -197,7 +197,7 @@
 											<option>人口贩运的受害者(T)</option>
 											<option>北美自由贸易协议专业人员(TD/TN)</option>
 											<option>犯罪活动的受害者(U)</option>
-											<option>假释收益者(PARCIS)</option>
+											<option>假释收益者(PARCIS)</option> -->
 										</select>
 									</div>
 								</div>
@@ -438,18 +438,20 @@
 								<!-- 市 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span></span></label> <input name="plancity"
-											type="text" value="${obj.travelInfo.city}"
+										<label><span></span></label> 
+										<input name="plancity" id="plancity" type="text" onchange="translateZhToEn(this,'plancityen','')" value="${obj.travelInfo.city}"
 											class="form-control input-sm" placeholder="市" />
+											<input type="hidden" id="plancityen" name="plancityen" value="${obj.travelInfo.cityen }"/>
 									</div>
 								</div>
 								<!-- 市END -->
 								<!-- 街道 -->
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span></span></label> <input name="planaddress"
+										<label><span></span></label> <input id="planaddress" name="planaddress" onchange="translateZhToEn(this,'planaddressen','')"
 											type="text" value="${obj.travelInfo.address}"
 											class="form-control input-sm" placeholder="街道" />
+											<input id="planaddressen" name="planaddressen" type="hidden" value="${obj.travelInfo.addressen }"/>
 									</div>
 								</div>
 								<!-- 街道END -->
@@ -1828,6 +1830,34 @@
 				area: ['900px', '80%'],
 				content: '/admin/orderUS/toErrorphoto.html?errorurl='+errorurl
 			});
+		}
+		
+		//翻译
+		function translateZhToEn(from, to, param){
+			var toval = "";
+			if(param != ""){
+				toval = param;
+			}else{
+				toval = $(from).val();
+			}
+			$.ajax({
+				//async : false,
+				url : '/admin/translate/translate',
+				data : {
+					api : 'google',
+					strType : to,
+					en : 'en',
+					q : toval
+				},
+				type : 'POST',
+				dataType : 'json',
+				success : function(data) {
+					$("#" + to).val(data).change();
+				}
+			});
+			/*$.getJSON("/admin/translate/google", {q: $(from).val()}, function (result) {
+		        $("#" + to).val(result.data);
+		    });*/
 		}
 		
 		function successCallback(status){

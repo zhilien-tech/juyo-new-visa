@@ -83,6 +83,10 @@ public class BasicinfoUSForm {
 	/**出生日期*/
 	private Date birthday;
 
+	private String birthcountry;
+
+	private String birthcountryen;
+
 	/**住址*/
 	private String address;
 	private String addressen;
