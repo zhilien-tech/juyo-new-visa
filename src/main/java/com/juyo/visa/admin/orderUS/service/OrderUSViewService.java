@@ -1304,6 +1304,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 		//创建申请人，上传头像，向官网申请
 		applyResult = (AutofillSearchJsonEntity) applyToDS160(passportnum, imgurl, orderid, staffid, orderus);
+		reviewurl = applyResult.getReview_url();
 		if (Util.isEmpty(applyResult.getReview_url())) {
 			return applyResult;
 		}
@@ -1333,11 +1334,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				if (count == 4) {
 					System.out.println("提交还是失败了o(╥﹏╥)o");
 					orderus.setIsautofilling(0);
-					orderus.setErrormsg("提交失败");
+					orderus.setErrormsg(applyResult.getErrorMsg());
 					dbDao.update(orderus);
 					return applyResult;
 				}
 				applyResult = (AutofillSearchJsonEntity) applyToDS160(passportnum, imgurl, orderid, staffid, orderus);
+				reviewurl = applyResult.getReview_url();
 				if (Util.isEmpty(applyResult.getReview_url())) {
 					return applyResult;
 				}

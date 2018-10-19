@@ -1679,36 +1679,46 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//MailingAddress
 		Map<String, Object> MailingAddress = Maps.newHashMap();
 
-		//邮寄国家
-		if (!Util.isEmpty(info.get("mailcountry"))) {
-			MailingAddress.put("country", getCountrycode((String) info.get("mailcountry")));
-		} else {
+		//邮寄地址跟居住地址一样
+		if (info.getInt("ismailsamewithlive") == 1) {
 			MailingAddress.put("country", "");
-		}
-
-		//邮寄省份
-		if (!Util.isEmpty(info.get("mailprovinceen"))) {
-			MailingAddress.put("province", info.get("mailprovinceen"));
-		} else {
 			MailingAddress.put("province", "");
-		}
-
-		//邮寄城市
-		if (!Util.isEmpty(info.get("mailcityen"))) {
-			MailingAddress.put("city", info.get("mailcityen"));
-		} else {
 			MailingAddress.put("city", "");
-		}
-
-		//邮寄地址
-		if (!Util.isEmpty(info.get("mailaddressen"))) {
-			MailingAddress.put("street", info.get("mailaddressen"));
-		} else {
 			MailingAddress.put("street", "");
-		}
+			MailingAddress.put("zip_code", "");
+		} else {
+			//邮寄国家
+			if (!Util.isEmpty(info.get("mailcountry"))) {
+				MailingAddress.put("country", getCountrycode((String) info.get("mailcountry")));
+			} else {
+				errorMsg += "邮寄地址国家,";
+			}
 
-		//邮政编码  没有  测试为空
-		MailingAddress.put("zip_code", "");
+			//邮寄省份
+			if (!Util.isEmpty(info.get("mailprovinceen"))) {
+				MailingAddress.put("province", info.get("mailprovinceen"));
+			} else {
+				errorMsg += "邮寄地址省份,";
+			}
+
+			//邮寄城市
+			if (!Util.isEmpty(info.get("mailcityen"))) {
+				MailingAddress.put("city", info.get("mailcityen"));
+			} else {
+				errorMsg += "邮寄地址城市,";
+			}
+
+			//邮寄地址
+			if (!Util.isEmpty(info.get("mailaddressen"))) {
+				MailingAddress.put("street", info.get("mailaddressen"));
+			} else {
+				errorMsg += "邮寄地址,";
+			}
+
+			//邮政编码  没有  测试为空
+			MailingAddress.put("zip_code", "");
+
+		}
 
 		/*MailingAddress.put("street", info.get("detailedaddressen"));
 		//现居住城市(基本信息)

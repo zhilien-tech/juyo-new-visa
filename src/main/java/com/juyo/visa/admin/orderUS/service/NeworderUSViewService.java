@@ -277,7 +277,17 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("marrystatusenum", EnumUtil.enum2(MarryStatusEnum.class));
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
 		result.put("basicinfo", basicinfo);
+
+		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
 		//日期处理
+		if (!Util.isEmpty(familyinfo.getMarrieddate())) {
+			result.put("marrieddate", sdf.format(familyinfo.getMarrieddate()));
+		}
+		if (!Util.isEmpty(familyinfo.getDivorcedate())) {
+			result.put("divorcedate", sdf.format(familyinfo.getDivorcedate()));
+		}
+
 		if (!Util.isEmpty(basicinfo.getBirthday())) {
 			result.put("birthday", sdf.format(basicinfo.getBirthday()));
 		}
@@ -350,6 +360,13 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object updateBasicinfo(BasicinfoUSForm form) {
 		Integer staffid = form.getStaffid();
+
+		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		familyinfo.setMarrieddate(form.getMarrieddate());
+		familyinfo.setDivorcedate(form.getDivorcedate());
+		dbDao.update(familyinfo);
+
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid.longValue());
 		basicinfo.setFirstname(form.getFirstname());
 		if (!Util.isEmpty(form.getFirstnameen())) {
@@ -363,6 +380,13 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		} else {
 			basicinfo.setLastnameen("");
 		}
+
+		basicinfo.setIsmailsamewithlive(form.getIsmailsamewithlive());
+		basicinfo.setMailcountry(form.getMailcountry());
+		basicinfo.setMailprovince(form.getMailprovince());
+		basicinfo.setMailcity(form.getMailcity());
+		basicinfo.setMailaddress(form.getMailaddress());
+
 		basicinfo.setSex(form.getSex());
 		basicinfo.setTelephone(form.getTelephone());
 		basicinfo.setEmail(form.getEmail());
@@ -393,6 +417,12 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//英文
 		long startTime = System.currentTimeMillis();
 		System.out.println("开始保存英文====");
+		basicinfo.setIsmailsamewithliveen(form.getIsmailsamewithliveen());
+		basicinfo.setMailcountryen(form.getMailcountryen());
+		basicinfo.setMailprovinceen(form.getMailprovinceen());
+		basicinfo.setMailcityen(form.getMailcityen());
+		basicinfo.setMailaddressen(form.getMailaddressen());
+
 		basicinfo.setTelephoneen(form.getTelephone());
 		basicinfo.setEmailen(form.getEmail());
 		basicinfo.setCardIden(form.getCardId());

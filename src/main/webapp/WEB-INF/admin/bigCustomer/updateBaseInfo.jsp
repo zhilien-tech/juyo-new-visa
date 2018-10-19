@@ -214,9 +214,21 @@
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
-								<div class="form-group marryexplain">
+								<div class="form-group none">
 									<label>说明</label> 
 									<input autocomplete="new-password" id="marryexplain" onchange="translateZhToEn(this,'marryexplainen','')" name="marryexplain" type="text" class="form-control input-sm" value="${obj.applicant.marryexplain }"/>
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group marryexplain">
+									<label>结婚日期</label> 
+									<input autocomplete="new-password" id="marrieddate" name="marrieddate" type="text" class="form-control input-sm" value="${obj.marrieddate }"/>
+								</div>
+							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group marryexplain">
+									<label>离婚日期</label> 
+									<input autocomplete="new-password" id="divorcedate" name="divorcedate" type="text" class="form-control input-sm" value="${obj.divorcedate }"/>
 								</div>
 							</div>
 						</div>
@@ -264,6 +276,53 @@
 								</div>
 							</div>
 						</div>
+						
+						<!-- 邮寄地址 -->
+						<div class="row">
+							<div class="col-sm-10 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>邮寄地址是否跟居住地址 一样</label> 
+									<div>
+										<span class="nameBeforeYes">
+											<input autocomplete="new-password" type="radio" name="ismailsamewithlive" class="mailinfo" value="1"/>是
+										</span>
+										<span>
+											<input autocomplete="new-password" type="radio" name="ismailsamewithlive" class="mailinfo" value="2" checked />否
+										</span>
+									</div>
+								</div>
+							</div>
+						
+						</div>
+						
+						<div class="row mailingAddressTrue">
+							<!-- 姓/名 -->
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>街道地址</label> 
+									<input autocomplete="new-password" onchange="translateZhToEn(this,'mailaddressen','')" id="mailaddress"  name="mailaddress" type="text" class="form-control input-sm " tabIndex="20" value="${obj.basicinfo.mailaddress }"/>
+								</div>
+							</div>
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>市</label> 
+									<input autocomplete="new-password" onchange="translateZhToEn(this,'mailcityen','')" id="mailcity" name="mailcity"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailcity }"/>
+								</div>
+							</div>
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>省</label> 
+									<input autocomplete="new-password" onchange="translateZhToEn(this,'mailprovinceen','')" id="mailprovince" name="mailprovince"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailprovince }"/>
+								</div>
+							</div>
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>国家</label> 
+									<input autocomplete="new-password" id="mailcountry" onchange="translateZhToEn(this,'mailcountryen','')" name="mailcountry"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailcountry }"/>
+								</div>
+							</div>
+						</div>
+						
 
 						<!-- 曾用名 -->
 						<div class="row">
@@ -413,6 +472,55 @@
 							</div>
 						</div>
 						
+						
+						<div class="row">
+							<div class="col-sm-10 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>Is your Mailing Address the same as your Home Address</label> 
+									<div>
+										<span class="nameBeforeYes">
+											<input autocomplete="new-password" type="radio" name="ismailsamewithliveen" class="mailinfoUS" value="1"/>yes
+										</span>
+										<span>
+											<input autocomplete="new-password" type="radio" name="ismailsamewithliveen" class="mailinfoUS" value="2" checked />No
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row mailingAddressUSTrue">
+							<!-- 姓/名 -->
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>Street Address</label> 
+									<input autocomplete="new-password" id="mailaddressen" name="mailaddressen" type="text" class="form-control input-sm " value="${obj.basicinfo.mailaddressen }" />
+								</div>
+							</div>
+							
+							<input autocomplete="new-password" id="mailcityen" name="mailcityen" type="hidden" class="form-control input-sm" value="${obj.basicinfo.mailcityen }" />
+							<input autocomplete="new-password" id="mailprovinceen" name="mailprovinceen" type="hidden" class="form-control input-sm" value="${obj.basicinfo.mailprovinceen }" />
+							<input autocomplete="new-password" id="mailcountryen" name="mailcountryen" type="hidden" class="form-control input-sm" value="${obj.basicinfo.mailcountryen }" />
+							
+							<%-- <div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>City </label> 
+									<input autocomplete="new-password" id="mailcityen" name="mailcityen" type="text" class="form-control input-sm" value="${obj.basicinfo.mailcityen }" />
+								</div>
+							</div>
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>State/Province  </label> 
+									<input autocomplete="new-password" id="mailprovinceen" name="mailprovinceen" type="text" class="form-control input-sm" value="${obj.basicinfo.mailprovinceen }" />
+								</div>
+							</div>
+							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
+								<div class="form-group">
+									<label>Country/Region</label> 
+									<input autocomplete="new-password" id="mailcountryen" name="mailcountryen" type="text" class="form-control input-sm" value="${obj.basicinfo.mailcountryen }" />
+								</div>
+							</div> --%>
+						</div>
+						
 						<!-- 曾用名 -->
 						<div class="row">
 							<!-- 是否有曾用名/曾有的或另有的国籍(或公民身份) -->
@@ -536,12 +644,16 @@
 			var nationen = '${obj.applicant.hasothernationalityen}';
 			var otherName = '${obj.basicinfo.hasothername}';
 			var otherNameen = '${obj.basicinfo.hasothernameen}';
+			var ismailsamewithlive = '${obj.basicinfo.ismailsamewithlive}';
+			var ismailsamewithliveen = '${obj.basicinfo.ismailsamewithliveen}';
 			var address = '${obj.applicant.addressIssamewithcard}';
 			var addressen = '${obj.applicant.addressIssamewithcarden}';
 			$("input[name='hasothernationality'][value='"+nation+"']").attr("checked",'checked');
 			$("input[name='hasothername'][value='"+otherName+"']").attr("checked",'checked');
 			$("input[name='hasothernationalityen'][value='"+nationen+"']").attr("checked",'checked');
 			$("input[name='hasothernameen'][value='"+otherNameen+"']").attr("checked",'checked');
+			$("input[name='ismailsamewithlive'][value='"+ismailsamewithlive+"']").attr("checked",'checked');
+			$("input[name='ismailsamewithliveen'][value='"+ismailsamewithliveen+"']").attr("checked",'checked');
 			//是否有其他国籍
 			if(nation == 1){
 				$(".nameBeforeTop").css('float','none');
@@ -565,6 +677,17 @@
 				$(".usedBeforeUSTrue").show();
 			}else {
 				$(".usedBeforeUSTrue").hide();
+			}
+			//邮寄地址
+			if(ismailsamewithlive == 2){
+				$(".mailingAddressTrue").show();
+			}else {
+				$(".mailingAddressTrue").hide();
+			}
+			if(ismailsamewithliveen == 2){
+				$(".mailingAddressUSTrue").show();
+			}else {
+				$(".mailingAddressUSTrue").hide();
 			}
 			//地址是否与身份证相同
 			if(address == 1){
@@ -634,6 +757,32 @@
 				minView: "month"//只显示年月日
 			});
 			$("#birthday").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+		        weekStart: 1,
+		        todayBtn: 1,
+				autoclose: true,
+				todayHighlight: true,//高亮
+				startView: 4,//从年开始选择
+				forceParse: 0,
+		        showMeridian: false,
+				pickerPosition:"bottom-right",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#marrieddate").datetimepicker({
+				format: 'yyyy-mm-dd',
+				language: 'zh-CN',
+		        weekStart: 1,
+		        todayBtn: 1,
+				autoclose: true,
+				todayHighlight: true,//高亮
+				startView: 4,//从年开始选择
+				forceParse: 0,
+		        showMeridian: false,
+				pickerPosition:"bottom-right",//显示位置
+				minView: "month"//只显示年月日
+			});
+			$("#divorcedate").datetimepicker({
 				format: 'yyyy-mm-dd',
 				language: 'zh-CN',
 		        weekStart: 1,

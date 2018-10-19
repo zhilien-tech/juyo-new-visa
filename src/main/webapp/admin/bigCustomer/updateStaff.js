@@ -700,7 +700,7 @@ $("#cityDiv").mouseleave(function(){
 
 //婚姻状况处理
 //左边
-if(marrystatus == 8 ){//其他有婚姻说明
+if($("#marrystatus").val() == 2 ){//其他有婚姻说明
 	$(".marryexplain").show();
 }else{
 	$(".marryexplain").hide();
@@ -709,12 +709,12 @@ if(marrystatus == 8 ){//其他有婚姻说明
 $("#marrystatus").change(function(){
 	var status = $(this).val();
 	$("#marrystatusen").val(status);
-	if($("#marrystatusen").val() == 8 ){//其他有婚姻说明
+	if($("#marrystatusen").val() == 2 ){//其他有婚姻说明
 		$(".marryexplainen").show();
 	}else{
 		$(".marryexplainen").hide();
 	}
-	if(status == 8 ){
+	if(status == 2 ){
 		$(".marryexplain").show();
 	}else{
 		$(".marryexplain").hide();
@@ -736,6 +736,29 @@ $("#marrystatusen").change(function(){
 	}
 })
 
+//radio 邮寄地址
+$(".mailinfo").change(function(){
+	var usedBeforeVal = $("input[name='ismailsamewithlive']:checked").val();
+	if(usedBeforeVal == 2){
+		$(".mailingAddressTrue").show();
+		$(".mailingAddressUSTrue").show();
+		$("input[name='ismailsamewithliveen'][value='2']").trigger("click");
+		//$(".usedBeforeUS1").trigger("click");
+	}else{
+		$(".mailingAddressTrue").hide();
+		$(".mailingAddressUSTrue").hide();
+		$("input[name='ismailsamewithliveen'][value='1']").trigger("click");
+		//$(".usedBeforeUS2").trigger("click");
+	}
+});
+$(".mailinfoUS").change(function(){
+	var usedBeforeVal = $("input[name='ismailsamewithliveen']:checked").val();
+	if(usedBeforeVal == 2){
+		$(".mailingAddressUSTrue").show();
+	}else{
+		$(".mailingAddressUSTrue").hide();
+	}
+});
 //radio 曾用名
 $(".usedBefore").change(function(){
 	var usedBeforeVal = $("input[name='hasothername']:checked").val();

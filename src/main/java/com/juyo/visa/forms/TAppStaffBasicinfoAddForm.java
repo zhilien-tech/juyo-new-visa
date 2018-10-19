@@ -28,6 +28,10 @@ public class TAppStaffBasicinfoAddForm extends AddForm implements Serializable {
 	/**名*/
 	private String lastname;
 
+	private Integer ismailsamewithlive;
+
+	private Integer ismailsamewithliveen;
+
 	private Integer isfirst;
 
 	private Integer iscompleted;

@@ -330,6 +330,14 @@ public class TAppStaffBasicinfoEntity implements Serializable {
 	private String nowcountryen;
 
 	@Column
+	@Comment("邮寄地址是否跟居住地址一致")
+	private Integer ismailsamewithlive;
+
+	@Column
+	@Comment("邮寄地址是否跟居住地址一致(英文)")
+	private Integer ismailsamewithliveen;
+
+	@Column
 	@Comment("邮寄城市")
 	private String mailcity;
 
