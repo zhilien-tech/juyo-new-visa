@@ -385,10 +385,29 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 
 		basicinfo.setIsmailsamewithlive(form.getIsmailsamewithlive());
-		basicinfo.setMailcountry(form.getMailcountry());
-		basicinfo.setMailprovince(form.getMailprovince());
-		basicinfo.setMailcity(form.getMailcity());
-		basicinfo.setMailaddress(form.getMailaddress());
+		if (form.getIsmailsamewithlive() == 1) {
+
+			basicinfo.setMailcountry("");
+			basicinfo.setMailprovince("");
+			basicinfo.setMailcity("");
+			basicinfo.setMailaddress("");
+
+			basicinfo.setMailcountryen("");
+			basicinfo.setMailprovinceen("");
+			basicinfo.setMailcityen("");
+			basicinfo.setMailaddressen("");
+		} else {
+
+			basicinfo.setMailcountry(form.getMailcountry());
+			basicinfo.setMailprovince(form.getMailprovince());
+			basicinfo.setMailcity(form.getMailcity());
+			basicinfo.setMailaddress(form.getMailaddress());
+
+			basicinfo.setMailcountryen(form.getMailcountryen());
+			basicinfo.setMailprovinceen(form.getMailprovinceen());
+			basicinfo.setMailcityen(form.getMailcityen());
+			basicinfo.setMailaddressen(form.getMailaddressen());
+		}
 
 		basicinfo.setSex(form.getSex());
 		basicinfo.setTelephone(form.getTelephone());
@@ -421,10 +440,6 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		long startTime = System.currentTimeMillis();
 		System.out.println("开始保存英文====");
 		basicinfo.setIsmailsamewithliveen(form.getIsmailsamewithliveen());
-		basicinfo.setMailcountryen(form.getMailcountryen());
-		basicinfo.setMailprovinceen(form.getMailprovinceen());
-		basicinfo.setMailcityen(form.getMailcityen());
-		basicinfo.setMailaddressen(form.getMailaddressen());
 
 		basicinfo.setTelephoneen(form.getTelephone());
 		basicinfo.setEmailen(form.getEmail());

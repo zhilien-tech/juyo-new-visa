@@ -403,11 +403,20 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		} else {
 			Map<String, Object> result = Maps.newHashMap();
 			TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+			TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
+					Cnd.where("staffid", "=", staffid));
+
 			SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-			//出生日期渲染
+			//日期渲染
 			if (!Util.isEmpty(basic.getBirthday())) {
 				String birthday = format.format(basic.getBirthday());
 				result.put("birthday", birthday);
+			}
+			if (!Util.isEmpty(familyinfo.getMarrieddate())) {
+				result.put("marrieddate", format.format(familyinfo.getMarrieddate()));
+			}
+			if (!Util.isEmpty(familyinfo.getDivorcedate())) {
+				result.put("divorcedate", format.format(familyinfo.getDivorcedate()));
 			}
 			//婚姻状况处理
 			/*if (!Util.isEmpty(basic.getMarrystatus())) {
@@ -474,6 +483,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object updateBasicinfo(BasicinfoUSForm form) {
+
+		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
+				Cnd.where("staffid", "=", form.getStaffid().longValue()));
+		familyinfo.setMarrieddate(form.getMarrieddate());
+		familyinfo.setDivorcedate(form.getDivorcedate());
+		familyinfo.setDivorcecountry(form.getDivorcecountry());
+		familyinfo.setDivorcecountryen(translate(form.getDivorcecountryen()));
+		dbDao.update(familyinfo);
+
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, form.getStaffid().longValue());
 		basicinfo.setDetailedaddress(form.getDetailedaddress());
 		basicinfo.setBirthday(form.getBirthday());
@@ -490,6 +508,30 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		basicinfo.setNationality(form.getNationality());
 		basicinfo.setHasothername(form.getHasothername());
 		basicinfo.setHasothernameen(form.getHasothername());
+
+		basicinfo.setIsmailsamewithlive(form.getIsmailsamewithlive());
+		basicinfo.setIsmailsamewithliveen(form.getIsmailsamewithliveen());
+
+		if (form.getIsmailsamewithlive() == 1) {
+			basicinfo.setMailaddress("");
+			basicinfo.setMailaddressen("");
+			basicinfo.setMailcity("");
+			basicinfo.setMailcityen("");
+			basicinfo.setMailprovince("");
+			basicinfo.setMailprovinceen("");
+			basicinfo.setMailcountry("");
+			basicinfo.setMailcountryen("");
+		} else {
+			basicinfo.setMailaddress(form.getMailaddress());
+			basicinfo.setMailaddressen(translate(form.getMailaddress()));
+			basicinfo.setMailcity(form.getMailcity());
+			basicinfo.setMailcityen(translate(form.getMailcity()));
+			basicinfo.setMailprovince(form.getMailprovince());
+			basicinfo.setMailprovinceen(translate(form.getMailprovince()));
+			basicinfo.setMailcountry(form.getMailcountry());
+			basicinfo.setMailcountryen(translate(form.getMailcountry()));
+		}
+
 		if (form.getHasothername() == 2) {
 			basicinfo.setOtherfirstname(null);
 			basicinfo.setOtherfirstnameen(null);
