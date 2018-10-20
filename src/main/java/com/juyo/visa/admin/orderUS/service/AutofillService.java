@@ -412,13 +412,13 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid));
 		//离异时，需要结婚和离婚日期
 		if (info.getInt("marrystatus") == 2) {
-			//结婚日期(签证信息)
+			//结婚日期(家庭信息)
 			if (!Util.isEmpty(info.get("marrieddate"))) {
 				SpouseInfo.put("start_date", sdf.format(info.get("marrieddate")));
 			} else {
 				errorMsg += "结婚日期,";
 			}
-			//离婚日期
+			//离婚日期(家庭信息)
 			if (!Util.isEmpty(info.get("divorcedate"))) {
 				SpouseInfo.put("end_date", sdf.format(info.get("divorcedate")));
 			} else {
@@ -438,8 +438,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		} else {
 			SpouseInfo.put("end_date", "");
 		}*/
-		//离婚国家(签证信息)
 
+		//离婚国家(家庭信息)
 		if (!Util.isEmpty(info.get("divorcecountry"))) {
 			SpouseInfo.put("divorced_country", getCountrycode((String) info.get("divorcecountry")));
 		} else {
@@ -452,14 +452,15 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		} else {
 			errorMsg += "离异国家,";
 		}*/
-		//离婚原因(签证信息)
+
+		//离婚原因(家庭信息)
 		SpouseInfo.put("divorced_reason", "Incompatibility of temperament");
 		/*if (!Util.isEmpty(formerspouse) && !Util.isEmpty(formerspouse.getDivorceexplain())) {
 			SpouseInfo.put("divorced_reason", formerspouse.getDivorceexplain());
 		} else {
 			errorMsg += "离异原因,";
 		}*/
-		//配偶的联系地址(签证信息)
+		//配偶的联系地址(家庭信息)
 		if (!Util.isEmpty(info.get("spouseaddressen")) && !Util.eq(0, info.get("spouseaddressen"))) {
 			int spouseAddress = (int) info.get("spouseaddress");
 			if (spouseAddress == 1) {

@@ -197,6 +197,13 @@
 	
 	
 	<script type="text/javascript">
+	
+		if('${obj.passportinfo.issuedorganization}' == ''){
+			$("#issuedOrganization").val("公安部出入境管理局")
+		}
+		if('${obj.passportinfo.issuedorganizationen}' == ''){
+			$("#issuedOrganizationEn").val("MPS Exit & Entry Administration")
+		}
 		
 		$('.is-duishihuzhao').change(function() {
 			var v = $(this).val();

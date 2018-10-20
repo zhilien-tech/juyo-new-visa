@@ -13,14 +13,21 @@ class ClassifyPhoto {
     }
 
     oncePhoto(it) {
-        this.oncePhotoHandler($(it.selector), this.getClassifyList(it.numType)[0]['url']);
+        let item = this.getClassifyList(it.numType)
+        let _url = item.length === 0 ? '' : item[0]['url']
+        this.oncePhotoHandler(
+            $(it.selector), 
+            _url
+        );
     }
 
     multiplePhoto(it) {
         this.multiplePhotoHandler($(it.selector), this.getClassifyList(it.numType));
     }
 
-    getClassifyList(tp) {return this.credentials.filter(it => it.type === tp)};
+    getClassifyList(tp) {
+        return this.credentials.filter(it => it.type === tp);
+    };
 
     oncePhotoHandler($selector, path) {$selector.attr('src', path)};
 
