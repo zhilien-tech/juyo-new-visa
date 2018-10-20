@@ -83,11 +83,11 @@ public class TAppStaffFamilyinfoEntity implements Serializable {
 
 	@Column
 	@Comment("离婚国家")
-	private Date divorcecountry;
+	private String divorcecountry;
 
 	@Column
 	@Comment("离婚国家(英文)")
-	private Date divorcecountryen;
+	private String divorcecountryen;
 
 	@Column
 	@Comment("离婚原因")

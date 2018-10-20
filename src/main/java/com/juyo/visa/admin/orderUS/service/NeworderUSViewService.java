@@ -280,6 +280,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		result.put("familyinfo", familyinfo);
 		//日期处理
 		if (!Util.isEmpty(familyinfo.getMarrieddate())) {
 			result.put("marrieddate", sdf.format(familyinfo.getMarrieddate()));
@@ -365,6 +366,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid));
 		familyinfo.setMarrieddate(form.getMarrieddate());
 		familyinfo.setDivorcedate(form.getDivorcedate());
+		familyinfo.setDivorcecountry(form.getDivorcecountry());
+		familyinfo.setDivorcecountryen(form.getDivorcecountryen());
 		dbDao.update(familyinfo);
 
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid.longValue());

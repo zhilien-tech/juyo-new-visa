@@ -60,6 +60,10 @@ public class BasicinfoUSForm {
 
 	private Date divorcedate;
 
+	private String divorcecountry;
+
+	private String divorcecountryen;
+
 	/**手机号(英文)*/
 	private String telephoneen;
 

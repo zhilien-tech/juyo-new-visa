@@ -231,6 +231,13 @@
 									<input autocomplete="new-password" id="divorcedate" name="divorcedate" type="text" class="form-control input-sm" value="${obj.divorcedate }"/>
 								</div>
 							</div>
+							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
+								<div class="form-group marryexplain">
+									<label>离婚国家</label> 
+									<input autocomplete="new-password" id="divorcecountry" onchange="translateZhToEn(this,'divorcecountryen','')" name="divorcecountry" type="text" class="form-control input-sm" value="${obj.familyinfo.divorcecountry }"/>
+									<input type="hidden" id="divorcecountryen" name="divorcecountryen" value="${obj.familyinfo.divorcecountryen }"/>
+								</div>
+							</div>
 						</div>
 						<!-- 出生日期 && 出生国家 -->
 						<div class="row">
@@ -281,7 +288,7 @@
 						<div class="row">
 							<div class="col-sm-10 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
-									<label>邮寄地址是否跟居住地址 一样</label> 
+									<label>邮寄地址是否跟居住地址一样</label>
 									<div>
 										<span class="nameBeforeYes">
 											<input autocomplete="new-password" type="radio" name="ismailsamewithlive" class="mailinfo" value="1"/>是

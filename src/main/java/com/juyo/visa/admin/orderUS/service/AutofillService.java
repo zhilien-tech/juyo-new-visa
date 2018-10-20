@@ -385,8 +385,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//省份  没有
 		SpouseBirthplaceInfo.put("province", "");
 		//配偶的出生国家(签证信息)
-		if (!Util.isEmpty(info.get("spousecountryen"))) {
-			String country = getCountry((int) info.get("spousecountryen"));
+		if (!Util.isEmpty(info.get("spousecountry"))) {
+			String country = getCountry((int) info.get("spousecountry"));
 			SpouseBirthplaceInfo.put("country", country);
 		} else {
 			errorMsg += "配偶出生国家,";
@@ -401,8 +401,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			errorMsg += "配偶出生日期,";
 		}
 		//配偶的国籍(签证信息)
-		if (!Util.isEmpty(info.get("spousenationalityen"))) {
-			String country = getCountry((int) info.get("spousenationalityen"));
+		if (!Util.isEmpty(info.get("spousenationality"))) {
+			String country = getCountry((int) info.get("spousenationality"));
 			SpouseInfo.put("nationality", country);
 		} else {
 			errorMsg += "配偶国籍,";
@@ -732,8 +732,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				preaddressinfo.put("province", "");
 			}
 			//雇主国家(签证信息)
-			if (!Util.isEmpty(workEntity.getEmployercountryen())) {
-				String country = getCountry(workEntity.getEmployercountryen());
+			if (!Util.isEmpty(workEntity.getEmployercountry())) {
+				String country = getCountry(workEntity.getEmployercountry());
 				preaddressinfo.put("country", country);
 			} else {
 				preaddressinfo.put("country", "");
@@ -850,8 +850,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				addressinfo.put("province", "");
 			}
 			//国家(签证信息)
-			if (!Util.isEmpty(educationEntity.getInstitutioncountryen())) {
-				String country = getCountry(educationEntity.getInstitutioncountryen());
+			if (!Util.isEmpty(educationEntity.getInstitutioncountry())) {
+				String country = getCountry(educationEntity.getInstitutioncountry());
 				addressinfo.put("country", country);
 			} else {
 				errorMsg += "教育信息所在国家,";
