@@ -1683,6 +1683,11 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		addForm.setIssecuritynumberapplyen(IsYesOrNoEnum.YES.intKey());
 		addForm.setIstaxpayernumberapply(IsYesOrNoEnum.YES.intKey());
 		addForm.setIstaxpayernumberapplyen(IsYesOrNoEnum.YES.intKey());
+		addForm.setIsmailsamewithlive(IsYesOrNoEnum.YES.intKey());
+		addForm.setIsmailsamewithliveen(IsYesOrNoEnum.YES.intKey());
+		//国家默认为中国
+		addForm.setNationality("中国");
+		addForm.setNationalityen("China");
 
 		//中文翻译成拼音并大写工具
 		PinyinTool tool = new PinyinTool();
@@ -1718,10 +1723,16 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 			e1.printStackTrace();
 		}
 
+		//签发机关默认值
+		staffPassport.setIssuedorganization("公安部出入境管理局");
+		staffPassport.setIssuedorganizationen("MPS Exit & Entry Administration");
+
 		staffPassport.setIslostpassport(2);//创建护照信息时默认设置为2，没有丢失
 		staffPassport.setIslostpassporten(2);//创建护照信息时默认设置为2，没有丢失
 		staffPassport.setIsrememberpassportnum(2);//是否记得丢失的护照号码，默认为2不记得
 		staffPassport.setIsrememberpassportnumen(2);//是否记得丢失的护照号码，默认为2不记得
+		staffPassport.setLostpassportnum("不知道");
+		staffPassport.setLostpassportnum("I do not know");
 		TAppStaffPassportEntity passportEntity = dbDao.insert(staffPassport);
 		Integer passportId = passportEntity.getId();
 

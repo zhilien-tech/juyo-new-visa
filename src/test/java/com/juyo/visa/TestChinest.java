@@ -1,6 +1,11 @@
 package com.juyo.visa;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -8,9 +13,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import org.nutz.lang.util.NutMap;
-
-import com.juyo.visa.admin.order.entity.TIdcardEntity;
+import org.apache.commons.codec.binary.Base64;
 
 public class TestChinest {
 
@@ -18,7 +21,67 @@ public class TestChinest {
 
 	public static void main(String[] args) {
 
-		NutMap resultMap = new NutMap();
+		System.out.println(imgToBse64("http://oyu1xyxxk.bkt.clouddn.com/5dc3274f-204b-4336-bf57-985e09c7ca14..jpeg"));
+
+		/*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
+
+		Date firstDate = DateUtil.nowDate();
+		System.out.println(simpleDateFormat.format(firstDate));
+		long count = 0;
+		for (long i = 0; i < 10000; i++) {
+			for (int j = 0; j < 100000; j++) {
+				count += (i + j);
+			}
+		}
+		System.out.println(count);
+		Date nowDate = DateUtil.nowDate();
+		System.out.println(simpleDateFormat.format(nowDate));
+
+		long twoDatebetweenMillis = DateUtil.twoDatebetweenMillis(firstDate, nowDate);
+		System.out.println("twoDatebetweenMillis:" + twoDatebetweenMillis);
+
+		long millisBetween = DateUtil.millisBetween(firstDate, nowDate);
+		System.out.println(millisBetween);
+		if (millisBetween != 0 && millisBetween % 30000 == 0) {
+			System.out.println("进来了~~~~~~~~~");
+		}*/
+
+		/*Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-mm-dd");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("YYYY-MM-dd");
+		System.out.println(sdf.format(date));
+		System.out.println(sdf2.format(date));*/
+
+		/*String code = "QFmcqNtSVfyt5nINFegOXL8D9GOe4CcWCw7H8OAV7YloccdRUTYhFTHkESkk//N13YC6IJ6Hmunkwv6U6nKW/w==";
+		try {
+			String encode = URLEncoder.encode(code, "utf-8");
+			System.out.println(encode);
+		} catch (UnsupportedEncodingException e1) {
+
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+
+		}*/
+		/*String str = R.sg(5, 18).next();
+
+		System.out.println("str的值:" + str);
+		System.out.println("str的length:" + str.length());*/
+
+		/*ArrayList<Object> arrayList = new ArrayList<>();
+		System.out.println(arrayList);
+		System.out.println(Util.isEmpty(arrayList));
+
+		try {
+			String translate = TranslateUtil.translate("不清楚", "en");
+			System.out.println(translate);
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		*/
+		/*NutMap resultMap = new NutMap();
 		TIdcardEntity cardentity = new TIdcardEntity();
 		cardentity.setCity("北京");
 		cardentity.setProvince("北京");
@@ -43,7 +106,7 @@ public class TestChinest {
 
 		for (String key : resultMap.keySet()) {
 			System.out.println(key + ":" + ((TIdcardEntity) resultMap.get(key)).getCounty());
-		}
+		}*/
 
 		/*//转机
 		String goFlightNum = "首都机场-羽田机场-青森机场 CA181//JL141 0800/1300//1400/1600";
@@ -179,6 +242,35 @@ public class TestChinest {
 		System.out.println(System.currentTimeMillis() - start);
 		System.out.println("===========");
 		return list;
+	}
+
+	static String imgToBse64(String filePath) {
+		InputStream inputStream = null;
+		HttpURLConnection httpURLConnection = null;
+		byte[] data = null;
+		try {
+			URL url = new URL(filePath);//创建的URL  
+			if (url != null) {
+				httpURLConnection = (HttpURLConnection) url.openConnection();//打开链接  
+				httpURLConnection.setConnectTimeout(3000);//设置网络链接超时时间，3秒，链接失败后重新链接  
+				httpURLConnection.setDoInput(true);//打开输入流  
+				httpURLConnection.setRequestMethod("GET");//表示本次Http请求是GET方式  
+				int responseCode = httpURLConnection.getResponseCode();//获取返回码  
+				if (responseCode == 200) {//成功为200  
+					//从服务器获得一个输入流  
+					inputStream = httpURLConnection.getInputStream();
+					data = new byte[inputStream.available()];
+					inputStream.read(data);
+					inputStream.close();
+				}
+			}
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Base64.encodeBase64String(data);
 	}
 
 }

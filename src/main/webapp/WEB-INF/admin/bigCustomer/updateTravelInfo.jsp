@@ -38,6 +38,33 @@
 	width: 90%;
 	float: none;
 }
+.select2-container{
+	border: 1px solid #aaa;
+}
+input:focus{
+	border: none!important;
+
+	outline: 0;
+	border-color: #3087f1!important;
+	border: 1px solid #3087f1!important;
+	box-shadow: none!important;
+}
+.select2 input:focus{
+	border: none!important;
+
+	outline: 0;
+
+}
+.select2-container .select2-selection--multiple{
+	height: 28px!important;
+	min-height: 28px!important;
+}
+
+.select2-container .select2-search__field{
+	margin: 0!important;
+	margin-top: 5px!important;
+}
+
 </style>
 </head>
 <body>
@@ -63,19 +90,20 @@
 		<form id="travelinfo">
 			<div id="wrapper" class="section">
 				<div class="dislogHide"></div>
+				
 				<!--旅伴信息-->
 				<div class="companyInfoModule">
 					<div class="companyMain" style="margin-top: 10px;">
 						<div style="overflow: hidden;">
 							<div class="companyMainInfo groupRadioInfo" style="float: left;">
-								<input type="hidden" name="staffid" value="${obj.staffId }" /> <label><span
-									class="s">*</span> 是否与其他人同行</label> <input type="radio"
-									class="companyInfo" name="istravelwithother" value="1" />是 <input
+								<input autocomplete="new-password" type="hidden" name="staffid" value="${obj.staffId }" /> <label><span
+									class="s">*</span> 是否与其他人同行</label> <input autocomplete="new-password" type="radio"
+									class="companyInfo" name="istravelwithother" value="1" />是 <input autocomplete="new-password"
 									type="radio" class="companyInfo" name="istravelwithother"
 									style="margin-left: 20px;" value="2" checked />否
 							</div>
 							<div style="float: left; margin: 20px 0 0 185px;">
-								<a class="save companysave">添加</a>
+								<a class="save companysave" style="display:none;">添加</a>
 							</div>
 						</div>
 						<!--yes-->
@@ -88,30 +116,28 @@
 											class="teamnamefalseDiv teamnamefalseDivzh teamaddfalse teamnamefalseIndexDIV">
 											<div class="row">
 												<div class="col-sm-3">
-													<label><span class="s">*</span>同行人姓</label> <input
+													<label><span class="s">*</span>同行人姓</label> <input autocomplete="new-password"
 														id="firstname" name="firstname"
 														value="${companion.firstname}"
-														onchange="addSegmentsTranslateZhToPinYin(this,'firstnameen','')"
-														type="text" placeholder="同行人姓" />
+														type="text" placeholder="" />
 												</div>
 												<div class="col-sm-3">
-													<label><span class="s">*</span> 同行人名</label> <input
+													<label><span class="s">*</span> 同行人名</label> <input autocomplete="new-password"
 														id="lastname" name="lastname"
 														value="${companion.lastname}"
-														onchange="addSegmentsTranslateZhToPinYin(this,'lastnameen','')"
-														type="text" placeholder="同行人名" />
+														type="text" placeholder="" />
 												</div>
 												<div class="col-sm-3">
-													<label><span class="s">*</span> Surnames</label> <input
+													<label><span class="s">*</span> Surnames</label> <input autocomplete="new-password"
 														id="firstnameen" class="firstnameen"
 														value="${companion.firstnameen}" name="firstnameen"
-														type="text" placeholder="Surnames" />
+														type="text" placeholder="" />
 												</div>
 												<div class="col-sm-3">
-													<label><span class="s">*</span> Given Names</label> <input
+													<label><span class="s">*</span> Given Names</label> <input autocomplete="new-password"
 														id="lastnameen" class="lastnameen"
 														value="${companion.lastnameen}" name="lastnameen"
-														type="text" placeholder="Given Names" />
+														type="text" placeholder=" " />
 												</div>
 											</div>
 											<div class="row">
@@ -128,9 +154,9 @@
 													</select>
 												</div>
 												<div class="col-sm-3 youRelationship" style="display: none;">
-													<label><span class="s">*</span> 说明</label> <input
-														style="height: 34px;" id="explain" name="explain"
-														value="${companion.explain }" type="text" placeholder="" />
+													<label><span class="s">*</span> 说明</label> <input autocomplete="new-password"
+														style="height: 34px;padding-left:10px;" id="explain" name="explain"
+														value="${companion.companionexplain }" type="text" placeholder="" />
 												</div>
 											</div>
 											<div>
@@ -146,24 +172,24 @@
 										class="teamnamefalseDiv teamnamefalseDivzh teamaddfalse teamnamefalseIndexDIV">
 										<div class="row">
 											<div class="col-sm-3">
-												<label><span class="s">*</span>同行人姓</label> <input
+												<label><span class="s">*</span>同行人姓</label> <input autocomplete="new-password"
 													id="firstname" name="firstname" type="text"
-													placeholder="同行人姓" />
+													placeholder="" />
 											</div>
 											<div class="col-sm-3">
-												<label><span class="s">*</span> 同行人名</label> <input
+												<label><span class="s">*</span> 同行人名</label> <input autocomplete="new-password"
 													id="lastname" name="lastname" type="text"
-													placeholder="同行人名" />
+													placeholder="" />
 											</div>
 											<div class="col-sm-3">
-												<label><span class="s">*</span> Surnames</label> <input
+												<label><span class="s">*</span> Surnames</label> <input autocomplete="new-password"
 													id="firstnameen" class="firstnameen" name="firstnameen"
-													type="text" placeholder="Surnames" />
+													type="text" placeholder="" />
 											</div>
 											<div class="col-sm-3">
-												<label><span class="s">*</span> Given Names</label> <input
+												<label><span class="s">*</span> Given Names</label> <input autocomplete="new-password"
 													id="lastnameen" class="lastnameen" name="lastnameen"
-													type="text" placeholder="Given Names" />
+													type="text" placeholder=" " />
 											</div>
 										</div>
 										<div class="row">
@@ -180,8 +206,8 @@
 												</select>
 											</div>
 											<div class="col-sm-3 youRelationship" style="display: none;">
-												<label><span class="s">*</span> 说明</label> <input
-													style="height: 34px;" id="" name="" type="text"
+												<label><span class="s">*</span> 说明</label> <input autocomplete="new-password"
+													style="height: 34px;padding-left: 10px;" id="" name="" type="text"
 													placeholder="" />
 											</div>
 										</div>
@@ -219,9 +245,9 @@
 							<div style="height: 80px; margin-top: 20px;">
 								<div class="groupRadioInfo goUSPad paddingbottom-14"
 									style="float: left;">
-									<label><span class="s">*</span> 是否去过美国</label> <input
+									<label><span class="s">*</span> 是否去过美国</label> <input autocomplete="new-password"
 										type="radio" name="hasbeeninus" class="goUS" value="1" />是
-									<input type="radio" style="margin-left: 20px;"
+									<input autocomplete="new-password" type="radio" style="margin-left: 20px;"
 										name="hasbeeninus" class="goUS" value="2" checked />否
 								</div>
 							</div>
@@ -232,14 +258,14 @@
 									<div class="goUS_CountryDiv">
 										<div class="row">
 											<div class="col-sm-3 groupInputInfo">
-												<label><span class="s">*</span> 抵达日期</label> <input
+												<label><span class="s">*</span> 抵达日期</label> <input autocomplete="new-password"
 													type="text" id="arrivedate" value="${obj.arrivedate }"
 													name="arrivedate" class="datetimepickercss form-control"
 													placeholder="">
 											</div>
 											<div class="col-sm-3 groupInputInfo stopDate"
 												style="margin: 0;">
-												<label><span class="s">*</span> 停留时间</label> <input
+												<label><span class="s">*</span> 停留时间</label> <input autocomplete="new-password"
 													id="staydays" style="width: 50%; margin: 0;"
 													name="staydays" value="${obj.gousinfo.staydays }"
 													type="text" /> <select id="dateunit"
@@ -257,28 +283,29 @@
 								</div>
 
 								<div class="groupRadioInfo drivingUS">
-									<label><span class="s">*</span> 是否有美国驾照</label> <input
+									<label><span class="s">*</span> 是否有美国驾照</label> <input autocomplete="new-password"
 										type="radio" name="hasdriverlicense" class="license" value="1" />是
-									<input type="radio" style="margin-left: 20px;"
+									<input autocomplete="new-password" type="radio" style="margin-left: 20px;"
 										name="hasdriverlicense" class="license" value="2" checked />否
 								</div>
 								<div class="driverInfo elementHide">
 									<div class="driverYes">
 										<div class="goUS_drivers">
 											<div class="groupcheckBoxInfo driverMain">
-												<label><span class="s">*</span> 驾照号</label> <input
+												<label><span class="s">*</span> 驾照号</label> <input autocomplete="new-password"
+													style="width: 180px;"
 													id="driverlicensenumber"
 													value="${obj.driverinfo.driverlicensenumber }"
 													name="driverlicensenumber" type="text">
 												<%-- <c:if test="${driver.isknowdrivernumber == 1}">
-														<input id="isknowdrivernumber" class="isknowdrivernumber" onchange="AddSegment(this,'isknowdrivernumberen')" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" checked="checked" type="checkbox"/>
+														<input autocomplete="new-password"  id="isknowdrivernumber" class="isknowdrivernumber" onchange="AddSegment(this,'isknowdrivernumberen')" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" checked="checked" type="checkbox"/>
 													</c:if>
 													<c:if test="${driver.isknowdrivernumber != 1}">
-														<input id="isknowdrivernumber"  class="isknowdrivernumber" onchange="AddSegment(this,'isknowdrivernumberen')" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" type="checkbox"/>
+														<input autocomplete="new-password"  id="isknowdrivernumber"  class="isknowdrivernumber" onchange="AddSegment(this,'isknowdrivernumberen')" value="${driver.isknowdrivernumber }" name="isknowdrivernumber" type="checkbox"/>
 													</c:if> --%>
 											</div>
 											<div class="groupSelectInfo driverR paddingleft-15">
-												<label><span class="s">*</span> 哪个州的驾照</label> <select
+												<label style="margin-bottom: 10px;"><span class="s">*</span> 哪个州的驾照</label> <select
 													id="witchstateofdriver"
 													name="witchstateofdriver" class=" select2" multiple="multiple">
 													
@@ -306,8 +333,8 @@
 				<div class="visaUSMain">
 					<div>
 						<div class="groupRadioInfo" style="clear: both; margin-top: 10px;">
-							<label><span class="s">*</span> 是否有美国签证</label> <input
-								type="radio" name="isissuedvisa" class="visaUS" value="1" />是 <input
+							<label><span class="s">*</span> 是否有美国签证</label> <input autocomplete="new-password"
+								type="radio" name="isissuedvisa" class="visaUS" value="1" />是 <input autocomplete="new-password"
 								type="radio" style="margin-left: 20px;" name="isissuedvisa"
 								class="visaUS" value="2" checked />否
 						</div>
@@ -315,37 +342,38 @@
 							<div class="dateIssue goUS_visa">
 								<div class="row">
 									<div class="col-sm-3 groupInputInfo lastVisaDate">
-										<label><span class="s">*</span> 签发日期</label> <input
+										<label><span class="s">*</span> 签发日期</label> <input autocomplete="new-password"
 											id="issueddate" name="issueddate" value="${obj.issueddate}"
 											class="datetimepickercss form-control" placeholder=""
 											type="text" />
 									</div>
 									<div class="col-sm-4 groupcheckBoxInfo visaisnumber">
-										<label><span class="s">*</span> 签证号码</label> <input
+										<label><span class="s">*</span> 签证号码</label> <input autocomplete="new-password"
+											style="width: 180px;"
 											name="visanumber" class="visanumber"
 											value="${obj.tripinfo.visanumber }" type="text" />
-										<!-- <input id="idknowvisanumber" onchange="AddSingle(this,'idknowvisanumberen')" name="idknowvisanumber" v-on:click="idknowvisanumberChange" value="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/> -->
+										<!-- <input autocomplete="new-password" id="idknowvisanumber" onchange="AddSingle(this,'idknowvisanumberen')" name="idknowvisanumber" v-on:click="idknowvisanumberChange" value="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/> -->
 									</div>
 								</div>
 
 
 								<div class="clear"></div>
 								<div class="Alike groupRadioInfo paddingTop">
-									<label><span class="s">*</span> 本次是否申请同类的签证</label> <input
-										type="radio" name="isapplyingsametypevisa" value="1" />是 <input
+									<label><span class="s">*</span> 本次是否申请同类的签证</label> <input autocomplete="new-password"
+										type="radio" name="isapplyingsametypevisa" value="1" />是 <input autocomplete="new-password"
 										type="radio" style="margin-left: 20px;"
 										name="isapplyingsametypevisa" value="2" checked />否
 								</div>
 								<div class="paddingTop groupRadioInfo">
-									<label><span class="s">*</span> 是否采集过指纹</label> <input
-										type="radio" name="istenprinted" value="1" />是 <input
+									<label><span class="s">*</span> 是否采集过指纹</label> <input autocomplete="new-password"
+										type="radio" name="istenprinted" value="1" />是 <input autocomplete="new-password"
 										type="radio" style="margin-left: 20px;" name="istenprinted"
 										value="2" checked />否
 								</div>
 								<div class="paddingTop">
 									<div class="groupRadioInfo">
-										<label><span class="s">*</span> 是否丢失过美国签证</label> <input
-											type="radio" name="islost" class="lose" value="1" />是 <input
+										<label><span class="s">*</span> 是否丢失过美国签证</label> <input autocomplete="new-password"
+											type="radio" name="islost" class="lose" value="1" />是 <input autocomplete="new-password"
 											type="radio" style="margin-left: 20px;" name="islost"
 											class="lose" value="2" checked />否
 									</div>
@@ -354,9 +382,9 @@
 								<div class="paddingTop">
 									<div>
 										<div class="groupRadioInfo">
-											<label><span class="s">*</span> 是否被取消过</label> <input
+											<label><span class="s">*</span> 是否被取消过</label> <input autocomplete="new-password"
 												type="radio" name="iscancelled" class="revoke" value="1" />是
-											<input type="radio" style="margin-left: 20px;"
+											<input autocomplete="new-password" type="radio" style="margin-left: 20px;"
 												name="iscancelled" class="revoke" value="2" checked />否
 										</div>
 									</div>
@@ -368,24 +396,25 @@
 				<!--被拒绝过美国签证，或被拒绝入境美国，或撤回入境口岸的入境-->
 				<div class="paddingBottom">
 					<div class="groupRadioInfo" style="margin-top: 10px;">
-						<label><span class="s">*</span> 是否被拒签过</label> <input type="radio"
-							name="isrefused" class="refuse" value="1" />是 <input
+						<label><span class="s">*</span> 是否被拒签过</label> <input autocomplete="new-password" type="radio"
+							name="isrefused" class="refuse" value="1" />是 <input autocomplete="new-password"
 							type="radio" style="margin-left: 20px;" name="isrefused"
 							class="refuse" value="2" checked />否
 					</div>
 					<div class="refuseExplain grouptextareaInfo paddingTop-9">
-						<label><span class="s">*</span> 说明</label> <input
-							name="refusedexplain" style="width: 182px !important;"
-							class="areaInputPic" id='refusedexplain'
+						<label><span class="s">*</span> 说明</label> <input autocomplete="new-password"
+							name="refusedexplain" style="padding-left: 10px; width: 182px !important;"
+							class="areaInputPic" onchange="translateZhToEn(this,'refusedexplainen','')" id='refusedexplain'
 							value="${obj.tripinfo.refusedexplain }" />
+							<input type="hidden" id="refusedexplainen" name="refusedexplainen" value="${obj.tripinfo.refusedexplainen }"/>
 					</div>
 				</div>
 
 				<div class="paddingBottom">
 					<div class="groupRadioInfo drivingUS">
-						<label><span class="s">*</span> 是否在申请美国移民</label> <input
+						<label><span class="s">*</span> 是否在申请美国移民</label> <input autocomplete="new-password"
 							type="radio" class="isfiledimmigrantpetition"
-							name="isfiledimmigrantpetition" value="1" />是 <input
+							name="isfiledimmigrantpetition" value="1" />是 <input autocomplete="new-password"
 							type="radio" class="isfiledimmigrantpetition"
 							name="isfiledimmigrantpetition" style="margin-left: 20px;"
 							value="2" checked />否
@@ -410,10 +439,11 @@
 							</select>
 						</div>
 						<div class="col-sm-3 youRelationship">
-							<label><span class="s">*</span> 其他理由</label> <input
-								style="height: 34px;" id="immigrantpetitionexplain"
+							<label><span class="s">*</span> 其他理由</label> <input autocomplete="new-password"
+								style="height: 34px;padding-left: 10px" id="immigrantpetitionexplain" onchange="translateZhToEn(this,'immigrantpetitionexplainen','')"
 								value="${obj.tripinfo.immigrantpetitionexplain }"
 								name="immigrantpetitionexplain" type="text" placeholder="" />
+								<input id="immigrantpetitionexplainen" name="immigrantpetitionexplainen" type="hidden" value="${obj.tripinfo.immigrantpetitionexplainen }"/>
 						</div>
 					</div>
 				</div>
@@ -421,59 +451,69 @@
 				<div class="paddingBottom">
 					<div style="height: 70px;">
 						<div class="groupRadioInfo drivingUS" style="float: left;">
-							<label><span class="s">*</span> 是否有出境记录</label> <input
+							<label><span class="s">*</span> 是否有出境记录</label> <input autocomplete="new-password"
 								type="radio" class="istraveledanycountry"
-								name="istraveledanycountry" value="1" />是 <input type="radio"
+								name="istraveledanycountry" value="1" />是 <input autocomplete="new-password" type="radio"
 								class="istraveledanycountry" name="istraveledanycountry"
 								style="margin-left: 20px;" value="2" checked />否
 						</div>
 						<div style="float: left; margin: 20px 0 0 185px;">
-							<a class="save gocountrysave">添加</a>
+							<a class="save cjjlSave" style="display:none;">添加</a>
+							<!-- <a class="save">添加</a> -->
 						</div>
 					</div>
 					<div class="row saveOutboundContent">
-						<div class="col-sm-3 youRelationship ">
+						<div class="col-sm-3 youRelationship cjjlBox">
 						
-						<c:if test="${!empty obj.gocountry }">
-								<c:forEach var="gocountry" items="${obj.gocountry }">
-									<div class="travelCountry paddingTop groupInputInfo">
+							<c:if test="${!empty obj.gocountry }">
+									<c:forEach var="gocountry" items="${obj.gocountry }">
+										<div class="travelCountry paddingTop groupInputInfo">
+											<label>国家/地区</label>
+											<div class="groupInputInfo groupSelectInfo" style="position: relative;">
+												<input id="traveledcountry"  name="traveledcountry" value="${gocountry.traveledcountry}"/>
+												<a class="cjjlRemove"  onclick="cjjlRemove(this)" style="display: inline-block; position: absolute; right: -74px;top: 7px; border-radius: 6px; font-size: 12px; text-decoration: none; padding: 3px 15px; color: #FFFFFF; background: #ca1818; cursor: pointer;" >删除</a>
+												<%-- <select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
+													<c:forEach items="${obj.gocountryfivelist }" var="country">
+															<c:if test="${gocountry.traveledcountry != country.id}">
+																<option value="${country.id }">${country.chinesename }</option>
+															</c:if>
+															<c:if test="${gocountry.traveledcountry == country.id}">
+																<option value="${country.id }" selected="selected">${country.chinesename }</option>
+															</c:if>
+													</c:forEach>
+												</select> --%>
+											</div>
+										</div>
+									</c:forEach>
+								</c:if>
+								<c:if test="${empty obj.gocountry }">
+									<div class="paddingTop travelCountry groupInputInfo">
 										<label>国家/地区</label>
-										<div class="groupInputInfo groupSelectInfo">
-										
-											<select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
+										<div class="groupInputInfo groupSelectInfo" style="position: relative;">
+											<input autocomplete="new-password" name="traveledcountry" id="traveledcountry" type="text"/>
+											<a class="cjjlRemove"  onclick="cjjlRemove(this)" style="display: inline-block; position: absolute; right: -74px;top: 7px; border-radius: 6px; font-size: 12px; text-decoration: none; padding: 3px 15px; color: #FFFFFF; background: #ca1818; cursor: pointer;" >删除</a>
+											<%-- <select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
 												<c:forEach items="${obj.gocountryfivelist }" var="country">
-														<c:if test="${gocountry.traveledcountry != country.id}">
-															<option value="${country.id }">${country.chinesename }</option>
-														</c:if>
-														<c:if test="${gocountry.traveledcountry == country.id}">
-															<option value="${country.id }" selected="selected">${country.chinesename }</option>
-														</c:if>
+													<option value="${country.id }">${country.chinesename }</option>
 												</c:forEach>
-											</select>
+											</select> --%>
 										</div>
 									</div>
-								</c:forEach>
-							</c:if>
-							<c:if test="${empty obj.gocountry }">
-								<div class="paddingTop travelCountry groupInputInfo">
-									<label>国家/地区</label>
-									<div class="groupInputInfo groupSelectInfo">
-										<select name="traveledcountry" id='traveledcountry'  class="form-control input-sm select2" multiple="multiple" >
-											<c:forEach items="${obj.gocountryfivelist }" var="country">
-												<option value="${country.id }">${country.chinesename }</option>
-											</c:forEach>
-										</select>
-									</div>
-								</div>
-							</c:if>
+								</c:if>
+							
 						
+						
+							<!-- <div class="travelCountry paddingTop groupInputInfo">
+								<label>国家/地区</label>
+								<div class="groupInputInfo groupSelectInfo" style="position: relative;">
+									<input autocomplete="new-password" name="traveledcountry" id="traveledcountry" value="" type="text" />
+									<a class="cjjlRemove"  onclick="cjjlRemove(this)" style="display: inline-block; position: absolute; right: -74px;top: 7px; border-radius: 6px; font-size: 12px; text-decoration: none; padding: 3px 15px; color: #FFFFFF; background: #ca1818; cursor: pointer;" >删除</a>
+								</div>
+							</div> -->
 						</div>
-						<div class="col-sm-3">
-							<a class="removeChuJingJiLu cancel gocountrycancel"
-								style="margin-top: 40px; display: inline-block; border-radius: 6px; font-size: 12px; text-decoration: none; padding: 3px 15px; color: #FFFFFF; background: #ca1818; cursor: pointer;"
-								onclick="gocountrycancel">删除</a>
-						</div>
+						
 					</div>
+					<div style="height: 150px;"></div>
 				</div>
 				<!--以前的美国旅游信息END-->
 				<div style="height: 50px;"></div>
@@ -506,22 +546,28 @@
 <!-- 本页js -->
 <%-- <script src="${base}/admin/bigCustomer/visa/openPageYesOrNo.js"></script><!-- 本页面  打开默认开关 js -->
 	<script src="${base}/admin/bigCustomer/visa/visaGetInfoList.js"></script><!-- 本页面  获取一对多信息 js -->
-	<script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script><!-- 本页面 Vue加载页面内容 js -->
+	<!--<script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script>--><!-- 本页面 Vue加载页面内容 js -->
 	<script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js --> --%>
-<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js?v=<%=System.currentTimeMillis() %>"></script>
+	<script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js?v=<%=System.currentTimeMillis() %>"></script> 
 <!-- 本页面 初始化时间插件 js -->
 <script
 	src="${base}/admin/bigCustomer/updateTravelinfo.js?v=<%=System.currentTimeMillis() %>"></script>
+	<script src="${base}/references/common/js/pinyin.js?v=<%=System.currentTimeMillis() %>"></script>
 <!-- 本页面  js -->
 <script type="text/javascript">
+		
+
+			
 	
 		//是否与其他人同行
 		var istravelwithother = '${obj.travelwithother}';
 		$("input[name='istravelwithother'][value='" + istravelwithother + "']").attr("checked", 'checked');
         if (istravelwithother == 1) {
         	$(".teamnamefalse").show();
+        	$(".companysave").show();
 		} else {
 			$(".teamnamefalse").hide();
+			$(".companysave").hide();
 		}
 		//是否去过美国
 		var hasbeeninus = '${obj.tripinfo.hasbeeninus}';
@@ -531,6 +577,7 @@
 		} else {
 			$(".goUSInfo").hide();
 		}
+		
       	//是否有美国驾照
       	var hasdriverlicense = '${obj.tripinfo.hasdriverlicense}';
 		$("input[name='hasdriverlicense'][value='" + hasdriverlicense + "']").attr("checked", 'checked');
@@ -580,15 +627,45 @@
 		$("input[name='istraveledanycountry'][value='" + istraveledanycountry + "']").attr("checked", 'checked');
 		if (istraveledanycountry == 1) {
 			$(".travelCountry").show();
+			$('.cjjlSave').show();
 		} else {
 			$(".travelCountry").hide();
+			$('.cjjlSave').hide();
 		}
+
+		$('.istraveledanycountry').change(function() {
+			console.log($(this).val());
+
+			if ($(this).val() == 1) {
+				$('.cjjlSave').show();
+			} else {
+				$('.cjjlSave').hide();
+			}
+		});
 		
 		
 		//跳转到基本信息页
 		function workInfoBtn(){
 			save(2);
-        }
+		}
+		
+		function cjjlRemove(_this) {
+			console.log($('.cjjlBox').length);
+			if ($('.travelCountry ').length < 2) return 0;
+			$(_this).parent().parent().remove();
+		}
+		
+		let $temp = '<div class="travelCountry paddingTop groupInputInfo">' +
+						'<label>国家/地区</label>' +
+						'<div class="groupInputInfo groupSelectInfo" style="position: relative;">' +
+							'<input autocomplete="new-password" name="traveledcountry" id="traveledcountry" value="" type="text" />' +
+							'<a class="cjjlRemove" onclick="cjjlRemove(this)" style="display: inline-block; position: absolute; right: -74px;top: 7px; border-radius: 6px; font-size: 12px; text-decoration: none; padding: 3px 15px; color: #FFFFFF; background: #ca1818; cursor: pointer;" >删除</a>' +
+					'</div></div>';
+
+		$('.cjjlSave').click(ev => {
+			console.log('...emit');
+			$('.cjjlBox').append($temp);
+		});
         
         /** 2018_08_20 */
         let removeFun = (self, len) => {
@@ -596,20 +673,9 @@
             $(self).parent().parent().remove();
         };
 
-        let removeTongXingRen = self => {
-            let len = $('.removeTongXingRen').length;
-            removeFun(self, len);
-        };
-        
-        let removeDiDaDate = self => {
-            let len = $('.removeDiDaDate').length;
-            removeFun(self, len);
-        };
-
-        let removeChuJingJiLu = self => {
-            let len = $('.removeChuJingJiLu').length;
-            removeFun(self, len);
-        };
+        let removeTongXingRen = self => removeFun(self, $('.removeTongXingRen').length);
+        let removeDiDaDate = self => removeFun(self, $('.removeDiDaDate').length);
+        let removeChuJingJiLu = self => removeFun(self, $('.removeChuJingJiLu').length);
 	</script>
 </html>
 

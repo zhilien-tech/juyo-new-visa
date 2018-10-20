@@ -13,13 +13,12 @@
 <body>
 	
 	<img id="vcode" alt="" src="http://oyu1xyxxk.bkt.clouddn.com/9ee3d197-8c26-4ca5-a768-77959e0f5be0.jpg">
-	<form id="vcodeForm">
+	<form id="vcodeForm" onsubmit="return false;">
 		<div class="col-sm-4" style="margin-top:20px;margin-left:20px;">
-					<input type="text" id="vcode" name="vcode">	
-					<input id="backBtn" type="button"
-					onclick="closeWindow()"  value="确定" />	
-					</div>
-				</form>	
+			<input type="text" id="vcode" name="vcode" onkeypress="onkeyEnter()">	
+			<input id="backBtn" type="button" onclick="closeWindow()"  value="确定" />	
+		</div>
+	</form>
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
 	</script>
@@ -40,6 +39,7 @@ function closeWindow(){
 	$.ajax({
 		async: false,
 		type: 'POST',
+		dataType:"json",
 		data : vcodeForm,
 		url: '/admin/orderUS/returnVcode.html',
 		success :function(data) {

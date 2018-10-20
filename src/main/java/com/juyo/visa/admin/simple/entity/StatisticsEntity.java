@@ -13,5 +13,9 @@ public class StatisticsEntity implements Serializable {
 	private Integer disablepeople;
 	private Integer zhaobaoorder;
 	private Integer zhaobaopeople;
+	private Integer singleperson;
+	private Integer multiplayer;
+
+	;
 
 }

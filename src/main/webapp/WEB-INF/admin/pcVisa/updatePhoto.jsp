@@ -11,242 +11,469 @@
 <meta http-equlv="expires" content="0" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>拍摄资料</title>
-<link rel="stylesheet" href="/references/public/dist/newvisacss/css/photograph.css?v='20180510'" />
+<link rel="stylesheet"
+	href="/references/public/dist/newvisacss/css/photograph.css?v='20180510'" />
 <style>
-	.photo{
-		overflow: hidden;
-	}
-	.samplePhoto{
-		margin-right: 7%;
-	}
-	.explain{
-		width: auto;
-		float: right;
-		font-size: 12px;
-	}
-	.QRCode{
-		font-size: 12px;
-		height: 200px;
-		line-height: 200px;
-	}
-	.QRCode .text{float: left;margin-left: 40px;}
-	.QRCode .scan{
-		margin-top: 0;
-		margin-left: 70px;
-	}
-	.sectionHead{
-		margin-top: 20px;
-	}
-	.imgInfoRight{
-		width: 100%;
-		float: left;
-	}
+.imgInfoRight {
+	float: left !important;
+}
+
+.sectionHead {
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
 </style>
 </head>
 <body>
 	<div class="head">
-		<span>拍摄资料</span>
-		<input id="staffid" type="hidden" value="${obj.staffid }">
+		<span>拍摄资料</span> <input id="staffid" type="hidden"
+			value="${obj.staffid }"> <input id="passportId" type="hidden"
+			value="${obj.passportId }">
 		<div class="btnGroup">
-			<a class="btnSave" onclick="savePhoto()">保存</a> <a class="btnCancel" onclick="closeWindow()">取消</a>
+			<a class="btnSave" onclick="closeWindow()">保存</a> <a
+				class="btnCancel" onclick="closeWindow()">取消</a>
 		</div>
 	</div>
-	
-	<a id="toBase" class="rightNav" onclick="passportBtn();">
-		<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';color:#3c8dbc;">第二步</i>
+
+	<a id="toBase" class="rightNav" onclick="passportBtn();"> <i
+		style="position: absolute; top: 20%; width: 1.5em; left: 10px; font-family: 'microsoft yahei'; color: #3c8dbc;">第二步</i>
 		<span></span>
 	</a>
 	<div class="topHide"></div>
 	<div class="section">
 		<div class="dislogHide"></div>
 		<div class="QRCode">
-			<span class="text">微信扫描二维码上传识别</span>
-			<img class="scan" src="${obj.encodeQrCode }"  width="100%" height="auto"/>
+			<div class="explain">微信扫描二维码上传识别</div>
+			<div class="scan">
+				<img src="${obj.qrCode }" width="100%" height="auto" />
+			</div>
 		</div>
 		<!--二寸免冠照-->
 		<div class="photo">
 			<div class="sectionHead">照片</div>
+
 			<div class="samplePhoto">
-				<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-photo.jpg" />
+				<img class="sampleImg"
+					src="${base}/references/public/dist/newvisacss/img/icon-photo.jpg" />
 			</div>
-			<div id="uploadPhoto" class="uploadPhoto" >
+			<div id="uploadPhoto" class="uploadPhoto">
 				<div>上传</div>
-				<img id="twonichphoto" onclick="toUpperPhoto(this)" class="loadImg" src=""/>
+				<img id="twonichphoto" onclick="toUpperPhoto(this)" class="loadImg"
+					src="" />
 				<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 				<%-- <c:if test="${not empty obj.twoinchphoto }">
 					<img src="${obj.twoinchphoto }" class="loadImg" width="100%"
 						height="100%" />
 				</c:if> --%>
 			</div>
-			<div class="explain">
-				<span>资料要求：</span> 
-				<span>1.白底，51×51mm</span> 
-				<span>2.拍摄时注意光线均匀，不要佩戴眼镜，露出双耳</span> 
-				<span>3.请用纯色墙做背景，避免衣服与背景色相同</span>
-				<span>4.手机拍摄的照片会经过程序检测，但最终结果由签</span>
-				<span>5.证专家人工审核，请严格根据要求拍摄</span>
+			<div class="explain"
+				style="margin: 0; margin-left: 40px; padding-top: 20px;">
+				<span>二寸免冠照片注意事项</span> <span>1.白底</span> <span>2.摘掉帽子</span> <span>3.漏出耳朵</span>
 			</div>
-			<!-- <input type="file" id="uploadFileImg" class="publicFile uploadFileImg" name="uploadFileImg" /> -->
+
+
 		</div>
 		<!--护照首页-->
-		<div class="passport">
+		<div class="passport" style="padding-top: 10px !important;">
 			<div class="sectionHead">护照首页</div>
-			<div class="explain"></div>
+			<!-- <div class="explain"></div> -->
 			<div class="samplePassport">
-				<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-visa.jpg" />
+				<img class="sampleImg"
+					src="${base}/references/public/dist/newvisacss/img/icon-visa.jpg" />
 			</div>
 			<div class="uploadPassport alignment">
 				<div>上传</div>
-				<img id = "huzhao" onclick="toUpperPhoto(this)" class="transverseImg" src=""/>
+				<img id="huzhao" onclick="toUpperPhoto(this)" class="transverseImg"
+					src="" />
 			</div>
-			<div class="explain">
-				<span>资料要求：</span> 
-				<span>拍摄的字体清晰可见、不要反光</span> 
+			<div class="explain"
+				style="margin: 0; margin-left: 40px; padding-top: 20px;">
+				<span>资料要求:</span> <span>1.拍摄的字体清晰可见、不要反光</span>
 			</div>
 			<input type="file" class="publicFile" name="" />
+
 		</div>
-		
+		<!--旧护照-->
+		<div class="passport">
+			<div class="sectionHead">旧护照</div>
+			<!-- <div class="explainLeft"></div> -->
+			<div class="imgInfoRight">
+				<div class="samplePassportImg">
+					<img class="sampleImg"
+						src="${base}/references/public/dist/newvisacss/img/icon-visa.jpg" />
+				</div>
+				<div class="beforeInfo"></div>
+				<div class="uploadPassports oldpassports alignment">
+					<div>上传</div>
+					<img id="oldhuzhao" onclick="toUpperPhoto(this)"
+						class="transverseImg" src="" />
+				</div>
+				<input type="file" class="publicFile" name="" />
+			</div>
+
+		</div>
+		<!--身份证-->
+		<div class="passport">
+			<div class="sectionHead">身份证</div>
+			<!-- <div class="explainLeft"></div> -->
+			<div class="imgInfoRight">
+				<div class="samplePassportImg">
+					<img class="sampleImg"
+						src="${base}/references/public/dist/newvisacss/img/icon-ID.jpg" />
+				</div>
+				<!-- <div class="beforeIDInfo"></div> -->
+				<div class="uploadPassports alignment">
+					<div>上传</div>
+					<img id="card" onclick="toUpperPhoto(this)" src=""
+						class="transverseImg" src="">
+				</div>
+				<div class="samplePassportImg">
+					<img class="sampleImg"
+						src="${base}/references/public/dist/newvisacss/img/icon-IDBack.jpg" />
+				</div>
+				<div class="uploadPassports alignment">
+					<div>上传</div>
+					<img id="cardBack" onclick="toUpperPhoto(this)" src=""
+						class="transverseImg" src="">
+				</div>
+			</div>
+		</div>
 		<!--户口本-->
-		<div class="huKouBook">
+		<div class="huKouBook" style="padding-top: 10px !important;">
 			<div class="sectionHead">户口本</div>
-			<!-- 首页 -->
+			<!-- <div class="explain"></div> -->
 			<div class="imgInfoRight">
 				<div class="sampleReleaseImg householdBack">
-					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-hold.jpeg" />
+					<img class="sampleImg"
+						src="${base}/references/public/dist/newvisacss/img/icon-hold.jpeg" />
 				</div>
-				<div class="uploadReleases" style="margin-right: 10px;">
-					<div>首页</div>
-					<img id="household" onclick="toUpperPhoto(this)" class="longitudinal" src=""/>
+				<!-- <div class="beforeHuKouInfo"></div> -->
+
+
+				<div class="uploadReleases  household-group">
+					<div>户主页</div>
+					<img id="household" onclick="toUpperPhoto(this)"
+						class="longitudinal" src="" />
 				</div>
-				<div class="explain" style="margin-right: 0;">
-					<span>资料要求：</span> 
-					<span>1.家庭户口的：拍摄整本户口本的所有页</span> 
-					<span>2.集体户口的：拍摄申请人本人页</span>
-					<span>3.要保证照片上的字体清晰可见，露出四个边角，不要压边拍摄</span>
+
+
+
+				<input type="file" class="publicFile" name="" multiple />
+			</div>
+		</div>
+		<!--房产证-->
+		<div class="huKouBook">
+			<div class="sectionHead">房产证</div>
+			<!-- <div class="explain"></div> -->
+			<div class="imgInfoRight">
+				<div class="sampleReleaseImg hoursecardMain">
+					<img
+						src="${base}/references/public/dist/newvisacss/img/icon-card.jpg"
+						width="100%" height="100%" />
+				</div>
+				<!-- <div class="beforeHouseInfo"></div> -->
+				<div class="uploadReleases hoursecardMain housecard 1 house-group">
+					<div>上传</div>
+					<img onclick="toUpperPhoto(this)" id="" class="longitudinal" src="" />
+				</div>
+
+				<!-- <div class="housecardAnother">
+					<div class="housecardInfo">
+						<div class="housecardL">
+							<label>产权人</label>
+							<input id="propertyholder" readonly="readonly" type="text" class="writter" >
+						</div>
+						<div class="housecardR">
+							<label>面积</label>
+							<input id="area" readonly="readonly" type="text" class="writter" />
+						</div>
+						<div class="areaMetre">平米</div>
+					</div>
+					<div class="housecardAddressInfo">
+						<label>地址</label>
+						<input id="address" readonly="readonly" type="text" class="writter"> 
+					</div>
+				</div> -->
+			</div>
+		</div>
+		<!--婚姻状况-->
+		<div class="huKouBook" style="padding-top: 10px !important;">
+			<div class="sectionHead">婚姻状况</div>
+			<!-- <div class="explain"></div> -->
+			<div class="imgInfoRight">
+				<div class="sampleReleaseImg">
+					<img class="sampleImg"
+						src="${base}/references/public/dist/newvisacss/img/icon-marry.jpeg" />
+				</div>
+				<div class="uploadReleases">
+					<div>上传</div>
+					<img onclick="toUpperPhoto(this)" id="marray" class="longitudinal"
+						src="" />
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
-			</div>		
-			<!-- 户主页 -->
+			</div>
+		</div>
+		<!--银行流水-->
+		<div class="passport">
+			<div class="sectionHead">银行流水</div>
+			<!-- <div class="explainLeft"></div> -->
 			<div class="imgInfoRight">
-				<div class="sampleReleaseImg householdBack">
-					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-hold.jpeg" />
+				<div
+					class="samplePassportImg bankGroup bankflow_moreImaage_WX_jssdk">
+					<img class="sampleImg"
+						src="${base}/references/public/dist/newvisacss/img/icon-bank.jpeg" />
 				</div>
-				<div class="uploadReleases" style="margin-right: 10px;">
-					<div>户主页</div>
-					<img id="household" onclick="toUpperPhoto(this)" class="longitudinal" src=""/>
+			</div>
+			<div class="uploadReleases hoursecardMain housecard bank-group">
+				<div>上传</div>
+				<img id="" class="longitudinal" src="" />
+			</div>
+		</div>
+		<%-- <div class="huKouBook">
+			<div class="sectionHead">银行流水</div>
+			<!-- <div class="explain"></div> -->
+			<div class="imgInfoRight">
+				<div class="sampleReleaseImg bankflow_moreImaage_WX_jssdk">
+					<img src="${base}/references/public/dist/newvisacss/img/icon-bank.jpeg" />
+				</div>
+				<!-- <div class="beforeBankInfo"></div> -->
+				<div class="uploadReleases" >
+					<div>上传</div>
+					<img class="longitudinal"  />
+				</div>
+			</div>	
+		</div> --%>
+		<!--在职证明-->
+		<div class="huKouBook" style="padding-top: 10px !important;">
+			<div class="sectionHead">在职证明</div>
+			<!-- <div class="explain"></div> -->
+			<div class="imgInfoRight">
+				<div class="sampleReleaseImg jobwidth">
+					<img class="sampleImg"
+						src="${base}/references/public/dist/newvisacss/img/icon-job.jpeg" />
+				</div>
+				<!-- <div class="beforeJobInfo"></div> -->
+				<div class="uploadReleases jobwidth">
+					<div>上传</div>
+					<img onclick="toUpperPhoto(this)" id="jobCertificate"
+						class="sampleImg" src="" />
+				</div>
+				<input type="file" class="publicFile" name="" multiple />
+			</div>
+		</div>
+		<!--营业执照或机构代码证-->
+		<div class="huKouBook">
+			<div class="sectionHead">营业执照或机构代码证</div>
+			<!-- <div class="explain"></div> -->
+			<div class="imgInfoRight">
+				<div class="sampleReleaseImg businesswidth">
+					<img class="sampleImg"
+						src="${base}/references/public/dist/newvisacss/img/icon-business.jpeg" />
+				</div>
+				<!-- <div class="beforeOZCardInfo"></div> -->
+				<div class="uploadReleases businesswidth">
+					<div>上传</div>
+					<img onclick="toUpperPhoto(this)" id="business" class="sampleImg"
+						src="" />
+				</div>
+				<input type="file" class="publicFile" name="" multiple />
+			</div>
+		</div>
+		<!--行驶证-->
+		<div class="passport">
+			<div class="sectionHead">行驶证</div>
+			<!-- <div class="explainLeft"></div> -->
+			<div class="imgInfoRight">
+				<div class="samplePassportImg driverGroup">
+					<img class="sampleImg"
+						src="${base}/references/public/dist/newvisacss/img/icon-driver.jpg" />
+				</div>
+				<!-- <div class="beforeIDInfo"></div> -->
+				<div class="uploadPassports driverface alignment">
+					<div>上传</div>
+					<img onclick="toUpperPhoto(this)" id="drive" src=""
+						class="transverseImg" src="">
+				</div>
+				<!-- <div class="uploadPassports driverback alignment" >
+					<div>上传</div>
+					<img id="drive2" src="" class="transverseImg" >
+				</div> -->
+				<input type="file" class="publicFile" name="" multiple />
+			</div>
+		</div>
+
+		<%-- <div class="huKouBook">
+			<div class="sectionHead">行驶证</div>
+			<!-- <div class="explain"></div> -->
+			<div class="imgInfoRight">
+				<div class="sampleReleaseImg">
+					<img src="${base}/references/public/dist/newvisacss/img/hukouBook.png" />
+				</div>
+				<!-- <div class="beforeDriverInfo"></div> -->
+				<div class="uploadReleases" >
+					<div>上传</div>
+					<img id="drive" class="longitudinal" />
+				</div>
+				<div class="uploadReleases" >
+					<div>上传</div>
+					<img id="drive2" class="longitudinal" />
 				</div>
 				
-				<input type="file" class="publicFile" name="" multiple />
-			</div>		
-			<!-- 本人页 -->
+			</div>
+		</div> --%>
+		<!--过期美签-->
+		<div class="huKouBook">
+			<div class="sectionHead">过期美签</div>
+			<!-- <div class="explain"></div> -->
 			<div class="imgInfoRight">
-				<div class="sampleReleaseImg householdBack">
-					<img class="sampleImg" src="${base}/references/public/dist/newvisacss/img/icon-hold.jpeg" />
+				<div class="sampleReleaseImg oldsigned_moreImaage_WX_jssdk">
+					<img class="sampleImg"
+						src="${base}/references/public/dist/newvisacss/img/icon-overdue.jpeg" />
 				</div>
-				<div class="uploadReleases" style="margin-right: 10px;">
-					<div>本人页</div>
-					<img id="household" onclick="toUpperPhoto(this)" class="longitudinal" src=""/>
+				<!-- <div class="beforeOverdueInfo"></div> -->
+				<div class="uploadReleases expire-group">
+					<div>上传</div>
+					<img onclick="" class="longitudinal" src="" />
+				</div>
+			</div>
+		</div>
+		<!--美国出签-->
+		<div class="huKouBook" style="padding-top: 10px !important;">
+			<div class="sectionHead">美国出签</div>
+			<!-- <div class="explain"></div> -->
+			<div class="imgInfoRight">
+				<div class="sampleReleaseImg">
+					<img class="sampleImg"
+						src="${base}/references/public/dist/newvisacss/img/icon-overdue.jpeg" />
+				</div>
+				<!-- <div class="beforeSignInfo"></div> -->
+				<div class="uploadReleases">
+					<div>上传</div>
+					<img onclick="toUpperPhoto(this)" id="chuqian" class="longitudinal"
+						src="" />
 				</div>
 				<input type="file" class="publicFile" name="" multiple />
-			</div>		
+			</div>
 		</div>
+
 	</div>
 </body>
-<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+<script
+	src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 <script src="/references/common/js/layer/layer.js"></script>
 <script type="text/javascript" src="/admin/common/commonjs.js"></script>
 <script src="/appmobileus/js/jquery-1.10.2.js"></script>
 <script src="/appmobileus/js/lrz.bundle.js"></script>
-<script src="/admin/pcVisa/getphoto.js"></script>
+<script src="/admin/pcVisa/photoGroups.js"></script>
+<script src="/admin/pcVisa/ClassifyPhoto.js"></script>
 <script>
 	var staffid = '${obj.staffid}';
-	$(function() {
-		//页面不可编辑
-		/* if(isDisable == 1){
-			$(".section").attr('readonly', true);
-			$(".dislogHide").show();
-			$(".btnSave").hide();
-		} */
-		
-		twonichphoto(staffid,13);
-		chuqian(staffid,12);
-		huzhao(staffid,1);
-		oldhuzhao(staffid,2);
-		card(staffid,3);
-		marray(staffid,6);
-		business(staffid,9);
-		drive(staffid,10);
-		jobCertificate(staffid,8);
-		housecard(staffid,5);
-		household(staffid,4);
-		bankflow(staffid,7);
-		oldsigned(staffid,11);
-		
-		$(".uploadPhoto").click(function(){
-			$("#uploadFileImg").click();
-			$("#uploadFileImg").change(function(){
-				layer.load(1,{
-					shade : "#000"
-				});
-				var that = this;
-	            lrz(this.files[0])
-	            	.then(function (rst) {
-	                /* $('.bacimg2').attr('src',rst.base64);*/
-	                $('#upload').hide(); 
-	                // 处理成功会执行
-	                sourceSize = (that.files[0].size / 1024).toFixed(2);
-	                resultSize = (rst.fileLen / 1024).toFixed(2);
-	                scale = parseInt(100 - (resultSize / sourceSize * 100));
-	                rst.formData.append('uploadFileImg',rst.file);
-	                uploadPositive(rst,rst.formData,staffid); 
-	            }).catch(function (err) {
-	                console.log(err);
-	            });
-			});
-		})
-	});
-	
-	function toUpperPhoto(photo){
-		var url = $(photo).attr("src");
-		if(url != ""){
-			window.open('/admin/pcVisa/toUpperPhoto.html?url='+url);
-		}
+	if('${obj.credentials}' != '[]'){
+		new ClassifyPhoto(JSON.parse('${obj.credentials}')).init(photoGroups);
 	}
+
+		$(function() {
+			
+			//页面不可编辑
+			// if(isDisable == 1){
+			// 	$(".section").attr('readonly', true);
+			// 	$(".dislogHide").show();
+			// 	$(".btnSave").hide();
+			// }
+			
+			// twonichphoto(staffid,13);
+			// chuqian(staffid,12);
+			// huzhao(staffid,1);
+			// oldhuzhao(staffid,2);
+			// card(staffid,3);
+			// marray(staffid,6);
+			// business(staffid,9);
+			// drive(staffid,10);
+			// jobCertificate(staffid,8);
+			// housecard(staffid,5);
+			// household(staffid,4);
+			// bankflow(staffid,7);
+			// oldsigned(staffid,11);
+			
+			$(".uploadPhoto").click(function(){
+				$("#uploadFileImg").click();
+				$("#uploadFileImg").change(function(){
+					layer.load(1,{
+						shade : "#000"
+					});
+					var that = this;
+					lrz(this.files[0])
+						.then(function (rst) {
+						/* $('.bacimg2').attr('src',rst.base64);*/
+						$('#upload').hide(); 
+						// 处理成功会执行
+						sourceSize = (that.files[0].size / 1024).toFixed(2);
+						resultSize = (rst.fileLen / 1024).toFixed(2);
+						scale = parseInt(100 - (resultSize / sourceSize * 100));
+						rst.formData.append('uploadFileImg',rst.file);
+						uploadPositive(rst,rst.formData,staffid); 
+					}).catch(function (err) {
+						console.log(err);
+					});
+				});
+			})
+		});
+		
+		function toUpperPhoto(photo){
+			var url = $(photo).attr("src");
+			if(url != ""){
+				window.open('/admin/pcVisa/toUpperPhoto.html?url='+url);
+			}
+		}
+
+		//返回
+		function closeWindow() {
+			parent.successCallback(2);
+			var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+			parent.layer.close(index);
+		}
+		
+		//连接websocket
+		// connectWebSocket();
+		function connectWebSocket() {
+			if ('WebSocket' in window) {
+				console.log('Websocket supported');
+				socket = new WebSocket(
+						'ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');
 	
-	//连接websocket
-	connectWebSocket();
-	function connectWebSocket() {
-		if ('WebSocket' in window) {
-			console.log('Websocket supported');
-			socket = new WebSocket(
-					'wss://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');
-
-			console.log('Connection attempted');
-
-			socket.onopen = function() {
-				console.log('Connection open!');
-				//setConnected(true);  
-			};
-
-			socket.onclose = function() {
-				console.log('Disconnecting connection');
-			};
-
-			socket.onmessage = function(state) {
-				if (state.data==200) {
+				console.log('Connection attempted');
+	
+				socket.onopen = function() {
+					console.log('Connection open!');
+					//setConnected(true);  
+				};
+	
+				socket.onclose = function() {
+					console.log('Disconnecting connection');
+				};
+	
+				socket.onmessage = function(state) {
+					var messageStr = JSON.parse(state.data);
+				if (messageStr.applyid == staffid) {
 					window.location.reload();
 				}
-				console.log('message received!');
-				//showMessage(received_msg);  
-			};
-
-		} else {
-			console.log('Websocket not supported');
+					console.log('message received!');
+					//showMessage(received_msg);  
+				};
+	
+			} else {
+				console.log('Websocket not supported');
+			}
 		}
+		
+		//取消关闭窗口
+	function closeWindow() {
+		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+		parent.layer.close(index);
 	}
 	
 	function passportBtn(){
-		saveApplicant(2);
+		window.location.href = '/admin/neworderUS/updateBaseInfo.html?staffid='+staffid;
 	}
-</script>
+	</script>
 </html>

@@ -2,12 +2,13 @@
  * AutofillService.java
  * com.juyo.visa.admin.orderUS.service
  * Copyright (c) 2018, 北京科技有限公司版权所有.
-*/
+ */
 
 package com.juyo.visa.admin.orderUS.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,19 +28,20 @@ import com.juyo.visa.entities.TAppStaffGocountryEntity;
 import com.juyo.visa.entities.TAppStaffGousinfoEntity;
 import com.juyo.visa.entities.TAppStaffImmediaterelativesEntity;
 import com.juyo.visa.entities.TAppStaffLanguageEntity;
-import com.juyo.visa.entities.TAppStaffOrderUsEntity;
 import com.juyo.visa.entities.TAppStaffOrganizationEntity;
+import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
-import com.juyo.visa.entities.TUsStateEntity;
+import com.juyo.visa.entities.TStateUsEntity;
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.service.BaseService;
 
 @IocBean
 public class AutofillService extends BaseService<TOrderUsEntity> {
 
-	public Map<String, Object> getData(int orderid) {
+	public Map<String, Object> getData(int orderid, int staffid) {
 		//最终接收数据Map(包括所需数据和错误信息)
 		Map<String, Object> result = Maps.newHashMap();
 		//所需数据Map
@@ -48,10 +50,6 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		String errorMsg = "";
 		//格式化日期
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		TAppStaffOrderUsEntity stafforderus = dbDao.fetch(TAppStaffOrderUsEntity.class,
-				Cnd.where("orderid", "=", orderid));
-		//人员id
-		Integer staffid = stafforderus.getStaffid();
 		//查询所需数据（除了一对多）
 		String sqlStr = sqlManager.get("getAutofilldata");
 		Sql infosql = Sqls.create(sqlStr);
@@ -73,13 +71,25 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			}
 		}
 		//出生日期，从护照信息里取
+		//计算年龄，未满14周岁的不需要面签，不用具体离开美国的日期
+		String date2String = sdf.format(new Date());
+		int yearsBetween = 0;
+
 		if (!Util.isEmpty(info.get("taspbirthday"))) {
 			BaseInfo.put("date_of_birth", sdf.format(info.get("taspbirthday")));
+			yearsBetween = DateUtil.yearsBetween(sdf.format(info.get("taspbirthday")), date2String);
 		} else {
 			errorMsg += "护照出生日期,";
 		}
+		System.out.println("yearsBetween:" + yearsBetween);
 		//国籍，默认为中国
-		BaseInfo.put("nationality", "CHIN");
+		//BaseInfo.put("nationality", "CHIN");
+		if (!Util.isEmpty(info.get("tasbnationality"))) {
+			BaseInfo.put("nationality", getCountrycode((String) info.get("tasbnationality")));
+		} else {
+			BaseInfo.put("nationality", "CHIN");
+		}
+
 		//身份证号
 		if (!Util.isEmpty(info.get("cardId"))) {
 			BaseInfo.put("ic", info.get("cardId"));
@@ -190,19 +200,25 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//BirthplaceInfo
 		Map<String, Object> BirthplaceInfo = Maps.newHashMap();
 		//出生城市(基本信息)
-		if (!Util.isEmpty(info.get("cardcity"))) {
-			BirthplaceInfo.put("city", info.get("cardcity"));
+		if (!Util.isEmpty(info.get("cardcityen"))) {
+			BirthplaceInfo.put("city", info.get("cardcityen"));
 		} else {
 			errorMsg += "出生城市,";
 		}
 		//出生省份(基本信息)
-		if (!Util.isEmpty(info.get("cardprovince"))) {
-			BirthplaceInfo.put("province", info.get("cardprovince"));
+		if (!Util.isEmpty(info.get("cardprovinceen"))) {
+			BirthplaceInfo.put("province", info.get("cardprovinceen"));
 		} else {
 			errorMsg += "出生省份,";
 		}
 		//出生国家,默认为中国
-		BirthplaceInfo.put("country", "CHIN");
+		if (!Util.isEmpty(info.get("birthcountry"))) {
+			BirthplaceInfo.put("country", getCountrycode((String) info.get("birthcountry")));
+		} else {
+			//errorMsg += "出生国家,";
+			BirthplaceInfo.put("country", "CHIN");
+		}
+		//BirthplaceInfo.put("country", "CHIN");
 
 		BaseInfo.put("BirthplaceInfo", BirthplaceInfo);
 
@@ -210,30 +226,35 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		//FamilyInfo
 		Map<String, Object> FamilyInfo = Maps.newHashMap();
-		//备用电话  不清楚
+		//备用电话  不清楚  测试为空
 		FamilyInfo.put("family_phone", "");
 		//AddressInfo
 		Map<String, Object> AddressInfo = Maps.newHashMap();
 		//详细地址(基本信息)
-		if (!Util.isEmpty(info.get("detailedaddress"))) {
-			AddressInfo.put("street", info.get("detailedaddress"));
+		if (!Util.isEmpty(info.get("detailedaddressen"))) {
+			AddressInfo.put("street", info.get("detailedaddressen"));
 		} else {
 			errorMsg += "街道,";
 		}
 		//现居住城市(基本信息)
-		if (!Util.isEmpty(info.get("tasbcity"))) {
-			AddressInfo.put("city", info.get("tasbcity"));
+		if (!Util.isEmpty(info.get("tasbcityen"))) {
+			AddressInfo.put("city", info.get("tasbcityen"));
 		} else {
 			errorMsg += "城市,";
 		}
 		//现居住省份(基本信息)
-		if (!Util.isEmpty(info.get("tasbprovince"))) {
-			AddressInfo.put("province", info.get("tasbprovince"));
+		if (!Util.isEmpty(info.get("tasbprovinceen"))) {
+			AddressInfo.put("province", info.get("tasbprovinceen"));
 		} else {
 			errorMsg += "省份,";
 		}
-		AddressInfo.put("country", "CHIN");
-		//邮政编码  没有
+		//现居住国家，默认中国
+		if (!Util.isEmpty(info.get("nowcountry"))) {
+			AddressInfo.put("country", getCountrycode((String) info.get("nowcountry")));
+		} else {
+			AddressInfo.put("country", "CHIN");
+		}
+		//邮政编码  没有  测试为空
 		AddressInfo.put("zip_code", "");
 		FamilyInfo.put("AdderssInfo", AddressInfo);
 
@@ -355,10 +376,11 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> SpouseBirthplaceInfo = Maps.newHashMap();
 
 		//配偶的出生城市(签证信息)
-		if (!Util.isEmpty(info.get("spousecity"))) {
-			SpouseBirthplaceInfo.put("city", info.get("spousecity"));
+		if (!Util.isEmpty(info.get("spousecityen"))) {
+			SpouseBirthplaceInfo.put("city", info.get("spousecityen"));
 		} else {
-			SpouseBirthplaceInfo.put("city", "");
+			//SpouseBirthplaceInfo.put("city", "");
+			errorMsg += "配偶出生省份,";
 		}
 		//省份  没有
 		SpouseBirthplaceInfo.put("province", "");
@@ -388,37 +410,74 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//查询前妻数据
 		TAppStaffFormerspouseEntity formerspouse = dbDao.fetch(TAppStaffFormerspouseEntity.class,
 				Cnd.where("staffid", "=", staffid));
-		//结婚日期(签证信息)
-		SpouseInfo.put("start_date", "");
+		//离异时，需要结婚和离婚日期
+		if (info.getInt("marrystatus") == 2) {
+			//结婚日期(家庭信息)
+			if (!Util.isEmpty(info.get("marrieddate"))) {
+				SpouseInfo.put("start_date", sdf.format(info.get("marrieddate")));
+			} else {
+				errorMsg += "结婚日期,";
+			}
+			//离婚日期(家庭信息)
+			if (!Util.isEmpty(info.get("divorcedate"))) {
+				SpouseInfo.put("end_date", sdf.format(info.get("divorcedate")));
+			} else {
+				errorMsg += "离婚日期,";
+			}
+		}
+		//SpouseInfo.put("start_date", "");
 		/*if (!Util.isEmpty(formerspouse) && !Util.isEmpty(formerspouse.getMarrieddate())) {
 			SpouseInfo.put("start_date", sdf.format(formerspouse.getMarrieddate()));
 		} else {
 			SpouseInfo.put("start_date", "");
 		}*/
 		//离婚日期(签证信息)
-		SpouseInfo.put("end_date", "");
+		//SpouseInfo.put("end_date", "");
 		/*if (!Util.isEmpty(formerspouse) && !Util.isEmpty(formerspouse.getDivorcedate())) {
 			SpouseInfo.put("end_date", sdf.format(formerspouse.getDivorcedate()));
 		} else {
 			SpouseInfo.put("end_date", "");
 		}*/
-		//离婚国家(签证信息)
-		SpouseInfo.put("divorced_country", "");
+
+		//离婚国家(家庭信息)
+		if (!Util.isEmpty(info.get("divorcecountry"))) {
+			SpouseInfo.put("divorced_country", getCountrycode((String) info.get("divorcecountry")));
+		} else {
+			SpouseInfo.put("divorced_country", "CHIN");
+		}
+
+		//SpouseInfo.put("divorced_country", "CHIN");
 		/*if (!Util.isEmpty(formerspouse) && !Util.isEmpty(formerspouse.getDivorce())) {
 			SpouseInfo.put("divorced_country", formerspouse.getDivorce());
 		} else {
 			errorMsg += "离异国家,";
 		}*/
-		//离婚原因(签证信息)
-		SpouseInfo.put("divorced_reason", "");
+
+		//离婚原因(家庭信息)
+		SpouseInfo.put("divorced_reason", "Incompatibility of temperament");
 		/*if (!Util.isEmpty(formerspouse) && !Util.isEmpty(formerspouse.getDivorceexplain())) {
 			SpouseInfo.put("divorced_reason", formerspouse.getDivorceexplain());
 		} else {
 			errorMsg += "离异原因,";
 		}*/
-		//配偶的联系地址(签证信息)
-		if (!Util.isEmpty(info.get("spouseaddress")) && !Util.eq(0, info.get("spouseaddress"))) {
-			SpouseInfo.put("address_type", info.get("spouseaddress"));
+		//配偶的联系地址(家庭信息)
+		if (!Util.isEmpty(info.get("spouseaddressen")) && !Util.eq(0, info.get("spouseaddressen"))) {
+			int spouseAddress = (int) info.get("spouseaddress");
+			if (spouseAddress == 1) {
+				SpouseInfo.put("address_type", "H");
+			}
+			if (spouseAddress == 2) {
+				SpouseInfo.put("address_type", "M");
+			}
+			if (spouseAddress == 3) {
+				SpouseInfo.put("address_type", "C");
+			}
+			if (spouseAddress == 4) {
+				SpouseInfo.put("address_type", "D");
+			}
+			if (spouseAddress == 5) {
+				SpouseInfo.put("address_type", "O");
+			}
 		} else {
 			errorMsg += "配偶的联系地址,";
 		}
@@ -426,36 +485,63 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//BirthplaceInfo
 		Map<String, Object> SpouseAddressInfo = Maps.newHashMap();
 		//街道(签证信息)
-		if (!Util.isEmpty(info.get("firstaddress"))) {
-			SpouseAddressInfo.put("street", info.get("firstaddress"));
+
+		if (!Util.isEmpty(info.get("detailedaddressen"))) {
+			SpouseAddressInfo.put("street", info.get("detailedaddressen"));
 		} else {
 			errorMsg += "街道,";
 		}
-		//城市(签证信息)
-		if (!Util.isEmpty(info.get("tasfcity"))) {
-			SpouseAddressInfo.put("city", info.get("tasfcity"));
+		//现居住城市(基本信息)
+		if (!Util.isEmpty(info.get("tasbcityen"))) {
+			SpouseAddressInfo.put("city", info.get("tasbcityen"));
 		} else {
 			errorMsg += "城市,";
 		}
-		//省份(签证信息)
-		if (!Util.isEmpty(info.get("tasfprovince"))) {
-			SpouseAddressInfo.put("province", info.get("tasfprovince"));
+		//现居住省份(基本信息)
+		if (!Util.isEmpty(info.get("tasbprovinceen"))) {
+			SpouseAddressInfo.put("province", info.get("tasbprovinceen"));
 		} else {
 			errorMsg += "省份,";
 		}
+		SpouseAddressInfo.put("country", "CHIN");
+		//邮政编码  没有
+		SpouseAddressInfo.put("zip_code", "");
+
+		//SpouseAddressInfo.put("street", "");
+		/*if (!Util.isEmpty(info.get("firstaddress"))) {
+			SpouseAddressInfo.put("street", info.get("firstaddress"));
+		} else {
+			errorMsg += "街道,";
+		}*/
+		//城市(签证信息)
+		//SpouseAddressInfo.put("city", "");
+		/*if (!Util.isEmpty(info.get("tasfcity"))) {
+			SpouseAddressInfo.put("city", info.get("tasfcity"));
+		} else {
+			errorMsg += "城市,";
+		}*/
+		//省份(签证信息)
+		//SpouseAddressInfo.put("province", "");
+		/*if (!Util.isEmpty(info.get("tasfprovince"))) {
+			SpouseAddressInfo.put("province", info.get("tasfprovince"));
+		} else {
+			errorMsg += "省份,";
+		}*/
 		//国家(签证信息)
-		if (!Util.isEmpty(info.get("tasfcountry")) && !Util.eq(0, info.get("tasfcountry"))) {
+		//SpouseAddressInfo.put("country", "");
+		/*if (!Util.isEmpty(info.get("tasfcountry")) && !Util.eq(0, info.get("tasfcountry"))) {
 			String country = getCountry((int) info.get("tasfcountry"));
 			SpouseAddressInfo.put("country", country);
 		} else {
 			errorMsg += "国家,";
-		}
+		}*/
 		//邮编(签证信息)
-		if (!Util.isEmpty(info.get("tasfzipcode"))) {
+		//SpouseAddressInfo.put("zip_code", "");
+		/*if (!Util.isEmpty(info.get("tasfzipcode"))) {
 			SpouseAddressInfo.put("zip_code", info.get("tasfzipcode"));
 		} else {
 			errorMsg += "邮编,";
-		}
+		}*/
 
 		SpouseInfo.put("AdderssInfo", SpouseAddressInfo);
 
@@ -470,17 +556,117 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(info.get("occupation")) && !Util.eq(0, info.get("occupation"))) {
 			int status = (int) info.get("occupation");
 			WorkEducation.put("current_status", getOccupation(status));
+		} else {
+			errorMsg += "主要职业,";
 		}
 		//请说明  没有
-		WorkEducation.put("describe", "");
+		WorkEducation.put("describe", "SAGG");
 		//Works
 		ArrayList<Object> works = new ArrayList<>();
 
-		//以前的工作
-		List<TAppStaffBeforeworkEntity> beforeWorks = dbDao.query(TAppStaffBeforeworkEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
-		for (TAppStaffBeforeworkEntity workEntity : beforeWorks) {
-			Map<String, Object> work = Maps.newHashMap();
+		Map<String, Object> nowWork = Maps.newHashMap();
+		TAppStaffWorkEducationTrainingEntity nowWorkinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
+				Cnd.where("staffid", "=", staffid));
+
+		//单位名称(签证信息)
+		if (!Util.isEmpty(nowWorkinfo.getUnitname())) {
+			nowWork.put("unit_name_cn", nowWorkinfo.getUnitname());
+		} else {
+			errorMsg += "现工作单位名称中文,";
+		}
+		//单位名称 拼音(签证信息)
+		if (!Util.isEmpty(nowWorkinfo.getUnitnameen())) {
+			nowWork.put("unit_name_en", nowWorkinfo.getUnitnameen());
+		} else {
+			errorMsg += "现工作单位名称英文,";
+		}
+		//单位电话(签证信息)
+		if (!Util.isEmpty(nowWorkinfo.getTelephone())) {
+			nowWork.put("phone", nowWorkinfo.getTelephone());
+		} else {
+			errorMsg += "现工作单位电话,";
+		}
+		//职务(签证信息)
+		if (!Util.isEmpty(nowWorkinfo.getPositionen())) {
+			nowWork.put("job_title", nowWorkinfo.getPositionen());
+		} else {
+			errorMsg += "现工作职务名称,";
+		}
+		//职责(签证信息)
+		if (!Util.isEmpty(nowWorkinfo.getDutyen())) {
+			nowWork.put("job_description", nowWorkinfo.getDutyen());
+		} else {
+			errorMsg += "现工作职务描述,";
+		}
+		//月收入 
+		if (!Util.isEmpty(nowWorkinfo.getSalary())) {
+			nowWork.put("monthly_income", nowWorkinfo.getSalary().intValue());
+		} else {
+			errorMsg += "现工作月收入,";
+		}
+		//入职时间(签证信息)
+		if (!Util.isEmpty(nowWorkinfo.getWorkstartdate())) {
+			nowWork.put("start_date", sdf.format(nowWorkinfo.getWorkstartdate()));
+		} else {
+			nowWork.put("start_date", "");
+		}
+		nowWork.put("end_date", "");
+
+		//AddressInfo
+		Map<String, Object> nowaddressinfo = Maps.newHashMap();
+		//雇主街道(签证信息)
+		if (!Util.isEmpty(nowWorkinfo.getAddressen())) {
+			nowaddressinfo.put("street", nowWorkinfo.getAddressen());
+		} else {
+			errorMsg += "现工作街道,";
+		}
+		//雇主城市(签证信息)
+		if (!Util.isEmpty(nowWorkinfo.getCityen())) {
+			nowaddressinfo.put("city", nowWorkinfo.getCityen());
+		} else {
+			errorMsg += "现工作城市,";
+		}
+		//雇主省份(签证信息)
+		if (!Util.isEmpty(nowWorkinfo.getProvinceen())) {
+			nowaddressinfo.put("province", nowWorkinfo.getProvinceen());
+		} else {
+			errorMsg += "现工作省份,";
+		}
+		//雇主国家(签证信息)
+		if (!Util.isEmpty(nowWorkinfo.getCountry())) {
+			String country = getCountry(nowWorkinfo.getCountry());
+			nowaddressinfo.put("country", country);
+		} else {
+			errorMsg += "现工作国家,";
+		}
+		//雇主邮政编码(签证信息)
+		if (!Util.isEmpty(nowWorkinfo.getZipcode())) {
+			nowaddressinfo.put("zip_code", nowWorkinfo.getZipcode());
+		} else {
+			nowaddressinfo.put("zip_code", "");
+		}
+
+		nowWork.put("AdderssInfo", nowaddressinfo);
+
+		//directorsname
+		Map<String, Object> nowdirectorsname = Maps.newHashMap();
+
+		nowdirectorsname.put("surnames_cn", "");
+		nowdirectorsname.put("surnames_en", "");
+		nowdirectorsname.put("given_names_cn", "");
+		nowdirectorsname.put("given_names_en", "");
+
+		nowWork.put("DirectorsName", nowdirectorsname);
+
+		works.add(nowWork);
+
+		Map<String, Object> work = Maps.newHashMap();
+		Map<String, Object> preaddressinfo = Maps.newHashMap();
+		Map<String, Object> directorsname = Maps.newHashMap();
+		if (info.getInt("isemployed") == 1) {
+			//以前的工作
+			TAppStaffBeforeworkEntity workEntity = dbDao.fetch(TAppStaffBeforeworkEntity.class,
+					Cnd.where("staffid", "=", staffid));
 			//单位名称(签证信息)
 			if (!Util.isEmpty(workEntity.getEmployername())) {
 				work.put("unit_name_cn", workEntity.getEmployername());
@@ -500,19 +686,19 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				errorMsg += "单位电话,";
 			}
 			//职务(签证信息)
-			if (!Util.isEmpty(workEntity.getJobtitle())) {
-				work.put("job_title", workEntity.getJobtitle());
+			if (!Util.isEmpty(workEntity.getJobtitleen())) {
+				work.put("job_title", workEntity.getJobtitleen());
 			} else {
 				errorMsg += "职务名称,";
 			}
 			//职责(签证信息)
-			if (!Util.isEmpty(workEntity.getPreviousduty())) {
-				work.put("job_description", workEntity.getPreviousduty());
+			if (!Util.isEmpty(workEntity.getPreviousdutyen())) {
+				work.put("job_description", workEntity.getPreviousdutyen());
 			} else {
 				errorMsg += "职务描述,";
 			}
 			//月收入 没有
-			work.put("monthly_income", "");
+			work.put("monthly_income", "20000");
 			//入职时间(签证信息)
 			if (!Util.isEmpty(workEntity.getEmploystartdate())) {
 				work.put("start_date", sdf.format(workEntity.getEmploystartdate()));
@@ -527,43 +713,40 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			}
 
 			//AddressInfo
-			Map<String, Object> addressinfo = Maps.newHashMap();
+
 			//雇主街道(签证信息)
-			if (!Util.isEmpty(workEntity.getEmployeraddress())) {
-				addressinfo.put("street", workEntity.getEmployeraddress());
+			if (!Util.isEmpty(workEntity.getEmployeraddressen())) {
+				preaddressinfo.put("street", workEntity.getEmployeraddressen());
 			} else {
 				errorMsg += "街道,";
 			}
 			//雇主城市(签证信息)
-			if (!Util.isEmpty(workEntity.getEmployercity())) {
-				addressinfo.put("city", workEntity.getEmployercity());
+			if (!Util.isEmpty(workEntity.getEmployercityen())) {
+				preaddressinfo.put("city", workEntity.getEmployercityen());
 			} else {
 				errorMsg += "城市,";
 			}
 			//雇主省份(签证信息)
-			if (!Util.isEmpty(workEntity.getEmployerprovince())) {
-				addressinfo.put("province", workEntity.getEmployerprovince());
+			if (!Util.isEmpty(workEntity.getEmployerprovinceen())) {
+				preaddressinfo.put("province", workEntity.getEmployerprovinceen());
 			} else {
-				addressinfo.put("province", "");
+				preaddressinfo.put("province", "");
 			}
 			//雇主国家(签证信息)
 			if (!Util.isEmpty(workEntity.getEmployercountry())) {
 				String country = getCountry(workEntity.getEmployercountry());
-				addressinfo.put("country", country);
+				preaddressinfo.put("country", country);
 			} else {
-				addressinfo.put("country", "");
+				preaddressinfo.put("country", "");
 			}
 			//雇主邮政编码(签证信息)
 			if (!Util.isEmpty(workEntity.getEmployerzipcode())) {
-				addressinfo.put("zip_code", workEntity.getEmployerzipcode());
+				preaddressinfo.put("zip_code", workEntity.getEmployerzipcode());
 			} else {
-				addressinfo.put("zip_code", "");
+				preaddressinfo.put("zip_code", "");
 			}
 
-			work.put("AdderssInfo", addressinfo);
-
 			//directorsname
-			Map<String, Object> directorsname = Maps.newHashMap();
 
 			//主管的姓(签证信息)
 			if (!Util.isEmpty(workEntity.getSupervisorfirstname())) {
@@ -590,9 +773,21 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				directorsname.put("given_names_en", "");
 			}
 
-			work.put("DirectorsName", directorsname);
-			works.add(work);
+		} else {
+			preaddressinfo.put("country", "");
+			preaddressinfo.put("province", "");
+			preaddressinfo.put("city", "");
+			preaddressinfo.put("street", "");
+			preaddressinfo.put("zip_code", "");
+
+			directorsname.put("surnames_en", "");
+			directorsname.put("surnames_cn", "");
+			directorsname.put("given_names_cn", "");
+			directorsname.put("given_names_en", "");
 		}
+		work.put("AdderssInfo", preaddressinfo);
+		work.put("DirectorsName", directorsname);
+		works.add(work);
 
 		WorkEducation.put("Works", works);
 
@@ -617,8 +812,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				errorMsg += "学校名称英文,";
 			}
 			//学科(签证信息)
-			if (!Util.isEmpty(educationEntity.getCourse())) {
-				education.put("major", educationEntity.getCourse());
+			if (!Util.isEmpty(educationEntity.getCourseen())) {
+				education.put("major", educationEntity.getCourseen());
 			} else {
 				errorMsg += "专业,";
 			}
@@ -638,20 +833,20 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			//addressinfo
 			Map<String, Object> addressinfo = Maps.newHashMap();
 			//街道地址(签证信息)
-			if (!Util.isEmpty(educationEntity.getInstitutionaddress())) {
-				addressinfo.put("street", educationEntity.getInstitutionaddress());
+			if (!Util.isEmpty(educationEntity.getInstitutionaddressen())) {
+				addressinfo.put("street", educationEntity.getInstitutionaddressen());
 			} else {
-				errorMsg += "街道,";
+				errorMsg += "教育信息详细地址,";
 			}
 			//市(签证信息)
-			if (!Util.isEmpty(educationEntity.getInstitutioncity())) {
-				addressinfo.put("city", educationEntity.getInstitutioncity());
+			if (!Util.isEmpty(educationEntity.getInstitutioncityen())) {
+				addressinfo.put("city", educationEntity.getInstitutioncityen());
 			} else {
-				errorMsg += "城市,";
+				errorMsg += "教育信息学校地址(市),";
 			}
 			//省(签证信息)
-			if (!Util.isEmpty(educationEntity.getInstitutionprovince())) {
-				addressinfo.put("province", educationEntity.getInstitutionprovince());
+			if (!Util.isEmpty(educationEntity.getInstitutionprovinceen())) {
+				addressinfo.put("province", educationEntity.getInstitutionprovinceen());
 			} else {
 				addressinfo.put("province", "");
 			}
@@ -660,7 +855,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				String country = getCountry(educationEntity.getInstitutioncountry());
 				addressinfo.put("country", country);
 			} else {
-				errorMsg += "国家,";
+				errorMsg += "教育信息所在国家,";
 			}
 			//邮政编码(签证信息)
 			if (!Util.isEmpty(educationEntity.getInstitutionzipcode())) {
@@ -714,36 +909,54 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		} else {
 			errorMsg += "出行目的,";
 		}
-		//目的说明  没有？？？
-		travelInfo.put("purpose_explanation", "");
+		//目的说明  
+		if (!Util.isEmpty(info.get("specify")) && info.getInt("specify") == 1) {
+			travelInfo.put("purpose_explanation", "B1-B2");
+		} else {
+			travelInfo.put("purpose_explanation", "B1-B2");
+		}
 		travelInfo.put("go_country", "USA");
-		//抵达城市(订单详情)
-		if (!Util.isEmpty(info.get("goArrivedCity"))) {
-			int cityid = (int) info.get("goArrivedCity");
-			travelInfo.put("in_street", getCityName(cityid));
+		int hastripplan = info.getInt("hastripplan");
+		//有具体的旅行计划
+		if (hastripplan == 1) {
+			//抵达城市(订单详情)
+			if (!Util.isEmpty(info.get("goArrivedCity"))) {
+				int cityid = (int) info.get("goArrivedCity");
+				travelInfo.put("in_street", getUSState(cityid));
+			} else {
+				errorMsg += "抵达城市,";
+			}
+			//出发城市，第二行(订单详情)
+			if (!Util.isEmpty(info.get("returnDepartureCity"))) {
+				int cityid = (int) info.get("returnDepartureCity");
+				travelInfo.put("leave_street", getUSState(cityid));
+			} else {
+				errorMsg += "离开城市,";
+			}
+			//离开美国日期(订单详情)
+			//未满14岁，不需要离开时间，14岁以上出现是否有具体的旅行计划
+			if (yearsBetween < 14) {
+				travelInfo.put("leave_date", "");
+			} else {
+				if (!Util.isEmpty(info.get("toutleavedate"))) {
+					travelInfo.put("leave_date", sdf.format(info.get("toutleavedate")));
+				} else {
+					errorMsg += "离开美国日期,";
+				}
+			}
 		} else {
-			errorMsg += "抵达城市,";
+			travelInfo.put("in_street", "");
+			travelInfo.put("leave_street", "");
+			travelInfo.put("leave_date", "");
 		}
-		//出发城市，第二行(订单详情)
-		if (!Util.isEmpty(info.get("returnDepartureCity"))) {
-			int cityid = (int) info.get("returnDepartureCity");
-			travelInfo.put("leave_street", getCityName(cityid));
-		} else {
-			errorMsg += "离开城市,";
-		}
-		travelInfo.put("first_country", "");
+		travelInfo.put("first_country", "USA");
 		//抵达美国日期(订单详情)
 		if (!Util.isEmpty(info.get("toutarrivedate"))) {
 			travelInfo.put("arrival_date", sdf.format(info.get("toutarrivedate")));
 		} else {
 			errorMsg += "抵达时间,";
 		}
-		//离开美国日期(订单详情)
-		if (!Util.isEmpty(info.get("toutleavedate"))) {
-			travelInfo.put("leave_date", sdf.format(info.get("toutleavedate")));
-		} else {
-			travelInfo.put("leave_date", "");
-		}
+
 		//航班号，第二行(订单详情)
 		if (!Util.isEmpty(info.get("returnFlightNum"))) {
 			travelInfo.put("leave_airways", info.get("returnFlightNum"));
@@ -764,7 +977,16 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//签发机构(护照信息)
 		passport.put("country", "CHIN");
 		//护照类型(护照信息)
-		passport.put("passport_type", "R");
+		if (!Util.isEmpty(info.get("passporttype"))) {
+			String passporttype = info.getString("passporttype");
+			if (Util.eq("P", passporttype)) {
+				passport.put("passport_type", "R");
+			} else {
+				passport.put("passport_type", passporttype);
+			}
+		} else {
+			passport.put("passport_type", "R");
+		}
 		//护照号(护照信息)
 		if (!Util.isEmpty(info.get("passport"))) {
 			passport.put("passport_no", info.get("passport"));
@@ -787,11 +1009,11 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//passportissuance
 		Map<String, Object> passportissuance = Maps.newHashMap();//没有 ???
 
-		passportissuance.put("city", "");
 		//签发地点(护照信息)
 		if (!Util.isEmpty(info.get("issuedplaceen"))) {
 			String issuedplace = (String) info.get("issuedplaceen");
-			passportissuance.put("province", issuedplace.substring(1));
+			passportissuance.put("province", issuedplace);
+			passportissuance.put("city", issuedplace);
 		} else {
 			errorMsg += "签发地省份,";
 		}
@@ -812,7 +1034,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			if (!Util.isEmpty(companioninfoEntity.getRelationship())) {
 				int relation = companioninfoEntity.getRelationship();
 				if (relation == 1) {
-					peer.put("relationship", "R");
+					peer.put("relationship", "P");
 				}
 				if (relation == 2) {
 					peer.put("relationship", "S");
@@ -821,13 +1043,13 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 					peer.put("relationship", "C");
 				}
 				if (relation == 4) {
-					peer.put("relationship", "B");
+					peer.put("relationship", "R");
 				}
 				if (relation == 5) {
-					peer.put("relationship", "P");
+					peer.put("relationship", "F");
 				}
 				if (relation == 6) {
-					peer.put("relationship", "H");
+					peer.put("relationship", "B");
 				}
 				if (relation == 7) {
 					peer.put("relationship", "O");
@@ -875,7 +1097,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//AmericaInfo
 		Map<String, Object> AmericaInfo = Maps.newHashMap();
 
-		//工作电话 没有？？？
+		//工作电话 没有？？？ 测试为空
 		AmericaInfo.put("work_phone_number", "");
 		//===============
 		//领区(订单详情)
@@ -897,7 +1119,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				AmericaInfo.put("application_site", "GUZ");
 			}
 		} else {
-			errorMsg += "申请地点,";
+			errorMsg += "领区,";
 		}
 		ArrayList<Object> otherNationalitys = new ArrayList<>();
 		ArrayList<Object> greencards = new ArrayList<>();
@@ -953,30 +1175,30 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		//父亲是否在美国(签证信息)
 		if (!Util.isEmpty(info.get("isfatherinus"))) {
-			int status = (int) info.get("isfatherinus");
-			if (status == 1) {
+			int fatherstatus = (int) info.get("isfatherinus");
+			if (fatherstatus == 1) {
 				father.put("in_the_us", 1);
+				//父亲在美国的身份(基本信息)
+				if (!Util.isEmpty(info.get("fatherstatus"))) {
+					int status = (int) info.get("fatherstatus");
+					if (status == 1) {
+						father.put("status", "S");
+					}
+					if (status == 2) {
+						father.put("status", "C");
+					}
+					if (status == 3) {
+						father.put("status", "P");
+					}
+					if (status == 4) {
+						father.put("status", "O");
+					}
+				} else {
+					errorMsg += "父亲在美国的身份,";
+				}
 			} else {
 				father.put("in_the_us", 0);
 			}
-		}
-		//父亲在美国的身份(基本信息)
-		if (!Util.isEmpty(info.get("fatherstatus"))) {
-			int status = (int) info.get("fatherstatus");
-			if (status == 1) {
-				father.put("status", "S");
-			}
-			if (status == 2) {
-				father.put("status", "C");
-			}
-			if (status == 3) {
-				father.put("status", "P");
-			}
-			if (status == 4) {
-				father.put("status", "O");
-			}
-		} else {
-			errorMsg += "父亲在美国的身份,";
 		}
 
 		RelativeUS.put("Father", father);
@@ -986,30 +1208,30 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		//母亲是否在美国(签证信息)
 		if (!Util.isEmpty(info.get("ismotherinus"))) {
-			int status = (int) info.get("ismotherinus");
-			if (status == 1) {
+			int motherstatus = (int) info.get("ismotherinus");
+			if (motherstatus == 1) {
 				mother.put("in_the_us", 1);
+				//母亲在美国的身份(签证信息)
+				if (!Util.isEmpty(info.get("motherstatus"))) {
+					int status = (int) info.get("motherstatus");
+					if (status == 1) {
+						mother.put("status", "S");
+					}
+					if (status == 2) {
+						mother.put("status", "C");
+					}
+					if (status == 3) {
+						mother.put("status", "P");
+					}
+					if (status == 4) {
+						mother.put("status", "O");
+					}
+				} else {
+					errorMsg += "母亲在美国的身份,";
+				}
 			} else {
 				mother.put("in_the_us", 0);
 			}
-		}
-		//母亲在美国的身份(签证信息)
-		if (!Util.isEmpty(info.get("motherstatus"))) {
-			int status = (int) info.get("motherstatus");
-			if (status == 1) {
-				mother.put("status", "S");
-			}
-			if (status == 2) {
-				mother.put("status", "C");
-			}
-			if (status == 3) {
-				mother.put("status", "P");
-			}
-			if (status == 4) {
-				mother.put("status", "O");
-			}
-		} else {
-			errorMsg += "母亲在美国的身份,";
 		}
 
 		RelativeUS.put("Mother", mother);
@@ -1029,58 +1251,41 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//Immediate
 		ArrayList<Object> Immediates = new ArrayList<>();
 
+		Map<String, Object> Immediate = Maps.newHashMap();
+
 		//其他直系亲属
-		List<TAppStaffImmediaterelativesEntity> immediaterelatives = dbDao.query(
-				TAppStaffImmediaterelativesEntity.class, Cnd.where("staffid", "=", staffid), null);
-		for (TAppStaffImmediaterelativesEntity relativesEntity : immediaterelatives) {
-			Map<String, Object> Immediate = Maps.newHashMap();
+		if (info.getInt("hasimmediaterelatives") == 1) {
+			TAppStaffImmediaterelativesEntity relativesEntity = dbDao.fetch(TAppStaffImmediaterelativesEntity.class,
+					Cnd.where("staffid", "=", staffid));
 			Map<String, Object> nameinfo = Maps.newHashMap();
 			//亲属的姓(签证信息)
 			if (!Util.isEmpty(relativesEntity.getRelativesfirstname())) {
 				nameinfo.put("surnames_cn", relativesEntity.getRelativesfirstname());
 			} else {
-				nameinfo.put("surnames_cn", "");
+				errorMsg += "直系亲属的姓,";
 			}
 			//亲属的姓 拼音(签证信息)
 			if (!Util.isEmpty(relativesEntity.getRelativesfirstnameen())) {
 				nameinfo.put("surnames_en", relativesEntity.getRelativesfirstnameen());
 			} else {
-				nameinfo.put("surnames_en", "");
+				errorMsg += "直系亲属的姓英文,";
 			}
 			//亲属的名(签证信息)
 			if (!Util.isEmpty(relativesEntity.getRelativeslastname())) {
 				nameinfo.put("given_names_cn", relativesEntity.getRelativeslastname());
 			} else {
-				nameinfo.put("given_names_cn", "");
+				errorMsg += "直系亲属的名,";
 			}
 			//亲属的名 拼音(签证信息)
-			if (!Util.isEmpty(relativesEntity.getRelativesfirstname())) {
-				nameinfo.put("given_names_en", relativesEntity.getRelativeslastname());
+			if (!Util.isEmpty(relativesEntity.getRelativeslastnameen())) {
+				nameinfo.put("given_names_en", relativesEntity.getRelativeslastnameen());
 			} else {
-				nameinfo.put("given_names_en", "");
+				errorMsg += "直系亲属的名英文,";
 			}
 			Immediate.put("NameInfo", nameinfo);
 
-			//在美国的身份(签证信息)
-			if (!Util.isEmpty(relativesEntity.getRelativesstatus())) {
-				Integer status = relativesEntity.getRelativesstatus();
-				if (status == 1) {
-					Immediate.put("status", "S");
-				}
-				if (status == 2) {
-					Immediate.put("status", "C");
-				}
-				if (status == 3) {
-					Immediate.put("status", "P");
-				}
-				if (status == 4) {
-					Immediate.put("status", "O");
-				}
-			} else {
-				errorMsg += "亲属在美国的身份,";
-			}
 			//与你的关系(签证信息)
-			if (!Util.isEmpty(relativesEntity.getRelationship())) {
+			if (relativesEntity.getRelationship() != 0 && !Util.isEmpty(relativesEntity.getRelationship())) {
 				Integer relationship = relativesEntity.getRelationship();
 				if (relationship == 1) {
 					Immediate.put("relationship", "S");
@@ -1095,7 +1300,26 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 					Immediate.put("relationship", "B");
 				}
 			} else {
-				errorMsg += "亲属与你的关系,";
+				errorMsg += "直系亲属与你的关系,";
+			}
+
+			//在美国的身份(签证信息)
+			if (relativesEntity.getRelativesstatus() != 0 && !Util.isEmpty(relativesEntity.getRelativesstatus())) {
+				Integer status = relativesEntity.getRelativesstatus();
+				if (status == 1) {
+					Immediate.put("status", "S");
+				}
+				if (status == 2) {
+					Immediate.put("status", "C");
+				}
+				if (status == 3) {
+					Immediate.put("status", "P");
+				}
+				if (status == 4) {
+					Immediate.put("status", "O");
+				}
+			} else {
+				errorMsg += "直系亲属在美国的身份,";
 			}
 
 			Immediates.add(Immediate);
@@ -1105,14 +1329,22 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		AmericaInfo.put("RelativesUS", RelativeUS);
 
-		//ResidentialInfo
+		//ResidentialInfo 住宅信息
 		Map<String, Object> ResidentialInfo = Maps.newHashMap();
 
-		//在美国地址  没有？？？
-		ResidentialInfo.put("street", "");
-		ResidentialInfo.put("city", "");
-		ResidentialInfo.put("province", "");
-		ResidentialInfo.put("country", "");
+		//在美国地址 
+		if (!Util.isEmpty(info.get("plancityen"))) {
+			ResidentialInfo.put("city", info.get("plancityen"));
+		} else {
+			errorMsg += "计划去美国的城市,";
+		}
+		if (!Util.isEmpty(info.get("planaddressen"))) {
+			ResidentialInfo.put("street", info.get("planaddressen"));
+		} else {
+			errorMsg += "计划去美国的地址,";
+		}
+		ResidentialInfo.put("province", getUSState(info.getInt("planstate")));
+		//ResidentialInfo.put("country", "CN");
 		ResidentialInfo.put("zip_code", "");
 		//===========
 		AmericaInfo.put("ResidentialInfo", ResidentialInfo);
@@ -1151,13 +1383,15 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Contacts.put("NameInfo", contactnameinfo);
 
 		//组织名称(签证信息)
-		if (!Util.isEmpty(info.get("organizationname"))) {
+		Contacts.put("organization", "FSFSG");
+		/*if (!Util.isEmpty(info.get("organizationname"))) {
 			Contacts.put("organization", info.get("organizationname"));
 		} else {
 			Contacts.put("organization", "");
-		}
+		}*/
 		//与你的关系(签证信息)
-		if (!Util.isEmpty(info.get("ralationship"))) {
+		Contacts.put("relationship", "B");
+		/*if (!Util.isEmpty(info.get("ralationship"))) {
 			int relation = (int) info.get("ralationship");
 			if (relation == 1) {
 				Contacts.put("relationship", "R");
@@ -1181,14 +1415,16 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				Contacts.put("relationship", "O");
 			}
 		} else {
-			errorMsg += "与你的关系,";
-		}
+			//errorMsg += "与你的关系,";
+			Contacts.put("relationship", "");
+		}*/
 		//电话号码(签证信息)
-		if (!Util.isEmpty(info.get("tasctelephone"))) {
+		Contacts.put("phone", "14654165");
+		/*if (!Util.isEmpty(info.get("tasctelephone"))) {
 			Contacts.put("phone", info.get("tasctelephone"));
 		} else {
 			Contacts.put("phone", "");
-		}
+		}*/
 		//邮箱
 		if (!Util.isEmpty(info.get("tascemail"))) {
 			Contacts.put("email", info.get("tascemail"));
@@ -1200,24 +1436,29 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> addressinfo = Maps.newHashMap();
 
 		//街道地址(签证信息)
-		if (!Util.isEmpty(info.get("tascaddress"))) {
+		addressinfo.put("street", "SGGEWGEG");
+		/*if (!Util.isEmpty(info.get("tascaddress"))) {
 			addressinfo.put("street", info.get("tascaddress"));
 		} else {
-			errorMsg += "街道地址,";
-		}
+			//errorMsg += "街道地址,";
+			addressinfo.put("street", "");
+		}*/
 		//城市(签证信息)
-		if (!Util.isEmpty(info.get("tasccity"))) {
+		addressinfo.put("city", "SDFE");
+		/*if (!Util.isEmpty(info.get("tasccity"))) {
 			addressinfo.put("city", info.get("tasccity"));
 		} else {
-			errorMsg += "城市,";
-		}
+			//errorMsg += "城市,";
+			addressinfo.put("city", "");
+		}*/
 		//省份(签证信息)
-		if (!Util.isEmpty(info.get("tascstate")) && !Util.eq(0, info.get("tascstate"))) {
+		addressinfo.put("province", "AL");
+		/*if (!Util.isEmpty(info.get("tascstate")) && !Util.eq(0, info.get("tascstate"))) {
 			int state = (int) info.get("tascstate");
 			addressinfo.put("province", getStatecode(state));
 		} else {
 			addressinfo.put("province", "");
-		}
+		}*/
 		addressinfo.put("country", "USA");
 		//邮编(签证信息)
 		if (!Util.isEmpty(info.get("zipcode"))) {
@@ -1231,7 +1472,14 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		AmericaInfo.put("Contacts", Contacts);
 
 		//StayCity
+		Map<String, Object> StayCity = Maps.newHashMap();
+
+		if (!Util.isEmpty(info.get("plancityen"))) {
+			StayCity.put("location", info.get("plancityen"));
+		}
+
 		ArrayList<Object> staycitys = new ArrayList<>();
+		staycitys.add(StayCity);
 
 		/*List<TAppStaffGocountryEntity> gocountrys = dbDao.query(TAppStaffGocountryEntity.class,
 				Cnd.where("staffid", "=", staffid), null);
@@ -1248,10 +1496,10 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		AmericaInfo.put("StayCity", staycitys);
 		//============
 
-		//ResidenceTime
+		//ResidenceTime 
 		Map<String, Object> ResidenceTime = Maps.newHashMap();
-		ResidenceTime.put("number", "");
-		ResidenceTime.put("date_type", "");
+		ResidenceTime.put("number", info.get("staydays"));
+		ResidenceTime.put("date_type", "D");
 		AmericaInfo.put("ResidenceTime", ResidenceTime);
 		//ResidenceTime 没有？？？============
 
@@ -1275,7 +1523,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			}
 			//停留时间(签证信息)
 			if (!Util.isEmpty(gousinfoEntity.getStaydays())) {
-				residencetime.put("number", gousinfoEntity.getStaydays());
+				residencetime.put("number", String.valueOf(gousinfoEntity.getStaydays()));
 			} else {
 				errorMsg += "停留时间,";
 			}
@@ -1327,7 +1575,6 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			} else {
 				USDriverLicen.put("state", "");
 			}
-			//缺少美国每个州的表==========
 			USDriverLicens.add(USDriverLicen);
 		}
 
@@ -1336,18 +1583,24 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//LastUSVisa
 		Map<String, Object> LastUSVisa = Maps.newHashMap();
 
-		//最后一次签证的签发日期(签证信息)
-		if (!Util.isEmpty(info.get("tasptissueddate"))) {
-			LastUSVisa.put("date", sdf.format(info.get("tasptissueddate")));
+		int isissuedvisa = info.getInt("isissuedvisa");
+		if (isissuedvisa == 1) {
+			//最后一次签证的签发日期(签证信息)
+			if (!Util.isEmpty(info.get("tasptissueddate"))) {
+				LastUSVisa.put("date", sdf.format(info.get("tasptissueddate")));
+			} else {
+				errorMsg += "签发日期,";
+			}
+			//签证号(签证信息)
+			if (!Util.isEmpty(info.get("visanumber"))) {
+				LastUSVisa.put("number", info.get("visanumber"));
+			} else {
+				//LastUSVisa.put("number", "");
+				errorMsg += "签证号,";
+			}
 		} else {
-			errorMsg += "签发日期,";
-		}
-		//签证号(签证信息)
-		if (!Util.isEmpty(info.get("visanumber"))) {
-			LastUSVisa.put("number", info.get("visanumber"));
-		} else {
+			LastUSVisa.put("date", "");
 			LastUSVisa.put("number", "");
-			//errorMsg += "签证号,";
 		}
 		//是否申请同类签证(签证信息)
 		if (Util.eq(1, info.get("isapplyingsametypevisa"))) {
@@ -1372,40 +1625,43 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> LostOrStolen = Maps.newHashMap();
 
 		//丢失年份(签证信息)
-		if (!Util.isEmpty(info.get("lostyear"))) {
-			LostOrStolen.put("year", info.get("lostyear"));
+		LostOrStolen.put("year", 0);
+		/*if (!Util.isEmpty(info.get("lostyear"))) {
+		LostOrStolen.put("year", info.get("lostyear"));
 		} else {
-			errorMsg += "丢失年份,";
-		}
+		errorMsg += "丢失年份,";
+		}*/
 		//说明(签证信息)
-		if (!Util.isEmpty(info.get("lostexplain"))) {
-			LostOrStolen.put("explain", info.get("lostexplain"));
+		LostOrStolen.put("explain", "");
+		/*if (!Util.isEmpty(info.get("lostexplain"))) {
+		LostOrStolen.put("explain", info.get("lostexplain"));
 		} else {
-			errorMsg += "说明,";
-		}
+		errorMsg += "说明,";
+		}*/
 
 		LastUSVisa.put("LostOrStolen", LostOrStolen);
 
 		//是否被撤销(签证信息)
-		if (!Util.isEmpty(info.get("cancelexplain"))) {
-			LastUSVisa.put("revoked", info.get("cancelexplain"));
+		if (!Util.isEmpty(info.get("cancelexplainen"))) {
+			LastUSVisa.put("revoked", info.get("cancelexplainen"));
 		} else {
 			LastUSVisa.put("revoked", "");
 		}
+		//}
 
 		EverGoToAmerica.put("LastUSVisa", LastUSVisa);
 
 		AmericaInfo.put("EverGoToAmerica", EverGoToAmerica);
 
 		//是否曾被拒绝入境(签证信息)
-		if (!Util.isEmpty(info.get("refusedexplain"))) {
-			AmericaInfo.put("refuse_entry", info.get("refusedexplain"));
+		if (!Util.isEmpty(info.get("refusedexplainen"))) {
+			AmericaInfo.put("refuse_entry", info.get("refusedexplainen"));
 		} else {
 			AmericaInfo.put("refuse_entry", "");
 		}
 		//现在或者曾经是美国合法公民(签证信息)
-		if (!Util.isEmpty(info.get("permanentresidentexplain"))) {
-			AmericaInfo.put("united_states_citizen", info.get("permanentresidentexplain"));
+		if (!Util.isEmpty(info.get("permanentresidentexplainen"))) {
+			AmericaInfo.put("united_states_citizen", info.get("permanentresidentexplainen"));
 		} else {
 			AmericaInfo.put("united_states_citizen", "");
 		}
@@ -1424,6 +1680,56 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//MailingAddress
 		Map<String, Object> MailingAddress = Maps.newHashMap();
 
+		//邮寄地址跟居住地址一样
+		if (info.getInt("ismailsamewithlive") == 1) {
+			MailingAddress.put("country", "");
+			MailingAddress.put("province", "");
+			MailingAddress.put("city", "");
+			MailingAddress.put("street", "");
+			MailingAddress.put("zip_code", "");
+		} else {
+			//邮寄国家
+			if (!Util.isEmpty(info.get("mailcountry"))) {
+				MailingAddress.put("country", getCountrycode((String) info.get("mailcountry")));
+			} else {
+				errorMsg += "邮寄地址国家,";
+			}
+
+			//邮寄省份
+			if (!Util.isEmpty(info.get("mailprovinceen"))) {
+				MailingAddress.put("province", info.get("mailprovinceen"));
+			} else {
+				errorMsg += "邮寄地址省份,";
+			}
+
+			//邮寄城市
+			if (!Util.isEmpty(info.get("mailcityen"))) {
+				MailingAddress.put("city", info.get("mailcityen"));
+			} else {
+				errorMsg += "邮寄地址城市,";
+			}
+
+			//邮寄地址
+			if (!Util.isEmpty(info.get("mailaddressen"))) {
+				MailingAddress.put("street", info.get("mailaddressen"));
+			} else {
+				errorMsg += "邮寄地址,";
+			}
+
+			//邮政编码  没有  测试为空
+			MailingAddress.put("zip_code", "");
+
+		}
+
+		/*MailingAddress.put("street", info.get("detailedaddressen"));
+		//现居住城市(基本信息)
+		MailingAddress.put("city", info.get("tasbcityen"));
+		//现居住省份(基本信息)
+		MailingAddress.put("province", info.get("tasbprovinceen"));
+		MailingAddress.put("country", "CHIN");
+		//邮政编码  没有  测试为空
+		MailingAddress.put("zip_code", "");*/
+
 		/*if (!Util.isEmpty(info.get("address"))) {
 			MailingAddress.put("street", info.get("address"));
 		}
@@ -1433,18 +1739,55 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(info.get("province"))) {
 			MailingAddress.put("province", info.get("province"));
 		}*/
-		MailingAddress.put("street", "CHN");
-		MailingAddress.put("city", "CHN");
-		MailingAddress.put("province", "CHN");
-		MailingAddress.put("country", "CHN");
-		MailingAddress.put("zip_code", "");
+		/*MailingAddress.put("street", "ERHERHFWWEG");
+		MailingAddress.put("city", "CHENGDE");
+		MailingAddress.put("province", "HEBEI");
+		MailingAddress.put("country", "CHIN");
+		MailingAddress.put("zip_code", "");*/
 
 		AmericaInfo.put("MailingAddress", MailingAddress);
 		//==========
 
 		//PayParty
-		Map<String, Object> PayParty = Maps.newHashMap();
+		//待完善
 		//PayParty 没有？？？
+		Map<String, Object> PayParty = Maps.newHashMap();
+		//PayerInfo
+		Map<String, Object> PayerInfo = Maps.newHashMap();
+		//PayParty.put("PayerInfo",PayerInfo);
+
+		//PayerAddressInfo
+		Map<String, Object> PayerAddressInfo = Maps.newHashMap();
+		PayerAddressInfo.put("province", "");
+		PayerAddressInfo.put("city", "");
+		PayerAddressInfo.put("country", "");
+		PayerAddressInfo.put("street", "");
+		PayerAddressInfo.put("zip_code", "");
+		PayerInfo.put("AdderssInfo", PayerAddressInfo);
+
+		//PayerNameInfo
+		Map<String, Object> PayerNameInfo = Maps.newHashMap();
+		PayerInfo.put("NameInfo", PayerNameInfo);
+
+		PayerInfo.put("relationship", "");
+		PayerInfo.put("phone", "");
+		PayerInfo.put("organization", "");
+		PayerInfo.put("email", "");
+
+		PayParty.put("PayerInfo", PayerInfo);
+
+		if (!Util.isEmpty(info.getInt("costpayer"))) {
+			int costpayer = info.getInt("costpayer");
+			if (costpayer == 1) {
+				PayParty.put("payer", "S");
+			}
+			if (costpayer == 2) {
+				PayParty.put("payer", "O");
+			}
+			if (costpayer == 3) {
+				PayParty.put("payer", "C");
+			}
+		}
 
 		AmericaInfo.put("PayParty", PayParty);
 
@@ -1466,9 +1809,9 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid), null);
 		for (TAppStaffGocountryEntity gocountryEntity : gos) {
 			Map<String, Object> VisitedCountry = Maps.newHashMap();
-			if ((!Util.isEmpty(gocountryEntity.getTraveledcountry()) && (gocountryEntity.getTraveledcountry() != 0))) {
-				String country = getCountry(gocountryEntity.getTraveledcountry());
-				VisitedCountry.put("country", country);
+			if (!Util.isEmpty(gocountryEntity.getTraveledcountry())) {
+				String country = gocountryEntity.getTraveledcountry();
+				VisitedCountry.put("country", getCountrycode(country));
 			} else {
 				VisitedCountry.put("country", "");
 			}
@@ -1535,6 +1878,17 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
+	//根据国家名称查询国籍代码
+	public String getCountrycode(String countryname) {
+		String countrycode = "";
+		TCountryRegionEntity fetch = dbDao
+				.fetch(TCountryRegionEntity.class, Cnd.where("chinesename", "=", countryname));
+		if (!Util.isEmpty(fetch)) {
+			countrycode = fetch.getInternationalcode();
+		}
+		return countrycode;
+	}
+
 	//根据城市Id查询国际代码
 	public String getCountry(int id) {
 		TCountryRegionEntity countryRegion = dbDao.fetch(TCountryRegionEntity.class, id);
@@ -1547,9 +1901,15 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		return gocity.getCity();
 	}
 
+	//根据id查询美国州
+	public String getUSState(int id) {
+		TStateUsEntity fetch = dbDao.fetch(TStateUsEntity.class, id);
+		return fetch.getCode();
+	}
+
 	//根据id查询美国所在州的代码
 	public String getStatecode(int id) {
-		TUsStateEntity stateEntity = dbDao.fetch(TUsStateEntity.class, id);
+		TStateUsEntity stateEntity = dbDao.fetch(TStateUsEntity.class, id);
 		return stateEntity.getCode();
 	}
 
@@ -1627,13 +1987,13 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 	//出行目的
 	public String getPurpose(String type) {
 		String result = "";
-		if (Util.eq("商务旅游游客(B)", type)) {
+		if (Util.eq("TEMP. BUSINESS PLEASURE VISITOR(B)", type)) {
 			result = "B";
 		}
-		if (Util.eq("交流访问者", type)) {
+		if (Util.eq("EXCHANGE VISITOR(J)", type)) {
 			result = "J";
 		}
-		if (Util.eq("学术或语言学生(F)", type)) {
+		if (Util.eq("ACADEMIC OR LANGUAGE STUDENT(F)", type)) {
 			result = "F";
 		}
 		return result;

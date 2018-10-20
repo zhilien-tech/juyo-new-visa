@@ -42,6 +42,7 @@
 								<label><span>*</span>客户来源：</label> <select id="customerType"
 									name="source" class="form-control input-sm inpImportant"
 									onchange="selectListData();">
+									<option value="">--请选择--</option>
 									<%-- <option value="${obj.sourceType }" selected="selected">${obj.sourceType }</option> --%>
 									<c:forEach var="map" items="${obj.customerTypeEnum}">
 										<option value="${map.key}"
@@ -201,18 +202,19 @@
 											}
 										}
 									},
+									/*
 									linkman : {
 										validators : {
 											notEmpty : {
 												message : '联系人不能为空'
 											}
 										}
-									},
+									}, */
 									mobile : {
 										validators : {
-											notEmpty : {
+											/* notEmpty : {
 												message : '手机不能为空'
-											},
+											}, */
 											regexp : {
 												regexp : /^[1][34578][0-9]{9}$/,
 												message : '手机号格式错误'
@@ -230,13 +232,13 @@
 											}
 										}
 									}, */
-									amount: {
+									/* amount: {
 										validators : {
 											notEmpty : {
 												message : '金额不能为空'
 											}
 										}
-									},
+									}, */
 								}
 							});
 		}
@@ -275,7 +277,7 @@
 					layer.msg('shortname不能为空');
 					return;
 				}
-				var source = $("#customerType").val();
+				/* var source = $("#customerType").val();
 				if (source == "") {
 					layer.msg('source不能为空');
 					return;
@@ -289,7 +291,7 @@
 				if (mobile == "") {
 					layer.msg('mobile不能为空');
 					return;
-				}
+				} */
 				/* var email = $("#email").val();
 				if (email == "") {
 					layer.msg('email不能为空');

@@ -276,6 +276,33 @@ $('#goFlightNum').select2({
 	maximumSelectionLength : 1, //设置最多可以选择多少项
 	tags : false //设置必须存在的选项 才能选中
 });
+
+/*$("#goFlightNum").on("select2:select",function(e){
+	var thisval = $(this).val();
+	if (thisval) {
+		thisval = thisval.join(',');
+	}else{
+		thisval += '';
+	}
+	
+	$.ajax({ 
+		url: '/admin/tripairline/getGoandReturncity.html',
+		dataType:"json",
+		data:{airline:thisval},
+		type:'post',
+		success: function(data){
+			//设置去程出发城市和抵达城市
+			$("#goDepartureCity").html('<option selected="selected" value="'+data.takeoffcityid+'">'+data.takeoffname+'</option>');
+			$("#goArrivedCity").html('<option selected="selected" value="'+data.landingcityid+'">'+data.landingname+'</option>');
+		}
+	});
+	
+	//查询航班接口到缓存
+	//initFlightByInterface(goDate,thisval,goArrivedCity);
+	//initFlightByInterface(returnDate,goArrivedCity,thisval);
+});*/
+
+
 //返程航班select2
 $('#returnFlightNum').select2({
 	ajax : {
@@ -350,7 +377,30 @@ $('#returnFlightNum').select2({
 	maximumSelectionLength : 1, //设置最多可以选择多少项
 	tags : false //设置必须存在的选项 才能选中
 });
-
+/*$("#returnFlightNum").on("select2:select",function(e){
+	var thisval = $(this).val();
+	if (thisval) {
+		thisval = thisval.join(',');
+	}else{
+		thisval += '';
+	}
+	
+	$.ajax({ 
+		url: '/admin/tripairline/getGoandReturncity.html',
+		dataType:"json",
+		data:{airline:thisval},
+		type:'post',
+		success: function(data){
+			//设置去程出发城市和抵达城市
+			$("#returnDepartureCity").html('<option selected="selected" value="'+data.takeoffcityid+'">'+data.takeoffname+'</option>');
+			$("#returnArrivedCity").html('<option selected="selected" value="'+data.landingcityid+'">'+data.landingname+'</option>');
+		}
+	});
+	
+	//查询航班接口到缓存
+	//initFlightByInterface(goDate,thisval,goArrivedCity);
+	//initFlightByInterface(returnDate,goArrivedCity,thisval);
+});*/
 
 //去程出发城市
 $("#goDepartureCity").on("select2:select",function(e){

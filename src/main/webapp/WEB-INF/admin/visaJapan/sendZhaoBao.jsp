@@ -19,7 +19,14 @@
 		<div class="modal-header">
 			<span class="heading">添加</span> 
 			<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm" data-dismiss="modal" value="取消" /> 
-			<input id="addBtn" type="button" onclick="sendZhaobao();" class="btn btn-primary pull-right btn-sm btn-right" value="发招宝" />
+			<c:choose>
+				<c:when test="${obj.visatype == 14 }">
+					<input id="addBtn" type="button" onclick="sendZhaobao();" class="btn btn-primary pull-right btn-sm btn-right" value="下载" />
+				</c:when>
+				<c:otherwise>
+					<input id="addBtn" type="button" onclick="sendZhaobao();" class="btn btn-primary pull-right btn-sm btn-right" value="发招宝" />
+				</c:otherwise>
+			</c:choose>
 			<input id="orderid" name="orderid" type="hidden" value="${obj.orderid }">
 		</div>
 		<div class="modal-body" style="height:100%;">
@@ -95,6 +102,7 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script src="${base}/references/public/plugins/jquery.fileDownload.js"></script>
 	<!-- uploadify -->
 	<%-- <script src="${base}/references/public/plugins/uploadify/jquery.uploadify.min.js"></script> --%>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
@@ -102,6 +110,7 @@
 	//发招宝
 	function sendZhaobao(){
 		var orderid = $('#orderid').val();
+		var visatype = '${obj.visatype}';
 		var sendsignid = $('#sendsignid').val();
 		if(!sendsignid){
 			layer.msg('请选择送签社！');
@@ -114,41 +123,66 @@
 		}
 		layer.load(1);
 	
-		//验证指定番号是否填写
-		$.ajax({ 
-         	url: '${base}/admin/visaJapan/validateDesignNum.html',
-         	data:{sendsignid:sendsignid},
-         	dataType:"json",
-         	type:'post',
-         	success: function(data){
-         		
-         		//受付番号未填写
-           		if(data.status == 500){
-           			layer.msg(data.msg);
-           			 layer.closeAll('loading'); 
-           			/* closeWindow();  */
-           		}else{
-           			$.ajax({ 
-           	         	url: '${base}/admin/visaJapan/saveZhaoBao.html',
-           	         	data:{orderId:orderid,sendsignid:sendsignid,groundconnectid:groundconnectid},
-           	         	dataType:"json",
-           	         	type:'post',
-           	         	success: function(data){
-           	         		if(data != "ok"){
-           	         			layer.msg(data);
-           	         			layer.closeAll('loading');
-           	         		}else{
-	           	           		window.parent.successCallBack(1);
-	           	           		//window.parent.reloaddata();
-	           	           		closeWindow();
-           	         		}
-           	           	}
-           	         });
-           		}
-       /*     		layer.closeAll('loading'); */
-           	}
-         	
-         });
+		if(visatype == 14){
+			$.ajax({ 
+	         	url: '${base}/admin/simple/saveSendandGround.html',
+	         	data:{orderid:orderid,sendsignid:sendsignid,groundconnectid:groundconnectid},
+	         	dataType:"json",
+	         	type:'post',
+	         	success: function(data){
+	         		$.fileDownload("${base}/admin/visaJapan/downloadFile.html?orderid=${obj.orderjpinfo.id}&", {
+       			        successCallback: function (url) {
+       			        	layer.closeAll('loading');
+       			        	closeWindow();
+       			        },
+       			        failCallback: function (html, url) {
+       			        	layer.closeAll('loading');
+       			       		layer.msg('下载失败');
+       			        }
+       			    });
+	           	}
+	         	
+	         });
+			
+		}else{
+			//验证指定番号是否填写
+			$.ajax({ 
+	         	url: '${base}/admin/visaJapan/validateDesignNum.html',
+	         	data:{sendsignid:sendsignid},
+	         	dataType:"json",
+	         	type:'post',
+	         	success: function(data){
+	         		
+	         		//受付番号未填写
+	           		if(data.status == 500){
+	           			layer.msg(data.msg);
+	           			 layer.closeAll('loading'); 
+	           			 //closeWindow();
+	           		}else{
+	           			$.ajax({ 
+	           	         	url: '${base}/admin/visaJapan/saveZhaoBao.html',
+	           	         	data:{orderId:orderid,sendsignid:sendsignid,groundconnectid:groundconnectid},
+	           	         	dataType:"json",
+	           	         	type:'post',
+	           	         	success: function(data){
+	           	         		if(data != "ok"){
+	           	         			layer.msg(data);
+	           	         			layer.closeAll('loading');
+	           	         		}else{
+		           	           		window.parent.successCallBack(1);
+		           	           		//window.parent.reloaddata();
+		           	           		closeWindow();
+	           	         		}
+	           	           	}
+	           	         });
+	           		}
+	      		//layer.closeAll('loading');
+	           	}
+	         	
+	         });
+			
+		}
+		
 		
 	}
 	//返回 

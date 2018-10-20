@@ -234,7 +234,7 @@ function passValidate(){
 
 //保存
 function save(status){
-	if(isDisable != 1){
+	if(status != 3){
 		//passportValidate();
 		//得到获取validator对象或实例 
 		var bootstrapValidator = $("#passportInfo").data('bootstrapValidator');

@@ -99,6 +99,9 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	//交通公社文件下载
 	@Inject
 	private JiaotonggongsheService jiaotonggongsheService;
+	//一起游文件下载
+	@Inject
+	private YiqiyouService yiqiyouService;
 
 	private static final Integer VISA_PROCESS = JPOrderProcessTypeEnum.VISA_PROCESS.intKey();
 
@@ -152,6 +155,13 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 		//changePrincipalViewService.ChangePrincipal(orderid, JPOrderProcessTypeEnum.SALES_PROCESS.intKey(), userId);
 		TUserEntity loginuser = LoginUtil.getLoginUser(session);
 		Integer userId = loginuser.getId();
+		//楽旅点击招宝变更或招宝取消处理,记录操作人为订单的原操作人，而不是楽旅
+		if (Util.eq("lelv", loginuser.getName())) {
+			orderinfo.setVisaOpid(orderinfo.getSalesOpid());
+		} else {
+			orderinfo.setVisaOpid(userId);
+		}
+
 		orderinfo.setVisaOpid(userId);
 		dbDao.update(orderinfo);
 		return null;
@@ -206,7 +216,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 				byteArray = huanyuService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.JINQIAO_TYPE.intKey()) {
 				byteArray = jinqiaoService.generateFile(orderjp, request).toByteArray();
-				//byteArray = jiaotonggongsheService.generateFile(orderjp, request).toByteArray();
+				//byteArray = yiqiyouService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.SHENZHOU_TYPE.intKey()) {
 				byteArray = shenzhouService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.FENGSHANG_TYPE.intKey()) {
@@ -221,6 +231,8 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 				byteArray = anjieService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.JIAOTONG_TYPE.intKey()) {
 				byteArray = jiaotonggongsheService.generateFile(orderjp, request).toByteArray();
+			} else if (pdftype == PdfTypeEnum.YIQIYOU_TYPE.intKey()) {
+				byteArray = yiqiyouService.generateFile(orderjp, request).toByteArray();
 			}
 
 			// 获取订单信息，准备文件名称

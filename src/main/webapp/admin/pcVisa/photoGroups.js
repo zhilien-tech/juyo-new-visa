@@ -1,0 +1,57 @@
+let photoGroups = [{
+    selector: '#twonichphoto',
+    numType: 13,
+    type: false
+}, {
+    selector: '#huzhao',
+    numType: 1,
+    type: false
+}, {
+    selector: '#oldhuzhao',
+    numType: 2,
+    type: false
+}, {
+    selector: '#card',
+    numType: 3,
+    type: false
+}, {
+    selector: '#cardBack',
+    numType: 14,
+    type: false
+}, {
+    selector: '#marray',
+    numType: 6,
+    type: false
+}, {
+    selector: '#jobCertificate',
+    numType: 8,
+    type: false
+}, {
+    selector: '#business',
+    numType: 9,
+    type: false
+}, {
+    selector: '#drive',
+    numType: 10,
+    type: false
+}, {
+    selector: '#chuqian',
+    numType: 12,
+    type: false
+}, {
+    selector: '.household-group',
+    numType: 4,
+    type: true
+}, {
+    selector: '.house-group',
+    numType: 5,
+    type: true
+}, {
+    selector: '.bank-group',
+    numType: 7,
+    type: true
+}, {
+    selector: '.expire-group',
+    numType: 11,
+    type: true
+}];

@@ -392,6 +392,7 @@ label {
 }
 .draBig input {
 	width:100% !important;
+	padding:0 0 0 10px !important;
 }
 .marginLS,.educationYes ,.languageGroup,.educationGroup,.gocountryGroup,.organizationGroup,.militaryGroup {
 	margin-top:10px;
@@ -435,6 +436,7 @@ label {
 .areaInputPic {
 	width:100% !important;
 	height:30px !important;
+	padding:0 0 0 10px !important;
 }
 .visanumber {
 	/* margin-top:0px !important; */

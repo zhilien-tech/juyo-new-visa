@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -271,8 +272,8 @@ public class OrderUSModule {
 	 */
 	@At
 	@POST
-	public Object validateInfoIsFull(@Param("orderid") int orderid, HttpSession session) {
-		return autofillService.getData(orderid);
+	public Object validateInfoIsFull(@Param("orderid") int orderid, @Param("staffid") int staffid, HttpSession session) {
+		return autofillService.getData(orderid, staffid);
 	}
 
 	@At
@@ -420,4 +421,23 @@ public class OrderUSModule {
 		return orderUSViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
 	}*/
 
+	/**
+	 * 下载文件
+	 */
+	@At
+	@GET
+	public Object downloadFile(@Param("orderid") int orderid, HttpServletResponse response) {
+		return orderUSViewService.downloadFile(orderid, response);
+	}
+
+	/**
+	 * 获取错误信息图片
+	 */
+	@At
+	@GET
+	@Ok("jsp")
+	public Object toErrorphoto(@Param("errorurl") String errorurl) {
+		return errorurl;
+		//return orderUSViewService.toErrorphoto(errorurl);
+	}
 }

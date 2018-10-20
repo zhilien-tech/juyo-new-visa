@@ -3,6 +3,7 @@ SELECT
 toj.id,
 toj.errormsg,
 taj.passport,
+taj.applyname,
 tuser.`name` opname,
 tcompany.shortName,
 tr.orderNum japanNumber,
@@ -131,6 +132,7 @@ SELECT
 	tavpj.black,
 	taoj.mainRelation,
 	taoj.relationRemark,
+	taoj.isMainApplicant,
 	tae.expressType,
 	tae.expressNum
 FROM
@@ -169,6 +171,7 @@ LEFT JOIN (
 		applicantId
 ) tavpj ON tavpj.applicantId = taoj.id
 where taoj.orderId = @orderid
+ORDER BY taoj.isMainApplicant DESC
 
 /*get_travel_plan_by_orderid*/
 SELECT

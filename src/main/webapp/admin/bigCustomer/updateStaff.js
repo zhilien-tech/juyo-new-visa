@@ -244,7 +244,7 @@ function applyValidate(){
 				trigger:"change keyup",
 				validators : {
 					notEmpty : {
-						message : '国籍不能为空'
+						message : '出生国家不能为空'
 					}
 				}
 			},
@@ -700,7 +700,7 @@ $("#cityDiv").mouseleave(function(){
 
 //婚姻状况处理
 //左边
-if(marrystatus == 8 ){//其他有婚姻说明
+if($("#marrystatus").val() == 2 ){//其他有婚姻说明
 	$(".marryexplain").show();
 }else{
 	$(".marryexplain").hide();
@@ -709,12 +709,12 @@ if(marrystatus == 8 ){//其他有婚姻说明
 $("#marrystatus").change(function(){
 	var status = $(this).val();
 	$("#marrystatusen").val(status);
-	if($("#marrystatusen").val() == 8 ){//其他有婚姻说明
+	if($("#marrystatusen").val() == 2 ){//其他有婚姻说明
 		$(".marryexplainen").show();
 	}else{
 		$(".marryexplainen").hide();
 	}
-	if(status == 8 ){
+	if(status == 2 ){
 		$(".marryexplain").show();
 	}else{
 		$(".marryexplain").hide();
@@ -736,16 +736,41 @@ $("#marrystatusen").change(function(){
 	}
 })
 
+//radio 邮寄地址
+$(".mailinfo").change(function(){
+	var usedBeforeVal = $("input[name='ismailsamewithlive']:checked").val();
+	if(usedBeforeVal == 2){
+		$(".mailingAddressTrue").show();
+		$(".mailingAddressUSTrue").show();
+		$("input[name='ismailsamewithliveen'][value='2']").trigger("click");
+		//$(".usedBeforeUS1").trigger("click");
+	}else{
+		$(".mailingAddressTrue").hide();
+		$(".mailingAddressUSTrue").hide();
+		$("input[name='ismailsamewithliveen'][value='1']").trigger("click");
+		//$(".usedBeforeUS2").trigger("click");
+	}
+});
+$(".mailinfoUS").change(function(){
+	var usedBeforeVal = $("input[name='ismailsamewithliveen']:checked").val();
+	if(usedBeforeVal == 2){
+		$(".mailingAddressUSTrue").show();
+	}else{
+		$(".mailingAddressUSTrue").hide();
+	}
+});
 //radio 曾用名
 $(".usedBefore").change(function(){
 	var usedBeforeVal = $("input[name='hasothername']:checked").val();
 	if(usedBeforeVal == 1){
 		
 		$(".usedBeforeTrue").show();
+		$(".usedBeforeUSTrue").show();
 		$("input[name='hasothernameen'][value='1']").trigger("click");
 		//$(".usedBeforeUS1").trigger("click");
 	}else{
 		$(".usedBeforeTrue").hide();
+		$(".usedBeforeUSTrue").hide();
 		$("input[name='hasothernameen'][value='2']").trigger("click");
 		//$(".usedBeforeUS2").trigger("click");
 	}
@@ -892,53 +917,68 @@ function searchByCard(status){
 //更新保存基本信息
 function saveApplicant(status){
 	
-	$("#applicantInfo").data('bootstrapValidator').destroy();
-	$("#applicantInfo").data('bootstrapValidator', null);
-	applyValidate();
-	//得到获取validator对象或实例 
-	var bootstrapValidator = $("#applicantInfo").data('bootstrapValidator');
-	// 执行表单验证 
-	bootstrapValidator.validate();
-	if (bootstrapValidator.isValid()){
-		var str="";
-		var	applicantInfo = $("#applicantInfo").serialize();
-
-		if(status == 2){
-			//左箭头跳转 
-			window.location.href = '/admin/neworderUS/updatePhoto.html?staffid='+staffId;
-			$.ajax({
-				type: 'POST',
-				data : applicantInfo,
-				url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
-				success :function(data) {
-					parent.successCallback(2);
-				}
-			});
-		}else if(status == 3){
-			//右箭头跳转
-			window.location.href = '/admin/neworderUS/updatePassportInfo.html?staffid='+staffId;
-			$.ajax({
-				type: 'POST',
-				data : applicantInfo,
-				url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
-				success :function(data) {
-					parent.successCallback(2);
-				}
-			});
-		}else{
-			layer.load(1);
-			$.ajax({
-				type: 'POST',
-				data : applicantInfo,
-				url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
-				success :function(data) {
-					layer.closeAll("loading");
-					closeWindow();
-					parent.successCallback(2);
-				}
-			});
+	var str="";
+	var	applicantInfo = $("#applicantInfo").serialize();
+	if(status != 2){
+		$("#applicantInfo").data('bootstrapValidator').destroy();
+		$("#applicantInfo").data('bootstrapValidator', null);
+		applyValidate();
+		//得到获取validator对象或实例 
+		var bootstrapValidator = $("#applicantInfo").data('bootstrapValidator');
+		// 执行表单验证 
+		bootstrapValidator.validate();
+		if (bootstrapValidator.isValid()){
+			
+			if(status == 2){
+				//左箭头跳转 
+				window.location.href = '/admin/neworderUS/updatePhoto.html?staffid='+staffId;
+				$.ajax({
+					type: 'POST',
+					data : applicantInfo,
+					url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
+					success :function(data) {
+						parent.successCallback(2);
+					}
+				});
+			}else if(status == 3){
+				//右箭头跳转
+				window.location.href = '/admin/neworderUS/updatePassportInfo.html?staffid='+staffId;
+				$.ajax({
+					type: 'POST',
+					data : applicantInfo,
+					url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
+					success :function(data) {
+						parent.successCallback(2);
+					}
+				});
+			}else{
+				layer.load(1);
+				$.ajax({
+					type: 'POST',
+					data : applicantInfo,
+					url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
+					success :function(data) {
+						layer.closeAll("loading");
+						closeWindow();
+						parent.successCallback(2);
+					}
+				});
+			}
 		}
+		
+	}else{
+		//左箭头跳转 
+		window.location.href = '/admin/neworderUS/updatePhoto.html?staffid='+staffId;
+		$.ajax({
+			type: 'POST',
+			data : applicantInfo,
+			url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
+			success :function(data) {
+				parent.successCallback(2);
+			}
+		});
 	}
+	
 }
 
 /*function saveApplicant(status){

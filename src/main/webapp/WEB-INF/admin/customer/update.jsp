@@ -172,32 +172,8 @@
 						                   	}
 										}
 									},
-									source : {
-										validators : {
-											notEmpty : {
-												message : '客户来源不能为空'
-											}
-										}
-									},
-									payType : {
-										validators : {
-											notEmpty : {
-												message : '支付方式不能为空'
-											}
-										}
-									},
-									linkman : {
-										validators : {
-											notEmpty : {
-												message : '联系人不能为空'
-											}
-										}
-									},
 									mobile : {
 										validators : {
-											notEmpty : {
-												message : '手机不能为空'
-											},
 											regexp : {
 												regexp : /^[1][34578][0-9]{9}$/,
 												message : '手机号格式错误'

@@ -44,7 +44,41 @@
 				-webkit-transform: translate(0,-50%) rotate(-135deg);
 				transform: translate(0,-50%) rotate(-135deg);
 			}
-		
+
+			.select2-container{
+				border: 1px solid #aaa;
+				/* width: 100%!important; */
+			}
+			/* input:focus{
+				border-color: #3087f1!important;
+			} */
+			input:focus{
+				border: none!important;
+			
+				outline: 0;
+				border-color: #3087f1!important;
+				border: 1px solid #3087f1!important;
+				box-shadow: none!important;
+			}
+
+			.select2-container input:focus{
+				border: none!important;
+			
+			}
+
+			#spousebirthday.form-control:focus {
+				border: 1px solid #3087f1!important;
+				box-shadow: none!important;
+				/* outline: 0!important;
+				-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6) !important;
+				box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6) !important; */
+			}
+
+			label {
+				font-weight: 500 !important;
+				color: #656565!important;
+				font-size: 12px!important;
+			}
      	</style>
 	</head>
 	<body>
@@ -82,23 +116,23 @@
                 <div class="titleInfo marginbottom-6">配偶信息</div>
                 <div class="floatLeft groupInputInfo">
                     <label><span class="s">*</span> 配偶姓</label>
-                    <input type="hidden" name="staffid" value="${obj.staffid}"/>
-                    <input name="spousefirstname" id="spousefirstname"  value="${obj.familyinfo.spousefirstname }" type="text" />
+                    <input autocomplete="new-password" type="hidden" name="staffid" value="${obj.staffid}"/>
+                    <input autocomplete="new-password" name="spousefirstname" id="spousefirstname"  value="${obj.familyinfo.spousefirstname }" type="text" />
                 </div>
                 
                 <div class="floatRight groupInputInfo">
                     <label><span class="s">*</span> 配偶名</label>
-                    <input name="spouselastname" id="spouselastname"  value="${obj.familyinfo.spouselastname }" type="text" />
+                    <input autocomplete="new-password" name="spouselastname" id="spouselastname"  value="${obj.familyinfo.spouselastname }" type="text" />
                 </div>
                 <div class="clear" style="height: 15px;"></div>
 				
 				<div class="floatLeft groupInputInfo">
 					<label><span class="s">*</span> 配偶生日</label>
-					<input id="spousebirthday" onchange="translateZhToEn(this,'spousebirthdayen','')" name="spousebirthday" value="${obj.spousebirthday}" class="datetimepickercss form-control" type="text" placeholder="" />
+					<input autocomplete="new-password" id="spousebirthday" onchange="translateZhToEn(this,'spousebirthdayen','')" name="spousebirthday" value="${obj.spousebirthday}" class="datetimepickercss form-control" type="text" placeholder="" />
 				</div>
 
 				
-				<div class="floatRight groupSelectInfo">
+				<div class="floatRight groupSelectInfo" style="width: 180px;">
 					<label><span class="s">*</span> 配偶国籍</label>
 					<select id="spousenationality" class="publicMarNone select2" multiple="multiple"  name="spousenationality" >
 						<c:forEach items="${obj.gocountryfivelist }" var="country">
@@ -118,13 +152,13 @@
 
 
                 <div class="clear" style="height: 15px;"></div>
-                <div class="floatLeft groupcheckBoxInfo">
-                    <label><span class="s">*</span> 配偶出生城市</label>
+                <div class="floatLeft groupcheckBoxInfo" style="width: 197px;">
+                    <label><span class="s">*</span> 配偶出生省份</label>
                     <select name="spousecity" class="form-control input-sm select2" multiple="multiple"  id="spousecity" >
 	                   <option selected="selected" value="${obj.familyinfo.spousecity }">${obj.familyinfo.spousecity}</option>
                     </select>
                 </div>
-                <div class="floatRight groupSelectInfo" >
+                <div class="floatRight groupSelectInfo"  style="width: 180px;">
                     <label><span class="s">*</span> 配偶出生国家</label>
                     <select  id="spousecountry"  name="spousecountry" class="form-control input-sm select2" multiple="multiple">
                      <c:forEach items="${obj.gocountryfivelist }" var="country">
@@ -161,27 +195,27 @@
                 <div class="otherSpouseInfo elementHide paddingTop paddingbottom-65" >
                     <div class="groupInputInfo prvPadL">
                         <label>街道地址(首选)</label>
-                        <input name="firstaddress" id="otherfrstaddress" onchange="translateZhToEn(this,'otherfrstaddressen','')" value="${obj.familyinfo.firstaddress }" type="text" />
+                        <input autocomplete="new-password" name="firstaddress" id="otherfrstaddress" onchange="translateZhToEn(this,'otherfrstaddressen','')" value="${obj.familyinfo.firstaddress }" type="text" />
                     </div>
                     <div class="groupInputInfo prvPadLT">
                         <label>街道地址(次要)*可选</label>
-                        <input name="secondaddress" id="othersecondaddress" onchange="translateZhToEn(this,'othersecondaddressen','')" value="${obj.familyinfo.secondaddress }" type="text" />
+                        <input autocomplete="new-password" name="secondaddress" id="othersecondaddress" onchange="translateZhToEn(this,'othersecondaddressen','')" value="${obj.familyinfo.secondaddress }" type="text" />
                     </div>
                     <div class="clear"></div>
                     <div class="paddingLeft groupcheckBoxInfo">
                         <label>州/省</label>
-                        <input name="province" value="${obj.familyinfo.province }" id="otherprovince" onchange="translateZhToEn(this,'otherprovinceen','')" type="text" />
-                        <!-- <input id="otherapply" name="otherapply" onchange="AddSingle(this,'otherapplyen')" @click="isotherapply" value="visaInfo.familyInfo.apply" type="checkbox" /> -->
+                        <input autocomplete="new-password" name="province" value="${obj.familyinfo.province }" id="otherprovince" onchange="translateZhToEn(this,'otherprovinceen','')" type="text" />
+                        <!-- <input autocomplete="new-password" id="otherapply" name="otherapply" onchange="AddSingle(this,'otherapplyen')" @click="isotherapply" value="visaInfo.familyInfo.apply" type="checkbox" /> -->
                     </div>
                     <div class="paddingRight groupInputInfo">
                         <label>市</label>
-                        <input name="othercity" value="${obj.familyinfo.city }" id="othercity" onchange="translateZhToEn(this,'othercityen','')" type="text"/>
+                        <input autocomplete="new-password" name="othercity" value="${obj.familyinfo.city }" id="othercity" onchange="translateZhToEn(this,'othercityen','')" type="text"/>
                     </div>
                     <div class="clear"></div>
                     <div class="groupcheckBoxInfo paddingLeft">
                         <label>邮政编码</label>
-                        <input name="zipcode" value="${obj.familyinfo.zipcode }" id="otherzipcode"  type="text" />
-                       <!--  <input id="selectcodeapply" name="selectcodeapply" onchange="AddSingle(this,'selectcodeapplyen')" @click="isselectcodeapply" value="visaInfo.familyInfo.selectcodeapply" type="checkbox" /> -->
+                        <input autocomplete="new-password" name="zipcode" value="${obj.familyinfo.zipcode }" id="otherzipcode"  type="text" />
+                       <!--  <input autocomplete="new-password" id="selectcodeapply" name="selectcodeapply" onchange="AddSingle(this,'selectcodeapplyen')" @click="isselectcodeapply" value="visaInfo.familyInfo.selectcodeapply" type="checkbox" /> -->
                     </div>
                     <div class="groupSelectInfo paddingRight">
                         <label>国家/地区</label>
@@ -205,25 +239,25 @@
 				<div class="titleInfo" style="margin-top: 20px;">父亲信息</div>
 				<div class="paddingLeft groupcheckBoxInfo" >
 					<label><span class="s">*</span>	父亲姓</label>
-					<input name="fatherfirstname" id="fatherfirstname" value="${obj.familyinfo.fatherfirstname }"  type="text"/>
-					<!-- <input id="isKnowFatherXing" name="isknowfatherfirstname" onchange="AddSingle(this,'isknowfatherfirstnameen')"  v-on:click="isknowfatherfirstname"  value="visaInfo.familyInfo.isknowfatherfirstname" type="checkbox" /> -->
+					<input autocomplete="new-password" name="fatherfirstname" id="fatherfirstname" value="${obj.familyinfo.fatherfirstname }" style="width: 180px;"  type="text"/>
+					<!-- <input autocomplete="new-password" id="isKnowFatherXing" name="isknowfatherfirstname" onchange="AddSingle(this,'isknowfatherfirstnameen')"  v-on:click="isknowfatherfirstname"  value="visaInfo.familyInfo.isknowfatherfirstname" type="checkbox" /> -->
 				</div>
 				<div class="paddingRight groupcheckBoxInfo" >
 					<label><span class="s">*</span> 父亲名</label>
-					<input name="fatherlastname" id="fatherlastname" value="${obj.familyinfo.fatherlastname }"  type="text" />
-					<!-- <input id="isKnowFatherMing" name="isknowfatherlastname" onchange="AddSingle(this,'isknowfatherlastnameen')" v-on:click="isknowfatherlastname" value="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" /> -->
+					<input autocomplete="new-password" name="fatherlastname" id="fatherlastname" value="${obj.familyinfo.fatherlastname }" style="width: 180px;"  type="text" />
+					<!-- <input autocomplete="new-password" id="isKnowFatherMing" name="isknowfatherlastname" onchange="AddSingle(this,'isknowfatherlastnameen')" v-on:click="isknowfatherlastname" value="visaInfo.familyInfo.isknowfatherlastname" type="checkbox" /> -->
 				</div>
 				<div class="clear"></div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label><span class="s">*</span> 父亲生日</label>
-					<input type="text" id="fatherbirthday" name="fatherbirthday" onchange="translateZhToEn(this,'fatherbirthdayen','')" value="${obj.fatherbirthday}" class="datetimepickercss form-control" placeholder="" />
-					<!-- <input id="isknowfatherbirthday" name="isknowfatherbirthday" onchange="AddSingle(this,'isknowfatherbirthdayen')" v-on:click="isknowfatherbirthday" value="visaInfo.familyInfo.isknowfatherbirthday" type="checkbox" /> -->
+					<input autocomplete="new-password" type="text" id="fatherbirthday" style="width: 180px;" name="fatherbirthday" onchange="translateZhToEn(this,'fatherbirthdayen','')" value="${obj.fatherbirthday}" class="datetimepickercss form-control" placeholder="" />
+					<!-- <input autocomplete="new-password" id="isknowfatherbirthday" name="isknowfatherbirthday" onchange="AddSingle(this,'isknowfatherbirthdayen')" v-on:click="isknowfatherbirthday" value="visaInfo.familyInfo.isknowfatherbirthday" type="checkbox" /> -->
 				</div>
 				<div class="paddingTop paddingRight">
 					<div class="groupRadioInfo" style=" margin-right: 40px; padding-top: 0px;">
 						<label style="margin-bottom: 10px; "><span class="s">*</span> 你的父亲是否在美国</label>
-						<input type="radio" name="isfatherinus"  class="fatherUS" value="1" />是
-						<input type="radio" style="margin-left: 20px;" name="isfatherinus"  class="fatherUS" value="2" checked />否
+						<input autocomplete="new-password" type="radio" name="isfatherinus"  class="fatherUS" value="1" />是
+						<input autocomplete="new-password" type="radio" style="margin-left: 20px;" name="isfatherinus"  class="fatherUS" value="2" checked />否
 					</div>
 					
 				</div>
@@ -241,26 +275,26 @@
 				<div class="titleInfo" style="margin-top: 20px;">母亲信息</div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label><span class="s">*</span> 母亲姓</label>
-					<input id="motherfirstname" name="motherfirstname"  value="${obj.familyinfo.motherfirstname }" type="text" />
-					<!-- <input id="isKnowMotherXing" name="isknowmotherfirstname" onchange="AddSingle(this,'isknowmotherfirstnameen')" v-on:click="isknowmotherfirstname" value="visaInfo.familyInfo.isknowmotherfirstname" type="checkbox" /> -->
+					<input autocomplete="new-password" id="motherfirstname" style="width: 180px;" name="motherfirstname"  value="${obj.familyinfo.motherfirstname }" type="text" />
+					<!-- <input autocomplete="new-password" id="isKnowMotherXing" name="isknowmotherfirstname" onchange="AddSingle(this,'isknowmotherfirstnameen')" v-on:click="isknowmotherfirstname" value="visaInfo.familyInfo.isknowmotherfirstname" type="checkbox" /> -->
 				</div>
 				<div class="paddingRight groupcheckBoxInfo">
 					<label><span class="s">*</span> 母亲名</label>
-					<input id="motherlastname" name="motherlastname" value="${obj.familyinfo.motherlastname }"  type="text" />
-					<!-- <input id="isKnowMotherMing" name="isknowmotherlastname" onchange="AddSingle(this,'isknowmotherlastnameen')" v-on:click="isknowmotherlastname" value="visaInfo.familyInfo.isknowmotherlastname" type="checkbox" /> -->
+					<input autocomplete="new-password" id="motherlastname" name="motherlastname" style="width: 180px;" value="${obj.familyinfo.motherlastname }"  type="text" />
+					<!-- <input autocomplete="new-password" id="isKnowMotherMing" name="isknowmotherlastname" onchange="AddSingle(this,'isknowmotherlastnameen')" v-on:click="isknowmotherlastname" value="visaInfo.familyInfo.isknowmotherlastname" type="checkbox" /> -->
 				</div>
 				<div class="clear"></div>
 				<div class="groupcheckBoxInfo prvPadLT paddingLeft">
 					<label><span class="s">*</span> 母亲生日</label>
-					<input type="text" id="motherbirthday" name="motherbirthday"  value="${obj.motherbirthday}" class="datetimepickercss form-control" placeholder="" />
-					<!-- <input id="isknowmotherbirthday" name="isknowmotherbirthday" onchange="AddSingle(this,'isknowmotherbirthdayen')" v-on:click="isknowmotherbirthday" value="visaInfo.familyInfo.isknowmotherbirthday" type="checkbox" /> -->
+					<input autocomplete="new-password" type="text" id="motherbirthday" style="width: 180px;" name="motherbirthday"  value="${obj.motherbirthday}" class="datetimepickercss form-control" placeholder="" />
+					<!-- <input autocomplete="new-password" id="isknowmotherbirthday" name="isknowmotherbirthday" onchange="AddSingle(this,'isknowmotherbirthdayen')" v-on:click="isknowmotherbirthday" value="visaInfo.familyInfo.isknowmotherbirthday" type="checkbox" /> -->
 				</div>
 
 				<div class="paddingTop padding-left paddingRight">
 					<div class="groupRadioInfo" style="margin-right: 40px;padding-top: 0px;">
 						<label style="margin-bottom: 10px;"><span class="s">*</span> 你的母亲是否在美国</label>
-						<input type="radio" name="ismotherinus"  class="motherUS" value="1" />是
-						<input type="radio" style="margin-left: 20px;" name="ismotherinus"  class="motherUS" value="2" checked />否
+						<input autocomplete="new-password" type="radio" name="ismotherinus"  class="motherUS" value="1" />是
+						<input autocomplete="new-password" type="radio" style="margin-left: 20px;" name="ismotherinus"  class="motherUS" value="2" checked />否
 					</div>
 				</div>
 				<div class="clear"></div>
@@ -277,19 +311,19 @@
 				<div class="paddingTop padding-left">
 					<div class="groupRadioInfo">
 						<label><span class="s">*</span> 在美国除了父母还有没有直系亲属</label>
-						<input type="radio" name="hasimmediaterelatives"  class="directUSRelatives" value="1" />是
-						<input type="radio" style="margin-left: 20px;" name="hasimmediaterelatives"  class="directUSRelatives" value="2" checked/>否
+						<input autocomplete="new-password" type="radio" name="hasimmediaterelatives"  class="directUSRelatives" value="1" />是
+						<input autocomplete="new-password" type="radio" style="margin-left: 20px;" name="hasimmediaterelatives"  class="directUSRelatives" value="2" checked/>否
 					</div>
 					<div class="directRelatives margtop">
 						<!--yes-->
 							<div class="directRelativesYes">
 								<div class="floatLeft leftNo groupInputInfo">
 									<label>姓</label>
-									<input name="relativesfirstname" id="relativesfirstname" value="${obj.immediaterelatives.relativesfirstname }"  type="text" />
+									<input autocomplete="new-password" name="relativesfirstname" id="relativesfirstname" value="${obj.immediaterelatives.relativesfirstname }"  type="text" />
 								</div>
 								<div class="floatRight groupInputInfo">
 									<label>名</label>
-									<input name="relativeslastname" id="relativeslastname" value="${obj.immediaterelatives.relativeslastname }"  type="text" />
+									<input autocomplete="new-password" name="relativeslastname" id="relativeslastname" value="${obj.immediaterelatives.relativeslastname }"  type="text" />
 								</div>
 								<div class="clear"></div>
 								<div class="paddingLeft leftNo groupSelectInfo">
@@ -322,14 +356,14 @@
 		<div class="English">
             <!--家庭信息-->
             <!--配偶-->
-			<div class="paddingTop" style="    margin-top: 45px;margin-bottom: 260px;">
+			<div class="paddingTop" style="    margin-top: 45px;margin-bottom: 264px;">
                 <div class="floatLeft groupInputInfo">
                     <label><span class="s">*</span> Spouse's Surnames </label>
-                    <input name="spousefirstnameen" id="spousefirstnameen" value="${obj.familyinfo.spousefirstnameen }" type="text" />
+                    <input autocomplete="new-password" name="spousefirstnameen" id="spousefirstnameen" value="${obj.familyinfo.spousefirstnameen }" type="text" />
                 </div>
                 <div class="floatRight groupInputInfo">
                     <label><span class="s">*</span> Spouse's Given Names</label>
-                    <input name="spouselastnameen" id="spouselastnameen" value="${obj.familyinfo.spouselastnameen }" type="text" />
+                    <input autocomplete="new-password" name="spouselastnameen" id="spouselastnameen" value="${obj.familyinfo.spouselastnameen }" type="text" />
                 </div>
                 <div class="clear"></div>
             </div>
@@ -337,37 +371,38 @@
 			<div class="familyInfo">
 				<div class="paddingLeft groupcheckBoxInfo" >
 					<label><span class="s">*</span> father's Surnames</label>
-					<input name="fatherfirstnameen" id="fatherfirstnameen" value="${obj.familyinfo.fatherfirstnameen }" type="text"/>
-					<!-- <input id="isKnowFatherXing" name="isknowfatherfirstnameen" class="isknowfatherfirstnameen"   v-on:click="isknowfatherfirstname"  value="visaInfo.familyInfo.isknowfatherfirstnameen" type="checkbox" /> -->
+					<input autocomplete="new-password" name="fatherfirstnameen" id="fatherfirstnameen" style="width: 180px;" value="${obj.familyinfo.fatherfirstnameen }" type="text"/>
+					<!-- <input autocomplete="new-password" id="isKnowFatherXing" name="isknowfatherfirstnameen" class="isknowfatherfirstnameen"   v-on:click="isknowfatherfirstname"  value="visaInfo.familyInfo.isknowfatherfirstnameen" type="checkbox" /> -->
 				</div>
 				<div class="paddingRight groupcheckBoxInfo" >
 					<label><span class="s">*</span> father's Given Names </label>
-					<input name="fatherlastnameen" id="fatherlastnameen" value="${obj.familyinfo.fatherlastnameen }" type="text" />
-					<!-- <input id="isKnowFatherMing" name="isknowfatherlastnameen" class="isknowfatherlastnameen"  v-on:click="isknowfatherlastname" value="visaInfo.familyInfo.isknowfatherlastnameen" type="checkbox" /> -->
+					<input autocomplete="new-password" name="fatherlastnameen" id="fatherlastnameen" style="width: 180px;" value="${obj.familyinfo.fatherlastnameen }" type="text" />
+					<!-- <input autocomplete="new-password" id="isKnowFatherMing" name="isknowfatherlastnameen" class="isknowfatherlastnameen"  v-on:click="isknowfatherlastname" value="visaInfo.familyInfo.isknowfatherlastnameen" type="checkbox" /> -->
 				</div>
-				<div class="clear" style="height: 118px;"></div>
+				<div class="clear" style="height:120px;" id="asd"></div>
 				<div class="paddingLeft groupcheckBoxInfo">
 					<label><span class="s">*</span> Mother's Surnames</label>
-					<input id="motherfirstnameen" name="motherfirstnameen" value="${obj.familyinfo.motherfirstnameen }" type="text" />
-					<!-- <input id="isKnowMotherXing" name="isknowmotherfirstnameen" class="isknowmotherfirstnameen"  v-on:click="isknowmotherfirstname" value="visaInfo.familyInfo.isknowmotherfirstnameen" type="checkbox" /> -->
+					<input autocomplete="new-password" id="motherfirstnameen" name="motherfirstnameen" style="width: 180px;" value="${obj.familyinfo.motherfirstnameen }" type="text" />
+					<!-- <input autocomplete="new-password" id="isKnowMotherXing" name="isknowmotherfirstnameen" class="isknowmotherfirstnameen"  v-on:click="isknowmotherfirstname" value="visaInfo.familyInfo.isknowmotherfirstnameen" type="checkbox" /> -->
 				</div>
 				<div class="paddingRight groupcheckBoxInfo">
 					<label><span class="s">*</span> Mother's Given Names</label>
-					<input id="motherlastnameen" name="motherlastnameen" value="${obj.familyinfo.motherlastnameen }" type="text" />
-					<!-- <input id="isKnowMotherMing" name="isknowmotherlastnameen" class="isknowmotherlastnameen"  v-on:click="isknowmotherlastname" value="visaInfo.familyInfo.isknowmotherlastnameen" type="checkbox" /> -->
+					<input autocomplete="new-password" id="motherlastnameen" name="motherlastnameen" style="width: 180px;" value="${obj.familyinfo.motherlastnameen }" type="text" />
+					<!-- <input autocomplete="new-password" id="isKnowMotherMing" name="isknowmotherlastnameen" class="isknowmotherlastnameen"  v-on:click="isknowmotherlastname" value="visaInfo.familyInfo.isknowmotherlastnameen" type="checkbox" /> -->
 				</div>
 				<div class="clear"></div>
-				<div class="paddingTop padding-left" style="margin-top: 183px;">
+				<!-- <div style="width: 300px;height: 70px; display: none;"></div> -->
+				<div class="paddingTop padding-left" id="fgh" style="margin-top: 183px;">
 					<div class="directRelatives">
 						<!--yes-->
 							<div class="directRelativesYesen">
 								<div class="floatLeft leftNo groupInputInfo">
 									<label><span class="s">*</span> Surnames</label>
-									<input name="relativesfirstnameen" id="relativesfirstnameen" value="${obj.immediaterelatives.relativesfirstnameen }" type="text" />
+									<input autocomplete="new-password" name="relativesfirstnameen" id="relativesfirstnameen" value="${obj.immediaterelatives.relativesfirstnameen }" type="text" />
 								</div>
 								<div class="floatRight groupInputInfo prvPadL">
 									<label><span class="s">*</span> Given Names</label>
-									<input name="relativeslastnameen" id="relativeslastnameen" value="${obj.immediaterelatives.relativeslastnameen }"  type="text" />
+									<input autocomplete="new-password" name="relativeslastnameen" id="relativeslastnameen" value="${obj.immediaterelatives.relativeslastnameen }"  type="text" />
 								</div>
 								<div class="clear"></div>
 								
@@ -413,28 +448,57 @@
 	<script src="${base}/admin/bigCustomer/updateFamilyinfo.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面  js -->
 	<script src="${base}/references/common/js/pinyin.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
-		
 	/* var spouseaddress = '${obj.familyinfo.spouseaddress}';
 	if(spouseaddress == 5){
 		$(".otherSpouseInfo").show();
 	} */
+
+	// $('.select2-container ').on('click', function() {
+	// 	console.log('asdasdsd');
+	// 	$(this).css({
+	// 		border:'1px solid #66afe9',
+	// 	});
+	// });
 	
 	//母亲是否在美国
 	var ismotherinus = '${obj.familyinfo.ismotherinus}';
 	$("input[name='ismotherinus'][value='" + ismotherinus + "']").attr("checked", 'checked');
     if (ismotherinus == 1) {
-    	$(".motherUSYes").show();
+		$(".motherUSYes").show();
+		$('#fgh').css('margin-top', 250)
+		
 	} else {
 		$(".motherUSYes").hide();
+		$('#fgh').css('margin-top', 183)
 	}
+
+	$(".motherUS").change(function() {
+		if($(this).val()==1){
+			$('#fgh').css('margin-top', 250)
+		}else{
+			$('#fgh').css('margin-top', 183)
+		}
+	});
+
 	//父亲是否在美国
 	var isfatherinus = '${obj.familyinfo.isfatherinus}';
 	$("input[name='isfatherinus'][value='" + isfatherinus + "']").attr("checked", 'checked');
     if (isfatherinus == 1) {
+		$('#asd').height(189);
     	$(".fatherUSYes").show();
 	} else {
 		$(".fatherUSYes").hide();
+		$('#asd').height(120);
 	}
+
+	$('.fatherUS').change(function() {
+		console.log($(this).val());
+		if ($(this).val() == 1) {
+			$('#asd').height(189);
+		} else {
+			$('#asd').height(120);
+		}
+	});
 	//在美国除了父母还有没有直系亲属
 	var hasimmediaterelatives = '${obj.familyinfo.hasimmediaterelatives}';
 	$("input[name='hasimmediaterelatives'][value='" + hasimmediaterelatives + "']").attr("checked", 'checked');

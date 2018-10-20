@@ -37,7 +37,7 @@
 								<label><span>*</span>客户来源：</label> <select id="customerType"
 									name="source" class="form-control input-sm inpImportant"
 									>
-									<option>--请选择--</option>
+									<option value="">--请选择--</option>
 									<c:forEach var="map" items="${obj.customerTypeEnum}">
 										<option value="${map.key}">${map.value}</option>
 									</c:forEach>
@@ -68,7 +68,7 @@
 								<select id="payType"
 									name="payType" class="form-control input-sm inpImportant"
 									placeholder="  " >
-									<option>--请选择--</option>
+									<option value="">--请选择--</option>
 									<c:forEach var="map" items="${obj.payTypeEnum}">
 										<option value="${map.key}">${map.value}</option>
 									</c:forEach>
@@ -192,18 +192,19 @@
 											}
 										}
 									},
+									/*
 									linkman : {
 										validators : {
 											notEmpty : {
 												message : '联系人不能为空'
 											}
 										}
-									},
+									}, */
 									mobile : {
 										validators : {
-											notEmpty : {
+											/* notEmpty : {
 												message : '手机不能为空'
-											},
+											}, */
 											regexp : {
 												regexp : /^[1][34578][0-9]{9}$/,
 												message : '手机号格式错误'
@@ -258,7 +259,7 @@
 					layer.msg('shortname不能为空');
 					return;
 				}
-				var source = $("#customerType").val();
+				/* var source = $("#customerType").val();
 				if (source == "") {
 					layer.msg('source不能为空');
 					return;
@@ -277,7 +278,7 @@
 				if (email == "") {
 					layer.msg('email不能为空');
 					return;
-				}
+				} */
 				var formdata = getFormJson('#customerAddForm');
 				var visatypes = [];
 				$('.visatyperow').each(function(){

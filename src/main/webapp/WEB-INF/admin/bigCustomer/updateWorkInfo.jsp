@@ -43,7 +43,38 @@
 				-webkit-transform: translate(0,-50%) rotate(-135deg);
 				transform: translate(0,-50%) rotate(-135deg);
 			}
-		
+			input:focus{
+				border: none!important;
+			
+				outline: 0;
+				border-color: #3087f1!important;
+				border: 1px solid #3087f1!important;
+				box-shadow: none!important;
+			}
+			.select2 input:focus{
+				border: none!important;
+			
+				outline: 0;
+			
+			}
+			.aaa .select2 .select2-search__field{
+				margin:0!important;
+			}
+			.select2 {
+				width: 100%!important;
+			}
+			.select2-container{
+				height: 34px;
+				border: 1px solid #aaa;
+			}
+			.select2-selection,
+			.selection{
+				height: 100%!important;
+			}
+			.select2-container .select2-selection--multiple{
+				height: 28px!important;
+				min-height: 28px!important;
+			}
     </style>
 </head>
 <body>
@@ -72,26 +103,26 @@
 			<div class="experience paddingTop">
 				<div class="titleInfo">职业信息</div>
 				<div class="paddingTop groupSelectInfo padding-left" >
-					<input type="hidden" value="${obj.staffId }" name="staffid"/>
+					<input autocomplete="new-password" type="hidden" value="${obj.staffId }" name="staffid"/>
 					<label><span class="s">*</span>主要职业</label>
-					<select id="occupation"  name="occupation" >
+					<select id="occupation"  name="occupation" style="width: 100%;">
 						<option value="0">请选择</option>
 						<c:forEach items="${obj.careersenum }" var="map">
-							<option value="${map.key }" ${map.key==obj.workinfo.occupation?"selected":"" } >${map.value }</option>
+							<option value="${map.key}" ${map.key==obj.workinfo.occupation?"selected":"" } >${map.value }</option>
 						</c:forEach>
 					</select>
 				</div>
 				<div class="paddingTop  jobEduLearningInfoDiv">
 					<div class="groupInputInfo draBig">
                         <label><span class="s">*</span>目前的工作单位名称</label>
-						<input name="unitname" id="unitname" onchange="translateZhToEn(this,'unitnameen','')"  type="text" value="${obj.workinfo.unitname }" />
+						<input autocomplete="new-password" name="unitname" id="unitname" onchange="translateZhToEn(this,'unitnameen','')"  type="text" value="${obj.workinfo.unitname }" />
                     </div>
                     <div class="clear"></div>
                     <div class="paddingLeft groupInputInfo">
                         <label><span class="s">*</span>电话号码</label>
-                        <input name="telephone" value="${obj.workinfo.telephone }" id="jobtelphone"  type="text" />
+                        <input autocomplete="new-password" name="telephone" value="${obj.workinfo.telephone }" id="jobtelphone"  type="text" />
                     </div>
-					<div class="paddingRight groupSelectInfo" >
+					<div class="paddingRight groupSelectInfo" style="width: 190px;padding-left: 15px;">
                         <label><span class="s">*</span>工作国家</label>
                         <select id='jobcountry'  class="form-control input-sm select2" multiple="multiple" name="country">
                         
@@ -109,41 +140,50 @@
                         </select>
                     </div>
                     <div class="clear"></div>
-                    <div class="paddingLeft groupcheckBoxInfo">
+                    <div class="paddingLeft groupcheckBoxInfo" style="width: 200px;">
                         <label><span class="s">*</span>单位地址（省）</label>
-                        <select name="province" class="form-control input-sm select2" multiple="multiple"  id="jobprovince" >
-	                   		<option selected="selected" value="${obj.workinfo.province }">${obj.workinfo.province}</option>
+                        <select name="province" class="form-control input-sm select2" onchange="translateZhToEn(this,'jobprovinceen','select2')" multiple="multiple"  id="jobprovince" >
+	                   		<%-- <option selected="selected" value="${obj.workinfo.province }">${obj.workinfo.province}</option> --%>
+	                        <c:if test="${not empty obj.workinfo.province }">
+								<option value="${obj.workinfo.province }" selected="selected">${obj.workinfo.province }</option>
+							</c:if>
                         </select>
+                        <input type="hidden" id="jobprovinceen" name="provinceen" value="${obj.workinfo.provinceen }"/>
                     </div>
-                    <div class="paddingRight groupInputInfo">
+                    <div class="paddingRight groupInputInfo aaa" style="width: 180px;">
                         <label><span class="s">*</span>单位地址（市）</label>
-                         <select name="city" class="form-control input-sm select2" multiple="multiple"  id="city" >
-	                   		<option selected="selected" value="${obj.workinfo.city }">${obj.workinfo.city}</option>
+                         <select name="city" class="form-control input-sm select2" onchange="translateZhToEn(this,'cityen','select2')" multiple="multiple"  id="city" >
+	                   		<c:if test="${not empty obj.workinfo.city }">
+								<option value="${obj.workinfo.city }" selected="selected">${obj.workinfo.city }</option>
+							</c:if>
                         </select>
+                        <input id="cityen" name="cityen" type="hidden" value="${obj.workinfo.cityen }"/>
                     </div>
                     <div class="clear"></div>
 					<div class="groupInputInfo draBig marginLS">
                         <label><span class="s">*</span>详细地址</label>
-						<input name="address" id="jobaddress" onchange="translateZhToEn(this,'jobaddressen','')" value="${obj.workinfo.address }" type="text" />
+						<input autocomplete="new-password" name="address" id="jobaddress" onchange="translateZhToEn(this,'jobaddressen','')" value="${obj.workinfo.address }" type="text" />
 					</div>
 					<div class="clear"></div>
                     <div class="paddingLeft groupInputInfo">
                         <label><span class="s">*</span>入职日期</label>
-                        <input id="workstartdate"  name="workstartdate" value="${obj.workstartdate}" class="datetimepickercss form-control" type="text" placeholder="" />
+                        <input autocomplete="new-password" id="workstartdate"  name="workstartdate" value="${obj.workstartdate}" class="datetimepickercss form-control" type="text" placeholder="" />
                     </div>
                     <div class=" paddingRight groupcheckBoxInfo">
                         <label><span class="s">*</span>职位</label>
-                        <input name="position" value="${obj.workinfo.position }" id="position" type="text" />
+                        <input autocomplete="new-password" onchange="translateZhToEn(this,'positionen','')" name="position" value="${obj.workinfo.position }" style="width: 180px;" id="position" type="text" />
+                        <input type="hidden" id="positionen" name="positionen" value="${obj.workinfo.positionen }"/>
                     </div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo" >
                         <label><span class="s">*</span>当前月收入</label>
-						<input name="salary" value="${obj.workinfo.salary }" id="salary" type="text"  onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]" onafterpaste="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"/>
+						<input autocomplete="new-password" name="salary" value="${obj.workinfo.salary }" style="width: 180px;" id="salary" type="text"  onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]" onafterpaste="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"/>
 					</div>
 					<div class="clear"></div>
 					<div class="grouptextareaInfo groupPM">
                         <label><span class="s">*</span>简述你的职责</label>
-						<input name="duty" class='areaInputPic' id="jobduty" value="${obj.workinfo.duty }" />
+						<input name="duty" class='areaInputPic' id="jobduty" onchange="translateZhToEn(this,'jobdutyen','')" value="${obj.workinfo.duty }" />
+						<%-- <input id="jobdutyen" name="dutyen" type="hidden" value="${obj.workinfo.dutyen }"/> --%>
 					</div>
 				</div>
 				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea"></div>
@@ -154,13 +194,13 @@
 					<div>
 						<div class="groupRadioInfo">
                             <label><span class="s">*</span>是否有上份工作</label>
-							<input 
+							<input autocomplete="new-password" 
 								type="radio" 
 								name="isemployed" 
 								class="beforeWork" 
 								value="1" 
 							/>是
-							<input 
+							<input autocomplete="new-password" 
 								type="radio" 
 								style="margin-left: 20px;" 
 								name="isemployed" 
@@ -175,17 +215,17 @@
 									<div class="workBeforeInfosDiv">
 										<div class="leftNo marginLS groupInputInfo" >
                                             <label><span class="s">*</span>单位名称</label>
-											<input name="employername" style="width: 100%" onchange="translateZhToEn(this,'employernameen','')" value="${obj.beforework.employername }" type="text" />
+											<input autocomplete="new-password" name="employername" style="width: 100%" onchange="translateZhToEn(this,'employernameen','')" value="${obj.beforework.employername }" type="text" />
 										</div>
                                       
                                         <div class="clear"></div>
 										<div class="paddingLeft leftNo groupInputInfo">
 
                                             <label><span class="s">*</span>电话号码</label>
-											<input name="employertelephone"  value="${obj.beforework.employertelephone }" type="text" />
+											<input autocomplete="new-password" name="employertelephone"  value="${obj.beforework.employertelephone }" type="text" />
                                         </div>
                                         
-                                        <div class="paddingRight groupSelectInfo">
+                                        <div class="paddingRight groupSelectInfo" style="width: 180px;">
                                             <label><span class="s">*</span>工作国家</label>
                                             <select name="employercountry" class=" select2" multiple="multiple"  id="employercountry">
                                                 <c:forEach items="${obj.gocountryfivelist }" var="country">
@@ -201,47 +241,55 @@
                                             </select>
                                         </div>
 										
-									
+										<div class="clear"></div>
 										
-										<div class="paddingLeft leftNo groupInputInfo">
+										<div class="paddingLeft leftNo groupInputInfo" style="width: 180px;">
                                             <label><span class="s">*</span>单位地址（省）</label>
-											<select name="employerprovince" class="form-control input-sm select2" multiple="multiple"  id="employerprovince" >
-						                   		<option selected="selected" value="${obj.beforework.employerprovince }">${obj.beforework.employerprovince}</option>
+											<select name="employerprovince" class="form-control input-sm select2" onchange="translateZhToEn(this,'employerprovinceen','select2')" multiple="multiple"  id="employerprovince" >
+						                   		<c:if test="${not empty obj.beforework.employerprovince }">
+													<option value="${obj.beforework.employerprovince }" selected="selected">${obj.beforework.employerprovince }</option>
+												</c:if>
 					                        </select>
+					                        <input id="employerprovinceen" name="employerprovinceen" type="hidden" value="${obj.beforework.employerprovinceen }"/>
 										</div>
-										<div class="paddingRight leftNo groupInputInfo" >
+										<div class="paddingRight leftNo groupInputInfo aaa" style="width: 180px;">
                                             <label><span class="s">*</span>单位地址（市）</label>
-											<select name="employercity" class="form-control input-sm select2" multiple="multiple"  id="employercity" >
-						                   		<option selected="selected" value="${obj.beforework.employercity }">${obj.beforework.employercity}</option>
+											<select name="employercity" class="form-control input-sm select2" onchange="translateZhToEn(this,'employercityen','select2')" multiple="multiple"  id="employercity" >
+						                   		<c:if test="${not empty obj.beforework.employercity }">
+													<option value="${obj.beforework.employercity }" selected="selected">${obj.beforework.employercity }</option>
+												</c:if>
 					                        </select>
+					                        <input id="employercityen" name="employercityen" type="hidden" value="${obj.beforework.employercityen }"/>
 										</div>
                                         <div class="clear"></div>
                                         
                                         <div class="draBig leftNo marginLS groupInputInfo">
                                             <label><span class="s">*</span>详细地址</label>
-                                            <input id="employeraddress" name="employeraddress" onchange="translateZhToEn(this,'employeraddressen','')" value="${obj.beforework.employeraddress }" type="text" />
+                                            <input autocomplete="new-password" id="employeraddress" name="employeraddress" onchange="translateZhToEn(this,'employeraddressen','')" value="${obj.beforework.employeraddress }" type="text" />
                                         </div>
 
                                         <div class="paddingLeft leftNo groupInputInfo" >
                                             <label><span class="s">*</span>入职时间</label>
-                                            <input id="employstartdate"  name="employstartdate"  value="${obj.employestartdate }"  class="datetimepickercss form-control" type="text" placeholder="" />
+                                            <input autocomplete="new-password" id="employstartdate"  name="employstartdate"  value="${obj.employestartdate }"  class="datetimepickercss form-control" type="text" placeholder="" />
                                         </div>
                                         <div class="paddingRight groupInputInfo">
 
                                             <label><span class="s">*</span>离职时间</label>
-                                            <input id="employenddate"  name="employenddate"  value="${obj.employenddate }"  class="datetimepickercss form-control" type="text" placeholder="" />
+                                            <input autocomplete="new-password" id="employenddate"  name="employenddate"  value="${obj.employenddate }"  class="datetimepickercss form-control" type="text" placeholder="" />
                                         </div>
 
 										<div class="paddingLeft groupInputInfo" style="padding-left: 0;">
                                             <label><span class="s">*</span>职位</label>
-                                            <input name="jobtitle" value="${obj.beforework.jobtitle }"  type="text"/>
+                                            <input autocomplete="new-password" onchange="translateZhToEn(this,'jobtitleen','')" name="jobtitle" value="${obj.beforework.jobtitle }"  type="text"/>
+                                            <input id="jobtitleen" name="jobtitleen" type="hidden" value="${obj.beforework.jobtitleen }"/>
                                         </div>
 										
 										<div class="clear"></div>
 									
 										<div class="draBig leftNo marginLS grouptextareaInfo">
                                             <label><span class="s">*</span>简述你的职责</label>
-											<input type="text" name="previousduty"  class="areaInputPic previousduty" value="${obj.beforework.previousduty }" />
+											<input autocomplete="new-password" type="text" onchange="translateZhToEn(this,'previousdutyen','')" name="previousduty"  class="areaInputPic previousduty" value="${obj.beforework.previousduty }" />
+											<input id="previousdutyen" name="previousdutyen" type="hidden" value="${obj.beforework.previousdutyen }"/>
 											<%-- <textarea name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }"></textarea> --%>
 										</div>
 									</div>
@@ -256,8 +304,8 @@
 						<div class="groupRadioInfo" style="padding-bottom: 10px;">
                             <label><span class="s">*</span> 是否有初中及以上教育经历（最高学历）</label>
                             
-							<input type="radio" name="issecondarylevel" class="education" value="1" />是
-							<input type="radio" style="margin-left: 20px;" name="issecondarylevel"  class="education" value="2" checked/>否
+							<input autocomplete="new-password" type="radio" name="issecondarylevel" class="education" value="1" />是
+							<input autocomplete="new-password" type="radio" style="margin-left: 20px;" name="issecondarylevel"  class="education" value="2" checked/>否
 						</div>
 						<!--yes-->
 						<div class="educationInfo elementHide">
@@ -281,15 +329,16 @@
 									<div class="midSchoolEduDiv margintop-10">
 										<div class="draBig leftNo marginLS groupInputInfo">
                                             <label><span class="s">*</span>学校名称</label>
-											<input name="institution" onchange="translateZhToEn(this,'institutionen','')" value="${obj.beforeeducate.institution }" type="text"/>
+											<input autocomplete="new-password" name="institution" onchange="translateZhToEn(this,'institutionen','')" value="${obj.beforeeducate.institution }" type="text"/>
 										</div>                                        
-                                        <div class="paddingLeft leftNo groupInputInfo courseClass">
+                                        <div class="paddingLeft leftNo groupInputInfo courseClass" style="margin-right: 20px;">
                                             <label><span class="s">*</span> 专业名称</label>
-                                            <input id="course" name="course" value="${obj.beforeeducate.course }" type="text" />
+                                            <input autocomplete="new-password" onchange="translateZhToEn(this,'courseen','')" id="course" name="course" value="${obj.beforeeducate.course }" type="text" />
+                                            <input id="courseen" name="courseen" type="hidden" value="${obj.beforeeducate.courseen }"/>
                                         </div>
                                         
                                         
-                                        <div class="paddingRight leftNo groupSelectInfo" >
+                                        <div class="paddingLeft leftNo groupSelectInfo" style="width: 180px;">
                                             <label><span class="s">*</span> 所在国家</label>
                                             <select name="institutioncountry" class=" select2" multiple="multiple" id="institutioncountry">
                                             	<c:forEach items="${obj.gocountryfivelist }" var="country">
@@ -306,37 +355,41 @@
                                         </div>
                                         <div class="clear"></div>
 
-										<div class="paddingLeft leftNo groupcheckBoxInfo" >
-                                            <label><span class="s">*</span> 单位地址（省）</label>
+										<div class="paddingLeft leftNo groupcheckBoxInfo" style="width: 180px;">
+                                            <label><span class="s">*</span> 学校地址（省）</label>
                                             
-                                            <select name="institutionprovince" class="form-control input-sm select2" multiple="multiple"  id="institutionprovince" >
+                                            <%-- <select name="institutionprovince" class="form-control input-sm select2" multiple="multiple"  id="institutionprovince" >
 							                   <option selected="selected" value="${obj.beforeeducate.institutionprovince }">${obj.beforeeducate.institutionprovince}</option>
-						                    </select>
+						                    </select> --%>
+						                    <input id="insprovince" autocomplete="new-password" style="width:182px;" name="institutionprovince" onchange="translateZhToEn(this,'institutionprovinceen','')" type="text" value="${obj.beforeeducate.institutionprovince }"/>
+						                    <input id="institutionprovinceen" name="institutionprovinceen" type="hidden" value="${obj.beforeeducate.institutionprovinceen }"/>
 										</div>
-										<div class="paddingRight leftNo groupInputInfo">
-                                            <label><span class="s">*</span> 单位地址（市）</label>
-                                            <select name="institutioncity" class="form-control input-sm select2" multiple="multiple"  id="institutioncity" >
+										<div class="paddingRight leftNo groupInputInfo aaa" style="width: 180px;">
+                                            <label><span class="s">*</span> 学校地址（市）</label>
+                                            <%-- <select name="institutioncity" class="form-control input-sm select2" multiple="multiple"  id="institutioncity" >
 							                   <option selected="selected" value="${obj.beforeeducate.institutioncity }">${obj.beforeeducate.institutioncity}</option>
-						                    </select>
+						                    </select> --%>
+						                    <input id="inscity" autocomplete="new-password" style="width:182px;" name="institutioncity" onchange="translateZhToEn(this,'institutioncityen','')" type="text" value="${obj.beforeeducate.institutioncity }"/>
+						                    <input id="institutioncityen" name="institutioncityen" type="hidden" value="${obj.beforeeducate.institutioncityen }"/>
 										</div>
 										<div class="clear"></div>
 										
 										<div class="draBig leftNo margintop-10 groupInputInfo">
                                             <label><span class="s">*</span>详细地址</label>
-                                            <input id="institutionaddress" name="institutionaddress" onchange="translateZhToEn(this,'institutionaddressen','')" value="${obj.beforeeducate.institutionaddress }" type="text" />
+                                            <input autocomplete="new-password" id="institutionaddress" name="institutionaddress" onchange="translateZhToEn(this,'institutionaddressen','')" value="${obj.beforeeducate.institutionaddress }" type="text" />
                                         </div>
 
 
 										<div class="clear"></div>
 										<div class="paddingLeft leftNo groupInputInfo">
                                             <label><span class="s">*</span>开始时间</label>
-											<input id="coursestartdate"  name="coursestartdate" value="${obj.coursestartdate }"  class="datetimepickercss form-control margintop-10" type="text" placeholder="" />
+											<input autocomplete="new-password" id="coursestartdate"  name="coursestartdate" value="${obj.coursestartdate }"  class="datetimepickercss form-control margintop-10" type="text" placeholder="" />
 										</div>
 										
 										<div class="paddingRight leftNo groupInputInfo">
                                             <label><span class="s">*</span>结束时间</label>
-											<%-- <input id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" /> --%>
-											<input id="courseenddate" name="courseenddate" value="${obj.courseenddate }"  class="datetimepickercss form-control margintop-10" type="text" placeholder="" />
+											<%-- <input autocomplete="new-password" id="courseenddate" onchange="addSegmentsTranslateZhToEn(this,'courseenddateen','')" name="courseenddate" value="<fmt:formatDate value="${education.courseenddate }" pattern="dd/MM/yyyy" />" class="datetimepickercss form-control margintop-10" type="text" placeholder="日/月/年" /> --%>
+											<input autocomplete="new-password" id="courseenddate" name="courseenddate" value="${obj.courseenddate }"  class="datetimepickercss form-control margintop-10" type="text" placeholder="" />
                                         </div>
                                         <div class="clear"></div>
 									</div>
@@ -352,28 +405,34 @@
 		<div class="English">
 
 			<!--工作/教育/培训信息-->
-			<div class="experience paddingTop" style="margin-bottom: 243px;">
+			<div class="experience paddingTop">
 				
 				<div class="paddingTop  jobEduLearningInfoDiv" style="margin-top: 107px;">
 					<div class="groupInputInfo draBig">
                             <label><span class="s">*</span> Present Employer Name</label>
-						<input name="unitnameen" id="unitnameen" value="${obj.workinfo.unitnameen }" type="text" />
+						<input autocomplete="new-password" name="unitnameen" id="unitnameen" style="width: 100%;" value="${obj.workinfo.unitnameen }" type="text" />
 					</div>
 					<div class="groupInputInfo draBig marginLS" style="margin-top: 147px;">
 						<label ><span class="s">*</span> Street Address</label>
-						<input name="addressen" id="jobaddressen" value="${obj.workinfo.addressen }" type="text" />
+						<input autocomplete="new-password" name="addressen" id="jobaddressen" value="${obj.workinfo.addressen }" type="text" />
 					</div>
 					<div class="clear"></div>
+				</div>
+
+				<div class="groupInputInfo draBig marginLS" style="margin-top: 144px;">
+					<label ><span class="s">*</span> Duty</label>
+					<input name="dutyen" id="jobdutyen" value="${obj.workinfo.dutyen }" type="text" />
 				</div>
 				
 				<div class="grouptextareaInfo elementHide jobEduLearningInfoTextarea">
 					<!-- <label>说明</label>
-					<input /> -->
+					<input autocomplete="new-password" /> -->
 				</div>
 			</div>
+			<div id="box1" style="width: 100px;height: 48px;"></div>
 			<!--以前-->
 			<div>
-				<div id="yiqian" class="paddingTop padding-left" style="margin-bottom: 369px;">
+				<div id="yiqian" class="paddingTop padding-left">
 					<div>
 						<!--yes-->
 						<div class="beforeWorkInfo beforeWorkInfoen elementHide">
@@ -381,11 +440,11 @@
 									<div class="workBeforeInfosDiven">
 										<div class="leftNo marginLS groupInputInfo" >
 											<label><span class="s">*</span>Present Employer Name</label>
-											<input name="employernameen" id="employernameen" class="employernameen" value="${obj.beforework.employernameen }" type="text" />
+											<input autocomplete="new-password" name="employernameen" id="employernameen" style="width: 100%;" class="employernameen" value="${obj.beforework.employernameen }" type="text" />
 										</div>
-										<div class="draBig leftNo marginLS groupInputInfo" style="margin-top: 148px;">
+										<div class="draBig leftNo marginLS groupInputInfo" style="margin-top: 147px;">
                                             <label><span class="s">*</span> Street Address</label>
-											<input id="employeraddressen" name="employeraddressen" class="employeraddressen" value="${obj.beforework.employeraddressen }" type="text" />
+											<input autocomplete="new-password" id="employeraddressen" name="employeraddressen" class="employeraddressen" value="${obj.beforework.employeraddressen }" type="text" />
 										</div>
 										<div class="clear"></div>
 									</div>
@@ -398,6 +457,8 @@
 						</div>
 					</div>
 				</div>
+
+				<div id="box2" style="width: 100px;height: 337px;"></div>
 				<div class="padding-left">
 					<div class="paddingTop">
 					
@@ -407,11 +468,11 @@
 									<div class="midSchoolEduDiven margintop-10">
 										<div class="draBig leftNo marginLS groupInputInfo">
 											<label><span class="s">*</span> School Name</label>
-											<input id="institutionen" name="institutionen" class="institutionen" value="${obj.beforeeducate.institutionen }" type="text"/>
+											<input autocomplete="new-password" id="institutionen" name="institutionen" class="institutionen" value="${obj.beforeeducate.institutionen }" type="text"/>
 										</div>
 										<div class="draBig leftNo margintop-10 groupInputInfo" style="margin-top: 145px!important;">
                                             <label><span class="s">*</span> Street Address</label>
-											<input id="institutionaddressen" name="institutionaddressen" class="institutionaddressen" value="${obj.beforeeducate.institutionaddressen }" type="text" />
+											<input autocomplete="new-password" id="institutionaddressen" name="institutionaddressen" class="institutionaddressen" value="${obj.beforeeducate.institutionaddressen }" type="text" />
 										</div>
 									
 										<div class="clear"></div>
@@ -459,7 +520,7 @@
     <script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js --> --%>
     <script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
     <script src="${base}/admin/bigCustomer/updateWorkinfo.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面 js -->
-    <script type="text/javascript">
+	<script type="text/javascript">
         /* $(function(){
             //页面不可编辑
             if(isDisable == 1){
@@ -476,10 +537,27 @@
         var beforework='${obj.workinfo.isemployed}';
         $("input[name='isemployed'][value='" + beforework + "']").attr("checked", 'checked');
         if (beforework == 1) {
-        	$(".beforeWorkInfo").show();
+			$(".beforeWorkInfo").show();
+			$('#box1').show();
+				$('#box2').height(337);
 		} else {
 			$(".beforeWorkInfo").hide();
+			$('#box1').hide();
+				$('#box2').height(224);
 		}
+
+		$('.beforeWork').change(function() {
+			console.log($(this).val());
+
+			if ($(this).val()==1) {
+				$('#box1').show();
+				$('#box2').height(337);
+			} else {
+				$('#box1').hide();
+				$('#box2').height(224);
+			}
+		});
+		
         //以前的教育信息
         var beforework='${obj.workinfo.issecondarylevel}';
         $("input[name='issecondarylevel'][value='" + beforework + "']").attr("checked", 'checked');

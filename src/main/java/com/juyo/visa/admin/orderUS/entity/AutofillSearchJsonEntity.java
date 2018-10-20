@@ -45,4 +45,8 @@ public class AutofillSearchJsonEntity implements Serializable {
 
 	private boolean success;
 
+	private String errorMsg;
+
+	private String AAcode;
+
 }

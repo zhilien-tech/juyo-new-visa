@@ -2,10 +2,17 @@
 //翻译
 function translateZhToEn(from, to, param){
 	var toval = "";
-	if(param != ""){
-		toval = param;
-	}else{
+	if(param == "select2"){
 		toval = $(from).val();
+		if(toval){
+			toval = toval.join(",");
+		}
+	}else{
+		if(param != ""){
+			toval = param;
+		}else{
+			toval = $(from).val();
+		}
 	}
 	$.ajax({
 		//async : false,
@@ -25,6 +32,70 @@ function translateZhToEn(from, to, param){
 	/*$.getJSON("/admin/translate/google", {q: $(from).val()}, function (result) {
         $("#" + to).val(result.data);
     });*/
+}
+
+//日期相关
+$(document).on("input","#workstartdate,#employstartdate,#employenddate,#coursestartdate,#courseenddate",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	if(temp.indexOf("-") > 0){
+		if(temp.length == 10){
+			var tmd = temp.split("-");
+			var result = "";
+			for(var i = 0;i < tmd.length;i++){
+				result += tmd[i].toString();
+			}
+			$(this).val(getNewDate(result));
+		}
+	}else{
+		if($(this).val().length == 8){
+			$(this).val(getNewDate(temp));
+		}
+	}
+});
+
+function getNewDate(temp, fn){
+	var tmd = temp.substring(0, 4)+'-' +temp.substring(4,6) + '-' + temp.substring(6,8);
+	var year = temp.substring(0,4);
+	var month = temp.substring(4,6);
+	var day = temp.substring(6,8);
+	if(month<1||month>12){
+		alert("月份必须在01和12之间!");
+		$(this).val("");
+		return;
+	}    
+    if(day<1||day>31){
+    	alert("日期必须在01和31之间!");
+    	$(this).val("");
+    	return;
+    }else{  
+    	if(month==2){      
+    		if((year%4)==0&&day>29){
+    			alert("二月份日期必须在01到29之间!");
+    			$(this).val("");
+    			return;
+    		}                
+            if((year%4)>0&&day>28){
+            	alert("二月份日期必须在01到28之间!");
+            	$(this).val("");
+            	return;
+            }    
+         }    
+         if((month==4||month==6||month==9||month==11)&&(day>30)){
+        	 alert(" 在四，六，九，十一月份   /n日期必须在01到30之间!");
+        	 $(this).val("");
+        	 return;
+         }    
+    }
+    var date =  new Date(tmd);
+	var YYYY = date.getFullYear();
+	var MM = date.getMonth()+1;
+	if (MM < 10) MM = "0" + MM;
+	var DD = date.getDate();
+	if (DD < 10) DD = "0" + DD;
+    return (YYYY+"-"+MM+"-"+DD);
 }
 
 //以前的工作radio
@@ -146,6 +217,19 @@ $('#jobprovince,#employerprovince,#institutionprovince').select2({
 	tags : false //设置必须存在的选项 才能选中
 });
 
+/* 取消选中时 */
+$("#jobprovince").on('select2:unselect', function (evt) {
+	//市清空
+	$("#city").val(null).trigger("change");
+});
+$("#employerprovince").on('select2:unselect', function (evt) {
+	//市清空
+	$("#employercity").val(null).trigger("change");
+});
+$("#institutionprovince").on('select2:unselect', function (evt) {
+	//市清空
+	$("#institutioncity").val(null).trigger("change");
+});
 
 //现工作所在市
 $('#city').select2({

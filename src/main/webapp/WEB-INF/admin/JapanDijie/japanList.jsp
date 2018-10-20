@@ -16,6 +16,10 @@
     <link rel="stylesheet" href="${base}/references/public/css/pikaday.css">
     <link rel="stylesheet" href="${base}/references/public/css/style.css">
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.js"></script>
+    <!-- 本页css -->
+	<link rel="stylesheet" href="${base}/references/common/css/simpleList.css?v=<%=System.currentTimeMillis() %>">
+	<!-- 加载中。。。样式 -->
+	<link rel="stylesheet" href="${base}/references/common/css/spinner.css?v=<%=System.currentTimeMillis() %>">
   	<link rel="stylesheet" href="${base}/references/public/css/visaJapan.css?v='20180510'">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
@@ -38,13 +42,138 @@
 		[v-cloak] {
 		  display: none;
 		}
+		.card-djtj{
+		    top: 70px;
+		    left: 1px;
+		    width: 100%;
+		    padding: 0 25px;
+		    height: 50px;
+		    line-height: 50px;
+		    background: #fff;
+		    z-index: 99999;
+		}
+		.card-djtj span {
+			margin-right: 20px;
+		}
 	</style>
+	<!-- <style>
+		[class*=" datetimepicker-dropdown"]:before{
+			top:-8px;
+		}
+			.form-control{
+				height: 30px;
+			}
+			.datetimepicker{
+				top:67px!important;
+				position: fixed;
+				
+			}
+			
+			/* 2018_07_30 */
+			/* .card-content {
+	
+			} */
+			.card-content {
+				width: 72%!important;
+			}
+			.card-content .visaListSpan div{
+				width: 19.5%!important;			
+			}
+	
+			.everybody-info div:nth-child(4) {
+				margin-left: 0;
+			}
+	
+			/* .card-content {
+				float: left;
+			} */
+	
+			.card-content-2{
+				top: 0;
+				right: 0;
+				position: absolute;
+				width: 28%;
+				height: 100%;
+			}
+
+			.card-content-2 span {
+				top: 50%;
+				left: 0;
+				position: absolute;
+				margin-top: -12px;
+				height: 24px;
+				line-height: 24px;
+				font-size: 18px;
+			}
+			.card-content-2 span b{
+				font-size: 14px;
+				font-weight: 400;
+			}
+			.everybody-info div:nth-child(3){
+				width: 16.5%!important;
+			}
+			.everybody-info div:nth-child(2){
+				width: 22.5%!important;
+			}
+			
+		</style> -->
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-				<section class="content">
-					<div class="box-header"><!-- 检索条件 -->
-						<div class="row">
-							<div class="col-md-2 left-5px right-0px">
+				
+					<div class="box-header" style="margin-left:16px;"><!-- 检索条件 -->
+						<div class="row searchMar tab-header">
+						
+							<div class="col-md col-md-2" style="width:10%;margin-left:2px;">
+								<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
+									<option value="">状态</option>
+									<c:forEach items="${obj.orderstatus }" var="orstatus">
+										<option value="${orstatus.key }">${orstatus.value}</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="col-md col-md-2 left-5px right-0px" style="width:11%;margin-left:2px;">
+								<select class="input-class input-sm" id="songqianshe" name="songqianshe" onchange="changestatus()">
+									<option value="">送签社简称</option>
+									<c:forEach items="${obj.songqianlist }" var="songqianlist">
+										<option value="${songqianlist.id}">${songqianlist.shortName }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<%-- <div class="col-md col-md-1 left-5px right-0px">
+								<select class="input-class input-sm" style="margin-left:-64px;" id="employee" name="employee" onchange="changestatus()">
+									<option value="">员工</option>
+									<c:forEach items="${obj.employees }" var="employees">
+										<option value="${employees.userid }">${employees.username }</option>
+									</c:forEach>
+								</select>
+							</div> --%>
+							<div class="col-md col-md-1 left-5px right-0px" style="width:10%;">
+								<select class="input-class input-sm" id="visatype" name="visatype" onchange="changestatus()">
+									<option value="">签证类型</option>
+									<c:forEach items="${obj.mainsalevisatypeenum }" var="visatype">
+										<option value="${visatype.key }">${visatype.value }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:18.5%;">
+								<input type="text" class="input-sm input-class form-control" style="height:30px;" id="orderDate" name="orderDate" placeholder="下单时间" onkeypress="onkeyEnter()"/>
+								<input type="hidden" id="orderstartdate" name="orderstartdate"/>
+								<input type="hidden" id="orderenddate" name="orderenddate"/>
+							</div>
+							<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%;">
+								<input type="text" class="input-sm input-class form-control" style="height:30px;" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onkeypress="onkeyEnter()"/>
+								<input type="hidden" id="sendstartdate" name="sendstartdate"/>
+								<input type="hidden" id="sendenddate" name="sendenddate"/>
+							</div>
+							<div class="col-md col-md-3 left-5px right-0px">
+								<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照号/电话/邮箱/申请人/受付番号" onkeypress="onkeyEnter()"/>
+							</div>
+							<div class="col-md col-md-3 left-5px right-0px" style="width:6%;">
+								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
+							</div>
+						
+						
+							<!-- <div class="col-md-2 left-5px right-0px">
 								<select class="input-class input-sm" id="status" name="status">
 									<option value="">状态</option>
 								</select>
@@ -57,10 +186,21 @@
 							</div>
 							<div class="col-md-3 left-5px">
 								<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
-							</div>
+							</div> -->
 						</div>
 					</div><!-- end 检索条件 -->
-					<div class="box-body" id="card" v-cloak><!-- 卡片列表 -->
+					<section class="content" id="card"  v-cloak>
+					<div class = "card-djtj" style="margin-top:1px;margin-left:6px;">
+						<span>订单总数(单)： {{visaJapanDataS.orderscount}}</span>
+						<span>总人数(人)： {{visaJapanDataS.peopletotal}}</span>
+						<!-- <span>作废数(单)： {{visaJapanDataS.disableorder}}</span>
+						<span>作废人数(人)： {{visaJapanDataS.disablepeople}}</span> -->
+						<span>招宝成功(单)： {{visaJapanDataS.zhaobaoorder}}</span>
+						<span>招宝成功(人)： {{visaJapanDataS.zhaobaopeople}}</span>
+						<span>单组单人： {{visaJapanDataS.singleperson}}</span>
+						<span>单组多人： {{visaJapanDataS.multiplayer}}</span>
+					</div>
+					<div class="box-body" style="margin-top:5px !important;"  v-cloak><!-- 卡片列表 -->
 						<div class="card-list" v-for="data in visaJapanData">
 							<div class="card-head cf">
 								<div><label>订单号：</label><span>{{data.japannumber}}</span></div>	
@@ -112,7 +252,7 @@
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/moment.min.js"></script>
-	<script type="text/javascript" src="${base}/references/public/bootstrap/js/daterangepicker.js"></script>
+	<script type="text/javascript" src="${base}/references/public/bootstrap/js/daterangepicker.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/public/plugins/jquery.fileDownload.js"></script>
@@ -120,14 +260,23 @@
 	<!-- <script src="${base}/admin/visaJapan/visaList.js"></script> -->
 	<script src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
+	<script src="${base}/admin/simple/listpagejs.js"></script>
 	<script type="text/javascript">
+	
+	/* $("#orderstartdate").val(getToday());
+	$("#orderenddate").val(getToday());
+	$("#sendstartdate").val(getToday());
+	$("#sendenddate").val(getToday()); */ 
 	//异步加载的URL地址
     var url="${base}/admin/JapanDijie/listData.html";
     //vue表格数据对象
     var _self;
 	new Vue({
 		el: '#card',
-		data: {visaJapanData:""},
+		data: {
+			visaJapanData:[],
+			visaJapanDataS:{}
+		},
 		created:function(){
             _self=this;
             $.ajax({ 
@@ -137,7 +286,20 @@
             	success: function(data){
             		console.log(data);
 					_self.visaJapanData = data.visaJapanData;
-					
+					if(data.visaJapanData.length != 0){
+	            		_self.visaJapanDataS = data.entity;
+            		}else{
+            			_self.visaJapanDataS = {
+            				orderscount:0,
+            				peopletotal:0,
+            				/* disableorder:0,
+            				disablepeople:0, */
+            				zhaobaoorder:0,
+            				zhaobaopeople:0,
+            				singleperson:0,
+            				multiplayer:0
+            			}
+            		}
 					$('#pagetotal').val(data.pagetotal);
               	}
             });
@@ -216,16 +378,55 @@
 	}
 	
 	function search(){
-		var status = $('#status').val();
+		/* var status = $('#status').val();
 		var zhaobaotime = $('#zhaobaotime').val();
+		var searchStr = $('#searchStr').val(); */
+		var status = $('#status').val();
+		var sendSignDate = $('#sendSignDate').val();
+		var sendstartdate = $('#sendstartdate').val();
+		var sendenddate = $('#sendenddate').val();
+		var orderDate = $('#orderDate').val();
+		var orderstartdate = $('#orderstartdate').val();
+		var orderenddate = $('#orderenddate').val();
+		var songqianshe = $("#songqianshe").val();
+		var employee = $("#employee").val();
+		var visatype = $("#visatype").val();
 		var searchStr = $('#searchStr').val();
+		var pageNumber = $('#pageNumber').val();
 		$.ajax({ 
         	url: url,
-        	data:{status:status,zhaobaotime:zhaobaotime,searchStr:searchStr},
+        	data:{
+        		status:status,
+        		visatype:visatype,
+        		songqianshe:songqianshe,
+        		employee:employee,
+        		sendSignDate:sendSignDate,
+        		orderDate:orderDate,
+        		searchStr:searchStr,
+        		sendstartdate:sendstartdate,
+        		sendenddate:sendenddate,
+        		orderstartdate:orderstartdate,
+        		orderenddate:orderenddate
+        	},
         	dataType:"json",
         	type:'post',
         	success: function(data){
+        		$('#pageNumber').val(1);
         		_self.visaJapanData = data.visaJapanData;
+        		if(data.visaJapanData.length != 0){
+            		_self.visaJapanDataS = data.entity;
+        		}else{
+            			_self.visaJapanDataS = {
+            				orderscount:0,
+            				peopletotal:0,
+            				/* disableorder:0,
+            				disablepeople:0, */
+            				zhaobaoorder:0,
+            				zhaobaopeople:0,
+            				singleperson:0,
+            				multiplayer:0
+            			}
+            		}
           	}
         });
 	}
@@ -237,8 +438,13 @@
 		 }
 	}
 	
+	function changestatus(){
+		search();
+	}
+	
 	function successCallBack(status){
-		$.ajax({
+		search();
+		/* $.ajax({
         	url: url,
         	dataType:"json",
         	type:'post',
@@ -248,7 +454,7 @@
         });
 		if(status){
 			layer.msg('保存成功');
-		}
+		} */
 	}
 	
 	// 注册scroll事件并监听 
@@ -266,8 +472,18 @@
 			$('#pageNumber').val(pageNumber);
 			var pagetotal = parseInt($('#pagetotal').val());
 			//搜索条件
+			/* var status = $('#status').val();
+			var zhaobaotime = $('#zhaobaotime').val(); */
 			var status = $('#status').val();
-			var zhaobaotime = $('#zhaobaotime').val();
+			var sendSignDate = $('#sendSignDate').val();
+			var visatype = $("#visatype").val();
+			var sendstartdate = $('#sendstartdate').val();
+			var sendenddate = $('#sendenddate').val();
+			var orderstartdate = $('#orderstartdate').val();
+			var orderenddate = $('#orderenddate').val();
+			
+			var orderDate = $('#orderDate').val();
+			var songqianshe = $("#songqianshe").val();
 			var searchStr = $('#searchStr').val();
 			//异步加载数据
 			console.log(pageNumber);
@@ -277,7 +493,7 @@
 				layer.load(1);
 				$.ajax({ 
 			    	url: url,
-			    	data:{status:status,zhaobaotime:zhaobaotime,searchStr:searchStr,pageNumber:pageNumber},
+			    	data:{status:status,visatype:visatype,sendstartdate:sendstartdate,sendenddate:sendenddate,orderstartdate:orderstartdate,orderenddate:orderenddate,sendSignDate:sendSignDate,orderDate:orderDate,songqianshe:songqianshe,searchStr:searchStr,pageNumber:pageNumber},
 			    	dataType:"json",
 			    	type:'post',
 			    	success: function(data){
@@ -292,6 +508,61 @@
 			}
 	　　}
 	});
+	
+	//时间插件处理
+	$('#sendSignDate').daterangepicker(null, function(start, end, label) {
+	  	console.log(start.toISOString(), end.toISOString(), label);
+	  	console.log(start.format('YYYY-MM-DD HH:mm:ss'));
+	  	$("#sendstartdate").val(start.format('YYYY-MM-DD HH:mm:ss'));
+	  	$("#sendenddate").val(end.format('YYYY-MM-DD HH:mm:ss'));
+	  	search();
+	});
+	$('#sendSignDate').on('cancel.daterangepicker', function(ev, picker) {
+		$('#sendSignDate').val('');
+		$("#sendstartdate").val('');
+	  	$("#sendenddate").val('');
+	  	search();
+	});
+	$('#sendSignDate').on('apply.daterangepicker', function(ev, picker) {
+		$("#sendstartdate").val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+	  	$("#sendenddate").val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+	  	search();
+	});
+	$('#orderDate').daterangepicker(null, function(start, end, label) {
+	  	console.log(start.toISOString(), end.toISOString(), label);
+	  	$("#orderstartdate").val(start.format('YYYY-MM-DD HH:mm:ss'));
+	  	$("#orderenddate").val(end.format('YYYY-MM-DD HH:mm:ss'));
+	  	search();
+	});
+	$('#orderDate').on('cancel.daterangepicker', function(ev, picker) {
+		$('#orderDate').val('');
+		$("#orderstartdate").val('');
+	  	$("#orderenddate").val('');
+	  	search();
+	});
+	$('#orderDate').on('apply.daterangepicker', function(ev, picker) {
+		$("#orderstartdate").val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+	  	$("#orderenddate").val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+	  	search();
+	});
+	
+	//获取当前日期
+	function getToday(){
+	    var date = new Date();
+	    var seperator1 = "-";
+	    var year = date.getFullYear();
+	    var month = date.getMonth() + 1;
+	    var strDate = date.getDate();
+	    if (month >= 1 && month <= 9) {
+	        month = "0" + month;
+	    }
+	    if (strDate >= 0 && strDate <= 9) {
+	        strDate = "0" + strDate;
+	    }
+	    var currentdate = year + seperator1 + month + seperator1 + strDate;
+	    return currentdate;
+	}
+	
 	</script>
 </body>
 </html>

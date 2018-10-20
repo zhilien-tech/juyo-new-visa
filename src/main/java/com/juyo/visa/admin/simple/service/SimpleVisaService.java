@@ -35,6 +35,7 @@ import org.nutz.dao.entity.Record;
 import org.nutz.dao.pager.Pager;
 import org.nutz.dao.sql.Sql;
 import org.nutz.dao.util.Daos;
+import org.nutz.dao.util.cri.SqlExpressionGroup;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
@@ -98,6 +99,7 @@ import com.juyo.visa.common.newairline.ResultflyEntity;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
+import com.juyo.visa.common.util.TokenUtil;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantFrontPaperworkJpEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
@@ -234,6 +236,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 
 		result.put("employees", employees);
+		result.put("mainsalevisatypeenum", EnumUtil.enum2(SimpleVisaTypeEnum.class));
 		result.put("orderstatus", EnumUtil.enum2(JpOrderSimpleEnum.class));
 		String localAddr = request.getServerName();
 		int localPort = request.getServerPort();
@@ -254,6 +257,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 */
 	public Object ListData(ListDataForm form, HttpServletRequest request) {
 
+		long startTime = System.currentTimeMillis();
 		HttpSession session = request.getSession();
 		//获取当前公司
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
@@ -280,18 +284,18 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		List<Record> totallist = (List<Record>) sql.getResult();
 		int orderscount = totallist.size();
 		int peopletotal = 0;
-		int disableorder = 0;
-		int disablepeople = 0;
+		/*int disableorder = 0;
+		int disablepeople = 0;*/
 		int zhaobaoorder = 0;
 		int zhaobaopeople = 0;
 		for (Record record : totallist) {
 			//作废单子、人数
-			if (Util.eq(1, record.get("isdisabled"))) {
+			/*if (Util.eq(1, record.get("isdisabled"))) {
 				disableorder++;
 				if (!Util.eq(0, record.get("peoplenumber"))) {
 					disablepeople += record.getInt("peoplenumber");
 				}
-			}
+			}*/
 
 			//收费单子，人数
 			if (Util.eq(1, record.get("zhaobaoupdate"))) {
@@ -310,6 +314,15 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		sql.setPager(pager);
 		sql.setCallback(Sqls.callback.records());
 		nutDao.execute(sql);
+
+		long middleTime = System.currentTimeMillis();
+		System.out.println("上头数据所用时间:" + (middleTime - startTime) + "ms");
+
+		/*Cnd cnd = Cnd.NEW();
+		cnd.and("tr.zhaobaoupdate", "=", 1);
+		cnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
+		sql.setCondition(cnd);
+		List<Record> singleperson = (List<Record>) sql.getResult();*/
 
 		@SuppressWarnings("unchecked")
 		//主sql数据
@@ -337,10 +350,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 
 			Integer orderid = (Integer) record.get("id");
-			String sqlStr = sqlManager.get("get_japan_visa_list_data_apply");
+			String sqlStr = sqlManager.get("get_simplelist_data_apply");
 			Sql applysql = Sqls.create(sqlStr);
-			List<Record> query = dbDao.query(applysql, Cnd.where("taoj.orderId", "=", orderid), null);
-			for (Record apply : query) {
+			List<Record> query = dbDao.query(
+					applysql,
+					Cnd.where("taoj.orderId", "=", orderid).orderBy("taoj.isMainApplicant", "DESC")
+							.orderBy("ta.id", "ASC"), null);
+			/*for (Record apply : query) {
 
 				if (!Util.isEmpty(apply.get("province"))) {
 					String province = (String) apply.get("province");
@@ -350,34 +366,34 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					if (province.length() > 3 && province.endsWith("自治区")) {
 						apply.put("province", province.substring(0, province.length() - 3));
 					}
-				}
+				}*/
 
-				Integer dataType = (Integer) apply.get("dataType");
-				for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
-					if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
-						apply.put("dataType", dataTypeEnum.value());
-					}
+			/*Integer dataType = (Integer) apply.get("dataType");
+			for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
+				if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
+					apply.put("dataType", dataTypeEnum.value());
 				}
-				String data = "";
-				String blue = "";
-				if (!Util.isEmpty(apply.get("blue"))) {
-					blue = (String) apply.get("blue");
-				}
-				String black = "";
-				if (!Util.isEmpty(apply.get("black"))) {
-					black = (String) apply.get("black");
-				}
-				if (Util.isEmpty(blue)) {
-					data = black;
-				} else {
-					data = blue;
-					if (!Util.isEmpty(black)) {
-						data += "、";
-						data += black;
-					}
-				}
-				apply.put("data", data);
 			}
+			String data = "";
+			String blue = "";
+			if (!Util.isEmpty(apply.get("blue"))) {
+				blue = (String) apply.get("blue");
+			}
+			String black = "";
+			if (!Util.isEmpty(apply.get("black"))) {
+				black = (String) apply.get("black");
+			}
+			if (Util.isEmpty(blue)) {
+				data = black;
+			} else {
+				data = blue;
+				if (!Util.isEmpty(black)) {
+					data += "、";
+					data += black;
+				}
+			}
+			apply.put("data", data);*/
+			//}
 			record.put("everybodyInfo", query);
 			//签证状态
 			Integer visastatus = record.getInt("japanState");
@@ -388,17 +404,111 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
+		//查询单组单人
+		List<Record> singleperson = getSingleperson(form);
+
 		StatisticsEntity entity = new StatisticsEntity();
-		entity.setDisableorder(disableorder);
-		entity.setDisablepeople(disablepeople);
+		/*entity.setDisableorder(disableorder);
+		entity.setDisablepeople(disablepeople);*/
 		entity.setOrderscount(orderscount);
 		entity.setPeopletotal(peopletotal);
 		entity.setZhaobaoorder(zhaobaoorder);
 		entity.setZhaobaopeople(zhaobaopeople);
+		entity.setSingleperson(singleperson.size());
+		entity.setMultiplayer(zhaobaoorder - singleperson.size());
 		result.put("entity", entity);
 		result.put("pagetotal", pager.getPageCount());
 		result.put("visaJapanData", list);
+		long endTime = System.currentTimeMillis();
+		System.out.println("下头所用时间为：" + (endTime - middleTime) + "ms");
+		System.out.println("方法所用时间为：" + (endTime - startTime) + "ms");
 		return result;
+	}
+
+	/**
+	 * 查询单人单组数据
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public List<Record> getSingleperson(ListDataForm form) {
+		long startTime = System.currentTimeMillis();
+		String singlesqlStr = sqlManager.get("getSingleperson");
+		Sql singlesql = Sqls.create(singlesqlStr);
+
+		Cnd singlecnd = Cnd.NEW();
+		singlecnd.and("tr.comId", "=", form.getCompanyid());
+		if (!Util.isEmpty(form.getSearchStr())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.orderNum", "like", "%" + form.getSearchStr() + "%")
+					.or("tc.linkman", "like", "%" + form.getSearchStr() + "%")
+					.or("tc.mobile", "like", "%" + form.getSearchStr() + "%")
+					.or("tc.email", "like", "%" + form.getSearchStr() + "%")
+					.or("taj.applyname", "like", "%" + form.getSearchStr() + "%")
+					.or("toj.acceptDesign", "like", "%" + form.getSearchStr() + "%")
+					.or("taj.passport", "like", "%" + form.getSearchStr() + "%");
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getSendstartdate()) && !Util.isEmpty(form.getSendenddate())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.sendVisaDate", "between", new Object[] { form.getSendstartdate(), form.getSendenddate() });
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getOrderstartdate()) && !Util.isEmpty(form.getOrderenddate())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.createTime", "between", new Object[] { form.getOrderstartdate(), form.getOrderenddate() });
+			singlecnd.and(exp);
+		}
+		if (!Util.isEmpty(form.getStatus())) {
+			if (Util.eq(form.getStatus(), JPOrderStatusEnum.DISABLED.intKey())) {
+				singlecnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
+			} else {
+				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).and("tr.isDisabled", "=",
+						IsYesOrNoEnum.NO.intKey());
+				singlecnd.and(e1);
+			}
+		}
+
+		if (!Util.isEmpty(form.getSongqianshe())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("toj.sendsignid", "=", form.getSongqianshe());
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getEmployee())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tuser.id", "=", form.getEmployee());
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getVisatype())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("toj.visatype", "=", form.getVisatype());
+			singlecnd.and(exp);
+		}
+
+		if (form.getUserid().equals(form.getAdminId())) {
+			//公司管理员
+			singlecnd.and("tr.comId", "=", form.getCompanyid());
+		} else {
+			//普通的操作员
+			singlecnd.and("tr.salesOpid", "=", form.getUserid());
+		}
+		singlecnd.and("tr.zhaobaoupdate", "=", 1);
+		singlecnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
+		singlecnd.orderBy("tr.isDisabled", "ASC");
+		singlecnd.orderBy("tr.updatetime", "desc");
+
+		singlesql.setCondition(singlecnd);
+		List<Record> singleperson = dbDao.query(singlesql, singlecnd, null);
+		long endTime = System.currentTimeMillis();
+		System.out.println("查询单组单人所用时间为：" + (endTime - startTime) + "ms");
+		return singleperson;
 	}
 
 	/**
@@ -3373,9 +3483,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		applicant.setEmail(form.getEmail());
 		if (!Util.isEmpty(form.getOtherLastNameEn())) {
 			applicant.setOtherLastNameEn(form.getOtherLastNameEn().substring(1));
+		} else {
+			applicant.setOtherLastNameEn(form.getOtherLastNameEn());
 		}
 		if (!Util.isEmpty(form.getOtherFirstNameEn())) {
 			applicant.setOtherFirstNameEn(form.getOtherFirstNameEn().substring(1));
+		} else {
+			applicant.setOtherFirstNameEn(form.getOtherFirstNameEn());
 		}
 		applicant.setNationality(form.getNationality());
 		applicant.setHasOtherName(form.getHasOtherName());
@@ -4206,7 +4320,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 									String wealthtype = wealthEntity.getWealthtype();
 									String wealthname = wealthEntity.getWealthname();
 
-									if (!Util.isEmpty(wealthvalue)) {
+									if (Util.isEmpty(wealthtype)
+											|| (!Util.isEmpty(wealthtype) && !Util.isEmpty(wealthvalue))) {
 										TApplicantWealthJpEntity wealthjp = new TApplicantWealthJpEntity();
 										wealthjp.setSequence(Integer.valueOf(sequence));
 										wealthjp.setBankflowfree(wealthtitle);
@@ -5358,6 +5473,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		HttpSession session = request.getSession();
 		Map<String, Object> result = Maps.newHashMap();
+		String token = TokenUtil.getInstance().makeToken();//创建令牌
+		System.out.println("在FormServlet中生成的token：" + token);
+		request.getSession().setAttribute("token", token);
+		//result.put("token", token);
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		result.put("userid", loginUser.getId());
@@ -5567,7 +5686,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		String host = "https://api.weixin.qq.com";
 		String path = "/wxa/getwxacodeunlimit?access_token=" + accessToken;
 		String method = "POST";
-		String entityStr = "";
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Content-Type", "application/json; charset=UTF-8");
 		Map<String, String> querys = new HashMap<String, String>();
@@ -5579,88 +5697,125 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		/*try {
-			response = HttpUtils.doPost(host, path, method, headers, querys, json);
-			entityStr = EntityUtils.toString(response.getEntity());
-			System.out.println("POST请求返回的数据：" + entityStr);
-		} catch (Exception e) {
-
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		}*/
 		return inputStream;
 	}
 
-	public Object hasApplyInfo(int applyid, int orderid, HttpSession session) {
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		Map<String, Object> result = Maps.newHashMap();
-		if (Util.isEmpty(applyid) || applyid == 0) {
-			//新建申请人表
-			TApplicantEntity apply = new TApplicantEntity();
-			apply.setOpId(loginUser.getId());
-			apply.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
-			apply.setIsPrompted(IsYesOrNoEnum.NO.intKey());
-			apply.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
-			apply.setCreateTime(new Date());
-			TApplicantEntity insertApply = dbDao.insert(apply);
-			applyid = insertApply.getId();
-			//新建日本申请人表
-			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
-			if (Util.isEmpty(orderid) || orderid == 0) {
-				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
-				orderid = generrateorder.get("orderjpid");
+	public Object hasApplyInfo(int applyid, int orderid, String token, HttpServletRequest request) {
+
+		boolean isRepeat = isRepeatSubmit(token, request);//判断用户是否是重复提交
+		if (isRepeat == true) {
+			System.out.println("请不要重复提交");
+			return null;
+		} else {
+			request.getSession().removeAttribute("token");//移除session中的token
+			System.out.println("处理用户提交请求！！");
+			HttpSession session = request.getSession();
+			TUserEntity loginUser = LoginUtil.getLoginUser(session);
+			TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+			Map<String, Object> result = Maps.newHashMap();
+			if (Util.isEmpty(applyid) || applyid == 0) {
+				//新建申请人表
+				TApplicantEntity apply = new TApplicantEntity();
+				apply.setOpId(loginUser.getId());
+				apply.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+				apply.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+				apply.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+				apply.setCreateTime(new Date());
+				TApplicantEntity insertApply = dbDao.insert(apply);
+				applyid = insertApply.getId();
+				//新建日本申请人表
+				TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+				if (Util.isEmpty(orderid) || orderid == 0) {
+					//创建订单表
+					Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
+					orderid = generrateorder.get("orderjpid");
+				}
+
+				//设置主申请人信息
+				List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
+						Cnd.where("orderId", "=", orderid), null);
+				if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
+
+					applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
+					TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
+							Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()));
+					if (!Util.isEmpty(mainApply)) {
+						apply.setMainId(mainApply.getApplicantId());
+					}
+					dbDao.update(apply);
+				} else {
+					//设置为主申请人
+					applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+					apply.setMainId(applyid);
+					dbDao.update(apply);
+				}
+
+				applicantjp.setOrderId(orderid);
+				applicantjp.setApplicantId(applyid);
+				applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+				applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+				applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+				TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
+
+				//日本工作信息
+				TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
+				workJp.setApplicantId(insertappjp.getId());
+				workJp.setCreateTime(new Date());
+				workJp.setOpId(loginUser.getId());
+				dbDao.insert(workJp);
+				//护照信息
+				TApplicantPassportEntity passport = new TApplicantPassportEntity();
+				passport.setIssuedOrganization("公安部出入境管理局");
+				passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
+				passport.setApplicantId(applyid);
+				dbDao.insert(passport);
+
+				TApplicantVisaOtherInfoEntity visaother = new TApplicantVisaOtherInfoEntity();
+				visaother.setApplicantid(insertappjp.getId());
+				visaother.setHotelname("参照'赴日予定表'");
+				visaother.setVouchname("参照'身元保证书'");
+				visaother.setInvitename("同上");
+				visaother.setTraveladvice("推荐");
+				dbDao.insert(visaother);
 			}
-
-			//设置主申请人信息
-			List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
-					Cnd.where("orderId", "=", orderid), null);
-			if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
-
-				applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
-				TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
-						Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()));
-				apply.setMainId(mainApply.getApplicantId());
-				dbDao.update(apply);
-			} else {
-				//设置为主申请人
-				applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
-				apply.setMainId(applyid);
-				dbDao.update(apply);
-			}
-
-			applicantjp.setOrderId(orderid);
-			applicantjp.setApplicantId(applyid);
-			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
-			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
-			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
-			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
-
-			//日本工作信息
-			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
-			workJp.setApplicantId(insertappjp.getId());
-			workJp.setCreateTime(new Date());
-			workJp.setOpId(loginUser.getId());
-			dbDao.insert(workJp);
-			//护照信息
-			TApplicantPassportEntity passport = new TApplicantPassportEntity();
-			passport.setIssuedOrganization("公安部出入境管理局");
-			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
-			passport.setApplicantId(applyid);
-			dbDao.insert(passport);
-
-			TApplicantVisaOtherInfoEntity visaother = new TApplicantVisaOtherInfoEntity();
-			visaother.setApplicantid(insertappjp.getId());
-			visaother.setHotelname("参照'赴日予定表'");
-			visaother.setVouchname("参照'身元保证书'");
-			visaother.setInvitename("同上");
-			visaother.setTraveladvice("推荐");
-			dbDao.insert(visaother);
+			result.put("applyid", applyid);
+			result.put("orderid", orderid);
+			return result;
 		}
-		result.put("applyid", applyid);
-		result.put("orderid", orderid);
-		return result;
+
+	}
+
+	/**
+	 * 判断是否重复提交
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param client_token
+	 * @param request
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public boolean isRepeatSubmit(String client_token, HttpServletRequest request) {
+
+		System.out.println("client_token:" + client_token);
+		//String client_token = request.getParameter("token");
+		//1、如果用户提交的表单数据中没有token，则用户是重复提交了表单
+		if (client_token == null) {
+			return true;
+		}
+		//取出存储在Session中的token
+		String server_token = (String) request.getSession().getAttribute("token");
+		System.out.println("server_token:" + server_token);
+		//2、如果当前用户的Session中不存在Token(令牌)，则用户是重复提交了表单
+		if (server_token == null) {
+			return true;
+		}
+		//3、存储在Session中的Token(令牌)与表单提交的Token(令牌)不同，则用户是重复提交了表单
+		if (!client_token.equals(server_token)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public Object isSamewithMainapply(int orderid) {
@@ -5677,6 +5832,33 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	public Object autoCalculateStaydays(Date laststartdate, Date lastreturndate) {
 		int daysBetween = DateUtil.daysBetween(laststartdate, lastreturndate);
 		return daysBetween + 1;
+	}
+
+	public Object ishaveMainapply(int orderid, int applicantid) {
+		String applicantSqlstr = sqlManager.get("ishaveMainapply");
+		Sql applicantSql = Sqls.create(applicantSqlstr);
+		applicantSql.setParam("id", orderid);
+		List<Record> query = dbDao.query(applicantSql, null, null);
+		if (query.size() > 1) {
+			return 1;
+		} else if (query.size() == 1) {
+			int mainid = query.get(0).getInt("applicantid");
+			if (mainid != applicantid) {
+				return 1;
+			} else {
+				return 0;
+			}
+		} else {
+			return 0;
+		}
+	}
+
+	public Object saveSendandGround(int orderid, int sendsignid, int groundconnectid) {
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+		orderjp.setSendsignid(sendsignid);
+		orderjp.setGroundconnectid(groundconnectid);
+		dbDao.update(orderjp);
+		return null;
 	}
 
 }

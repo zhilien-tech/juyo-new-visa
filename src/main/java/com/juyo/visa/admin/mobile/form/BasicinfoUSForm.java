@@ -56,6 +56,14 @@ public class BasicinfoUSForm {
 	/**手机号*/
 	private String telephone;
 
+	private Date marrieddate;
+
+	private Date divorcedate;
+
+	private String divorcecountry;
+
+	private String divorcecountryen;
+
 	/**手机号(英文)*/
 	private String telephoneen;
 
@@ -82,6 +90,30 @@ public class BasicinfoUSForm {
 
 	/**出生日期*/
 	private Date birthday;
+
+	private Integer ismailsamewithlive;
+
+	private Integer ismailsamewithliveen;
+
+	private String mailcity;
+
+	private String mailcityen;
+
+	private String mailprovince;
+
+	private String mailprovinceen;
+
+	private String mailcountry;
+
+	private String mailcountryen;
+
+	private String mailaddress;
+
+	private String mailaddressen;
+
+	private String birthcountry;
+
+	private String birthcountryen;
 
 	/**住址*/
 	private String address;

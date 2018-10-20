@@ -26,6 +26,7 @@ import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.juyo.visa.admin.visajp.form.FlightSelectParam;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.haoservice.AirLineParam;
@@ -37,6 +38,7 @@ import com.juyo.visa.entities.TAirportInfoEntity;
 import com.juyo.visa.entities.TCityEntity;
 import com.juyo.visa.entities.TFlightEntity;
 import com.juyo.visa.entities.TFlightHisEntity;
+import com.juyo.visa.entities.TUsStateEntity;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
@@ -1072,15 +1074,25 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 		List<TFlightEntity> result = Lists.newArrayList();
 		String dep = "";
 		if (!Util.isEmpty(param.getGocity())) {
-			TCityEntity gocity = dbDao.fetch(TCityEntity.class, param.getGocity());
-			dep = gocity.getCode();
+			if (param.getFlag() == 1) {
+				TCityEntity gocity = dbDao.fetch(TCityEntity.class, param.getGocity());
+				dep = gocity.getCode();
+			} else {
+				TUsStateEntity gocity = dbDao.fetch(TUsStateEntity.class, param.getGocity());
+				dep = gocity.getCode();
+			}
 		} else {
 			return result;
 		}
 		String arr = "";
 		if (!Util.isEmpty(param.getArrivecity())) {
-			TCityEntity arrivecity = dbDao.fetch(TCityEntity.class, param.getArrivecity());
-			arr = arrivecity.getCode();
+			if (param.getFlag() == 1) {
+				TUsStateEntity arrivecity = dbDao.fetch(TUsStateEntity.class, param.getArrivecity());
+				arr = arrivecity.getCode();
+			} else {
+				TCityEntity arrivecity = dbDao.fetch(TCityEntity.class, param.getArrivecity());
+				arr = arrivecity.getCode();
+			}
 		} else {
 			return result;
 		}
@@ -1089,9 +1101,10 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 			Date string2Date = DateUtil.string2Date(param.getDate(), DateUtil.FORMAT_YYYY_MM_DD);
 			DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYYMMDD);
 			date = format.format(string2Date);
-		} else {
-			return result;
 		}
+		/*else {
+			return result;
+		}*/
 		AirLineResult airLineResult = new AirLineResult();
 
 		//查询接口
@@ -1134,6 +1147,59 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 		//同步到数据库
 		//updateFlightByCache(param.getGocity().intValue(), param.getArrivecity().intValue());
 		return null;
+	}
+
+	/**
+	 * 根据航班查询出发城市和抵达城市
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param airline
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object getGoandReturncity(String airline) {
+		Map<String, Object> result = Maps.newHashMap();
+		//分两种情况，一种直飞，一种转机
+		if (!Util.isEmpty(airline)) {
+			String takeoffname = "";
+			String landingname = "";
+			int takeOffCityId = 0;
+			int landingCityId = 0;
+			if (airline.contains("//")) {//转机
+				String firstAirnum = airline.substring(airline.indexOf(" ") + 1, airline.indexOf("//"));
+				String secondeAirnum = airline.substring(airline.indexOf("//") + 2, airline.lastIndexOf(" "));
+				TFlightEntity firstFlight = (TFlightEntity) getFlight(firstAirnum);
+				TFlightEntity secondFlight = (TFlightEntity) getFlight(secondeAirnum);
+				takeOffCityId = firstFlight.getTakeOffCityId();
+				landingCityId = secondFlight.getLandingCityId();
+
+			} else {
+				//获取航班号
+				String airnum = airline.substring(airline.indexOf(" ") + 1, airline.lastIndexOf(" "));
+				TFlightEntity flight = (TFlightEntity) getFlight(airnum);
+				takeOffCityId = flight.getTakeOffCityId();
+				landingCityId = flight.getLandingCityId();
+			}
+			takeoffname = getCityName(takeOffCityId);
+			landingname = getCityName(landingCityId);
+			result.put("takeoffcityid", takeOffCityId);
+			result.put("landingcityid", landingCityId);
+			result.put("takeoffname", takeoffname);
+			result.put("landingname", landingname);
+		}
+		return result;
+	}
+
+	public Object getFlight(String airnum) {
+		TFlightEntity flight = dbDao.fetch(TFlightEntity.class, Cnd.where("flightnum", "=", airnum));
+		return flight;
+	}
+
+	public String getCityName(int cityid) {
+		TCityEntity city = dbDao.fetch(TCityEntity.class, cityid);
+		String cityname = city.getCity();
+		return cityname;
 	}
 
 }

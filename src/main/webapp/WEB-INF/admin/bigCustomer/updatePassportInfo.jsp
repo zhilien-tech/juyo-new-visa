@@ -25,6 +25,9 @@
 			height: 150px;
 			background: oldlace;
 		}
+		.datetimepicker {
+			top: 494.563px!important;
+		}
 	</style>
 </head>
 <body>
@@ -40,21 +43,21 @@
 		<form id="passportInfo">
 			<div class="modal-header">
 				<span class="heading">护照信息</span> 
-				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
-				<input id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
+				<input autocomplete="new-password" id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
+				<input autocomplete="new-password" id="addBtn" type="button" onclick="save(1);" class="btn btn-primary pull-right btn-sm btn-right btn-margin" value="保存" />
 			</div>
 			<div class="modal-body">
 				<div class="dislogHide"></div>
 				<div class="tab-content row">
-					<div class="col-sm-5 padding-right-0">
+					<div class="col-sm-12">
 						<div class="info-imgUpload front has-error" id="borderColor"><!-- 护照 -->
 							
 							<div class="col-xs-6 mainWidth">
 							<div class="form-group">
 								<div class="cardFront-div">
 									<span>点击上传护照</span>
-									<input id="passportUrl" name="passporturl" type="hidden" value="${obj.passurl.url }"/>
-									<input id="uploadFile" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
+									<input autocomplete="new-password" id="passportUrl" name="passporturl" type="hidden" value="${obj.passurl.url }"/>
+									<input autocomplete="new-password" id="uploadFile" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
 									<img style="top:-219px;" id="sqImg" alt="" src="${obj.passporturl }" >
 									<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 								</div>
@@ -72,8 +75,8 @@
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>护照号</label>
-									<input type="hidden" name="staffid" value="${obj.staffid }"/>
-									<input id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.passport}"/>
+									<input autocomplete="new-password" type="hidden" name="staffid" value="${obj.staffid }"/>
+									<input autocomplete="new-password" id="passport" name="passport" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.passport}"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
@@ -81,8 +84,8 @@
 									<label>
 										<span>*</span>签发地点/拼音
 									</label>
-									<input id="issuedPlace" name="issuedplace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passportinfo.issuedplace }"/>
-									<input id="issuedPlaceEn" name="issuedplaceen" type="text" style="position:absolute;top:32px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passportinfo.issuedplaceen }"/>
+									<input autocomplete="new-password" id="issuedPlace" name="issuedplace"  type="text" class="form-control input-sm " placeholder=" " value="${obj.passportinfo.issuedplace }"/>
+									<input autocomplete="new-password" id="issuedPlaceEn" name="issuedplaceen" type="text" style="position:absolute;top:32px;border:0px;left:80px;width:120px;" placeholder=" " value="${obj.passportinfo.issuedplaceen }"/>
 								</div>
 							</div>
 						</div><!-- end 出生日期/签发地点 拼音 -->
@@ -92,7 +95,7 @@
 									<label>
 										<span>*</span>签发日期
 									</label>
-									<input id="issuedDate" name="issueddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.issueddate }"/>
+									<input autocomplete="new-password" id="issuedDate" name="issueddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.issueddate }"/>
 								</div>
 							</div>
 							<div class="col-sm-2 col-sm-offset 2 padding-right-0">
@@ -110,7 +113,7 @@
 									<label>
 										<span>*</span>有效期至
 									</label>
-									<input id="validEndDate" name="validenddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.validenddate }"/>
+									<input autocomplete="new-password" id="validEndDate" name="validenddate" type="text" class="form-control input-sm" placeholder=" " value="${obj.validenddate }"/>
 								</div>
 							</div>
 						</div><!-- end 签发日期/有效期至 -->
@@ -120,19 +123,50 @@
 									<label>
 										<span>*</span>签发机关
 									</label>
-									<input id="issuedOrganization" name="issuedorganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.issuedorganization }"/>
+									<input autocomplete="new-password" id="issuedOrganization" name="issuedorganization" type="text" class="form-control input-sm" placeholder=" " value="${obj.passportinfo.issuedorganization }"/>
 								</div>
 							</div>
-							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+							<div class="col-sm-5 col-sm-offset-1 padding-right-0" style="width: 230px;">
 								<div class="form-group">
 										<label>
 												<span>*</span>Exit & Entry Administration
 											</label>
-									<input id="issuedOrganizationEn" name="issuedorganizationen" type="text" class="form-control input-sm" placeholder="Ministry of Public Security" value="${obj.passportinfo.issuedorganizationen }"/>
+									<input autocomplete="new-password" id="issuedOrganizationEn" name="issuedorganizationen" type="text" class="form-control input-sm" placeholder="Ministry of Public Security" value="${obj.passportinfo.issuedorganizationen }"/>
 								</div>
 							</div>
 						</div><!-- end 签发机关 -->
 					</div>	
+					<div class="row">
+						<div class="col-sm-5 col-sm-offset-1 padding-right-0">
+							<div class="form-group">
+								<label><span>*</span>是否丢失过护照号</label>
+								<div>
+									<input type="radio" name="islostpassport" value="1" class="is-duishihuzhao">是
+									<input type="radio" name="islostpassport" value="2" class="is-duishihuzhao" style="margin-left: 20px;">否
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row jidehuzhao" style="display: none;">
+						<div class="col-sm-5 col-sm-offset-1 padding-right-0" style="width: 210px;">
+							<div class="form-group">
+								<label><span>*</span>是否记得丢失的护照号</label>
+								<div>
+									<input type="radio" name="isrememberpassportnum" value="1" class="is-jideduishihuzhao ">是
+									<input type="radio" name="isrememberpassportnum" value="2" class="is-jideduishihuzhao is-jideduishihuzhao-2" style="margin-left: 20px;">否
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-5 col-sm-offset-1 padding-right-0 jideduishihuzhao-ipt" style="width: 230px;display: none;">
+							<div class="form-group">
+									<label>
+										<span>*</span>护照号码
+									</label>
+								<input id="lostpassportnum" tabindex="1" name="lostpassportnum" type="text" class="form-control input-sm" placeholder="" value="${obj.passportinfo.lostpassportnum }"/>
+							</div>
+						</div>
+					</div><!-- end 签发机关 -->
 						
 				</div>
 			</div>
@@ -163,15 +197,53 @@
 	
 	
 	<script type="text/javascript">
+	
+		if('${obj.passportinfo.issuedorganization}' == ''){
+			$("#issuedOrganization").val("公安部出入境管理局")
+		}
+		if('${obj.passportinfo.issuedorganizationen}' == ''){
+			$("#issuedOrganizationEn").val("MPS Exit & Entry Administration")
+		}
 		
-		/* $(function(){
-			//页面不可编辑
-			if(isDisable == 1){
-				$(".modal-body").attr('readonly', true);
-				$(".dislogHide").show();
-				$("#addBtn").hide();
+		$('.is-duishihuzhao').change(function() {
+			var v = $(this).val();
+			if (v == 1) {
+				$('.jidehuzhao').show();
+			} else {
+				$('.jidehuzhao').hide();
+				$('.is-jideduishihuzhao-2').attr('checked','checked');
+				$('.jideduishihuzhao-ipt').hide();
+				$('.jideduishihuzhao-ipt').val('');
 			}
-		}); */
+		});
+
+		$('.is-jideduishihuzhao').change(function() {
+			var v = $(this).val();
+			if (v == 1) {
+				$('.jideduishihuzhao-ipt').show();
+			} else {
+				$('.jideduishihuzhao-ipt').hide();
+				$('.jideduishihuzhao-ipt').val('');
+			}
+		});
+		
+		//回显radio处理
+		//是否丢失护照
+		var islostpassport = '${obj.passportinfo.islostpassport}';
+		$("input[name='islostpassport'][value='" + islostpassport + "']").attr("checked", 'checked');
+		if(islostpassport == 1){
+			$('.jidehuzhao').show();
+		}else{
+			$('.jidehuzhao').hide();
+		}
+		//是否记得护照号
+		var isrememberpassportnum = '${obj.passportinfo.isrememberpassportnum}';
+		$("input[name='isrememberpassportnum'][value='" + isrememberpassportnum + "']").attr("checked", 'checked');
+		if(isrememberpassportnum == 1){
+			$('.jideduishihuzhao-ipt').show();
+		}else{
+			$('.jideduishihuzhao-ipt').hide();
+		}
 		
 	
 		$("#issuedDate").datetimepicker({

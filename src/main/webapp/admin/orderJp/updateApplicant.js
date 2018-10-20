@@ -334,7 +334,7 @@ connectWebSocket();
 function connectWebSocket(){
 	 if ('WebSocket' in window){  
         console.log('Websocket supported');  
-        socket = new WebSocket('ws://'+localAddr+':'+localPort+'/'+websocketaddr);   
+        socket = new WebSocket('wss://'+localAddr+':'+localPort+'/'+websocketaddr);   
         console.log('Connection attempted');  
         socket.onopen = function(){  
              console.log('Connection open!');  

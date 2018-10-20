@@ -35,28 +35,28 @@
 			.datetimepicker{
 				top:67px!important;
 				position: fixed;
-				
+
 			}
-			
+
 			/* 2018_07_30 */
 			/* .card-content {
-	
+
 			} */
 			.card-content {
 				width: 72%!important;
 			}
 			.card-content .visaListSpan div{
-				width: 19.5%!important;			
+				width: 19.5%!important;
 			}
-	
+
 			.everybody-info div:nth-child(4) {
 				margin-left: 0;
 			}
-	
+
 			/* .card-content {
 				float: left;
 			} */
-	
+
 			.card-content-2{
 				top: 0;
 				right: 0;
@@ -84,8 +84,8 @@
 			.everybody-info div:nth-child(2){
 				width: 22.5%!important;
 			}
-			
-		</style>	
+
+		</style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="box-header"style=" padding-top:25px!important"><!-- 检索条件 -->
@@ -93,7 +93,7 @@
 
 		<!-- 切换卡按钮 end -->
 		<div class="row searchMar tab-header">
-			<div class="col-md col-md-2" style="width:12%">
+			<div class="col-md col-md-2" style="width:10%">
 				<select class="input-class input-sm" id="status" name="status" onchange="changestatus()">
 					<option value="">状态</option>
 					<c:forEach items="${obj.orderstatus }" var="orstatus">
@@ -101,15 +101,15 @@
 					</c:forEach>
 				</select>
 			</div>
-			<div class="col-md col-md-2 left-5px right-0px">
+			<div class="col-md col-md-2 left-5px right-0px" style="width:11%;margin-left:0.4%;">
 				<select class="input-class input-sm" id="songqianshe" name="songqianshe" onchange="changestatus()">
-					<option value="">送签社</option>
+					<option value="">送签社简称</option>
 					<c:forEach items="${obj.songqianlist }" var="songqianlist">
-						<option value="${songqianlist.id}">${songqianlist.name }</option>
+						<option value="${songqianlist.id}">${songqianlist.shortName }</option>
 					</c:forEach>
 				</select>
 			</div>
-			<div class="col-md col-md-1 left-5px right-0px">
+			<div class="col-md col-md-1 left-5px right-0px" style="width:7.5%;margin-left:0;">
 				<select class="input-class input-sm" id="employee" name="employee" onchange="changestatus()">
 					<option value="">员工</option>
 					<c:forEach items="${obj.employees }" var="employees">
@@ -117,41 +117,55 @@
 					</c:forEach>
 				</select>
 			</div>
-			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%">
+			<div class="col-md col-md-1 left-5px right-0px" style="width:10%;margin-left:0%;">
+				<select class="input-class input-sm" id="visatype" name="visatype" onchange="changestatus()">
+					<option value="">签证类型</option>
+					<c:forEach items="${obj.mainsalevisatypeenum }" var="visatype">
+						<option value="${visatype.key }">${visatype.value }</option>
+					</c:forEach>
+				</select>
+			</div>
+			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:16%;margin-left:0%;">
 				<input type="text" class="input-sm input-class form-control" id="orderDate" name="orderDate" placeholder="下单时间" onkeypress="onkeyEnter()"/>
+				<input type="hidden" id="orderstartdate" name="orderstartdate"/>
+				<input type="hidden" id="orderenddate" name="orderenddate"/>
 			</div>
-			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:9.5%">
+			<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:8.5%;margin-left:0%;">
 				<input type="text" class="input-sm input-class form-control" id="sendSignDate" name="sendSignDate" placeholder="送签时间" onkeypress="onkeyEnter()"/>
+				<input type="hidden" id="sendstartdate" name="sendstartdate"/>
+				<input type="hidden" id="sendenddate" name="sendenddate"/>
 			</div>
-			<div class="col-md col-md-3 left-5px right-0px">
-				<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="订单号/护照号/电话/邮箱/申请人/受付番号" onkeypress="onkeyEnter()"/>
+			<div class="col-md col-md-3 left-5px right-0px" style="margin-left:0%;width:15.5%">
+				<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="护照号/申请人/受付番号" onkeypress="onkeyEnter()"/>
 			</div>
 			<div class="col-md col-md-1 ">
-				<a class="btn btn-primary btn-sm pull-left" href="javascript:search();" id="searchbtn">搜索</a>
+				<a class="btn btn-primary btn-sm pull-left" style="width:6%;" href="javascript:search();" id="searchbtn">搜索</a>
 			</div>
-			<div class="col-md col-md-1  " style="    margin-left: 10px;">
+			<div class="col-md col-md-1  " style="    margin-left: 0%;">
 				<a class="btn btn-primary btn-sm pull-right" onclick="addOrder();">下单</a>
 			</div>
 		</div>
 	</div><!-- end 检索条件 -->
 	<section class="card-list-content content">
-		
+
 		<div id="card" style="margin-left: -5px;" v-cloak>
 			<div class = "card-tj">
 				<span>订单总数(单)： {{visaJapanDataS.orderscount}}</span>
 				<span>总人数(人)： {{visaJapanDataS.peopletotal}}</span>
-				<span>作废数(单)： {{visaJapanDataS.disableorder}}</span>
-				<span>作废人数(人)： {{visaJapanDataS.disablepeople}}</span>
+				<!-- <span>作废数(单)： {{visaJapanDataS.disableorder}}</span>
+				<span>作废人数(人)： {{visaJapanDataS.disablepeople}}</span> -->
 				<span>招宝成功(单)： {{visaJapanDataS.zhaobaoorder}}</span>
 				<span>招宝成功(人)： {{visaJapanDataS.zhaobaopeople}}</span>
+				<span>单组单人： {{visaJapanDataS.singleperson}}</span>
+				<span>单组多人： {{visaJapanDataS.multiplayer}}</span>
 			</div>
-			
+
 			<div style="margin-top:123px!important;" class="box-body" v-cloak><!-- 卡片列表 -->
-				
+
 				<div class="card-list" v-for="data in visaJapanData">
 					<div class="card-head">
-						<div><label>订单号：</label><span><a v-on:click="visaDetail(data.id)" href="javascript:;">{{data.japannumber}}</a></span></div>	
-						<div><label>受付番号：</label><span>{{data.acceptdesign}}</span></div>	
+						<div><label>订单号：</label><span><a v-on:click="visaDetail(data.id)" href="javascript:;">{{data.japannumber}}</a></span></div>
+						<div><label>受付番号：</label><span>{{data.acceptdesign}}</span></div>
 						<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 						<div><label>操作人：</label><span>{{data.opname}}</span></div>
 						<div><label>送签社：</label><span>{{data.shortname}}</span></div>
@@ -162,7 +176,7 @@
 							</span>
 							<span v-else-if="data.visastatus === '发招宝中'">
 								<font>{{data.visastatus}}</font>
-				
+
 								<div class="spinner">
 								  <div class="bounce1"></div>
 								  <div class="bounce2"></div>
@@ -175,15 +189,15 @@
 								<span v-else>
 									{{data.visastatus}}
 								</span>
-							
+
 							</span>
 						</div>	 -->
 						<div v-if="data.isdisabled != 1">
 							<label>操作：</label>
 							<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 							<!-- <i class="shiShou" v-on:click="revenue(data.id)"> </i> -->
-							
-							<span v-if="data.zhaobaocomplete == 0 && data.visatype != 14">
+
+							<span v-if="data.zhaobaocomplete == 0 && data.visatype != '普通五年多次'">
 								<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
 							</span>
 							<!-- <span v-else>
@@ -194,6 +208,7 @@
 								<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
 								<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
 							</span>
+							<span v-else-if="data.visatype === '普通五年多次'"></span>
 
 							<!-- <span v-else>
 								<i class="theTrial1"> </i>
@@ -201,7 +216,7 @@
 							</span> -->
 
 							<!-- <i class="Refusal" v-on:click=""></i> -->
-							<i class="download" v-on:click="downLoadFile(data.id)"> </i>
+							<i class="download" v-on:click="downLoadFile(data.id,data.visatype)"> </i>
 							<!-- <i class="handoverTable"> </i> -->
 							<!-- 作废按钮 -->
 							<i class="toVoid" v-on:click="disabled(data.id,data.zhaobaoupdate)"> </i>
@@ -216,15 +231,15 @@
 							<li class="everybody-info" v-for="(item,index) in data.everybodyinfo">
 								<span v-if="index === 0" class="visaListSpan">
 									<div class="div-s1"><label>申请人：</label><span>{{item.applicant}}</span></div>
-									
+
 									<div><label>英文：</label><span>{{item.applicanten}}</span></div>
 									<!-- <div><label>性别：</label><span>{{item.sex}}</span></div> -->
 									<div><label>现居住地：</label><span>{{item.province}}</span></div>
 									<div><label>护照号：</label><span>{{item.passportno}}</span></div>
-									
+
 									<div><label>手机号：</label><span>{{item.telephone}}</span></div>
-									
-									
+
+
 									<!-- <span class="hideInfo"></span> -->
 								</span>
 								<span v-else class="visaListSpan">
@@ -233,14 +248,14 @@
 									<!-- <div><label>性别：</label><span>{{item.sex}}</span></div> -->
 									<div><label>现居住地：</label><span>{{item.province}}</span></div>
 									<div><label style="opacity:0;">护照号：</label><span>{{item.passportno}}</span></div>
-									
+
 									<div><label style="opacity:0;">手机号：</label><span>{{item.telephone}}</span></div>
-									
-									
+
+
 									<!-- <span class="hideInfo"></span> -->
 								</span>
 							</li>
-						</ul> 
+						</ul>
 						<div class="card-content-2">
 							<span v-if="data.visastatus === '招宝成功'">
 								<font color="red">{{data.visastatus}}</font>
@@ -263,12 +278,12 @@
 								{{data.visastatus}}
 								<b>{{data.errormsg}}</b>
 							</span>
-							
+
 
 							<span v-else>
 								{{data.visastatus}}
 							</span>
-								
+
 						</div>
 					</div>
 				</div>
@@ -294,7 +309,7 @@
 	<%-- <script src="${base}/admin/visaJapan/visaList.js"></script> --%>
 	<script src="${base}/references/common/js/base/cardList.js"></script><!-- 卡片式列表公用js文件 -->
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
-	<script src="${base}/admin/simple/listpagejs.js"></script><!--下单 -->
+	<script src="${base}/admin/simple/listpagejs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
 	//异步加载的URL地址
     var url="${base}/admin/simple/listData.html";
@@ -308,7 +323,7 @@
 		},
 		created:function(){
             _self=this;
-            $.ajax({ 
+            $.ajax({
             	url: url,
             	dataType:"json",
             	type:'post',
@@ -320,13 +335,15 @@
             			_self.visaJapanDataS = {
             				orderscount:0,
             				peopletotal:0,
-            				disableorder:0,
-            				disablepeople:0,
+            				/* disableorder:0,
+            				disablepeople:0, */
             				zhaobaoorder:0,
-            				zhaobaopeople:0
+            				zhaobaopeople:0,
+            				singleperson:0,
+            				multiplayer:0
             			}
             		}
-            		
+
             		$('#pagetotal').val(data.pagetotal);
               	}
             });
@@ -393,7 +410,7 @@
     									orderAuthority = $(this).attr("name");
     								}
     							});
-    	                 		$.ajax({ 
+    	                 		$.ajax({
     	                        	url: url,
     	                        	data:{orderAuthority:orderAuthority},
     	                        	dataType:"json",
@@ -421,7 +438,7 @@
 									orderAuthority = $(this).attr("name");
 								}
 							});
-	                 		$.ajax({ 
+	                 		$.ajax({
 	                        	url: url,
 	                        	data:{orderAuthority:orderAuthority},
 	                        	dataType:"json",
@@ -433,7 +450,7 @@
 	                   	}
 	                 });
          		}
-        		
+
         	},
         	sendzhaobao:function(orderid){
         		$.ajax({
@@ -517,43 +534,63 @@
     				});
     			});
         	},
-        	downLoadFile:function(orderid){
-        		$.ajax({
-                 	url: '${base}/admin/visaJapan/validateDownLoadInfoIsFull.html',
-                 	data:{orderjpid:orderid},
-                 	dataType:"json",
-                 	type:'post',
-                 	async:false,
-                 	success: function(data){
-                 		//var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
-                 		console.log(data.data);
-                 		if(data.data){
-                 			var url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
-			        		layer.open({
-			        		    type: 2,
-			        		    title: false,
-			        		    closeBtn:false,
-			        		    fix: false,
-			        		    maxmin: false,
-			        		    shadeClose: false,
-			        		    scrollbar: false,
-			        		    area: ['400px', '300px'],
-			        		    content: url
-			        		  });
-                 		}else{
-                 			layer.load(1);
-                    		$.fileDownload("${base}/admin/visaJapan/downloadFile.html?orderid=" + orderid, {
-            			         successCallback: function (url) {
-            			        	 layer.closeAll('loading');
-            			         },
-            			         failCallback: function (html, url) {
-            			        	layer.closeAll('loading');
-            			        	layer.msg("下载失败");
-            			         }
-            			     });
-                 		}
-                   	}
-                 });
+        	downLoadFile:function(orderid,visatype){
+        		
+        		
+        		if(visatype == "普通五年多次"){
+     				var vtype = 14;
+         			var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid+'&visatype='+vtype;
+	        		layer.open({
+	        		    type: 2,
+	        		    title: false,
+	        		    closeBtn:false,
+	        		    fix: false,
+	        		    maxmin: false,
+	        		    shadeClose: false,
+	        		    scrollbar: false,
+	        		    area: ['400px', '300px'],
+	        		    content: url
+	        		  });
+     				
+     			}else{
+	       			$.ajax({
+	                 	url: '${base}/admin/visaJapan/validateDownLoadInfoIsFull.html',
+	                 	data:{orderjpid:orderid},
+	                 	dataType:"json",
+	                 	type:'post',
+	                 	async:false,
+	                 	success: function(data){
+	                 		//var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
+	                 		if(data.data){
+	                 			var url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
+				        		layer.open({
+				        		    type: 2,
+				        		    title: false,
+				        		    closeBtn:false,
+				        		    fix: false,
+				        		    maxmin: false,
+				        		    shadeClose: false,
+				        		    scrollbar: false,
+				        		    area: ['400px', '300px'],
+				        		    content: url
+				        		  });
+	                 		}else{
+	                 				layer.load(1);
+		                    		$.fileDownload("${base}/admin/visaJapan/downloadFile.html?orderid=" + orderid, {
+		            			         successCallback: function (url) {
+		            			        	 layer.closeAll('loading');
+		            			         },
+		            			         failCallback: function (html, url) {
+		            			        	layer.closeAll('loading');
+		            			        	layer.msg("下载失败");
+		            			         }
+		            			     });
+	                 		}
+	                   	}
+	                 });
+     				
+     			}
+        		
         	},
         	//签证录入
     		visainput:function(applyId,orderid){
@@ -571,12 +608,12 @@
     		}
         }
 	});
-	// 注册scroll事件并监听 
+	// 注册scroll事件并监听
 	$(window).scroll(function(){
 	　　var scrollTop = $(this).scrollTop();
 	　　var scrollHeight = $(document).height();
 	　　var windowHeight = $(this).height();
-		// 判断是否滚动到底部  
+		// 判断是否滚动到底部
 	　　if(scrollTop + windowHeight == scrollHeight){
 	　　　　// alert("滚到底了");
 			//分页条件
@@ -587,7 +624,12 @@
 			//搜索条件
 			var status = $('#status').val();
 			var sendSignDate = $('#sendSignDate').val();
-			
+			var visatype = $("#visatype").val();
+			var sendstartdate = $('#sendstartdate').val();
+			var sendenddate = $('#sendenddate').val();
+			var orderstartdate = $('#orderstartdate').val();
+			var orderenddate = $('#orderenddate').val();
+
 			var orderDate = $('#orderDate').val();
 			var songqianshe = $("#songqianshe").val();
 			var employee = $("#employee").val();
@@ -605,9 +647,9 @@
 						orderAuthority = $(this).attr("name");
 					}
 				});
-				$.ajax({ 
+				$.ajax({
 			    	url: url,
-			    	data:{status:status,sendSignDate:sendSignDate,orderDate:orderDate,employee:employee,songqianshe:songqianshe,searchStr:searchStr,pageNumber:pageNumber,orderAuthority:orderAuthority},
+			    	data:{status:status,visatype:visatype,sendstartdate:sendstartdate,sendenddate:sendenddate,orderstartdate:orderstartdate,orderenddate:orderenddate,sendSignDate:sendSignDate,orderDate:orderDate,employee:employee,songqianshe:songqianshe,searchStr:searchStr,pageNumber:pageNumber,orderAuthority:orderAuthority},
 			    	dataType:"json",
 			    	type:'post',
 			    	success: function(data){
@@ -622,14 +664,14 @@
 			}
 	　　}
 	});
-	
+
 
 	//跳转 签证详情页
 	function edit(orderid){
 		window.location.href = '${base}/admin/simple/visaDetail.html?orderid='+orderid;
 	}
-	
-	
+
+
 	$(function(){
 		$(".btnList").click(function(){
 			$(this).addClass('bgColor').siblings().removeClass('bgColor');
@@ -637,26 +679,36 @@
 			search();
 		});
 
-		
+
 	});
-	
+
 	function clearSearchEle(){
 		//检索框
 		$("#status").val("");
 		$("#sendSignDate").val("");
 		$("#searchStr").val("");
+		$("#visatype").val("");
+		$("#sendstartdate").val("");
+		$("#sendenddate").val("");
+		$('#orderstartdate').val("");
+		$('#orderenddate').val("");
 		//分页项
 		$("#pageNumber").val(1);
 		$("#pageTotal").val("");
 		$("#pageListCount").val("");
 	}
-	
+
 	function search(){
 		var status = $('#status').val();
 		var sendSignDate = $('#sendSignDate').val();
+		var sendstartdate = $('#sendstartdate').val();
+		var sendenddate = $('#sendenddate').val();
 		var orderDate = $('#orderDate').val();
+		var orderstartdate = $('#orderstartdate').val();
+		var orderenddate = $('#orderenddate').val();
 		var songqianshe = $("#songqianshe").val();
 		var employee = $("#employee").val();
+		var visatype = $("#visatype").val();
 		//var signOutDate = $('#signOutDate').val();
 		var searchStr = $('#searchStr').val();
 		var orderAuthority = "allOrder";
@@ -667,16 +719,21 @@
 				orderAuthority = $(this).attr("name");
 			}
 		});
-		
-		$.ajax({ 
+
+		$.ajax({
         	url: url,
         	data:{
         		status:status,
+        		visatype:visatype,
         		songqianshe:songqianshe,
         		employee:employee,
         		sendSignDate:sendSignDate,
         		orderDate:orderDate,
         		searchStr:searchStr,
+        		sendstartdate:sendstartdate,
+        		sendenddate:sendenddate,
+        		orderstartdate:orderstartdate,
+        		orderenddate:orderenddate,
         		orderAuthority:orderAuthority
         	},
         	dataType:"json",
@@ -690,10 +747,12 @@
             			_self.visaJapanDataS = {
             				orderscount:0,
             				peopletotal:0,
-            				disableorder:0,
-            				disablepeople:0,
+            				/* disableorder:0,
+            				disablepeople:0, */
             				zhaobaoorder:0,
-            				zhaobaopeople:0
+            				zhaobaopeople:0,
+            				singleperson:0,
+            				multiplayer:0
             			}
             		}
           	}
@@ -716,7 +775,7 @@
 				orderAuthority = $(this).attr("name");
 			}
 		});
-		$.ajax({ 
+		$.ajax({
         	url: url,
         	data:{orderAuthority:orderAuthority},
         	dataType:"json",
@@ -730,22 +789,24 @@
             			_self.visaJapanDataS = {
             				orderscount:0,
             				peopletotal:0,
-            				disableorder:0,
-            				disablepeople:0,
+            				/* disableorder:0,
+            				disablepeople:0, */
             				zhaobaoorder:0,
-            				zhaobaopeople:0
+            				zhaobaopeople:0,
+            				singleperson:0,
+            				multiplayer:0
             			}
             		}
           	}
         });
 	}
-	
+
 	function successCallBack(status){
 		search();
-		
-		
-		
-		
+
+
+
+
 		/* var orderAuthority = "allOrder";
 		$(".searchOrderBtn").each(function(){
 			if($(this).hasClass("bgColor")){
@@ -777,13 +838,13 @@
 			//layer.msg('发招宝');
 			parent.successCallBack(4);
 		}else if(status == 12){
-			
+
 		}else{
 			//layer.msg('保存成功');
 			parent.successCallBack(2);
 		} */
 	}
-	
+
 	$(function(){
 		//送签时间
 		/* $("#sendSignDate").datetimepicker({
@@ -800,10 +861,10 @@
 			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"bottom-left",//显示位置
 			minView: "month"
-			
+
 		}); */
-		
-		//送签时间
+
+		/* //送签时间
 		$("#sendSignDate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
@@ -816,10 +877,10 @@
 	        showMeridian: false,
 			pickerPosition:"bottom",//显示位置
 			minView: "month"//只显示年月日
-		}).on("changeDate",function(){  
+		}).on("changeDate",function(){
 			search();
 		});
-		
+
 		//下单时间
 		$("#orderDate").datetimepicker({
 			format: 'yyyy-mm-dd',
@@ -833,13 +894,48 @@
 	        showMeridian: false,
 			pickerPosition:"bottom",//显示位置
 			minView: "month"//只显示年月日
-		}).on("changeDate",function(){  
+		}).on("changeDate",function(){
 			search();
-		});
-		
-		/* $('#sendSignDate').daterangepicker(null, function(start, end, label) {
-		  	console.log(start.toISOString(), end.toISOString(), label);
 		}); */
+
+		//时间插件处理
+		$('#sendSignDate').daterangepicker(null, function(start, end, label) {
+		  	console.log(start.toISOString(), end.toISOString(), label);
+		  	console.log(start.format('YYYY-MM-DD HH:mm:ss'));
+		  	$("#sendstartdate").val(start.format('YYYY-MM-DD HH:mm:ss'));
+		  	$("#sendenddate").val(end.format('YYYY-MM-DD HH:mm:ss'));
+		  	search();
+		});
+		$('#sendSignDate').on('cancel.daterangepicker', function(ev, picker) {
+			$('#sendSignDate').val('');
+			$("#sendstartdate").val('');
+		  	$("#sendenddate").val('');
+		  	search();
+		});
+		$('#sendSignDate').on('apply.daterangepicker', function(ev, picker) {
+			$("#sendstartdate").val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+		  	$("#sendenddate").val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+		  	search();
+		});
+		$('#orderDate').daterangepicker(null, function(start, end, label) {
+		  	console.log(start.toISOString(), end.toISOString(), label);
+		  	$("#orderstartdate").val(start.format('YYYY-MM-DD HH:mm:ss'));
+		  	$("#orderenddate").val(end.format('YYYY-MM-DD HH:mm:ss'));
+		  	search();
+		});
+		$('#orderDate').on('cancel.daterangepicker', function(ev, picker) {
+			$('#orderDate').val('');
+			$("#orderstartdate").val('');
+		  	$("#orderenddate").val('');
+		  	search();
+		});
+		$('#orderDate').on('apply.daterangepicker', function(ev, picker) {
+			$("#orderstartdate").val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+		  	$("#orderenddate").val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+		  	search();
+		});
+
+
 		//鼠标移入事件
 		$(document).on('mouseover','.showInfo',function(){
 
@@ -852,35 +948,39 @@
 			$(".hideInfo").hide();
 		});
 	});
-	
+
+	function addOrder(){
+		window.location.href = "/admin/simple/addOrder.html";
+	}
+
 	//连接websocket
 	/* connectWebSocket();
 	function connectWebSocket(){
-		 if ('WebSocket' in window){  
-            console.log('Websocket supported');  
-            socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');   
+		 if ('WebSocket' in window){
+            console.log('Websocket supported');
+            socket = new WebSocket('ws://${obj.localAddr}:${obj.localPort}/${obj.websocketaddr}');
 
-            console.log('Connection attempted');  
+            console.log('Connection attempted');
 
-            socket.onopen = function(){  
-                 console.log('Connection open!');  
-                 //setConnected(true);  
+            socket.onopen = function(){
+                 console.log('Connection open!');
+                 //setConnected(true);
              };
 
             socket.onclose = function(){
-                console.log('Disconnecting connection'); 
+                console.log('Disconnecting connection');
             };
 
             socket.onmessage = function (evt){
-                console.log('message received!');  
+                console.log('message received!');
                 search();
-             };  
+             };
 
-          } else {  
-            console.log('Websocket not supported');  
-          }  
+          } else {
+            console.log('Websocket not supported');
+          }
 	} */
-	
+
 	</script>
 </body>
 </html>

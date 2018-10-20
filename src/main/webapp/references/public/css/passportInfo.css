@@ -20,7 +20,8 @@ input[type="file"] {
 }
 
 .info-imgUpload {
-	width: 98%;
+	width: 40%;
+	margin-left: 15px;
 }
 
 .col-sm-offset-1 {

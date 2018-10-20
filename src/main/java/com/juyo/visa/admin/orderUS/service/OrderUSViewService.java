@@ -6,16 +6,22 @@
 
 package com.juyo.visa.admin.orderUS.service;
 
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,8 +32,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
@@ -52,14 +62,17 @@ import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.RateLimiter;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.admin.order.entity.PassportJsonEntity;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
+import com.juyo.visa.admin.order.form.RecognitionForm;
 import com.juyo.visa.admin.orderUS.entity.AutofillSearchJsonEntity;
 import com.juyo.visa.admin.orderUS.entity.USStaffJsonEntity;
 import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
+import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
 import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
@@ -109,6 +122,7 @@ import com.juyo.visa.entities.TOrderUsFollowupEntity;
 import com.juyo.visa.entities.TOrderUsInfoEntitiy;
 import com.juyo.visa.entities.TOrderUsLogsEntity;
 import com.juyo.visa.entities.TOrderUsTravelinfoEntity;
+import com.juyo.visa.entities.TUsStateEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.OrderUpdateForm;
 import com.juyo.visa.forms.TAppStaffVisaUsAddForm;
@@ -541,14 +555,20 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				orderInfoEntity.setGoDepartureCity(gocity.getCity());
 			}
 			if (!Util.isEmpty(orderTravelInfo.getGoArrivedCity())) {
-				TCityEntity gocity = dbDao.fetch(TCityEntity.class,
+				/*TCityEntity gocity = dbDao.fetch(TCityEntity.class,
 						Cnd.where("id", "=", orderTravelInfo.getGoArrivedCity()));
-				orderInfoEntity.setGoArrivedCity((gocity.getCity()));
+				orderInfoEntity.setGoArrivedCity((gocity.getCity()));*/
+				TUsStateEntity gocity = dbDao.fetch(TUsStateEntity.class, orderTravelInfo.getGoArrivedCity()
+						.longValue());
+				orderInfoEntity.setGoArrivedCity((gocity.getStatecn()));
 			}
 			if (!Util.isEmpty(orderTravelInfo.getReturnDepartureCity())) {
-				TCityEntity gocity = dbDao.fetch(TCityEntity.class,
+				/*TCityEntity gocity = dbDao.fetch(TCityEntity.class,
 						Cnd.where("id", "=", orderTravelInfo.getReturnDepartureCity()));
-				orderInfoEntity.setReturnDepartureCity(gocity.getCity());
+				orderInfoEntity.setReturnDepartureCity(gocity.getCity());*/
+				TUsStateEntity gocity = dbDao.fetch(TUsStateEntity.class, orderTravelInfo.getGoArrivedCity()
+						.longValue());
+				orderInfoEntity.setReturnDepartureCity((gocity.getStatecn()));
 			}
 			if (!Util.isEmpty(orderTravelInfo.getReturnArrivedCity())) {
 				TCityEntity gocity = dbDao.fetch(TCityEntity.class,
@@ -1160,28 +1180,836 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return null;
 	}
 
+	public Object getAutofillOrder(int orderid, HttpSession session) {
+
+		/*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
+		RateLimiter rateLimiter = RateLimiter.create(1);
+		List<TOrderUsEntity> query = dbDao.query(TOrderUsEntity.class, Cnd.where("status", "=", 5), null);
+		Integer orderusid = query.get(0).getId();
+		int count = 0;
+		while (true) {
+			count++;
+			rateLimiter.acquire();
+			ThreadDemo1 aDemo = new ThreadDemo1();
+			new Thread(aDemo).start();
+
+			System.out.println(simpleDateFormat.format(new Date()));
+			if (count == 10) {
+				break;
+			}
+		}
+		System.out.println("出循环了~~~~~~~~~~~");*/
+		Object applyinfo = getApplyinfo("3ea2a02d");
+		selectApplyinfo("E49878974");
+		return null;
+	}
+
+	class ThreadDemo1 implements Runnable {
+		private HttpSession session;
+
+		public void setSession(HttpSession session) {
+			this.session = session;
+		}
+
+		@SuppressWarnings("synthetic-access")
+		@Override
+		public void run() {
+			try {
+				List<TOrderUsEntity> query = dbDao.query(TOrderUsEntity.class, Cnd.where("status", "=", 5), null);
+				RateLimiter rateLimiter = RateLimiter.create(1);
+				for (int i = 0; i < query.size(); i++) {
+					rateLimiter.acquire();
+					autofill(query.get(i).getId(), this.session);
+				}
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("thread_01");
+		}
+	}
+
+	//自动填表
 	public Object autofill(int orderid, HttpSession session) {
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
+		System.out.println(simpleDateFormat.format(new Date()) + "============");
+		System.out.println("=====orderid:" + orderid);
+		Map<String, Object> result = Maps.newHashMap();
+		//TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		//改变订单状态
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		orderus.setIsautofilling(1);
 		if (orderus.getStatus() < USOrderListStatusEnum.AUTOFILL.intKey()) {
 			orderus.setStatus(USOrderListStatusEnum.AUTOFILL.intKey());
+		}
+		dbDao.update(orderus);
+		//根据订单id查询对应申请人，根据申请人查询二寸照片
+		TAppStaffOrderUsEntity staffOrderUS = dbDao.fetch(TAppStaffOrderUsEntity.class,
+				Cnd.where("orderid", "=", orderid));
+		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffOrderUS.getStaffid()
+				.longValue());
+		Integer staffid = basicinfo.getId();
+		TAppStaffCredentialsEntity twoinchphoto = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", 13));
+		String imgurl = twoinchphoto.getUrl();
+		System.out.println("imgurl:" + imgurl);
+		TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		String passportnum = passportinfo.getPassport();
+
+		/*int height = 300;
+		int width = 300;
+		Icon icon = null;
+		try {
+			icon = getFixedIcon(imgurl, width, height);
+		} catch (Exception e) {
+			System.out.println("exception : " + e);
+		}*/
+
+		//调用第一个接口
+		//selectApplyinfo();
+		//调用第二个，第三个接口,获取申请人识别码
+		//String applyidcode = (String) insertandupdateApplyinfo(orderid);
+		//调用第四个接口
+		//Object applyinfo = getApplyinfo(applyidcode);
+		//调用第五个接口,上传图片
+		//int successStatus = (int) uploadImgtoUS(imgurl, applyidcode);
+		//System.out.println("imgsuccessStatus:" + successStatus);
+		//调用第六个接口，向DS160官网提交申请
+		//successStatus = (int) submittoDS160(applyidcode, type);
+		//System.out.println("ds160successStatus:" + successStatus);
+		//调用第四个接口,查询
+		//be3d1654,77d68168,baf0e46c,8046d51a,de3dbd8a,48ca6a6f,1f1bdb37,bb9c3f38,15231000,73dacefd
+
+		//调整顺序
+		String applyidcode = "";
+		int successStatus = 0;
+		Map<String, Object> AAcodeinfo = Maps.newHashMap();
+		Map<String, Object> repeatResult = Maps.newHashMap();
+		String statusname = "";
+		String AAcode = "";
+		String errorMsg = "";
+		String reviewurl = "";
+		String pdfurl = "";
+		String avatorurl = "";
+		String daturl = "";
+		String errorurl = "";
+		List<AutofillSearchJsonEntity> applyinfoList = new ArrayList<>();
+		AutofillSearchJsonEntity applyResult = new AutofillSearchJsonEntity();
+
+		//创建申请人信息，并上传头像
+		/*repeatResult = repeatInsertandupdate(imgurl, orderid, staffid);
+		successStatus = (int) repeatResult.get("successStatus");
+		applyidcode = (String) repeatResult.get("applyidcode");*/
+
+		//创建申请人，上传头像，向官网申请
+		applyResult = (AutofillSearchJsonEntity) applyToDS160(passportnum, imgurl, orderid, staffid, orderus);
+		reviewurl = applyResult.getReview_url();
+		if (Util.isEmpty(applyResult.getReview_url())) {
+			return applyResult;
+		}
+
+		applyidcode = applyResult.getCode();
+		//向DS160官网递交，参数1代表申请，参数2代表递交
+		successStatus = (int) applyorsubmit(applyidcode, 2);
+		int count = 0;
+		if (successStatus == 1) {
+			//根据护照号查询,参数1代表申请，参数2代表递交
+			applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 2);
+			statusname = applyResult.getStatus();
+			errorMsg = applyResult.getErrorMsg();
+			/*if (Util.eq("提交失败", statusname)) {
+				System.out.println("提交失败了~~~~~~~~~~~~~~~~~~~~");
+				orderus.setErrorurl(applyResult.getError_url());
+				orderus.setApplyidcode(applyidcode);
+				orderus.setErrormsg(applyResult.getErrorMsg());
+				orderus.setIsautofilling(0);
+				dbDao.update(orderus);
+				System.out.println("提交失败:" + simpleDateFormat.format(new Date()));
+				return applyResult;
+			}*/
+			while (Util.eq("提交失败", statusname)) {
+				count++;
+				System.out.println("count===========:" + count);
+				if (count == 4) {
+					System.out.println("提交还是失败了o(╥﹏╥)o");
+					orderus.setIsautofilling(0);
+					orderus.setErrormsg(applyResult.getErrorMsg());
+					dbDao.update(orderus);
+					return applyResult;
+				}
+				applyResult = (AutofillSearchJsonEntity) applyToDS160(passportnum, imgurl, orderid, staffid, orderus);
+				reviewurl = applyResult.getReview_url();
+				if (Util.isEmpty(applyResult.getReview_url())) {
+					return applyResult;
+				}
+				applyidcode = applyResult.getCode();
+				successStatus = (int) applyorsubmit(applyidcode, 2);
+				if (successStatus == 1) {
+					applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 2);
+					statusname = applyResult.getStatus();
+				}
+			}
+
+			System.out.println("reviewurl:" + reviewurl);
+			pdfurl = applyResult.getPdf_url();
+			System.out.println("pdfurl:" + pdfurl);
+			daturl = applyResult.getDat_url();
+			System.out.println("daturl:" + daturl);
+			AAcode = applyResult.getApp_id();
+			System.out.println("AAcode:" + AAcode);
+			errorurl = applyResult.getError_url();
+			System.out.println("errorurl:" + errorurl);
+			errorMsg = applyResult.getErrorMsg();
+			System.out.println("errorMsg:" + errorMsg);
+			orderus.setReviewurl(reviewurl);
+			orderus.setPdfurl(pdfurl);
+			orderus.setDaturl(daturl);
+			orderus.setApplyidcode(applyidcode);
+			//orderus.setErrorurl(errorurl);
+			//成功时不更新错误信息，这样可以看到之前的错误信息
+			//orderus.setErrormsg(errorMsg);
+			orderus.setErrormsg("");
+			orderus.setErrorurl("");
+			orderus.setIsautofilling(0);
 			dbDao.update(orderus);
+			if (!Util.isEmpty(applyResult.getApp_id())) {
+				basicinfo.setAacode(applyResult.getApp_id());
+				dbDao.update(basicinfo);
+			}
 		}
 
-		//code=99fee3e5
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("search", "E72073527");
-		List<AutofillSearchJsonEntity> searchInterface = searchInterface(jsonObject);
+		result.put("applyidcode", applyidcode);
+		result.put("AAcode", AAcode);
+		result.put("errorMsg", errorMsg);
+		result.put("daturl", daturl);
+		result.put("reviewurl", reviewurl);
+		result.put("pdfurl", pdfurl);
+		result.put("avatorurl", avatorurl);
 
-		//调用 优签易接口进行自动填表 TODO
-		/*Map<String, Object> result = autofillService.getData(orderid);
-		if (!Util.isEmpty(result)) {
-			String aacode = toGetAAcode(result.get("resultData"));
-		}
+		//uploadImgtoUS(imgurl, "9667808b");
+		//submittoDS160("9667808b", "cover");
 		//记录日志
-		insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());*/
-		return null;
+		//insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
+		return result;
+	}
+
+	public Object applyToDS160(String passportnum, String imgurl, int orderid, int staffid, TOrderUsEntity orderus) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
+		Map<String, Object> repeatResult = Maps.newHashMap();
+		AutofillSearchJsonEntity applyResult = new AutofillSearchJsonEntity();
+		int successStatus = 0;
+		String statusname = "";
+		String errorMsg = "";
+		String reviewurl = "";
+		String errorurl = "";
+
+		//创建申请人信息，并上传头像
+		repeatResult = repeatInsertandupdate(imgurl, orderid, staffid);
+		successStatus = (int) repeatResult.get("successStatus");
+		String applyidcode = (String) repeatResult.get("applyidcode");
+
+		if (successStatus == 1) {
+			//向DS160官网申请，参数1代表申请
+			successStatus = (int) applyorsubmit(applyidcode, 1);
+			if (successStatus == 1) {
+				//根据护照号查询,参数1代表申请，参数2代表递交
+				applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 1);
+				statusname = applyResult.getStatus();
+				while (Util.eq("申请失败", statusname)) {
+					errorMsg = applyResult.getErrorMsg();
+					if (errorMsg.contains("Connection") || errorMsg.contains("打码工超时未打码")
+							|| errorMsg.contains("图片服务器连接错误")) {
+						repeatResult = repeatInsertandupdate(imgurl, orderid, staffid);
+						successStatus = (int) repeatResult.get("successStatus");
+						applyidcode = (String) repeatResult.get("applyidcode");
+						if (successStatus == 1) {
+							successStatus = (int) applyorsubmit(applyidcode, 1);
+							if (successStatus == 1) {
+								applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 1);
+								statusname = applyResult.getStatus();
+								System.out.println("申请失败的while循环里:" + statusname);
+							}
+						}
+					} else {
+						System.out.println("申请失败了~~~~~~~~~~~~~~~~~~~~");
+						errorurl = applyResult.getError_url();
+						if (!Util.isEmpty(errorurl)) {
+							try {
+								// 创建URL
+								URL url = new URL(errorurl);
+								// 创建链接
+								HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+								conn.setRequestMethod("GET");
+								conn.setConnectTimeout(5000);
+								InputStream is = conn.getInputStream();
+								errorurl = CommonConstants.IMAGES_SERVER_ADDR
+										+ qiniuUploadService.uploadImage(is, "", "");
+								is.close();
+
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+						applyResult.setError_url(errorurl);
+						orderus.setErrorurl(errorurl);
+						orderus.setApplyidcode(applyidcode);
+						orderus.setErrormsg(applyResult.getErrorMsg());
+						orderus.setReviewurl("");
+						orderus.setPdfurl("");
+						orderus.setDaturl("");
+						orderus.setIsautofilling(0);
+						dbDao.update(orderus);
+						System.out.println("申请失败:" + simpleDateFormat.format(new Date()));
+						return applyResult;
+					}
+					/*if (countnum == 3) {
+					if (countnum == 3) {
+					System.out.println("第" + countnum + "次申请失败！！！");
+					orderus.setErrorurl(applyResult.getError_url());
+					orderus.setApplyidcode(applyidcode);
+					orderus.setErrormsg(applyResult.getErrorMsg());
+					dbDao.update(orderus);
+					return applyResult;
+					}*/
+					/*repeatResult = repeatInsertandupdate(imgurl, orderid);
+					successStatus = (int) repeatResult.get("successStatus");
+					applyidcode = (String) repeatResult.get("applyidcode");
+					if (successStatus == 1) {
+					successStatus = (int) applyorsubmit(applyidcode, 1);
+					if (successStatus == 1) {
+						applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 1);
+						statusname = applyResult.getStatus();
+						System.out.println("申请失败的while循环里:" + statusname);
+					}
+					}*/
+
+				}
+
+			}
+
+		}
+		applyResult.setCode(applyidcode);
+		return applyResult;
+	}
+
+	public static Icon getFixedIcon(String filePath, int width, int height) throws Exception {
+		File f = new File(filePath);
+		BufferedImage bi = ImageIO.read(f);
+		double wRatio = (new Integer(width)).doubleValue() / bi.getWidth(); //宽度的比例		
+		double hRatio = (new Integer(height)).doubleValue() / bi.getHeight(); //高度的比例		
+		Image image = bi.getScaledInstance(width, height, Image.SCALE_SMOOTH); //设置图像的缩放大小		
+		AffineTransformOp op = new AffineTransformOp(AffineTransform.getScaleInstance(wRatio, hRatio), null); //设置图像的缩放比例		
+		image = op.filter(bi, null);
+		int lastLength = filePath.lastIndexOf(".");
+		String subFilePath = filePath.substring(0, lastLength); //得到图片输出路径    
+		String fileType = filePath.substring(lastLength); //图片类型   
+		File zoomFile = new File(subFilePath + "_" + width + "_" + height + fileType);
+		Icon ret = null;
+		try {
+			ImageIO.write((BufferedImage) image, "jpg", zoomFile);
+			ret = new ImageIcon(zoomFile.getPath());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+
+	/**
+	 * 上传申请人数据并上传头像
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param imgurl
+	 * @param orderid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Map<String, Object> repeatInsertandupdate(String imgurl, int orderid, int staffid) {
+		Map<String, Object> result = Maps.newHashMap();
+		int successStatus = 0;
+		//创建申请人数据
+		String applyidcode = (String) insertandupdateApplyinfo(orderid, staffid);
+		while (Util.isEmpty(applyidcode)) {
+			applyidcode = (String) insertandupdateApplyinfo(orderid, staffid);
+		}
+		if (!Util.isEmpty(applyidcode)) {
+			//try {
+			successStatus = (int) uploadImgtoUS(imgurl, applyidcode);
+			System.out.println("上传头像imgsuccessStatus:" + successStatus);
+			while (successStatus != 1) {
+				successStatus = (int) uploadImgtoUS(imgurl, applyidcode);
+				System.out.println("上传头像imgsuccessStatus在while循环里:" + successStatus);
+			}
+		}
+		result.put("applyidcode", applyidcode);
+		result.put("successStatus", successStatus);
+		return result;
+	}
+
+	/**
+	 * 向DS160官网申请或递交
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param applyidcode
+	 * @param type 1代表申请，2代表递交
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object applyorsubmit(String applyidcode, int type) {
+		int successStatus = 0;
+		try {
+			if (type == 1) {
+				successStatus = (int) submittoDS160(applyidcode, "applying");
+				System.out.println("申请DS160官网ds160successStatus:" + successStatus);
+				while (successStatus != 1) {
+					successStatus = (int) submittoDS160(applyidcode, "applying");
+					System.out.println("申请DS160官网ds160successStatus在while循环里:" + successStatus);
+				}
+			} else {
+				successStatus = (int) submittoDS160(applyidcode, "submitting");
+				System.out.println("递交DS160官网ds160successStatus:" + successStatus);
+				while (successStatus != 1) {
+					successStatus = (int) submittoDS160(applyidcode, "submitting");
+					System.out.println("递交DS160官网ds160successStatus在while循环里:" + successStatus);
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("里边失败了~~");
+		}
+		return successStatus;
+	}
+
+	/**
+	 * 查询申请人数据
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param applyidcode
+	 * @param passportnum
+	 * @param type
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object infinitQuery(String applyidcode, String passportnum, int type) {
+		Map<String, Object> result = Maps.newHashMap();
+		List<AutofillSearchJsonEntity> applyinfoList = new ArrayList<>();
+		AutofillSearchJsonEntity applyResult = new AutofillSearchJsonEntity();
+		Map<String, Object> AAcodeinfo = Maps.newHashMap();
+		String statusname = "";
+		String AAcode = "";
+		String errorMsg = "";
+		String errorurl = "";
+		applyinfoList = selectApplyinfo(passportnum);
+		applyResult = applyinfoList.get(0);
+		statusname = applyResult.getStatus();
+		AAcode = applyResult.getApp_id();
+
+		System.out.println("statusname:" + statusname);
+		System.out.println("AAcode:" + AAcode);
+		if (type == 1) {
+			Date firstDate = DateUtil.nowDate();
+			Date nowDate = null;
+			while (Util.eq("正在申请", statusname) || Util.eq("已保存", statusname)) {
+				nowDate = DateUtil.nowDate();
+				long millisBetween = DateUtil.twoDatebetweenMillis(firstDate, nowDate);
+				//long millisBetween = DateUtil.millisBetween(firstDate, nowDate) + 1000;
+				//System.out.println("millisBetween:" + millisBetween);
+				if (millisBetween != 0 && millisBetween % 30000 == 0) {
+					System.out.println("进循环前millisBetween:" + millisBetween);
+					System.out.println("进入循环了~~~~~~~~~~~");
+					applyinfoList = selectApplyinfo(passportnum);
+					applyResult = applyinfoList.get(0);
+					statusname = applyResult.getStatus();
+					AAcode = applyResult.getApp_id();
+					nowDate = DateUtil.nowDate();
+					millisBetween = DateUtil.twoDatebetweenMillis(firstDate, nowDate);
+					System.out.println("millisBetween:" + millisBetween);
+					System.out.println("while循环里申请statusname:" + statusname);
+					System.out.println("while循环里申请AAcode:" + AAcode);
+				}
+			}
+			if (Util.eq("申请失败", statusname)) {
+				errorurl = applyResult.getError_url();
+				System.out.println("申请失败原因网址:" + errorurl);
+				AAcodeinfo = getApplyinfo(applyidcode);
+				errorMsg = (String) AAcodeinfo.get("errorMsg");
+				System.out.println("申请失败原因：" + errorMsg);
+			}
+		} else {
+			Date firstDate = DateUtil.nowDate();
+			Date nowDate = null;
+			while (Util.eq("正在提交", statusname)) {
+				nowDate = DateUtil.nowDate();
+				//long millisBetween = DateUtil.millisBetween(firstDate, nowDate);
+				long millisBetween = DateUtil.twoDatebetweenMillis(firstDate, nowDate);
+				if (millisBetween != 0 && millisBetween % 30000 == 0) {
+					applyinfoList = selectApplyinfo(passportnum);
+					applyResult = applyinfoList.get(0);
+					statusname = applyResult.getStatus();
+					AAcode = applyResult.getApp_id();
+					nowDate = DateUtil.nowDate();
+					millisBetween = DateUtil.twoDatebetweenMillis(firstDate, nowDate);
+					System.out.println("while循环里提交statusname:" + statusname);
+					System.out.println("while循环里提交AAcode:" + AAcode);
+				}
+			}
+			if (Util.eq("提交失败", statusname)) {
+				errorurl = applyResult.getError_url();
+				System.out.println("提交失败图片网址:" + errorurl);
+				AAcodeinfo = getApplyinfo(applyidcode);
+				errorMsg = (String) AAcodeinfo.get("errorMsg");
+				System.out.println("提交失败原因：" + errorMsg);
+			}
+		}
+		applyResult.setErrorMsg(errorMsg);
+		return applyResult;
+	}
+
+	//第一个接口，查询
+	public List<AutofillSearchJsonEntity> selectApplyinfo(String passportnum) {
+		//JSONObject jsonObject = new JSONObject();
+		long startTime = System.currentTimeMillis();
+		Map<String, Object> resultData = Maps.newHashMap();
+		resultData.put("search", passportnum);
+
+		System.out.println("passportJSON:" + resultData);
+		//List<AutofillSearchJsonEntity> searchInterface = searchInterface(resultData);
+		JSONArray array = (JSONArray) searchInterface(resultData, "");
+		List<AutofillSearchJsonEntity> searchList = com.alibaba.fastjson.JSONObject.parseArray(array.toString(),
+				AutofillSearchJsonEntity.class);
+		long endTime = System.currentTimeMillis();
+		System.out.println("第一个接口所用时间为：" + (endTime - startTime) + "ms");
+		return searchList;
+	}
+
+	//第二个，第三个接口，创建和更改申请人数据，只是请求方式不同，一个为POST,一个为PATCH
+	public Object insertandupdateApplyinfo(int orderid, int staffid) {
+		String applyidcode = "";
+		Map<String, Object> result = autofillService.getData(orderid, staffid);
+		if (!Util.isEmpty(result)) {
+			//第二个，第三个接口，创建和更改申请人数据，只是请求方式不同，一个为POST,一个为PATCH
+			//applyidcode = toGetApplyidcode(result.get("resultData"));
+			String resultStr = (String) toGetEncrypt(result.get("resultData"), applyidcode, "POST");
+			//String resultStr = (String) toGetEncrypt(result.get("resultData"), applyidcode, "PATCH");
+			//从解密之后的字符串获取applyidcode
+			JSONObject aacodeObj = new JSONObject(resultStr);
+			try {
+				if (aacodeObj.getInt("success") == 1) {
+					applyidcode = (String) aacodeObj.get("code");
+					System.out.println("创建申请人数据成功，applyidcode: " + applyidcode);
+				} else {
+					System.out.println("糟糕，创建申请人数据获取识别码失败了o(╥﹏╥)o");
+				}
+			} catch (Exception e) {
+				applyidcode = aacodeObj.getString("detail");
+				System.out.println("创建申请人数据出现错误，错误信息:" + aacodeObj.getString("detail"));
+			}
+			/*if (!Util.isEmpty(aacodeObj.getInt("success"))) {
+					if (aacodeObj.getInt("success") == 1) {
+						applyidcode = (String) aacodeObj.get("code");
+						System.out.println("applyidcode: " + applyidcode);
+					} else {
+						System.out.println("糟糕，获取识别码失败了o(╥﹏╥)o");
+					}
+				} else {
+					System.out.println(aacodeObj.getString("detail"));
+				}*/
+		}
+		System.out.println("申请人识别码为：" + applyidcode);
+		return applyidcode;
+	}
+
+	//第四个接口，申请人数据详情
+	public Map<String, Object> getApplyinfo(String applyidcode) {
+		Map<String, Object> result = Maps.newHashMap();
+		Map<String, Object> applycode = Maps.newHashMap();
+		String appid = "";
+		String errorMsg = "";
+		String reviewurl = "";
+		String pdfurl = "";
+		String avatorurl = "";
+		String daturl = "";
+		//applycode.put("code", "d19eb111");//code为第二个接口返回
+		JSONObject applyinfo = (JSONObject) searchInterface(applycode, applyidcode);
+		JSONObject applystatus = (JSONObject) applyinfo.get("status");
+		String statusname = (String) applystatus.get("name");
+		result.put("statusname", statusname);
+		try {
+			errorMsg = (String) applyinfo.get("error_msg");
+		} catch (Exception e) {
+			errorMsg = "";
+		}
+		result.put("errorMsg", errorMsg);
+		try {
+			appid = (String) applyinfo.get("app_id");
+		} catch (Exception e) {
+			appid = "";
+		}
+		try {
+			reviewurl = (String) applyinfo.get("review_url");
+		} catch (Exception e) {
+			reviewurl = "";
+		}
+		try {
+			pdfurl = (String) applyinfo.get("pdf_url");
+		} catch (Exception e) {
+			pdfurl = "";
+		}
+		try {
+			avatorurl = (String) applyinfo.get("avator_url");
+		} catch (Exception e) {
+			avatorurl = "";
+		}
+		try {
+			daturl = (String) applyinfo.get("dat_url");
+		} catch (Exception e) {
+			daturl = "";
+		}
+
+		result.put("reviewurl", reviewurl);
+		result.put("pdfurl", pdfurl);
+		result.put("avatorurl", avatorurl);
+		result.put("daturl", daturl);
+		result.put("AAcode", appid);
+		System.out.println("AA码为：" + appid);
+		return result;
+	}
+
+	//第五个接口，上传美签申请人头像
+	public Object uploadImgtoUS(String imgurl, String applyidcode) {
+		//String imgbase64 = imgToBse64(imgurl);
+		String imgbase64 = ImageToBase64ByOnline(imgurl);
+		Map<String, Object> resultData = Maps.newHashMap();
+		resultData.put("file", imgbase64);
+		//resultData.put("file", imgurl);
+		System.out.println("base64imgurl:" + resultData);
+
+		String resultStr = (String) toGetEncrypt(resultData, applyidcode, "image");
+		//从解密之后的字符串获取applyidcode
+		JSONObject aacodeObj = new JSONObject(resultStr);
+		int successStatus = (int) aacodeObj.get("success");
+		System.out.println("applyidcode: " + applyidcode);
+		return successStatus;
+	}
+
+	//第六个接口,递交DS160官网数据
+	public Object submittoDS160(String applyidcode, String type) {
+		Map<String, Object> resultData = Maps.newHashMap();
+		resultData.put("action", type);
+		String resultStr = (String) toGetEncrypt(resultData, applyidcode, type);
+		JSONObject aacodeObj = new JSONObject(resultStr);
+		int successStatus = (int) aacodeObj.get("success");
+		System.out.println("applyidcode: " + applyidcode);
+		return successStatus;
+	}
+
+	//将enctrypt加密，发送请求，然后解密拿到解密之后的enctrypt
+	public Object toGetEncrypt(Object result, String applyidcode, String type) {
+		WXBizMsgCrypt pc;
+		String resultStr = "";
+		String json = encrypt(result);
+		//System.out.println("json:" + json);
+		try {
+			//发送POST请求
+			String returnResult = toPostRequest(json, applyidcode, type);
+			//String returnResult = toPatchRequest(json);
+			JSONObject resultObj = new JSONObject(returnResult);
+			String encrypt = (String) resultObj.get("encrypt");
+			//对请求返回来的encrypt解密
+			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
+			resultStr = pc.decrypt(encrypt);
+			//System.out.println("toGetEncrypt解密后明文: " + resultStr);
+		} catch (AesException e) {
+			e.printStackTrace();
+		}
+
+		return resultStr;
+	}
+
+	//发送POST请求
+	public String toPostRequest(String json, String applyidcode, String type) {
+		String path = "";
+		String host = "https://open.visae.net";
+		if (!Util.isEmpty(applyidcode)) {
+			if (Util.eq("image", type)) {
+				path = "/visae/america/lg/save/data/" + applyidcode
+						+ "/upload_photo/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
+			} else {
+				path = "/visae/america/lg/save/data/" + applyidcode
+						+ "/submit_ds160/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
+			}
+		} else {
+			path = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
+		}
+		String method = "POST";
+		String entityStr = "";
+		Map<String, String> headers = new HashMap<String, String>();
+		if (Util.eq("PATCH", type)) {
+			headers.put(" X-HTTP-Method-Override", "PATCH");
+		}
+		headers.put("Content-Type", "application/json; charset=UTF-8");
+		Map<String, String> querys = new HashMap<String, String>();
+		HttpResponse response;
+		System.out.println("httpurl:" + (host + path));
+		System.out.println("json:" + json);
+		try {
+			response = HttpUtils.doPost(host, path, method, headers, querys, json);
+			entityStr = EntityUtils.toString(response.getEntity());
+			//System.out.println("POST请求返回的数据：" + entityStr);
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		return entityStr;
+	}
+
+	/*//发送PATCH请求
+		public String toPatchRequest(String json) {
+			String host = "https://open.visae.net";
+			String path = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
+			String method = "POST";
+			String entityStr = "";
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("Content-Type", "application/json; charset=UTF-8");
+			headers.put(" x-http-method-override", "PATCH");
+			Map<String, String> querys = new HashMap<String, String>();
+			HttpResponse response;
+			try {
+				response = HttpUtils.doPost(host, path, method, headers, querys, json);
+				entityStr = EntityUtils.toString(response.getEntity());
+				System.out.println("PATCH请求返回的数据：" + entityStr);
+			} catch (Exception e) {
+
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+			}
+			return entityStr;
+		}*/
+
+	//查询接口
+	public Object searchInterface(Object result, String applyidcode) {
+		List<AutofillSearchJsonEntity> searchList = new ArrayList<AutofillSearchJsonEntity>();
+		String url = "";
+		//先加密，获取加密之后的数据
+		String encrypt = encrypt(result);
+		JSONObject encryptObj = new JSONObject(encrypt);
+		String timestamp = (String) encryptObj.get("timeStamp");
+		String signature = (String) encryptObj.get("msg_signature");
+		String nonce = (String) encryptObj.get("nonce");
+		encrypt = (String) encryptObj.get("encrypt");
+		System.out.println("encode之前的encrypt:" + encrypt);
+		try {
+			encrypt = URLEncoder.encode(encrypt, "utf-8");
+			System.out.println("encode之后的encrypt:" + encrypt);
+		} catch (UnsupportedEncodingException e1) {
+
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+
+		}
+		//encrypt = com.alibaba.dubbo.common.URL.encode(encrypt);
+		//GET请求拼凑URL
+		if (!Util.isEmpty(applyidcode)) {
+
+			url = "/visae/america/lg/save/data/" + applyidcode + "/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&timeStamp="
+					+ timestamp + "&msg_signature=" + signature + "&nonce=" + nonce + "&encrypt=" + encrypt;
+		} else {
+			url = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&timeStamp=" + timestamp
+					+ "&msg_signature=" + signature + "&nonce=" + nonce + "&encrypt=" + encrypt;
+		}
+		System.out.println("encode之后的url:" + url);
+		//发送请求，并对返回的结果解密
+		String getRequest = toGetRequest(url);
+		JSONObject jsonObject = new JSONObject(getRequest);
+		encrypt = (String) jsonObject.get("encrypt");
+		//System.out.println("encrypt:" + encrypt);
+		//解密
+		WXBizMsgCrypt pc;
+		JSONArray array = null;
+		JSONObject resultdata = null;
+		try {
+			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
+			String resultStr = pc.decrypt(encrypt);
+			System.out.println("searchInterface解密后明文: " + resultStr);
+			JSONObject searchObj = new JSONObject(resultStr);
+			if (!Util.isEmpty(applyidcode)) {
+				//{"msg": null, "data": {"id": 3402, "status": {"number": 1, "name": "已保存"}, "create_by": {"id": 36849, "name": "ysgj"}, "submit_time": null, "get_time": null, "create_date": "2018-09-19 17:23", "update_date": "2018-09-19 17:23", "date_of_birth": "2018-09-03", "apply_info": {"id": 2576640, "code": "baa996b5", "base_info": {"InforMation": {"WorkEducation": {"Education": [{"unit_name_cn": "北电", "AdderssInfo": {"province": "北京市", "country": "ANGL", "street": "大学", "city": "北京市", "zip_code": "110200"}, "major": "发顺丰色鬼", "end_date": "2018-09-10", "unit_name_en": "Nortel", "start_date": "2018-09-06"}], "Works": [{"unit_name_cn": "水电费第三方", "AdderssInfo": {"province": "北京市", "country": "ASMO", "street": "舒服舒服的", "city": "北京市", "zip_code": "110200"}, "DirectorsName": {"given_names_cn": "", "surnames_cn": "", "given_names_en": "", "surnames_en": ""}, "end_date": "2018-09-13", "monthly_income": "", "phone": "265646", "unit_name_en": "Water and electricity fee third party", "job_description": "水电费", "start_date": "2018-09-14", "job_title": "水电费"}], "describe": "", "current_status": "CM"}, "ExitInfo": {"OldPassport": [], "Language": []}, "TravelInfo": {"arrival_date": "2018-10-12", "go_country": "USA", "first_country": "", "Passport": {"passport_no": "E72073528", "issuance_date": "2016-05-31", "passport_type": "R", "PassportIssuance": {"province": "XINJIANG", "country": "CHIN", "city": ""}, "expiration_date": "2021-06-05", "country": "CHIN"}, "airways": "首都国际机场-羽田国际机场 NH964 0825/1250", "leave_airways": "成田国际机场-首都国际机场 CA6652 1820/2120", "travel_agency": "", "purpose_explanation": "", "purpose": "", "leave_date": "2018-10-18", "Peer": [], "leave_street": "密歇根州", "in_street": "密歇根州"}, "FamilyInfo": {"FatherInfo": {"date_of_birth": "2018-09-04", "NameInfo": {"given_names_cn": "水电", "surnames_cn": "水电费", "given_names_en": "SHUIDIAN", "surnames_en": "SHUIDIANFEI"}}, "AdderssInfo": {"province": "河北", "country": "CHIN", "street": "山西省大同市", "city": "张家口", "zip_code": ""}, "MotherInfo": {"date_of_birth": "2018-09-06", "NameInfo": {"given_names_cn": "水", "surnames_cn": "阿斯蒂芬", "given_names_en": "SHUI", "surnames_en": "ASIDIFEN"}}, "SpouseInfo": {"AdderssInfo": {"province": "", "country": "", "street": "", "city": "", "zip_code": ""}, "NameInfo": {"given_names_cn": "水电费", "surnames_cn": "水电水电都是", "given_names_en": "SHUIDIANFEI", "surnames_en": "SHUIDIANSHUIDIANDOUSHI"}, "end_date": "", "BirthplaceInfo": {"province": "", "country": "ASMO", "city": "内蒙古自治区"}, "date_of_birth": "2018-09-13", "divorced_reason": "", "nationality": "ALGR", "address_type": 5, "start_date": "", "divorced_country": ""}, "family_phone": ""}, "BaseInfo": {"NameInfo": {"old_given_names_en": "SIASADE", "old_surnames_en": "LISHUIDIANFEISHIDEFEN", "surnames_en": "LIU", "old_given_names_cn": "四阿萨德", "given_names_code_cn": "", "given_names_en": "YUFEI1", "given_names_cn": "宇飞1", "surnames_cn": "刘", "surnames_code_cn": "", "old_surnames_cn": "里水电费实得分"}, "photo": "https://upload.visae.net/visae/us/ds160/2018/09/19/photo/e7616438-d142-496b-8950-465373fcbe08.jpeg", "sex": 1, "phone": "18612131435", "BirthplaceInfo": {"province": "山西", "country": "CHIN", "city": "临汾"}, "date_of_birth": "2018-09-03", "Marriage": "W", "PHOTO_MD5_URL": "https://upload.visae.net/https://upload.visae.net/visae/us/ds160/2018/09/19/photo/e7616438-d142-496b-8950-465373fcbe08.jpeg?qhash/md5&e=1537422458&token=Kcgo66ixdBsRf20QIHsITR-5xOdxwpk8793v9-Ym:Iff3zB88RrcyuAKCfkWr-R5P5ck=", "nationality": "CHIN", "ic": "1104964189498", "email": "110@qq.com", "photo_url": "https://upload.visae.net/https://upload.visae.net/visae/us/ds160/2018/09/19/photo/e7616438-d142-496b-8950-465373fcbe08.jpeg?e=1537422458&token=Kcgo66ixdBsRf20QIHsITR-5xOdxwpk8793v9-Ym:7MfWtWK3Gq9prNU3pV9aO7LQK6Y="}}}, "visa_info": {"AmericaInfo": {"us_social_security_number": "", "united_states_citizen": "", "PayParty": {"payer": "S"}, "Contacts": {"AdderssInfo": {"province": "AK", "country": "USA", "street": "国为不产有产人在在地一有在要工", "zip_code": "", "city": "4233432423"}, "NameInfo": {"given_names_cn": "先哲", "surnames_cn": "孙", "given_names_en": "XIANZHE", "surnames_en": "SUN"}, "relationship": "C", "phone": "132432432423", "organization": "4324243242", "email": "18612131435@163.com"}, "MailingAddress": {"province": "CHN", "country": "CHN", "street": "CHN", "zip_code": "", "city": "CHN"}, "RelativesUS": {"Father": {"status": "C", "in_the_us": 1}, "other_in_us": false, "Immediate": [{"NameInfo": {"given_names_cn": "的", "surnames_cn": "的", "given_names_en": "的", "surnames_en": "DEDSDS"}}], "Mother": {"status": "P", "in_the_us": 1}}, "apply_for_emigrant": "水个个人然后", "school_in_america": "", "ResidenceTime": {"date_type": "", "number": ""}, "esta": "", "sevis_id": "", "OtherNationality": [{"country": "", "passport": ""}], "StayCity": [], "GreenCard": [{"country": ""}], "work_phone_number": "", "principal_applicant_sevis_id": "", "EverGoToAmerica": {"USDriverLicense": [{"state": "AR", "number": "345345"}], "LastUSVisa": {"LostOrStolen": {"explain": "", "year": 0}, "revoked": "32432432434232", "finger_fingerprint": 1, "number": "165156", "date": "2018-09-19", "same_place": 1, "same_visa": 1}, "InformationUSVisit": [{"date": "2018-09-20", "ResidenceTime": {"date_type": "D", "number": 2}}]}, "Security": {"q20": "", "q21": "", "q22": "", "q23": "", "q24": "", "q25": "", "q26": "", "q27": "", "q28": "", "q29": "", "q1": "", "q3": "", "q2": "", "q5": "", "q4": "", "q7": "", "q6": "", "q9": "", "q8": "", "q15": "", "q14": "", "q17": "", "q16": "", "q11": "", "q10": "", "q13": "", "q12": "", "q19": "", "q18": ""}, "refuse_entry": "第三方围观围观双方各是", "program_number": "", "ResidentialInfo": {"province": "", "country": "", "street": "", "zip_code": "", "city": ""}, "national_identification_number": "", "Supplement": {"paramilitary": "", "religion": "", "special_skills": "", "Charitable": [], "MilitaryService": {"armed_services": "", "end_date": "", "level": "", "country": "", "specialty": "", "start_date": ""}, "VisitedCountry": [{"country": "日本"}, {"country": "中国"}]}, "application_site": "BEJ", "us_taxpayerid_number": ""}}, "status": 1, "visa_type": 175, "create_by": 36849}, "app_id": null, "error_msg": null, "name": "刘宇飞1", "name_en": "LIU YUFEI1", "passport_num": "E72073528", "review_url": null, "pdf_url": null, "avator_url": null, "error_url": null, "dat_url": null}, "success": 1}
+				resultdata = (JSONObject) searchObj.get("data");
+			} else {
+				//从解密之后的数据中获取所查询的数据，并最终转化成list
+				array = (JSONArray) searchObj.get("data");
+			}
+			//将JSONArray转成list集合
+			//searchList = com.alibaba.fastjson.JSONObject.parseArray(array.toString(), AutofillSearchJsonEntity.class);
+			//List<?> list2 = JSONArray.toList(array, new AutofillSearchJsonEntity(), new JsonConfig());
+		} catch (AesException e) {
+			e.printStackTrace();
+		}
+		if (!Util.isEmpty(applyidcode)) {
+			return resultdata;
+		} else {
+			return array;
+		}
+	}
+
+	//将图片转成base64
+	public String imgToBse64(String filePath) {
+		InputStream inputStream = null;
+		HttpURLConnection httpURLConnection = null;
+		byte[] data = null;
+		try {
+			URL url = new URL(filePath);//创建的URL  
+			if (url != null) {
+				httpURLConnection = (HttpURLConnection) url.openConnection();//打开链接  
+				httpURLConnection.setConnectTimeout(3000);//设置网络链接超时时间，3秒，链接失败后重新链接  
+				httpURLConnection.setDoInput(true);//打开输入流  
+				httpURLConnection.setRequestMethod("GET");//表示本次Http请求是GET方式  
+				int responseCode = httpURLConnection.getResponseCode();//获取返回码  
+				if (responseCode == 200) {//成功为200  
+					//从服务器获得一个输入流  
+					inputStream = httpURLConnection.getInputStream();
+					data = new byte[inputStream.available()];
+					inputStream.read(data);
+					inputStream.close();
+				}
+			}
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Base64.encodeBase64String(data);
+	}
+
+	public static String ImageToBase64ByOnline(String imgURL) {
+		ByteArrayOutputStream data = new ByteArrayOutputStream();
+		try {
+			// 创建URL
+			URL url = new URL(imgURL);
+			byte[] by = new byte[1024];
+			// 创建链接
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setConnectTimeout(5000);
+			InputStream is = conn.getInputStream();
+			// 将内容读取内存中
+			int len = -1;
+			while ((len = is.read(by)) != -1) {
+				data.write(by, 0, len);
+			}
+			// 关闭流
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		// 对字节数组Base64编码
+		return Base64.encodeBase64String(data.toByteArray());
 	}
 
 	//将数据加密
@@ -1193,6 +2021,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String appId = APPID;
 
 		String jsonResult = JsonUtil.toJson(result);
+		System.out.println("jsonResult:" + jsonResult);
 
 		//加密
 		WXBizMsgCrypt pc;
@@ -1207,69 +2036,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 
 		return json;
-	}
-
-	//查询接口
-	public List<AutofillSearchJsonEntity> searchInterface(Object result) {
-		List<AutofillSearchJsonEntity> searchList = new ArrayList<AutofillSearchJsonEntity>();
-		//先加密，获取加密之后的数据
-		String encrypt = encrypt(result);
-		JSONObject encryptObj = new JSONObject(encrypt);
-		String timestamp = (String) encryptObj.get("timeStamp");
-		String signature = (String) encryptObj.get("msg_signature");
-		String nonce = (String) encryptObj.get("nonce");
-		encrypt = (String) encryptObj.get("encrypt");
-		encrypt = com.alibaba.dubbo.common.URL.encode(encrypt);
-		//GET请求拼凑URL
-		String url = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&timeStamp=" + timestamp
-				+ "&msg_signature=" + signature + "&nonce=" + nonce + "&encrypt=" + encrypt;
-		//发送请求，并对返回的结果解密
-		String getRequest = toGetRequest(url);
-		JSONObject jsonObject = new JSONObject(getRequest);
-		encrypt = (String) jsonObject.getString("encrypt");
-		//解密
-		WXBizMsgCrypt pc;
-		try {
-			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
-			String resultStr = pc.decrypt(encrypt);
-			System.out.println("解密后明文: " + resultStr);
-			//从解密之后的数据中获取所查询的数据，并最终转化成list
-			JSONObject searchObj = new JSONObject(resultStr);
-			JSONArray array = (JSONArray) searchObj.get("data");
-			//将JSONArray转成list集合
-			searchList = com.alibaba.fastjson.JSONObject.parseArray(array.toString(), AutofillSearchJsonEntity.class);
-			//List<?> list2 = JSONArray.toList(array, new AutofillSearchJsonEntity(), new JsonConfig());
-		} catch (AesException e) {
-			e.printStackTrace();
-		}
-		return searchList;
-	}
-
-	//创建申请人数据接口
-	public String toGetAAcode(Object result) {
-
-		WXBizMsgCrypt pc;
-		String aacode = "";
-		String json = encrypt(result);
-		try {
-			//发送POST请求
-			String returnResult = toPostRequest(json);
-			JSONObject resultObj = new JSONObject(returnResult);
-			String encrypt = (String) resultObj.get("encrypt");
-			//对请求返回来的encrypt解密
-			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
-			String resultStr = pc.decrypt(encrypt);
-			System.out.println("解密后明文: " + resultStr);
-
-			//从解密之后的字符串获取aacode
-			JSONObject aacodeObj = new JSONObject(resultStr);
-			aacode = (String) aacodeObj.get("code");
-			System.out.println("aacode: " + aacode);
-		} catch (AesException e) {
-			e.printStackTrace();
-		}
-
-		return aacode;
 	}
 
 	/**
@@ -1323,30 +2089,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		try {
 			response = HttpUtils.doGet(host, path, method, headers, querys);
 			entityStr = EntityUtils.toString(response.getEntity());
-			System.out.println("GET请求返回的数据：" + entityStr);
-		} catch (Exception e) {
-
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		}
-		return entityStr;
-	}
-
-	//发送POST请求
-	public String toPostRequest(String json) {
-		String host = "https://open.visae.net";
-		String path = "/visae/america/lg/save/data/?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
-		String method = "POST";
-		String entityStr = "";
-		Map<String, String> headers = new HashMap<String, String>();
-		headers.put("Content-Type", "application/json; charset=UTF-8");
-		Map<String, String> querys = new HashMap<String, String>();
-		HttpResponse response;
-		try {
-			response = HttpUtils.doPost(host, path, method, headers, querys, json);
-			entityStr = EntityUtils.toString(response.getEntity());
-			System.out.println("POST请求返回的数据：" + entityStr);
+			//System.out.println("GET请求返回的数据：" + entityStr);
 		} catch (Exception e) {
 
 			// TODO Auto-generated catch block
@@ -1466,49 +2209,53 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		Integer staffid = form.getStaffid();
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
 		/*TOrderUsEntity orderus = new TOrderUsEntity();
-		//如果订单Id为0说明是下单，需要创建订单表，并处理下单时创建的人员表等的关系
-		if(orderid == 0){
-			orderus.setCreatetime(new Date());
-			orderus.setUpdatetime(new Date());
-			orderus = dbDao.insert(orderus);
-			orderid = orderus.getId();
-		}else{
-			orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
-		}*/
+			//如果订单Id为0说明是下单，需要创建订单表，并处理下单时创建的人员表等的关系
+			if(orderid == 0){
+				orderus.setCreatetime(new Date());
+				orderus.setUpdatetime(new Date());
+				orderus = dbDao.insert(orderus);
+				orderid = orderus.getId();
+			}else{
+				orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
+			}*/
 		//获取出行信息表
 		TOrderUsTravelinfoEntity orderTravelInfo = dbDao.fetch(TOrderUsTravelinfoEntity.class,
 				Cnd.where("orderid", "=", orderid));
 		if (Util.isEmpty(orderTravelInfo)) {
 			orderTravelInfo = new TOrderUsTravelinfoEntity();
 			orderTravelInfo.setOrderid(orderid);
+			orderTravelInfo.setTravelpurpose("TEMP. BUSINESS PLEASURE VISITOR(B)");
+			orderTravelInfo.setSpecify(1);
 			orderTravelInfo = dbDao.insert(orderTravelInfo);
 		}
-		if (!Util.isEmpty(form.getGodate()))
-			orderTravelInfo.setGodate(form.getGodate());
-		if (!Util.isEmpty(form.getLeavedate()))
-			orderTravelInfo.setLeavedate(form.getLeavedate());
-		if (!Util.isEmpty(form.getArrivedate()))
-			orderTravelInfo.setArrivedate(form.getArrivedate());
-		if (!Util.isEmpty(form.getStaydays()))
-			orderTravelInfo.setStaydays(form.getStaydays());
-		if (!Util.isEmpty(form.getPlanaddress()))
-			orderTravelInfo.setAddress(form.getPlanaddress());
-		if (!Util.isEmpty(form.getPlancity()))
-			orderTravelInfo.setCity(form.getPlancity());
-		if (!Util.isEmpty(form.getPlanstate()))
-			orderTravelInfo.setState(form.getPlanstate());
+		orderTravelInfo.setGodate(form.getGodate());
+		orderTravelInfo.setLeavedate(form.getLeavedate());
+		orderTravelInfo.setArrivedate(form.getArrivedate());
+		orderTravelInfo.setStaydays(form.getStaydays());
+		orderTravelInfo.setAddress(form.getPlanaddress());
+		orderTravelInfo.setAddressen(form.getPlanaddressen());
+		orderTravelInfo.setCity(form.getPlancity());
+		orderTravelInfo.setCityen(form.getPlancityen());
+		orderTravelInfo.setState(form.getPlanstate());
 		if (!Util.isEmpty(form.getTravelpurpose())) {
 			String travelpurpose = form.getTravelpurpose();
 			String key = TravelpurposeEnum.getEnum(travelpurpose).getKey();
 			orderTravelInfo.setTravelpurpose(key);
+		} else {
+			orderTravelInfo.setTravelpurpose("TEMP. BUSINESS PLEASURE VISITOR(B)");
 		}
 		orderTravelInfo.setHastripplan(form.getHastripplan());
 		orderTravelInfo.setGodeparturecity(form.getGodeparturecity());
 		orderTravelInfo.setGoArrivedCity(form.getGoArrivedCity());
-		orderTravelInfo.setGoFlightNum(form.getGoFlightNum());
+		if (form.getHastripplan() == 1) {
+			orderTravelInfo.setGoFlightNum(form.getGoFlightNum());
+			orderTravelInfo.setReturnFlightNum(form.getReturnFlightNum());
+		} else {
+			orderTravelInfo.setGoFlightNum("");
+			orderTravelInfo.setReturnFlightNum("");
+		}
 		orderTravelInfo.setReturnDepartureCity(form.getReturnDepartureCity());
 		orderTravelInfo.setReturnArrivedCity(form.getReturnArrivedCity());
-		orderTravelInfo.setReturnFlightNum(form.getReturnFlightNum());
 		//修改订单信息
 		int orderUpdateNum = dbDao.update(orderTravelInfo);
 
@@ -1754,10 +2501,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 		if (!Util.isEmpty(toEmail)) {
 			/*if (Util.eq("男", sex)) {
-				sex = "先生";
-			} else {
-				sex = "女士";
-			}*/
+					sex = "先生";
+				} else {
+					sex = "女士";
+				}*/
 			sex = "先生/女士";
 			//分享
 			if (Util.eq(sendType, "share")) {
@@ -1794,6 +2541,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String telephone = staffBaseInfo.getTelephone();
 		String email = staffBaseInfo.getEmail();
 		String sex = staffBaseInfo.getSex();
+		String url = "";
 		String interviewdateStr = "";
 		Date interviewdate = staffBaseInfo.getInterviewdate();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -1803,10 +2551,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String result = "";
 		if (!Util.isEmpty(telephone)) {
 			/*if (Util.eq("男", sex)) {
-				sex = "先生";
-			} else {
-				sex = "女士";
-			}*/
+					sex = "先生";
+				} else {
+					sex = "女士";
+				}*/
 			sex = "先生/女士";
 			TOrderUsEntity order = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
 			String orderNum = order.getOrdernumber();
@@ -1815,7 +2563,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			//分享
 			if (Util.eq(sendType, "share")) {
 				smsContent = smsContent.replace("${name}", name).replace("${sex}", sex)
-						.replace("${ordernum}", orderNum).replace("${mobileUrl}", telephone).replace("${email}", email);
+						.replace("${ordernum}", orderNum).replace("${mobileUrl}", telephone).replace("${email}", url);
 				result = sendSMS(telephone, smsContent);
 			}
 			//合格
@@ -1856,9 +2604,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	public Object IDCardRecognition(String encode, File file, int staffid) {
 		/*String openid = redisDao.get(encode);
-		if (Util.isEmpty(openid)) {
-			return -1;
-		} else {*/
+			if (Util.isEmpty(openid)) {
+				return -1;
+			} else {*/
 		System.out.println("encode:" + encode + " file:" + file + " staffid:" + staffid);
 		String imageDataValue = saveDiskImageToDisk(file);
 		Input input = new Input(imageDataValue, "face");
@@ -1947,7 +2695,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 		//消息通知
 		try {
-			simplesendinfosocket.broadcast(new TextMessage(""));
+			RecognitionForm form = new RecognitionForm();
+			form.setApplyid(staffid);
+			simplesendinfosocket.broadcast(new TextMessage(JsonUtil.toJson(form)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1957,9 +2707,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	public Object IDCardRecognitionBack(String encode, File file, int staffid) {
 		/*String openid = redisDao.get(encode);
-		if (Util.isEmpty(openid)) {
-			return -1;
-		} else {*/
+			if (Util.isEmpty(openid)) {
+				return -1;
+			} else {*/
 		System.out.println("encode:" + encode + " file:" + file + " staffid:" + staffid);
 
 		USStaffJsonEntity jsonEntity = new USStaffJsonEntity();
@@ -2039,7 +2789,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 		//消息通知
 		try {
-			simplesendinfosocket.broadcast(new TextMessage(""));
+			RecognitionForm form = new RecognitionForm();
+			form.setApplyid(staffid);
+			simplesendinfosocket.broadcast(new TextMessage(JsonUtil.toJson(form)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -2050,9 +2802,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object passportRecognitionBack(String encode, File file, int staffid) {
 
 		/*String openid = redisDao.get(encode);
-		if (Util.isEmpty(openid)) {
-			return -1;
-		} else {*/
+			if (Util.isEmpty(openid)) {
+				return -1;
+			} else {*/
 
 		System.out.println("encode:" + encode + " file:" + file + " staffid:" + staffid);
 
@@ -2187,7 +2939,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 		//消息通知
 		try {
-			simplesendinfosocket.broadcast(new TextMessage(""));
+			RecognitionForm form = new RecognitionForm();
+			form.setApplyid(staffid);
+			simplesendinfosocket.broadcast(new TextMessage(JsonUtil.toJson(form)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -2277,17 +3031,22 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		passportEntity.setSexen(passportJsonEntity.getSexEn());
 		passportEntity.setBirthaddress(passportJsonEntity.getBirthCountry());//出生地
 
-		try {
-			passportEntity.setBirthaddressen("/"
-					+ tool.toPinYin(passportJsonEntity.getBirthCountry(), "", Type.UPPERCASE));
-			passportEntity.setIssuedplaceen("/"
-					+ tool.toPinYin(passportJsonEntity.getVisaCountry(), "", Type.UPPERCASE));
-		} catch (BadHanyuPinyinOutputFormatCombination e1) {
-
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-
+		if (Util.eq("陕西", passportJsonEntity.getBirthCountry())) {
+			passportEntity.setBirthaddressen("SHAANXI");
+		} else if (Util.eq("内蒙古", passportJsonEntity.getBirthCountry())) {
+			passportEntity.setBirthaddressen("NEI MONGOL");
+		} else {
+			passportEntity.setBirthaddressen(translatename(passportJsonEntity.getBirthCountry()));
 		}
+
+		if (Util.eq("陕西", passportJsonEntity.getVisaCountry())) {
+			passportEntity.setIssuedplaceen("SHAANXI");
+		} else if (Util.eq("内蒙古", passportJsonEntity.getVisaCountry())) {
+			passportEntity.setIssuedplaceen("NEI MONGOL");
+		} else {
+			passportEntity.setIssuedplaceen(translatename(passportJsonEntity.getVisaCountry()));
+		}
+
 		//passportEntity.setBirthaddressen(translate(passportJsonEntity.getBirthCountry()));
 		//passportEntity.setIssuedplaceen(translate(passportJsonEntity.getVisaCountry()));
 		passportEntity.setType(passportJsonEntity.getType());
@@ -2450,6 +3209,42 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
+	//这个函数负责把获取到的InputStream流保存到本地。  
+	public static ByteArrayOutputStream saveImageToOutputStream(String filePath) {
+		InputStream inputStream = null;
+		inputStream = getInputStream(filePath);//调用getInputStream()函数。  
+		byte[] data = new byte[1024];
+		ByteArrayOutputStream result = new ByteArrayOutputStream();
+		int len = -1;
+		ByteArrayOutputStream fileOutputStream = new ByteArrayOutputStream();
+		try {
+			while ((len = inputStream.read(data)) != -1) {//循环读取inputStream流中的数据，存入文件流fileOutputStream  
+				fileOutputStream.write(data, 0, len);
+			}
+			result = fileOutputStream;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {//finally函数，不管有没有异常发生，都要调用这个函数下的代码  
+			if (fileOutputStream != null) {
+				try {
+					fileOutputStream.close();//记得及时关闭文件流  
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (inputStream != null) {
+				try {
+					inputStream.close();//关闭输入流  
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
+	}
+
 	public static InputStream getInputStream(String filePath) {
 		InputStream inputStream = null;
 		HttpURLConnection httpURLConnection = null;
@@ -2514,18 +3309,95 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	//微信JSSDK上传的文件需要重新下载后上传到七牛云
 	/*public Object wechatJsSDKUploadToQiniu(Integer staffId, String mediaIds, String sessionid, Integer type) {
-		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
-				+ type);
-		weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
-		TAppStaffCredentialsEntity passport = dbDao.fetch(TAppStaffCredentialsEntity.class,
-				Cnd.where("staffid", "=", staffId).and("type", "=", type));
-		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
-				+ type);
-		String url = passport.getUrl();
-		passportRecognitionBack(url, staffId);
-		System.out.println("url=" + url);
-		System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
-				+ type);
+			System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
+					+ type);
+			weXinTokenViewService.wechatJsSDKUploadToQiniu(staffId, mediaIds, sessionid, type);
+			TAppStaffCredentialsEntity passport = dbDao.fetch(TAppStaffCredentialsEntity.class,
+					Cnd.where("staffid", "=", staffId).and("type", "=", type));
+			System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
+					+ type);
+			String url = passport.getUrl();
+			passportRecognitionBack(url, staffId);
+			System.out.println("url=" + url);
+			System.out.println("staffid=" + staffId + "  mediaIds=" + mediaIds + "  sessionid=" + sessionid + "  type="
+					+ type);
+			return null;
+		}*/
+
+	/**
+	 * 文件下载
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @param response
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object downloadFile(int orderid, HttpServletResponse response) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		Map<String, File> fileMap = new HashMap<String, File>();
+		TemplateUtil templateUtil = new TemplateUtil();
+		byte[] byteArray = null;
+
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		String reviewurl = orderus.getReviewurl();
+		String pdfurl = orderus.getPdfurl();
+		String daturl = orderus.getDaturl();
+
+		ByteArrayOutputStream reviewurlbyteArray = saveImageToOutputStream(reviewurl);
+		ByteArrayOutputStream pdfurlbyteArray = saveImageToOutputStream(pdfurl);
+		ByteArrayOutputStream daturlbyteArray = saveImageToOutputStream(daturl);
+
+		fileMap.put("预览.PNG", templateUtil.createTempFile(reviewurlbyteArray));
+		fileMap.put("确认.PDF", templateUtil.createTempFile(pdfurlbyteArray));
+		fileMap.put("DAT文件.TXT", templateUtil.createTempFile(daturlbyteArray));
+		stream = templateUtil.mergeToZip(fileMap);
+
+		byteArray = stream.toByteArray();
+		String filename = orderus.getOrdernumber() + ".zip";
+		downloadType(filename, byteArray, response);
 		return null;
-	}*/
+	}
+
+	public Object downloadType(String filename, byte[] type, HttpServletResponse response) {
+		try {
+			// 将文件进行编码
+			String fileName = URLEncoder.encode(filename, "UTF-8");
+			// 设置下载的响应头
+			response.setContentType("application/zip");
+			//通过response.reset()刷新可能存在一些未关闭的getWriter(),避免可能出现未关闭的getWriter()
+			//response.setContentType("application/octet-stream");
+			response.setHeader("Set-Cookie", "fileDownload=true; path=/");
+			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
+			// 将字节流相应到浏览器（下载）
+			IOUtils.write(type, response.getOutputStream());
+			response.flushBuffer();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public Object toErrorphoto(String errorurl) {
+		String imgurl = "";
+		try {
+			// 创建URL
+			URL url = new URL(errorurl);
+			// 创建链接
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setConnectTimeout(5000);
+			InputStream is = conn.getInputStream();
+			imgurl = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(is, "", "");
+			is.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return imgurl;
+	}
+
 }

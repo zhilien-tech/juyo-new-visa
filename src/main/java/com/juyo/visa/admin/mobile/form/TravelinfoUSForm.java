@@ -7,8 +7,11 @@
 package com.juyo.visa.admin.mobile.form;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
+
+import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -193,16 +196,18 @@ public class TravelinfoUSForm {
 	private Integer istraveledanycountryen;
 
 	/**去旅游的国家*/
-	private Integer traveledcountry;
+	private String traveledcountry;
 
 	/**去旅游的国家(英文)*/
-	private Integer traveledcountryen;
+	private String traveledcountryen;
 
 	private String driverlicensenumber;
 
 	private Integer witchstateofdriver;
 
 	private String companioninfoList;
+
+	private List<TAppStaffCompanioninfoEntity> companionList;
 
 	private String gocountry;
 

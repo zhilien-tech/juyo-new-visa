@@ -306,8 +306,9 @@ public class SimpleVisaModule {
 
 	@At
 	@POST
-	public Object hasApplyInfo(@Param("applyid") int applyid, @Param("orderid") int orderid, HttpSession session) {
-		return simpleVisaService.hasApplyInfo(applyid, orderid, session);
+	public Object hasApplyInfo(@Param("applyid") int applyid, @Param("orderid") int orderid,
+			@Param("token") String token, HttpServletRequest request) {
+		return simpleVisaService.hasApplyInfo(applyid, orderid, token, request);
 	}
 
 	@At
@@ -321,6 +322,19 @@ public class SimpleVisaModule {
 	public Object autoCalculateStaydays(@Param("laststartdate") Date laststartdate,
 			@Param("lastreturndate") Date lastreturndate) {
 		return simpleVisaService.autoCalculateStaydays(laststartdate, lastreturndate);
+	}
+
+	@At
+	@POST
+	public Object ishaveMainapply(@Param("orderid") int orderid, @Param("applicantid") int applicantid) {
+		return simpleVisaService.ishaveMainapply(orderid, applicantid);
+	}
+
+	@At
+	@POST
+	public Object saveSendandGround(@Param("orderid") int orderid, @Param("sendsignid") int sendsignid,
+			@Param("groundconnectid") int groundconnectid) {
+		return simpleVisaService.saveSendandGround(orderid, sendsignid, groundconnectid);
 	}
 
 }

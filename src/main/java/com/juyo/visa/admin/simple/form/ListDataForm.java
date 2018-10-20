@@ -42,6 +42,13 @@ public class ListDataForm implements SQLParamForm {
 	private String orderDate;
 	//检索框
 	private String searchStr;
+	//签证类型
+	private Integer visatype;
+
+	private String sendenddate;
+	private String sendstartdate;
+	private String orderstartdate;
+	private String orderenddate;
 
 	//页码
 	private Integer pageNumber = 1;
@@ -78,16 +85,26 @@ public class ListDataForm implements SQLParamForm {
 		/*SqlExpressionGroup statusexp = new SqlExpressionGroup();
 		statusexp.and("tr.status", ">=", JPOrderStatusEnum.SEND_ADDRESS.intKey());
 		cnd.and(statusexp);*/
-		if (!Util.isEmpty(sendSignDate)) {
+		/*if (!Util.isEmpty(sendSignDate)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("tr.sendVisaDate", "=", sendSignDate);
 			cnd.and(exp);
+		}*/
+		if (!Util.isEmpty(sendstartdate) && !Util.isEmpty(sendenddate)) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.sendVisaDate", "between", new Object[] { sendstartdate, sendenddate });
+			cnd.and(exp);
 		}
-		if (!Util.isEmpty(orderDate)) {
+		if (!Util.isEmpty(orderstartdate) && !Util.isEmpty(orderenddate)) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.createTime", "between", new Object[] { orderstartdate, orderenddate });
+			cnd.and(exp);
+		}
+		/*if (!Util.isEmpty(orderDate)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("DATE_FORMAT(tr.createTime,'%Y-%m-%d')", "=", orderDate);
 			cnd.and(exp);
-		}
+		}*/
 		if (!Util.isEmpty(status)) {
 			if (Util.eq(status, JPOrderStatusEnum.DISABLED.intKey())) {
 				cnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
@@ -107,6 +124,12 @@ public class ListDataForm implements SQLParamForm {
 		if (!Util.isEmpty(employee)) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("tuser.id", "=", employee);
+			cnd.and(exp);
+		}
+
+		if (!Util.isEmpty(visatype)) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("toj.visatype", "=", visatype);
 			cnd.and(exp);
 		}
 

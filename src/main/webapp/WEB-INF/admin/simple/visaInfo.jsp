@@ -394,7 +394,7 @@
 					<!-- end 财产信息 -->
 					<!-- 在日拟入住九点名称或友人姓名及地址 -->
 					<div class='info'>
-						<div class="info-head">在日拟入住九点名称或友人姓名及地址</div>
+						<div class="info-head">在日拟入住酒店名称或友人姓名及地址</div>
 						<div class="info-body-from cf ">
 							<div class="row ">
 								<div class="col-sm-4">
@@ -632,6 +632,8 @@
 
 	<script type="text/javascript">
 		var BASE_PATH = '${base}';
+		var orderid = '${obj.orderid}';
+		var applicantid = '${obj.applicantid}';
 	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
@@ -865,16 +867,34 @@
 					$(".wealthmain").show();
 					$("#mainApply").text("主申请人");
 				}else{//副申请人
-					$(".applyvice").show();
-					$(".tripvice").show();
-					$(".wealthvice").show();
-					$("#wealth").val(1);
-					$(".applymain").hide();
-					$(".workmain").hide();
-					$(".wealthmain").hide();
-					$("#mainApply").text("副申请人");
-
-					$('.wealth-input-group').hide();
+					
+					$.ajax({ 
+						url: '/admin/simple/ishaveMainapply.html',
+						dataType:"json",
+						data:{
+							orderid:orderid,
+							applicantid:applicantid	
+							},
+						type:'post',
+						success: function(data){
+							if(data == 0){
+								layer.msg("必须有一个主申请人");
+								$("#applicant").val("1");
+							}else{
+								$(".applyvice").show();
+								$(".tripvice").show();
+								$(".wealthvice").show();
+								$("#wealth").val(1);
+								$(".applymain").hide();
+								$(".workmain").hide();
+								$(".wealthmain").hide();
+								$("#mainApply").text("副申请人");
+			
+								$('.wealth-input-group').hide();
+							}
+						}
+					});
+					
 				}
 			});
 			
