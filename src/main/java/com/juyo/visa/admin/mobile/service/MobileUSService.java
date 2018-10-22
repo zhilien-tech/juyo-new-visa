@@ -926,9 +926,9 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			if (!Util.isEmpty(beforework)) {
 				result.put("beforework", beforework);
 				if (!Util.isEmpty(beforework.getEmploystartdate())) {
-					result.put("employestartdate", format.format(beforework.getEmploystartdate()));
+					result.put("employstartdate", format.format(beforework.getEmploystartdate()));
 				} else {
-					result.put("employestartdate", "");
+					result.put("employstartdate", "");
 				}
 				if (!Util.isEmpty(beforework.getEmployenddate())) {
 					result.put("employenddate", format.format(beforework.getEmployenddate()));
