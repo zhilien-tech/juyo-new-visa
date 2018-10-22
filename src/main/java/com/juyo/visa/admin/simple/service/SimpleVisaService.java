@@ -5623,7 +5623,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	public String createBCode(String accessToken, String page, String scene) {
 		String url = WX_B_CODE_URL.replace("ACCESS_TOKEN", accessToken);
 		Map<String, Object> param = new HashMap<>();
-		param.put("path", page);
+		param.put("page", page);
 		param.put("scene", scene);
 		param.put("width", "100");
 		param.put("auto_color", false);
