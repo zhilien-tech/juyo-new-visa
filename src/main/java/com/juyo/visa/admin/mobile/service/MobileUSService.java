@@ -486,10 +486,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 
 		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 				Cnd.where("staffid", "=", form.getStaffid().longValue()));
-		familyinfo.setMarrieddate(form.getMarrieddate());
-		familyinfo.setDivorcedate(form.getDivorcedate());
-		familyinfo.setDivorcecountry(form.getDivorcecountry());
-		familyinfo.setDivorcecountryen(translate(form.getDivorcecountryen()));
+		if (form.getMarrystatus() == 2) {//离异时，有结婚时间和离婚时间
+			familyinfo.setMarrieddate(form.getMarrieddate());
+			familyinfo.setDivorcedate(form.getDivorcedate());
+		} else {
+			familyinfo.setMarrieddate(null);
+			familyinfo.setDivorcedate(null);
+		}
+		//familyinfo.setDivorcecountry(form.getDivorcecountry());
+		//familyinfo.setDivorcecountryen(translate(form.getDivorcecountryen()));
 		dbDao.update(familyinfo);
 
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, form.getStaffid().longValue());
@@ -1003,7 +1008,8 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				}
 			}
 			//教育信息
-			if (Util.eq(1, form.getIssecondarylevel())) {
+			updateBeforeeducation(form);
+			/*if (Util.eq(1, form.getIssecondarylevel())) {
 				updateBeforeeducation(form);
 			} else {
 				TAppStaffBeforeeducationEntity beforeeducation = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
@@ -1011,7 +1017,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				if (!Util.isEmpty(beforeeducation)) {
 					dbDao.delete(beforeeducation);
 				}
-			}
+			}*/
 
 			return JuYouResult.ok();
 		}

@@ -1689,6 +1689,9 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		addForm.setNationality("中国");
 		addForm.setNationalityen("China");
 
+		addForm.setBirthcountry("中国");
+		addForm.setBirthcountryen("China");
+
 		//中文翻译成拼音并大写工具
 		PinyinTool tool = new PinyinTool();
 		try {
