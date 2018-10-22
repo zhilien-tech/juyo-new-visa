@@ -1050,7 +1050,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		workinfo.setSalary(form.getSalary());
 		workinfo.setDuty(form.getDuty());
 		workinfo.setIsemployed(form.getIsemployed());
-		workinfo.setIssecondarylevel(form.getIssecondarylevel());
+		//workinfo.setIssecondarylevel(form.getIssecondarylevel());
 		//英文翻译保存
 		workinfo.setOccupationen(form.getOccupation());
 		workinfo.setTelephoneen(form.getTelephone());
@@ -1061,7 +1061,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		workinfo.setSalaryen(form.getSalary());
 		workinfo.setDutyen(translate(form.getDuty()));
 		workinfo.setIsemployeden(form.getIsemployed());
-		workinfo.setIssecondarylevelen(form.getIssecondarylevel());
+		//workinfo.setIssecondarylevelen(form.getIssecondarylevel());
 		dbDao.update(workinfo);
 		return null;
 	}

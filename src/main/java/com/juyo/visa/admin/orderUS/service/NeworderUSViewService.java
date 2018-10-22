@@ -857,7 +857,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 		}
 		//教育信息
-		if (Util.eq(1, form.getIssecondarylevel())) {
+		translateTime += (long) updateBeforeeducation(form);
+		/*if (Util.eq(1, form.getIssecondarylevel())) {
 			translateTime += (long) updateBeforeeducation(form);
 		} else {
 			TAppStaffBeforeeducationEntity beforeeducation = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
@@ -865,7 +866,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			if (!Util.isEmpty(beforeeducation)) {
 				dbDao.delete(beforeeducation);
 			}
-		}
+		}*/
 		long endTime = System.currentTimeMillis();
 		System.out.println("保存用了" + (endTime - startTime) + "ms");
 		System.out.println("translateTime:" + translateTime);

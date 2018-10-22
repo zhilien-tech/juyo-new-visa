@@ -1836,7 +1836,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		workEducationInfo.setCountryen(chinaId);
 
 		workEducationInfo.setIsemployed(DEFAULT_IS_NO);
-		workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
+		workEducationInfo.setIssecondarylevel(DEFAULT_IS_YES);
 		workEducationInfo.setIsclan(DEFAULT_IS_NO);
 		workEducationInfo.setIstraveledanycountry(DEFAULT_IS_NO);
 		workEducationInfo.setIsworkedcharitableorganization(DEFAULT_IS_NO);
@@ -1845,7 +1845,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		workEducationInfo.setIsservedinrebelgroup(DEFAULT_IS_NO);
 
 		workEducationInfo.setIsemployeden(DEFAULT_IS_NO);
-		workEducationInfo.setIssecondarylevelen(DEFAULT_IS_NO);
+		workEducationInfo.setIssecondarylevelen(DEFAULT_IS_YES);
 		workEducationInfo.setIsclanen(DEFAULT_IS_NO);
 		workEducationInfo.setIstraveledanycountryen(DEFAULT_IS_NO);
 		workEducationInfo.setIsworkedcharitableorganizationen(DEFAULT_IS_NO);
