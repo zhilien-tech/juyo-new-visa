@@ -938,7 +938,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			} else {
 				TAppStaffBeforeworkEntity newbeforework = new TAppStaffBeforeworkEntity();
 				result.put("beforework", newbeforework);
-				result.put("employestartdate", "");
+				result.put("employstartdate", "");
 				result.put("employenddate", "");
 			}
 			//教育信息
