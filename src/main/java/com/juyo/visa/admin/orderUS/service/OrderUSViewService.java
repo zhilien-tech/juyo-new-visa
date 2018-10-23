@@ -1435,7 +1435,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				while (Util.eq("申请失败", statusname)) {
 					errorMsg = applyResult.getErrorMsg();
 					if (errorMsg.contains("Connection") || errorMsg.contains("打码工超时未打码")
-							|| errorMsg.contains("图片服务器连接错误")) {
+							|| errorMsg.contains("图片服务器连接错误") || errorMsg.contains("Cannot allocate memory")) {
 						repeatResult = repeatInsertandupdate(imgurl, orderid, staffid);
 						successStatus = (int) repeatResult.get("successStatus");
 						applyidcode = (String) repeatResult.get("applyidcode");
