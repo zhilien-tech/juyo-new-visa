@@ -1629,7 +1629,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			Date nowDate = null;
 			while (Util.eq("正在申请", statusname) || Util.eq("已保存", statusname)) {
 				nowDate = DateUtil.nowDate();
-				long millisBetween = DateUtil.twoDatebetweenMillis(firstDate, nowDate);
+				long millisBetween = twoDatebetweenMillis(firstDate, nowDate);
 				//long millisBetween = DateUtil.millisBetween(firstDate, nowDate) + 1000;
 				//System.out.println("millisBetween:" + millisBetween);
 				if (millisBetween != 0 && millisBetween % 30000 == 0) {
@@ -1640,7 +1640,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					statusname = applyResult.getStatus();
 					AAcode = applyResult.getApp_id();
 					nowDate = DateUtil.nowDate();
-					millisBetween = DateUtil.twoDatebetweenMillis(firstDate, nowDate);
+					millisBetween = twoDatebetweenMillis(firstDate, nowDate);
 					System.out.println("millisBetween:" + millisBetween);
 					System.out.println("while循环里申请statusname:" + statusname);
 					System.out.println("while循环里申请AAcode:" + AAcode);
@@ -1659,14 +1659,14 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			while (Util.eq("正在提交", statusname)) {
 				nowDate = DateUtil.nowDate();
 				//long millisBetween = DateUtil.millisBetween(firstDate, nowDate);
-				long millisBetween = DateUtil.twoDatebetweenMillis(firstDate, nowDate);
+				long millisBetween = twoDatebetweenMillis(firstDate, nowDate);
 				if (millisBetween != 0 && millisBetween % 30000 == 0) {
 					applyinfoList = selectApplyinfo(passportnum);
 					applyResult = applyinfoList.get(0);
 					statusname = applyResult.getStatus();
 					AAcode = applyResult.getApp_id();
 					nowDate = DateUtil.nowDate();
-					millisBetween = DateUtil.twoDatebetweenMillis(firstDate, nowDate);
+					millisBetween = twoDatebetweenMillis(firstDate, nowDate);
 					System.out.println("while循环里提交statusname:" + statusname);
 					System.out.println("while循环里提交AAcode:" + AAcode);
 				}
@@ -3414,6 +3414,32 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			e.printStackTrace();
 		}
 		return imgurl;
+	}
+
+	/**
+	 * 计算两个日期的相差毫秒数
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param datePre
+	 * @param dateLatter
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public long twoDatebetweenMillis(Date datePre, Date dateLatter) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
+		long between = 0;
+		try {
+			Date begin = simpleDateFormat.parse(simpleDateFormat.format(datePre));
+			Date end = simpleDateFormat.parse(simpleDateFormat.format(dateLatter));
+			between = (end.getTime() - begin.getTime());
+		} catch (ParseException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		return between;
 	}
 
 }
