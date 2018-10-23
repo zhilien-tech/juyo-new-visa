@@ -157,7 +157,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("localPort", serverPort);
 		result.put("websocketaddr", SEND_INFO_WEBSPCKET_ADDR);
 
-		//生成二维码
+		//生成带参数小程序码，将小程序码图片上传到七牛云并返回图片地址url
 		String qrCode = dataUpload(staffid, request);
 		result.put("qrCode", qrCode);
 
@@ -189,9 +189,11 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//因为小程序参数最长为32，所以参数尽量简化，a是人员id
 		scene = "a=" + staffid;
 		System.out.println("scene:" + scene + "--------------");
+		//获取token
 		String accessToken = (String) getAccessToken();
 		System.out.println("accessToken:" + accessToken);
 		System.out.println("page:" + page);
+		//生成小程序码，并上传到七牛云，获得图片路径url
 		String url = createBCode(accessToken, page, scene);
 		System.out.println("url:" + url);
 		return url;
@@ -206,9 +208,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		String accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 		String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("APPSECRET", WX_APPSECRET);
 		com.alibaba.fastjson.JSONObject result = HttpUtil.doGet(requestUrl);
-		//redis中设置 access_token
 		accessTokenUrl = result.getString("access_token");
-
 		return accessTokenUrl;
 	}
 
@@ -226,13 +226,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		param.put("line_color", line_color);
 		com.alibaba.fastjson.JSONObject json = com.alibaba.fastjson.JSONObject.parseObject(JSON.toJSONString(param));
 		System.out.println("json:" + json.toString());
+		//调用微信生成小程序码接口
 		InputStream inputStream = toPostRequest(json.toString(), accessToken);
 
+		//将小程序码图片上传到七牛云
 		String imgurl = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, "", "");
 		return imgurl;
 	}
 
-	//发送POST请求
+	//生成微信小程序码
 	public InputStream toPostRequest(String json, String accessToken) {
 		String host = "https://api.weixin.qq.com";
 		String path = "/wxa/getwxacodeunlimit?access_token=" + accessToken;
