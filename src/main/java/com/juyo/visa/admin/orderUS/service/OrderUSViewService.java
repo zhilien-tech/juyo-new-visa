@@ -1328,7 +1328,20 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				System.out.println("提交失败:" + simpleDateFormat.format(new Date()));
 				return applyResult;
 			}*/
+
 			while (Util.eq("提交失败", statusname)) {
+				System.out.println("errorMsg------:" + errorMsg);
+				if (errorMsg.contains("码")) {
+					System.out.println("提交失败，跟验证码有关~~~~~~~~~");
+					orderus.setIsautofilling(0);
+					orderus.setErrormsg(errorMsg);
+					dbDao.update(orderus);
+					System.out.println("提交失败app_id:" + applyResult.getApp_id());
+					basicinfo.setAacode(applyResult.getApp_id());
+					dbDao.update(basicinfo);
+					return applyResult;
+				}
+
 				count++;
 				System.out.println("count===========:" + count);
 				if (count == 4) {
@@ -1336,6 +1349,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					orderus.setIsautofilling(0);
 					orderus.setErrormsg(applyResult.getErrorMsg());
 					dbDao.update(orderus);
+					System.out.println("提交失败4次之后app_id:" + applyResult.getApp_id());
+					basicinfo.setAacode(applyResult.getApp_id());
+					dbDao.update(basicinfo);
 					return applyResult;
 				}
 				applyResult = (AutofillSearchJsonEntity) applyToDS160(passportnum, imgurl, orderid, staffid, orderus);
@@ -1464,25 +1480,25 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 						return applyResult;
 					}
 					/*if (countnum == 3) {
-					if (countnum == 3) {
-					System.out.println("第" + countnum + "次申请失败！！！");
-					orderus.setErrorurl(applyResult.getError_url());
-					orderus.setApplyidcode(applyidcode);
-					orderus.setErrormsg(applyResult.getErrorMsg());
-					dbDao.update(orderus);
-					return applyResult;
-					}*/
+						if (countnum == 3) {
+						System.out.println("第" + countnum + "次申请失败！！！");
+						orderus.setErrorurl(applyResult.getError_url());
+						orderus.setApplyidcode(applyidcode);
+						orderus.setErrormsg(applyResult.getErrorMsg());
+						dbDao.update(orderus);
+						return applyResult;
+						}*/
 					/*repeatResult = repeatInsertandupdate(imgurl, orderid);
-					successStatus = (int) repeatResult.get("successStatus");
-					applyidcode = (String) repeatResult.get("applyidcode");
-					if (successStatus == 1) {
-					successStatus = (int) applyorsubmit(applyidcode, 1);
-					if (successStatus == 1) {
+						successStatus = (int) repeatResult.get("successStatus");
+						applyidcode = (String) repeatResult.get("applyidcode");
+						if (successStatus == 1) {
+						successStatus = (int) applyorsubmit(applyidcode, 1);
+						if (successStatus == 1) {
 						applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 1);
 						statusname = applyResult.getStatus();
 						System.out.println("申请失败的while循环里:" + statusname);
-					}
-					}*/
+						}
+						}*/
 
 				}
 

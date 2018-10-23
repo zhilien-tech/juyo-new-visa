@@ -553,7 +553,11 @@ public class FengshangService extends BaseService<TOrderJpEntity> {
 			}*/
 			//酒店信息
 
-			map.put("hotelname", record.getString("hotelname"));
+			if (!Util.isEmpty(record.getString("hotelname"))) {
+				map.put("hotelname", record.getString("hotelname"));
+			} else {
+				map.put("hotelname", "参照'赴日予定表'");
+			}
 			map.put("hotelphone", record.getString("hotelphone"));
 			map.put("hoteladdress", record.getString("hoteladdress"));
 			//上次赴日日期及停留时间

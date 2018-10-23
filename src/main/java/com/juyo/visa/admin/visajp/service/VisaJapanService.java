@@ -2169,9 +2169,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			if (Util.isEmpty(record.get("passportno"))) {
 				resultstrbuf.append("申请人" + count + "的护照号、");
 			}
-			if (Util.isEmpty(record.get("hotelname"))) {
+			/*if (Util.isEmpty(record.get("hotelname"))) {
 				resultstrbuf.append("申请人" + count + "的酒店名称、");
-			}
+			}*/
 			if (Util.isEmpty(record.get("vouchname"))) {
 				resultstrbuf.append("申请人" + count + "的在日担保人姓名、");
 			}
