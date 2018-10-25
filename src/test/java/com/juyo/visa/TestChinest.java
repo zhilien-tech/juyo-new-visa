@@ -21,7 +21,9 @@ public class TestChinest {
 
 	public static void main(String[] args) {
 
-		System.out.println(imgToBse64("http://oyu1xyxxk.bkt.clouddn.com/5dc3274f-204b-4336-bf57-985e09c7ca14..jpeg"));
+		System.out.println(1920 * 4 * 3);
+
+		//System.out.println(imgToBse64("http://oyu1xyxxk.bkt.clouddn.com/5dc3274f-204b-4336-bf57-985e09c7ca14..jpeg"));
 
 		/*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
 

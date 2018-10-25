@@ -80,6 +80,11 @@ public class MobileUSModule {
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object updateImage(@Param("encode") String encode, @Param("image") File file, @Param("staffid") int staffid,
 			@Param("type") int type, @Param("sequence") int sequence) {
+		System.out.println(encode);
+		System.out.println(file);
+		System.out.println(staffid);
+		System.out.println(type);
+		System.out.println(sequence);
 		return mobileUSService.updateImage(encode, file, staffid, type, sequence);
 	}
 

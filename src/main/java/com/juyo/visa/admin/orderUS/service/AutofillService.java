@@ -919,25 +919,27 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		int hastripplan = info.getInt("hastripplan");
 		//有具体的旅行计划
 		if (hastripplan == 1) {
-			//抵达城市(订单详情)
-			if (!Util.isEmpty(info.get("goArrivedCity"))) {
-				int cityid = (int) info.get("goArrivedCity");
-				travelInfo.put("in_street", getUSState(cityid));
-			} else {
-				errorMsg += "抵达城市,";
-			}
-			//出发城市，第二行(订单详情)
-			if (!Util.isEmpty(info.get("returnDepartureCity"))) {
-				int cityid = (int) info.get("returnDepartureCity");
-				travelInfo.put("leave_street", getUSState(cityid));
-			} else {
-				errorMsg += "离开城市,";
-			}
-			//离开美国日期(订单详情)
-			//未满14岁，不需要离开时间，14岁以上出现是否有具体的旅行计划
+			//未满14岁，不需要离开时间，不出现是否有具体的旅行计划
 			if (yearsBetween < 14) {
 				travelInfo.put("leave_date", "");
+				travelInfo.put("leave_street", "");
+				travelInfo.put("in_street", "");
 			} else {
+				//抵达城市(订单详情)
+				if (!Util.isEmpty(info.get("goArrivedCity"))) {
+					int cityid = (int) info.get("goArrivedCity");
+					travelInfo.put("in_street", getUSState(cityid));
+				} else {
+					errorMsg += "抵达城市,";
+				}
+				//出发城市，第二行(订单详情)
+				if (!Util.isEmpty(info.get("returnDepartureCity"))) {
+					int cityid = (int) info.get("returnDepartureCity");
+					travelInfo.put("leave_street", getUSState(cityid));
+				} else {
+					errorMsg += "离开城市,";
+				}
+				//离开美国日期(订单详情)
 				if (!Util.isEmpty(info.get("toutleavedate"))) {
 					travelInfo.put("leave_date", sdf.format(info.get("toutleavedate")));
 				} else {

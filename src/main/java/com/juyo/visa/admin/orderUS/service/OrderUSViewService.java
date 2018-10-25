@@ -1331,7 +1331,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 			while (Util.eq("提交失败", statusname)) {
 				System.out.println("errorMsg------:" + errorMsg);
-				if (errorMsg.contains("码")) {
+				/*if (errorMsg.contains("码")) {
 					System.out.println("提交失败，跟验证码有关~~~~~~~~~");
 					orderus.setIsautofilling(0);
 					orderus.setErrormsg(errorMsg);
@@ -1340,7 +1340,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					basicinfo.setAacode(applyResult.getApp_id());
 					dbDao.update(basicinfo);
 					return applyResult;
-				}
+				}*/
 
 				count++;
 				System.out.println("count===========:" + count);
@@ -1424,6 +1424,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		repeatResult = repeatInsertandupdate(imgurl, orderid, staffid);
 		successStatus = (int) repeatResult.get("successStatus");
 		String applyidcode = (String) repeatResult.get("applyidcode");
+		String errorType = (String) repeatResult.get("errorType");
 
 		if (successStatus == 1) {
 			//向DS160官网申请，参数1代表申请
@@ -1504,6 +1505,14 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 			}
 
+		} else {
+			applyResult.setReview_url("");
+			orderus.setErrormsg(errorType);
+			orderus.setReviewurl("");
+			orderus.setPdfurl("");
+			orderus.setDaturl("");
+			orderus.setIsautofilling(0);
+			dbDao.update(orderus);
 		}
 		applyResult.setCode(applyidcode);
 		return applyResult;
@@ -1546,18 +1555,35 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		int successStatus = 0;
 		//创建申请人数据
 		String applyidcode = (String) insertandupdateApplyinfo(orderid, staffid);
+		int count = 1;
 		while (Util.isEmpty(applyidcode)) {
+			count++;
+			if (count == 4) {
+				result.put("errorType", "创建申请人");
+				result.put("applyidcode", applyidcode);
+				result.put("successStatus", successStatus);
+				return result;
+			}
 			applyidcode = (String) insertandupdateApplyinfo(orderid, staffid);
 		}
 		if (!Util.isEmpty(applyidcode)) {
 			//try {
 			successStatus = (int) uploadImgtoUS(imgurl, applyidcode);
 			System.out.println("上传头像imgsuccessStatus:" + successStatus);
+			int successCount = 1;
 			while (successStatus != 1) {
+				successCount++;
+				if (successCount == 4) {
+					result.put("errorType", "上传头像");
+					result.put("applyidcode", applyidcode);
+					result.put("successStatus", successStatus);
+					return result;
+				}
 				successStatus = (int) uploadImgtoUS(imgurl, applyidcode);
 				System.out.println("上传头像imgsuccessStatus在while循环里:" + successStatus);
 			}
 		}
+		result.put("errorType", "");
 		result.put("applyidcode", applyidcode);
 		result.put("successStatus", successStatus);
 		return result;
@@ -1719,7 +1745,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					System.out.println("糟糕，创建申请人数据获取识别码失败了o(╥﹏╥)o");
 				}
 			} catch (Exception e) {
-				applyidcode = aacodeObj.getString("detail");
+				//applyidcode = aacodeObj.getString("detail");
 				System.out.println("创建申请人数据出现错误，错误信息:" + aacodeObj.getString("detail"));
 			}
 			/*if (!Util.isEmpty(aacodeObj.getInt("success"))) {

@@ -253,12 +253,17 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 */
 	public Object updateImage(String encode, File file, int staffid, int type, int sequence) {
 		String openid = redisDao.get(encode);
+		System.out.println("上传图片openid:" + openid);
 		if (Util.isEmpty(openid)) {
 			return -1;
 		} else {
+			System.out.println("开始上传图片---");
 			Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
 			String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 
+			System.out.println("sequence:" + sequence);
+			System.out.println("type:" + type);
+			System.out.println("staffid:" + staffid);
 			//分多张图片和单张图片,sequence=0时为单张图片，分添加和修改。sequence不为0时为多张图片，只有添加，没有修改
 			if (Util.isEmpty(sequence) || sequence == 0) {//单张图片,分修改和添加
 				TAppStaffCredentialsEntity credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
