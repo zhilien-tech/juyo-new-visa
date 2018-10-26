@@ -31,6 +31,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -1229,8 +1232,33 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 	}
 
+	public Object autofill1(int orderid, HttpSession session) {
+		String orderidstr = "orderid";
+		redisDao.lpush(orderidstr, String.valueOf(orderid));
+		//System.out.println(redisDao.rpop(orderidstr));
+		return null;
+	}
+
+	public void toautofill() {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
+		Date firstTime = DateUtil.nowDate();
+		Date lastTime = DateUtil.nowDate();
+		long twoDatebetweenMillis = twoDatebetweenMillis(firstTime, lastTime);
+
+		Runnable runnable = new Runnable() {
+			public void run() {
+				// task to run goes here  
+				System.out.println(redisDao.rpop("orderid"));
+			}
+		};
+		ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+		// 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  
+		service.scheduleAtFixedRate(runnable, 10, 10, TimeUnit.SECONDS);
+	}
+
 	//自动填表
 	public Object autofill(int orderid, HttpSession session) {
+
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
 		System.out.println(simpleDateFormat.format(new Date()) + "============");
 		System.out.println("=====orderid:" + orderid);
@@ -1654,23 +1682,26 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			Date firstDate = DateUtil.nowDate();
 			Date nowDate = null;
 			while (Util.eq("正在申请", statusname) || Util.eq("已保存", statusname)) {
+
+				try {
+					Thread.sleep(30000);
+				} catch (InterruptedException e) {
+					System.out.println("申请等待30秒出错~~~~~~");
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+
+				}
+
 				nowDate = DateUtil.nowDate();
 				long millisBetween = twoDatebetweenMillis(firstDate, nowDate);
-				//long millisBetween = DateUtil.millisBetween(firstDate, nowDate) + 1000;
-				//System.out.println("millisBetween:" + millisBetween);
-				if (millisBetween != 0 && millisBetween % 30000 == 0) {
-					System.out.println("进循环前millisBetween:" + millisBetween);
-					System.out.println("进入循环了~~~~~~~~~~~");
-					applyinfoList = selectApplyinfo(passportnum);
-					applyResult = applyinfoList.get(0);
-					statusname = applyResult.getStatus();
-					AAcode = applyResult.getApp_id();
-					nowDate = DateUtil.nowDate();
-					millisBetween = twoDatebetweenMillis(firstDate, nowDate);
-					System.out.println("millisBetween:" + millisBetween);
-					System.out.println("while循环里申请statusname:" + statusname);
-					System.out.println("while循环里申请AAcode:" + AAcode);
-				}
+				System.out.println("millisBetween:*********" + millisBetween);
+				System.out.println("进入循环了~~~~~~~~~~~");
+				applyinfoList = selectApplyinfo(passportnum);
+				applyResult = applyinfoList.get(0);
+				statusname = applyResult.getStatus();
+				AAcode = applyResult.getApp_id();
+				System.out.println("while循环里申请statusname:" + statusname);
+				System.out.println("while循环里申请AAcode:" + AAcode);
 			}
 			if (Util.eq("申请失败", statusname)) {
 				errorurl = applyResult.getError_url();
@@ -1680,22 +1711,21 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				System.out.println("申请失败原因：" + errorMsg);
 			}
 		} else {
-			Date firstDate = DateUtil.nowDate();
-			Date nowDate = null;
 			while (Util.eq("正在提交", statusname)) {
-				nowDate = DateUtil.nowDate();
-				//long millisBetween = DateUtil.millisBetween(firstDate, nowDate);
-				long millisBetween = twoDatebetweenMillis(firstDate, nowDate);
-				if (millisBetween != 0 && millisBetween % 30000 == 0) {
-					applyinfoList = selectApplyinfo(passportnum);
-					applyResult = applyinfoList.get(0);
-					statusname = applyResult.getStatus();
-					AAcode = applyResult.getApp_id();
-					nowDate = DateUtil.nowDate();
-					millisBetween = twoDatebetweenMillis(firstDate, nowDate);
-					System.out.println("while循环里提交statusname:" + statusname);
-					System.out.println("while循环里提交AAcode:" + AAcode);
+				try {
+					Thread.sleep(30000);
+				} catch (InterruptedException e) {
+					System.out.println("提交等待30秒出错~~~~~~");
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+
 				}
+				applyinfoList = selectApplyinfo(passportnum);
+				applyResult = applyinfoList.get(0);
+				statusname = applyResult.getStatus();
+				AAcode = applyResult.getApp_id();
+				System.out.println("while循环里提交statusname:" + statusname);
+				System.out.println("while循环里提交AAcode:" + AAcode);
 			}
 			if (Util.eq("提交失败", statusname)) {
 				errorurl = applyResult.getError_url();
