@@ -1,4 +1,8 @@
 
+$(function(){
+	workinfoValidate();
+});
+
 //翻译
 function translateZhToEn(from, to, param){
 	var toval = "";
@@ -130,6 +134,314 @@ $("#highesteducation").change(function(){
 		$(".courseClass").hide();
 	}
 })
+
+
+function workinfoValidate(){
+	$('#workinfo').bootstrapValidator({
+		message : '验证不通过',
+		feedbackIcons : {
+			valid : 'glyphicon glyphicon-ok',
+			invalid : 'glyphicon glyphicon-remove',
+			validating : 'glyphicon glyphicon-refresh'
+		},
+		fields : {
+			addressen: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '详细地址英文不能为空'
+					},
+					stringLength: {//检测长度
+                        max: 80,
+                        message: '详细地址英文不能超过80个字符'
+                    }
+				}
+			},
+			employeraddressen: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '详细地址英文不能为空'
+					},
+					stringLength: {//检测长度
+						max: 80,
+						message: '详细地址英文不能超过80个字符'
+					}
+				}
+			},
+			institutionaddressen: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '详细地址英文不能为空'
+					},
+					stringLength: {//检测长度
+						max: 80,
+						message: '详细地址英文不能超过80个字符'
+					}
+				}
+			},
+			unitname: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '工作单位名称不能为空'
+					}
+				}
+			},
+			unitnameen: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '工作单位名称英文不能为空'
+					}
+				}
+			},
+			telephone: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '电话号码不能为空'
+					}
+				}
+			},
+			country: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '工作国家不能为空'
+					}
+				}
+			},
+			province: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '省份不能为空'
+					}
+				}
+			},
+			city: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '城市不能为空'
+					}
+				}
+			},
+			address : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '详细地址不能为空'
+					}
+				}
+			},
+			workstartdate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '入职日期不能为空'
+					}
+				}
+			},
+			position : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '职位不能为空'
+					}
+				}
+			},
+			salary : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '月收入不能为空'
+					}
+				}
+			},
+			duty : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '职责不能为空'
+					}
+				}
+			},
+			dutyen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '职责英文不能为空'
+					}
+				}
+			},
+			employername : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '单位名称不能为空'
+					}
+				}
+			},
+			employernameen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '单位名称英文不能为空'
+					}
+				}
+			},
+			employertelephone : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '电话号码不能为空'
+					}
+				}
+			},
+			employercountry : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国家不能为空'
+					}
+				}
+			},
+			employerprovince : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '省份不能为空'
+					}
+				}
+			},
+			employercity : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '城市不能为空'
+					}
+				}
+			},
+			employeraddress : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '详细地址不能为空'
+					}
+				}
+			},
+			employstartdate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '入职时间不能为空'
+					}
+				}
+			},
+			employenddate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '离职时间不能为空'
+					}
+				}
+			},
+			jobtitle : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '职务不能为空'
+					}
+				}
+			},
+			previousduty : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '职责不能为空'
+					}
+				}
+			},
+			highesteducation : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '最高学历不能为空'
+					}
+				}
+			},
+			institution : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '学校名称不能为空'
+					}
+				}
+			},
+			institutionen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '学校名称英文不能为空'
+					}
+				}
+			},
+			institutioncountry : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国家不能为空'
+					}
+				}
+			},
+			institutionprovince : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '省份不能为空'
+					}
+				}
+			},
+			institutioncity : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '城市不能为空'
+					}
+				}
+			},
+			institutionaddress : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '详细地址不能为空'
+					}
+				}
+			},
+			coursestartdate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '开始时间不能为空'
+					}
+				}
+			},
+			courseenddate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '结束时间不能为空'
+					}
+				}
+			},
+		}
+	});
+	$('#workinfo').bootstrapValidator('validate');
+}
+
 
 
 //工作国家
@@ -364,9 +676,15 @@ function closeWindow() {
 
 //保存工作信息
 function save(status){
+	var	familyinfo = $("#workinfo").serialize();
+	console.log(familyinfo);
 	
-		var	familyinfo = $("#workinfo").serialize();
-		console.log(familyinfo);
+	
+	/*workinfoValidate();
+	var bootstrapValidator = $("#workinfo").data('bootstrapValidator');
+	// 执行表单验证 
+	bootstrapValidator.validate();
+	if (bootstrapValidator.isValid()){*/
 		if(status == 2){
 			//左箭头跳转 
 			window.location.href = '/admin/neworderUS/updateFamilyInfo.html?staffid='+staffId;
@@ -402,5 +720,6 @@ function save(status){
 				}
 			});
 		}
+	//}
 }
 

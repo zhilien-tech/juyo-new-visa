@@ -698,7 +698,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				errorMsg += "职务描述,";
 			}
 			//月收入 没有
-			work.put("monthly_income", "20000");
+			//work.put("monthly_income", "20000");
 			//入职时间(签证信息)
 			if (!Util.isEmpty(workEntity.getEmploystartdate())) {
 				work.put("start_date", sdf.format(workEntity.getEmploystartdate()));
@@ -1345,7 +1345,11 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		} else {
 			errorMsg += "计划去美国的地址,";
 		}
-		ResidentialInfo.put("province", getUSState(info.getInt("planstate")));
+		if (!Util.isEmpty(info.getInt("planstate")) && info.getInt("planstate") != -1) {
+			ResidentialInfo.put("province", getUSState(info.getInt("planstate")));
+		} else {
+			errorMsg += "计划去美国的州,";
+		}
 		//ResidentialInfo.put("country", "CN");
 		ResidentialInfo.put("zip_code", "");
 		//===========

@@ -1904,29 +1904,33 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		}
 		int count = 1;
 		int passportflag = 0;
-		for (Record record : applyinfo) {
-			if (count == 1) {
+		if (Util.isEmpty(applyinfo)) {
+			resultstrbuf.append("请添加申请人、");
+		} else {
+			for (Record record : applyinfo) {
+				if (count == 1) {
 
-				if (Util.isEmpty(record.get("firstname")) && Util.isEmpty(record.get("lastname"))) {
-					resultstrbuf.append("申请人" + count + "的姓名、");
+					if (Util.isEmpty(record.get("firstname")) && Util.isEmpty(record.get("lastname"))) {
+						resultstrbuf.append("申请人" + count + "的姓名、");
+					}
+					if (Util.isEmpty(record.get("firstnameen")) && Util.isEmpty(record.get("lastnameen"))) {
+						resultstrbuf.append("申请人" + count + "的姓名英文、");
+					}
+					if (Util.isEmpty(record.get("sex"))) {
+						resultstrbuf.append("申请人" + count + "的性别、");
+					}
+					if (Util.isEmpty(record.get("passportno"))) {
+						resultstrbuf.append("申请人" + count + "的护照号、");
+					}
+					if (Util.isEmpty(record.get("position"))) {
+						resultstrbuf.append("申请人" + count + "的职位、");
+					}
+					if (Util.isEmpty(record.get("unitName"))) {
+						resultstrbuf.append("申请人" + count + "的父母（配偶）职业、");
+					}
 				}
-				if (Util.isEmpty(record.get("firstnameen")) && Util.isEmpty(record.get("lastnameen"))) {
-					resultstrbuf.append("申请人" + count + "的姓名英文、");
-				}
-				if (Util.isEmpty(record.get("sex"))) {
-					resultstrbuf.append("申请人" + count + "的性别、");
-				}
-				if (Util.isEmpty(record.get("passportno"))) {
-					resultstrbuf.append("申请人" + count + "的护照号、");
-				}
-				if (Util.isEmpty(record.get("position"))) {
-					resultstrbuf.append("申请人" + count + "的职位、");
-				}
-				if (Util.isEmpty(record.get("unitName"))) {
-					resultstrbuf.append("申请人" + count + "的父母（配偶）职业、");
-				}
+				count++;
 			}
-			count++;
 		}
 		String resultstr = resultstrbuf.toString();
 		//姓名长度限制

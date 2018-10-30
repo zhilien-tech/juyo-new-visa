@@ -5,10 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <title>签证信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
     <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
     <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="${base}/references/public/bootstrap/css/daterangepicker-bs3.css">
+    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
     <!-- 本页样式 -->
     <link rel="stylesheet" href="${base}/references/public/css/updateVisaInfo.css">
     <style>
@@ -94,7 +96,6 @@
 		<i style="position:absolute;top:20%;width:1.5em;left:10px;font-family: 'microsoft yahei';">第六步</i>
 		<span></span>
 	</a>
-	<div class="topHide"></div>
 	<form id="workinfo">
 	<div id="section">
 		<div id="wrapper" v-cloak class="section">
@@ -302,7 +303,7 @@
 				<div class="padding-left">
 					<div class="paddingTop">
 						<div class="groupRadioInfo" style="padding-bottom: 10px;">
-                            <label><span class="s">*</span> 是否有初中及以上教育经历（最高学历）</label>
+                            <label><span class="s">*</span> 是否有高中及以上教育经历（最高学历）</label>
                             
 							<input autocomplete="new-password" type="radio" name="issecondarylevel" class="education" value="1" />是
 							<input autocomplete="new-password" type="radio" style="margin-left: 20px;" name="issecondarylevel"  class="education" value="2" checked/>否
@@ -503,21 +504,22 @@
         var isDisable = '${obj.isDisable}';
         var flag      = '${obj.flag}';
     </script>
-    <!-- 公共js -->
-    <script src="${base}/references/common/js/jquery-1.10.2.js" ></script>
-    <script src="${base}/references/public/bootstrap/js/bootstrap.min.js"></script>
+   <!-- 公共js -->
+    <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
+    <script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
+    <script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+    
     <script src="${base}/references/common/js/layer/layer.js"></script>
     <script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
-    <script src="${base}/references/common/js/My97DatePicker/WdatePicker.js"></script>
+    
     <script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
     <script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+    
     <script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
     <script src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
     <!-- 本页js -->
-    <%-- <script src="${base}/admin/bigCustomer/visa/openPageYesOrNo.js"></script><!-- 本页面  打开默认开关 js -->
-    <script src="${base}/admin/bigCustomer/visa/visaGetInfoList.js"></script><!-- 本页面  获取一对多信息 js -->
-    <script src="${base}/admin/bigCustomer/visa/visaInfoVue.js"></script><!-- 本页面 Vue加载页面内容 js -->
-    <script src="${base}/admin/bigCustomer/visa/visaInfo.js"></script><!-- 本页面 开关交互 js --> --%>
     <script src="${base}/admin/bigCustomer/visa/initDatetimepicker.js"></script><!-- 本页面 初始化时间插件 js -->
     <script src="${base}/admin/bigCustomer/updateWorkinfo.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面 js -->
 	<script type="text/javascript">

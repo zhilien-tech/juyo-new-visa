@@ -32,6 +32,62 @@ function applyValidate(){
 			validating : 'glyphicon glyphicon-refresh'
 		},
 		fields : {
+			detailedaddressen: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '详细地址英文不能为空'
+					},
+					stringLength: {//检测长度
+                        max: 80,
+                        message: '详细地址英文不能超过80个字符'
+                    }
+				}
+			},
+			mailaddress: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '街道地址不能为空'
+					}
+				}
+			},
+			mailcountry: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '国家不能为空'
+					}
+				}
+			},
+			mailprovince: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '省份不能为空'
+					}
+				}
+			},
+			mailcity: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '城市不能为空'
+					}
+				}
+			},
+			mailaddressen: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '街道地址英文不能为空'
+					},
+					stringLength: {//检测长度
+						max: 80,
+						message: '街道地址地址英文不能超过80个字符'
+					}
+				}
+			},
 			telephone : {
 				trigger:"change keyup",
 				validators : {
@@ -177,14 +233,6 @@ function applyValidate(){
 				}
 			},
 			detailedaddress : {
-				trigger:"change keyup",
-				validators : {
-					notEmpty : {
-						message : '详细地址不能为空'
-					}
-				}
-			},
-			detailedaddressen : {
 				trigger:"change keyup",
 				validators : {
 					notEmpty : {

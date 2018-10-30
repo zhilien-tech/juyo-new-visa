@@ -31,9 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -1232,32 +1229,28 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 	}
 
-	public Object autofill1(int orderid, HttpSession session) {
+	public Object autofill10(int orderid, HttpSession session) {
 		String orderidstr = "orderid";
 		redisDao.lpush(orderidstr, String.valueOf(orderid));
 		//System.out.println(redisDao.rpop(orderidstr));
 		return null;
 	}
 
-	public void toautofill() {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
-		Date firstTime = DateUtil.nowDate();
-		Date lastTime = DateUtil.nowDate();
-		long twoDatebetweenMillis = twoDatebetweenMillis(firstTime, lastTime);
+	public String autofill(int orderid, HttpSession session) {
 
-		Runnable runnable = new Runnable() {
+		Thread t = new Thread(new Runnable() {
 			public void run() {
-				// task to run goes here  
-				System.out.println(redisDao.rpop("orderid"));
+				// run方法具体重写
+				autofill1(orderid, session);
 			}
-		};
-		ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-		// 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  
-		service.scheduleAtFixedRate(runnable, 10, 10, TimeUnit.SECONDS);
+		});
+		t.start();
+
+		return "ok";
 	}
 
 	//自动填表
-	public Object autofill(int orderid, HttpSession session) {
+	public Object autofill1(int orderid, HttpSession session) {
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
 		System.out.println(simpleDateFormat.format(new Date()) + "============");

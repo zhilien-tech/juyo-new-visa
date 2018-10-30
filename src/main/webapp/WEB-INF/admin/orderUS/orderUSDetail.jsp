@@ -54,7 +54,7 @@
 				</span>
 				<c:choose>
 					<c:when test="${!empty obj.orderinfo.errorurl }">
-						<a id="errorimgPhoto" onclick="toErrorphoto()">错误信息图片</a>
+						<a id="errorimgPhoto" onclick="toErrorphoto()"><span style="color:red;"><strong>错误信息图片</strong></span></a>
 					</c:when>
 					<c:otherwise>
 						
@@ -1461,7 +1461,7 @@
 			
 		} */
 		
-		function autofill(){
+		function autofill1(){
 			autofill1(4749, 4776);
 			autofill1(4750, 4777);
 			autofill1(4751, 4778); 
@@ -1472,10 +1472,10 @@
 			
 		}
 		
- 		function autofill1(orderid, staffid){
+ 		function autofill(orderid, staffid){
  			$("#autofill").attr("disabled",true);
-			//var orderid = '${obj.orderid}';
-			//var staffid = '${obj.basicinfo.id}';
+			var orderid = '${obj.orderid}';
+			var staffid = '${obj.basicinfo.id}';
 			console.log(count);
 			$.ajax({
 				url : '/admin/orderUS/validateInfoIsFull.html',
@@ -1511,7 +1511,8 @@
 							success : function(data) {
 								//alert("申请人识别码为："+data);
 								count++;
-								if(data.errorMsg == ""){
+								console.log(data);
+								/* if(data.errorMsg == ""){
 									console.log("走了"+count+"次终于成功了☺");
 									console.log("applyidcode:"+data.applyidcode);
 									console.log("AAcode:"+data.AAcode);
@@ -1519,13 +1520,13 @@
 									console.log("pdfurl:"+data.pdfurl);
 									console.log("avatorurl:"+data.avatorurl);
 									console.log("daturl:"+data.daturl);
-									$("#autofill").attr("disabled",false);
+									//$("#autofill").attr("disabled",false);
 								}else{
 									console.log(data.errorMsg);
 									console.log(data.error_url);
 									console.log(data.code);
-									$("#autofill").attr("disabled",false);
-								}
+									//$("#autofill").attr("disabled",false);
+								} */
 							}
 						});
 					}
