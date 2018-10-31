@@ -77,7 +77,14 @@
 				<c:otherwise>
 					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
-					<input type="button" onclick="download()" value="下载" class="btn btn-primary btn-sm pull-right" />
+					<c:choose>
+						<c:when test="${!empty obj.orderinfo.pdfurl }">
+							<input type="button" onclick="download()" value="下载" class="btn btn-primary btn-sm pull-right" />
+						</c:when>
+						<c:otherwise>
+							<input type="button" disabled="disabled" onclick="download()" value="下载" class="btn btn-primary btn-sm pull-right" />
+						</c:otherwise>
+					</c:choose>
 					<input type="button" onclick="refuse()" value="拒签" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="pass()" value="通过" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" id="autofill" onclick="autofill()" value="自动填表" class="btn btn-primary btn-sm pull-right btn-Big" />

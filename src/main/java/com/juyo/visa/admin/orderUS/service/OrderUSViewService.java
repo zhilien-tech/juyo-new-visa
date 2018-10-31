@@ -1240,11 +1240,17 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 		Thread t = new Thread(new Runnable() {
 			public void run() {
-				// run方法具体重写
+				// run方法调用自动填表
 				autofillMethod(orderid, session);
 			}
 		});
 		t.start();
+		/*ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10, 200, TimeUnit.MILLISECONDS,
+				new ArrayBlockingQueue<Runnable>(5));
+		executor.execute(t);
+		System.out.println("线程池中线程数目：" + executor.getPoolSize() + "，队列中等待执行的任务数目：" + executor.getQueue().size()
+				+ "，已执行玩别的任务数目：" + executor.getCompletedTaskCount());
+		executor.shutdown();*/
 
 		return "ok";
 	}
@@ -1260,9 +1266,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//改变订单状态
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		orderus.setIsautofilling(1);
-		if (orderus.getStatus() < USOrderListStatusEnum.AUTOFILL.intKey()) {
-			orderus.setStatus(USOrderListStatusEnum.AUTOFILL.intKey());
-		}
+		orderus.setStatus(USOrderListStatusEnum.AUTOFILLING.intKey());
 		dbDao.update(orderus);
 		//根据订单id查询对应申请人，根据申请人查询二寸照片
 		TAppStaffOrderUsEntity staffOrderUS = dbDao.fetch(TAppStaffOrderUsEntity.class,
@@ -1318,11 +1322,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		List<AutofillSearchJsonEntity> applyinfoList = new ArrayList<>();
 		AutofillSearchJsonEntity applyResult = new AutofillSearchJsonEntity();
 
-		//创建申请人信息，并上传头像
-		/*repeatResult = repeatInsertandupdate(imgurl, orderid, staffid);
-		successStatus = (int) repeatResult.get("successStatus");
-		applyidcode = (String) repeatResult.get("applyidcode");*/
-
 		//创建申请人，上传头像，向官网申请
 		applyResult = (AutofillSearchJsonEntity) applyToDS160(passportnum, imgurl, orderid, staffid, orderus);
 		reviewurl = applyResult.getReview_url();
@@ -1339,36 +1338,15 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 2);
 			statusname = applyResult.getStatus();
 			errorMsg = applyResult.getErrorMsg();
-			/*if (Util.eq("提交失败", statusname)) {
-				System.out.println("提交失败了~~~~~~~~~~~~~~~~~~~~");
-				orderus.setErrorurl(applyResult.getError_url());
-				orderus.setApplyidcode(applyidcode);
-				orderus.setErrormsg(applyResult.getErrorMsg());
-				orderus.setIsautofilling(0);
-				dbDao.update(orderus);
-				System.out.println("提交失败:" + simpleDateFormat.format(new Date()));
-				return applyResult;
-			}*/
-
 			while (Util.eq("提交失败", statusname)) {
 				System.out.println("errorMsg------:" + errorMsg);
-				/*if (errorMsg.contains("码")) {
-					System.out.println("提交失败，跟验证码有关~~~~~~~~~");
-					orderus.setIsautofilling(0);
-					orderus.setErrormsg(errorMsg);
-					dbDao.update(orderus);
-					System.out.println("提交失败app_id:" + applyResult.getApp_id());
-					basicinfo.setAacode(applyResult.getApp_id());
-					dbDao.update(basicinfo);
-					return applyResult;
-				}*/
-
 				count++;
 				System.out.println("count===========:" + count);
 				if (count == 4) {
 					System.out.println("提交还是失败了o(╥﹏╥)o");
 					orderus.setIsautofilling(0);
 					orderus.setErrormsg(applyResult.getErrorMsg());
+					orderus.setStatus(USOrderListStatusEnum.AUTOFILLFAILED.intKey());
 					dbDao.update(orderus);
 					System.out.println("提交失败4次之后app_id:" + applyResult.getApp_id());
 					basicinfo.setAacode(applyResult.getApp_id());
@@ -1409,6 +1387,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			orderus.setErrormsg("");
 			orderus.setErrorurl("");
 			orderus.setIsautofilling(0);
+			orderus.setStatus(USOrderListStatusEnum.AUTOFILLED.intKey());
 			dbDao.update(orderus);
 			if (!Util.isEmpty(applyResult.getApp_id())) {
 				basicinfo.setAacode(applyResult.getApp_id());
@@ -1497,30 +1476,11 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 						orderus.setPdfurl("");
 						orderus.setDaturl("");
 						orderus.setIsautofilling(0);
+						orderus.setStatus(USOrderListStatusEnum.AUTOFILLFAILED.intKey());
 						dbDao.update(orderus);
 						System.out.println("申请失败:" + simpleDateFormat.format(new Date()));
 						return applyResult;
 					}
-					/*if (countnum == 3) {
-						if (countnum == 3) {
-						System.out.println("第" + countnum + "次申请失败！！！");
-						orderus.setErrorurl(applyResult.getError_url());
-						orderus.setApplyidcode(applyidcode);
-						orderus.setErrormsg(applyResult.getErrorMsg());
-						dbDao.update(orderus);
-						return applyResult;
-						}*/
-					/*repeatResult = repeatInsertandupdate(imgurl, orderid);
-						successStatus = (int) repeatResult.get("successStatus");
-						applyidcode = (String) repeatResult.get("applyidcode");
-						if (successStatus == 1) {
-						successStatus = (int) applyorsubmit(applyidcode, 1);
-						if (successStatus == 1) {
-						applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 1);
-						statusname = applyResult.getStatus();
-						System.out.println("申请失败的while循环里:" + statusname);
-						}
-						}*/
 
 				}
 
@@ -1533,6 +1493,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			orderus.setPdfurl("");
 			orderus.setDaturl("");
 			orderus.setIsautofilling(0);
+			orderus.setStatus(USOrderListStatusEnum.AUTOFILLFAILED.intKey());
 			dbDao.update(orderus);
 		}
 		applyResult.setCode(applyidcode);
@@ -2331,12 +2292,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderus.setUpdatetime(new Date());
 
 		//如果有面签时间，则改变订单状态为面签
-		if (!Util.isEmpty(form.getInterviewdate())) {
+		/*if (!Util.isEmpty(form.getInterviewdate())) {
 			if (orderus.getStatus() < USOrderListStatusEnum.MIANQIAN.intKey()) {
 				orderus.setStatus(USOrderListStatusEnum.MIANQIAN.intKey());
 			}
 			insertLogs(orderus.getId(), USOrderListStatusEnum.MIANQIAN.intKey(), loginUser.getId());
-		}
+		}*/
 		dbDao.update(orderus);
 		//把面签时间添加到人员信息中
 		TAppStaffOrderUsEntity fetch = dbDao.fetch(TAppStaffOrderUsEntity.class, Cnd.where("orderid", "=", orderid));

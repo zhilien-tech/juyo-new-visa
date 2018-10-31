@@ -122,7 +122,7 @@
 										<div><label>资料类型：</label><span>{{data.type}}</span></div>
 										<div class="whiteSpace"><label>资料：</label><span class="showInfo"></span></div>
 										<span class="hideInfo"></span>
-										<div><a class="visaInputUS" v-on:click="visaInput(data.staffid, data.orderid)">出境记录</a></div>
+										<!-- <div><a class="visaInputUS" v-on:click="visaInput(data.staffid, data.orderid)">出境记录</a></div> -->
 									</span>
 								</li>
 							</ul>
