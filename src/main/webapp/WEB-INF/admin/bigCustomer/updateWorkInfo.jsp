@@ -8,9 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
     <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
-    <link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
     <!-- 本页样式 -->
     <link rel="stylesheet" href="${base}/references/public/css/updateVisaInfo.css">
     <style>
@@ -98,7 +97,7 @@
 	</a>
 	<form id="workinfo">
 	<div id="section">
-		<div id="wrapper" v-cloak class="section">
+		<div id="wrapper" class="section">
 			<div class="dislogHide"></div>
 			<!--工作/教育/培训信息-->
 			<div class="experience paddingTop">
@@ -506,10 +505,9 @@
     </script>
    <!-- 公共js -->
     <script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
-    <script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
-    <script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
-    <script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
+	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
+	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
     
     <script src="${base}/references/common/js/layer/layer.js"></script>
     <script src="${base}/references/common/js/base/base.js"></script><!-- 公用js文件 -->
@@ -534,6 +532,7 @@
             openYesOrNoPage();
             
         }); */
+        
 
         //是否有上份工作
         var beforework='${obj.workinfo.isemployed}';

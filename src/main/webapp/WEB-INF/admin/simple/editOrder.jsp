@@ -401,7 +401,11 @@
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
 										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="19" >
-										<option selected="selected" value="${obj.tripinfo.goFlightNum }">${obj.tripinfo.goFlightNum}</option>
+											<c:if test="${!empty obj.tripinfo.goFlightNum }">
+												<option selected="selected" value="${obj.tripinfo.goFlightNum }">${obj.tripinfo.goFlightNum}</option>
+											
+											</c:if>
+										
 											<%-- <c:set var="isDoneAir" value="0" scope="page"></c:set>
 											<c:forEach items="${obj.gotripAirlineSelect }" var="flight">
 												<c:if test="${obj.tripinfo.goFlightNum eq  flight.flightnum}">
@@ -457,7 +461,9 @@
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
 										<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="22">
-										<option selected="selected" value="${obj.tripinfo.returnFlightNum }">${obj.tripinfo.returnFlightNum}</option>
+											<c:if test="${!empty obj.tripinfo.returnFlightNum }">
+												<option selected="selected" value="${obj.tripinfo.returnFlightNum }">${obj.tripinfo.returnFlightNum}</option>
+											</c:if>
 											<%-- <c:if test="${!empty obj.tripinfo.returnFlightNum }">
 												<option value="${obj.tripinfo.returnFlightNum }" selected="selected">${obj.tripinfo.returnFlightNum }</option>
 											</c:if> --%>

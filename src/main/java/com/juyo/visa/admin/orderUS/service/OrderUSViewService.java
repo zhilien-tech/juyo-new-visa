@@ -1241,7 +1241,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				// run方法具体重写
-				autofill1(orderid, session);
+				autofillMethod(orderid, session);
 			}
 		});
 		t.start();
@@ -1250,7 +1250,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//自动填表
-	public Object autofill1(int orderid, HttpSession session) {
+	public Object autofillMethod(int orderid, HttpSession session) {
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
 		System.out.println(simpleDateFormat.format(new Date()) + "============");

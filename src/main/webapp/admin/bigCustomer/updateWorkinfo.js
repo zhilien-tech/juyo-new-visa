@@ -1,7 +1,7 @@
 
-$(function(){
+/*$(function(){
 	workinfoValidate();
-});
+});*/
 
 //翻译
 function translateZhToEn(from, to, param){
@@ -439,7 +439,7 @@ function workinfoValidate(){
 			},
 		}
 	});
-	$('#workinfo').bootstrapValidator('validate');
+	//$('#workinfo').bootstrapValidator('validate');
 }
 
 

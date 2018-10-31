@@ -1905,7 +1905,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		int count = 1;
 		int passportflag = 0;
 		if (Util.isEmpty(applyinfo)) {
-			resultstrbuf.append("请添加申请人、");
+			resultstrbuf.append("申请人、");
 		} else {
 			for (Record record : applyinfo) {
 				if (count == 1) {
