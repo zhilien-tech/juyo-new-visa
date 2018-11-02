@@ -11,8 +11,9 @@ import com.uxuexi.core.common.enums.IEnum;
  * 
  */
 public enum USOrderListStatusEnum implements IEnum {
-	PLACE_ORDER(1, "下单"), FILLING(2, "填写资料"), FILlED(3, "填写完成"), HEGE(4, "合格"), AUTOFILLING(5, "自动填表中"), AUTOFILLED(6,
-			"自动填表成功"), AUTOFILLFAILED(7, "自动填表失败"), TONGGUO(8, "通过"), JUJUE(9, "拒签"), DISABLED(10, "作废");
+	PLACE_ORDER(1, "下单"), FILLING(2, "填写资料"), FILlED(3, "填写完成"), HEGE(4, "合格"), PREAUTOFILLING(5, "预检查中"), PREAUTOFILLED(
+			6, "预检查成功"), PREAUTOFILLFAILED(7, "预检查失败"), AUTOFILLING(8, "自动填表中"), AUTOFILLED(9, "自动填表成功"), AUTOFILLFAILED(
+			10, "自动填表失败"), TONGGUO(11, "通过"), JUJUE(12, "拒签"), DISABLED(13, "作废");
 	private int key;
 	private String value;
 

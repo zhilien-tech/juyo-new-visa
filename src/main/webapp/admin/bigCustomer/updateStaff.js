@@ -39,8 +39,8 @@ function applyValidate(){
 						message: '详细地址英文不能为空'
 					},
 					stringLength: {//检测长度
-                        max: 40,
-                        message: '详细地址英文不能超过40个字符'
+                        max: 60,
+                        message: '详细地址英文不能超过60个字符'
                     }
 				}
 			},

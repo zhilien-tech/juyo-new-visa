@@ -62,7 +62,6 @@ import org.springframework.web.socket.TextMessage;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.util.concurrent.RateLimiter;
 import com.juyo.visa.admin.login.util.LoginUtil;
 import com.juyo.visa.admin.mail.service.MailService;
 import com.juyo.visa.admin.order.entity.PassportJsonEntity;
@@ -1204,59 +1203,34 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return null;
 	}
 
-	class ThreadDemo1 implements Runnable {
-		private HttpSession session;
+	/**
+	 * 预检查
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @param session
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public String preautofill(int orderid, HttpSession session) {
 
-		public void setSession(HttpSession session) {
-			this.session = session;
-		}
-
-		@SuppressWarnings("synthetic-access")
-		@Override
-		public void run() {
-			try {
-				List<TOrderUsEntity> query = dbDao.query(TOrderUsEntity.class, Cnd.where("status", "=", 5), null);
-				RateLimiter rateLimiter = RateLimiter.create(1);
-				for (int i = 0; i < query.size(); i++) {
-					rateLimiter.acquire();
-					autofill(query.get(i).getId(), this.session);
-				}
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			System.out.println("thread_01");
-		}
-	}
-
-	public Object autofill10(int orderid, HttpSession session) {
-		String orderidstr = "orderid";
-		redisDao.lpush(orderidstr, String.valueOf(orderid));
-		//System.out.println(redisDao.rpop(orderidstr));
-		return null;
-	}
-
-	public String autofill(int orderid, HttpSession session) {
+		//90f7a200
+		//applyorsubmit("90f7a200", 3);
 
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				// run方法调用自动填表
-				autofillMethod(orderid, session);
+				preautofillMethod(orderid, session);
 			}
 		});
 		t.start();
-		/*ThreadPoolExecutor executor = new ThreadPoolExecutor(5, 10, 200, TimeUnit.MILLISECONDS,
-				new ArrayBlockingQueue<Runnable>(5));
-		executor.execute(t);
-		System.out.println("线程池中线程数目：" + executor.getPoolSize() + "，队列中等待执行的任务数目：" + executor.getQueue().size()
-				+ "，已执行玩别的任务数目：" + executor.getCompletedTaskCount());
-		executor.shutdown();*/
 
 		return "ok";
 	}
 
-	//自动填表
-	public Object autofillMethod(int orderid, HttpSession session) {
+	//预检查
+	public Object preautofillMethod(int orderid, HttpSession session) {
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");
 		System.out.println(simpleDateFormat.format(new Date()) + "============");
@@ -1265,8 +1239,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		//改变订单状态
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
-		orderus.setIsautofilling(1);
-		orderus.setStatus(USOrderListStatusEnum.AUTOFILLING.intKey());
+		orderus.setIspreautofilling(1);
+		orderus.setStatus(USOrderListStatusEnum.PREAUTOFILLING.intKey());
 		dbDao.update(orderus);
 		//根据订单id查询对应申请人，根据申请人查询二寸照片
 		TAppStaffOrderUsEntity staffOrderUS = dbDao.fetch(TAppStaffOrderUsEntity.class,
@@ -1307,7 +1281,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//be3d1654,77d68168,baf0e46c,8046d51a,de3dbd8a,48ca6a6f,1f1bdb37,bb9c3f38,15231000,73dacefd
 
 		//调整顺序
-		String applyidcode = "";
+		/*String applyidcode = "";
 		int successStatus = 0;
 		Map<String, Object> AAcodeinfo = Maps.newHashMap();
 		Map<String, Object> repeatResult = Maps.newHashMap();
@@ -1319,12 +1293,28 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String avatorurl = "";
 		String daturl = "";
 		String errorurl = "";
-		List<AutofillSearchJsonEntity> applyinfoList = new ArrayList<>();
+		List<AutofillSearchJsonEntity> applyinfoList = new ArrayList<>();*/
 		AutofillSearchJsonEntity applyResult = new AutofillSearchJsonEntity();
 
 		//创建申请人，上传头像，向官网申请
 		applyResult = (AutofillSearchJsonEntity) applyToDS160(passportnum, imgurl, orderid, staffid, orderus);
-		reviewurl = applyResult.getReview_url();
+		if (Util.eq("申请成功", applyResult.getStatus())) {
+			if (!Util.isEmpty(applyResult.getApp_id())) {
+				basicinfo.setAacode(applyResult.getApp_id());
+				dbDao.update(basicinfo);
+			}
+			orderus.setErrorurl("");
+			orderus.setErrormsg("");
+			orderus.setReviewurl(applyResult.getReview_url());
+			orderus.setPdfurl("");
+			orderus.setDaturl("");
+			orderus.setApplyidcode(applyResult.getCode());
+			orderus.setIspreautofilling(0);
+			orderus.setStatus(USOrderListStatusEnum.PREAUTOFILLED.intKey());
+			dbDao.update(orderus);
+		}
+		return applyResult;
+		/*reviewurl = applyResult.getReview_url();
 		if (Util.isEmpty(applyResult.getReview_url())) {
 			return applyResult;
 		}
@@ -1407,7 +1397,132 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//submittoDS160("9667808b", "cover");
 		//记录日志
 		//insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
+		return result;*/
+	}
+
+	public Object formallyfill(int orderid) {
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				// run方法调用自动填表
+				formallyfilling(orderid);
+			}
+		});
+		t.start();
+
+		return "ok";
+	}
+
+	public Object formallyfilling(int orderid) {
+
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		String applyidcode = orderus.getApplyidcode();
+		orderus.setIsautofilling(1);
+		orderus.setStatus(USOrderListStatusEnum.AUTOFILLING.intKey());
+		dbDao.update(orderus);
+		//根据订单id查询对应申请人，根据申请人查询二寸照片
+		TAppStaffOrderUsEntity staffOrderUS = dbDao.fetch(TAppStaffOrderUsEntity.class,
+				Cnd.where("orderid", "=", orderid));
+		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffOrderUS.getStaffid()
+				.longValue());
+		Integer staffid = basicinfo.getId();
+		TAppStaffCredentialsEntity twoinchphoto = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", 13));
+		String imgurl = twoinchphoto.getUrl();
+		System.out.println("imgurl:" + imgurl);
+		TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		String passportnum = passportinfo.getPassport();
+
+		Map<String, Object> result = Maps.newHashMap();
+		int successStatus = 0;
+		String statusname = "";
+		String AAcode = "";
+		String errorMsg = "";
+		String reviewurl = "";
+		String pdfurl = "";
+		String avatorurl = "";
+		String daturl = "";
+		String errorurl = "";
+		AutofillSearchJsonEntity applyResult = new AutofillSearchJsonEntity();
+		//向DS160官网递交，参数1代表申请，参数2代表递交
+		successStatus = (int) applyorsubmit(applyidcode, 2);
+		int count = 0;
+		if (successStatus == 1) {
+			//根据护照号查询,参数1代表申请，参数2代表递交
+			applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 2);
+			statusname = applyResult.getStatus();
+			errorMsg = applyResult.getErrorMsg();
+			while (Util.eq("提交失败", statusname)) {
+				System.out.println("errorMsg------:" + errorMsg);
+				count++;
+				System.out.println("count===========:" + count);
+				if (count == 4) {
+					System.out.println("提交还是失败了o(╥﹏╥)o");
+					orderus.setIsautofilling(0);
+					orderus.setErrormsg(applyResult.getErrorMsg());
+					orderus.setStatus(USOrderListStatusEnum.AUTOFILLFAILED.intKey());
+					dbDao.update(orderus);
+					System.out.println("提交失败4次之后app_id:" + applyResult.getApp_id());
+					basicinfo.setAacode(applyResult.getApp_id());
+					dbDao.update(basicinfo);
+					return applyResult;
+				}
+				applyResult = (AutofillSearchJsonEntity) applyToDS160(passportnum, imgurl, orderid, staffid, orderus);
+				reviewurl = applyResult.getReview_url();
+				if (Util.isEmpty(applyResult.getReview_url())) {
+					return applyResult;
+				}
+				applyidcode = applyResult.getCode();
+				successStatus = (int) applyorsubmit(applyidcode, 2);
+				if (successStatus == 1) {
+					applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 2);
+					statusname = applyResult.getStatus();
+				}
+			}
+
+			System.out.println("reviewurl:" + reviewurl);
+			pdfurl = applyResult.getPdf_url();
+			System.out.println("pdfurl:" + pdfurl);
+			daturl = applyResult.getDat_url();
+			System.out.println("daturl:" + daturl);
+			AAcode = applyResult.getApp_id();
+			System.out.println("AAcode:" + AAcode);
+			errorurl = applyResult.getError_url();
+			System.out.println("errorurl:" + errorurl);
+			errorMsg = applyResult.getErrorMsg();
+			System.out.println("errorMsg:" + errorMsg);
+			//orderus.setReviewurl(reviewurl);
+			orderus.setPdfurl(pdfurl);
+			orderus.setDaturl(daturl);
+			orderus.setApplyidcode(applyidcode);
+			//orderus.setErrorurl(errorurl);
+			//成功时不更新错误信息，这样可以看到之前的错误信息
+			//orderus.setErrormsg(errorMsg);
+			orderus.setErrormsg("");
+			orderus.setErrorurl("");
+			orderus.setIsautofilling(0);
+			orderus.setStatus(USOrderListStatusEnum.AUTOFILLED.intKey());
+			dbDao.update(orderus);
+			if (!Util.isEmpty(applyResult.getApp_id())) {
+				basicinfo.setAacode(applyResult.getApp_id());
+				dbDao.update(basicinfo);
+			}
+		}
+
+		result.put("applyidcode", applyidcode);
+		result.put("AAcode", AAcode);
+		result.put("errorMsg", errorMsg);
+		result.put("daturl", daturl);
+		result.put("reviewurl", reviewurl);
+		result.put("pdfurl", pdfurl);
+		result.put("avatorurl", avatorurl);
+
+		//uploadImgtoUS(imgurl, "9667808b");
+		//submittoDS160("9667808b", "cover");
+		//记录日志
+		//insertLogs(orderid, USOrderListStatusEnum.AUTOFILL.intKey(), loginUser.getId());
 		return result;
+
 	}
 
 	public Object applyToDS160(String passportnum, String imgurl, int orderid, int staffid, TOrderUsEntity orderus) {
@@ -1436,7 +1551,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				while (Util.eq("申请失败", statusname)) {
 					errorMsg = applyResult.getErrorMsg();
 					if (errorMsg.contains("Connection") || errorMsg.contains("打码工超时未打码")
-							|| errorMsg.contains("图片服务器连接错误") || errorMsg.contains("Cannot allocate memory")) {
+							|| errorMsg.contains("图片服务器连接错误") || errorMsg.contains("Cannot allocate memory")
+							|| errorMsg.contains("EOF occurred")) {
 						repeatResult = repeatInsertandupdate(imgurl, orderid, staffid);
 						successStatus = (int) repeatResult.get("successStatus");
 						applyidcode = (String) repeatResult.get("applyidcode");
@@ -1470,19 +1586,36 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 						}
 						applyResult.setError_url(errorurl);
 						orderus.setErrorurl(errorurl);
-						orderus.setApplyidcode(applyidcode);
+						orderus.setApplyidcode("");
 						orderus.setErrormsg(applyResult.getErrorMsg());
 						orderus.setReviewurl("");
 						orderus.setPdfurl("");
 						orderus.setDaturl("");
-						orderus.setIsautofilling(0);
-						orderus.setStatus(USOrderListStatusEnum.AUTOFILLFAILED.intKey());
+						orderus.setIspreautofilling(0);
+						orderus.setStatus(USOrderListStatusEnum.PREAUTOFILLFAILED.intKey());
 						dbDao.update(orderus);
 						System.out.println("申请失败:" + simpleDateFormat.format(new Date()));
 						return applyResult;
 					}
 
 				}
+				if (!Util.isEmpty(applyResult.getReview_url())) {
+					try {
+						// 创建URL
+						URL url = new URL(applyResult.getReview_url());
+						// 创建链接
+						HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+						conn.setRequestMethod("GET");
+						conn.setConnectTimeout(5000);
+						InputStream is = conn.getInputStream();
+						errorurl = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(is, "", "");
+						is.close();
+
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				applyResult.setReview_url(errorurl);
 
 			}
 
@@ -1492,8 +1625,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			orderus.setReviewurl("");
 			orderus.setPdfurl("");
 			orderus.setDaturl("");
-			orderus.setIsautofilling(0);
-			orderus.setStatus(USOrderListStatusEnum.AUTOFILLFAILED.intKey());
+			orderus.setApplyidcode("");
+			orderus.setIspreautofilling(0);
+			orderus.setStatus(USOrderListStatusEnum.PREAUTOFILLFAILED.intKey());
 			dbDao.update(orderus);
 		}
 		applyResult.setCode(applyidcode);
@@ -1591,12 +1725,19 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					successStatus = (int) submittoDS160(applyidcode, "applying");
 					System.out.println("申请DS160官网ds160successStatus在while循环里:" + successStatus);
 				}
-			} else {
+			} else if (type == 2) {
 				successStatus = (int) submittoDS160(applyidcode, "submitting");
 				System.out.println("递交DS160官网ds160successStatus:" + successStatus);
 				while (successStatus != 1) {
 					successStatus = (int) submittoDS160(applyidcode, "submitting");
 					System.out.println("递交DS160官网ds160successStatus在while循环里:" + successStatus);
+				}
+			} else {
+				successStatus = (int) submittoDS160(applyidcode, "cover");
+				System.out.println("覆盖DS160官网ds160successStatus:" + successStatus);
+				while (successStatus != 1) {
+					successStatus = (int) submittoDS160(applyidcode, "submitting");
+					System.out.println("覆盖DS160官网ds160successStatus在while循环里:" + successStatus);
 				}
 			}
 		} catch (Exception e) {
@@ -1846,7 +1987,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			//对请求返回来的encrypt解密
 			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
 			resultStr = pc.decrypt(encrypt);
-			//System.out.println("toGetEncrypt解密后明文: " + resultStr);
+			System.out.println("toGetEncrypt解密后明文: " + resultStr);
 		} catch (AesException e) {
 			e.printStackTrace();
 		}
@@ -3360,29 +3501,38 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @param response
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object downloadFile(int orderid, HttpServletResponse response) {
+	public Object downloadFile(int orderid, int type, HttpServletResponse response) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		Map<String, File> fileMap = new HashMap<String, File>();
 		TemplateUtil templateUtil = new TemplateUtil();
 		byte[] byteArray = null;
+		String filename = "";
 
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		String reviewurl = orderus.getReviewurl();
 		String pdfurl = orderus.getPdfurl();
 		String daturl = orderus.getDaturl();
 
-		ByteArrayOutputStream reviewurlbyteArray = saveImageToOutputStream(reviewurl);
-		ByteArrayOutputStream pdfurlbyteArray = saveImageToOutputStream(pdfurl);
-		ByteArrayOutputStream daturlbyteArray = saveImageToOutputStream(daturl);
-
-		fileMap.put("预览.PNG", templateUtil.createTempFile(reviewurlbyteArray));
-		fileMap.put("确认.PDF", templateUtil.createTempFile(pdfurlbyteArray));
-		fileMap.put("DAT文件.TXT", templateUtil.createTempFile(daturlbyteArray));
-		stream = templateUtil.mergeToZip(fileMap);
+		if (type == 1) {
+			stream = saveImageToOutputStream(reviewurl);
+			filename = orderus.getOrdernumber() + "预览.PNG";
+			//fileMap.put("预览.PNG", templateUtil.createTempFile(reviewurlbyteArray));
+		}
+		if (type == 2) {
+			stream = saveImageToOutputStream(pdfurl);
+			filename = orderus.getOrdernumber() + "确认.PDF";
+			//fileMap.put("确认.PDF", templateUtil.createTempFile(pdfurlbyteArray));
+		}
+		if (type == 3) {
+			stream = saveImageToOutputStream(daturl);
+			filename = orderus.getOrdernumber() + "DAT文件.TXT";
+			//fileMap.put("DAT文件.TXT", templateUtil.createTempFile(daturlbyteArray));
+		}
+		//stream = templateUtil.mergeToZip(fileMap);
 
 		byteArray = stream.toByteArray();
-		String filename = orderus.getOrdernumber() + ".zip";
+		//filename = orderus.getOrdernumber() + ".zip";
 		downloadType(filename, byteArray, response);
 		return null;
 	}
@@ -3392,9 +3542,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			// 将文件进行编码
 			String fileName = URLEncoder.encode(filename, "UTF-8");
 			// 设置下载的响应头
-			response.setContentType("application/zip");
+			//response.setContentType("application/zip");
 			//通过response.reset()刷新可能存在一些未关闭的getWriter(),避免可能出现未关闭的getWriter()
-			//response.setContentType("application/octet-stream");
+			response.setContentType("application/octet-stream");
 			response.setHeader("Set-Cookie", "fileDownload=true; path=/");
 			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
 			// 将字节流相应到浏览器（下载）
@@ -3450,6 +3600,11 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 		}
 		return between;
+	}
+
+	public Object isAutofilled(int orderid) {
+		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+		return orderus;
 	}
 
 }

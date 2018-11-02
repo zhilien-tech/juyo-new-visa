@@ -52,7 +52,9 @@
 					</c:choose>
 				
 				</span>
-				<c:choose>
+				<a id="errorimgPhoto" style="display:  none;" onclick="toErrorphoto('${obj.orderinfo.errorurl}')"><span style="color:red;"><strong>错误信息图片</strong></span></a>
+				<a id="reviewimgPhoto" style="display:  none;" onclick="toReviewphoto('${obj.orderinfo.reviewurl}')"><span style="color:red;"><strong>预览信息图片</strong></span></a>
+				<%-- <c:choose>
 					<c:when test="${!empty obj.orderinfo.errorurl }">
 						<a id="errorimgPhoto" onclick="toErrorphoto()"><span style="color:red;"><strong>错误信息图片</strong></span></a>
 					</c:when>
@@ -60,6 +62,14 @@
 						
 					</c:otherwise>
 				</c:choose>
+				<c:choose>
+					<c:when test="${!empty obj.orderinfo.reviewurl }">
+						<a id="reviewimgPhoto" onclick="toReviewphoto()"><span style="color:red;"><strong>预览信息图片</strong></span></a>
+					</c:when>
+					<c:otherwise>
+						
+					</c:otherwise>
+				</c:choose> --%>
 				<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
 				<%-- <span class="state">状态： 
 					<c:if test="${obj.orderInfo.status == '1'}">
@@ -77,17 +87,29 @@
 				<c:otherwise>
 					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
-					<c:choose>
-						<c:when test="${!empty obj.orderinfo.pdfurl }">
-							<input type="button" onclick="download()" value="下载" class="btn btn-primary btn-sm pull-right" />
-						</c:when>
-						<c:otherwise>
-							<input type="button" disabled="disabled" onclick="download()" value="下载" class="btn btn-primary btn-sm pull-right" />
-						</c:otherwise>
-					</c:choose>
+					<input type="button" id="daturl" style="width:67px !important;" onclick="download(3)" value="DAT文件" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" id="pdfurl" onclick="download(2)" value="确认页" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" id="reviewurl" onclick="download(1)" value="预览页" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="refuse()" value="拒签" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="pass()" value="通过" class="btn btn-primary btn-sm pull-right" />
-					<input type="button" id="autofill" onclick="autofill()" value="自动填表" class="btn btn-primary btn-sm pull-right btn-Big" />
+					<input type="button" id="autofill" onclick="autofill()" value="正式填写" class="btn btn-primary btn-sm pull-right btn-Big" />
+					<%-- <c:choose>
+						<c:when test="${!empty obj.orderinfo.reviewurl }">
+							<input type="button" id="autofill" onclick="autofill()" value="正式填写" class="btn btn-primary btn-sm pull-right btn-Big" />
+						</c:when>
+						<c:otherwise>
+							<input type="button" disabled="disabled" id="autofill" onclick="autofill()" value="正式填写" class="btn btn-primary btn-sm pull-right btn-Big" />
+						</c:otherwise>
+					</c:choose> --%>
+					<%-- <c:choose>
+						<c:when test="${!empty obj.orderinfo.reviewurl }">
+							<input type="button" id="preautofill" disabled="disabled" onclick="preautofill()" value="预检查" class="btn btn-primary btn-sm pull-right btn-Big" />
+						</c:when>
+						<c:otherwise>
+							<input type="button" id="preautofill" onclick="preautofill()" value="预检查" class="btn btn-primary btn-sm pull-right btn-Big" />
+						</c:otherwise>
+					</c:choose> --%>
+					<input type="button" id="preautofill" onclick="preautofill()" value="预检查" class="btn btn-primary btn-sm pull-right btn-Big" />
 					<input type="button" value="通知" onclick="sendEmailUS()" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="日志" onclick="toLog()" class="btn btn-primary btn-sm pull-right" />
 				</c:otherwise>
@@ -692,6 +714,29 @@
 		var isautofilling = '${obj.orderinfo.isautofilling}';
 		if(isautofilling == 1){
 			$("#autofill").attr("disabled",true);
+		}
+		
+		var ispreautofilling = '${obj.orderinfo.ispreautofilling}';
+		if(ispreautofilling == 1){
+			$("#preautofill").attr("disabled",true);
+		}
+		
+		if('${obj.orderinfo.errorurl}'){
+			$("#errorimgPhoto").show();
+			//$("#errorimgPhoto").attr("src",'${obj.orderinfo.errorurl}');
+		}
+		if('${obj.orderinfo.reviewurl}'){
+			$("#reviewimgPhoto").show();
+			$("#reviewurl").attr("disabled",false);
+			//$("#reviewimgPhoto").attr("src",'${obj.orderinfo.reviewurl}');
+		}else{
+			$("#reviewurl").attr("disabled",true);
+		}
+		if(!'${obj.orderinfo.pdfurl}'){
+			$("#pdfurl").attr("disabled",true);
+		}
+		if(!'${obj.orderinfo.daturl}'){
+			$("#daturl").attr("disabled",true);
 		}
 		
 		//将汉字转为拼音
@@ -1479,8 +1524,78 @@
 			
 		}
 		
- 		function autofill(orderid, staffid){
+		//正式填写
+		function autofill(orderid){
+			$("#orderstatus_US").html("正式填写中");
  			$("#autofill").attr("disabled",true);
+			
+			var orderid = '${obj.orderid}';
+			$.ajax({
+				url : '/admin/orderUS/autofill.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					
+					var getstatus = setInterval(function(){
+			 			console.log("轮询开始");
+			 			console.log(count);
+			 			var orderid = '${obj.orderid}';
+			 			$.ajax({
+							url : '/admin/orderUS/isAutofilled.html',
+							data : {
+								orderid : orderid
+							},
+							dataType : "json",
+							type : 'POST',
+							success : function(data) {
+								if(data.status == 9){
+									$("#autofill").attr("disabled",false);
+									$("#orderstatus_US").html("正式填写成功");
+									clearInterval(getstatus);
+									console.log("自动填表成功，轮询停止了~~~");
+									if(data.pdfurl){
+										$("#pdfurl").attr("disabled",false);
+									}else{
+										$("#pdfurl").attr("disabled",true);
+									}
+									if(data.daturl){
+										$("#daturl").attr("disabled",false);
+									}else{
+										$("#daturl").attr("disabled",true);
+									}
+								}
+								if(data.status == 10){
+									$("#autofill").attr("disabled",true);
+									$("#orderstatus_US").html("正式填写失败");
+									clearInterval(getstatus);
+									console.log("正式填写失败，轮询停止了~~~");
+									if(data.pdfurl){
+										$("#pdfurl").attr("disabled",false);
+									}else{
+										$("#pdfurl").attr("disabled",true);
+									}
+									if(data.daturl){
+										$("#daturl").attr("disabled",false);
+									}else{
+										$("#daturl").attr("disabled",true);
+									}
+								}
+								count++;
+							}
+			 			});
+			 		},"10000");
+					
+				}
+			});
+		}
+		
+		//预检查
+ 		function preautofill(orderid, staffid){
+ 			$("#orderstatus_US").html("预检查中");
+ 			$("#preautofill").attr("disabled",true);
 			var orderid = '${obj.orderid}';
 			var staffid = '${obj.basicinfo.id}';
 			console.log(count);
@@ -1494,7 +1609,8 @@
 				type : 'POST',
 				success : function(data) {
 					if(data.errMsg){
-						$("#autofill").attr("disabled",false);
+						$("#preautofill").attr("disabled",false);
+						$("#downloadButton").attr("disabled",false);
 						layer.open({
 		        		    type: 2,
 		        		    title: false,
@@ -1509,7 +1625,7 @@
 					}else{
 						
 						$.ajax({
-							url : '/admin/orderUS/autofill.html',
+							url : '/admin/orderUS/preautofill.html',
 							data : {
 								orderid : orderid
 							},
@@ -1519,6 +1635,54 @@
 								//alert("申请人识别码为："+data);
 								count++;
 								console.log(data);
+								//每隔30秒查一次自动填表是否完成
+						 		var getstatus = setInterval(function(){
+						 			console.log("轮询开始");
+						 			console.log(count);
+						 			var orderid = '${obj.orderid}';
+						 			$.ajax({
+										url : '/admin/orderUS/isAutofilled.html',
+										data : {
+											orderid : orderid
+										},
+										dataType : "json",
+										type : 'POST',
+										success : function(data) {
+											if(data.status == 6){
+												$("#preautofill").attr("disabled",false);
+												$("#orderstatus_US").html("预检查成功");
+												clearInterval(getstatus);
+												console.log("预检查成功，轮询停止了~~~");
+												console.log(data.reviewurl);
+												if(data.reviewurl){
+													console.log("预检查成功，进入图片展示环节");
+													$("#reviewimgPhoto").show();
+													$("#reviewimgPhoto").attr('onclick', '').unbind('click').click( function () { toReviewphoto(data.reviewurl); });
+													$("#reviewurl").attr("disabled",false);
+												}else{
+													$("#reviewurl").attr("disabled",true);
+												}
+											}
+											if(data.status == 7){
+												$("#preautofill").attr("disabled",false);
+												$("#orderstatus_US").html("预检查失败");
+												clearInterval(getstatus);
+												console.log("预检查失败，轮询停止了~~~");
+												console.log(data.errorurl);
+												if(data.errorurl){
+													console.log("预检查失败，进入图片展示环节");
+													$("#errorimgPhoto").show();
+													$("#errorimgPhoto").attr('onclick', '').unbind('click').click( function () { toReviewphoto(data.errorurl); });
+													$("#reviewurl").attr("disabled",true);
+												}
+											}
+											count++;
+										}
+						 			});
+						 		},"10000");
+								
+						 		
+								
 								/* if(data.errorMsg == ""){
 									console.log("走了"+count+"次终于成功了☺");
 									console.log("applyidcode:"+data.applyidcode);
@@ -1540,13 +1704,44 @@
 				}
 			});
 		}
+ 		
+ 		
+ 		function isAutofilled(){
+ 			console.log("轮询开始");
+ 			console.log(count);
+ 			var orderid = '${obj.orderid}';
+ 			$.ajax({
+				url : '/admin/orderUS/isAutofilled.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					if(data == 6){
+						$("#autofill").attr("disabled",false);
+						$("#downloadButton").attr("disabled",false);
+						$("#orderstatus_US").html("自动填表成功");
+						//clearInterval(getstatus);
+					}
+					if(data == 7){
+						$("#autofill").attr("disabled",false);
+						$("#downloadButton").attr("disabled",true);
+						$("#orderstatus_US").html("自动填表失败");
+						//clearInterval(getstatus);
+					}
+					count++;
+				}
+ 			});
+ 		}
+ 		
 		
 		//下载
-		function download(){
+		function download(type){
 			var orderid = '${obj.orderid}';
 			
 			layer.load(1);
-    		$.fileDownload("${base}/admin/orderUS/downloadFile.html?orderid=" + orderid, {
+    		$.fileDownload("${base}/admin/orderUS/downloadFile.html?orderid=" + orderid+"&type="+type, {
 		         successCallback: function (url) {
 		        	 layer.closeAll('loading');
 		         },
@@ -1826,8 +2021,25 @@
 		}
 		
 		//错误图片信息
-		function toErrorphoto(){
-			var errorurl = '${obj.orderinfo.errorurl }';
+		function toErrorphoto(errorurl){
+			//var errorurl = '${obj.orderinfo.errorurl }';
+			console.log("错误图片:"+errorurl);
+			layer.open({
+				type: 2,
+				title: false,
+				closeBtn:false,
+				fix: false,
+				maxmin: false,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content: '/admin/orderUS/toErrorphoto.html?errorurl='+errorurl
+			});
+		}
+		//预览图片信息
+		function toReviewphoto(errorurl){
+			//var errorurl = '${obj.orderinfo.reviewurl }';
+			console.log("预览图片:"+errorurl);
 			layer.open({
 				type: 2,
 				title: false,

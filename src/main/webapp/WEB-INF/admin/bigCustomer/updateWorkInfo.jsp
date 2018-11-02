@@ -289,7 +289,7 @@
 										<div class="draBig leftNo marginLS grouptextareaInfo">
                                             <label><span class="s">*</span>简述你的职责</label>
 											<input autocomplete="new-password" type="text" onchange="translateZhToEn(this,'previousdutyen','')" name="previousduty"  class="areaInputPic previousduty" value="${obj.beforework.previousduty }" />
-											<input id="previousdutyen" name="previousdutyen" type="hidden" value="${obj.beforework.previousdutyen }"/>
+											<%-- <input id="previousdutyen" name="previousdutyen" type="hidden" value="${obj.beforework.previousdutyen }"/> --%>
 											<%-- <textarea name="previousduty" class="bigArea previousduty" value="${beforeWork.previousduty }"></textarea> --%>
 										</div>
 									</div>
@@ -445,6 +445,10 @@
 										<div class="draBig leftNo marginLS groupInputInfo" style="margin-top: 147px;">
                                             <label><span class="s">*</span> Street Address</label>
 											<input autocomplete="new-password" id="employeraddressen" name="employeraddressen" class="employeraddressen" value="${obj.beforework.employeraddressen }" type="text" />
+										</div>
+										<div class="draBig leftNo margintop-10 groupInputInfo" style="margin-top: 138px!important;">
+                                            <label><span class="s">*</span> Duty</label>
+											<input autocomplete="new-password" id="previousdutyen" name="previousdutyen" class="institutionaddressen" value="${obj.beforework.previousdutyen }" type="text" />
 										</div>
 										<div class="clear"></div>
 									</div>
