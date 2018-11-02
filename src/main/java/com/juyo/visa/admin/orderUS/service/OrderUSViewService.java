@@ -1400,6 +1400,15 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;*/
 	}
 
+	/**
+	 * 递交DS160官网
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object formallyfill(int orderid) {
 		Thread t = new Thread(new Runnable() {
 			public void run() {
@@ -1507,6 +1516,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				basicinfo.setAacode(applyResult.getApp_id());
 				dbDao.update(basicinfo);
 			}
+		} else {
+			orderus.setIsautofilling(0);
+			orderus.setStatus(USOrderListStatusEnum.AUTOFILLFAILED.intKey());
+			dbDao.update(orderus);
 		}
 
 		result.put("applyidcode", applyidcode);
@@ -1617,6 +1630,16 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				}
 				applyResult.setReview_url(errorurl);
 
+			} else {
+				applyResult.setReview_url("");
+				orderus.setErrormsg(errorType);
+				orderus.setReviewurl("");
+				orderus.setPdfurl("");
+				orderus.setDaturl("");
+				orderus.setApplyidcode("");
+				orderus.setIspreautofilling(0);
+				orderus.setStatus(USOrderListStatusEnum.PREAUTOFILLFAILED.intKey());
+				dbDao.update(orderus);
 			}
 
 		} else {
@@ -1717,26 +1740,52 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object applyorsubmit(String applyidcode, int type) {
 		int successStatus = 0;
+		String msg = "";
+		Map<String, Object> result = Maps.newHashMap();
 		try {
 			if (type == 1) {
-				successStatus = (int) submittoDS160(applyidcode, "applying");
+				result = submittoDS160(applyidcode, "applying");
+				successStatus = (int) result.get("successStatus");
 				System.out.println("申请DS160官网ds160successStatus:" + successStatus);
+				int count = 1;
 				while (successStatus != 1) {
-					successStatus = (int) submittoDS160(applyidcode, "applying");
+					count++;
+					result = submittoDS160(applyidcode, "applying");
+					successStatus = (int) result.get("successStatus");
+					if (count == 4) {
+						return successStatus;
+					}
 					System.out.println("申请DS160官网ds160successStatus在while循环里:" + successStatus);
 				}
 			} else if (type == 2) {
-				successStatus = (int) submittoDS160(applyidcode, "submitting");
+				result = submittoDS160(applyidcode, "submitting");
+				msg = (String) result.get("msg");
+				successStatus = (int) result.get("successStatus");
+				if (Util.eq("没有符合条件的申请人信息", msg)) {
+					return successStatus;
+				}
 				System.out.println("递交DS160官网ds160successStatus:" + successStatus);
+				int count = 1;
 				while (successStatus != 1) {
-					successStatus = (int) submittoDS160(applyidcode, "submitting");
+					count++;
+					result = submittoDS160(applyidcode, "submitting");
+					msg = (String) result.get("msg");
+					successStatus = (int) result.get("successStatus");
+					if (Util.eq("没有符合条件的申请人信息", msg)) {
+						return successStatus;
+					}
+					if (count == 4) {
+						return successStatus;
+					}
 					System.out.println("递交DS160官网ds160successStatus在while循环里:" + successStatus);
 				}
 			} else {
-				successStatus = (int) submittoDS160(applyidcode, "cover");
+				result = submittoDS160(applyidcode, "cover");
+				successStatus = (int) result.get("successStatus");
 				System.out.println("覆盖DS160官网ds160successStatus:" + successStatus);
 				while (successStatus != 1) {
-					successStatus = (int) submittoDS160(applyidcode, "submitting");
+					result = submittoDS160(applyidcode, "submitting");
+					successStatus = (int) result.get("successStatus");
 					System.out.println("覆盖DS160官网ds160successStatus在while循环里:" + successStatus);
 				}
 			}
@@ -1962,14 +2011,23 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//第六个接口,递交DS160官网数据
-	public Object submittoDS160(String applyidcode, String type) {
+	public Map<String, Object> submittoDS160(String applyidcode, String type) {
+		Map<String, Object> result = Maps.newHashMap();
 		Map<String, Object> resultData = Maps.newHashMap();
 		resultData.put("action", type);
 		String resultStr = (String) toGetEncrypt(resultData, applyidcode, type);
 		JSONObject aacodeObj = new JSONObject(resultStr);
 		int successStatus = (int) aacodeObj.get("success");
+		String msg = "";
+		try {
+			msg = (String) aacodeObj.get("msg");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		result.put("msg", msg);
+		result.put("successStatus", successStatus);
 		System.out.println("applyidcode: " + applyidcode);
-		return successStatus;
+		return result;
 	}
 
 	//将enctrypt加密，发送请求，然后解密拿到解密之后的enctrypt

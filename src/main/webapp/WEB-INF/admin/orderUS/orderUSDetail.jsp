@@ -1568,7 +1568,7 @@
 									}
 								}
 								if(data.status == 10){
-									$("#autofill").attr("disabled",true);
+									$("#autofill").attr("disabled",false);
 									$("#orderstatus_US").html("正式填写失败");
 									clearInterval(getstatus);
 									console.log("正式填写失败，轮询停止了~~~");
