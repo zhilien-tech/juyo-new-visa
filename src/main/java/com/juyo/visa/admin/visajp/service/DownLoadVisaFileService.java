@@ -1727,8 +1727,22 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 					(!Util.isEmpty(record.get("firstname")) ? record.getString("firstname") : "")
 							+ (!Util.isEmpty(record.get("lastname")) ? record.getString("lastname") : ""));
 			//ピンイン
-			map.put("name_en", (!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : " ")
-					+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : " "));
+			int firstlength = record.getString("firstnameen").length();
+			int lastlength = record.getString("lastnameen").length();
+			System.out.println("姓名拼音的长度为:" + (firstlength + lastlength));
+			if (firstlength + lastlength > 15) {
+				System.out.println("长度大于15，只取姓:"
+						+ (!Util.isEmpty(record.getString("firstnameen")) ? record.getString("firstnameen") : " "));
+				map.put("name_en", !Util.isEmpty(record.getString("firstnameen")) ? record.getString("firstnameen")
+						: " ");
+			} else {
+				System.out.println("长度小于等于15，取姓名:"
+						+ ((!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : " ") + (!Util
+								.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : " ")));
+				map.put("name_en", (!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : " ")
+						+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : " "));
+			}
+
 			//性别
 			String sex = "";
 			if (!Util.isEmpty(record.get("sex"))) {

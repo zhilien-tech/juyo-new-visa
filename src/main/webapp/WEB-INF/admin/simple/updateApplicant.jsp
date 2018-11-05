@@ -513,7 +513,7 @@
 			
 			(() => {
 				let _url = "${base}/references/public/dist/newvisacss/img/error.png";
-				let smallTemp = '<small id="diySmall" style="display: none;color: #ff1a1a;margin-top:5px; background: url('+_url+') no-repeat;padding-left: 18px;background-position: 0px 3px;line-height: 18px;">日本官网要求英文姓名少于15字母</small>';
+				let smallTemp = '<small id="diySmall" style="display: none;color: #ff1a1a;margin-top:5px; background: url('+_url+') no-repeat;padding-left: 18px;background-position: 0px 3px;line-height: 18px;">日本官网要求英文姓名少于30字母</small>';
 				$('#firstNameEn').parent().append($(smallTemp));
 				$('#lastNameEn').parent().append($(smallTemp));
 
@@ -521,7 +521,7 @@
 					setTimeout(r => {
 						let fl = $('#firstNameEn').val().length;
 						let ll = $('#lastNameEn').val().length;
-						if ((fl + ll) > 17) {
+						if ((fl + ll) > 32) {
 							$(ev.target).parent().find('#diySmall').show();
 							_FLAG = true;
 						} else {
