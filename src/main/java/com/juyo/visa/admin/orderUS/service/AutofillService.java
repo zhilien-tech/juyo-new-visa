@@ -1526,16 +1526,16 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			if (!Util.isEmpty(gousinfoEntity.getDateunit())) {
 				Integer dateunit = gousinfoEntity.getDateunit();
 				if (dateunit == 1) {
-					residencetime.put("date_type", "Y");
+					residencetime.put("date_type", "D");
 				}
 				if (dateunit == 2) {
-					residencetime.put("date_type", "M");
-				}
-				if (dateunit == 3) {
 					residencetime.put("date_type", "W");
 				}
+				if (dateunit == 3) {
+					residencetime.put("date_type", "M");
+				}
 				if (dateunit == 4) {
-					residencetime.put("date_type", "D");
+					residencetime.put("date_type", "Y");
 				}
 				if (dateunit == 5) {
 					residencetime.put("date_type", "H");
