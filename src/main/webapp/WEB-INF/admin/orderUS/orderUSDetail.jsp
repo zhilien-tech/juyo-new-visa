@@ -2110,7 +2110,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/orderUS/toErrorphoto.html?errorurl='+errorurl
+				content: '/admin/orderUS/toErrorphoto.html?errorurl='+errorurl+'&type=1'
 			});
 		}
 		//预览图片信息
@@ -2126,7 +2126,7 @@
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/orderUS/toErrorphoto.html?errorurl='+errorurl
+				content: '/admin/orderUS/toErrorphoto.html?errorurl='+errorurl+'&type=2'
 			});
 		}
 		

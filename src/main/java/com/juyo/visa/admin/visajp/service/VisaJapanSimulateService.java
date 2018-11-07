@@ -90,6 +90,9 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	//上海宝狮文件下载
 	@Inject
 	private ShanghaiBaoshiService shanghaiBaoshiService;
+	//上海中宝文件下载
+	@Inject
+	private ShanghaiZhongbaoService shanghaiZhongbaoService;
 	//和平文件下载
 	@Inject
 	private HepingService hepingService;
@@ -233,6 +236,8 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 				byteArray = jiaotonggongsheService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.YIQIYOU_TYPE.intKey()) {
 				byteArray = yiqiyouService.generateFile(orderjp, request).toByteArray();
+			} else if (pdftype == PdfTypeEnum.ZHONGBAO_TYPE.intKey()) {
+				byteArray = shanghaiZhongbaoService.generateFile(orderjp, request).toByteArray();
 			}
 
 			// 获取订单信息，准备文件名称

@@ -445,8 +445,11 @@ public class OrderUSModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object toErrorphoto(@Param("errorurl") String errorurl) {
-		return errorurl;
+	public Object toErrorphoto(@Param("errorurl") String errorurl, @Param("type") int type) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("imgurl", errorurl);
+		result.put("imgtype", type);
+		return result;
 		//return orderUSViewService.toErrorphoto(errorurl);
 	}
 
