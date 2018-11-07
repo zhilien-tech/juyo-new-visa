@@ -1338,8 +1338,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> ResidentialInfo = Maps.newHashMap();
 
 		//在美国地址 
-		if (!Util.isEmpty(info.get("plancityen"))) {
-			ResidentialInfo.put("city", info.get("plancityen"));
+		if (!Util.isEmpty(info.get("plancity"))) {
+			ResidentialInfo.put("city", getUScityByname((String) info.get("plancity")));
 		} else {
 			errorMsg += "计划去美国的城市,";
 		}
@@ -1469,8 +1469,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//StayCity
 		Map<String, Object> StayCity = Maps.newHashMap();
 
-		if (!Util.isEmpty(info.get("plancityen"))) {
-			StayCity.put("location", info.get("plancityen"));
+		if (!Util.isEmpty(info.get("plancity"))) {
+			StayCity.put("location", getUScityByname((String) info.get("plancity")));
 		}
 
 		ArrayList<Object> staycitys = new ArrayList<>();
@@ -1905,6 +1905,12 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 	//根据id查询美国城市
 	public String getUScity(int id) {
 		TCityUsEntity fetch = dbDao.fetch(TCityUsEntity.class, id);
+		return fetch.getCitynameen();
+	}
+
+	//根据城市名查询美国城市
+	public String getUScityByname(String name) {
+		TCityUsEntity fetch = dbDao.fetch(TCityUsEntity.class, Cnd.where("cityname", "=", name));
 		return fetch.getCitynameen();
 	}
 

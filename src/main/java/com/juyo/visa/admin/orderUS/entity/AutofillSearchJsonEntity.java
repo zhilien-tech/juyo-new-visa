@@ -49,4 +49,6 @@ public class AutofillSearchJsonEntity implements Serializable {
 
 	private String AAcode;
 
+	private Integer orderstatus;
+
 }

@@ -3669,9 +3669,18 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return between;
 	}
 
-	public Object isAutofilled(int orderid) {
+	public Object isAutofilled(int orderid, int staffid) {
+		AutofillSearchJsonEntity applyResult = new AutofillSearchJsonEntity();
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
-		return orderus;
+		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+		applyResult.setOrderstatus(orderus.getStatus());
+		applyResult.setDat_url(orderus.getDaturl());
+		applyResult.setPdf_url(orderus.getPdfurl());
+		applyResult.setError_url(orderus.getErrorurl());
+		applyResult.setErrorMsg(orderus.getErrormsg());
+		applyResult.setReview_url(orderus.getReviewurl());
+		applyResult.setAAcode(basicinfo.getAacode());
+		return applyResult;
 	}
 
 }

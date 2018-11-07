@@ -452,7 +452,7 @@ public class OrderUSModule {
 
 	@At
 	@POST
-	public Object isAutofilled(@Param("orderid") int orderid) {
-		return orderUSViewService.isAutofilled(orderid);
+	public Object isAutofilled(@Param("orderid") int orderid, @Param("staffid") int staffid) {
+		return orderUSViewService.isAutofilled(orderid, staffid);
 	}
 }

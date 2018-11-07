@@ -1591,6 +1591,7 @@
  			$("#autofill").attr("disabled",true);
 			
 			var orderid = '${obj.orderid}';
+			var staffid = '${obj.basicinfo.id}';
 			$.ajax({
 				url : '/admin/orderUS/autofill.html',
 				data : {
@@ -1603,47 +1604,47 @@
 					var getstatus = setInterval(function(){
 			 			console.log("轮询开始");
 			 			console.log(count);
-			 			var orderid = '${obj.orderid}';
 			 			$.ajax({
 							url : '/admin/orderUS/isAutofilled.html',
 							data : {
-								orderid : orderid
+								orderid : orderid,
+								staffid : staffid
 							},
 							dataType : "json",
 							type : 'POST',
 							success : function(data) {
-								if(data.status == 9){
+								if(data.orderstatus == 9){
 									$("#autofill").attr("disabled",false);
 									$("#orderstatus_US").html("正式填写成功");
 									clearInterval(getstatus);
 									console.log("自动填表成功，轮询停止了~~~");
 									layer.msg("自动填表成功");
-									if(data.pdfurl){
+									if(data.pdf_url){
 										$("#pdfurl").attr("disabled",false);
 										//$("#pdfurl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.pdfurl); });
 									}else{
 										$("#pdfurl").attr("disabled",true);
 									}
-									if(data.daturl){
+									if(data.dat_url){
 										$("#daturl").attr("disabled",false);
 										//$("#daturl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.daturl); });
 									}else{
 										$("#daturl").attr("disabled",true);
 									}
 								}
-								if(data.status == 10){
+								if(data.orderstatus == 10){
 									$("#autofill").attr("disabled",false);
 									$("#orderstatus_US").html("正式填写失败");
 									clearInterval(getstatus);
 									console.log("正式填写失败，轮询停止了~~~");
 									layer.msg("自动填表失败");
-									if(data.pdfurl){
+									if(data.pdf_url){
 										$("#pdfurl").attr("disabled",false);
 										//$("#pdfurl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.pdfurl); });
 									}else{
 										$("#pdfurl").attr("disabled",true);
 									}
-									if(data.daturl){
+									if(data.dat_url){
 										$("#daturl").attr("disabled",false);
 										//$("#daturl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.daturl); });
 									}else{
@@ -1702,49 +1703,52 @@
 								//alert("申请人识别码为："+data);
 								count++;
 								console.log(data);
-								//每隔30秒查一次自动填表是否完成
+								//每隔10秒查一次自动填表是否完成
 						 		var getstatus = setInterval(function(){
 						 			console.log("轮询开始");
 						 			console.log(count);
-						 			var orderid = '${obj.orderid}';
 						 			$.ajax({
 										url : '/admin/orderUS/isAutofilled.html',
 										data : {
-											orderid : orderid
+											orderid : orderid,
+											staffid : staffid
 										},
 										dataType : "json",
 										type : 'POST',
 										success : function(data) {
-											if(data.status == 6){
+											if(data.orderstatus == 6){
 												$("#preautofill").attr("disabled",false);
 												$("#orderstatus_US").html("预检查成功");
 												clearInterval(getstatus);
 												console.log("预检查成功，轮询停止了~~~");
 												layer.msg("预检查成功");
-												console.log(data.reviewurl);
-												if(data.reviewurl){
+												console.log(data.review_url);
+												if(data.review_url){
 													console.log("预检查成功，进入图片展示环节");
 													$("#reviewimgPhoto").show();
 													$("#errorimgPhoto").hide();
-													$("#reviewimgPhoto").attr('onclick', '').unbind('click').click( function () { toReviewphoto(data.reviewurl); });
+													$("#reviewimgPhoto").attr('onclick', '').unbind('click').click( function () { toReviewphoto(data.review_url); });
 													//$("#reviewurl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.reviewurl); });
 													$("#reviewurl").attr("disabled",false);
 												}else{
 													$("#reviewurl").attr("disabled",true);
 												}
+												if(data.AAcode){
+													$("#aacode").val(data.AAcode);
+												}
 											}
-											if(data.status == 7){
+											if(data.orderstatus == 7){
 												$("#preautofill").attr("disabled",false);
 												$("#orderstatus_US").html("预检查失败");
 												clearInterval(getstatus);
 												console.log("预检查失败，轮询停止了~~~");
 												layer.msg("预检查失败");
-												console.log(data.errorurl);
+												console.log(data.error_url);
 												$("#reviewimgPhoto").hide();
-												if(data.errorurl){
+												if(data.error_url){
 													console.log("预检查失败，进入图片展示环节");
 													$("#errorimgPhoto").show();
-													$("#errorimgPhoto").attr('onclick', '').unbind('click').click( function () { toReviewphoto(data.errorurl); });
+													$("#errorimgPhoto").attr('onclick', '').unbind('click').click( function () { toReviewphoto(data.error_url); });
 													$("#reviewurl").attr("disabled",true);
 												}
 											}
