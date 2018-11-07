@@ -87,9 +87,9 @@
 				<c:otherwise>
 					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
-					<input type="button" id="daturl" style="width:67px !important;" onclick="download(3)" value="DAT文件" class="btn btn-primary btn-sm pull-right" />
-					<input type="button" id="pdfurl" onclick="download(2)" value="确认页" class="btn btn-primary btn-sm pull-right" />
-					<input type="button" id="reviewurl" onclick="download(1)" value="预览页" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" id="daturl" style="width:92px !important;" onclick="download(3)" value="下载DAT文件" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" id="pdfurl" style="width:80px !important;" onclick="download(2)" value="下载确认页" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" id="reviewurl" style="width:80px !important;" onclick="download(1)" value="下载预览页" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="refuse()" value="拒签" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="pass()" value="通过" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" id="autofill" onclick="autofill()" value="正式填写" class="btn btn-primary btn-sm pull-right btn-Big" />
@@ -453,7 +453,7 @@
 								<!-- 送签计划去美国地点 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label>送签计划去美国地点：</label> <select name="planstate"
+										<label>送签计划去美国地点：</label> <select id="planstate" name="planstate"
 											class="form-control input-sm">
 											<!-- <span>*</span> -->
 											<c:forEach items="${obj.state }" var="planstate" >
@@ -467,9 +467,21 @@
 								<!-- 市 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span></span></label> 
-										<input name="plancity" id="plancity" type="text" onchange="translateZhToEn(this,'plancityen','')" value="${obj.travelInfo.city}"
-											class="form-control input-sm" placeholder="市" />
+										<label></label>
+										
+										<select
+											id="plancity" name="plancity"
+											class="form-control input-sm select2City arrivedcity"
+											multiple="multiple">
+										<c:if test="${!empty obj.travelInfo.city}">
+												<option value="${obj.travelInfo.city}"
+													selected="selected">${obj.travelInfo.city}</option>
+											</c:if>
+										
+										
+										 
+										<%-- <input name="plancity" id="plancity" type="text" onchange="translateZhToEn(this,'plancityen','')" value="${obj.travelInfo.city}"
+											class="form-control input-sm" placeholder="市" /> --%>
 											<input type="hidden" id="plancityen" name="plancityen" value="${obj.travelInfo.cityen }"/>
 									</div>
 								</div>
@@ -810,6 +822,11 @@
 			var sendvisadate = $("#sendVisaDate").val(); //抵达美国日期
 			$("#sendVisaDate").val(godate);
 		});
+		
+		//计划去美国的州改变，城市自动清空
+		$("#planstate").change(function(){
+			$("#plancity").empty();
+		});
 
 		//离开美国日期联动
 		function sendDate() {
@@ -975,10 +992,10 @@
 			tags : false
 		//设置必须存在的选项 才能选中
 		});
-		//加载美国州的select2
+		//加载美国城市的select2
 		$('#goArrivedCity,#returnDepartureCity').select2({
 			ajax : {
-				url : "/admin/neworderUS/selectUSstate.html",
+				url : "/admin/neworderUS/selectUScity.html",
 				dataType : 'json',
 				delay : 250,
 				type : 'post',
@@ -997,7 +1014,50 @@
 					params.page = params.page || 1;
 					var selectdata = $.map(data, function(obj) {
 						obj.id = obj.id; // replace pk with your identifier
-						obj.text = obj.name; // replace pk with your identifier
+						obj.text = obj.cityname; // replace pk with your identifier
+						/*obj.text = obj.dictCode;*/
+						return obj;
+					});
+					return {
+						results : selectdata
+					};
+				},
+				cache : false
+			},
+			//templateSelection: formatRepoSelection,
+			escapeMarkup : function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength : 1,
+			maximumInputLength : 20,
+			language : "zh-CN", //设置 提示语言
+			maximumSelectionLength : 1, //设置最多可以选择多少项
+			tags : false
+		//设置必须存在的选项 才能选中
+		});
+		$('#plancity').select2({
+			ajax : {
+				url : "/admin/neworderUS/selectUSstateandcity.html",
+				dataType : 'json',
+				delay : 250,
+				type : 'post',
+				data : function(params) {
+					var province = $('#planstate').val();
+					/* alert(province);
+				    if(province){
+				    	province = province.join(',');
+					} */
+					return {
+						province : province,
+						searchstr : params.term, // search term
+						page : params.page
+					};
+				},
+				processResults : function(data, params) {
+					params.page = params.page || 1;
+					var selectdata = $.map(data, function(obj) {
+						obj.id = obj.cityname; // replace pk with your identifier
+						obj.text = obj.cityname; // replace pk with your identifier
 						/*obj.text = obj.dictCode;*/
 						return obj;
 					});
@@ -1201,6 +1261,7 @@
 			$('#goFlightNum').empty();
 			$('#returnFlightNum').empty();
 		});
+		
 		//去程抵达城市
 		$("#goArrivedCity")
 				.on(
@@ -1556,13 +1617,16 @@
 									$("#orderstatus_US").html("正式填写成功");
 									clearInterval(getstatus);
 									console.log("自动填表成功，轮询停止了~~~");
+									layer.msg("自动填表成功");
 									if(data.pdfurl){
 										$("#pdfurl").attr("disabled",false);
+										//$("#pdfurl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.pdfurl); });
 									}else{
 										$("#pdfurl").attr("disabled",true);
 									}
 									if(data.daturl){
 										$("#daturl").attr("disabled",false);
+										//$("#daturl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.daturl); });
 									}else{
 										$("#daturl").attr("disabled",true);
 									}
@@ -1572,13 +1636,16 @@
 									$("#orderstatus_US").html("正式填写失败");
 									clearInterval(getstatus);
 									console.log("正式填写失败，轮询停止了~~~");
+									layer.msg("自动填表失败");
 									if(data.pdfurl){
 										$("#pdfurl").attr("disabled",false);
+										//$("#pdfurl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.pdfurl); });
 									}else{
 										$("#pdfurl").attr("disabled",true);
 									}
 									if(data.daturl){
 										$("#daturl").attr("disabled",false);
+										//$("#daturl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.daturl); });
 									}else{
 										$("#daturl").attr("disabled",true);
 									}
@@ -1653,11 +1720,14 @@
 												$("#orderstatus_US").html("预检查成功");
 												clearInterval(getstatus);
 												console.log("预检查成功，轮询停止了~~~");
+												layer.msg("预检查成功");
 												console.log(data.reviewurl);
 												if(data.reviewurl){
 													console.log("预检查成功，进入图片展示环节");
 													$("#reviewimgPhoto").show();
+													$("#errorimgPhoto").hide();
 													$("#reviewimgPhoto").attr('onclick', '').unbind('click').click( function () { toReviewphoto(data.reviewurl); });
+													//$("#reviewurl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.reviewurl); });
 													$("#reviewurl").attr("disabled",false);
 												}else{
 													$("#reviewurl").attr("disabled",true);
@@ -1668,7 +1738,9 @@
 												$("#orderstatus_US").html("预检查失败");
 												clearInterval(getstatus);
 												console.log("预检查失败，轮询停止了~~~");
+												layer.msg("预检查失败");
 												console.log(data.errorurl);
+												$("#reviewimgPhoto").hide();
 												if(data.errorurl){
 													console.log("预检查失败，进入图片展示环节");
 													$("#errorimgPhoto").show();
@@ -1706,7 +1778,7 @@
 		}
  		
  		
- 		function isAutofilled(){
+ 		/* function isAutofilled(){
  			console.log("轮询开始");
  			console.log(count);
  			var orderid = '${obj.orderid}';
@@ -1733,7 +1805,7 @@
 					count++;
 				}
  			});
- 		}
+ 		} */
  		
 		
 		//下载
@@ -1744,6 +1816,7 @@
     		$.fileDownload("${base}/admin/orderUS/downloadFile.html?orderid=" + orderid+"&type="+type, {
 		         successCallback: function (url) {
 		        	 layer.closeAll('loading');
+		        	 layer.msg("下载成功");
 		         },
 		         failCallback: function (html, url) {
 		        	layer.closeAll('loading');
@@ -2051,6 +2124,12 @@
 				area: ['900px', '80%'],
 				content: '/admin/orderUS/toErrorphoto.html?errorurl='+errorurl
 			});
+		}
+		
+		function toUpperPhoto(url){
+			if(url != ""){
+				window.open(url);
+			}
 		}
 		
 		//翻译

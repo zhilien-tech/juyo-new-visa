@@ -74,6 +74,7 @@ import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
+import com.juyo.visa.entities.TCityUsEntity;
 import com.juyo.visa.entities.TCountryRegionEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TStateUsEntity;
@@ -1464,6 +1465,64 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 		}
 		List<TStateUsEntity> list = new ArrayList<>();
+		if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(stateList.get(i));
+			}
+			return list;
+		} else {
+			return stateList;
+		}
+	}
+
+	/**
+	 * 美国城市模糊查询
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param searchstr
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object selectUScity(String searchstr) {
+		List<TCityUsEntity> stateList = new ArrayList<>();
+		List<TCityUsEntity> state = dbDao.query(TCityUsEntity.class,
+				Cnd.where("cityname", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		for (TCityUsEntity tState : state) {
+			if (!stateList.contains(tState)) {
+				stateList.add(tState);
+			}
+		}
+		List<TCityUsEntity> list = new ArrayList<>();
+		if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(stateList.get(i));
+			}
+			return list;
+		} else {
+			return stateList;
+		}
+	}
+
+	/**
+	 * 美国州城市联动模糊查询
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param searchstr
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object selectUSstateandcity(int stateid, String searchstr) {
+		List<TCityUsEntity> stateList = new ArrayList<>();
+		List<TCityUsEntity> state = dbDao.query(TCityUsEntity.class,
+				Cnd.where("stateid", "=", stateid).and("cityname", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		for (TCityUsEntity tState : state) {
+			if (!stateList.contains(tState)) {
+				stateList.add(tState);
+			}
+		}
+		List<TCityUsEntity> list = new ArrayList<>();
 		if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
 			for (int i = 0; i < 5; i++) {
 				list.add(stateList.get(i));

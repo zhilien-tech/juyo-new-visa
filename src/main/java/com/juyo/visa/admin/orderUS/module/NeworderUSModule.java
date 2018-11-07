@@ -183,6 +183,24 @@ public class NeworderUSModule {
 	}
 
 	/**
+	 * 美国城市模糊查询
+	 */
+	@At
+	@POST
+	public Object selectUScity(@Param("searchstr") String searchstr) {
+		return neworderUSViewService.selectUScity(searchstr);
+	}
+
+	/**
+	 * 美国州城市联动模糊查询
+	 */
+	@At
+	@POST
+	public Object selectUSstateandcity(@Param("province") int province, @Param("searchstr") String searchstr) {
+		return neworderUSViewService.selectUSstateandcity(province, searchstr);
+	}
+
+	/**
 	 * 根据国家名称查询id
 	 */
 	@At

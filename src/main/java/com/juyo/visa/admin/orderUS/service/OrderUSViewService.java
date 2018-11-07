@@ -113,6 +113,7 @@ import com.juyo.visa.entities.TAppStaffVcodeEntity;
 import com.juyo.visa.entities.TAppStaffVisaUsEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCityEntity;
+import com.juyo.visa.entities.TCityUsEntity;
 import com.juyo.visa.entities.TCompanyCustomerMapEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TFlightEntity;
@@ -121,7 +122,6 @@ import com.juyo.visa.entities.TOrderUsFollowupEntity;
 import com.juyo.visa.entities.TOrderUsInfoEntitiy;
 import com.juyo.visa.entities.TOrderUsLogsEntity;
 import com.juyo.visa.entities.TOrderUsTravelinfoEntity;
-import com.juyo.visa.entities.TUsStateEntity;
 import com.juyo.visa.entities.TUserEntity;
 import com.juyo.visa.forms.OrderUpdateForm;
 import com.juyo.visa.forms.TAppStaffVisaUsAddForm;
@@ -557,17 +557,16 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				/*TCityEntity gocity = dbDao.fetch(TCityEntity.class,
 						Cnd.where("id", "=", orderTravelInfo.getGoArrivedCity()));
 				orderInfoEntity.setGoArrivedCity((gocity.getCity()));*/
-				TUsStateEntity gocity = dbDao.fetch(TUsStateEntity.class, orderTravelInfo.getGoArrivedCity()
-						.longValue());
-				orderInfoEntity.setGoArrivedCity((gocity.getStatecn()));
+				TCityUsEntity gocity = dbDao.fetch(TCityUsEntity.class, orderTravelInfo.getGoArrivedCity().longValue());
+				orderInfoEntity.setGoArrivedCity((gocity.getCityname()));
 			}
 			if (!Util.isEmpty(orderTravelInfo.getReturnDepartureCity())) {
 				/*TCityEntity gocity = dbDao.fetch(TCityEntity.class,
 						Cnd.where("id", "=", orderTravelInfo.getReturnDepartureCity()));
 				orderInfoEntity.setReturnDepartureCity(gocity.getCity());*/
-				TUsStateEntity gocity = dbDao.fetch(TUsStateEntity.class, orderTravelInfo.getGoArrivedCity()
+				TCityUsEntity gocity = dbDao.fetch(TCityUsEntity.class, orderTravelInfo.getReturnDepartureCity()
 						.longValue());
-				orderInfoEntity.setReturnDepartureCity((gocity.getStatecn()));
+				orderInfoEntity.setReturnDepartureCity((gocity.getCityname()));
 			}
 			if (!Util.isEmpty(orderTravelInfo.getReturnArrivedCity())) {
 				TCityEntity gocity = dbDao.fetch(TCityEntity.class,
@@ -1903,7 +1902,16 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	//第二个，第三个接口，创建和更改申请人数据，只是请求方式不同，一个为POST,一个为PATCH
 	public Object insertandupdateApplyinfo(int orderid, int staffid) {
 		String applyidcode = "";
-		Map<String, Object> result = autofillService.getData(orderid, staffid);
+		Map<String, Object> result = Maps.newHashMap();
+		try {
+			result = autofillService.getData(orderid, staffid);
+		} catch (Exception e) {
+			e.printStackTrace();
+			TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+			orderus.setIspreautofilling(0);
+			orderus.setStatus(USOrderListStatusEnum.PREAUTOFILLFAILED.intKey());
+			dbDao.update(orderus);
+		}
 		if (!Util.isEmpty(result)) {
 			//第二个，第三个接口，创建和更改申请人数据，只是请求方式不同，一个为POST,一个为PATCH
 			//applyidcode = toGetApplyidcode(result.get("resultData"));
@@ -3591,17 +3599,18 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 		byteArray = stream.toByteArray();
 		//filename = orderus.getOrdernumber() + ".zip";
-		downloadType(filename, byteArray, response);
+		downloadByType(filename, byteArray, response);
 		return null;
 	}
 
-	public Object downloadType(String filename, byte[] type, HttpServletResponse response) {
+	public Object downloadByType(String filename, byte[] type, HttpServletResponse response) {
 		try {
 			// 将文件进行编码
 			String fileName = URLEncoder.encode(filename, "UTF-8");
 			// 设置下载的响应头
 			//response.setContentType("application/zip");
 			//通过response.reset()刷新可能存在一些未关闭的getWriter(),避免可能出现未关闭的getWriter()
+			response.reset();
 			response.setContentType("application/octet-stream");
 			response.setHeader("Set-Cookie", "fileDownload=true; path=/");
 			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名

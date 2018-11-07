@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -31,7 +32,9 @@ import com.juyo.visa.entities.TAppStaffLanguageEntity;
 import com.juyo.visa.entities.TAppStaffOrganizationEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCityEntity;
+import com.juyo.visa.entities.TCityUsEntity;
 import com.juyo.visa.entities.TCountryRegionEntity;
+import com.juyo.visa.entities.THotelUsEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TStateUsEntity;
 import com.uxuexi.core.common.util.DateUtil;
@@ -928,14 +931,14 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				//抵达城市(订单详情)
 				if (!Util.isEmpty(info.get("goArrivedCity"))) {
 					int cityid = (int) info.get("goArrivedCity");
-					travelInfo.put("in_street", getUSState(cityid));
+					travelInfo.put("in_street", getUScity(cityid));
 				} else {
 					errorMsg += "抵达城市,";
 				}
 				//出发城市，第二行(订单详情)
 				if (!Util.isEmpty(info.get("returnDepartureCity"))) {
 					int cityid = (int) info.get("returnDepartureCity");
-					travelInfo.put("leave_street", getUSState(cityid));
+					travelInfo.put("leave_street", getUScity(cityid));
 				} else {
 					errorMsg += "离开城市,";
 				}
@@ -1388,49 +1391,55 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		Contacts.put("NameInfo", contactnameinfo);
 
-		//组织名称(签证信息)
-		Contacts.put("organization", "FSFSG");
-		/*if (!Util.isEmpty(info.get("organizationname"))) {
-			Contacts.put("organization", info.get("organizationname"));
-		} else {
-			Contacts.put("organization", "");
-		}*/
+		//组织名称(签证信息)，目前为酒店信息
+
+		TCityUsEntity city = new TCityUsEntity();
+		THotelUsEntity hotel = new THotelUsEntity();
+		//Contacts.put("organization", "FSFSG");
+		if (!Util.isEmpty(info.get("plancity"))) {
+			String plancity = (String) info.get("plancity");
+			city = dbDao.fetch(TCityUsEntity.class, Cnd.where("cityname", "=", plancity));
+			List<THotelUsEntity> hotels = dbDao.query(THotelUsEntity.class, Cnd.where("cityid", "=", city.getId()),
+					null);
+			Random random = new Random();
+			int hotelindex = random.nextInt(hotels.size());
+			hotel = hotels.get(hotelindex);
+
+			Contacts.put("organization", hotel.getNameen());
+		}
+
 		//与你的关系(签证信息)
-		Contacts.put("relationship", "B");
+		Contacts.put("relationship", "O");
 		/*if (!Util.isEmpty(info.get("ralationship"))) {
 			int relation = (int) info.get("ralationship");
 			if (relation == 1) {
-				Contacts.put("relationship", "R");
+				Contacts.put("relationship", "R");//RELATIVE
 			}
 			if (relation == 2) {
-				Contacts.put("relationship", "S");
+				Contacts.put("relationship", "S");//SPOUSE
 			}
 			if (relation == 3) {
-				Contacts.put("relationship", "C");
+				Contacts.put("relationship", "C");//FRIEND
 			}
 			if (relation == 4) {
-				Contacts.put("relationship", "B");
+				Contacts.put("relationship", "B");//BUSINESS ASSOCIATE
 			}
 			if (relation == 5) {
-				Contacts.put("relationship", "P");
+				Contacts.put("relationship", "P");//EMPLOYER
 			}
 			if (relation == 6) {
-				Contacts.put("relationship", "H");
+				Contacts.put("relationship", "H");//SCHOOL OFFICIAL
 			}
 			if (relation == 7) {
-				Contacts.put("relationship", "O");
+				Contacts.put("relationship", "O");//OTHER
 			}
 		} else {
 			//errorMsg += "与你的关系,";
 			Contacts.put("relationship", "");
 		}*/
 		//电话号码(签证信息)
-		Contacts.put("phone", "14654165");
-		/*if (!Util.isEmpty(info.get("tasctelephone"))) {
-			Contacts.put("phone", info.get("tasctelephone"));
-		} else {
-			Contacts.put("phone", "");
-		}*/
+		//Contacts.put("phone", "165156");
+		Contacts.put("phone", hotel.getTelephone().replace(" ", "").replace("-", ""));
 		//邮箱
 		if (!Util.isEmpty(info.get("tascemail"))) {
 			Contacts.put("email", info.get("tascemail"));
@@ -1442,36 +1451,16 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> addressinfo = Maps.newHashMap();
 
 		//街道地址(签证信息)
-		addressinfo.put("street", "SGGEWGEG");
-		/*if (!Util.isEmpty(info.get("tascaddress"))) {
-			addressinfo.put("street", info.get("tascaddress"));
-		} else {
-			//errorMsg += "街道地址,";
-			addressinfo.put("street", "");
-		}*/
+		addressinfo.put("street", hotel.getAddressen());
 		//城市(签证信息)
-		addressinfo.put("city", "SDFE");
-		/*if (!Util.isEmpty(info.get("tasccity"))) {
-			addressinfo.put("city", info.get("tasccity"));
-		} else {
-			//errorMsg += "城市,";
-			addressinfo.put("city", "");
-		}*/
+		addressinfo.put("city", city.getCitynameen());
 		//省份(签证信息)
-		addressinfo.put("province", "AL");
-		/*if (!Util.isEmpty(info.get("tascstate")) && !Util.eq(0, info.get("tascstate"))) {
-			int state = (int) info.get("tascstate");
-			addressinfo.put("province", getStatecode(state));
-		} else {
-			addressinfo.put("province", "");
-		}*/
+		int stateid = city.getStateid();
+		addressinfo.put("province", getStatecode(stateid));
+		//国家
 		addressinfo.put("country", "USA");
 		//邮编(签证信息)
-		if (!Util.isEmpty(info.get("zipcode"))) {
-			addressinfo.put("zip_code", info.get("tasczipcode"));
-		} else {
-			addressinfo.put("zip_code", "");
-		}
+		addressinfo.put("zip_code", hotel.getZipcode());
 
 		Contacts.put("AdderssInfo", addressinfo);
 
@@ -1911,6 +1900,12 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 	public String getUSState(int id) {
 		TStateUsEntity fetch = dbDao.fetch(TStateUsEntity.class, id);
 		return fetch.getCode();
+	}
+
+	//根据id查询美国城市
+	public String getUScity(int id) {
+		TCityUsEntity fetch = dbDao.fetch(TCityUsEntity.class, id);
+		return fetch.getCitynameen();
 	}
 
 	//根据id查询美国所在州的代码
