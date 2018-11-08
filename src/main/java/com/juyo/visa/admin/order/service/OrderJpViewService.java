@@ -3475,6 +3475,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			resultObj = new JSONObject(info);
 		} catch (JSONException e) {
 			jsonEntity.setSuccess(false);
+			System.out.println("扫描失败");
 			return jsonEntity;
 		}
 		JSONArray outputArray = resultObj.getJSONArray("outputs");
@@ -3491,6 +3492,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			jsonEntity.setNum(out.getString("passport_no"));
 			if (Util.isEmpty(jsonEntity.getNum()) || jsonEntity.getNum().length() != 9) {
 				jsonEntity.setSuccess(false);
+				System.out.println("护照号识别失败");
 				return jsonEntity;
 			}
 			if (out.getString("sex").equals("F")) {
@@ -3524,10 +3526,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					e1.printStackTrace();
 				}
 			}
-			if (Util.isEmpty(jsonEntity.getXingCn()) || Util.isEmpty(jsonEntity.getMingCn())) {
+			/*if (Util.isEmpty(jsonEntity.getXingCn()) || Util.isEmpty(jsonEntity.getMingCn())) {
 				jsonEntity.setSuccess(false);
 				return jsonEntity;
-			}
+			}*/
 
 			jsonEntity.setOCRline1(out.getString("line0"));
 			jsonEntity.setOCRline2(out.getString("line1"));
