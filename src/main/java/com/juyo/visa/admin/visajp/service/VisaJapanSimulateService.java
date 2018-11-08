@@ -165,7 +165,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			orderinfo.setVisaOpid(userId);
 		}
 
-		orderinfo.setVisaOpid(userId);
+		//orderinfo.setVisaOpid(userId);
 		dbDao.update(orderinfo);
 		return null;
 	}
