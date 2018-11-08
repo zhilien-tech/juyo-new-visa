@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
@@ -51,6 +52,14 @@ public class NeworderUSModule {
 	@GET
 	@Ok("jsp:admin/pcVisa/updatePhoto")
 	public Object updatePhoto(@Param("staffid") int staffid, HttpServletRequest request) {
+		return neworderUSViewService.tofillimage(staffid, request);
+	}
+
+	@At
+	@GET
+	@Filters
+	@Ok("jsp:admin/pcVisa/QRPhoto")
+	public Object QRPhoto(@Param("staffid") int staffid, HttpServletRequest request) {
 		return neworderUSViewService.tofillimage(staffid, request);
 	}
 

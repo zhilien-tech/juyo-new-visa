@@ -26,16 +26,10 @@
 </head>
 <body>
 
-	<div class="section">
-		<div class="dislogHide"></div>
-		<div class="QRCode">
-			<div class="explain">微信扫描二维码上传识别</div>
-			<div class="scan">
-				<img src="${obj.qrCode }" width="100%" height="auto" />
+			<div align="center">
+				<img src="${obj.qrCode }" width="50%" height="50%" />
 			</div>
-		</div>
 
-	</div>
 </body>
 <script
 	src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>

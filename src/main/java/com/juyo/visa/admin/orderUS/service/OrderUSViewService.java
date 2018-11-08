@@ -160,6 +160,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	private MailService mailService;
 
 	@Inject
+	private NeworderUSViewService neworderUSViewService;
+
+	@Inject
 	private WeXinTokenViewService weXinTokenViewService;
 
 	@Inject
@@ -2643,6 +2646,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object sendShareMsg(Integer staffId, Integer orderid, String sendType, HttpServletRequest request) {
 
 		String pcUrl = "https://" + request.getServerName() + ":" + request.getServerPort() + "/tlogin";
+		String QRUrl = "https://" + request.getServerName() + ":" + request.getServerPort();
 		HttpSession session = request.getSession();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid.longValue());
@@ -2651,28 +2655,28 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				//发送短信
 				//分享
 				if (Util.eq(sendType, "share")) {
-					sendSMSUS(staffId, orderid, sendType, "orderustemp/order_us_share_sms.txt");
+					sendSMSUS(staffId, QRUrl, orderid, sendType, "orderustemp/order_us_share_sms.txt");
 				}
 				//合格
 				if (Util.eq(sendType, "qualified")) {
-					sendSMSUS(staffId, orderid, sendType, "orderustemp/order_us_qualified_sms.txt");
+					sendSMSUS(staffId, QRUrl, orderid, sendType, "orderustemp/order_us_qualified_sms.txt");
 				}
 				//面试
 				if (Util.eq(sendType, "interview")) {
-					sendSMSUS(staffId, orderid, sendType, "orderustemp/order_us_interview_sms.txt");
+					sendSMSUS(staffId, QRUrl, orderid, sendType, "orderustemp/order_us_interview_sms.txt");
 				}
 				//发送邮件
 				//分享
 				if (Util.eq(sendType, "share")) {
-					sendEmailUS(staffId, orderid, pcUrl, sendType, "orderustemp/order_us_share_mail.html");
+					sendEmailUS(staffId, orderid, pcUrl, sendType, "orderustemp/order_us_share_mail.html", request);
 				}
 				//合格
 				if (Util.eq(sendType, "qualified")) {
-					sendEmailUS(staffId, orderid, pcUrl, sendType, "orderustemp/order_us_qualified_mail.html");
+					sendEmailUS(staffId, orderid, pcUrl, sendType, "orderustemp/order_us_qualified_mail.html", request);
 				}
 				//面试
 				if (Util.eq(sendType, "interview")) {
-					sendEmailUS(staffId, orderid, pcUrl, sendType, "orderustemp/order_us_interview_mail.html");
+					sendEmailUS(staffId, orderid, pcUrl, sendType, "orderustemp/order_us_interview_mail.html", request);
 				}
 				//改变订单状态
 				//分享
@@ -2705,8 +2709,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//发送邮件
-	public Object sendEmailUS(Integer staffId, Integer orderid, String pcUrl, String sendType, String mailTemplate)
-			throws IOException {
+	public Object sendEmailUS(Integer staffId, Integer orderid, String pcUrl, String sendType, String mailTemplate,
+			HttpServletRequest request) throws IOException {
 		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(mailTemplate));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
@@ -2726,6 +2730,10 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String toEmail = staffBaseInfo.getEmail();
 		String sex = staffBaseInfo.getSex();
 		String interviewdateStr = "";
+		//String url = pcUrl + "/admin/neworderUS/QRPhoto?staffid=" + staffId;
+		//String url = "http://192.168.2.198:8080/admin/neworderUS/QRPhoto?staffid=" + staffId;
+		//生成带参数小程序码，将小程序码图片上传到七牛云并返回图片地址url
+		String url = neworderUSViewService.dataUpload(staffId, request);
 		Date interviewdate = staffBaseInfo.getInterviewdate();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		if (!Util.isEmpty(interviewdate)) {
@@ -2742,7 +2750,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			//分享
 			if (Util.eq(sendType, "share")) {
 				emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-						.replace("${telephone}", telephone).replace("${pcUrl}", pcUrl);
+						.replace("${telephone}", telephone).replace("${pcUrl}", url);
+				System.out.println("邮箱分享的模板内容：" + emailText);
 				result = mailService.send(toEmail, emailText, "美国订单分享", MailService.Type.HTML);
 			}
 			//合格
@@ -2762,7 +2771,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	//发送短信
-	public Object sendSMSUS(Integer staffId, Integer orderid, String sendType, String smsTemplate) throws IOException {
+	public Object sendSMSUS(Integer staffId, String QRUrl, Integer orderid, String sendType, String smsTemplate)
+			throws IOException {
 		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(smsTemplate));
 		StringBuilder tmp = new StringBuilder();
 		for (String line : readLines) {
@@ -2774,7 +2784,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		String telephone = staffBaseInfo.getTelephone();
 		String email = staffBaseInfo.getEmail();
 		String sex = staffBaseInfo.getSex();
-		String url = "";
+		String url = QRUrl + "/admin/neworderUS/QRPhoto?staffid=" + staffId;
+		//String url = "http://192.168.2.198:8080/admin/neworderUS/QRPhoto?staffid=" + staffId;
 		String interviewdateStr = "";
 		Date interviewdate = staffBaseInfo.getInterviewdate();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -2797,6 +2808,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			if (Util.eq(sendType, "share")) {
 				smsContent = smsContent.replace("${name}", name).replace("${sex}", sex)
 						.replace("${ordernum}", orderNum).replace("${email}", url);
+				System.out.println("短信分享内容：" + smsContent);
 				result = sendSMS(telephone, smsContent);
 			}
 			//合格

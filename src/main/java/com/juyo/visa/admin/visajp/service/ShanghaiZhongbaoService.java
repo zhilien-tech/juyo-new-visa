@@ -218,10 +218,10 @@ public class ShanghaiZhongbaoService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(company.getName())) {
 			companyname = company.getName();
 		}
-		content.append(companyname).append("根据与").append(dijie).append("的合同约定,组织").append(applyinfo.size())
+		content.append(companyname).append("根据与").append(dijie).append("的合同约定，组织").append(applyinfo.size())
 				.append("人访日旅游团。请协助办理赴日签证。");
 		map.put("Text1", content.toString());
-		map.put("Text8", company.getName());
+		map.put("Text11", company.getName());
 		if (!Util.isEmpty(ordertripjp)) {
 			if (ordertripjp.getTripType().equals(1)) {
 				//入境日期
