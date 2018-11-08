@@ -108,7 +108,7 @@ public class TestChinest {
 			System.out.println(key + ":" + ((TIdcardEntity) resultMap.get(key)).getCounty());
 		}*/
 
-		/*//转机
+		//转机
 		String goFlightNum = "首都机场-羽田机场-青森机场 CA181//JL141 0800/1300//1400/1600";
 		//第一个时间 0800
 		String substring = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1, goFlightNum.lastIndexOf(" ") + 5);
@@ -140,7 +140,14 @@ public class TestChinest {
 		//两个航班号 CA181//JL141
 		String substring4 = goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" "));
 
-		System.out.println(substring4);*/
+		String substring12 = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1);
+		StringBuffer stringBuilder1 = new StringBuffer(substring12);
+		stringBuilder1.insert(2, ":");
+		stringBuilder1.insert(8, ":");
+		stringBuilder1.insert(15, ":");
+		stringBuilder1.insert(21, ":");
+
+		System.out.println(stringBuilder1.toString());
 
 		/*//直飞
 		String goFlightNum = "首都国际机场-关西国际机场 CA161 1625/2030";
@@ -156,8 +163,13 @@ public class TestChinest {
 		//航班号 CA181
 		String substring2 = goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" "));
 
-		System.out.println(substring2);
-		 */
+		String substring4 = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1);
+		StringBuffer stringBuilder1 = new StringBuffer(substring4);
+		stringBuilder1.insert(2, ":");
+		stringBuilder1.insert(8, ":");
+
+		System.out.println(stringBuilder1.toString());*/
+
 		//System.out.println(s.substring(s.indexOf(".", s.indexOf(".")) + 1, s.indexOf(".", s.indexOf(".") + 1)));
 	}
 

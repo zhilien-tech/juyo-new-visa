@@ -2796,7 +2796,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			//分享
 			if (Util.eq(sendType, "share")) {
 				smsContent = smsContent.replace("${name}", name).replace("${sex}", sex)
-						.replace("${ordernum}", orderNum).replace("${mobileUrl}", telephone).replace("${email}", url);
+						.replace("${ordernum}", orderNum).replace("${email}", url);
 				result = sendSMS(telephone, smsContent);
 			}
 			//合格
