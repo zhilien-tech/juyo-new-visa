@@ -78,6 +78,12 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	//金桥文件下载
 	@Inject
 	private JinqiaoService jinqiaoService;
+	//康辉文件下载
+	@Inject
+	private KanghuiService kanghuiService;
+	//河南中青旅文件下载
+	@Inject
+	private HenanZhongqinglvService henanZhongqinglvService;
 	//神州文件下载
 	@Inject
 	private ShenzhouService shenzhouService;
@@ -219,7 +225,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 				byteArray = huanyuService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.JINQIAO_TYPE.intKey()) {
 				byteArray = jinqiaoService.generateFile(orderjp, request).toByteArray();
-				//byteArray = shanghaiZhongbaoService.generateFile(orderjp, request).toByteArray();
+				//byteArray = kanghuiService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.SHENZHOU_TYPE.intKey()) {
 				byteArray = shenzhouService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.FENGSHANG_TYPE.intKey()) {
@@ -238,6 +244,10 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 				byteArray = yiqiyouService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.ZHONGBAO_TYPE.intKey()) {
 				byteArray = shanghaiZhongbaoService.generateFile(orderjp, request).toByteArray();
+			} else if (pdftype == PdfTypeEnum.HENANZHONGQINGLV_TYPE.intKey()) {
+				byteArray = henanZhongqinglvService.generateFile(orderjp, request).toByteArray();
+			} else if (pdftype == PdfTypeEnum.KANGHUI_TYPE.intKey()) {
+				byteArray = kanghuiService.generateFile(orderjp, request).toByteArray();
 			}
 
 			// 获取订单信息，准备文件名称
