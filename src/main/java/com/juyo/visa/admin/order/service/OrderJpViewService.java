@@ -3782,9 +3782,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(form.getIssueDate()) && !Util.isEmpty(form.getExpiryDay())) {
 			int yearsBetween = DateUtil.yearsBetween(form.getIssueDate(), form.getExpiryDay());
 			if (yearsBetween == 10) {
-				passport.setValidType(2);
-			} else {
 				passport.setValidType(1);
+			} else {
+				passport.setValidType(2);
 			}
 		}
 		//passport.setValidType(form.getValidType());
