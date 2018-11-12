@@ -273,43 +273,6 @@ public class KanghuiService extends BaseService<TOrderJpEntity> {
 											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 				}
 				//map.put("Text14", ordertripjp.getReturnFlightNum().replace("*", ""));
-			} else if (ordertripjp.getTripType().equals(2)) {
-				//多程处理
-				if (!Util.isEmpty(mutiltrip)) {
-					//多程第一程为出发日期
-					TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
-					if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-						map.put("Text4", sdf.format(entrytrip.getDepartureDate()));
-					}
-					//入境航班
-					if (!Util.isEmpty(entrytrip.getFlightNum())) {
-						//						TFlightEntity goflight = flightViewService.fetch(entrytrip.getFlightNum().longValue());
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-						map.put("Text5", goflight.getLandingName() + "、 " + entrytrip.getFlightNum().replace("*", ""));
-					}
-					//map.put("Text13", entrytrip.getFlightNum());
-					//最后一程作为返回日期
-					TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
-					if (!Util.isEmpty(returntrip.getDepartureDate())) {
-						map.put("Text7", sdf.format(returntrip.getDepartureDate()));
-					}
-					if (!Util.isEmpty(returntrip.getFlightNum())) {
-						//出境航班
-						//						TFlightEntity returnflight = flightViewService.fetch(returntrip.getFlightNum().longValue());
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-						map.put("Text8", goflight.getTakeOffName() + "、 " + returntrip.getFlightNum().replace("*", ""));
-					}
-					//map.put("Text14", returntrip.getFlightNum().replace("*", ""));
-					//停留天数
-					if (!Util.isEmpty(entrytrip.getDepartureDate()) && !Util.isEmpty(returntrip.getDepartureDate())) {
-						map.put("Text6",
-								String.valueOf(DateUtil.daysBetween(entrytrip.getDepartureDate(),
-										returntrip.getDepartureDate()) + 1)
-										+ "天");
-					}
-				}
 			}
 		}
 		map.put("Text6", company.getLinkman());

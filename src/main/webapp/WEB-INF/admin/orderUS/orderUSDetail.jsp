@@ -1677,6 +1677,7 @@
 				type : 'POST',
 				success : function(data) {
 					if(data.errMsg){
+						console.log(data.errMsg);
 						$("#preautofill").attr("disabled",false);
 						$("#downloadButton").attr("disabled",false);
 						layer.open({

@@ -21,6 +21,9 @@ public class TestChinest {
 
 	public static void main(String[] args) {
 
+		String str = "400 830 2959";
+		System.out.println(str.replace(" ", "").replace("-", ""));
+
 		//System.out.println(imgToBse64("http://oyu1xyxxk.bkt.clouddn.com/5dc3274f-204b-4336-bf57-985e09c7ca14..jpeg"));
 
 		/*SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss.SSS");

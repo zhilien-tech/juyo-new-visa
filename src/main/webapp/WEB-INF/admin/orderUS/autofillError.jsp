@@ -37,7 +37,7 @@
 			<div class="modal-body">
 		 		<div style="text-align:center; margin-top:15%;">
 		 			<div style="font-size:16px;">
-						${obj.errMsg }
+						${obj}
 	     			</div>
 					<div style="margin-top:10%;">
 						<input  id="cancel" class="selectBtn" type="button" value="以后再说" onclick="cancelBtn();"/>
@@ -54,15 +54,7 @@
 	<script src="${base}/references/common/js/vue/vue.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script type="text/javascript">
-		var orderid = '${obj.orderid}';
-		function fillIn(){
-			/* var type = '${obj.type}';
-			if(type == 1){
-				window.open('${base}/admin/simple/editOrder.html?orderid='+orderid);
-			}else{
-				window.open('${base}/admin/visaJapan/visaDetail.html?orderid='+orderid);
-			} */
-		}
+		console.log('${obj}');
 		function cancelBtn(){
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);

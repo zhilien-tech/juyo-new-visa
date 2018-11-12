@@ -280,9 +280,10 @@ public class OrderUSModule {
 	@GET
 	@Ok("jsp")
 	public Object autofillError(@Param("errData") String errData) {
-		Map<String, Object> result = Maps.newHashMap();
-		result.put("errMsg", errData);
-		return result;
+		System.out.println("errData=====:" + errData);
+		//Map<String, Object> result = Maps.newHashMap();
+		//result.put("errMsg", errData);
+		return errData;
 	}
 
 	/*
