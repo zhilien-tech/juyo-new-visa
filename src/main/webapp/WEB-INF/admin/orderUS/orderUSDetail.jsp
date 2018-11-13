@@ -82,25 +82,24 @@
 				<c:choose>
 				<c:when test="${obj.isaddorder == 1 }">
 					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
-					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
+					<input type="button" onclick="save()" value="保存" class="btn btn-primary btn-sm pull-right" /> 
 				</c:when>
 				<c:otherwise>
 					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
-					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
+					<input type="button" onclick="save()" value="保存" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" id="daturl" style="width:92px !important;" onclick="download(3)" value="下载DAT文件" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" id="pdfurl" style="width:80px !important;" onclick="download(2)" value="下载确认页" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" id="reviewurl" style="width:80px !important;" onclick="download(1)" value="下载预览页" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="refuse()" value="拒签" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="pass()" value="通过" class="btn btn-primary btn-sm pull-right" />
-					<input type="button" id="autofill" onclick="autofill()" value="正式填写" class="btn btn-primary btn-sm pull-right btn-Big" />
-					<%-- <c:choose>
-						<c:when test="${!empty obj.orderinfo.reviewurl }">
+					<c:choose>
+						<c:when test="${!empty obj.orderinfo.reviewurl && obj.orderinfo.ispreautofilling == 0  }">
 							<input type="button" id="autofill" onclick="autofill()" value="正式填写" class="btn btn-primary btn-sm pull-right btn-Big" />
 						</c:when>
 						<c:otherwise>
 							<input type="button" disabled="disabled" id="autofill" onclick="autofill()" value="正式填写" class="btn btn-primary btn-sm pull-right btn-Big" />
 						</c:otherwise>
-					</c:choose> --%>
+					</c:choose>
 					<%-- <c:choose>
 						<c:when test="${!empty obj.orderinfo.reviewurl }">
 							<input type="button" id="preautofill" disabled="disabled" onclick="preautofill()" value="预检查" class="btn btn-primary btn-sm pull-right btn-Big" />
@@ -249,7 +248,7 @@
 								<!-- 预计出发时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label>预计出发日期：</label> <input id="goDate"
+										<label><span>*</span>预计出发日期：</label> <input id="goDate"
 											name="godate" type="text"
 											class="form-format form-control input-sm"
 											value="<fmt:formatDate value="${obj.travelInfo.godate }" pattern="yyyy-MM-dd" />" />
@@ -259,7 +258,7 @@
 								<!-- 抵达美国日期 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label>抵达美国日期：</label> <input id="sendVisaDate"
+										<label><span>*</span>抵达美国日期：</label> <input id="sendVisaDate"
 											name="arrivedate" type="text"
 											class="form-format form-control input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.arrivedate }" pattern="yyyy-MM-dd" />" />
@@ -269,7 +268,7 @@
 								<!-- 停留天数 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label>停留天数：</label> <input id="stayday"
+										<label><span>*</span>停留天数：</label> <input id="stayday"
 											onchange="sendDate()" name="staydays" class="input-sm"
 											value="${obj.travelInfo.staydays}" type="text" />
 									</div>
@@ -376,7 +375,7 @@
 								<!-- 出发城市 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>出发城市：</label> <select
+										<label><span>*</span>返回城市：</label> <select
 											id="returnDepartureCity" name="returnDepartureCity"
 											class="form-control select2 select2City departurecity"
 											multiple="multiple">
@@ -391,7 +390,7 @@
 								<!-- 返回城市 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>返回城市：</label> <select
+										<label><span>*</span>抵达城市：</label> <select
 											id="returnArrivedCity" name="returnArrivedCity"
 											class="form-control input-sm select2City arrivedcity"
 											multiple="multiple">
@@ -453,7 +452,7 @@
 								<!-- 送签计划去美国地点 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label>送签计划去美国地点：</label> <select id="planstate" name="planstate"
+										<label><span>*</span>送签计划去美国地点：</label> <select id="planstate" name="planstate"
 											class="form-control input-sm">
 											<!-- <span>*</span> -->
 											<c:forEach items="${obj.state }" var="planstate" >
@@ -1587,7 +1586,7 @@
 		
 		//正式填写
 		function autofill(orderid){
-			$("#orderstatus_US").html("正式填写中");
+			$("#orderstatus_US").html("自动填表中");
  			$("#autofill").attr("disabled",true);
 			
 			var orderid = '${obj.orderid}';
@@ -1615,7 +1614,7 @@
 							success : function(data) {
 								if(data.orderstatus == 9){
 									$("#autofill").attr("disabled",false);
-									$("#orderstatus_US").html("正式填写成功");
+									$("#orderstatus_US").html("自动填表成功");
 									clearInterval(getstatus);
 									console.log("自动填表成功，轮询停止了~~~");
 									layer.msg("自动填表成功");
@@ -1634,7 +1633,7 @@
 								}
 								if(data.orderstatus == 10){
 									$("#autofill").attr("disabled",false);
-									$("#orderstatus_US").html("正式填写失败");
+									$("#orderstatus_US").html("自动填表失败");
 									clearInterval(getstatus);
 									console.log("正式填写失败，轮询停止了~~~");
 									layer.msg("自动填表失败");
@@ -1664,6 +1663,8 @@
  		function preautofill(orderid, staffid){
  			$("#orderstatus_US").html("预检查中");
  			$("#preautofill").attr("disabled",true);
+ 			$("#errorimgPhoto").hide();
+ 			$("#autofill").attr("disabled",true);
 			var orderid = '${obj.orderid}';
 			var staffid = '${obj.basicinfo.id}';
 			console.log(count);
@@ -1679,6 +1680,7 @@
 					if(data.errMsg){
 						console.log(data.errMsg);
 						$("#preautofill").attr("disabled",false);
+						$("#orderstatus_US").html("预检查失败");
 						$("#downloadButton").attr("disabled",false);
 						layer.open({
 		        		    type: 2,
@@ -1688,8 +1690,9 @@
 		        		    maxmin: false,
 		        		    shadeClose: false,
 		        		    scrollbar: false,
-		        		    area: ['400px', '300px'],
+		        		    area: ['450px', '300px'],
 		        		    content: '${base}/admin/orderUS/autofillError.html?errData='+data.errMsg
+		        		    //content: '${base}/admin/orderUS/autofillError.html?errData='+data.errMsg
 		        		  });
 					}else{
 						
@@ -1728,6 +1731,7 @@
 													console.log("预检查成功，进入图片展示环节");
 													$("#reviewimgPhoto").show();
 													$("#errorimgPhoto").hide();
+													$("#autofill").attr("disabled",false);
 													$("#reviewimgPhoto").attr('onclick', '').unbind('click').click( function () { toReviewphoto(data.review_url); });
 													//$("#reviewurl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.reviewurl); });
 													$("#reviewurl").attr("disabled",false);
@@ -1966,16 +1970,19 @@
 		
 		//保存并返回
 		function save(){
+			layer.load(1);
 			$.ajax({
 				url : "${base}/admin/orderUS/orderSave",
 				dataType : "json",
 				data : $("#orderUpdateForm").serialize(),
 				type : 'POST',
 				success : function(data) {
+					layer.closeAll();
 					layer.msg("保存成功", {
-						time: 500,
+						time: 1000,
 						end: function () {
-							self.window.close();
+							//self.window.close();
+							//location.reload();
 						}
 					});
 					// window.location.href = '/admin/pcVisa/visaDetail.html'; 

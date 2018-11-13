@@ -89,7 +89,6 @@ import com.juyo.visa.common.enums.orderUS.DistrictEnum;
 import com.juyo.visa.common.enums.orderUS.IsPayedEnum;
 import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.common.enums.visaProcess.TAppStaffCredentialsEnum;
-import com.juyo.visa.common.enums.visaProcess.VisaUSStatesEnum;
 import com.juyo.visa.common.enums.visaProcess.YesOrNoEnum;
 import com.juyo.visa.common.msgcrypt.AesException;
 import com.juyo.visa.common.msgcrypt.WXBizMsgCrypt;
@@ -597,10 +596,18 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 
 		//送签美国州
+		String sqlStr = sqlManager.get("orderUS_getSomeState");
+		Sql statesql = Sqls.create(sqlStr);
+		List<Record> stateList = dbDao.query(statesql, null, null);
+
 		Map<Integer, String> stateMap = new HashMap<Integer, String>();
-		for (VisaUSStatesEnum e : VisaUSStatesEnum.values()) {
-			stateMap.put(e.intKey(), e.value());
+
+		for (Record record : stateList) {
+			stateMap.put(record.getInt("id"), record.getString("name"));
 		}
+		/*for (VisaUSStatesEnum e : VisaUSStatesEnum.values()) {
+			stateMap.put(e.intKey(), e.value());
+		}*/
 		result.put("state", stateMap);
 
 		//跟进信息
@@ -1243,6 +1250,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
 		orderus.setIspreautofilling(1);
 		orderus.setStatus(USOrderListStatusEnum.PREAUTOFILLING.intKey());
+		orderus.setErrorurl("");
 		dbDao.update(orderus);
 		//根据订单id查询对应申请人，根据申请人查询二寸照片
 		TAppStaffOrderUsEntity staffOrderUS = dbDao.fetch(TAppStaffOrderUsEntity.class,
@@ -1250,9 +1258,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffOrderUS.getStaffid()
 				.longValue());
 		Integer staffid = basicinfo.getId();
+		String imgurl = "";
 		TAppStaffCredentialsEntity twoinchphoto = dbDao.fetch(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid).and("type", "=", 13));
-		String imgurl = twoinchphoto.getUrl();
+		if (!Util.isEmpty(twoinchphoto)) {
+			imgurl = twoinchphoto.getUrl();
+		}
 		System.out.println("imgurl:" + imgurl);
 		TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffid", "=", staffid));
@@ -2469,7 +2480,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderTravelInfo.setArrivedate(form.getArrivedate());
 		orderTravelInfo.setStaydays(form.getStaydays());
 		orderTravelInfo.setAddress(form.getPlanaddress());
-		orderTravelInfo.setAddressen(form.getPlanaddressen());
+		//orderTravelInfo.setAddressen(form.getPlanaddressen());
+		orderTravelInfo.setAddressen(translate(form.getPlanaddress()));
 		orderTravelInfo.setCity(form.getPlancity());
 		orderTravelInfo.setCityen(form.getPlancityen());
 		orderTravelInfo.setState(form.getPlanstate());
@@ -3348,6 +3360,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("翻译结果：" + result);
 		return result;
 
 	}

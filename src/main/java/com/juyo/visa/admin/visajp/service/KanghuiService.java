@@ -730,7 +730,7 @@ public class KanghuiService extends BaseService<TOrderJpEntity> {
 		/*String passporturl = count + "," + passport + "," + validEndDate + "," + firstNameEn + "," + lastNameEn + ","
 				+ sex + "," + birthday + "," + "CHN" + "," + cardId + "," + "\"" + "\"" + ",," + "\"" + "\"";*/
 		//生成二维码
-		String qrCode = qrCodeService.encodeQrCode(request, passporturl);
+		String qrCode = qrCodeService.encodeQrCode2(request, passporturl);
 		return qrCode;
 	}
 

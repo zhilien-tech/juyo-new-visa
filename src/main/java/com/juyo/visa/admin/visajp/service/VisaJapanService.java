@@ -1720,7 +1720,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		String data = request.getParameter("data");
 		String strPtname = "";
 		try {
-			strPtname = new String(data.getBytes("UTF-8"), "UTF-8");
+			strPtname = new String(data.getBytes("ISO8859-1"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -7,6 +7,7 @@
 package com.juyo.visa.admin.orderUS.module;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -280,10 +281,15 @@ public class OrderUSModule {
 	@GET
 	@Ok("jsp")
 	public Object autofillError(@Param("errData") String errData) {
-		System.out.println("errData=====:" + errData);
-		//Map<String, Object> result = Maps.newHashMap();
-		//result.put("errMsg", errData);
-		return errData;
+		String result = "";
+
+		try {
+			result = new String(errData.getBytes("ISO8859-1"), "UTF-8");
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+
+		return result;
 	}
 
 	/*

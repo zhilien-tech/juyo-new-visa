@@ -1514,15 +1514,21 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object selectUSstateandcity(int stateid, String searchstr) {
-		List<TCityUsEntity> stateList = new ArrayList<>();
-		List<TCityUsEntity> state = dbDao.query(TCityUsEntity.class,
-				Cnd.where("stateid", "=", stateid).and("cityname", "like", "%" + Strings.trim(searchstr) + "%"), null);
-		for (TCityUsEntity tState : state) {
-			if (!stateList.contains(tState)) {
-				stateList.add(tState);
+
+		String sqlStr = sqlManager.get("orderUS_getSomeCity");
+		Sql statesql = Sqls.create(sqlStr);
+		statesql.setParam("stateid", stateid);
+		List<Record> state = dbDao.query(statesql, null, null);
+
+		List<Record> stateList = new ArrayList<>();
+
+		for (Record record : state) {
+			if (!stateList.contains(record)) {
+				stateList.add(record);
 			}
 		}
-		List<TCityUsEntity> list = new ArrayList<>();
+
+		List<Record> list = new ArrayList<>();
 		if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
 			for (int i = 0; i < 5; i++) {
 				list.add(stateList.get(i));

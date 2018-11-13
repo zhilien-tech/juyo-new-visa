@@ -142,7 +142,7 @@
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>邮箱</label> 
+									<label><span>*</span>邮箱</label> 
 									<input autocomplete="new-password" id="email" name="email" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="5" value="${obj.basicinfo.email }" />
 								</div>
 							</div>
@@ -154,7 +154,7 @@
 							<!-- 公民身份证 -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>公民身份证</label> 
+									<label><span>*</span>公民身份证</label> 
 									<input autocomplete="new-password" id="cardId" name="cardId"  type="text" class="form-control input-sm"  tabIndex="6" placeholder=" " value="${obj.basicinfo.cardId }" />
 								</div>
 							</div>
@@ -165,7 +165,7 @@
 							<!-- 现居住地址省份/现居住地址城市 -->
 							<div class="col-sm-5 col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="provinceDiv">
-									<label>现居住地</label>
+									<label><span>*</span>现居住地</label>
 									<%-- <input autocomplete="new-password" type="hidden" name="cardprovince" id="cardProvince" value="${obj.applicant.cardprovince }"/>
 									<input autocomplete="new-password" type="hidden" name="cardcity" id="cardCity" value="${obj.applicant.cardcity }"/>
 									<input autocomplete="new-password" type="hidden" id="sameAddress" value=""/>
@@ -176,7 +176,7 @@
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
-									<label>现居住地址城市</label> 
+									<label><span>*</span>现居住地址城市</label> 
 									<input autocomplete="new-password" id="city" name="city" autocomplete="new-password" type="text" onchange="translateZhToEn(this,'cityen','')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.basicinfo.city }" />
 									<input id="cityen" name="cityen" value="${obj.basicinfo.cityen }" type="hidden" />
 								</div>
@@ -187,7 +187,7 @@
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>详细地址</label> 
+									<label><span>*</span>详细地址</label> 
 									<input autocomplete="new-password" id="detailedAddress" name="detailedaddress" onchange="translateZhToEn(this,'detailedAddressen','')" type="text"  tabIndex="14" class="form-control input-sm" placeholder="区(县)/街道/小区(社区)/楼号/单元/房间" value="${obj.basicinfo.detailedaddress }" />
 								</div>
 							</div>
@@ -309,7 +309,7 @@
 							</div>
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1 mailingAddressTrue">
 								<div class="form-group">
-									<label>国家</label> 
+									<label><span>*</span>国家</label> 
 									<input autocomplete="new-password" id="mailcountry" onchange="translateZhToEn(this,'mailcountryen','')" name="mailcountry"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailcountry }"/>
 								</div>
 							</div>
@@ -318,21 +318,21 @@
 						<div class="row mailingAddressTrue">
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
-									<label>省</label> 
+									<label><span>*</span>省</label> 
 									<input autocomplete="new-password" onchange="translateZhToEn(this,'mailprovinceen','')" id="mailprovince" name="mailprovince"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailprovince }"/>
 								</div>
 							</div>
 							
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
-									<label>市</label> 
+									<label><span>*</span>市</label> 
 									<input autocomplete="new-password" onchange="translateZhToEn(this,'mailcityen','')" id="mailcity" name="mailcity"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailcity }"/>
 								</div>
 							</div>
 							
 							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
-									<label>街道地址</label> 
+									<label><span>*</span>街道地址</label> 
 									<input autocomplete="new-password" onchange="translateZhToEn(this,'mailaddressen','')" id="mailaddress"  name="mailaddress" type="text" class="form-control input-sm " tabIndex="20" value="${obj.basicinfo.mailaddress }"/>
 								</div>
 							</div>
@@ -451,7 +451,7 @@
 							<!-- 详细地址/区(县)/街道/小区(社区)/楼号/单元/房间  -->
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
-									<label>Street Address</label> 
+									<label><span>*</span>Street Address</label> 
 									<input autocomplete="new-password" id="detailedAddressen" name="detailedaddressen" type="text" class="form-control input-sm" placeholder=" " value="${obj.basicinfo.detailedaddressen }" />
 								</div>
 							</div>
@@ -508,7 +508,7 @@
 							<!-- 姓/名 -->
 							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
-									<label>Street Address</label> 
+									<label><span>*</span>Street Address</label> 
 									<input autocomplete="new-password" id="mailaddressen" name="mailaddressen" type="text" class="form-control input-sm " value="${obj.basicinfo.mailaddressen }" />
 								</div>
 							</div>

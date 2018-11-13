@@ -154,3 +154,25 @@ FROM
 t_app_staff_gocountry
 WHERE
 staffid=@staffid
+
+
+/*orderUS_getSomeState*/
+SELECT
+tsu.id,
+tsu.`name`
+FROM
+t_hotel_us thu
+LEFT JOIN t_city_us tcu ON tcu.id = thu.cityid
+LEFT JOIN t_state_us tsu ON tcu.stateid = tsu.id
+GROUP BY tsu.id
+
+/*orderUS_getSomeCity*/
+SELECT
+tcu.id,
+tcu.cityname
+FROM
+t_hotel_us thu
+LEFT JOIN t_city_us tcu ON tcu.id = thu.cityid
+LEFT JOIN t_state_us tsu ON tcu.stateid = tsu.id
+WHERE tsu.id=@stateid
+GROUP BY cityname
