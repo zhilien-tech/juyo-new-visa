@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -600,7 +601,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		Sql statesql = Sqls.create(sqlStr);
 		List<Record> stateList = dbDao.query(statesql, null, null);
 
-		Map<Integer, String> stateMap = new HashMap<Integer, String>();
+		//Map<Integer, String> stateMap = new HashMap<Integer, String>();
+
+		LinkedHashMap<Integer, String> stateMap = Maps.newLinkedHashMap();
 
 		for (Record record : stateList) {
 			stateMap.put(record.getInt("id"), record.getString("name"));

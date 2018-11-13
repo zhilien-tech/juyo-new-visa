@@ -825,6 +825,7 @@
 		//计划去美国的州改变，城市自动清空
 		$("#planstate").change(function(){
 			$("#plancity").empty();
+			$("#planaddress").val("");
 		});
 
 		//离开美国日期联动
