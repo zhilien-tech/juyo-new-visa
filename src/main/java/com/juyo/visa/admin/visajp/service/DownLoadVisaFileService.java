@@ -1735,12 +1735,16 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 						+ (!Util.isEmpty(record.getString("firstnameen")) ? record.getString("firstnameen") : " "));
 				map.put("name_en", !Util.isEmpty(record.getString("firstnameen")) ? record.getString("firstnameen")
 						: " ");
+				//備考,姓名长度大于15时，把名放进去
+				map.put("remark", !Util.isEmpty(record.getString("lastnameen")) ? record.getString("lastnameen") : " ");
 			} else {
 				System.out.println("长度小于等于15，取姓名:"
 						+ ((!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : " ") + (!Util
 								.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : " ")));
 				map.put("name_en", (!Util.isEmpty(record.get("firstnameen")) ? record.getString("firstnameen") : " ")
 						+ (!Util.isEmpty(record.get("lastnameen")) ? record.getString("lastnameen") : " "));
+				//備考，姓名长度小于15时，设置为空
+				map.put("remark", " ");
 			}
 
 			//性别
@@ -1770,8 +1774,7 @@ public class DownLoadVisaFileService extends BaseService<TOrderJpEntity> {
 			map.put("birthday", birthdaystr);
 			//旅券番号
 			map.put("passport", !Util.isEmpty(record.get("passportno")) ? record.getString("passportno") : " ");
-			//備考
-			map.put("remark", " ");
+
 			list.add(map);
 		}
 		stream = templateUtil.createExcel(entity, list);
