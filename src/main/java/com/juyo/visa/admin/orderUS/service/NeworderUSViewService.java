@@ -309,6 +309,19 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
+	public Object saveBasicinfoThread(BasicinfoUSForm form) {
+		Thread t = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				saveBasicinfo(form);
+			}
+
+		});
+		t.start();
+		return "ok";
+	}
+
 	/**
 	 * 保存基本信息
 	 * TODO(这里用一句话描述这个方法的作用)
@@ -411,10 +424,10 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			basicinfo.setMailcity(form.getMailcity());
 			basicinfo.setMailaddress(form.getMailaddress());
 
-			basicinfo.setMailcountryen(form.getMailcountryen());
-			basicinfo.setMailprovinceen(form.getMailprovinceen());
-			basicinfo.setMailcityen(form.getMailcityen());
-			basicinfo.setMailaddressen(form.getMailaddressen());
+			basicinfo.setMailcountryen(translate(form.getMailcountry()));
+			basicinfo.setMailprovinceen(translate(form.getMailprovince()));
+			basicinfo.setMailcityen(translate(form.getMailcity()));
+			basicinfo.setMailaddressen(translate(form.getMailaddress()));
 		}
 
 		basicinfo.setSex(form.getSex());
@@ -426,7 +439,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setCardprovince(form.getCardprovince());
 		basicinfo.setCardcity(form.getCardcity());
 		basicinfo.setDetailedaddress(form.getDetailedaddress());
-		basicinfo.setDetailedaddressen(form.getDetailedaddressen());
+		//basicinfo.setDetailedaddressen(form.getDetailedaddressen());
 		basicinfo.setMarrystatus(form.getMarrystatus());
 		basicinfo.setBirthday(form.getBirthday());
 		basicinfo.setBirthcountry(form.getBirthcountry());
@@ -452,18 +465,25 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setTelephoneen(form.getTelephone());
 		basicinfo.setEmailen(form.getEmail());
 		basicinfo.setCardIden(form.getCardId());
-		basicinfo.setProvinceen(form.getProvinceen());
-		basicinfo.setCityen(form.getCityen());
-		basicinfo.setCardprovinceen(form.getCardprovinceen());
-		basicinfo.setCardcityen(form.getCardcityen());
-		basicinfo.setBirthcountryen(form.getBirthcountryen());
+		//basicinfo.setProvinceen(form.getProvinceen());
+		//basicinfo.setCityen(form.getCityen());
+		//basicinfo.setCardprovinceen(form.getCardprovinceen());
+		//basicinfo.setCardcityen(form.getCardcityen());
 		//basicinfo.setNationalityen(form.getNationalityen());
-		/*		basicinfo.setProvinceen(translate(form.getProvince()));
-				basicinfo.setCityen(translate(form.getCity()));
-				basicinfo.setCardprovinceen(translate(form.getCardprovince()));
-				basicinfo.setCardcityen(translate(form.getCardcity()));
-				basicinfo.setNationalityen(translate(form.getNationality()));
-		*/basicinfo.setMarrystatusen(form.getMarrystatus());
+		basicinfo.setBirthcountryen(translate(form.getBirthcountry()));
+		basicinfo.setProvinceen(translate(form.getProvince()));
+		basicinfo.setCityen(translate(form.getCity()));
+		basicinfo.setCardprovinceen(translate(form.getCardprovince()));
+		basicinfo.setCardcityen(translate(form.getCardcity()));
+		basicinfo.setNationalityen(translate(form.getNationality()));
+
+		if (!Util.isEmpty(form.getDetailedaddressen())) {
+			basicinfo.setDetailedaddressen(form.getDetailedaddressen());
+		} else {
+			basicinfo.setDetailedaddressen(translate(form.getDetailedaddress()));
+		}
+
+		basicinfo.setMarrystatusen(form.getMarrystatus());
 		long endTime = System.currentTimeMillis();
 		System.out.println("保存英文用了" + (endTime - startTime) + "ms=====");
 		dbDao.update(basicinfo);
@@ -507,6 +527,17 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		result.put("passporttype", EnumUtil.enum2(PassportTypeEnum.class));
 		return result;
+	}
+
+	public Object savePassportinfoThread(PassportinfoUSForm form) {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				savePassportinfo(form);
+			}
+		});
+		t.start();
+		return "ok";
 	}
 
 	/**
@@ -564,7 +595,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				passportinfo.setLostpassportnumen("I do not know");
 			} else {
 				passportinfo.setLostpassportnum(form.getLostpassportnum());
-				passportinfo.setLostpassportnumen(form.getLostpassportnum());
+				passportinfo.setLostpassportnumen(translate(form.getLostpassportnum()));
 			}
 		}
 
@@ -616,6 +647,17 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//直系亲属---与你的关系
 		result.put("immediaterelationshipenum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));
 		return result;
+	}
+
+	public Object saveFamilyinfoThread(FamilyinfoUSForm form) {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				saveFamilyinfo(form);
+			}
+		});
+		t.start();
+		return "ok";
 	}
 
 	/**
@@ -833,6 +875,20 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
+	public Object saveWorkandeducationThread(WorkandeducateinfoUSForm form) {
+		Thread t = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				saveWorkandeducation(form);
+			}
+
+		});
+		t.start();
+
+		return "ok";
+	}
+
 	/**
 	 * 保存教育与职业信息
 	 * TODO(这里用一句话描述这个方法的作用)
@@ -891,13 +947,25 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid));
 		workinfo.setOccupation(form.getOccupation());
 		workinfo.setUnitname(form.getUnitname());
-		workinfo.setUnitnameen(form.getUnitnameen());
+
+		if (!Util.isEmpty(form.getUnitnameen())) {
+			workinfo.setUnitnameen(form.getUnitnameen());
+		} else {
+			workinfo.setUnitnameen(translate(form.getUnitname()));
+		}
+
 		workinfo.setTelephone(form.getTelephone());
 		workinfo.setCountry(form.getCountry());
 		workinfo.setProvince(form.getProvince());
 		workinfo.setCity(form.getCity());
 		workinfo.setAddress(form.getAddress());
-		workinfo.setAddressen(form.getAddressen());
+
+		if (!Util.isEmpty(form.getAddressen())) {
+			workinfo.setAddressen(form.getAddressen());
+		} else {
+			workinfo.setAddressen(translate(form.getAddress()));
+		}
+
 		workinfo.setWorkstartdate(form.getWorkstartdate());
 		workinfo.setPosition(form.getPosition());
 		workinfo.setSalary(form.getSalary());
@@ -911,15 +979,21 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		workinfo.setOccupationen(form.getOccupation());
 		workinfo.setTelephoneen(form.getTelephone());
 		workinfo.setCountryen(form.getCountry());
-		workinfo.setProvinceen(form.getProvinceen());
+		/*workinfo.setProvinceen(form.getProvinceen());
 		workinfo.setCityen(form.getCityen());
 		workinfo.setPositionen(form.getPositionen());
-		workinfo.setDutyen(form.getDutyen());
+		workinfo.setDutyen(form.getDutyen());*/
 
-		//workinfo.setProvinceen(translate(form.getProvince()));
-		//workinfo.setCityen(translate(form.getCity()));
-		//workinfo.setPositionen(translate(form.getPosition()));
-		//workinfo.setDutyen(translate(form.getDuty()));
+		workinfo.setProvinceen(translate(form.getProvince()));
+		workinfo.setCityen(translate(form.getCity()));
+		workinfo.setPositionen(translate(form.getPosition()));
+
+		if (!Util.isEmpty(form.getDutyen())) {
+			workinfo.setDutyen(form.getDutyen());
+		} else {
+			workinfo.setDutyen(translate(form.getDuty()));
+		}
+
 		workinfo.setWorkstartdateen(form.getWorkstartdateen());
 		workinfo.setSalaryen(form.getSalary());
 		workinfo.setIssecondarylevelen(form.getIssecondarylevel());
@@ -949,13 +1023,25 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			dbDao.insert(beforework);
 		}
 		beforework.setEmployername(form.getEmployername());
-		beforework.setEmployernameen(form.getEmployernameen());
+
+		if (!Util.isEmpty(form.getEmployernameen())) {
+			beforework.setEmployernameen(form.getEmployernameen());
+		} else {
+			beforework.setEmployernameen(translate(form.getEmployername()));
+		}
+
 		beforework.setEmployertelephone(form.getEmployertelephone());
 		beforework.setEmployercountry(form.getEmployercountry());
 		beforework.setEmployerprovince(form.getEmployerprovince());
 		beforework.setEmployercity(form.getEmployercity());
 		beforework.setEmployeraddress(form.getEmployeraddress());
-		beforework.setEmployeraddressen(form.getEmployeraddressen());
+
+		if (!Util.isEmpty(form.getEmployeraddressen())) {
+			beforework.setEmployeraddressen(form.getEmployeraddressen());
+		} else {
+			beforework.setEmployeraddressen(translate(form.getEmployeraddress()));
+		}
+
 		beforework.setEmploystartdate(form.getEmploystartdate());
 		beforework.setEmployenddate(form.getEmployenddate());
 		beforework.setJobtitle(form.getJobtitle());
@@ -969,14 +1055,20 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		beforework.setEmploystartdateen(form.getEmploystartdate());
 		beforework.setEmployenddateen(form.getEmployenddate());
 
-		/*		beforework.setEmployerprovinceen(translate(form.getEmployerprovince()));
-				beforework.setEmployercityen(translate(form.getEmployercity()));
-				beforework.setJobtitleen(translate(form.getJobtitle()));
-				beforework.setPreviousdutyen(translate(form.getPreviousduty()));
-		*/beforework.setEmployerprovinceen(form.getEmployerprovinceen());
+		beforework.setEmployerprovinceen(translate(form.getEmployerprovince()));
+		beforework.setEmployercityen(translate(form.getEmployercity()));
+		beforework.setJobtitleen(translate(form.getJobtitle()));
+		//beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+		/*beforework.setEmployerprovinceen(form.getEmployerprovinceen());
 		beforework.setEmployercityen(form.getEmployercityen());
-		beforework.setJobtitleen(form.getJobtitleen());
-		beforework.setPreviousdutyen(form.getPreviousdutyen());
+		beforework.setJobtitleen(form.getJobtitleen());*/
+
+		if (!Util.isEmpty(form.getPreviousdutyen())) {
+			beforework.setPreviousdutyen(form.getPreviousdutyen());
+		} else {
+			beforework.setPreviousduty(translate(form.getPreviousduty()));
+		}
+
 		long endTime = System.currentTimeMillis();
 
 		dbDao.update(beforework);
@@ -1021,13 +1113,24 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 		beforeeducation.setHighesteducation(form.getHighesteducation());
 		beforeeducation.setInstitution(form.getInstitution());
-		beforeeducation.setInstitutionen(form.getInstitutionen());
+
+		if (!Util.isEmpty(form.getInstitutionen())) {
+			beforeeducation.setInstitutionen(form.getInstitutionen());
+		} else {
+			beforeeducation.setInstitutionen(translate(form.getInstitution()));
+		}
+
 		beforeeducation.setCourse(form.getCourse());
 		beforeeducation.setInstitutioncountry(form.getInstitutioncountry());
 		beforeeducation.setInstitutionprovince(form.getInstitutionprovince());
 		beforeeducation.setInstitutioncity(form.getInstitutioncity());
 		beforeeducation.setInstitutionaddress(form.getInstitutionaddress());
-		beforeeducation.setInstitutionaddressen(form.getInstitutionaddressen());
+
+		if (!Util.isEmpty(form.getInstitutionaddressen())) {
+			beforeeducation.setInstitutionaddressen(form.getInstitutionaddressen());
+		} else {
+			beforeeducation.setInstitutionaddressen(translate(form.getInstitutionaddress()));
+		}
 		beforeeducation.setCoursestartdate(form.getCoursestartdate());
 		beforeeducation.setCourseenddate(form.getCourseenddate());
 		beforeeducation.setInstitutionzipcode(getZipcode(form.getInstitutioncity()));
@@ -1038,12 +1141,12 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		beforeeducation.setInstitutioncountryen(form.getInstitutioncountry());
 		beforeeducation.setCoursestartdateen(form.getCoursestartdate());
 		beforeeducation.setCourseenddateen(form.getCourseenddate());
-		/*		beforeeducation.setCourseen(translate(form.getCourse()));
-				beforeeducation.setInstitutionprovinceen(translate(form.getInstitutionprovince()));
-				beforeeducation.setInstitutioncityen(translate(form.getInstitutioncity()));
-		*/beforeeducation.setCourseen(form.getCourseen());
+		beforeeducation.setCourseen(translate(form.getCourse()));
+		beforeeducation.setInstitutionprovinceen(translate(form.getInstitutionprovince()));
+		beforeeducation.setInstitutioncityen(translate(form.getInstitutioncity()));
+		/*beforeeducation.setCourseen(form.getCourseen());
 		beforeeducation.setInstitutionprovinceen(form.getInstitutionprovinceen());
-		beforeeducation.setInstitutioncityen(form.getInstitutioncityen());
+		beforeeducation.setInstitutioncityen(form.getInstitutioncityen());*/
 		long endTime = System.currentTimeMillis();
 
 		dbDao.update(beforeeducation);
@@ -1119,6 +1222,18 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("emigrationreasonenumenum", EnumUtil.enum2(EmigrationreasonEnum.class));
 		result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
 		return result;
+	}
+
+	public Object saveTravelinfoThread(TravelinfoUSForm form) {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				saveTravelinfo(form);
+			}
+		});
+		t.start();
+
+		return "ok";
 	}
 
 	/**
@@ -1211,12 +1326,12 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 			if (!Util.isEmpty(form.getArrivedate())) {
 				gousinfo.setArrivedate(form.getArrivedate());
-				gousinfo.setArrivedateen(form.getArrivedateen());
+				gousinfo.setArrivedateen(form.getArrivedate());
 			}
 			gousinfo.setDateunit(form.getDateunit());
-			gousinfo.setDateuniten(form.getDateuniten());
+			gousinfo.setDateuniten(form.getDateunit());
 			gousinfo.setStaydays(form.getStaydays());
-			gousinfo.setStaydaysen(form.getStaydaysen());
+			gousinfo.setStaydaysen(form.getStaydays());
 			dbDao.update(gousinfo);
 		} else {
 			if (!Util.isEmpty(gousinfo)) {
@@ -1302,8 +1417,10 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		tripinfo.setIsrefuseden(form.getIsrefused());
 		tripinfo.setIsfiledimmigrantpetitionen(form.getIsfiledimmigrantpetition());
 		tripinfo.setEmigrationreasonen(form.getEmigrationreason());
-		tripinfo.setRefusedexplainen(form.getRefusedexplainen());
-		tripinfo.setImmigrantpetitionexplainen(form.getImmigrantpetitionexplainen());
+		//tripinfo.setRefusedexplainen(form.getRefusedexplainen());
+		//tripinfo.setImmigrantpetitionexplainen(form.getImmigrantpetitionexplainen());
+		tripinfo.setRefusedexplainen(translate(form.getRefusedexplain()));
+		tripinfo.setImmigrantpetitionexplainen(translate(form.getImmigrantpetitionexplain()));
 		dbDao.update(tripinfo);
 		return null;
 	}

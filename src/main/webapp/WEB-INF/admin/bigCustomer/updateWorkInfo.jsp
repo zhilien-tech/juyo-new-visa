@@ -544,7 +544,8 @@
         if (beforework == 1) {
 			$(".beforeWorkInfo").show();
 			$('#box1').show();
-				$('#box2').height(337);
+				//$('#box2').height(337);
+				$('#box2').height(140);
 		} else {
 			$(".beforeWorkInfo").hide();
 			$('#box1').hide();
@@ -556,7 +557,8 @@
 
 			if ($(this).val()==1) {
 				$('#box1').show();
-				$('#box2').height(337);
+				//$('#box2').height(337);
+				$('#box2').height(140);
 			} else {
 				$('#box1').hide();
 				$('#box2').height(224);

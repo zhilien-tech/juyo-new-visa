@@ -80,6 +80,7 @@ public class NeworderUSModule {
 	@POST
 	public Object saveBasicinfo(@Param("..") BasicinfoUSForm form) {
 		return neworderUSViewService.saveBasicinfo(form);
+		//return neworderUSViewService.saveBasicinfoThread(form);
 	}
 
 	/**
@@ -99,6 +100,7 @@ public class NeworderUSModule {
 	@POST
 	public Object savePassportinfo(@Param("..") PassportinfoUSForm form) {
 		return neworderUSViewService.savePassportinfo(form);
+		//return neworderUSViewService.savePassportinfoThread(form);
 	}
 
 	/**
@@ -118,6 +120,7 @@ public class NeworderUSModule {
 	@POST
 	public Object saveFamilyinfo(@Param("..") FamilyinfoUSForm form) {
 		return neworderUSViewService.saveFamilyinfo(form);
+		//return neworderUSViewService.saveFamilyinfoThread(form);
 	}
 
 	/**
@@ -137,6 +140,7 @@ public class NeworderUSModule {
 	@POST
 	public Object saveWorkandeducation(@Param("..") WorkandeducateinfoUSForm form) {
 		return neworderUSViewService.saveWorkandeducation(form);
+		//return neworderUSViewService.saveWorkandeducationThread(form);
 	}
 
 	/**
@@ -156,6 +160,7 @@ public class NeworderUSModule {
 	@POST
 	public Object saveTravelinfo(@Param("..") TravelinfoUSForm form) {
 		return neworderUSViewService.saveTravelinfo(form);
+		//return neworderUSViewService.saveTravelinfoThread(form);
 	}
 
 	/**

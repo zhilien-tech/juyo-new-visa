@@ -280,14 +280,6 @@ public class OrderUSModule {
 	@GET
 	@Ok("jsp")
 	public Object autofillError(@Param("errData") String errData) {
-		String result = "";
-
-		/*try {
-			result = new String(errData.getBytes("ISO8859-1"), "UTF-8");
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}*/
-
 		return errData;
 	}
 
