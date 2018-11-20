@@ -2859,6 +2859,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			} catch (JSONException | ParseException e) {
 				e.printStackTrace();
 				jsonEntity.setSuccess(false);
+				System.out.println("生日识别失败");
 				return jsonEntity;
 			}
 			jsonEntity.setName(name);
@@ -3490,11 +3491,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 			jsonEntity.setType(substring);
 			jsonEntity.setNum(out.getString("passport_no"));
-			if (Util.isEmpty(jsonEntity.getNum()) || jsonEntity.getNum().length() != 9) {
+			/*if (Util.isEmpty(jsonEntity.getNum()) || jsonEntity.getNum().length() != 9) {
 				jsonEntity.setSuccess(false);
 				System.out.println("护照号识别失败");
 				return jsonEntity;
-			}
+			}*/
 			if (out.getString("sex").equals("F")) {
 				jsonEntity.setSex("女");
 				jsonEntity.setSexEn("F");
@@ -3560,8 +3561,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			} catch (JSONException | ParseException e) {
 
 				e.printStackTrace();
-				jsonEntity.setSuccess(false);
-				return jsonEntity;
+				/*jsonEntity.setSuccess(false);
+				System.out.println("日期相关识别失败");
+				return jsonEntity;*/
 
 			}
 			//将图片上传到七牛云
