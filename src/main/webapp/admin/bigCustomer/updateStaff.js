@@ -467,6 +467,114 @@ function touristValidate(){
 	//$('#applicantInfo').bootstrapValidator('validate');
 }
 
+
+$(document).on("input","#cardprovince",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val().replace(/\s*/g,"");
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#cardprovinceen").val("").change();
+	}else{
+		if(temp.endsWith("省") || temp.endsWith("市") || temp.endsWith("区")){
+			temp = temp.substr(0,temp.length - 1);
+		}
+		console.log(temp);
+		
+		if(temp == "内蒙古" || temp == "内蒙古自治区"){
+			$("#cardprovinceen").val("NEI MONGOL").change();
+		}else if(temp == "陕西" || temp == "陕西省"){
+			$("#cardprovinceen").val("SHAANXI").change();
+		}else{
+			$("#cardprovinceen").val(pinyinchar.toUpperCase()).change();
+		}
+	}
+});
+$(document).on("input","#cardcity",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val().replace(/\s*/g,"");
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#cardcityen").val("").change();
+	}else{
+		if(temp.endsWith("省") || temp.endsWith("市") || temp.endsWith("区")){
+			temp = temp.substr(0,temp.length - 1);
+		}
+		console.log(temp);
+		
+		if(temp == "内蒙古" || temp == "内蒙古自治区"){
+			$("#cardcityen").val("NEI MONGOL").change();
+		}else if(temp == "陕西" || temp == "陕西省"){
+			$("#cardcityen").val("SHAANXI").change();
+		}else{
+			$("#cardcityen").val(pinyinchar.toUpperCase()).change();
+		}
+	}
+});
+$(document).on("input","#mailprovince",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val().replace(/\s*/g,"");
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#mailprovinceen").val("").change();
+	}else{
+		if(temp.endsWith("省") || temp.endsWith("市") || temp.endsWith("区")){
+			temp = temp.substr(0,temp.length - 1);
+		}
+		
+		if(temp == "内蒙古" || temp == "内蒙古自治区"){
+			$("#mailprovinceen").val("NEI MONGOL").change();
+		}else if(temp == "陕西" || temp == "陕西省"){
+			$("#mailprovinceen").val("SHAANXI").change();
+		}else{
+			$("#mailprovinceen").val(pinyinchar.toUpperCase()).change();
+			console.log($("#mailprovinceen").val());
+		}
+	}
+});
+$(document).on("input","#mailcity",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val().replace(/\s*/g,"");
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#mailcityen").val("").change();
+	}else{
+		if(temp.endsWith("省") || temp.endsWith("市") || temp.endsWith("区")){
+			temp = temp.substr(0,temp.length - 1);
+		}
+		console.log(temp);
+		
+		if(temp == "内蒙古" || temp == "内蒙古自治区"){
+			$("#mailcityen").val("NEI MONGOL").change();
+		}else if(temp == "陕西" || temp == "陕西省"){
+			$("#mailcityen").val("SHAANXI").change();
+		}else{
+			$("#mailcityen").val(pinyinchar.toUpperCase()).change();
+		}
+	}
+});
+
+//获取拼音字符串
+function getPinYinStr(hanzi){
+	var onehanzi = hanzi.split('');
+	var pinyinchar = '';
+	for(var i=0;i<onehanzi.length;i++){
+		pinyinchar += PinYin.getPinYin(onehanzi[i]);
+	}
+	return pinyinchar.toUpperCase();
+}
+
 function translateZhToEn(from, to, param){
 	var toval = "";
 	if(param != ""){

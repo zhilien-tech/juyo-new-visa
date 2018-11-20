@@ -55,10 +55,22 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label><span>*</span>景区：</label> 
-								<select id="scenic" name="scenic" class="form-control input-sm" multiple="multiple">
-									<%-- <option value="${obj.travelplan.scenic }" selected="selected">${obj.travelplan.scenic }</option> --%>
-										<option selected="selected" value="${obj.scenic.name }">${obj.scenic.name }</option>
-								</select>
+								<c:choose>
+								<c:when test="${obj.travelplan.day == 1 }">
+								
+									<select id="scenic" name="scenic" disabled="disabled" class="form-control input-sm" multiple="multiple">
+										<%-- <option value="${obj.travelplan.scenic }" selected="selected">${obj.travelplan.scenic }</option> --%>
+											<option selected="selected" value="${obj.scenic.name }">${obj.scenic.name }</option>
+									</select>
+								</c:when>
+								<c:otherwise>
+								
+									<select id="scenic" name="scenic" class="form-control input-sm" multiple="multiple">
+										<%-- <option value="${obj.travelplan.scenic }" selected="selected">${obj.travelplan.scenic }</option> --%>
+											<option selected="selected" value="${obj.scenic.name }">${obj.scenic.name }</option>
+									</select>
+								</c:otherwise>
+								</c:choose>
 							</div>
 						</div>
 					</div>

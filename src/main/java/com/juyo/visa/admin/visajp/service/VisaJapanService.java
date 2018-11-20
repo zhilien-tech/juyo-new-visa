@@ -651,7 +651,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 					if (nowplanList.size() == 1) {
 						String countryAirline = simpleVisaService.countryAirline(formerPlan.getCityId(),
 								plan.getCityId(), 1);
-						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
+						/*String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
 						Sql sql = Sqls.create(sqlString);
 						sql.setParam("orderid", orderid);
 						sql.setParam("cityid", plan.getCityId());
@@ -659,10 +659,11 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 						List<Record> scenics = dbDao.query(sql, null, null);
 						Random random = new Random();
 						plan.setScenic(countryAirline + "。"
-								+ scenics.get(random.nextInt(scenics.size())).getString("name"));
+								+ scenics.get(random.nextInt(scenics.size())).getString("name"));*/
+						plan.setScenic(countryAirline);
 						dbDao.update(plan);
 
-					} else if (lastplanList.size() == 2 && Integer.valueOf(plan.getDay()) == planlist.size() - 1) {
+					} else if (lastplanList.size() == 2 && Integer.valueOf(plan.getDay()) == planlist.size() - 1) {//最后一个城市是两天，如果是第一天则是新干线加景点
 						String countryAirline = simpleVisaService.countryAirline(formerPlan.getCityId(),
 								plan.getCityId(), 1);
 						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
@@ -678,6 +679,27 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 
 					} else {
 						//无需操作
+					}
+
+					if (lastplanList.size() == 2 && Integer.valueOf(plan.getDay()) == planlist.size() - 1) {//最后一个城市是两天，如果是第一天则是新干线加景点
+						String countryAirline = simpleVisaService.countryAirline(formerPlan.getCityId(),
+								plan.getCityId(), 1);
+						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
+						Sql sql = Sqls.create(sqlString);
+						sql.setParam("orderid", orderid);
+						sql.setParam("cityid", plan.getCityId());
+						sql.setParam("scenicname", plan.getScenic());
+						List<Record> scenics = dbDao.query(sql, null, null);
+						Random random = new Random();
+						plan.setScenic(countryAirline + "。"
+								+ scenics.get(random.nextInt(scenics.size())).getString("name"));
+						dbDao.update(plan);
+
+					} else {
+						String countryAirline = simpleVisaService.countryAirline(formerPlan.getCityId(),
+								plan.getCityId(), 1);
+						plan.setScenic(countryAirline);
+						dbDao.update(plan);
 					}
 
 				}

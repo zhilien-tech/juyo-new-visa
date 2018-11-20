@@ -108,8 +108,9 @@ function initTravelPlanTable(){
 							html += '<td></td>';
 						}
 					}
-					if(index != data.length - 1 && index != 0){
-						html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i></td>';
+					if(index != data.length - 1){
+						//html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i></td>';
+						html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i><i class="addHui" onclick="addHotel('+value.id+')"></i></td>';					
 					}
 					html += '</tr>';
 				});
@@ -143,6 +144,19 @@ function resetPlan(planid){
 			initTravelPlanTable();
 			layer.msg('重置成功');
 		}
+	});
+}
+function addHotel(planid){
+	layer.open({
+		type: 2,
+		title: false,
+		closeBtn:false,
+		fix: false,
+		maxmin: false,
+		shadeClose: false,
+		scrollbar: false,
+		area: ['800px', '460px'],
+		content: '/admin/simple/addHotel.html?planid='+planid+'&visatype='+visatype
 	});
 }
 

@@ -170,14 +170,14 @@
 									<input autocomplete="new-password" type="hidden" name="cardcity" id="cardCity" value="${obj.applicant.cardcity }"/>
 									<input autocomplete="new-password" type="hidden" id="sameAddress" value=""/>
 									<input autocomplete="new-password" class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" />  --%>
-									<input autocomplete="new-password" id="province" autocomplete="new-password" name="province" onchange="translateZhToEn(this,'provinceen','')" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.basicinfo.province }" />
+									<input autocomplete="new-password" id="province" autocomplete="new-password" name="province" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.basicinfo.province }" />
 									<input id="provinceen" name="provinceen" value="${obj.basicinfo.provinceen }" type="hidden"/>
 								</div>
 							</div>
 							<div class="col-sm-5  col-sm-offset-1 padding-right-0">
 								<div class="form-group" id="cityDiv">
 									<label><span>*</span>现居住地址城市</label> 
-									<input autocomplete="new-password" id="city" name="city" autocomplete="new-password" type="text" onchange="translateZhToEn(this,'cityen','')" class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.basicinfo.city }" />
+									<input autocomplete="new-password" id="city" name="city" autocomplete="new-password"  type="text"  class="form-control input-sm" tabIndex="13" placeholder="市" value="${obj.basicinfo.city }" />
 									<input id="cityen" name="cityen" value="${obj.basicinfo.cityen }" type="hidden" />
 								</div>
 							</div>
@@ -277,7 +277,7 @@
 									<label>
 										<span>*</span>出生省
 									</label> 
-									<input autocomplete="new-password" onchange="translateZhToEn(this,'cardprovinceen','')" id="cardprovince" name="cardprovince" type="text"  class="form-control input-sm"  tabIndex="18" placeholder=" " value="${obj.basicinfo.cardprovince }" />
+									<input autocomplete="new-password" id="cardprovince" name="cardprovince" type="text"  class="form-control input-sm"  tabIndex="18" placeholder=" " value="${obj.basicinfo.cardprovince }" />
 									<input id="cardprovinceen" name="cardprovinceen" value="${obj.basicinfo.cardprovinceen }" type="hidden"/>
 								</div>
 							</div>
@@ -286,7 +286,7 @@
 									<label>
 										<span>*</span>出生城市
 									</label>
-									<input autocomplete="new-password" onchange="translateZhToEn(this,'cardcityen','')" id="cardcity" name="cardcity" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="19" value="${obj.basicinfo.cardcity }" />
+									<input autocomplete="new-password" id="cardcity" name="cardcity" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="19" value="${obj.basicinfo.cardcity }" />
 									<input id="cardcityen" name="cardcityen" value="${obj.basicinfo.cardcityen }" type="hidden"/>
 								</div>
 							</div>
@@ -319,14 +319,14 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label><span>*</span>省</label> 
-									<input autocomplete="new-password" onchange="translateZhToEn(this,'mailprovinceen','')" id="mailprovince" name="mailprovince"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailprovince }"/>
+									<input autocomplete="new-password" id="mailprovince" name="mailprovince"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailprovince }"/>
 								</div>
 							</div>
 							
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label><span>*</span>市</label> 
-									<input autocomplete="new-password" onchange="translateZhToEn(this,'mailcityen','')" id="mailcity" name="mailcity"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailcity }"/>
+									<input autocomplete="new-password" id="mailcity" name="mailcity"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailcity }"/>
 								</div>
 							</div>
 							

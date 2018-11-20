@@ -2022,6 +2022,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object uploadImgtoUS(String imgurl, String applyidcode) {
 		//String imgbase64 = imgToBse64(imgurl);
 		String imgbase64 = ImageToBase64ByOnline(imgurl);
+		System.out.println("图片base64编码:" + imgbase64);
 		Map<String, Object> resultData = Maps.newHashMap();
 		resultData.put("file", imgbase64);
 		//resultData.put("file", imgurl);

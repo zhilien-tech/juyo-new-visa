@@ -20,6 +20,7 @@ import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.simple.form.AddOrderForm;
+import com.juyo.visa.admin.simple.form.AddSimpleHotelForm;
 import com.juyo.visa.admin.simple.form.BasicinfoForm;
 import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
@@ -94,6 +95,21 @@ public class SimpleVisaModule {
 	@POST
 	public Object getHotelSelect(@Param("hotelname") String hotelname, @Param("cityId") int cityId) {
 		return simpleVisaService.getHotelSelect(hotelname, cityId);
+	}
+
+	/**
+	 * 添加酒店信息
+	 */
+	@At
+	@Ok("jsp")
+	public Object addHotel(@Param("planid") Integer planid, @Param("visatype") int visatype) {
+		return simpleVisaService.addHotel(planid, visatype);
+	}
+
+	@At
+	@POST
+	public Object addsimplehotel(@Param("..") AddSimpleHotelForm form) {
+		return simpleVisaService.addsimplehotel(form);
 	}
 
 	/**

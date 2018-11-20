@@ -424,10 +424,10 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			basicinfo.setMailcity(form.getMailcity());
 			basicinfo.setMailaddress(form.getMailaddress());
 
-			basicinfo.setMailcountryen(translate(form.getMailcountry()));
-			basicinfo.setMailprovinceen(translate(form.getMailprovince()));
-			basicinfo.setMailcityen(translate(form.getMailcity()));
-			basicinfo.setMailaddressen(translate(form.getMailaddress()));
+			basicinfo.setMailcountryen(form.getMailcountryen());
+			basicinfo.setMailprovinceen(form.getMailprovinceen());
+			basicinfo.setMailcityen(form.getMailcityen());
+			basicinfo.setMailaddressen(form.getMailaddressen());
 		}
 
 		basicinfo.setSex(form.getSex());
@@ -439,7 +439,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setCardprovince(form.getCardprovince());
 		basicinfo.setCardcity(form.getCardcity());
 		basicinfo.setDetailedaddress(form.getDetailedaddress());
-		//basicinfo.setDetailedaddressen(form.getDetailedaddressen());
+		basicinfo.setDetailedaddressen(form.getDetailedaddressen());
 		basicinfo.setMarrystatus(form.getMarrystatus());
 		basicinfo.setBirthday(form.getBirthday());
 		basicinfo.setBirthcountry(form.getBirthcountry());
@@ -465,23 +465,63 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setTelephoneen(form.getTelephone());
 		basicinfo.setEmailen(form.getEmail());
 		basicinfo.setCardIden(form.getCardId());
+
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
+		if (!Util.isEmpty(form.getProvince())) {
+			String issuedplace = form.getProvince();
+			if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+				basicinfo.setProvinceen("NEI MONGOL");
+			} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+				basicinfo.setProvinceen("SHAANXI");
+			} else {
+				if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				if (issuedplace.endsWith("自治区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+				}
+				try {
+					basicinfo.setProvinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
+		if (!Util.isEmpty(form.getCity())) {
+			String issuedplace = form.getCity();
+			if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}
+			if (issuedplace.endsWith("自治区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+			}
+			try {
+				basicinfo.setCityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+			} catch (BadHanyuPinyinOutputFormatCombination e1) {
+				e1.printStackTrace();
+			}
+
+		}
 		//basicinfo.setProvinceen(form.getProvinceen());
 		//basicinfo.setCityen(form.getCityen());
-		//basicinfo.setCardprovinceen(form.getCardprovinceen());
-		//basicinfo.setCardcityen(form.getCardcityen());
+
+		basicinfo.setCardprovinceen(form.getCardprovinceen());
+		basicinfo.setCardcityen(form.getCardcityen());
 		//basicinfo.setNationalityen(form.getNationalityen());
-		basicinfo.setBirthcountryen(translate(form.getBirthcountry()));
+		/*basicinfo.setBirthcountryen(translate(form.getBirthcountry()));
 		basicinfo.setProvinceen(translate(form.getProvince()));
 		basicinfo.setCityen(translate(form.getCity()));
 		basicinfo.setCardprovinceen(translate(form.getCardprovince()));
 		basicinfo.setCardcityen(translate(form.getCardcity()));
-		basicinfo.setNationalityen(translate(form.getNationality()));
+		basicinfo.setNationalityen(translate(form.getNationality()));*/
 
-		if (!Util.isEmpty(form.getDetailedaddressen())) {
+		/*if (!Util.isEmpty(form.getDetailedaddressen())) {
 			basicinfo.setDetailedaddressen(form.getDetailedaddressen());
 		} else {
 			basicinfo.setDetailedaddressen(translate(form.getDetailedaddress()));
-		}
+		}*/
 
 		basicinfo.setMarrystatusen(form.getMarrystatus());
 		long endTime = System.currentTimeMillis();
@@ -595,7 +635,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				passportinfo.setLostpassportnumen("I do not know");
 			} else {
 				passportinfo.setLostpassportnum(form.getLostpassportnum());
-				passportinfo.setLostpassportnumen(translate(form.getLostpassportnum()));
+				passportinfo.setLostpassportnumen(form.getLostpassportnum());
 			}
 		}
 
@@ -670,6 +710,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveFamilyinfo(FamilyinfoUSForm form) {
+		long startTime = System.currentTimeMillis();
 		Integer staffid = form.getStaffid();
 		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
@@ -696,7 +737,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				dbDao.delete(immediaterelatives);
 			}
 		}
-
+		long endTime = System.currentTimeMillis();
+		System.out.println("保存家庭信息用了" + (endTime - startTime) + "ms");
 		return JuYouResult.ok();
 	}
 
@@ -927,7 +969,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 		}*/
 		long endTime = System.currentTimeMillis();
-		System.out.println("保存用了" + (endTime - startTime) + "ms");
+		System.out.println("保存工作教育信息用了" + (endTime - startTime) + "ms");
 		System.out.println("translateTime:" + translateTime);
 		return JuYouResult.ok();
 	}
@@ -984,8 +1026,49 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		workinfo.setPositionen(form.getPositionen());
 		workinfo.setDutyen(form.getDutyen());*/
 
-		workinfo.setProvinceen(translate(form.getProvince()));
-		workinfo.setCityen(translate(form.getCity()));
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
+		if (!Util.isEmpty(form.getProvince())) {
+			String issuedplace = form.getProvince();
+			if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+				workinfo.setProvinceen("NEI MONGOL");
+			} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+				workinfo.setProvinceen("SHAANXI");
+			} else {
+				if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				if (issuedplace.endsWith("自治区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+				}
+				try {
+					workinfo.setProvinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
+
+		if (!Util.isEmpty(form.getCity())) {
+			String issuedplace = form.getCity();
+			if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}
+			if (issuedplace.endsWith("自治区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+			}
+			try {
+				workinfo.setCityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+			} catch (BadHanyuPinyinOutputFormatCombination e1) {
+				e1.printStackTrace();
+			}
+
+		}
+
+		//workinfo.setProvinceen(translate(form.getProvince()));
+		//workinfo.setCityen(translate(form.getCity()));
+
 		workinfo.setPositionen(translate(form.getPosition()));
 
 		if (!Util.isEmpty(form.getDutyen())) {
@@ -1055,8 +1138,49 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		beforework.setEmploystartdateen(form.getEmploystartdate());
 		beforework.setEmployenddateen(form.getEmployenddate());
 
-		beforework.setEmployerprovinceen(translate(form.getEmployerprovince()));
-		beforework.setEmployercityen(translate(form.getEmployercity()));
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
+		if (!Util.isEmpty(form.getEmployerprovince())) {
+			String issuedplace = form.getEmployerprovince();
+			if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+				beforework.setEmployerprovinceen("NEI MONGOL");
+			} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+				beforework.setEmployerprovinceen("SHAANXI");
+			} else {
+				if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				if (issuedplace.endsWith("自治区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+				}
+				try {
+					beforework.setEmployerprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
+
+		if (!Util.isEmpty(form.getEmployercity())) {
+			String issuedplace = form.getEmployercity();
+			if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}
+			if (issuedplace.endsWith("自治区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+			}
+			try {
+				beforework.setEmployercityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+			} catch (BadHanyuPinyinOutputFormatCombination e1) {
+				e1.printStackTrace();
+			}
+
+		}
+
+		//beforework.setEmployerprovinceen(translate(form.getEmployerprovince()));
+		//beforework.setEmployercityen(translate(form.getEmployercity()));
+
 		beforework.setJobtitleen(translate(form.getJobtitle()));
 		//beforework.setPreviousdutyen(translate(form.getPreviousduty()));
 		/*beforework.setEmployerprovinceen(form.getEmployerprovinceen());
@@ -1142,8 +1266,49 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		beforeeducation.setCoursestartdateen(form.getCoursestartdate());
 		beforeeducation.setCourseenddateen(form.getCourseenddate());
 		beforeeducation.setCourseen(translate(form.getCourse()));
-		beforeeducation.setInstitutionprovinceen(translate(form.getInstitutionprovince()));
-		beforeeducation.setInstitutioncityen(translate(form.getInstitutioncity()));
+
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
+		if (!Util.isEmpty(form.getInstitutionprovince())) {
+			String issuedplace = form.getInstitutionprovince();
+			if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+				beforeeducation.setInstitutionprovinceen("NEI MONGOL");
+			} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+				beforeeducation.setInstitutionprovinceen("SHAANXI");
+			} else {
+				if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				if (issuedplace.endsWith("自治区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+				}
+				try {
+					beforeeducation.setInstitutionprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
+
+		if (!Util.isEmpty(form.getInstitutioncity())) {
+			String issuedplace = form.getInstitutioncity();
+			if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}
+			if (issuedplace.endsWith("自治区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+			}
+			try {
+				beforeeducation.setInstitutioncityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+			} catch (BadHanyuPinyinOutputFormatCombination e1) {
+				e1.printStackTrace();
+			}
+
+		}
+
+		//beforeeducation.setInstitutionprovinceen(translate(form.getInstitutionprovince()));
+		//beforeeducation.setInstitutioncityen(translate(form.getInstitutioncity()));
 		/*beforeeducation.setCourseen(form.getCourseen());
 		beforeeducation.setInstitutionprovinceen(form.getInstitutionprovinceen());
 		beforeeducation.setInstitutioncityen(form.getInstitutioncityen());*/

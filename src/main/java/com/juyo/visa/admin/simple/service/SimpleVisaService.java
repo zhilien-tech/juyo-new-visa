@@ -55,6 +55,7 @@ import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.admin.simple.entity.StatisticsEntity;
 import com.juyo.visa.admin.simple.entity.WealthEntity;
 import com.juyo.visa.admin.simple.form.AddOrderForm;
+import com.juyo.visa.admin.simple.form.AddSimpleHotelForm;
 import com.juyo.visa.admin.simple.form.BasicinfoForm;
 import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
@@ -633,14 +634,56 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object getHotelSelect(String hotelname, int cityid) {
-		Cnd cnd = Cnd.NEW();
-		/*cnd.and("name", "like", "%" + Strings.trim(hotelname) + "%");
-		if (!Util.isEmpty(cityid)) {
-			cnd.and("cityId", "=", cityid);
-		}*/
-		cnd.and("cityId", "=", cityid);
+		//Cnd cnd = Cnd.NEW();
+
+		Cnd cnd = Cnd.where(
+				Cnd.exps("address", "like", "%" + Strings.trim(hotelname) + "%")
+						.or("addressjp", "like", "%" + Strings.trim(hotelname) + "%")
+						.or("mobile", "like", "%" + Strings.trim(hotelname) + "%")).and("cityId", "=", cityid);
+
+		/*SqlExpressionGroup exp = new SqlExpressionGroup();
+		//exp.and("cityId", "=", cityid);
+		exp.and("address", "like", "%" + Strings.trim(hotelname) + "%")
+				.or("mobile", "like", "%" + Strings.trim(hotelname) + "%")
+				.or("addressjp", "like", "%" + Strings.trim(hotelname) + "%");
+		cnd.and(exp);
+
+		exp = new SqlExpressionGroup();
+		exp.and("cityId", "=", cityid);
+		cnd.and(exp);*/
+
 		List<THotelEntity> hotels = dbDao.query(THotelEntity.class, cnd, null);
 		return hotels;
+	}
+
+	public Object addHotel(Integer planid, int visatype) {
+		Map<String, Object> result = Maps.newHashMap();
+		TOrderTravelplanJpEntity plan = dbDao.fetch(TOrderTravelplanJpEntity.class, planid.longValue());
+		result.put("travelplan", plan);
+		return result;
+
+	}
+
+	public Object addsimplehotel(AddSimpleHotelForm form) {
+		THotelEntity hotel = new THotelEntity();
+		hotel.setAddress(form.getAddress());
+		hotel.setAddressjp(form.getAddressjp());
+		hotel.setCityId(form.getCityId());
+		hotel.setCreateTime(new Date());
+		hotel.setMobile(form.getMobile());
+		hotel.setName(form.getName());
+		hotel.setNamejp(form.getNamejp());
+		hotel.setUpdateTime(new Date());
+		THotelEntity insertHotel = dbDao.insert(hotel);
+		Integer travelplanid = form.getTravelplanid();
+		TCityEntity city = dbDao.fetch(TCityEntity.class, form.getCityId().longValue());
+		TOrderTravelplanJpEntity travelplan = dbDao.fetch(TOrderTravelplanJpEntity.class, travelplanid.longValue());
+		travelplan.setHotel(insertHotel.getId());
+		travelplan.setCityId(form.getCityId());
+		travelplan.setCityName(city.getCity());
+		//travelplan.setIsupdatecity(IsYesOrNoEnum.YES.intKey());
+		dbDao.update(travelplan);
+		return null;
 	}
 
 	/**
@@ -5502,6 +5545,23 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 	public Object changeVisatype(int orderid, int visatype) {
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+		if (visatype == 7) {
+			orderjp.setVisaCounty("冲绳县");
+		} else if (visatype == 8) {
+			orderjp.setVisaCounty("宫城县");
+		} else if (visatype == 9) {
+			orderjp.setVisaCounty("福岛县");
+		} else if (visatype == 10) {
+			orderjp.setVisaCounty("岩手县");
+		} else if (visatype == 11) {
+			orderjp.setVisaCounty("青森县");
+		} else if (visatype == 12) {
+			orderjp.setVisaCounty("秋田县");
+		} else if (visatype == 13) {
+			orderjp.setVisaCounty("山形县");
+		} else {
+			orderjp.setVisaCounty("");
+		}
 		orderjp.setVisaType(visatype);
 		dbDao.update(orderjp);
 		return null;

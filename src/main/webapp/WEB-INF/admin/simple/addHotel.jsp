@@ -1,3 +1,4 @@
+
 <%@ page contentType="text/html; charset=UTF-8" language="java"
 	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
@@ -5,13 +6,13 @@
 <c:set var="url" value="${base}/admin/hotel" />
 
 <!DOCTYPE HTML>
-<html lang="en-US" id="updateHtml">
+<html lang="en-US" id="addHtml">
 <head>
 <meta charset="UTF-8">
 <meta http-equlv="proma" content="no-cache" />
 <meta http-equlv="cache-control" content="no-cache" />
 <meta http-equlv="expires" content="0" />
-<title>更新</title>
+<title>添加</title>
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, minimum-scale=1">
 <link rel="stylesheet"
@@ -28,26 +29,24 @@
 </style>
 </head>
 <body>
-
 	<div class="modal-content">
-		<form id="hotelUpdateForm">
+		<form id="hotelAddForm">
 			<div class="modal-header" style="width:100%;z-index:10000;position:fixed;top:0;left:0;height:62px; background:#FFF;">
-				<span class="heading">编辑</span> <input id="backBtn" type="button"
+				<span class="heading">添加酒店</span> <input id="backBtn" type="button"
 					onclick="closeWindow()" class="btn btn-primary pull-right btn-sm"
-					data-dismiss="modal" value="取消" /> <input id="updateBtn"
-					type="button" onclick="save()"
+					data-dismiss="modal" value="取消" /> <input id="addBtn"
+					type="button" onclick="save();"
 					class="btn btn-primary pull-right btn-sm btn-right" value="保存" />
 			</div>
 			<div class="modal-body" style="height:100%;margin-top:62px;">
 				<div class="tab-content">
-					<input name="id" type="hidden" value="${obj.hotel.id}">
-
+					<input type="hidden" name="travelplanid" value="${obj.travelplan.id }"/>
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label><span>*</span>酒店名称(中文)：</label> <input id="name"
-									name="name" value="${obj.hotel.name}" type="text"
-									class="form-control input-sm" placeholder=" " />
+									name="name" type="text" class="form-control input-sm"
+									placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -56,8 +55,8 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label><span>*</span>酒店名称(原文)：</label> <input id="namejp"
-									name="namejp" value="${obj.hotel.namejp}" type="text"
-									class="form-control input-sm" placeholder=" " />
+									name="namejp" type="text" class="form-control input-sm"
+									placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -67,8 +66,8 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label><span>*</span>酒店地址(中文)：</label> <input id="address"
-									name="address" value="${obj.hotel.address}" type="text"
-									class="form-control input-sm" placeholder=" " />
+									name="address" type="text" class="form-control input-sm"
+									placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -77,8 +76,8 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label><span>*</span>酒店地址(原文)：</label> <input id="addressjp"
-									name="addressjp" value="${obj.hotel.addressjp}" type="text"
-									class="form-control input-sm" placeholder=" " />
+									name="addressjp" type="text" class="form-control input-sm"
+									placeholder=" " />
 							</div>
 						</div>
 					</div>
@@ -88,24 +87,27 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>电话：</label> <input id="mobile"
-									name="mobile" value="${obj.hotel.mobile}" type="text"
-									class="form-control input-sm" placeholder=" " />
+									name="mobile" type="text" class="form-control input-sm"
+									placeholder=" " />
 							</div>
 						</div>
 
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label><span>*</span>所属城市：</label> 
-								<select id = "cityId" name="cityId" 
+								<select id = "cityId" name="cityId"
 										class="form-control select2 cityselect2" multiple="multiple"
-										data-placeholder="">
-										<c:if test="${ !empty obj.city.id }">
-										<option value="${obj.city.id }" selected="selected">${obj.city.city }</option>
-										</c:if>
+										data-placeholder="" style="height: 35px;">
+									<option value="${obj.travelplan.cityId }" selected="selected">${obj.travelplan.cityName }</option>
 								</select>
+								
+								<!-- <input id="cityId"
+									name="cityId" type="text" class="form-control input-sm"
+									placeholder=" " /> -->
 							</div>
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</form>
@@ -127,12 +129,12 @@
 		<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
 		<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 		<script src="${base}/admin/city/customerNeeds.js"></script>
-	<script src="${base}/references/common/js/select2/initSelect2.js"></script>
+
 	<script type="text/javascript">
 		var base = "${base}";
-		function initvalidate() {
+		$(function() {
 			//校验
-			$('#hotelUpdateForm').bootstrapValidator({
+			$('#hotelAddForm').bootstrapValidator({
 				message : '验证不通过',
 				feedbackIcons : {
 					valid : 'glyphicon glyphicon-ok',
@@ -140,6 +142,7 @@
 					validating : 'glyphicon glyphicon-refresh'
 				},
 				fields : {
+
 					name : {
 						validators : {
 							notEmpty : {
@@ -184,73 +187,37 @@
 					},
 				}
 			});
-		}
-		
+			initCityNeedsSelect2();
+		});
+		/* 页面初始化加载完毕 */
 
-		//更新时刷新页面
-		function update() {
-			window.location.reload();
-		}
-		initvalidate();
-		initCityNeedsSelect2();
-		$('#hotelUpdateForm').bootstrapValidator('validate');
+		/*保存页面*/
 		function save() {
-			$('#hotelUpdateForm').bootstrapValidator('validate');
-			var bootstrapValidator = $("#hotelUpdateForm").data(
+			//初始化验证插件
+			$('#hotelAddForm').bootstrapValidator('validate');
+			//得到获取validator对象或实例 
+			var bootstrapValidator = $("#hotelAddForm").data(
 					'bootstrapValidator');
+			// 执行表单验证 
+			bootstrapValidator.validate();
 			if (bootstrapValidator.isValid()) {
-
-				//获取必填项信息
-				var name = $("#name").val();
-				if (name == "") {
-					layer.msg('name不能为空');
-					return;
-				}
-				var namejp = $("#namejp").val();
-				if (namejp == "") {
-					layer.msg('namejp不能为空');
-					return;
-				}
-				var address = $("#address").val();
-				if (address == "") {
-					layer.msg('address不能为空');
-					return;
-				}
-				var addressjp = $("#addressjp").val();
-				if (addressjp == "") {
-					layer.msg('addressjp不能为空');
-					return;
-				}
-				var mobile = $("#mobile").val();
-				if (mobile == "") {
-					layer.msg('mobile不能为空');
-					return;
-				}
-				var city = $("#cityId").val();
-				if (city == "") {
-					layer.msg('city不能为空');
-					return;
-				}
-
 				$.ajax({
 					type : 'POST',
-					data : $("#hotelUpdateForm").serialize(),
-					url : '${base}/admin/hotel/update.html',
+					data : $("#hotelAddForm").serialize(),
+					url : '${base}/admin/simple/addsimplehotel.html',
 					success : function(data) {
-						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-						layer.close(index);
-						window.parent.layer.msg("编辑成功", "", 3000);
-						parent.layer.close(index);
-						parent.datatable.ajax.reload();
+						window.parent.layer.msg("添加成功", "", 3000);
+						parent.successCallBack(1);
+						closeWindow();
 					},
 					error : function(xhr) {
-						layer.msg("编辑失败", "", 3000);
+						layer.msg("添加失败", "", 3000);
 					}
 				});
 			}
 		}
 
-		//返回刷新页面 
+		//返回 
 		function closeWindow() {
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 			parent.layer.close(index);
@@ -260,4 +227,3 @@
 
 </body>
 </html>
-

@@ -15,25 +15,15 @@ import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.juyo.visa.common.util.TranslateUtil;
-
 public class TestChinest {
 
 	static final int N = 50000;
 
 	public static void main(String[] args) {
 
-		String str = "EG156154656";
-		String translate = "";
-		try {
-			translate = TranslateUtil.translate(str, "en");
-		} catch (Exception e) {
-
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		}
-		System.out.println(translate);
+		String str = "EG15615//4656";
+		//String replace = str.replace("//", " ");
+		System.out.println(str.substring(0, str.length() - 1));
 
 		//System.out.println(imgToBse64("http://oyu1xyxxk.bkt.clouddn.com/5dc3274f-204b-4336-bf57-985e09c7ca14..jpeg"));
 

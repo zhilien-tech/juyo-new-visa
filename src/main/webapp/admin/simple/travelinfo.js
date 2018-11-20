@@ -623,8 +623,8 @@ function initTravalPlanTable(data){
 				html += '<td></td>';
 			}
 		}
-		if(index != data.length - 1 && index != 0){
-			html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i></td>';
+		if(index != data.length - 1){
+			html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i><i class="addHui" onclick="addHotel('+value.id+')"></i></td>';
 		}
 		html += '</tr>';
 	});

@@ -22,6 +22,11 @@
 	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<style>
+	.select2-selection{
+		height:35px !important;
+	}
+</style>
 </head>
 <body>
 	<div class="modal-content">
