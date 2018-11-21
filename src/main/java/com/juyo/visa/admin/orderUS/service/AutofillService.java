@@ -349,67 +349,90 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		//NameInfo
 		Map<String, Object> SpouseNameInfo = Maps.newHashMap();
-		//配偶的姓(签证信息)
-		if (!Util.isEmpty(info.get("spousefirstname"))) {
-			SpouseNameInfo.put("surnames_cn", info.get("spousefirstname"));
-		} else {
-			errorMsg += "家庭信息：配偶姓中文,</br>";
-		}
-		//配偶的姓 拼音(签证信息)
-		if (!Util.isEmpty(info.get("spousefirstnameen"))) {
-			SpouseNameInfo.put("surnames_en", info.get("spousefirstnameen"));
-		} else {
-			errorMsg += "家庭信息：配偶姓拼音,</br>";
-		}
-		//配偶的名(签证信息)
-		if (!Util.isEmpty(info.get("spouselastname"))) {
-			SpouseNameInfo.put("given_names_cn", info.get("spouselastname"));
-		} else {
-			errorMsg += "家庭信息：配偶名中文,</br>";
-		}
-		//配偶的名 拼音(签证信息)
-		if (!Util.isEmpty(info.get("spouselastnameen"))) {
-			SpouseNameInfo.put("given_names_en", info.get("spouselastnameen"));
-		} else {
-			errorMsg += "家庭信息：配偶名拼音,</br>";
-		}
+		if (!Util.isEmpty(info.get("marrystatus")) && !Util.eq(4, info.get("marrystatus"))) {//不是单身时，有配偶信息
+			//配偶的姓(签证信息)
+			if (!Util.isEmpty(info.get("spousefirstname"))) {
+				SpouseNameInfo.put("surnames_cn", info.get("spousefirstname"));
+			} else {
+				errorMsg += "家庭信息：配偶姓中文,</br>";
+			}
+			//配偶的姓 拼音(签证信息)
+			if (!Util.isEmpty(info.get("spousefirstnameen"))) {
+				SpouseNameInfo.put("surnames_en", info.get("spousefirstnameen"));
+			} else {
+				errorMsg += "家庭信息：配偶姓拼音,</br>";
+			}
+			//配偶的名(签证信息)
+			if (!Util.isEmpty(info.get("spouselastname"))) {
+				SpouseNameInfo.put("given_names_cn", info.get("spouselastname"));
+			} else {
+				errorMsg += "家庭信息：配偶名中文,</br>";
+			}
+			//配偶的名 拼音(签证信息)
+			if (!Util.isEmpty(info.get("spouselastnameen"))) {
+				SpouseNameInfo.put("given_names_en", info.get("spouselastnameen"));
+			} else {
+				errorMsg += "家庭信息：配偶名拼音,</br>";
+			}
 
-		SpouseInfo.put("NameInfo", SpouseNameInfo);
+			SpouseInfo.put("NameInfo", SpouseNameInfo);
 
-		//BirthplaceInfo
-		Map<String, Object> SpouseBirthplaceInfo = Maps.newHashMap();
+			//BirthplaceInfo
+			Map<String, Object> SpouseBirthplaceInfo = Maps.newHashMap();
 
-		//配偶的出生城市(签证信息)
-		if (!Util.isEmpty(info.get("spousecityen"))) {
-			SpouseBirthplaceInfo.put("city", info.get("spousecityen"));
-		} else {
-			//SpouseBirthplaceInfo.put("city", "");
-			errorMsg += "家庭信息：配偶出生省份,</br>";
-		}
-		//省份  没有
-		SpouseBirthplaceInfo.put("province", "");
-		//配偶的出生国家(签证信息)
-		if (!Util.isEmpty(info.get("spousecountry"))) {
-			String country = getCountry((int) info.get("spousecountry"));
-			SpouseBirthplaceInfo.put("country", country);
-		} else {
-			errorMsg += "家庭信息：配偶出生国家,</br>";
-		}
+			//配偶的出生城市(签证信息)
+			if (!Util.isEmpty(info.get("spousecityen"))) {
+				SpouseBirthplaceInfo.put("city", info.get("spousecityen"));
+			} else {
+				//SpouseBirthplaceInfo.put("city", "");
+				errorMsg += "家庭信息：配偶出生省份,</br>";
+			}
+			//省份  没有
+			SpouseBirthplaceInfo.put("province", "");
+			//配偶的出生国家(签证信息)
+			if (!Util.isEmpty(info.get("spousecountry"))) {
+				String country = getCountry((int) info.get("spousecountry"));
+				SpouseBirthplaceInfo.put("country", country);
+			} else {
+				errorMsg += "家庭信息：配偶出生国家,</br>";
+			}
 
-		SpouseInfo.put("BirthplaceInfo", SpouseBirthplaceInfo);
+			SpouseInfo.put("BirthplaceInfo", SpouseBirthplaceInfo);
 
-		//配偶的出生日期(签证信息)
-		if (!Util.isEmpty(info.get("spousebirthday"))) {
-			SpouseInfo.put("date_of_birth", sdf.format(info.get("spousebirthday")));
-		} else {
-			errorMsg += "家庭信息：配偶生日,</br>";
-		}
-		//配偶的国籍(签证信息)
-		if (!Util.isEmpty(info.get("spousenationality"))) {
-			String country = getCountry((int) info.get("spousenationality"));
-			SpouseInfo.put("nationality", country);
-		} else {
-			errorMsg += "家庭信息：配偶国籍,</br>";
+			//配偶的出生日期(签证信息)
+			if (!Util.isEmpty(info.get("spousebirthday"))) {
+				SpouseInfo.put("date_of_birth", sdf.format(info.get("spousebirthday")));
+			} else {
+				errorMsg += "家庭信息：配偶生日,</br>";
+			}
+			//配偶的国籍(签证信息)
+			if (!Util.isEmpty(info.get("spousenationality"))) {
+				String country = getCountry((int) info.get("spousenationality"));
+				SpouseInfo.put("nationality", country);
+			} else {
+				errorMsg += "家庭信息：配偶国籍,</br>";
+			}
+			//配偶的联系地址(家庭信息)
+			if (!Util.isEmpty(info.get("spouseaddressen")) && !Util.eq(0, info.get("spouseaddressen"))) {
+				int spouseAddress = (int) info.get("spouseaddress");
+				if (spouseAddress == 1) {
+					SpouseInfo.put("address_type", "H");
+				}
+				if (spouseAddress == 2) {
+					SpouseInfo.put("address_type", "M");
+				}
+				if (spouseAddress == 3) {
+					SpouseInfo.put("address_type", "C");
+				}
+				if (spouseAddress == 4) {
+					SpouseInfo.put("address_type", "D");
+				}
+				if (spouseAddress == 5) {
+					SpouseInfo.put("address_type", "O");
+				}
+			} else {
+				errorMsg += "家庭信息：配偶的联系地址,</br>";
+			}
 		}
 		//查询前妻数据
 		TAppStaffFormerspouseEntity formerspouse = dbDao.fetch(TAppStaffFormerspouseEntity.class,
@@ -464,27 +487,6 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		} else {
 			errorMsg += "离异原因,";
 		}*/
-		//配偶的联系地址(家庭信息)
-		if (!Util.isEmpty(info.get("spouseaddressen")) && !Util.eq(0, info.get("spouseaddressen"))) {
-			int spouseAddress = (int) info.get("spouseaddress");
-			if (spouseAddress == 1) {
-				SpouseInfo.put("address_type", "H");
-			}
-			if (spouseAddress == 2) {
-				SpouseInfo.put("address_type", "M");
-			}
-			if (spouseAddress == 3) {
-				SpouseInfo.put("address_type", "C");
-			}
-			if (spouseAddress == 4) {
-				SpouseInfo.put("address_type", "D");
-			}
-			if (spouseAddress == 5) {
-				SpouseInfo.put("address_type", "O");
-			}
-		} else {
-			errorMsg += "家庭信息：配偶的联系地址,</br>";
-		}
 
 		//BirthplaceInfo  配偶的居住地址
 		Map<String, Object> SpouseAddressInfo = Maps.newHashMap();
@@ -1455,11 +1457,15 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		//街道地址(签证信息)
 		addressinfo.put("street", hotel.getAddressen());
-		//城市(签证信息)
-		addressinfo.put("city", city.getCitynameen());
-		//省份(签证信息)
-		int stateid = city.getStateid();
-		addressinfo.put("province", getStatecode(stateid));
+
+		if (!Util.isEmpty(city.getId())) {
+			//城市(签证信息)
+			addressinfo.put("city", city.getCitynameen());
+			//省份(签证信息)
+			int stateid = city.getStateid();
+			addressinfo.put("province", getStatecode(stateid));
+		}
+
 		//国家
 		addressinfo.put("country", "USA");
 		//邮编(签证信息)

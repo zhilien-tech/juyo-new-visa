@@ -439,7 +439,21 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setCardprovince(form.getCardprovince());
 		basicinfo.setCardcity(form.getCardcity());
 		basicinfo.setDetailedaddress(form.getDetailedaddress());
-		basicinfo.setDetailedaddressen(form.getDetailedaddressen());
+
+		//如果地址英文为空，直接翻译中文地址
+		if (Util.isEmpty(form.getDetailedaddressen())) {
+			basicinfo.setDetailedaddressen(translate(form.getDetailedaddress()));
+		} else {//地址英文不为空时，比较地址中文，如果一样，直接保存地址英文
+			if (Util.eq(form.getDetailedaddress(), basicinfo.getDetailedaddress())) {
+				basicinfo.setDetailedaddressen(form.getDetailedaddressen());
+			} else {//中文地址变了，比较英文地址是否一样,如果英文地址一样，则翻译，否则直接存
+				if (Util.eq(form.getDetailedaddressen(), basicinfo.getDetailedaddressen())) {
+					basicinfo.setDetailedaddressen(translate(form.getDetailedaddress()));
+				} else {
+					basicinfo.setDetailedaddressen(form.getDetailedaddress());
+				}
+			}
+		}
 		basicinfo.setMarrystatus(form.getMarrystatus());
 		basicinfo.setBirthday(form.getBirthday());
 		basicinfo.setBirthcountry(form.getBirthcountry());
@@ -657,6 +671,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object toFamilyinfo(int staffid) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("staffid", staffid);
+		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+		result.put("basicinfo", basicinfo);
+
 		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		result.put("familyinfo", familyinfo);
@@ -1838,5 +1855,18 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		} else {
 			return 0;
 		}
+	}
+
+	public Object translate(String type, String str) {
+		String result = "";
+		try {
+			result = TranslateUtil.translate(str, "en");
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		return result;
 	}
 }

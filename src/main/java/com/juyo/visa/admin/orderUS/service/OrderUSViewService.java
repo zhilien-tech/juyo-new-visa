@@ -1841,9 +1841,12 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		if (type == 1) {
 			Date firstDate = DateUtil.nowDate();
 			Date nowDate = null;
+			int count = 0;
 			while (Util.eq("正在申请", statusname) || Util.eq("已保存", statusname)) {
-
+				count++;
+				System.out.println(passportnum + ":" + count + "!!!!!!!!!!!!!!!!!!!");
 				try {
+					System.out.println("申请30秒等待中————————");
 					Thread.sleep(30000);
 				} catch (InterruptedException e) {
 					System.out.println("申请等待30秒出错~~~~~~");
@@ -1862,6 +1865,14 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				AAcode = applyResult.getApp_id();
 				System.out.println("while循环里申请statusname:" + statusname);
 				System.out.println("while循环里申请AAcode:" + AAcode);
+				if (count == 4) {
+					statusname = "申请失败";
+					applyResult.setStatus("申请失败");
+					applyResult.setErrorMsg("");
+					System.out.println("申请了4次，手动失败~~~");
+					return applyResult;
+				}
+
 			}
 			if (Util.eq("申请失败", statusname)) {
 				errorurl = applyResult.getError_url();

@@ -223,4 +223,14 @@ public class NeworderUSModule {
 		return neworderUSViewService.getCountryid(searchstr);
 	}
 
+	/**
+	 * 翻译
+	 */
+	@At
+	@POST
+	@Filters
+	public Object translate(@Param("strType") String type, @Param("q") String q) {
+		return neworderUSViewService.translate(type, q);
+	}
+
 }

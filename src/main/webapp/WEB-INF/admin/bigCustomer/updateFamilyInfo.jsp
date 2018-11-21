@@ -112,7 +112,7 @@
 			<div class="dislogHide"></div>
             <!--家庭信息-->
             <!--配偶-->
-			<div class="paddingTop">
+			<div class="paddingTop spouseHide">
                 <div class="titleInfo marginbottom-6">配偶信息</div>
                 <div class="floatLeft groupInputInfo">
                     <label><span class="s">*</span> 配偶姓</label>
@@ -356,7 +356,7 @@
 		<div class="English">
             <!--家庭信息-->
             <!--配偶-->
-			<div class="paddingTop" style="    margin-top: 45px;margin-bottom: 264px;">
+			<div class="paddingTop spouseHide" style="    margin-top: 45px;margin-bottom: 264px;">
                 <div class="floatLeft groupInputInfo">
                     <label><span class="s">*</span> Spouse's Surnames </label>
                     <input autocomplete="new-password" name="spousefirstnameen" id="spousefirstnameen" value="${obj.familyinfo.spousefirstnameen }" type="text" />
@@ -370,12 +370,12 @@
 			<!--亲属-->
 			<div class="familyInfo">
 				<div class="paddingLeft groupcheckBoxInfo" >
-					<label><span class="s">*</span> father's Surnames</label>
+					<label class="spouselabel"><span class="s">*</span> father's Surnames</label>
 					<input autocomplete="new-password" name="fatherfirstnameen" id="fatherfirstnameen" style="width: 180px;" value="${obj.familyinfo.fatherfirstnameen }" type="text"/>
 					<!-- <input autocomplete="new-password" id="isKnowFatherXing" name="isknowfatherfirstnameen" class="isknowfatherfirstnameen"   v-on:click="isknowfatherfirstname"  value="visaInfo.familyInfo.isknowfatherfirstnameen" type="checkbox" /> -->
 				</div>
 				<div class="paddingRight groupcheckBoxInfo" >
-					<label><span class="s">*</span> father's Given Names </label>
+					<label class="spouselabel"><span class="s">*</span> father's Given Names </label>
 					<input autocomplete="new-password" name="fatherlastnameen" id="fatherlastnameen" style="width: 180px;" value="${obj.familyinfo.fatherlastnameen }" type="text" />
 					<!-- <input autocomplete="new-password" id="isKnowFatherMing" name="isknowfatherlastnameen" class="isknowfatherlastnameen"  v-on:click="isknowfatherlastname" value="visaInfo.familyInfo.isknowfatherlastnameen" type="checkbox" /> -->
 				</div>
@@ -459,6 +459,13 @@
 	// 		border:'1px solid #66afe9',
 	// 	});
 	// });
+	
+	if('${obj.basicinfo.marrystatus}' == 4){
+		$(".spouseHide").hide();
+		$("#fatherfirstnameen").css("margin-top", 7);
+		$("#fatherlastnameen").css("margin-top", 7);
+		$(".spouselabel").css("margin-top", 50);
+	}
 	
 	//母亲是否在美国
 	var ismotherinus = '${obj.familyinfo.ismotherinus}';

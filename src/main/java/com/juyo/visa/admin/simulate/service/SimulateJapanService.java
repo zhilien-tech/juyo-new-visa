@@ -666,6 +666,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object updateYifa(JapanSimulatorForm form) {
+		System.out.println("成功之后更新状态的CID:" + form.getCid());
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, form.getCid());
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		//order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());

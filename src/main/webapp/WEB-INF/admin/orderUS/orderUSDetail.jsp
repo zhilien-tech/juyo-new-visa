@@ -31,6 +31,11 @@
 	.icon-line{
 		width: 2.2%;
 	}
+	#streetspan{
+		display: inline;
+		font-size: 12px;
+		position: inherit;
+	}
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -120,7 +125,7 @@
 				<!-- 主体 -->
 				<section class="content listDetailContent">
 					<!-- 订单信息 -->
-					<p class="info-head">订单信息<span>如不清楚出行信息，可不必填写</span></p>
+					<p class="info-head">订单信息</p>
 					<div class="info-body-from">
 						<!-- 模块 -->
 						<div class="row body-from-input">
@@ -488,9 +493,9 @@
 								<!-- 街道 -->
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span></span></label> <input id="planaddress" name="planaddress" onchange="translateZhToEn(this,'planaddressen','')"
+										<label><span id="streetspan">只能填写英文和数字</span></label> <input id="planaddress" name="planaddress" onchange="translateZhToEn(this,'planaddressen','')"
 											type="text" value="${obj.travelInfo.address}"
-											class="form-control input-sm" placeholder="街道" />
+											class="form-control input-sm" placeholder="街道英文" />
 											<input id="planaddressen" name="planaddressen" type="hidden" value="${obj.travelInfo.addressen }"/>
 									</div>
 								</div>

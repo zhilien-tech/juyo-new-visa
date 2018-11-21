@@ -15,15 +15,23 @@ import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 
+import com.juyo.visa.common.util.TranslateUtil;
+
 public class TestChinest {
 
 	static final int N = 50000;
 
 	public static void main(String[] args) {
 
-		String str = "EG15615//4656";
-		//String replace = str.replace("//", " ");
-		System.out.println(str.substring(0, str.length() - 1));
+		String str = "内蒙古自治区朝阳区朝阳门天辰大厦908";
+		try {
+			System.out.println(TranslateUtil.translate(str, "en"));
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
 
 		//System.out.println(imgToBse64("http://oyu1xyxxk.bkt.clouddn.com/5dc3274f-204b-4336-bf57-985e09c7ca14..jpeg"));
 
@@ -112,7 +120,7 @@ public class TestChinest {
 			System.out.println(key + ":" + ((TIdcardEntity) resultMap.get(key)).getCounty());
 		}*/
 
-		//转机
+		/*//转机
 		String goFlightNum = "首都机场-羽田机场-青森机场 CA181//JL141 0800/1300//1400/1600";
 		//第一个时间 0800
 		String substring = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1, goFlightNum.lastIndexOf(" ") + 5);
@@ -151,7 +159,7 @@ public class TestChinest {
 		stringBuilder1.insert(15, ":");
 		stringBuilder1.insert(21, ":");
 
-		System.out.println(stringBuilder1.toString());
+		System.out.println(stringBuilder1.toString());*/
 
 		/*//直飞
 		String goFlightNum = "首都国际机场-关西国际机场 CA161 1625/2030";

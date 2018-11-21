@@ -248,6 +248,14 @@ function applyValidate(){
 					}
 				}
 			},
+			marrystatus : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '婚姻状况不能为空'
+					}
+				}
+			},
 			marryexplainen : {
 				trigger:"change keyup",
 				validators : {
@@ -584,7 +592,7 @@ function translateZhToEn(from, to, param){
 	}
 	$.ajax({
 		//async : false,
-		url : BASE_PATH+'/admin/translate/translate',
+		url : BASE_PATH+'/admin/neworderUS/translate',
 		data : {
 			api : 'google',
 			strType : to,

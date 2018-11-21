@@ -211,6 +211,17 @@ $(document).on("input","#cardId",function(){
 		$("#cardIden").val(temp).change();
 	}
 });
+$(document).on("input","#planaddress",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var reg = /([\u4E00-\u9FA5])+/;
+	//var reg =/[\u4e00-\u9fa5]/g;
+	if(reg.test(temp)){
+		$("#planaddress").val(temp.replace(reg, ""));
+    }
+});
 $(document).on("input","#nationalidentificationnumber",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
