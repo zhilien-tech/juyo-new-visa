@@ -142,7 +142,7 @@
                     <div class="clear"></div>
                     <div class="paddingLeft groupcheckBoxInfo" style="width: 200px;">
                         <label><span class="s">*</span>单位地址（省）</label>
-                        <select name="province" class="form-control input-sm select2" onchange="translateZhToEn(this,'jobprovinceen','select2')" multiple="multiple"  id="jobprovince" >
+                        <select name="province" class="form-control input-sm select2"  multiple="multiple"  id="jobprovince" >
 	                   		<%-- <option selected="selected" value="${obj.workinfo.province }">${obj.workinfo.province}</option> --%>
 	                        <c:if test="${not empty obj.workinfo.province }">
 								<option value="${obj.workinfo.province }" selected="selected">${obj.workinfo.province }</option>
@@ -152,7 +152,7 @@
                     </div>
                     <div class="paddingRight groupInputInfo aaa" style="width: 180px;">
                         <label><span class="s">*</span>单位地址（市）</label>
-                         <select name="city" class="form-control input-sm select2" onchange="translateZhToEn(this,'cityen','select2')" multiple="multiple"  id="city" >
+                         <select name="city" class="form-control input-sm select2"  multiple="multiple"  id="city" >
 	                   		<c:if test="${not empty obj.workinfo.city }">
 								<option value="${obj.workinfo.city }" selected="selected">${obj.workinfo.city }</option>
 							</c:if>
@@ -245,7 +245,7 @@
 										
 										<div class="paddingLeft leftNo groupInputInfo" style="width: 180px;">
                                             <label><span class="s">*</span>单位地址（省）</label>
-											<select name="employerprovince" class="form-control input-sm select2" onchange="translateZhToEn(this,'employerprovinceen','select2')" multiple="multiple"  id="employerprovince" >
+											<select name="employerprovince" class="form-control input-sm select2" multiple="multiple"  id="employerprovince" >
 						                   		<c:if test="${not empty obj.beforework.employerprovince }">
 													<option value="${obj.beforework.employerprovince }" selected="selected">${obj.beforework.employerprovince }</option>
 												</c:if>
@@ -254,7 +254,7 @@
 										</div>
 										<div class="paddingRight leftNo groupInputInfo aaa" style="width: 180px;">
                                             <label><span class="s">*</span>单位地址（市）</label>
-											<select name="employercity" class="form-control input-sm select2" onchange="translateZhToEn(this,'employercityen','select2')" multiple="multiple"  id="employercity" >
+											<select name="employercity" class="form-control input-sm select2"  multiple="multiple"  id="employercity" >
 						                   		<c:if test="${not empty obj.beforework.employercity }">
 													<option value="${obj.beforework.employercity }" selected="selected">${obj.beforework.employercity }</option>
 												</c:if>
@@ -361,7 +361,7 @@
                                             <%-- <select name="institutionprovince" class="form-control input-sm select2" multiple="multiple"  id="institutionprovince" >
 							                   <option selected="selected" value="${obj.beforeeducate.institutionprovince }">${obj.beforeeducate.institutionprovince}</option>
 						                    </select> --%>
-						                    <input id="insprovince" autocomplete="new-password" style="width:182px;" name="institutionprovince" onchange="translateZhToEn(this,'institutionprovinceen','')" type="text" value="${obj.beforeeducate.institutionprovince }"/>
+						                    <input id="insprovince" autocomplete="new-password" style="width:182px;" name="institutionprovince" type="text" value="${obj.beforeeducate.institutionprovince }"/>
 						                    <input id="institutionprovinceen" name="institutionprovinceen" type="hidden" value="${obj.beforeeducate.institutionprovinceen }"/>
 										</div>
 										<div class="paddingRight leftNo groupInputInfo aaa" style="width: 180px;">
@@ -369,7 +369,7 @@
                                             <%-- <select name="institutioncity" class="form-control input-sm select2" multiple="multiple"  id="institutioncity" >
 							                   <option selected="selected" value="${obj.beforeeducate.institutioncity }">${obj.beforeeducate.institutioncity}</option>
 						                    </select> --%>
-						                    <input id="inscity" autocomplete="new-password" style="width:182px;" name="institutioncity" onchange="translateZhToEn(this,'institutioncityen','')" type="text" value="${obj.beforeeducate.institutioncity }"/>
+						                    <input id="inscity" autocomplete="new-password" style="width:182px;" name="institutioncity" type="text" value="${obj.beforeeducate.institutioncity }"/>
 						                    <input id="institutioncityen" name="institutioncityen" type="hidden" value="${obj.beforeeducate.institutioncityen }"/>
 										</div>
 										<div class="clear"></div>
@@ -536,6 +536,13 @@
             openYesOrNoPage();
             
         }); */
+        
+        if('${obj.beforework.employercountry}' == ''){
+        	$("#employercountry").val(45).trigger("change");;
+        }
+        if('${obj.beforeeducate.institutioncountry}' == ''){
+        	$("#institutioncountry").val(45).trigger("change");;
+        }
         
 
         //是否有上份工作

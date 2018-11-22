@@ -578,6 +578,7 @@
 	<script src="${base}/admin/simple/addsimpleorder.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面js文件 -->
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
+		
 		//加载申请人表格数据
 		initApplicantTable();
 		//加载行程安排表格数据

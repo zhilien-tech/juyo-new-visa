@@ -2019,4 +2019,11 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		}
 		return result;
 	}
+
+	//检查字符串是否合法
+	public boolean isLegalStr(String str) {
+		String reg = "[A-Za-z0-9-& ]+";
+		boolean isChinese = str.matches(reg);
+		return isChinese;
+	}
 }

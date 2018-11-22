@@ -4,7 +4,7 @@
 <html lang="en-US" id="addHtml">
 <head>
 	<meta charset="UTF-8">
-	<meta http-equlv="proma" content="no-cache" />
+	<meta http-equlv="Pragma" content="no-cache" />
 	<meta http-equlv="cache-control" content="no-cache" />
 	<meta http-equlv="expires" content="0" />
 	<title>签证信息</title>
@@ -30,7 +30,7 @@
 			<input id="orderProcessType" name="orderProcessType" type="hidden" value="${obj.orderProcessType }">
 			<div class="modal-header">
 				<span class="heading">签证信息 </span>
-				<input type="hidden" value="${obj.applicantid }" name="applicantId"/>
+				<%-- <input type="hidden" value="${obj.applicantid }" name="applicantId"/> --%>
 				<input type="hidden" value="${obj.orderid }" name="orderid"/>
 				<input type="hidden" id="isTrailOrder" name="isTrailOrder" value="${obj.isTrailOrder }"/>
 				<input id="backBtn" type="button" onclick="closeWindow()" class="btn btn-primary pull-right btn-sm btn-margin" data-dismiss="modal" value="取消" /> 
@@ -651,6 +651,10 @@
 	<script type="text/javascript" src="${base}/admin/orderJp/visaInfo.js"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script>
+	
+		//historyData = '${obj.applicantid}';
+		
+		
 		var wealthDeftData = [
 			{
 				200001: '银行流水'
@@ -1159,7 +1163,7 @@
 
 				arr.push(ret);
 			});
-			
+			console.log("arr:"+JSON.stringify(arr));
 			return arr;
 		}
 
@@ -1273,9 +1277,11 @@
 				isVisit: isVisit,
 				threecounty: threecounty,
 				isname: isname,
+				applicantId: applicantid,
 				isyaoqing: isyaoqing
 			}) + "&" + $("#passportInfo").serialize();
 			console.log(wealthInfoObject);
+			console.log(passportInfo);
 
 			ajaxConnection();
 			var count = 0;

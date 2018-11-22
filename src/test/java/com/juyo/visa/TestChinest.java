@@ -15,23 +15,31 @@ import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 
-import com.juyo.visa.common.util.TranslateUtil;
-
 public class TestChinest {
 
 	static final int N = 50000;
 
 	public static void main(String[] args) {
 
-		String str = "内蒙古自治区朝阳区朝阳门天辰大厦908";
-		try {
+		String str = "ggweg146 51-& ";
+		System.out.println(isLegalStr(str));
+		/*if (str.endsWith("自治区")) {
+			str = str.substring(0, str.length() - 3);
+		}
+		if (str.endsWith("区")) {
+			str = str.substring(0, str.length() - 1);
+		}
+
+		System.out.println(str);*/
+
+		/*try {
 			System.out.println(TranslateUtil.translate(str, "en"));
 		} catch (Exception e) {
 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
-		}
+		}*/
 
 		//System.out.println(imgToBse64("http://oyu1xyxxk.bkt.clouddn.com/5dc3274f-204b-4336-bf57-985e09c7ca14..jpeg"));
 
@@ -183,6 +191,12 @@ public class TestChinest {
 		System.out.println(stringBuilder1.toString());*/
 
 		//System.out.println(s.substring(s.indexOf(".", s.indexOf(".")) + 1, s.indexOf(".", s.indexOf(".") + 1)));
+	}
+
+	public static boolean isLegalStr(String str) {
+		String reg = "[A-Za-z0-9-& ]+";
+		boolean isChinese = str.matches(reg);
+		return isChinese;
 	}
 
 	public static int[] getRandomArray(int[] paramArray, int count) {

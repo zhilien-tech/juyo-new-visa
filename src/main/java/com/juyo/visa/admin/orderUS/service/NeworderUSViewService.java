@@ -422,12 +422,26 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			basicinfo.setMailcountry(form.getMailcountry());
 			basicinfo.setMailprovince(form.getMailprovince());
 			basicinfo.setMailcity(form.getMailcity());
-			basicinfo.setMailaddress(form.getMailaddress());
 
 			basicinfo.setMailcountryen(form.getMailcountryen());
 			basicinfo.setMailprovinceen(form.getMailprovinceen());
 			basicinfo.setMailcityen(form.getMailcityen());
-			basicinfo.setMailaddressen(form.getMailaddressen());
+
+			if (Util.isEmpty(form.getMailaddressen())) {
+				basicinfo.setMailaddressen(translate(form.getMailaddress()));
+			} else {
+				if (Util.eq(form.getMailaddress(), basicinfo.getMailaddress())) {
+					basicinfo.setMailaddressen(form.getMailaddressen());
+				} else {
+					if (Util.eq(form.getMailaddressen(), basicinfo.getMailaddressen())) {
+						basicinfo.setMailaddressen(translate(form.getMailaddress()));
+					} else {
+						basicinfo.setMailaddressen(form.getMailaddressen());
+					}
+				}
+			}
+
+			basicinfo.setMailaddress(form.getMailaddress());
 		}
 
 		basicinfo.setSex(form.getSex());
@@ -438,7 +452,6 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setCity(form.getCity());
 		basicinfo.setCardprovince(form.getCardprovince());
 		basicinfo.setCardcity(form.getCardcity());
-		basicinfo.setDetailedaddress(form.getDetailedaddress());
 
 		//如果地址英文为空，直接翻译中文地址
 		if (Util.isEmpty(form.getDetailedaddressen())) {
@@ -450,10 +463,11 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				if (Util.eq(form.getDetailedaddressen(), basicinfo.getDetailedaddressen())) {
 					basicinfo.setDetailedaddressen(translate(form.getDetailedaddress()));
 				} else {
-					basicinfo.setDetailedaddressen(form.getDetailedaddress());
+					basicinfo.setDetailedaddressen(form.getDetailedaddressen());
 				}
 			}
 		}
+		basicinfo.setDetailedaddress(form.getDetailedaddress());
 		basicinfo.setMarrystatus(form.getMarrystatus());
 		basicinfo.setBirthday(form.getBirthday());
 		basicinfo.setBirthcountry(form.getBirthcountry());
@@ -495,6 +509,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				if (issuedplace.endsWith("自治区")) {
 					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
 				}
+				if (issuedplace.endsWith("区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
 				try {
 					basicinfo.setProvinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
 				} catch (BadHanyuPinyinOutputFormatCombination e1) {
@@ -505,12 +522,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 		if (!Util.isEmpty(form.getCity())) {
 			String issuedplace = form.getCity();
-			if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+			/*if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
 				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
 			}
 			if (issuedplace.endsWith("自治区")) {
 				issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
 			}
+			if (issuedplace.endsWith("区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}*/
 			try {
 				basicinfo.setCityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
 			} catch (BadHanyuPinyinOutputFormatCombination e1) {
@@ -975,8 +995,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 		}
 		//教育信息
-		translateTime += (long) updateBeforeeducation(form);
-		/*if (Util.eq(1, form.getIssecondarylevel())) {
+		//translateTime += (long) updateBeforeeducation(form);
+		if (Util.eq(1, form.getIssecondarylevel())) {
 			translateTime += (long) updateBeforeeducation(form);
 		} else {
 			TAppStaffBeforeeducationEntity beforeeducation = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
@@ -984,7 +1004,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			if (!Util.isEmpty(beforeeducation)) {
 				dbDao.delete(beforeeducation);
 			}
-		}*/
+		}
 		long endTime = System.currentTimeMillis();
 		System.out.println("保存工作教育信息用了" + (endTime - startTime) + "ms");
 		System.out.println("translateTime:" + translateTime);
@@ -1005,34 +1025,85 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		workinfo.setOccupation(form.getOccupation());
-		workinfo.setUnitname(form.getUnitname());
 
-		if (!Util.isEmpty(form.getUnitnameen())) {
+		/*if (!Util.isEmpty(form.getUnitnameen())) {
 			workinfo.setUnitnameen(form.getUnitnameen());
 		} else {
 			workinfo.setUnitnameen(translate(form.getUnitname()));
+		}*/
+		if (Util.isEmpty(form.getUnitnameen())) {
+			workinfo.setUnitnameen(translate(form.getUnitname()));
+		} else {
+			if (Util.eq(form.getUnitname(), workinfo.getUnitname())) {
+				workinfo.setUnitnameen(form.getUnitnameen());
+			} else {
+				if (Util.eq(form.getUnitnameen(), workinfo.getUnitnameen())) {
+					workinfo.setUnitnameen(translate(form.getUnitname()));
+				} else {
+					workinfo.setUnitnameen(form.getUnitnameen());
+				}
+			}
 		}
+
+		workinfo.setUnitname(form.getUnitname());
 
 		workinfo.setTelephone(form.getTelephone());
 		workinfo.setCountry(form.getCountry());
 		workinfo.setProvince(form.getProvince());
 		workinfo.setCity(form.getCity());
-		workinfo.setAddress(form.getAddress());
 
-		if (!Util.isEmpty(form.getAddressen())) {
+		/*if (!Util.isEmpty(form.getAddressen())) {
 			workinfo.setAddressen(form.getAddressen());
 		} else {
 			workinfo.setAddressen(translate(form.getAddress()));
+		}*/
+
+		if (Util.isEmpty(form.getAddressen())) {
+			workinfo.setAddressen(translate(form.getAddress()));
+		} else {
+			if (Util.eq(form.getAddress(), workinfo.getAddress())) {
+				workinfo.setAddressen(form.getAddressen());
+			} else {
+				if (Util.eq(form.getAddressen(), workinfo.getAddressen())) {
+					workinfo.setAddressen(translate(form.getAddress()));
+				} else {
+					workinfo.setAddressen(form.getAddressen());
+				}
+			}
 		}
 
+		workinfo.setAddress(form.getAddress());
+
 		workinfo.setWorkstartdate(form.getWorkstartdate());
-		workinfo.setPosition(form.getPosition());
+
 		workinfo.setSalary(form.getSalary());
-		workinfo.setDuty(form.getDuty());
 		workinfo.setIssecondarylevel(form.getIssecondarylevel());
 		workinfo.setIsemployed(form.getIsemployed());
 		workinfo.setZipcode(getZipcode(form.getCity()));
 		workinfo.setZipcodeen(workinfo.getZipcode());
+
+		/*if (!Util.isEmpty(form.getDutyen())) {
+			workinfo.setDutyen(form.getDutyen());
+		} else {
+			workinfo.setDutyen(translate(form.getDuty()));
+		}*/
+
+		if (Util.isEmpty(form.getDutyen())) {
+			workinfo.setDutyen(translate(form.getDuty()));
+		} else {
+			if (Util.eq(form.getDuty(), workinfo.getDuty())) {
+				workinfo.setDutyen(form.getDutyen());
+			} else {
+				if (Util.eq(form.getDutyen(), workinfo.getDutyen())) {
+					workinfo.setDutyen(translate(form.getDuty()));
+				} else {
+					workinfo.setDutyen(form.getDutyen());
+				}
+			}
+		}
+
+		workinfo.setDuty(form.getDuty());
+
 		//英文
 		long startTime = System.currentTimeMillis();
 		workinfo.setOccupationen(form.getOccupation());
@@ -1058,6 +1129,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				if (issuedplace.endsWith("自治区")) {
 					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
 				}
+				if (issuedplace.endsWith("区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
 				try {
 					workinfo.setProvinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
 				} catch (BadHanyuPinyinOutputFormatCombination e1) {
@@ -1069,12 +1143,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		if (!Util.isEmpty(form.getCity())) {
 			String issuedplace = form.getCity();
-			if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+			/*if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
 				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
 			}
 			if (issuedplace.endsWith("自治区")) {
 				issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
 			}
+			if (issuedplace.endsWith("区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}*/
 			try {
 				workinfo.setCityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
 			} catch (BadHanyuPinyinOutputFormatCombination e1) {
@@ -1086,13 +1163,23 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//workinfo.setProvinceen(translate(form.getProvince()));
 		//workinfo.setCityen(translate(form.getCity()));
 
-		workinfo.setPositionen(translate(form.getPosition()));
-
-		if (!Util.isEmpty(form.getDutyen())) {
-			workinfo.setDutyen(form.getDutyen());
+		if (Util.isEmpty(form.getPositionen())) {
+			workinfo.setPositionen(translate(form.getPosition()));
 		} else {
-			workinfo.setDutyen(translate(form.getDuty()));
+			if (Util.eq(form.getPosition(), workinfo.getPosition())) {
+				workinfo.setPositionen(form.getPositionen());
+			} else {
+				if (Util.eq(form.getPositionen(), workinfo.getPositionen())) {
+					workinfo.setPositionen(translate(form.getPosition()));
+				} else {
+					workinfo.setPositionen(form.getPositionen());
+				}
+			}
 		}
+
+		//workinfo.setPositionen(translate(form.getPosition()));
+
+		workinfo.setPosition(form.getPosition());
 
 		workinfo.setWorkstartdateen(form.getWorkstartdateen());
 		workinfo.setSalaryen(form.getSalary());
@@ -1122,30 +1209,97 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			beforework.setStaffid(staffid);
 			dbDao.insert(beforework);
 		}
-		beforework.setEmployername(form.getEmployername());
 
-		if (!Util.isEmpty(form.getEmployernameen())) {
+		/*if (!Util.isEmpty(form.getEmployernameen())) {
 			beforework.setEmployernameen(form.getEmployernameen());
 		} else {
 			beforework.setEmployernameen(translate(form.getEmployername()));
+		}*/
+
+		if (Util.isEmpty(form.getEmployernameen())) {
+			beforework.setEmployernameen(translate(form.getEmployername()));
+		} else {
+			if (Util.eq(form.getEmployername(), beforework.getEmployername())) {
+				beforework.setEmployernameen(form.getEmployernameen());
+			} else {
+				if (Util.eq(form.getEmployernameen(), beforework.getEmployernameen())) {
+					beforework.setEmployernameen(translate(form.getEmployername()));
+				} else {
+					beforework.setEmployernameen(form.getEmployernameen());
+				}
+			}
 		}
+
+		beforework.setEmployername(form.getEmployername());
 
 		beforework.setEmployertelephone(form.getEmployertelephone());
 		beforework.setEmployercountry(form.getEmployercountry());
 		beforework.setEmployerprovince(form.getEmployerprovince());
 		beforework.setEmployercity(form.getEmployercity());
-		beforework.setEmployeraddress(form.getEmployeraddress());
 
-		if (!Util.isEmpty(form.getEmployeraddressen())) {
+		/*if (!Util.isEmpty(form.getEmployeraddressen())) {
 			beforework.setEmployeraddressen(form.getEmployeraddressen());
 		} else {
 			beforework.setEmployeraddressen(translate(form.getEmployeraddress()));
+		}*/
+
+		if (Util.isEmpty(form.getEmployeraddressen())) {
+			beforework.setEmployeraddressen(translate(form.getEmployeraddress()));
+		} else {
+			if (Util.eq(form.getEmployeraddress(), beforework.getEmployeraddress())) {
+				beforework.setEmployeraddressen(form.getEmployeraddressen());
+			} else {
+				if (Util.eq(form.getEmployeraddressen(), beforework.getEmployeraddressen())) {
+					beforework.setEmployeraddressen(translate(form.getEmployeraddress()));
+				} else {
+					beforework.setEmployeraddressen(form.getEmployeraddressen());
+				}
+			}
 		}
+
+		beforework.setEmployeraddress(form.getEmployeraddress());
 
 		beforework.setEmploystartdate(form.getEmploystartdate());
 		beforework.setEmployenddate(form.getEmployenddate());
+
+		if (Util.isEmpty(form.getJobtitleen())) {
+			beforework.setJobtitleen(translate(form.getJobtitle()));
+		} else {
+			if (Util.eq(form.getJobtitle(), beforework.getJobtitle())) {
+				beforework.setJobtitleen(form.getJobtitleen());
+			} else {
+				if (Util.eq(form.getJobtitleen(), beforework.getJobtitleen())) {
+					beforework.setJobtitleen(translate(form.getJobtitle()));
+				} else {
+					beforework.setJobtitleen(form.getJobtitleen());
+				}
+			}
+		}
+
 		beforework.setJobtitle(form.getJobtitle());
+
+		/*if (!Util.isEmpty(form.getPreviousdutyen())) {
+			beforework.setPreviousdutyen(form.getPreviousdutyen());
+		} else {
+			beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+		}*/
+
+		if (Util.isEmpty(form.getPreviousdutyen())) {
+			beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+		} else {
+			if (Util.eq(form.getPreviousduty(), beforework.getPreviousduty())) {
+				beforework.setPreviousdutyen(form.getPreviousdutyen());
+			} else {
+				if (Util.eq(form.getPreviousdutyen(), beforework.getPreviousdutyen())) {
+					beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+				} else {
+					beforework.setPreviousdutyen(form.getPreviousdutyen());
+				}
+			}
+		}
+
 		beforework.setPreviousduty(form.getPreviousduty());
+
 		beforework.setEmployerzipcode(getZipcode(form.getEmployercity()));
 		beforework.setEmployerzipcodeen(beforework.getEmployerzipcode());
 		//英文
@@ -1170,6 +1324,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				if (issuedplace.endsWith("自治区")) {
 					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
 				}
+				if (issuedplace.endsWith("区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
 				try {
 					beforework.setEmployerprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
 				} catch (BadHanyuPinyinOutputFormatCombination e1) {
@@ -1181,12 +1338,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		if (!Util.isEmpty(form.getEmployercity())) {
 			String issuedplace = form.getEmployercity();
-			if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+			/*if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
 				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
 			}
 			if (issuedplace.endsWith("自治区")) {
 				issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
 			}
+			if (issuedplace.endsWith("区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}*/
 			try {
 				beforework.setEmployercityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
 			} catch (BadHanyuPinyinOutputFormatCombination e1) {
@@ -1198,17 +1358,10 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//beforework.setEmployerprovinceen(translate(form.getEmployerprovince()));
 		//beforework.setEmployercityen(translate(form.getEmployercity()));
 
-		beforework.setJobtitleen(translate(form.getJobtitle()));
 		//beforework.setPreviousdutyen(translate(form.getPreviousduty()));
 		/*beforework.setEmployerprovinceen(form.getEmployerprovinceen());
 		beforework.setEmployercityen(form.getEmployercityen());
 		beforework.setJobtitleen(form.getJobtitleen());*/
-
-		if (!Util.isEmpty(form.getPreviousdutyen())) {
-			beforework.setPreviousdutyen(form.getPreviousdutyen());
-		} else {
-			beforework.setPreviousduty(translate(form.getPreviousduty()));
-		}
 
 		long endTime = System.currentTimeMillis();
 
@@ -1253,25 +1406,73 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			dbDao.insert(beforeeducation);
 		}
 		beforeeducation.setHighesteducation(form.getHighesteducation());
-		beforeeducation.setInstitution(form.getInstitution());
 
-		if (!Util.isEmpty(form.getInstitutionen())) {
+		/*if (!Util.isEmpty(form.getInstitutionen())) {
 			beforeeducation.setInstitutionen(form.getInstitutionen());
 		} else {
 			beforeeducation.setInstitutionen(translate(form.getInstitution()));
+		}*/
+
+		if (Util.isEmpty(form.getInstitutionen())) {
+			beforeeducation.setInstitutionen(translate(form.getInstitution()));
+		} else {
+			if (Util.eq(form.getInstitution(), beforeeducation.getInstitution())) {
+				beforeeducation.setInstitutionen(form.getInstitutionen());
+			} else {
+				if (Util.eq(form.getInstitutionen(), beforeeducation.getInstitutionen())) {
+					beforeeducation.setInstitutionen(translate(form.getInstitution()));
+				} else {
+					beforeeducation.setInstitutionen(form.getInstitutionen());
+				}
+			}
+		}
+
+		beforeeducation.setInstitution(form.getInstitution());
+
+		//beforeeducation.setCourseen(translate(form.getCourse()));
+
+		if (Util.isEmpty(form.getCourseen())) {//如果英文为空，直接翻译
+			beforeeducation.setCourseen(translate(form.getCourse()));
+		} else {
+			if (Util.eq(form.getCourse(), beforeeducation.getCourse())) {//英文不为空，中文相同说明没变，直接存英文
+				beforeeducation.setCourseen(form.getCourseen());
+			} else {
+				if (Util.eq(form.getCourseen(), beforeeducation.getCourseen())) {//中文不同，英文相同，说明没有翻译过来，需要翻译
+					beforeeducation.setCourseen(translate(form.getCourse()));
+				} else {
+					beforeeducation.setCourseen(form.getCourseen());//中文、英文都不一样，直接存英文
+				}
+			}
 		}
 
 		beforeeducation.setCourse(form.getCourse());
+
 		beforeeducation.setInstitutioncountry(form.getInstitutioncountry());
 		beforeeducation.setInstitutionprovince(form.getInstitutionprovince());
 		beforeeducation.setInstitutioncity(form.getInstitutioncity());
-		beforeeducation.setInstitutionaddress(form.getInstitutionaddress());
 
-		if (!Util.isEmpty(form.getInstitutionaddressen())) {
+		/*if (!Util.isEmpty(form.getInstitutionaddressen())) {
 			beforeeducation.setInstitutionaddressen(form.getInstitutionaddressen());
 		} else {
 			beforeeducation.setInstitutionaddressen(translate(form.getInstitutionaddress()));
+		}*/
+
+		if (Util.isEmpty(form.getInstitutionaddressen())) {
+			beforeeducation.setInstitutionaddressen(translate(form.getInstitutionaddress()));
+		} else {
+			if (Util.eq(form.getInstitutionaddress(), beforeeducation.getInstitutionaddress())) {
+				beforeeducation.setInstitutionaddressen(form.getInstitutionaddressen());
+			} else {
+				if (Util.eq(form.getInstitutionaddressen(), beforeeducation.getInstitutionaddressen())) {
+					beforeeducation.setInstitutionaddressen(translate(form.getInstitutionaddress()));
+				} else {
+					beforeeducation.setInstitutionaddressen(form.getInstitutionaddressen());
+				}
+			}
 		}
+
+		beforeeducation.setInstitutionaddress(form.getInstitutionaddress());
+
 		beforeeducation.setCoursestartdate(form.getCoursestartdate());
 		beforeeducation.setCourseenddate(form.getCourseenddate());
 		beforeeducation.setInstitutionzipcode(getZipcode(form.getInstitutioncity()));
@@ -1282,7 +1483,6 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		beforeeducation.setInstitutioncountryen(form.getInstitutioncountry());
 		beforeeducation.setCoursestartdateen(form.getCoursestartdate());
 		beforeeducation.setCourseenddateen(form.getCourseenddate());
-		beforeeducation.setCourseen(translate(form.getCourse()));
 
 		//中文翻译成拼音并大写工具
 		PinyinTool tool = new PinyinTool();
@@ -1299,6 +1499,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				if (issuedplace.endsWith("自治区")) {
 					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
 				}
+				if (issuedplace.endsWith("区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
 				try {
 					beforeeducation.setInstitutionprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
 				} catch (BadHanyuPinyinOutputFormatCombination e1) {
@@ -1310,12 +1513,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		if (!Util.isEmpty(form.getInstitutioncity())) {
 			String issuedplace = form.getInstitutioncity();
-			if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+			/*if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
 				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
 			}
 			if (issuedplace.endsWith("自治区")) {
 				issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
 			}
+			if (issuedplace.endsWith("区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}*/
 			try {
 				beforeeducation.setInstitutioncityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
 			} catch (BadHanyuPinyinOutputFormatCombination e1) {
@@ -1578,15 +1784,66 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			tripinfo.setIssueddate(null);
 			tripinfo.setVisanumber("");
 		}
+
+		if (form.getIsrefused() == 1) {
+			if (Util.isEmpty(form.getRefusedexplainen())) {//如果没有英文，则直接翻译
+				tripinfo.setRefusedexplainen(translate(form.getRefusedexplain()));
+			} else {
+				if (Util.eq(form.getRefusedexplain(), tripinfo.getRefusedexplain())) {//英文不为空，中文不变，直接保存英文
+					tripinfo.setRefusedexplainen(form.getRefusedexplainen());
+				} else {//英文不为空，中文改变，分两种情况：一种英文不变，说明没翻译，需要翻译，另一种英文改变，直接保存英文
+					if (Util.eq(form.getRefusedexplainen(), tripinfo.getRefusedexplainen())) {
+						tripinfo.setRefusedexplainen(translate(form.getRefusedexplain()));
+					} else {
+						tripinfo.setRefusedexplainen(form.getRefusedexplainen());
+					}
+				}
+			}
+
+			tripinfo.setRefusedexplain(form.getRefusedexplain());
+		} else {
+			tripinfo.setRefusedexplain("");
+			tripinfo.setRefusedexplainen("");
+		}
+
 		tripinfo.setIsapplyingsametypevisa(form.getIsapplyingsametypevisa());
 		tripinfo.setIstenprinted(form.getIstenprinted());
 		tripinfo.setIslost(form.getIslost());
 		tripinfo.setIscancelled(form.getIscancelled());
 		tripinfo.setIsrefused(form.getIsrefused());
-		tripinfo.setRefusedexplain(form.getRefusedexplain());
+
+		//tripinfo.setRefusedexplainen(translate(form.getRefusedexplain()));
+
 		tripinfo.setIsfiledimmigrantpetition(form.getIsfiledimmigrantpetition());
-		tripinfo.setEmigrationreason(form.getEmigrationreason());
-		tripinfo.setImmigrantpetitionexplain(form.getImmigrantpetitionexplain());
+
+		if (form.getIsfiledimmigrantpetition() == 1) {
+			tripinfo.setEmigrationreason(form.getEmigrationreason());
+			tripinfo.setEmigrationreasonen(form.getEmigrationreason());
+
+			if (Util.isEmpty(form.getImmigrantpetitionexplainen())) {
+				tripinfo.setImmigrantpetitionexplainen(translate(form.getImmigrantpetitionexplain()));
+			} else {
+				if (Util.eq(form.getImmigrantpetitionexplain(), tripinfo.getImmigrantpetitionexplain())) {
+					tripinfo.setImmigrantpetitionexplainen(form.getImmigrantpetitionexplainen());
+				} else {
+					if (Util.eq(form.getImmigrantpetitionexplainen(), tripinfo.getImmigrantpetitionexplainen())) {
+						tripinfo.setImmigrantpetitionexplainen(translate(form.getImmigrantpetitionexplain()));
+					} else {
+						tripinfo.setImmigrantpetitionexplainen(form.getImmigrantpetitionexplainen());
+					}
+				}
+			}
+
+			tripinfo.setImmigrantpetitionexplain(form.getImmigrantpetitionexplain());
+		} else {
+			tripinfo.setEmigrationreason(0);
+			tripinfo.setEmigrationreasonen(0);
+			tripinfo.setImmigrantpetitionexplain("");
+			tripinfo.setImmigrantpetitionexplainen("");
+		}
+
+		//tripinfo.setImmigrantpetitionexplainen(translate(form.getImmigrantpetitionexplain()));
+
 		//英文
 		tripinfo.setCostpayeren(form.getCostpayer());
 		tripinfo.setHasbeeninusen(form.getHasbeeninus());
@@ -1598,11 +1855,10 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		tripinfo.setIscancelleden(form.getIscancelled());
 		tripinfo.setIsrefuseden(form.getIsrefused());
 		tripinfo.setIsfiledimmigrantpetitionen(form.getIsfiledimmigrantpetition());
-		tripinfo.setEmigrationreasonen(form.getEmigrationreason());
+		//tripinfo.setEmigrationreasonen(form.getEmigrationreason());
 		//tripinfo.setRefusedexplainen(form.getRefusedexplainen());
 		//tripinfo.setImmigrantpetitionexplainen(form.getImmigrantpetitionexplainen());
-		tripinfo.setRefusedexplainen(translate(form.getRefusedexplain()));
-		tripinfo.setImmigrantpetitionexplainen(translate(form.getImmigrantpetitionexplain()));
+
 		dbDao.update(tripinfo);
 		return null;
 	}
@@ -1661,6 +1917,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(str)) {
 			try {
 				result = TranslateUtil.translate(str, "en");
+				System.out.println("翻译内容为：" + str + "，翻译结果为result:" + result);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

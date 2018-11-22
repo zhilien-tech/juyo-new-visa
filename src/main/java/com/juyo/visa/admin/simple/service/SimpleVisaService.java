@@ -4175,7 +4175,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		HttpSession session = request.getSession();
 
-		System.out.println("applicantid:" + applicantid + "===============");
+		System.out.println("跳转到签证信息页的applicantid:" + applicantid + "===============");
 		result.put("applicantid", applicantid);
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);

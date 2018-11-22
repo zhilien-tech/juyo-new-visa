@@ -493,7 +493,7 @@
 								<!-- 街道 -->
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label><span id="streetspan">只能填写英文和数字</span></label> <input id="planaddress" name="planaddress" onchange="translateZhToEn(this,'planaddressen','')"
+										<label><span>*</span><span id="streetspan">只能填写英文和数字</span></label> <input id="planaddress" name="planaddress" onchange="translateZhToEn(this,'planaddressen','')"
 											type="text" value="${obj.travelInfo.address}"
 											class="form-control input-sm" placeholder="街道英文" />
 											<input id="planaddressen" name="planaddressen" type="hidden" value="${obj.travelInfo.addressen }"/>
