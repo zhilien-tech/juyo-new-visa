@@ -1123,9 +1123,10 @@ function saveApplicant(status){
 					url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
 					success :function(data) {
 						console.log(data);
-						layer.closeAll("loading");
 						closeWindow();
+						layer.closeAll("loading");
 						parent.successCallback(2);
+						layer.msg("保存成功");
 					},error: function (XMLHttpRequest, textStatus, errorThrown) {
 						layer.closeAll("loading");
 						console.log(XMLHttpRequest);

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -1395,8 +1394,17 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Contacts.put("NameInfo", contactnameinfo);
 
 		//组织名称(签证信息)，目前为酒店信息
-
 		TCityUsEntity city = new TCityUsEntity();
+		THotelUsEntity hotel = new THotelUsEntity();
+		if (!Util.isEmpty(info.get("hotelnameen"))) {
+			Contacts.put("organization", info.get("hotelnameen"));
+			hotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("name", "=", info.get("hotelname")));
+			city = dbDao.fetch(TCityUsEntity.class, hotel.getCityId().longValue());
+		} else {
+			errorMsg += "出行信息：计划去美国的酒店,</br>";
+		}
+
+		/*TCityUsEntity city = new TCityUsEntity();
 		THotelUsEntity hotel = new THotelUsEntity();
 		//Contacts.put("organization", "FSFSG");
 		if (!Util.isEmpty(info.get("plancity"))) {
@@ -1409,7 +1417,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			hotel = hotels.get(hotelindex);
 
 			Contacts.put("organization", hotel.getNameen());
-		}
+		}*/
 
 		//与你的关系(签证信息)
 		Contacts.put("relationship", "O");
@@ -1670,8 +1678,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			AmericaInfo.put("united_states_citizen", "");
 		}
 		//曾经有人为您申请移民(签证信息)
-		if (!Util.isEmpty(info.get("immigrantpetitionexplain"))) {
-			AmericaInfo.put("apply_for_emigrant", info.get("immigrantpetitionexplain"));
+		if (!Util.isEmpty(info.get("immigrantpetitionexplainen"))) {
+			AmericaInfo.put("apply_for_emigrant", info.get("immigrantpetitionexplainen"));
 		} else {
 			AmericaInfo.put("apply_for_emigrant", "");
 		}

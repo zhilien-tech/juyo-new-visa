@@ -274,7 +274,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>停留天数：</label> <input id="stayday"
-											onchange="sendDate()" name="staydays" class="input-sm"
+											 name="staydays" class="input-sm"
 											value="${obj.travelInfo.staydays}" type="text" />
 									</div>
 								</div>
@@ -491,9 +491,32 @@
 								</div>
 								<!-- 市END -->
 								<!-- 街道 -->
-								<div class="col-sm-6">
+								<%-- <div class="col-sm-6">
 									<div class="form-group">
 										<label><span>*</span><span id="streetspan">只能填写英文和数字</span></label> <input id="planaddress" name="planaddress" onchange="translateZhToEn(this,'planaddressen','')"
+											type="text" value="${obj.travelInfo.address}"
+											class="form-control input-sm" placeholder="街道英文" />
+											<input id="planaddressen" name="planaddressen" type="hidden" value="${obj.travelInfo.addressen }"/>
+									</div>
+								</div> --%>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label></label> 
+										<select
+											id="hotelname" name="hotelname"
+											class="form-control input-sm select2City arrivedcity"
+											multiple="multiple">
+										<c:if test="${!empty obj.travelInfo.hotelname}">
+												<option value="${obj.travelInfo.hotelname}"
+													selected="selected">${obj.travelInfo.hotelname}</option>
+											</c:if>
+										
+											<input id=""hotelnameen"" name="hotelnameen" type="hidden" value="${obj.travelInfo.hotelnameen }"/>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label></label> <input id="planaddress" name="planaddress" onchange="translateZhToEn(this,'planaddressen','')"
 											type="text" value="${obj.travelInfo.address}"
 											class="form-control input-sm" placeholder="街道英文" />
 											<input id="planaddressen" name="planaddressen" type="hidden" value="${obj.travelInfo.addressen }"/>
@@ -775,7 +798,123 @@
 			$(".checkShowORHide").hide();
 		}
 		//日期格式处理
-		$(".form-format").datetimepicker({
+		var now = new Date();
+		//预计出发日期
+		$("#goDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			startDate: now,//日期小于今天
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition: "bottom-right",//显示位置
+			minView: "month"//只显示年月日
+		}).on('changeDate', function (ev) {
+			$("#sendVisaDate").datetimepicker("setStartDate", $("#goDate").val());
+		});
+		
+		//抵达美国日期
+		$("#sendVisaDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			startDate: now,//日期小于今天
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition: "bottom-right",//显示位置
+			minView: "month"//只显示年月日
+		}).on('changeDate', function (ev) {
+			console.log('change..');
+			var stayday = $("#stayday").val();
+			var startDate = $("#sendVisaDate").val();
+			var returnDate = $("#returnDate").val();
+			if(stayday != ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalculateBackDate.html',
+					dataType: "json",
+					data: { gotripdate: startDate, stayday: stayday },
+					type: 'post',
+					success: function (data) {
+						$("#returnDate").val(data);
+					}
+				});
+			}
+			if(returnDate != "" && stayday == ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalCulateStayday.html',
+					dataType: "json",
+					data: { gotripdate: startDate, returnDate: returnDate },
+					type: 'post',
+					success: function (data) {
+						$("#stayday").val(data);
+					}
+				});
+			}
+		});
+		//离开美国日期
+		$("#returnDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			startDate: now,
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition: "bottom-right",//显示位置
+			minView: "month"//只显示年月日
+		}).on("click", function () {
+			console.log('click..');
+			
+			$(this).datetimepicker(
+				"setStartDate", $("#sendVisaDate").val()
+			);
+			
+		}).on('changeDate', function (ev) {
+			console.log('change..');
+			var stayday = $("#stayday").val();
+			var startDate = $("#sendVisaDate").val();
+			var returnDate = $("#returnDate").val();
+			/* if(stayday != ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalculateBackDate.html',
+					dataType: "json",
+					data: { gotripdate: startDate, stayday: stayday },
+					type: 'post',
+					success: function (data) {
+						$("#returnDate").val(data);
+					}
+				});
+			} */
+			if(returnDate != "" && startDate != ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalCulateStayday.html',
+					dataType: "json",
+					data: { gotripdate: startDate, returnDate: returnDate },
+					type: 'post',
+					success: function (data) {
+						$("#stayday").val(data);
+					}
+				});
+			}
+		});
+		
+		$(document).on("input","#stayday",function(){
+			var thisval = $(this).val();
+			thisval = thisval.replace(/[^\d]/g,'');
+			$(this).val(thisval);
+			if(!thisval){
+				$('#returnDate').val('');
+			}
+			
+			var sendvisadate = $("#sendVisaDate").val();
+			var returnDate = $("#returnDate").val();
+			if(sendvisadate != "" && thisval){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalculateBackDate.html',
+					dataType: "json",
+					data: { gotripdate: sendvisadate, stayday: thisval },
+					type: 'post',
+					success: function (data) {
+						$("#returnDate").val(data);
+					}
+				});
+			}
+		});
+		
+		/* $(".form-format").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
 	        weekStart: 1,
@@ -787,7 +926,7 @@
 	        showMeridian: false,
 			pickerPosition:"bottom-right",//显示位置
 			minView: "month"//只显示年月日
-		}); 
+		});  */
 		//面签时间日期格式处理
 		$(".interviewformat").datetimepicker({
 			format: 'yyyy-mm-dd H:i',
@@ -824,27 +963,18 @@
 		$("#goDate").change(function(){
 			var godate = $("#goDate").val(); //出发日期
 			var sendvisadate = $("#sendVisaDate").val(); //抵达美国日期
-			$("#sendVisaDate").val(godate);
+			if(sendvisadate == ""){
+				$("#sendVisaDate").val(godate);
+			}
 		});
 		
 		//计划去美国的州改变，城市自动清空
 		$("#planstate").change(function(){
 			$("#plancity").empty();
+			$("#hotelname").empty();
 			$("#planaddress").val("");
 		});
 
-		//离开美国日期联动
-		function sendDate() {
-			var stayday = $("#stayday").val();
-			//自动计算离开美国时间
-			var stayday = stayday;
-			var sendvisadate = $("#sendVisaDate").val();
-			console.log(sendvisadate);
-			console.log(stayday);
-			var days = getNewDay(sendvisadate, stayday);
-			console.log(days);
-			$("#returnDate").val(days);
-		}
 
 		//日期转换 加上指定天数
 		function getNewDay(dateTemp, days) {
@@ -1083,7 +1213,123 @@
 			tags : false
 		//设置必须存在的选项 才能选中
 		});
+		//酒店名称
+		$('#hotelname').select2({
+			ajax : {
+				url : "/admin/neworderUS/selectUSHotel.html",
+				dataType : 'json',
+				delay : 250,
+				type : 'post',
+				data : function(params) {
+					var cArrivalcity = $('#plancity').val();
+					if(cArrivalcity){
+						cArrivalcity = cArrivalcity.join(',');
+					}
+					return {
+						plancity : cArrivalcity,
+						searchstr : params.term, // search term
+						page : params.page
+					};
+				},
+				processResults : function(data, params) {
+					params.page = params.page || 1;
+					var selectdata = $.map(data, function(obj) {
+						obj.id = obj.name; // replace pk with your identifier
+						obj.text = obj.name; // replace pk with your identifier
+						/*obj.text = obj.dictCode;*/
+						return obj;
+					});
+					return {
+						results : selectdata
+					};
+				},
+				cache : false
+			},
+			//templateSelection: formatRepoSelection,
+			escapeMarkup : function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength : 1,
+			maximumInputLength : 20,
+			language : "zh-CN", //设置 提示语言
+			maximumSelectionLength : 1, //设置最多可以选择多少项
+			tags : false
+		//设置必须存在的选项 才能选中
+		});
+		
+		$("#plancity").on('select2:unselect', function (evt) {
+			$("#hotelname").empty();
+			$("#planaddress").val("");
+		}); 
+		$("#hotelname").on('select2:unselect', function (evt) {
+			$("#planaddress").val("");
+		}); 
+		
+		$("#hotelname").on('select2:select', function (evt) {
+			var hotelname = $(this).select2("val");
+			if(hotelname){
+				hotelname = hotelname.join(',');
+			}
+			$.ajax({
+				url : '/admin/neworderUS/getHoteladdress',
+				type : 'POST',
+				data : {
+					'hotelname' : hotelname
+				},
+				dataType:'json',
+				success : function(data) {
+					$("#planaddress").val(data);
+				},
+				error : function() {
+				}
+			});
 
+		});
+		
+		$('#plancity').select2({
+			ajax : {
+				url : "/admin/neworderUS/selectUSstateandcity.html",
+				dataType : 'json',
+				delay : 250,
+				type : 'post',
+				data : function(params) {
+					var province = $('#planstate').val();
+					/* alert(province);
+				    if(province){
+				    	province = province.join(',');
+					} */
+					return {
+						province : province,
+						searchstr : params.term, // search term
+						page : params.page
+					};
+				},
+				processResults : function(data, params) {
+					params.page = params.page || 1;
+					var selectdata = $.map(data, function(obj) {
+						obj.id = obj.cityname; // replace pk with your identifier
+						obj.text = obj.cityname; // replace pk with your identifier
+						/*obj.text = obj.dictCode;*/
+						return obj;
+					});
+					return {
+						results : selectdata
+					};
+				},
+				cache : false
+			},
+			//templateSelection: formatRepoSelection,
+			escapeMarkup : function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength : 1,
+			maximumInputLength : 20,
+			language : "zh-CN", //设置 提示语言
+			maximumSelectionLength : 1, //设置最多可以选择多少项
+			tags : false
+		//设置必须存在的选项 才能选中
+		});
+		
 		//出发航班select2
 		$('#goFlightNum').select2(
 				{

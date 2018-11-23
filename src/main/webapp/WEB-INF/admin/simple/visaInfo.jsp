@@ -1520,14 +1520,48 @@
 		$("#laststartdate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
+			endDate:now,
 			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"bottom-right",//显示位置
 			minView: "month"//只显示年月日
+		}).on("click",function(){  
+				$("#lastreturndate").datetimepicker("setStartDate",$("#laststartdate").val());  
+		}).on('changeDate', function (ev) {
+			console.log('change..');
+			
+			$("#lastreturndate").datetimepicker("setStartDate",$("#laststartdate").val());
+			
+			var stayday = $("#laststayday").val();
+			var startDate = $("#laststartdate").val();
+			var returnDate = $("#lastreturndate").val();
+			if(stayday != "" && returnDate == ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalculateBackDate.html',
+					dataType: "json",
+					data: { gotripdate: startDate, stayday: stayday },
+					type: 'post',
+					success: function (data) {
+						$("#lastreturndate").val(data);
+					}
+				});
+			}
+			/* if(returnDate != "" && stayday == ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalCulateStayday.html',
+					dataType: "json",
+					data: { gotripdate: startDate, returnDate: returnDate },
+					type: 'post',
+					success: function (data) {
+						$("#stayday").val(data);
+					}
+				});
+			} */
 		});
 		//返回时间
 		$("#lastreturndate").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
+			endDate:now,
 			autoclose: true,//选中日期后 自动关闭
 			pickerPosition:"bottom-right",//显示位置
 			minView: "month"//只显示年月日

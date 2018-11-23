@@ -104,4 +104,8 @@ public class OrderUpdateForm {
 	//人员id
 	private Integer staffid;
 
+	private String hotelname;
+
+	private String hotelnameen;
+
 }

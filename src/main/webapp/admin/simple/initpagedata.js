@@ -201,23 +201,20 @@ $(document).on("input","#stayday",function(){
 	if(!thisval){
 		$('#returnDate').val('');
 	}
+	
+	var returnDate = $("#returnDate").val();
 	if(gotripdate && thisval){
-		$.ajax({ 
-			url: '/admin/visaJapan/autoCalculateBackDate.html',
-			dataType:"json",
-			data:{gotripdate:gotripdate,stayday:thisval},
-			type:'post',
-			success: function(data){
-				$('#backtripdate').val(data);
-				//设置出行信息返回日期的时间
-				var triptype = $('#triptype').val();
-				if(triptype == 1){
-					//往返设置返回日期
-					$('#returnDate').val(data);
-				}
+		$.ajax({
+			url: '/admin/neworderUS/autoCalculateBackDate.html',
+			dataType: "json",
+			data: { gotripdate: gotripdate, stayday: thisval },
+			type: 'post',
+			success: function (data) {
+				$("#returnDate").val(data);
 			}
 		});
 	}
+	
 });
 $(document).on("focus",".select2-search__field",function(){
 	var thisval = $(this).val();

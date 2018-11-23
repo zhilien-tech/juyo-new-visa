@@ -7,8 +7,10 @@
 package com.juyo.visa.admin.orderUS.service;
 
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +78,7 @@ import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
 import com.juyo.visa.entities.TCityUsEntity;
 import com.juyo.visa.entities.TCountryRegionEntity;
+import com.juyo.visa.entities.THotelUsEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TStateUsEntity;
 import com.juyo.visa.entities.TUserEntity;
@@ -2125,5 +2128,70 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		}
 		return result;
+	}
+
+	/**
+	 * 根据城市名称获取酒店下拉
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param plancity
+	 * @param searchstr
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object selectUSHotel(String plancity, String searchstr) {
+
+		List<THotelUsEntity> hotelList = new ArrayList<>();
+		TCityUsEntity city = dbDao.fetch(TCityUsEntity.class, Cnd.where("cityname", "=", plancity));
+		List<THotelUsEntity> hotels = dbDao.query(THotelUsEntity.class, Cnd.where("cityid", "=", city.getId()), null);
+
+		for (THotelUsEntity hotel : hotels) {
+			if (!hotelList.contains(hotel)) {
+				hotelList.add(hotel);
+			}
+		}
+
+		List<THotelUsEntity> list = new ArrayList<>();
+		if (!Util.isEmpty(hotelList) && hotelList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(hotelList.get(i));
+			}
+			return list;
+		} else {
+			return hotelList;
+		}
+	}
+
+	/**
+	 * 通过酒店名称查询酒店地址
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param plancity
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object getHoteladdress(String hotelname) {
+		String result = "";
+		THotelUsEntity hotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("name", "=", hotelname));
+		if (!Util.isEmpty(hotel)) {
+			result = hotel.getAddressen();
+		}
+		return result;
+	}
+
+	public Object autoCalculateBackDate(Date gotripdate, Integer stayday) {
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		return format.format(DateUtil.addDay(gotripdate, stayday - 1));
+	}
+
+	public Object autoCalCulateStayday(Date gotripdate, Date returndate) {
+		return DateUtil.daysBetween(gotripdate, returndate) + 1;
+	}
+
+	public Object autoCalculategoDate(Date gotripdate, Integer stayday) {
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		return format.format(DateUtil.addDay(gotripdate, -stayday));
 	}
 }

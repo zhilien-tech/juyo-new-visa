@@ -117,6 +117,7 @@ import com.juyo.visa.entities.TCityUsEntity;
 import com.juyo.visa.entities.TCompanyCustomerMapEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TFlightEntity;
+import com.juyo.visa.entities.THotelUsEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TOrderUsFollowupEntity;
 import com.juyo.visa.entities.TOrderUsInfoEntitiy;
@@ -2495,6 +2496,15 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderTravelInfo.setArrivedate(form.getArrivedate());
 		orderTravelInfo.setStaydays(form.getStaydays());
 		orderTravelInfo.setAddress(form.getPlanaddress());
+		orderTravelInfo.setHotelname(form.getHotelname());
+		if (!Util.isEmpty(form.getHotelname())) {
+			THotelUsEntity hotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("name", "=", form.getHotelname()));
+			if (!Util.isEmpty(hotel)) {
+				orderTravelInfo.setHotelnameen(hotel.getNameen());
+			}
+		} else {
+			orderTravelInfo.setHotelnameen("");
+		}
 		//orderTravelInfo.setAddressen(form.getPlanaddressen());
 		orderTravelInfo.setAddressen(translate(form.getPlanaddress()));
 		orderTravelInfo.setCity(form.getPlancity());

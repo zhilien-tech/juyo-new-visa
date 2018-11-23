@@ -6,6 +6,8 @@
 
 package com.juyo.visa.admin.orderUS.module;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -233,4 +235,45 @@ public class NeworderUSModule {
 		return neworderUSViewService.translate(type, q);
 	}
 
+	/**
+	 * 根据城市名称获取酒店信息
+	 */
+	@At
+	@POST
+	public Object selectUSHotel(@Param("plancity") String plancity, @Param("searchstr") String searchstr) {
+		return neworderUSViewService.selectUSHotel(plancity, searchstr);
+	}
+
+	/**
+	 * 根据酒店名称查询酒店地址
+	 */
+	@At
+	@POST
+	public Object getHoteladdress(@Param("hotelname") String hotelname) {
+		return neworderUSViewService.getHoteladdress(hotelname);
+	}
+
+	/**
+	 * 根据抵达日期和停留天数计算离开日期
+	 */
+	@At
+	@POST
+	public Object autoCalculateBackDate(@Param("gotripdate") Date gotripdate, @Param("stayday") Integer stayday) {
+		return neworderUSViewService.autoCalculateBackDate(gotripdate, stayday);
+	}
+
+	/**
+	 * 根据抵达日期和离开日期计算停留天数
+	 */
+	@At
+	@POST
+	public Object autoCalCulateStayday(@Param("gotripdate") Date gotripdate, @Param("returnDate") Date returnDate) {
+		return neworderUSViewService.autoCalCulateStayday(gotripdate, returnDate);
+	}
+
+	@At
+	@POST
+	public Object autoCalculategoDate(@Param("gotripdate") Date gotripdate, @Param("stayday") Integer stayday) {
+		return neworderUSViewService.autoCalculategoDate(gotripdate, stayday);
+	}
 }

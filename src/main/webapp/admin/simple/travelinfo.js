@@ -693,6 +693,7 @@ $("#sendVisaDate").datetimepicker({
 					success: function (data) {
 						$("#outVisaDate").val(data);
 						$("#goDate").datetimepicker("setStartDate", data);
+						$("#returnDate").datetimepicker("setStartDate", data);
 					}
 				});
 			}
@@ -767,6 +768,35 @@ $("#goDate").datetimepicker({
 		$("#goDate").datetimepicker("setStartDate",sendVisaDates[1]);  
 	}else{
 		$("#goDate").datetimepicker("setStartDate",now);  
+	}	
+}).on('changeDate', function (ev) {
+	console.log('change..');
+	$("#returnDate").datetimepicker("setStartDate",$("#goDate").val());
+	
+	var stayday = $("#stayday").val();
+	var startDate = $("#goDate").val();
+	var returnDate = $("#returnDate").val();
+	if(stayday != ""){
+		$.ajax({
+			url: '/admin/neworderUS/autoCalculateBackDate.html',
+			dataType: "json",
+			data: { gotripdate: startDate, stayday: stayday },
+			type: 'post',
+			success: function (data) {
+				$("#returnDate").val(data);
+			}
+		});
+	}
+	if(returnDate != "" && stayday == ""){
+		$.ajax({
+			url: '/admin/neworderUS/autoCalCulateStayday.html',
+			dataType: "json",
+			data: { gotripdate: startDate, returnDate: returnDate },
+			type: 'post',
+			success: function (data) {
+				$("#stayday").val(data);
+			}
+		});
 	}
 });
 $("#returnDate").datetimepicker({
@@ -777,12 +807,25 @@ $("#returnDate").datetimepicker({
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 }).on("click",function(){  
-	var sendVisaDate = $('#sendVisaDate').val();
+	var sendVisaDate = $('#goDate').val();
 	if(sendVisaDate){
-		var sendVisaDates = sendVisaDate.split(' - ');
-		$("#goDate").datetimepicker("setStartDate",sendVisaDates[1]);
-	}else{
-		$("#goDate").datetimepicker("setStartDate",now);  
+		$("#returnDate").datetimepicker("setStartDate",sendVisaDate);
+	}
+}).on('changeDate', function (ev) {
+	console.log('change..');
+	var stayday = $("#stayday").val();
+	var startDate = $("#goDate").val();
+	var returnDate = $("#returnDate").val();
+	if(returnDate != "" && startDate != ""){
+		$.ajax({
+			url: '/admin/neworderUS/autoCalCulateStayday.html',
+			dataType: "json",
+			data: { gotripdate: startDate, returnDate: returnDate },
+			type: 'post',
+			success: function (data) {
+				$("#stayday").val(data);
+			}
+		});
 	}
 });
 

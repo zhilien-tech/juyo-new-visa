@@ -133,4 +133,12 @@ public class TOrderUsTravelinfoEntity implements Serializable {
 	@Comment("计划去美国的地点(地址)")
 	private String planaddress;
 
+	@Column
+	@Comment("酒店名称")
+	private String hotelname;
+
+	@Column
+	@Comment("酒店名称(英文)")
+	private String hotelnameen;
+
 }
