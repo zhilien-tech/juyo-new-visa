@@ -274,7 +274,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>停留天数：</label> <input id="stayday"
-											 name="staydays" class="input-sm"
+											 name="staydays" class="form-format form-control input-sm datetimepickercss"
 											value="${obj.travelInfo.staydays}" type="text" />
 									</div>
 								</div>
@@ -471,7 +471,7 @@
 								<!-- 市 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label></label>
+										<label>城市</label>
 										
 										<select
 											id="plancity" name="plancity"
@@ -501,7 +501,7 @@
 								</div> --%>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label></label> 
+										<label>酒店</label> 
 										<select
 											id="hotelname" name="hotelname"
 											class="form-control input-sm select2City arrivedcity"
@@ -516,9 +516,9 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label></label> <input id="planaddress" name="planaddress" onchange="translateZhToEn(this,'planaddressen','')"
+										<label>街道英文</label> <input id="planaddress" name="planaddress" onchange="translateZhToEn(this,'planaddressen','')"
 											type="text" value="${obj.travelInfo.address}"
-											class="form-control input-sm" placeholder="街道英文" />
+											class="form-control input-sm" placeholder="" />
 											<input id="planaddressen" name="planaddressen" type="hidden" value="${obj.travelInfo.addressen }"/>
 									</div>
 								</div>
