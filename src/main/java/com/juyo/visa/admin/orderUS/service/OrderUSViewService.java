@@ -2706,7 +2706,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				//发送邮件
 				//分享
 				if (Util.eq(sendType, "share")) {
-					sendEmailUS(staffId, orderid, pcUrl, sendType, "orderustemp/order_us_share_mail.html", request);
+					//sendEmailUS(staffId, orderid, pcUrl, sendType, "orderustemp/order_us_share_mail.html", request);
+					sendEmailUS(staffId, orderid, pcUrl, sendType, "orderustemp/neworder_us_share_mail.html", request);
 				}
 				//合格
 				if (Util.eq(sendType, "qualified")) {
@@ -2787,8 +2788,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			sex = "先生/女士";
 			//分享
 			if (Util.eq(sendType, "share")) {
-				emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
-						.replace("${telephone}", telephone).replace("${pcUrl}", url);
+				/*emailText = emailText.replace("${name}", name).replace("${sex}", sex).replace("${ordernum}", orderNum)
+						.replace("${telephone}", telephone).replace("${pcUrl}", url);*/
+				emailText = emailText.replace("${pcUrl}", url);
 				System.out.println("邮箱分享的模板内容：" + emailText);
 				result = mailService.send(toEmail, emailText, "美国订单分享", MailService.Type.HTML);
 			}
