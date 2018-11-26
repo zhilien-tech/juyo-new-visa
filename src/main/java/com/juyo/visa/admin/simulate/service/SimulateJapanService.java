@@ -624,6 +624,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object updateAcceptanceNumber(JapanSimulatorForm form) {
+		System.out.println("更新收付番号CID:" + form.getCid());
 		if (Util.isEmpty(form.getCid())) {
 			return ResultObject.fail("任务id不能为空！");
 		}

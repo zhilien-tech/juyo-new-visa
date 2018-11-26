@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -20,9 +21,12 @@ public class TestChinest {
 	static final int N = 50000;
 
 	public static void main(String[] args) {
+		int str = 1200;
+		DecimalFormat df = new DecimalFormat("#,###");
+		System.out.println(df.format(str));
 
-		String str = "ggweg146 51-& ";
-		System.out.println(isLegalStr(str));
+		/*String str = "ggweg146 51-& ";
+		System.out.println(isLegalStr(str));*/
 		/*if (str.endsWith("自治区")) {
 			str = str.substring(0, str.length() - 3);
 		}
