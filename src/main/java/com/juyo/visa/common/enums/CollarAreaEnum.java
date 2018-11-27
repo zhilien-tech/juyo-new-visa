@@ -18,7 +18,7 @@ import com.uxuexi.core.common.enums.IEnum;
  */
 public enum CollarAreaEnum implements IEnum {
 
-	BEIJING(1, "北京"), SHANGHAI(2, "上海"), GUANGZHOU(5, "广州"), CHENGDU(4, "成都"), SHENYANG(3, "沈阳"), QINGDAO(6, "青岛"), DALIAN(
+	BEIJING(1, "北京"), SHANGHAI(2, "上海"), GUANGZHOU(5, "广州"), CHENGDU(4, "重庆"), SHENYANG(3, "沈阳"), QINGDAO(6, "青岛"), DALIAN(
 			7, "大连");
 
 	private int key;

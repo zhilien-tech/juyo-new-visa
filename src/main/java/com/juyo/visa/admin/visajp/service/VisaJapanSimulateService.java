@@ -276,7 +276,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 						orderJp = dbDao
 								.fetch(TOrderJpEntity.class, Cnd.where("orderid", "=", applicantjp.getOrderId()));
 						Integer type = orderjp.getVisaType();
-						System.out.println(type);
+						//System.out.println(type);
 						if (!Util.isEmpty(type)) {
 							for (SimpleVisaTypeEnum visatype : SimpleVisaTypeEnum.values()) {
 								if (type == visatype.intKey()) {
