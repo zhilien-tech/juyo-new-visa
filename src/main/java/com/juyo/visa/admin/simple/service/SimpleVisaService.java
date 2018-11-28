@@ -1837,12 +1837,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
-		if (Util.isEmpty(form.getGoDepartureCity())) {
-			result.put("message", "请选择出发城市");
-			return result;
-		}
-		if (Util.isEmpty(form.getGoArrivedCity())) {
-			result.put("message", "请选择抵达城市");
+
+		if (Util.isEmpty(form.getCityid())) {
+			result.put("message", "请选择领区");
 			return result;
 		}
 		if (Util.isEmpty(form.getGoDate())) {
@@ -1853,81 +1850,221 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			result.put("message", "请选择返回日期");
 			return result;
 		}
-		if (Util.isEmpty(form.getGoFlightNum())) {
-			result.put("message", "请选择出发航班号");
-			return result;
-		}
-		if (Util.isEmpty(form.getReturnFlightNum())) {
-			result.put("message", "请选择返回航班号");
-			return result;
-		}
 		if (Util.isEmpty(form.getVisatype())) {
 			result.put("message", "请选择签证类型");
 			return result;
 		}
+		if (form.getCityid() > 2) {//重庆
+			if (Util.isEmpty(form.getGotransferdeparturecity())) {
+				result.put("message", "请选择国际段出发城市");
+				return result;
+			}
+			if (Util.isEmpty(form.getNewgoarrivedcity())) {
+				result.put("message", "请选择国际段抵达城市");
+				return result;
+			}
+			if (Util.isEmpty(form.getNewreturndeparturecity())) {
+				result.put("message", "请选择国际段返回城市");
+				return result;
+			}
+			if (Util.isEmpty(form.getReturntransferarrivedcity())) {
+				result.put("message", "请选择国际段抵达城市");
+				return result;
+			}
+			if (Util.isEmpty(form.getNewgoflightnum())) {
+				result.put("message", "请选择国际段出发航班号");
+				return result;
+			}
+			if (Util.isEmpty(form.getReturntransferflightnum())) {
+				result.put("message", "请选择国际段返回航班号");
+				return result;
+			}
+		} else {//北京，上海
+			if (Util.isEmpty(form.getGoDepartureCity())) {
+				result.put("message", "请选择出发城市");
+				return result;
+			}
+
+			if (Util.isEmpty(form.getGoArrivedCity())) {
+				result.put("message", "请选择抵达城市");
+				return result;
+			}
+			if (Util.isEmpty(form.getGoFlightNum())) {
+				result.put("message", "请选择出发航班号");
+				return result;
+			}
+			if (Util.isEmpty(form.getReturnFlightNum())) {
+				result.put("message", "请选择返回航班号");
+				return result;
+			}
+		}
+
 		int daysBetween = DateUtil.daysBetween(form.getGoDate(), form.getReturnDate());
 		if (daysBetween < 4) {
 			result.put("message", "停留天数必须大于4天");
 			return result;
 		}
+
 		//返回时的出发城市
-		Integer returnDepartureCity = form.getReturnDepartureCity();
-		TCityEntity returngoCity = dbDao.fetch(TCityEntity.class, returnDepartureCity.longValue());
-
+		TCityEntity returngoCity = null;
 		//出发城市
-		Integer goDepartureCity = form.getGoDepartureCity();
-		TCityEntity goCity = dbDao.fetch(TCityEntity.class, goDepartureCity.longValue());
-		String province = goCity.getProvince();
-		if (province.endsWith("省") || province.endsWith("市")) {
-			province = province.substring(0, province.length() - 1);
-		}
+		TCityEntity goCity = null;
+		//省份
+		String province = "";
 		//出发航班
-		String goFlightNum = form.getGoFlightNum();
-		String firstday = " "
-				+ province
-				+ "から"
-				+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-						goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
-				+ "便にて"
-				+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-						goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
-
+		String goFlightNum = "";
 		//返回航班
-		String returnFlightNum = form.getReturnFlightNum();
-		String lastday = " "
-				+ returnFlightNum.substring(0, returnFlightNum.indexOf("-", returnFlightNum.indexOf("-")))
-				+ "から"
-				+ returnFlightNum.substring(returnFlightNum.indexOf(" ", returnFlightNum.indexOf(" ")) + 1,
-						returnFlightNum.indexOf(" ", returnFlightNum.indexOf(" ") + 1)) + "便にて帰国";
+		String returnFlightNum = "";
+		//第一天
+		String firstday = "";
+		//最后一天
+		String lastday = "";
+		//根据cityid来区分城市
+		if (form.getCityid() > 2) {//重庆
+			//出发城市
+			int gotransferdeparturecity = 0;
+			if (!Util.isEmpty(form.getNewgodeparturecity())) {//第一行出发城市不为空，说明为转机
+				gotransferdeparturecity = form.getNewgodeparturecity();
+			} else {
+				gotransferdeparturecity = form.getGotransferdeparturecity();
+			}
+			goCity = dbDao.fetch(TCityEntity.class, gotransferdeparturecity);
+			province = goCity.getProvince();
+			if (province.endsWith("省") || province.endsWith("市")) {
+				province = province.substring(0, province.length() - 1);
+			}
+			//返回时的出发城市
+			Integer returnDepartureCity = form.getNewreturndeparturecity();
+			returngoCity = dbDao.fetch(TCityEntity.class, returnDepartureCity.longValue());
+			//出发航班
+			if (!Util.isEmpty(form.getGotransferflightnum())) {//有第一行航班,说明是转机
+				String gotransferflightnum = form.getGotransferflightnum();
+				String newgoflightnum = form.getNewgoflightnum();
+
+				StringBuffer stringBuilder = new StringBuffer(gotransferflightnum.substring(
+						gotransferflightnum.indexOf(" ") + 1, gotransferflightnum.lastIndexOf(" ")));
+				stringBuilder.append("//"
+						+ newgoflightnum.substring(newgoflightnum.indexOf(" ") + 1, newgoflightnum.lastIndexOf(" ")));
+
+				//第一天
+				firstday = " "
+						+ province
+						+ "から"
+						+ stringBuilder.toString()
+						+ "便にて"
+						+ newgoflightnum.substring(newgoflightnum.indexOf("-", newgoflightnum.lastIndexOf("-")) + 1,
+								newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+			} else {
+				String newgoflightnum = form.getNewgoflightnum();
+				//第一天
+				firstday = " "
+						+ province
+						+ "から"
+						+ newgoflightnum.substring(newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" ")) + 1,
+								newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" ") + 1))
+						+ "便にて"
+						+ newgoflightnum.substring(newgoflightnum.indexOf("-", newgoflightnum.lastIndexOf("-")) + 1,
+								newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+			}
+
+			if (!Util.isEmpty(form.getNewreturnflightnum())) {
+				String returntransferflightnum = form.getReturntransferflightnum();
+				String newreturnflightnum = form.getNewreturnflightnum();
+
+				StringBuffer stringBuilder = new StringBuffer(returntransferflightnum.substring(
+						returntransferflightnum.indexOf(" ") + 1, returntransferflightnum.lastIndexOf(" ")));
+				stringBuilder.append("//"
+						+ newreturnflightnum.substring(newreturnflightnum.indexOf(" ") + 1,
+								newreturnflightnum.lastIndexOf(" ")));
+
+				//最后一天
+				lastday = " "
+						+ returntransferflightnum.substring(0,
+								returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-"))) + "から"
+						+ stringBuilder.toString() + "便にて帰国";
+			} else {
+				String returntransferflightnum = form.getReturntransferflightnum();
+				//最后一天
+				lastday = " "
+						+ returntransferflightnum.substring(0,
+								returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-")))
+						+ "から"
+						+ returntransferflightnum.substring(
+								returntransferflightnum.indexOf(" ", returntransferflightnum.indexOf(" ")) + 1,
+								returntransferflightnum.indexOf(" ", returntransferflightnum.indexOf(" ") + 1))
+						+ "便にて帰国";
+			}
+
+		} else {//北京,上海
+				//返回时的出发城市
+			Integer returnDepartureCity = form.getReturnDepartureCity();
+			returngoCity = dbDao.fetch(TCityEntity.class, returnDepartureCity.longValue());
+			//出发城市
+			Integer goDepartureCity = form.getGoDepartureCity();
+			goCity = dbDao.fetch(TCityEntity.class, goDepartureCity.longValue());
+			province = goCity.getProvince();
+			if (province.endsWith("省") || province.endsWith("市")) {
+				province = province.substring(0, province.length() - 1);
+			}
+			//出发航班
+			goFlightNum = form.getGoFlightNum();
+			//返回航班
+			returnFlightNum = form.getReturnFlightNum();
+			//第一天
+			firstday = " "
+					+ province
+					+ "から"
+					+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+							goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+					+ "便にて"
+					+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+							goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+
+			//最后一天
+			lastday = " "
+					+ returnFlightNum.substring(0, returnFlightNum.indexOf("-", returnFlightNum.indexOf("-")))
+					+ "から"
+					+ returnFlightNum.substring(returnFlightNum.indexOf(" ", returnFlightNum.indexOf(" ")) + 1,
+							returnFlightNum.indexOf(" ", returnFlightNum.indexOf(" ") + 1)) + "便にて帰国";
+		}
 
 		FlightSelectParam param = null;
-		//根据签证类型来决定前两天的城市
+		//签证类型
 		Integer visatype = form.getVisatype();
 
+		int cityid = 0;
+		int lastcityid = 0;
+
+		if (form.getCityid() > 2) {//重庆
+			cityid = form.getNewgoarrivedcity();
+			lastcityid = form.getNewreturndeparturecity();
+		} else {//北京，上海
+			cityid = form.getGoArrivedCity();
+			lastcityid = form.getReturnDepartureCity();
+		}
+
 		//获取前两天城市
-		TCityEntity city = dbDao.fetch(TCityEntity.class, form.getGoArrivedCity().longValue());
+		TCityEntity city = dbDao.fetch(TCityEntity.class, cityid);
 		//获取前两天城市所有的酒店
-		List<THotelEntity> hotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", form.getGoArrivedCity()),
-				null);
+		List<THotelEntity> hotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", cityid), null);
 		//获取前两天城市所有的景区
-		List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class,
-				Cnd.where("cityId", "=", form.getGoArrivedCity()), null);
+		List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", cityid), null);
 		if (scenics.size() < 2) {
 			result.put("message", "没有更多的景区");
 			return result;
 		}
+
 		//获取后两天城市
-		TCityEntity lastcity = dbDao.fetch(TCityEntity.class, form.getReturnDepartureCity().longValue());
+		TCityEntity lastcity = dbDao.fetch(TCityEntity.class, lastcityid);
 		//获取后两天酒店
-		List<THotelEntity> lasthotels = dbDao.query(THotelEntity.class,
-				Cnd.where("cityId", "=", form.getReturnDepartureCity()), null);
+		List<THotelEntity> lasthotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", lastcityid), null);
 		//获取后两天景区
-		List<TScenicEntity> lastscenics = dbDao.query(TScenicEntity.class,
-				Cnd.where("cityId", "=", form.getReturnDepartureCity()), null);
+		List<TScenicEntity> lastscenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", lastcityid), null);
 		if (lastscenics.size() < 2) {
 			result.put("message", "没有更多的景区");
 			return result;
 		}
+
 		Integer orderjpid = form.getOrderid();
 		Integer orderid = null;
 		if (Util.isEmpty(orderjpid)) {
@@ -1951,10 +2088,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		if (visatype == 6 || visatype == 1 || visatype == 14 || visatype == 2 || visatype == 7) {//除去东北六县
 			//如果去程抵达城市和返回出发城市一样，则什么都不需要分
-			if (form.getGoArrivedCity() == form.getReturnDepartureCity()) {
+			if (lastcityid == cityid) {
 				for (int i = 0; i <= daysBetween; i++) {
 					TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-					travelplan.setCityId(form.getGoArrivedCity());
+					travelplan.setCityId(cityid);
 					travelplan.setDay(String.valueOf(i + 1));
 					travelplan.setOrderId(orderjpid);
 					travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
@@ -1992,7 +2129,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				//前两天
 				for (int i = 0; i < 2; i++) {
 					TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-					travelplan.setCityId(form.getGoArrivedCity());
+					travelplan.setCityId(cityid);
 					travelplan.setCityName(city.getCity());
 					travelplan.setDay(String.valueOf(i + 1));
 					travelplan.setOrderId(orderjpid);
@@ -2031,7 +2168,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				int totalstyle = subday / 2;
 				//intArray为所有有景点的城市并且出去东北六县的Id组成的数组
 				int[] intArray = generrateCityArray();
-				intArray = getCitysArray(intArray, form.getGoArrivedCity(), form.getReturnDepartureCity());
+				intArray = getCitysArray(intArray, cityid, lastcityid);
 				//randomArray为获取的不重复随机数
 				int j = 0;
 				if (subday != 0) {
@@ -2045,7 +2182,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (i == getNum(datesList, j) + 2) {
 							j++;
 							if (i == 2) {
-								String countryAirline = countryAirline(form.getGoArrivedCity(), citysList.get(j - 1), 1);
+								String countryAirline = countryAirline(cityid, citysList.get(j - 1), 1);
 								travelplan.setScenic(countryAirline);
 							} else {
 								String countryAirline = countryAirline(citysList.get(j - 2), citysList.get(j - 1), 1);
@@ -2095,7 +2232,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					//最后三天
 					for (int i = daysBetween - 2; i <= daysBetween; i++) {
 						TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-						travelplan.setCityId(form.getReturnDepartureCity());
+						travelplan.setCityId(lastcityid);
 						travelplan.setDay(String.valueOf(i + 1));
 						travelplan.setOrderId(orderjpid);
 						travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
@@ -2114,19 +2251,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							travelplan.setScenic(lastday);
 						} else if (i == daysBetween - 2) {
 							if (daysBetween == 4) {
-								String countryAirline = countryAirline(form.getGoArrivedCity(),
-										form.getReturnDepartureCity(), 2);
+								String countryAirline = countryAirline(cityid, lastcityid, 2);
 								travelplan.setScenic(countryAirline);
 							} else {
-								String countryAirline = countryAirline(citysList.get(j - 1),
-										form.getReturnDepartureCity(), 2);
+								String countryAirline = countryAirline(citysList.get(j - 1), lastcityid, 2);
 								travelplan.setScenic(countryAirline);
 							}
 						} else {
 							//景区
 							if (scenics.size() == 0) {
-								scenics = dbDao.query(TScenicEntity.class,
-										Cnd.where("cityId", "=", form.getGoArrivedCity()), null);
+								scenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", cityid), null);
 							}
 							int scenicindex = random.nextInt(scenics.size());
 							TScenicEntity scenic = scenics.get(scenicindex);
@@ -2139,7 +2273,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					//最后两天
 					for (int i = daysBetween - 1; i <= daysBetween; i++) {
 						TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-						travelplan.setCityId(form.getReturnDepartureCity());
+						travelplan.setCityId(lastcityid);
 						travelplan.setDay(String.valueOf(i + 1));
 						travelplan.setOrderId(orderjpid);
 						travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
@@ -2157,8 +2291,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (i == daysBetween) {
 							travelplan.setScenic(lastday);
 						} else {
-							String countryAirline = countryAirline(citysList.get(j - 1), form.getReturnDepartureCity(),
-									2);
+							String countryAirline = countryAirline(citysList.get(j - 1), lastcityid, 2);
 							int nextInt = random.nextInt(lastscenics.size());
 							countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
 							travelplan.setScenic(countryAirline);
@@ -2172,7 +2305,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			//前两天
 			for (int i = 0; i < 2; i++) {
 				TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-				travelplan.setCityId(form.getGoArrivedCity());
+				travelplan.setCityId(cityid);
 				travelplan.setCityName(city.getCity());
 				travelplan.setDay(String.valueOf(i + 1));
 				travelplan.setOrderId(orderjpid);
@@ -2247,7 +2380,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			THotelEntity thotel = threeHotels.get(threehotel);
 			thravelplan.setHotel(thotel.getId());
 			//景区
-			String threeScenic = countryAirline(form.getGoArrivedCity(), threeCityid, 1);
+			String threeScenic = countryAirline(cityid, threeCityid, 1);
 			int threeScenicIndex = random.nextInt(threeScenics.size());
 			TScenicEntity tScenicEntity = threeScenics.get(threeScenicIndex);
 
@@ -2270,7 +2403,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			int totalstyle = subday / 2;
 			//intArray为所有有景点的城市并且出去东北六县的Id组成的数组
 			int[] intArray = generrateCityArray();
-			intArray = getCitysArray(intArray, form.getGoArrivedCity(), form.getReturnDepartureCity());
+			intArray = getCitysArray(intArray, cityid, lastcityid);
 			//randomArray为获取的不重复随机数
 			//随机城市和天数
 
@@ -2328,7 +2461,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				//最后三天
 				for (int i = daysBetween - 2; i <= daysBetween; i++) {
 					TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-					travelplan.setCityId(form.getReturnDepartureCity());
+					travelplan.setCityId(lastcityid);
 					travelplan.setDay(String.valueOf(i + 1));
 					travelplan.setOrderId(orderjpid);
 					travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
@@ -2347,19 +2480,17 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						travelplan.setScenic(lastday);
 					} else if (i == daysBetween - 2) {
 						if (daysBetween == 5) {
-							String countryAirline = countryAirline(threeCityid, form.getReturnDepartureCity(), 2);
+							String countryAirline = countryAirline(threeCityid, lastcityid, 2);
 							travelplan.setScenic(countryAirline);
 
 						} else {
-							String countryAirline = countryAirline(citysList.get(j - 1), form.getReturnDepartureCity(),
-									2);
+							String countryAirline = countryAirline(citysList.get(j - 1), lastcityid, 2);
 							travelplan.setScenic(countryAirline);
 						}
 					} else {
 						//景区
 						if (scenics.size() == 0) {
-							scenics = dbDao.query(TScenicEntity.class,
-									Cnd.where("cityId", "=", form.getGoArrivedCity()), null);
+							scenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", cityid), null);
 						}
 						int scenicindex = random.nextInt(scenics.size());
 						TScenicEntity scenic = scenics.get(scenicindex);
@@ -2372,7 +2503,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				//最后两天
 				for (int i = daysBetween - 1; i <= daysBetween; i++) {
 					TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-					travelplan.setCityId(form.getReturnDepartureCity());
+					travelplan.setCityId(lastcityid);
 					travelplan.setDay(String.valueOf(i + 1));
 					travelplan.setOrderId(orderjpid);
 					travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
@@ -2391,13 +2522,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						travelplan.setScenic(lastday);
 					} else {
 						if (daysBetween == 4) {
-							String countryAirline = countryAirline(threeCityid, form.getReturnDepartureCity(), 2);
+							String countryAirline = countryAirline(threeCityid, lastcityid, 2);
 							int nextInt = random.nextInt(lastscenics.size());
 							countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
 							travelplan.setScenic(countryAirline);
 						} else {
-							String countryAirline = countryAirline(citysList.get(j - 1), form.getReturnDepartureCity(),
-									2);
+							String countryAirline = countryAirline(citysList.get(j - 1), lastcityid, 2);
 							int nextInt = random.nextInt(lastscenics.size());
 							countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
 							travelplan.setScenic(countryAirline);
@@ -2923,6 +3053,21 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderjptrip.setReturnDepartureCity(form.getReturnDepartureCity());
 		orderjptrip.setReturnArrivedCity(form.getReturnArrivedCity());
 		orderjptrip.setReturnFlightNum(form.getReturnFlightNum());
+
+		orderjptrip.setNewgoarrivedcity(form.getNewgoarrivedcity());
+		orderjptrip.setNewgodeparturecity(form.getNewgodeparturecity());
+		orderjptrip.setNewgoflightnum(form.getNewgoflightnum());
+		orderjptrip.setNewreturnarrivedcity(form.getNewreturnarrivedcity());
+		orderjptrip.setNewreturndeparturecity(form.getNewreturndeparturecity());
+		orderjptrip.setNewreturnflightnum(form.getNewreturnflightnum());
+
+		orderjptrip.setGotransferarrivedcity(form.getGotransferarrivedcity());
+		orderjptrip.setGotransferdeparturecity(form.getGotransferdeparturecity());
+		orderjptrip.setGotransferflightnum(form.getGotransferflightnum());
+		orderjptrip.setReturntransferarrivedcity(form.getReturntransferarrivedcity());
+		orderjptrip.setReturntransferdeparturecity(form.getReturntransferdeparturecity());
+		orderjptrip.setReturntransferflightnum(form.getReturntransferflightnum());
+
 		orderjptrip.setOrderId(orderjpid);
 		if (!Util.isEmpty(orderjptrip.getId())) {
 			dbDao.update(orderjptrip);
@@ -3005,6 +3150,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 		TOrderTripJpEntity tripinfo = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderid", "=", orderid));
 		List<TCityEntity> citylist = Lists.newArrayList();
+		List<TCityEntity> newcitylist = Lists.newArrayList();
 		List<TFlightEntity> flightlist = Lists.newArrayList();
 		List<ResultflyEntity> gotripAirlineSelect = Lists.newArrayList();
 		List<ResultflyEntity> returntripAirlineSelect = Lists.newArrayList();
@@ -3025,14 +3171,20 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			Integer[] cityids = { tripinfo.getGoDepartureCity(), tripinfo.getGoArrivedCity(),
 					tripinfo.getReturnDepartureCity(), tripinfo.getReturnArrivedCity() };
 			citylist = dbDao.query(TCityEntity.class, Cnd.where("id", "in", cityids), null);
-			String[] flightnums = { tripinfo.getGoFlightNum(), tripinfo.getReturnFlightNum() };
+
+			Integer[] newcityids = { tripinfo.getGotransferarrivedcity(), tripinfo.getGotransferdeparturecity(),
+					tripinfo.getReturntransferarrivedcity(), tripinfo.getReturntransferdeparturecity(),
+					tripinfo.getNewgoarrivedcity(), tripinfo.getNewgodeparturecity(),
+					tripinfo.getNewreturnarrivedcity(), tripinfo.getNewreturndeparturecity() };
+			newcitylist = dbDao.query(TCityEntity.class, Cnd.where("id", "in", newcityids), null);
+			/*String[] flightnums = { tripinfo.getGoFlightNum(), tripinfo.getReturnFlightNum() };
 			List<TFlightEntity> flightlistpre = dbDao.query(TFlightEntity.class,
 					Cnd.where("flightnum", "in", flightnums), null);
 			for (TFlightEntity tFlightEntity : flightlistpre) {
 				if (!flightlist.contains(tFlightEntity)) {
 					flightlist.add(tFlightEntity);
 				}
-			}
+			}*/
 		}
 		String orderstatus = "";
 		for (JPOrderStatusEnum orderenum : JPOrderStatusEnum.values()) {
@@ -3062,7 +3214,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("sendvisadatestr", sendvisadatestr);
 		result.put("outvisadatestr", outvisadatestr);
 		result.put("orderstatus", orderstatus);
-		result.put("flightlist", flightlist);
+		//result.put("flightlist", flightlist);
 		result.put("collarAreaEnum", EnumUtil.enum2(CollarAreaEnum.class));
 		result.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
 		result.put("mainSaleUrgentEnum", EnumUtil.enum2(MainSaleUrgentEnum.class));
@@ -3071,6 +3223,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("mainSalePayTypeEnum", EnumUtil.enum2(MainSalePayTypeEnum.class));
 		result.put("mainSaleVisaTypeEnum", EnumUtil.enum2(SimpleVisaTypeEnum.class));
 		result.put("citylist", citylist);
+		result.put("newcitylist", newcitylist);
 		result.put("orderjpinfo", orderjpinfo);
 		result.put("orderinfo", orderinfo);
 		result.put("tripinfo", tripinfo);
@@ -5577,8 +5730,20 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			if (Util.eq("goDepartureCity", citytype)) {
 				sqlStr = sqlManager.get("cityselectBygodeparturecity");
 			}
+			if (Util.eq("newgodeparturecity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBynewgodeparturecity");
+			}
 			if (Util.eq("goArrivedCity", citytype)) {
 				sqlStr = sqlManager.get("cityselectBygoarrivedcity");
+			}
+			if (Util.eq("newgoarrivedcity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBynewgoarrivedcity");
+			}
+			if (Util.eq("newreturndeparturecity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBynewreturndeparturecity");
+			}
+			if (Util.eq("newreturnarrivedcity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBynewreturnarrivedcity");
 			}
 			if (Util.eq("returnDepartureCity", citytype)) {
 				sqlStr = sqlManager.get("cityselectByreturndeparturecity");
@@ -5586,16 +5751,52 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			if (Util.eq("returnArrivedCity", citytype)) {
 				sqlStr = sqlManager.get("cityselectByreturnarrivedcity");
 			}
+			if (Util.eq("gotransferarrivedcity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBygotransferarrivedcity");
+			}
+			if (Util.eq("gotransferdeparturecity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBygotransferdeparturecity");
+			}
+			if (Util.eq("returntransferarrivedcity", citytype)) {
+				sqlStr = sqlManager.get("cityselectByreturntransferarrivedcity");
+			}
+			if (Util.eq("returntransferdeparturecity", citytype)) {
+				sqlStr = sqlManager.get("cityselectByreturntransferdeparturecity");
+			}
 			Sql applysql = Sqls.create(sqlStr);
 			Cnd cnd = Cnd.NEW();
 			cnd.and("tr.comId", "=", comid);
 			cnd.groupBy("tc.city");
 			cnd.orderBy("count", "DESC");
 			List<Record> infoList = dbDao.query(applysql, cnd, null);
-			if (infoList.size() > 4) {
-				infoList = infoList.subList(0, 5);
+
+			if (infoList.size() == 0) {
+				List<TCityEntity> citySelect = new ArrayList<TCityEntity>();
+				try {
+					citySelect = dbDao.query(TCityEntity.class,
+							Cnd.where("city", "like", Strings.trim(cityname) + "%"), null);
+					//移除的城市
+					TCityEntity exinfo = new TCityEntity();
+					for (TCityEntity tCityEntity : citySelect) {
+						if (!Util.isEmpty(exname) && tCityEntity.getCity().equals(exname)) {
+							exinfo = tCityEntity;
+						}
+					}
+					citySelect.remove(exinfo);
+					if (citySelect.size() > 5) {
+						citySelect = citySelect.subList(0, 5);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return citySelect;
+			} else {
+				if (infoList.size() > 4) {
+					infoList = infoList.subList(0, 5);
+				}
+				return infoList;
 			}
-			return infoList;
+
 		} else {
 			List<TCityEntity> citySelect = new ArrayList<TCityEntity>();
 			try {

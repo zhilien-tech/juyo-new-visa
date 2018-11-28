@@ -74,6 +74,112 @@ function saveAddOrder(status){
 		returnFlightNum += '';
 	}
 	orderinfo.returnFlightNum = returnFlightNum;
+	
+	var newgodeparturecity = $('#newgodeparturecity').val();
+	if (newgodeparturecity) {
+		newgodeparturecity = newgodeparturecity.join(',');
+	}else{
+		newgodeparturecity += '';
+	}
+	orderinfo.newgodeparturecity = newgodeparturecity;
+	
+	var gotransferarrivedcity = $('#gotransferarrivedcity').val();
+	if (gotransferarrivedcity) {
+		gotransferarrivedcity = gotransferarrivedcity.join(',');
+	}else{
+		gotransferarrivedcity += '';
+	}
+	orderinfo.gotransferarrivedcity = gotransferarrivedcity;
+	
+	var gotransferflightnum = $('#gotransferflightnum').val();
+	if (gotransferflightnum) {
+		gotransferflightnum = gotransferflightnum.join(',');
+	}else{
+		gotransferflightnum += '';
+	}
+	orderinfo.gotransferflightnum = gotransferflightnum;
+	
+	var gotransferdeparturecity = $('#gotransferdeparturecity').val();
+	if (gotransferdeparturecity) {
+		gotransferdeparturecity = gotransferdeparturecity.join(',');
+	}else{
+		gotransferdeparturecity += '';
+	}
+	orderinfo.gotransferdeparturecity = gotransferdeparturecity;
+	
+	var gotransferdeparturecity = $('#gotransferdeparturecity').val();
+	if (gotransferdeparturecity) {
+		gotransferdeparturecity = gotransferdeparturecity.join(',');
+	}else{
+		gotransferdeparturecity += '';
+	}
+	orderinfo.gotransferdeparturecity = gotransferdeparturecity;
+	
+	var newgoarrivedcity = $('#newgoarrivedcity').val();
+	if (newgoarrivedcity) {
+		newgoarrivedcity = newgoarrivedcity.join(',');
+	}else{
+		newgoarrivedcity += '';
+	}
+	orderinfo.newgoarrivedcity = newgoarrivedcity;
+	
+	var newgoflightnum = $('#newgoflightnum').val();
+	if (newgoflightnum) {
+		newgoflightnum = newgoflightnum.join(',');
+	}else{
+		newgoflightnum += '';
+	}
+	orderinfo.newgoflightnum = newgoflightnum;
+	
+	var newreturndeparturecity = $('#newreturndeparturecity').val();
+	if (newreturndeparturecity) {
+		newreturndeparturecity = newreturndeparturecity.join(',');
+	}else{
+		newreturndeparturecity += '';
+	}
+	orderinfo.newreturndeparturecity = newreturndeparturecity;
+	
+	var returntransferarrivedcity = $('#returntransferarrivedcity').val();
+	if (returntransferarrivedcity) {
+		returntransferarrivedcity = returntransferarrivedcity.join(',');
+	}else{
+		returntransferarrivedcity += '';
+	}
+	orderinfo.returntransferarrivedcity = returntransferarrivedcity;
+	
+	var returntransferflightnum = $('#returntransferflightnum').val();
+	if (returntransferflightnum) {
+		returntransferflightnum = returntransferflightnum.join(',');
+	}else{
+		returntransferflightnum += '';
+	}
+	orderinfo.returntransferflightnum = returntransferflightnum;
+	
+	var returntransferdeparturecity = $('#returntransferdeparturecity').val();
+	if (returntransferdeparturecity) {
+		returntransferdeparturecity = returntransferdeparturecity.join(',');
+	}else{
+		returntransferdeparturecity += '';
+	}
+	orderinfo.returntransferdeparturecity = returntransferdeparturecity;
+	
+	var newreturnarrivedcity = $('#newreturnarrivedcity').val();
+	if (newreturnarrivedcity) {
+		newreturnarrivedcity = newreturnarrivedcity.join(',');
+	}else{
+		newreturnarrivedcity += '';
+	}
+	orderinfo.newreturnarrivedcity = newreturnarrivedcity;
+	
+	var newreturnflightnum = $('#newreturnflightnum').val();
+	if (newreturnflightnum) {
+		newreturnflightnum = newreturnflightnum.join(',');
+	}else{
+		newreturnflightnum += '';
+	}
+	orderinfo.newreturnflightnum = newreturnflightnum;
+	
+	
 	var customerType = $('#customerType').val();
 	orderinfo.customerType = customerType;
 	var compName = $('#compName').val();

@@ -42,4 +42,30 @@ public class GenerrateTravelForm {
 	private String returnFlightNum;
 
 	private Integer visatype;
+
+	private Integer cityid;
+
+	private Integer gotransferarrivedcity;
+
+	private Integer gotransferdeparturecity;
+
+	private Integer returntransferarrivedcity;
+
+	private Integer returntransferdeparturecity;
+
+	private String gotransferflightnum;
+
+	private String returntransferflightnum;
+
+	private Integer newgodeparturecity;
+
+	private Integer newgoarrivedcity;
+
+	private String newgoflightnum;
+
+	private Integer newreturndeparturecity;
+
+	private Integer newreturnarrivedcity;
+
+	private String newreturnflightnum;
 }

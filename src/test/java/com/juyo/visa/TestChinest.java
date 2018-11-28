@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -21,9 +20,9 @@ public class TestChinest {
 	static final int N = 50000;
 
 	public static void main(String[] args) {
-		int str = 1200;
+		/*int str = 1200;
 		DecimalFormat df = new DecimalFormat("#,###");
-		System.out.println(df.format(str));
+		System.out.println(df.format(str));*/
 
 		/*String str = "ggweg146 51-& ";
 		System.out.println(isLegalStr(str));*/
@@ -173,7 +172,7 @@ public class TestChinest {
 
 		System.out.println(stringBuilder1.toString());*/
 
-		/*//直飞
+		//直飞
 		String goFlightNum = "首都国际机场-关西国际机场 CA161 1625/2030";
 
 		//第一个机场名 首都机场
@@ -188,11 +187,11 @@ public class TestChinest {
 		String substring2 = goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" "));
 
 		String substring4 = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1);
-		StringBuffer stringBuilder1 = new StringBuffer(substring4);
-		stringBuilder1.insert(2, ":");
-		stringBuilder1.insert(8, ":");
+		StringBuffer stringBuilder1 = new StringBuffer(substring2);
+		//stringBuilder1.insert(8, ":");
+		stringBuilder1.append("//" + substring2);
 
-		System.out.println(stringBuilder1.toString());*/
+		System.out.println(stringBuilder1.toString());
 
 		//System.out.println(s.substring(s.indexOf(".", s.indexOf(".")) + 1, s.indexOf(".", s.indexOf(".") + 1)));
 	}

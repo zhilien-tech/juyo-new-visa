@@ -648,10 +648,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 							Cnd.where("orderId", "=", orderid).and("cityId", "=",
 									planlist.get(planlist.size() - 1).getCityId()), null);
 
-					if (nowplanList.size() == 1) {
+					if (nowplanList.size() == 1) {//只有一天，说明是东北六县
 						String countryAirline = simpleVisaService.countryAirline(formerPlan.getCityId(),
 								plan.getCityId(), 1);
-						/*String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
+						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
 						Sql sql = Sqls.create(sqlString);
 						sql.setParam("orderid", orderid);
 						sql.setParam("cityid", plan.getCityId());
@@ -659,8 +659,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 						List<Record> scenics = dbDao.query(sql, null, null);
 						Random random = new Random();
 						plan.setScenic(countryAirline + "。"
-								+ scenics.get(random.nextInt(scenics.size())).getString("name"));*/
-						plan.setScenic(countryAirline);
+								+ scenics.get(random.nextInt(scenics.size())).getString("name"));
+						//plan.setScenic(countryAirline);
 						dbDao.update(plan);
 
 					} else if (lastplanList.size() == 2 && Integer.valueOf(plan.getDay()) == planlist.size() - 1) {//最后一个城市是两天，如果是第一天则是新干线加景点
@@ -678,10 +678,13 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 						dbDao.update(plan);
 
 					} else {
-						//无需操作
+						String countryAirline = simpleVisaService.countryAirline(formerPlan.getCityId(),
+								plan.getCityId(), 1);
+						plan.setScenic(countryAirline);
+						dbDao.update(plan);
 					}
 
-					if (lastplanList.size() == 2 && Integer.valueOf(plan.getDay()) == planlist.size() - 1) {//最后一个城市是两天，如果是第一天则是新干线加景点
+					/*if (lastplanList.size() == 2 && Integer.valueOf(plan.getDay()) == planlist.size() - 1) {//最后一个城市是两天，如果是第一天则是新干线加景点
 						String countryAirline = simpleVisaService.countryAirline(formerPlan.getCityId(),
 								plan.getCityId(), 1);
 						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
@@ -700,7 +703,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 								plan.getCityId(), 1);
 						plan.setScenic(countryAirline);
 						dbDao.update(plan);
-					}
+					}*/
 
 				}
 

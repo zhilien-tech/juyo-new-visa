@@ -29,6 +29,29 @@ LEFT JOIN t_order_jp toj ON totj.orderId = toj.id
 LEFT JOIN t_order tr ON toj.orderId = tr.id
 $condition
 
+
+/*cityselectBygotransferarrivedcity*/
+SELECT
+tc.*, count(*) AS count
+FROM
+t_city tc
+LEFT JOIN t_order_trip_jp totj ON totj.gotransferarrivedcity = tc.id
+LEFT JOIN t_order_jp toj ON totj.orderId = toj.id
+LEFT JOIN t_order tr ON toj.orderId = tr.id
+$condition
+
+
+/*cityselectBygotransferdeparturecity*/
+SELECT
+tc.*, count(*) AS count
+FROM
+t_city tc
+LEFT JOIN t_order_trip_jp totj ON totj.gotransferdeparturecity = tc.id
+LEFT JOIN t_order_jp toj ON totj.orderId = toj.id
+LEFT JOIN t_order tr ON toj.orderId = tr.id
+$condition
+
+
 /*cityselectBygoarrivedcity*/
 SELECT
 tc.*, count(*) AS count
@@ -40,12 +63,76 @@ LEFT JOIN t_order tr ON toj.orderId = tr.id
 $condition
 
 
+/*cityselectBynewgodeparturecity*/
+SELECT
+tc.*, count(*) AS count
+FROM
+t_city tc
+LEFT JOIN t_order_trip_jp totj ON totj.newgodeparturecity = tc.id
+LEFT JOIN t_order_jp toj ON totj.orderId = toj.id
+LEFT JOIN t_order tr ON toj.orderId = tr.id
+$condition
+
+
+/*cityselectBynewgoarrivedcity*/
+SELECT
+tc.*, count(*) AS count
+FROM
+t_city tc
+LEFT JOIN t_order_trip_jp totj ON totj.newgoarrivedcity = tc.id
+LEFT JOIN t_order_jp toj ON totj.orderId = toj.id
+LEFT JOIN t_order tr ON toj.orderId = tr.id
+$condition
+
+/*cityselectBynewreturndeparturecity*/
+SELECT
+tc.*, count(*) AS count
+FROM
+t_city tc
+LEFT JOIN t_order_trip_jp totj ON totj.newreturndeparturecity = tc.id
+LEFT JOIN t_order_jp toj ON totj.orderId = toj.id
+LEFT JOIN t_order tr ON toj.orderId = tr.id
+$condition
+
+/*cityselectBynewreturnarrivedcity*/
+SELECT
+tc.*, count(*) AS count
+FROM
+t_city tc
+LEFT JOIN t_order_trip_jp totj ON totj.newreturnarrivedcity = tc.id
+LEFT JOIN t_order_jp toj ON totj.orderId = toj.id
+LEFT JOIN t_order tr ON toj.orderId = tr.id
+$condition
+
+
 /*cityselectByreturndeparturecity*/
 SELECT
 tc.*, count(*) AS count
 FROM
 t_city tc
 LEFT JOIN t_order_trip_jp totj ON totj.returnDepartureCity = tc.id
+LEFT JOIN t_order_jp toj ON totj.orderId = toj.id
+LEFT JOIN t_order tr ON toj.orderId = tr.id
+$condition
+
+
+/*cityselectByreturntransferarrivedcity*/
+SELECT
+tc.*, count(*) AS count
+FROM
+t_city tc
+LEFT JOIN t_order_trip_jp totj ON totj.returntransferarrivedcity = tc.id
+LEFT JOIN t_order_jp toj ON totj.orderId = toj.id
+LEFT JOIN t_order tr ON toj.orderId = tr.id
+$condition
+
+
+/*cityselectByreturntransferdeparturecity*/
+SELECT
+tc.*, count(*) AS count
+FROM
+t_city tc
+LEFT JOIN t_order_trip_jp totj ON totj.returntransferdeparturecity = tc.id
 LEFT JOIN t_order_jp toj ON totj.orderId = toj.id
 LEFT JOIN t_order tr ON toj.orderId = tr.id
 $condition

@@ -77,4 +77,28 @@ public class AddOrderForm {
 	private String sendvisanum;
 	//直客用户Id
 	private Integer zhikecustomid;
+
+	private Integer gotransferarrivedcity;
+
+	private Integer gotransferdeparturecity;
+
+	private Integer returntransferarrivedcity;
+
+	private Integer returntransferdeparturecity;
+
+	private String gotransferflightnum;
+
+	private String returntransferflightnum;
+
+	private Integer newgodeparturecity;
+
+	private Integer newgoarrivedcity;
+
+	private String newgoflightnum;
+
+	private Integer newreturndeparturecity;
+
+	private Integer newreturnarrivedcity;
+
+	private String newreturnflightnum;
 }
