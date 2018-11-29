@@ -20,6 +20,20 @@ public class TestChinest {
 	static final int N = 50000;
 
 	public static void main(String[] args) {
+
+		/*Random random = new Random();
+		for (int i = 0; i < 100; i++) {
+			int nextInt = random.nextInt(31);
+			if (nextInt + 2 > 30) {
+				System.out.println(nextInt + 2);
+			}
+		}*/
+
+		int[] arr = { 1, 2, 3, 4, 5, 6 };
+		List<Integer> randomDates = getRandomDates(arr, 32);
+		for (Integer integer : randomDates) {
+			System.out.println(integer);
+		}
 		/*int str = 1200;
 		DecimalFormat df = new DecimalFormat("#,###");
 		System.out.println(df.format(str));*/
@@ -172,7 +186,7 @@ public class TestChinest {
 
 		System.out.println(stringBuilder1.toString());*/
 
-		//直飞
+		/*//直飞
 		String goFlightNum = "首都国际机场-关西国际机场 CA161 1625/2030";
 
 		//第一个机场名 首都机场
@@ -191,7 +205,7 @@ public class TestChinest {
 		//stringBuilder1.insert(8, ":");
 		stringBuilder1.append("//" + substring2);
 
-		System.out.println(stringBuilder1.toString());
+		System.out.println(stringBuilder1.toString());*/
 
 		//System.out.println(s.substring(s.indexOf(".", s.indexOf(".")) + 1, s.indexOf(".", s.indexOf(".") + 1)));
 	}
@@ -200,6 +214,30 @@ public class TestChinest {
 		String reg = "[A-Za-z0-9-& ]+";
 		boolean isChinese = str.matches(reg);
 		return isChinese;
+	}
+
+	public static List<Integer> getRandomDates(int[] paramArray, int days) {
+		Random random = new Random();
+		List<Integer> numbers = new ArrayList<Integer>();
+		int sum = 0;
+		while (true) {
+			int n = random.nextInt(days - 1) + 2;
+			System.out.println("n:" + n);
+			sum += n;
+			numbers.add(n);
+
+			if (numbers.size() > paramArray.length || sum > days) {
+				numbers.clear();
+				sum = 0;
+			}
+
+			if (numbers.size() == paramArray.length && sum == days) {
+				break;
+			}
+		}
+		System.out.println(numbers);
+
+		return numbers;
 	}
 
 	public static int[] getRandomArray(int[] paramArray, int count) {

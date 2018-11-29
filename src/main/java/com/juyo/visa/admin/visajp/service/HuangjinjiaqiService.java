@@ -2218,19 +2218,25 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(ordertripjp.getNewgodeparturecity())) {//第一行出发城市不为空，说明为转机
 			gotransferdeparturecity = ordertripjp.getNewgodeparturecity();
 		} else {
-			gotransferdeparturecity = ordertripjp.getGotransferdeparturecity();
+			if (!Util.isEmpty(ordertripjp.getGotransferflightnum())) {
+				gotransferdeparturecity = ordertripjp.getGotransferdeparturecity();
+			}
 		}
-		goCity = dbDao.fetch(TCityEntity.class, gotransferdeparturecity);
-		province = goCity.getProvince();
-		if (province.endsWith("省") || province.endsWith("市")) {
-			province = province.substring(0, province.length() - 1);
-		}
-		if (province.length() > 3 && province.endsWith("自治区")) {
-			province = province.substring(0, province.length() - 3);
+		if (gotransferdeparturecity != 0) {
+			goCity = dbDao.fetch(TCityEntity.class, gotransferdeparturecity);
+			province = goCity.getProvince();
+			if (province.endsWith("省") || province.endsWith("市")) {
+				province = province.substring(0, province.length() - 1);
+			}
+			if (province.length() > 3 && province.endsWith("自治区")) {
+				province = province.substring(0, province.length() - 3);
+			}
 		}
 		//返回时的出发城市
 		Integer returnDepartureCity = ordertripjp.getNewreturndeparturecity();
-		returngoCity = dbDao.fetch(TCityEntity.class, returnDepartureCity.longValue());
+		if (!Util.isEmpty(returnDepartureCity)) {
+			returngoCity = dbDao.fetch(TCityEntity.class, returnDepartureCity.longValue());
+		}
 		//出发航班
 		if (!Util.isEmpty(ordertripjp.getGotransferflightnum())) {//有第一行航班,说明是转机
 			String gotransferflightnum = ordertripjp.getGotransferflightnum();
@@ -2250,16 +2256,18 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 					+ newgoflightnum.substring(newgoflightnum.indexOf("-", newgoflightnum.lastIndexOf("-")) + 1,
 							newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
 		} else {
-			String newgoflightnum = ordertripjp.getNewgoflightnum();
-			//第一天
-			firstday = " "
-					+ province
-					+ "から"
-					+ newgoflightnum.substring(newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" ")) + 1,
-							newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" ") + 1))
-					+ "便にて"
-					+ newgoflightnum.substring(newgoflightnum.indexOf("-", newgoflightnum.lastIndexOf("-")) + 1,
-							newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+			if (!Util.isEmpty(ordertripjp.getNewgoflightnum())) {
+				String newgoflightnum = ordertripjp.getNewgoflightnum();
+				//第一天
+				firstday = " "
+						+ province
+						+ "から"
+						+ newgoflightnum.substring(newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" ")) + 1,
+								newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" ") + 1))
+						+ "便にて"
+						+ newgoflightnum.substring(newgoflightnum.indexOf("-", newgoflightnum.lastIndexOf("-")) + 1,
+								newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+			}
 		}
 
 		if (!Util.isEmpty(ordertripjp.getNewreturnflightnum())) {
@@ -2278,15 +2286,18 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 							returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-"))) + "から"
 					+ stringBuilder.toString() + "便にて帰国";
 		} else {
-			String returntransferflightnum = ordertripjp.getReturntransferflightnum();
-			//最后一天
-			lastday = " "
-					+ returntransferflightnum.substring(0,
-							returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-")))
-					+ "から"
-					+ returntransferflightnum.substring(
-							returntransferflightnum.indexOf(" ", returntransferflightnum.indexOf(" ")) + 1,
-							returntransferflightnum.indexOf(" ", returntransferflightnum.indexOf(" ") + 1)) + "便にて帰国";
+			if (!Util.isEmpty(ordertripjp.getReturntransferflightnum())) {
+				String returntransferflightnum = ordertripjp.getReturntransferflightnum();
+				//最后一天
+				lastday = " "
+						+ returntransferflightnum.substring(0,
+								returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-")))
+						+ "から"
+						+ returntransferflightnum.substring(
+								returntransferflightnum.indexOf(" ", returntransferflightnum.indexOf(" ")) + 1,
+								returntransferflightnum.indexOf(" ", returntransferflightnum.indexOf(" ") + 1))
+						+ "便にて帰国";
+			}
 		}
 
 		result.put("firstday", firstday);
@@ -2389,6 +2400,28 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 		return wordStream;
 	}
 
+	public String getLineStr(TOrderTripJpEntity ordertripjp, String goFlightNum, int applysize, int sequence,
+			String dateStr) {
+		String result = "";
+		//第一个机场
+		String firstflight = goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")));
+		//第二个机场 
+		String secondflight = goFlightNum.substring(goFlightNum.indexOf("-") + 1, goFlightNum.indexOf(" "));
+
+		TFlightEntity firstname = dbDao.fetch(TFlightEntity.class, Cnd.where("takeOffName", "=", firstflight));
+		TFlightEntity secondname = dbDao.fetch(TFlightEntity.class, Cnd.where("landingName", "=", secondflight));
+
+		//起飞时间
+		String takeofftime = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1, goFlightNum.indexOf("/"));
+		//降落时间
+		String landingtime = goFlightNum.substring(goFlightNum.indexOf("/") + 1);
+
+		result = sequence + "." + goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" "))
+				+ " Y " + dateStr.toUpperCase() + " " + firstname.getTakeOffCode() + secondname.getLandingCode()
+				+ " HK" + applysize + " " + takeofftime + "/" + landingtime;
+		return result;
+	}
+
 	/**
 	 * 航班
 	 */
@@ -2432,11 +2465,19 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 				}
 
 			}
-			Paragraph p = new Paragraph("1." + firstStr, font);
-			p.setSpacingBefore(5);
-			p.setIndentationLeft(20);
-			p.setAlignment(Paragraph.ALIGN_LEFT);
-			document.add(p);
+			if (!Util.isEmpty(firstStr)) {
+				Paragraph p = new Paragraph("1." + firstStr, font);
+				p.setSpacingBefore(5);
+				p.setIndentationLeft(20);
+				p.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(p);
+			} else {
+				Paragraph p = new Paragraph(" ", font);
+				p.setSpacingBefore(5);
+				p.setIndentationLeft(20);
+				p.setAlignment(Paragraph.ALIGN_LEFT);
+				document.add(p);
+			}
 
 			//第二行
 			//applyinfo.size()
@@ -2444,524 +2485,43 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 			String thirdStr = "";
 			String fourthStr = "";
 			String fifthStr = "";
+			String godateStr = "";
+			String returndateStr = "";
+			if (!Util.isEmpty(ordertripjp.getGoDate())) {
+				godateStr = df.format(ordertripjp.getGoDate());
+			}
+			if (!Util.isEmpty(ordertripjp.getReturnDate())) {
+				returndateStr = df.format(ordertripjp.getReturnDate());
+			}
 
 			if (!Util.isEmpty(ordertripjp)) {
-				if (ordertripjp.getTripType().equals(1)) {
-					//入境航班
-					if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
-						String goFlightNum = ordertripjp.getGoFlightNum();
-						//分直飞和转机
-						if (goFlightNum.contains("//")) {//转机
-							//第一行，共2行
-							//机场
-							//第一个机场名 
-							String firstflight = goFlightNum.substring(0,
-									goFlightNum.indexOf("-", goFlightNum.indexOf("-")));
-
-							//第二个机场 
-							String secondflight = goFlightNum.substring(goFlightNum.indexOf("-") + 1,
-									goFlightNum.lastIndexOf("-"));
-
-							//最后一个机场名 
-							String lastflight = goFlightNum.substring(goFlightNum.lastIndexOf("-") + 1,
-									goFlightNum.indexOf(" "));
-
-							TFlightEntity firstname = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("takeOffName", "=", firstflight));
-							TFlightEntity secondname = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("landingName", "=", secondflight));
-							TFlightEntity lastname = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("landingName", "=", lastflight));
-
-							//始发地/目的地
-							map.put("Text2", firstname.getTakeOffCode() + "/" + secondname.getLandingCode());
-							//航班
-							map.put("Text5",
-									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.indexOf("//")));
-							//日期
-							map.put("Text9", df.format(ordertripjp.getGoDate()).toUpperCase());
-							//起飞时间
-							map.put("Text11",
-									goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
-											goFlightNum.lastIndexOf(" ") + 5).substring(0, 2)
-											+ ":"
-											+ goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
-													goFlightNum.lastIndexOf(" ") + 5).substring(2, 4));
-							//到达时间
-							map.put("Text13",
-									goFlightNum.substring(goFlightNum.lastIndexOf("//") - 4,
-											goFlightNum.lastIndexOf("//")).substring(0, 2)
-											+ ":"
-											+ goFlightNum.substring(goFlightNum.lastIndexOf("//") - 4,
-													goFlightNum.lastIndexOf("//")).substring(2, 4));
-							//有效期
-							Date addDay = DateUtil.addDay(ordertripjp.getGoDate(), 8);
-							map.put("Text15", df.format(addDay).toUpperCase());
-
-							secondStr = "2."
-									+ goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.indexOf("//"))
-									+ " Y "
-									+ df.format(ordertripjp.getGoDate()).toUpperCase()
-									+ " "
-									+ firstname.getTakeOffCode()
-									+ secondname.getLandingCode()
-									+ " HK"
-									+ applyinfo.size()
-									+ " "
-									+ goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
-											goFlightNum.lastIndexOf(" ") + 5)
-									+ "/"
-									+ goFlightNum.substring(goFlightNum.lastIndexOf("//") - 4,
-											goFlightNum.lastIndexOf("//"));
-
-							//第二行
-							//始发地/目的地
-							map.put("Text3", secondname.getLandingCode() + "/" + lastname.getLandingCode());
-							//航班
-							map.put("Text6",
-									goFlightNum.substring(goFlightNum.indexOf("//") + 2, goFlightNum.lastIndexOf(" ")));
-							//日期
-							map.put("Text10", df.format(ordertripjp.getGoDate()).toUpperCase());
-							//起飞时间
-							map.put("Text12",
-									goFlightNum.substring(goFlightNum.lastIndexOf("//") + 2,
-											goFlightNum.lastIndexOf("/")).substring(0, 2)
-											+ ":"
-											+ goFlightNum.substring(goFlightNum.lastIndexOf("//") + 2,
-													goFlightNum.lastIndexOf("/")).substring(2, 4));
-							//到达时间
-							map.put("Text14", goFlightNum.substring(goFlightNum.lastIndexOf("/") + 1).substring(0, 2)
-									+ ":" + goFlightNum.substring(goFlightNum.lastIndexOf("/") + 1).substring(2, 4));
-							//有效期
-							map.put("Text16", df.format(addDay).toUpperCase());
-							thirdStr = "3."
-									+ goFlightNum
-											.substring(goFlightNum.indexOf("//") + 2, goFlightNum.lastIndexOf(" "))
-									+ " Y "
-									+ df.format(ordertripjp.getGoDate()).toUpperCase()
-									+ " "
-									+ secondname.getLandingCode()
-									+ lastname.getLandingCode()
-									+ " HK"
-									+ applyinfo.size()
-									+ " "
-									+ goFlightNum.substring(goFlightNum.lastIndexOf("//") + 2,
-											goFlightNum.lastIndexOf("/")) + "/"
-									+ goFlightNum.substring(goFlightNum.lastIndexOf("/") + 1);
-
-						} else {//直飞
-							//只需占一行
-							//第一个机场
-							String firstflight = goFlightNum.substring(0,
-									goFlightNum.indexOf("-", goFlightNum.indexOf("-")));
-							//第二个机场 
-							String secondflight = goFlightNum.substring(goFlightNum.indexOf("-") + 1,
-									goFlightNum.indexOf(" "));
-
-							TFlightEntity firstname = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("takeOffName", "=", firstflight));
-							TFlightEntity secondname = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("landingName", "=", secondflight));
-
-							//起飞时间
-							String takeofftime = goFlightNum.substring(goFlightNum.lastIndexOf(" ") + 1,
-									goFlightNum.indexOf("/"));
-							//降落时间
-							String landingtime = goFlightNum.substring(goFlightNum.indexOf("/") + 1);
-							//始发地/目的地
-							map.put("Text2", firstname.getTakeOffCode() + "/" + secondname.getLandingCode());
-							//起飞航班号
-							map.put("Text5",
-									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
-							//起飞时间 
-							map.put("Text11", takeofftime.substring(0, 2) + ":" + takeofftime.substring(2, 4));
-							//降落时间
-							map.put("Text13", landingtime.substring(0, 2) + ":" + landingtime.substring(2, 4));
-
-							//出发航班日期
-							map.put("Text9", df.format(ordertripjp.getGoDate()).toUpperCase());
-							//有效期（出发日期+8天）
-							Date addDay = DateUtil.addDay(ordertripjp.getGoDate(), 8);
-							map.put("Text15", df.format(addDay).toUpperCase());
-
-							secondStr = "2."
-									+ goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" "))
-									+ " Y " + df.format(ordertripjp.getGoDate()).toUpperCase() + " "
-									+ firstname.getTakeOffCode() + secondname.getLandingCode() + " HK"
-									+ applyinfo.size() + " " + takeofftime + "/" + landingtime;
-						}
+				if (!Util.isEmpty(ordertripjp.getGotransferflightnum())) {//第一行不为空，为secondeStr
+					secondStr = getLineStr(ordertripjp, ordertripjp.getGotransferflightnum(), applyinfo.size(), 2,
+							godateStr);
+					if (!Util.isEmpty(ordertripjp.getNewgoflightnum())) {
+						thirdStr = getLineStr(ordertripjp, ordertripjp.getNewgoflightnum(), applyinfo.size(), 3,
+								godateStr);
 					}
-
-					//出境航班
-					if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
-						//需要根据入境航班是转机还是直飞来区分
-						String goFlightNum = ordertripjp.getGoFlightNum();
-						String returnFlightNum = ordertripjp.getReturnFlightNum();
-						//如果去程是转机，则返程从模板第三行开始，否则从第二行开始
-						if (!goFlightNum.contains("//")) {//直飞，从第二行开始
-							if (returnFlightNum.contains("//")) {//转机
-								//第一个机场名 
-								String firstflight = returnFlightNum.substring(0,
-										returnFlightNum.indexOf("-", returnFlightNum.indexOf("-")));
-
-								//第二个机场 
-								String secondflight = returnFlightNum.substring(returnFlightNum.indexOf("-") + 1,
-										returnFlightNum.lastIndexOf("-"));
-
-								//最后一个机场名 
-								String lastflight = returnFlightNum.substring(returnFlightNum.lastIndexOf("-") + 1,
-										returnFlightNum.indexOf(" "));
-
-								TFlightEntity firstname = dbDao.fetch(TFlightEntity.class,
-										Cnd.where("takeOffName", "=", firstflight));
-								TFlightEntity secondname = dbDao.fetch(TFlightEntity.class,
-										Cnd.where("landingName", "=", secondflight));
-								TFlightEntity lastname = dbDao.fetch(TFlightEntity.class,
-										Cnd.where("landingName", "=", lastflight));
-								//第一行 共2行
-								//始发地/目的地
-								map.put("Text3", firstname.getTakeOffCode() + "/" + secondname.getLandingCode());
-								//航班
-								map.put("Text6",
-										returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
-												returnFlightNum.indexOf("//")));
-								//日期
-								map.put("Text10", df.format(ordertripjp.getReturnDate()).toUpperCase());
-								//起飞时间
-								map.put("Text12",
-										returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
-												returnFlightNum.lastIndexOf(" ") + 5).substring(0, 2)
-												+ ":"
-												+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
-														returnFlightNum.lastIndexOf(" ") + 5).substring(2, 4));
-								//到达时间
-								map.put("Text14",
-										returnFlightNum.substring(returnFlightNum.lastIndexOf("//") - 4,
-												returnFlightNum.lastIndexOf("//")).substring(0, 2)
-												+ ":"
-												+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") - 4,
-														returnFlightNum.lastIndexOf("//")).substring(2, 4));
-								//有效期
-								Date addDay = DateUtil.addDay(ordertripjp.getReturnDate(), 8);
-								map.put("Text16", df.format(addDay).toUpperCase());
-
-								thirdStr = "3."
-										+ returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
-												returnFlightNum.indexOf("//"))
-										+ " Y "
-										+ df.format(ordertripjp.getReturnDate()).toUpperCase()
-										+ " "
-										+ firstname.getTakeOffCode()
-										+ secondname.getLandingCode()
-										+ " HK"
-										+ applyinfo.size()
-										+ " "
-										+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
-												returnFlightNum.lastIndexOf(" ") + 5)
-										+ "/"
-										+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") - 4,
-												returnFlightNum.lastIndexOf("//"));
-
-								//第二行
-								//始发地/目的地
-								map.put("Text4", secondname.getLandingCode() + "/" + lastname.getLandingCode());
-								//航班
-								map.put("Text21",
-										returnFlightNum.substring(returnFlightNum.indexOf("//") + 2,
-												returnFlightNum.lastIndexOf(" ")));
-								//日期
-								map.put("Text23", df.format(ordertripjp.getReturnDate()).toUpperCase());
-								//起飞时间
-								map.put("Text24",
-										returnFlightNum.substring(returnFlightNum.lastIndexOf("//") + 2,
-												returnFlightNum.lastIndexOf("/")).substring(0, 2)
-												+ ":"
-												+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") + 2,
-														returnFlightNum.lastIndexOf("/")).substring(2, 4));
-								//到达时间
-								map.put("Text25",
-										returnFlightNum.substring(returnFlightNum.lastIndexOf("/") + 1).substring(0, 2)
-												+ ":"
-												+ returnFlightNum.substring(returnFlightNum.lastIndexOf("/") + 1)
-														.substring(2, 4));
-								//有效期
-								map.put("Text26", df.format(addDay).toUpperCase());
-
-								map.put("Text22", "Y");
-								map.put("Text27", "OK");
-								map.put("Text28", applyinfo.size() + "PC");
-								fourthStr = "4."
-										+ returnFlightNum.substring(returnFlightNum.indexOf("//") + 2,
-												returnFlightNum.lastIndexOf(" "))
-										+ " Y "
-										+ df.format(ordertripjp.getReturnDate()).toUpperCase()
-										+ " "
-										+ secondname.getLandingCode()
-										+ lastname.getLandingCode()
-										+ " HK"
-										+ applyinfo.size()
-										+ " "
-										+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") + 2,
-												returnFlightNum.lastIndexOf("/")) + "/"
-										+ returnFlightNum.substring(returnFlightNum.lastIndexOf("/") + 1);
-
-							} else {//直飞，从第二行开始，只占一行
-								//第一个机场
-								String firstflight = returnFlightNum.substring(0,
-										returnFlightNum.indexOf("-", returnFlightNum.indexOf("-")));
-								//第二个机场 
-								String secondflight = returnFlightNum.substring(returnFlightNum.indexOf("-") + 1,
-										returnFlightNum.indexOf(" "));
-
-								TFlightEntity firstname = dbDao.fetch(TFlightEntity.class,
-										Cnd.where("takeOffName", "=", firstflight));
-								TFlightEntity secondname = dbDao.fetch(TFlightEntity.class,
-										Cnd.where("landingName", "=", secondflight));
-								//始发地/目的地
-								map.put("Text3", firstname.getTakeOffCode() + "/" + secondname.getLandingCode());
-								//起飞时间 
-								map.put("Text12",
-										returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
-												returnFlightNum.indexOf("/")).substring(0, 2)
-												+ ":"
-												+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
-														returnFlightNum.indexOf("/")).substring(2, 4));
-								//降落时间
-								map.put("Text14",
-										returnFlightNum.substring(returnFlightNum.indexOf("/") + 1).substring(0, 2)
-												+ ":"
-												+ returnFlightNum.substring(returnFlightNum.indexOf("/") + 1)
-														.substring(2, 4));
-								//航班号
-								map.put("Text6",
-										returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
-												returnFlightNum.lastIndexOf(" ")));
-
-								//返回航班日期
-								map.put("Text10", df.format(ordertripjp.getReturnDate()).toUpperCase());
-								//有效期（返回日期+6天）
-								Date addDay2 = DateUtil.addDay(ordertripjp.getReturnDate(), 6);
-								map.put("Text16", df.format(addDay2).toUpperCase());
-
-								thirdStr = "3."
-										+ returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
-												returnFlightNum.lastIndexOf(" "))
-										+ " Y "
-										+ df.format(ordertripjp.getReturnDate()).toUpperCase()
-										+ " "
-										+ firstname.getTakeOffCode()
-										+ secondname.getLandingCode()
-										+ " HK"
-										+ applyinfo.size()
-										+ " "
-										+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
-												returnFlightNum.indexOf("/")) + "/"
-										+ returnFlightNum.substring(returnFlightNum.indexOf("/") + 1);
-							}
-
-						} else {//转机，从第三行开始
-							if (returnFlightNum.contains("//")) {//转机
-								//第一个机场名 
-								String firstflight = returnFlightNum.substring(0,
-										returnFlightNum.indexOf("-", returnFlightNum.indexOf("-")));
-
-								//第二个机场 
-								String secondflight = returnFlightNum.substring(returnFlightNum.indexOf("-") + 1,
-										returnFlightNum.lastIndexOf("-"));
-
-								//最后一个机场名 
-								String lastflight = returnFlightNum.substring(returnFlightNum.lastIndexOf("-") + 1,
-										returnFlightNum.indexOf(" "));
-
-								TFlightEntity firstname = dbDao.fetch(TFlightEntity.class,
-										Cnd.where("takeOffName", "=", firstflight));
-								TFlightEntity secondname = dbDao.fetch(TFlightEntity.class,
-										Cnd.where("landingName", "=", secondflight));
-								TFlightEntity lastname = dbDao.fetch(TFlightEntity.class,
-										Cnd.where("landingName", "=", lastflight));
-								//第一行 共2行
-								//始发地/目的地
-								map.put("Text4", firstname.getTakeOffCode() + "/" + secondname.getLandingCode());
-								//航班
-								map.put("Text21",
-										returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
-												returnFlightNum.indexOf("//")));
-								//日期
-								map.put("Text23", df.format(ordertripjp.getReturnDate()).toUpperCase());
-								//起飞时间
-								map.put("Text24",
-										returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
-												returnFlightNum.lastIndexOf(" ") + 5).substring(0, 2)
-												+ ":"
-												+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
-														returnFlightNum.lastIndexOf(" ") + 5).substring(2, 4));
-								//到达时间
-								map.put("Text25",
-										returnFlightNum.substring(returnFlightNum.lastIndexOf("//") - 4,
-												returnFlightNum.lastIndexOf("//")).substring(0, 2)
-												+ ":"
-												+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") - 4,
-														returnFlightNum.lastIndexOf("//")).substring(2, 4));
-								//有效期
-								Date addDay = DateUtil.addDay(ordertripjp.getReturnDate(), 8);
-								map.put("Text26", df.format(addDay).toUpperCase());
-
-								fourthStr = "4."
-										+ returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
-												returnFlightNum.indexOf("//"))
-										+ " Y "
-										+ df.format(ordertripjp.getReturnDate()).toUpperCase()
-										+ " "
-										+ firstname.getTakeOffCode()
-										+ secondname.getLandingCode()
-										+ " HK"
-										+ applyinfo.size()
-										+ " "
-										+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
-												returnFlightNum.lastIndexOf(" ") + 5)
-										+ "/"
-										+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") - 4,
-												returnFlightNum.lastIndexOf("//"));
-
-								//第二行
-								//始发地/目的地
-								map.put("Text29", secondname.getLandingCode() + "/" + lastname.getLandingCode());
-								//航班
-								map.put("Text30",
-										returnFlightNum.substring(returnFlightNum.indexOf("//") + 2,
-												returnFlightNum.lastIndexOf(" ")));
-								//日期
-								map.put("Text32", df.format(ordertripjp.getReturnDate()).toUpperCase());
-								//起飞时间
-								map.put("Text33",
-										returnFlightNum.substring(returnFlightNum.lastIndexOf("//") + 2,
-												returnFlightNum.lastIndexOf("/")).substring(0, 2)
-												+ ":"
-												+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") + 2,
-														returnFlightNum.lastIndexOf("/")).substring(2, 4));
-								//到达时间
-								map.put("Text34",
-										returnFlightNum.substring(returnFlightNum.lastIndexOf("/") + 1).substring(0, 2)
-												+ ":"
-												+ returnFlightNum.substring(returnFlightNum.lastIndexOf("/") + 1)
-														.substring(2, 4));
-								//有效期
-								map.put("Text35", df.format(addDay).toUpperCase());
-								fifthStr = "5."
-										+ returnFlightNum.substring(returnFlightNum.indexOf("//") + 2,
-												returnFlightNum.lastIndexOf(" "))
-										+ " Y "
-										+ df.format(ordertripjp.getReturnDate()).toUpperCase()
-										+ " "
-										+ secondname.getLandingCode()
-										+ lastname.getLandingCode()
-										+ " HK"
-										+ applyinfo.size()
-										+ " "
-										+ returnFlightNum.substring(returnFlightNum.lastIndexOf("//") + 2,
-												returnFlightNum.lastIndexOf("/")) + "/"
-										+ returnFlightNum.substring(returnFlightNum.lastIndexOf("/") + 1);
-
-							} else {//直飞
-								//第一个机场
-								String firstflight = returnFlightNum.substring(0,
-										returnFlightNum.indexOf("-", returnFlightNum.indexOf("-")));
-								//第二个机场 
-								String secondflight = returnFlightNum.substring(returnFlightNum.indexOf("-") + 1,
-										returnFlightNum.indexOf(" "));
-
-								TFlightEntity firstname = dbDao.fetch(TFlightEntity.class,
-										Cnd.where("takeOffName", "=", firstflight));
-								TFlightEntity secondname = dbDao.fetch(TFlightEntity.class,
-										Cnd.where("landingName", "=", secondflight));
-								//始发地/目的地
-								map.put("Text4", firstname.getTakeOffCode() + "/" + secondname.getLandingCode());
-								//起飞时间 
-								map.put("Text24",
-										returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
-												returnFlightNum.indexOf("/")).substring(0, 2)
-												+ ":"
-												+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
-														returnFlightNum.indexOf("/")).substring(2, 4));
-								//降落时间
-								map.put("Text25",
-										returnFlightNum.substring(returnFlightNum.indexOf("/") + 1).substring(0, 2)
-												+ ":"
-												+ returnFlightNum.substring(returnFlightNum.indexOf("/") + 1)
-														.substring(2, 4));
-								//航班号
-								map.put("Text21",
-										returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
-												returnFlightNum.lastIndexOf(" ")));
-
-								//返回航班日期
-								map.put("Text23", df.format(ordertripjp.getReturnDate()).toUpperCase());
-								//有效期（返回日期+6天）
-								Date addDay2 = DateUtil.addDay(ordertripjp.getReturnDate(), 6);
-								map.put("Text26", df.format(addDay2).toUpperCase());
-
-								fourthStr = "4."
-										+ returnFlightNum.substring(returnFlightNum.indexOf(" ") + 1,
-												returnFlightNum.lastIndexOf(" "))
-										+ " Y "
-										+ df.format(ordertripjp.getReturnDate()).toUpperCase()
-										+ " "
-										+ firstname.getTakeOffCode()
-										+ secondname.getLandingCode()
-										+ " HK"
-										+ applyinfo.size()
-										+ " "
-										+ returnFlightNum.substring(returnFlightNum.lastIndexOf(" ") + 1,
-												returnFlightNum.indexOf("/")) + "/"
-										+ returnFlightNum.substring(returnFlightNum.indexOf("/") + 1);
-							}
-
-						}
-
+					if (!Util.isEmpty(ordertripjp.getReturntransferflightnum())) {
+						fourthStr = getLineStr(ordertripjp, ordertripjp.getReturntransferflightnum(), applyinfo.size(),
+								4, returndateStr);
 					}
-				} else if (ordertripjp.getTripType().equals(2)) {
-					//多程处理
-					if (!Util.isEmpty(mutiltrip)) {
-						//多程第一程为出发日期
-						TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
-						if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-							map.put("Text9", df.format(entrytrip.getDepartureDate()));
-						}
-						//入境航班
-						if (!Util.isEmpty(entrytrip.getFlightNum())) {
-							//							TFlightEntity goflight = flightViewService.fetch(entrytrip.getFlightNum().longValue());
-							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-							//起飞机场
-							map.put("Text2", goflight.getTakeOffName());
-							//起飞时间 
-							map.put("Text11", goflight.getTakeOffTime().substring(0, 2) + ":"
-									+ goflight.getTakeOffTime().substring(2, 4));
-							//降落时间
-							map.put("Text13", goflight.getLandingTime().substring(0, 2) + ":"
-									+ goflight.getLandingTime().substring(2, 4));
-						}
-						map.put("Text5", entrytrip.getFlightNum());
-						//最后一程作为返回日期
-						TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
-						if (!Util.isEmpty(returntrip.getDepartureDate())) {
-							map.put("Text10", df.format(returntrip.getDepartureDate()));
-						}
-						if (!Util.isEmpty(returntrip.getFlightNum())) {
-							//出境航班
-							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-							//返回机场
-							map.put("Text3", goflight.getTakeOffName());
-							//起飞时间 
-							map.put("Text12", goflight.getTakeOffTime().substring(0, 2) + ":"
-									+ goflight.getTakeOffTime().substring(2, 4));
-							//降落时间
-							map.put("Text14", goflight.getLandingTime().substring(0, 2) + ":"
-									+ goflight.getLandingTime().substring(2, 4));
-							map.put("Text4", goflight.getLandingName());
-						}
-						map.put("Text6", returntrip.getFlightNum());
+					if (!Util.isEmpty(ordertripjp.getNewreturnflightnum())) {
+						fifthStr = getLineStr(ordertripjp, ordertripjp.getNewreturnflightnum(), applyinfo.size(), 5,
+								returndateStr);
+					}
+				} else {//第一行为空，则第二行为secondeStr
+					if (!Util.isEmpty(ordertripjp.getNewgoflightnum())) {
+						secondStr = getLineStr(ordertripjp, ordertripjp.getNewgoflightnum(), applyinfo.size(), 2,
+								godateStr);
+					}
+					if (!Util.isEmpty(ordertripjp.getReturntransferflightnum())) {
+						thirdStr = getLineStr(ordertripjp, ordertripjp.getReturntransferflightnum(), applyinfo.size(),
+								3, returndateStr);
+					}
+					if (!Util.isEmpty(ordertripjp.getNewreturnflightnum())) {
+						fourthStr = getLineStr(ordertripjp, ordertripjp.getNewreturnflightnum(), applyinfo.size(), 4,
+								returndateStr);
 					}
 				}
 			}

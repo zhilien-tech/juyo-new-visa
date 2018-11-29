@@ -432,6 +432,13 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			} else {
 				errorMsg += "家庭信息：配偶的联系地址,</br>";
 			}
+		} else {
+			Map<String, Object> SpouseBirthplaceInfo = Maps.newHashMap();
+			SpouseInfo.put("BirthplaceInfo", SpouseBirthplaceInfo);
+			SpouseInfo.put("date_of_birth", "");
+			SpouseInfo.put("nationality", "");
+			SpouseInfo.put("address_type", "");
+			SpouseInfo.put("NameInfo", SpouseNameInfo);
 		}
 		//查询前妻数据
 		TAppStaffFormerspouseEntity formerspouse = dbDao.fetch(TAppStaffFormerspouseEntity.class,
@@ -1350,8 +1357,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		} else {
 			errorMsg += "出行信息：计划去美国的城市,</br>";
 		}
-		if (!Util.isEmpty(info.get("planaddressen"))) {
-			ResidentialInfo.put("street", info.get("planaddressen"));
+		if (!Util.isEmpty(info.get("planaddress"))) {
+			ResidentialInfo.put("street", info.get("planaddress"));
 		} else {
 			errorMsg += "出行信息：计划去美国的地址,</br>";
 		}
