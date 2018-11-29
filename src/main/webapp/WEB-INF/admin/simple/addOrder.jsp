@@ -255,7 +255,114 @@
 									</div>
 								</div>
 							</div>
-							<div class="row body-from-input"><!-- 出发日期/出发城市/抵达城市/航班号 -->
+							
+							
+							<div class="row body-from-input transfer"><!-- 出发日期/出发城市/抵达城市/航班号 -->
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>国内段出发城市：</label>
+												<select id="newgodeparturecity" oninput="clearplan()" class="form-control select2 select2City" multiple="multiple" tabindex="17" >
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>抵达城市：</label>
+												<select id="gotransferarrivedcity" oninput="clearplan()" class="form-control select2 select2City" multiple="multiple" tabindex="17" >
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-3 paddingRight">
+											<div class="form-group">
+												<label><span>*</span>航班号：</label>
+												<select id="gotransferflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="19" >
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+								
+									</div><!-- end 出发日期/出发城市/抵达城市/航班号 -->
+									<div class="row body-from-input transfer">
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>国际段出发城市：</label>
+												<select id="gotransferdeparturecity" class="form-control input-sm select2City" oninput="clearplan()" multiple="multiple" tabindex="18">
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>抵达城市：</label>
+												<select id="newgoarrivedcity" class="form-control input-sm select2City" oninput="clearplan()" multiple="multiple" tabindex="18">
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+										<div class="col-sm-3 paddingRight">
+											<div class="form-group">
+												<label><span>*</span>航班号：</label>
+												<select id="newgoflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="19" >
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+									</div>
+									
+									<div class="row body-from-input transfer"><!-- 返回日期/出发城市/返回城市/航班号 -->
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>国际段返回城市：</label>
+												<select id="newreturndeparturecity" class="form-control select2 select2City" multiple="multiple" tabindex="20">
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>抵达城市：</label>
+												<select id="returntransferarrivedcity" class="form-control select2 select2City" multiple="multiple" tabindex="20">
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-3 paddingRight">
+											<div class="form-group">
+												<label><span>*</span>航班号：</label>
+												<select id="returntransferflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="22">
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+									</div><!-- end 返回日期/出发城市/返回城市/航班号 -->
+									<div class="row body-from-input transfer">
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>国内段返回城市：</label>
+												<select id="returntransferdeparturecity" class="form-control input-sm select2City" multiple="multiple" tabindex="21">
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>抵达城市：</label>
+												<select id="newreturnarrivedcity" class="form-control input-sm select2City" multiple="multiple" tabindex="21">
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+										<div class="col-sm-3 paddingRight">
+											<div class="form-group">
+												<label><span>*</span>航班号：</label>
+												<select id="newreturnflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="22">
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+									</div>
+							
+							
+							
+							<div class="row body-from-input direct"><!-- 出发日期/出发城市/抵达城市/航班号 -->
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
@@ -281,7 +388,7 @@
 								</div>
 							</div><!-- end 出发日期/出发城市/抵达城市/航班号 -->
 							
-							<div class="row body-from-input"><!-- 返回日期/出发城市/返回城市/航班号 -->
+							<div class="row body-from-input direct"><!-- 返回日期/出发城市/返回城市/航班号 -->
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
@@ -403,10 +510,41 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
 
 	<script type="text/javascript">
+	
+		$(".transfer").hide();
+		$(".direct").show();
+	
 		$("#cityid").change(function(){
 			var cityid = $(this).val();
 			$("#cityid").val(cityid);
 			cityidstr = cityid;
+			if($(this).val() > 2){
+				$(".transfer").show();
+				$(".direct").hide();
+				$("#goDepartureCity").empty();
+				$("#goArrivedCity").empty();
+				$("#goFlightNum").empty();
+				$("#returnDepartureCity").empty();
+				$("#returnArrivedCity").empty();
+				$("#returnFlightNum").empty();
+			}else{
+				$(".transfer").hide();
+				$(".direct").show();
+				$("#newgodeparturecity").empty();
+				$("#gotransferarrivedcity").empty();
+				$("#gotransferflightnum").empty();
+				$("#gotransferdeparturecity").empty();
+				$("#newgoarrivedcity").empty();
+				$("#newgoflightnum").empty();
+				$("#newreturndeparturecity").empty();
+				$("#returntransferarrivedcity").empty();
+				$("#returntransferflightnum").empty();
+				$("#returntransferdeparturecity").empty();
+				$("#newreturnarrivedcity").empty();
+				$("#newreturnflightnum").empty();
+			}
+			
+			
 		});
 		
 		$("#visatype").change(function(){
