@@ -1870,6 +1870,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			if (province.endsWith("省") || province.endsWith("市")) {
 				province = province.substring(0, province.length() - 1);
 			}
+			if (province.length() > 3 && province.endsWith("自治区")) {
+				province = province.substring(0, province.length() - 3);
+			}
 			//返回时的出发城市
 			Integer returnDepartureCity = form.getNewreturndeparturecity();
 			returngoCity = dbDao.fetch(TCityEntity.class, returnDepartureCity.longValue());
@@ -1943,6 +1946,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			if (province.endsWith("省") || province.endsWith("市")) {
 				province = province.substring(0, province.length() - 1);
 			}
+			if (province.length() > 3 && province.endsWith("自治区")) {
+				province = province.substring(0, province.length() - 3);
+			}
 			//出发航班
 			goFlightNum = form.getGoFlightNum();
 			//返回航班
@@ -1981,24 +1987,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(result.get("message"))) {
 			return result;
 		}
-
-		int daysBetween = DateUtil.daysBetween(form.getGoDate(), form.getReturnDate());
-		if (daysBetween < 4) {
-			result.put("message", "停留天数必须大于4天");
-			return result;
-		}
-
-		Map<String, Object> firstdayAndLastday = getFirstdayAndLastday(form);
-		String firstday = (String) firstdayAndLastday.get("firstday");
-		String lastday = (String) firstdayAndLastday.get("lastday");
-		TCityEntity returngoCity = (TCityEntity) firstdayAndLastday.get("returngocity");
-
 		//签证类型
 		Integer visatype = form.getVisatype();
-
 		int cityid = 0;
 		int lastcityid = 0;
-
 		if (form.getCityid() > 2) {//重庆
 			cityid = form.getNewgoarrivedcity();
 			lastcityid = form.getNewreturndeparturecity();
@@ -2006,7 +1998,25 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			cityid = form.getGoArrivedCity();
 			lastcityid = form.getReturnDepartureCity();
 		}
-
+		int daysBetween = DateUtil.daysBetween(form.getGoDate(), form.getReturnDate());
+		if (visatype == 6 || visatype == 1 || visatype == 14 || visatype == 2 || visatype == 7) {//除去东北六县
+			//如果去程抵达城市和返回出发城市一样，则什么都不需要分
+			if (lastcityid != cityid) {
+				if (daysBetween < 4) {
+					result.put("message", "停留天数必须大于4天");
+					return result;
+				}
+			}
+		} else {
+			if (daysBetween < 4) {
+				result.put("message", "停留天数必须大于4天");
+				return result;
+			}
+		}
+		Map<String, Object> firstdayAndLastday = getFirstdayAndLastday(form);
+		String firstday = (String) firstdayAndLastday.get("firstday");
+		String lastday = (String) firstdayAndLastday.get("lastday");
+		TCityEntity returngoCity = (TCityEntity) firstdayAndLastday.get("returngocity");
 		//获取前两天城市
 		TCityEntity city = dbDao.fetch(TCityEntity.class, cityid);
 		//获取前两天城市所有的酒店
@@ -2017,7 +2027,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			result.put("message", "没有更多的景区");
 			return result;
 		}
-
 		//获取后两天酒店
 		List<THotelEntity> lasthotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", lastcityid), null);
 		//获取后两天景区
@@ -2026,7 +2035,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			result.put("message", "没有更多的景区");
 			return result;
 		}
-
 		Integer orderjpid = form.getOrderid();
 		Integer orderid = null;
 		if (Util.isEmpty(orderjpid)) {
@@ -2040,14 +2048,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 		//需要生成的travelplan
 		List<TOrderTravelplanJpEntity> travelplans = Lists.newArrayList();
-		//生成行程安排历史信息
-		//		List<TOrderTravelplanHisJpEntity> travelplansHis = Lists.newArrayList();
-
 		//在一个城市只住一家酒店
 		Random random = new Random();
 		int hotelindex = random.nextInt(hotels.size());
 		int lasthotelindex = random.nextInt(lasthotels.size());
-
 		if (visatype == 6 || visatype == 1 || visatype == 14 || visatype == 2 || visatype == 7) {//除去东北六县
 			//如果去程抵达城市和返回出发城市一样，则什么都不需要分
 			if (lastcityid == cityid) {
@@ -2173,7 +2177,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						travelplans.add(travelplan);
 					}
 				}
-
 				if (daysBetween % 2 == 0) {
 					//最后三天
 					for (int i = daysBetween - 2; i <= daysBetween; i++) {
@@ -2228,8 +2231,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						if (i != daysBetween) {
 							THotelEntity hotel = lasthotels.get(lasthotelindex);
 							travelplan.setHotel(hotel.getId());
-							//酒店历史信息
-							//				travelPlanHis.setHotel(hotel.getName());
 						}
 						if (i == daysBetween) {
 							travelplan.setScenic(lastday);
@@ -2243,7 +2244,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					}
 				}
 			}
-
 		} else {//东北六县第三天要去对应的签证类型城市，不管去程抵达城市和返程出发城市是否一样，中间都随机
 			//前两天
 			for (int i = 0; i < 2; i++) {

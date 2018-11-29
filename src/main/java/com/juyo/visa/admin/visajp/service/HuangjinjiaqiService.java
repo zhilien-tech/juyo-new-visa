@@ -33,6 +33,7 @@ import org.nutz.dao.sql.Sql;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 
+import com.google.common.collect.Maps;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
@@ -149,8 +150,8 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 		//准备合并的PDF文件
 		List<ByteArrayOutputStream> pdffiles = Lists.newArrayList();
 		//准备封皮信息
-		/*ByteArrayOutputStream note = note(tempdata);
-		pdffiles.add(note);*/
+		ByteArrayOutputStream note = note(tempdata);
+		pdffiles.add(note);
 		//査 証 申 請 人 名 簿
 		ByteArrayOutputStream book = book(tempdata);
 		pdffiles.add(book);
@@ -240,113 +241,75 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 		map.put("Text1", content.toString());
 		map.put("Text8", company.getName());
 		if (!Util.isEmpty(ordertripjp)) {
-			if (ordertripjp.getTripType().equals(1)) {
-				if (!Util.isEmpty(ordertripjp.getGoDate())) {
-					map.put("Text2", dateFormat1.format(ordertripjp.getGoDate()));
-				}
-				//入境航班
-				if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
-					String goFlightNum = ordertripjp.getGoFlightNum();
-					TCityEntity goCity = dbDao.fetch(TCityEntity.class, ordertripjp.getGoArrivedCity().longValue());
-					String cityName = goCity.getCity();
-					if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
-						cityName = cityName.substring(0, cityName.length() - 1);
-					}
-					//入境机场名
-					String airportName = goFlightNum.substring(
-							goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-							goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
-					TFlightEntity airCity = dbDao
-							.fetch(TFlightEntity.class, Cnd.where("takeOffName", "=", airportName));
-					String aircode = "";
-					if (!Util.isEmpty(airCity)) {
-						aircode = airCity.getTakeOffCode();
-					}
-					map.put("Text3",
-							cityName
-									+ " "
-									+ airportName
-									+ " "
-									+ aircode
-									+ ": "
-									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
-				}
-				if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-					map.put("Text4", dateFormat1.format(ordertripjp.getReturnDate()));
-				}
-				//天数
-				/*if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
+			if (!Util.isEmpty(ordertripjp.getGoDate())) {
+				map.put("Text2", dateFormat1.format(ordertripjp.getGoDate()));
+			}
 
-					map.put("stay",
-							String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate()) + 1)
-									+ "天");
-				}*/
-				if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
-					//出境航班
-					String goFlightNum = ordertripjp.getReturnFlightNum();
-					TCityEntity leaveCity = dbDao.fetch(TCityEntity.class, ordertripjp.getReturnDepartureCity()
-							.longValue());
-					String cityName = leaveCity.getCity();
-					if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
-						cityName = cityName.substring(0, cityName.length() - 1);
-					}
-					//出境机场名
-					String airportName = goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")));
-					TFlightEntity airCity = dbDao
-							.fetch(TFlightEntity.class, Cnd.where("takeOffName", "=", airportName));
-					String aircode = "";
-					if (!Util.isEmpty(airCity)) {
-						aircode = airCity.getTakeOffCode();
-					}
-					map.put("Text5",
-							cityName
-									+ " "
-									+ airportName
-									+ " "
-									+ aircode
-									+ ": "
-									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
+			if (!Util.isEmpty(ordertripjp.getNewgoflightnum())) {
+				//抵达日本的城市
+				TCityEntity goCity = dbDao.fetch(TCityEntity.class, ordertripjp.getNewgoarrivedcity().longValue());
+				String cityName = goCity.getCity();
+				if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
+					cityName = cityName.substring(0, cityName.length() - 1);
 				}
-				//map.put("Text14", ordertripjp.getReturnFlightNum().replace("*", ""));
-			} else if (ordertripjp.getTripType().equals(2)) {
-				//多程处理
-				if (!Util.isEmpty(mutiltrip)) {
-					//多程第一程为出发日期
-					TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
-					if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-						map.put("Text4", dateFormat.format(entrytrip.getDepartureDate()));
-					}
-					//入境航班
-					if (!Util.isEmpty(entrytrip.getFlightNum())) {
-						//						TFlightEntity goflight = flightViewService.fetch(entrytrip.getFlightNum().longValue());
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-						map.put("Text5", goflight.getLandingName() + "、 " + entrytrip.getFlightNum().replace("*", ""));
-					}
-					//map.put("Text13", entrytrip.getFlightNum());
-					//最后一程作为返回日期
-					TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
-					if (!Util.isEmpty(returntrip.getDepartureDate())) {
-						map.put("Text7", dateFormat.format(returntrip.getDepartureDate()));
-					}
-					if (!Util.isEmpty(returntrip.getFlightNum())) {
-						//出境航班
-						//						TFlightEntity returnflight = flightViewService.fetch(returntrip.getFlightNum().longValue());
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-						map.put("Text8", goflight.getTakeOffName() + "、 " + returntrip.getFlightNum().replace("*", ""));
-					}
-					//map.put("Text14", returntrip.getFlightNum().replace("*", ""));
-					//停留天数
-					if (!Util.isEmpty(entrytrip.getDepartureDate()) && !Util.isEmpty(returntrip.getDepartureDate())) {
-						map.put("Text6",
-								String.valueOf(DateUtil.daysBetween(entrytrip.getDepartureDate(),
-										returntrip.getDepartureDate()) + 1)
-										+ "天");
-					}
+				String goFlightNum = ordertripjp.getNewgoflightnum();
+				//入境机场名
+				String airportName = goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+						goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
+				TFlightEntity airCity = dbDao.fetch(TFlightEntity.class, Cnd.where("landingName", "=", airportName));
+				String aircode = "";
+				if (!Util.isEmpty(airCity)) {
+					aircode = airCity.getLandingCode();
 				}
+
+				String lastnum = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+						goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
+				if (!Util.isEmpty(ordertripjp.getGotransferflightnum())) {//有第一行，航班号要组合
+					String gotransferflightnum = ordertripjp.getGotransferflightnum();
+					StringBuffer stringBuffer = new StringBuffer(gotransferflightnum.substring(
+							gotransferflightnum.indexOf(" ", gotransferflightnum.indexOf(" ")) + 1,
+							gotransferflightnum.indexOf(" ", gotransferflightnum.indexOf(" ") + 1)));
+					stringBuffer.append("//" + lastnum);
+					lastnum = stringBuffer.toString();
+				}
+
+				map.put("Text3", cityName + " " + airportName + " " + aircode + ": " + lastnum);
+			}
+			//返回日期
+			if (!Util.isEmpty(ordertripjp.getReturnDate())) {
+				map.put("Text4", dateFormat1.format(ordertripjp.getReturnDate()));
+			}
+			if (!Util.isEmpty(ordertripjp.getReturntransferflightnum())) {
+				//出境航班
+				String goFlightNum = ordertripjp.getReturntransferflightnum();
+				TCityEntity leaveCity = dbDao.fetch(TCityEntity.class, ordertripjp.getNewreturndeparturecity()
+						.longValue());
+				String cityName = leaveCity.getCity();
+				if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
+					cityName = cityName.substring(0, cityName.length() - 1);
+				}
+				//出境机场名
+				String airportName = goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")));
+				TFlightEntity airCity = dbDao.fetch(TFlightEntity.class, Cnd.where("takeOffName", "=", airportName));
+				String aircode = "";
+				if (!Util.isEmpty(airCity)) {
+					aircode = airCity.getTakeOffCode();
+				}
+
+				String lastnum = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+						goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
+
+				if (!Util.isEmpty(ordertripjp.getNewreturnflightnum())) {
+					String newreturnflightnum = ordertripjp.getNewreturnflightnum();
+					String substring = newreturnflightnum.substring(
+							newreturnflightnum.indexOf(" ", newreturnflightnum.indexOf(" ")) + 1,
+							newreturnflightnum.indexOf(" ", newreturnflightnum.indexOf(" ") + 1));
+					StringBuffer stringBuffer = new StringBuffer(lastnum);
+					stringBuffer.append("//" + substring);
+					lastnum = stringBuffer.toString();
+				}
+
+				map.put("Text5", cityName + " " + airportName + " " + aircode + ": " + lastnum);
 			}
 		}
 		map.put("Text6", company.getLinkman());
@@ -491,83 +454,50 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(ordertripjp)) {
 				//赴日目的
 				map.put("tripPurpose", ordertripjp.getTripPurpose());
-				if (ordertripjp.getTripType().equals(1)) {
-					//出行时间
-					if (!Util.isEmpty(ordertripjp.getGoDate())) {
-						map.put("goDate", dateFormat1.format(ordertripjp.getGoDate()));
-					}
-					//返回时间
-					if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-						map.put("returnDate", dateFormat1.format(ordertripjp.getReturnDate()));
-					}
-					//逗留时间
-					if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
-						int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
-						map.put("stayday", String.valueOf(stayday + 1) + "天");
-					}
-					if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
-						String goFlightNum = ordertripjp.getGoFlightNum();
+				//出行时间
+				if (!Util.isEmpty(ordertripjp.getGoDate())) {
+					map.put("goDate", dateFormat1.format(ordertripjp.getGoDate()));
+				}
+				//返回时间
+				if (!Util.isEmpty(ordertripjp.getReturnDate())) {
+					map.put("returnDate", dateFormat1.format(ordertripjp.getReturnDate()));
+				}
+				//逗留时间
+				if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
+					int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
+					map.put("stayday", String.valueOf(stayday + 1) + "天");
+				}
+				if (!Util.isEmpty(ordertripjp.getNewgoflightnum())) {
+					String goFlightNum = ordertripjp.getNewgoflightnum();
 
-						TCityEntity goCity = dbDao.fetch(TCityEntity.class, ordertripjp.getGoArrivedCity().longValue());
-						String cityName = goCity.getCity();
-						if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
-							cityName = cityName.substring(0, cityName.length() - 1);
-						}
-						//入境机场名
-						String airportName = goFlightNum.substring(
-								goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
-						TFlightEntity airCity = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("takeOffName", "=", airportName));
-						String aircode = "";
-						if (!Util.isEmpty(airCity)) {
-							aircode = airCity.getTakeOffCode();
-						}
-
-						if (goFlightNum.contains("//")) {//转机
-							//入境口岸
-							map.put("goArrivedCity", cityName + " " + airportName + " " + aircode);
-							//航空公司
-							map.put("goFlightNum",
-									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.indexOf("//")));
-						} else {//直飞
-							//入境口岸
-							map.put("goArrivedCity", cityName + " " + airportName + " " + aircode);
-							//航空公司
-							map.put("goFlightNum",
-									goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" ")));
-						}
+					TCityEntity goCity = dbDao.fetch(TCityEntity.class, ordertripjp.getNewgoarrivedcity().longValue());
+					String cityName = goCity.getCity();
+					if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
+						cityName = cityName.substring(0, cityName.length() - 1);
 					}
-				} else if (ordertripjp.getTripType().equals(2)) {
-					//多程处理
-					if (!Util.isEmpty(mutiltrip)) {
-						//多程第一程为出发日期
-						TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
-						if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-							map.put("goDate", dateFormat1.format(entrytrip.getDepartureDate()));
-						}
-						//入境口岸
-						TCityEntity arrivecity = dbDao.fetch(TCityEntity.class, entrytrip.getArrivedCity().longValue());
-						if (!Util.isEmpty(arrivecity)) {
-							map.put("goArrivedCity", arrivecity.getCity());
-						}
-						//航空公司
-						if (!Util.isEmpty(entrytrip.getFlightNum())) {
-							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-							map.put("goFlightNum", entrytrip.getFlightNum());
-						}
-						//最后一程作为返回日期
-						TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
-						if (!Util.isEmpty(returntrip.getDepartureDate())) {
-							map.put("returnDate", dateFormat1.format(returntrip.getDepartureDate()));
-						}
-						//停留天数
-						if (!Util.isEmpty(entrytrip.getDepartureDate()) && !Util.isEmpty(returntrip.getDepartureDate())) {
-							int stayday = DateUtil.daysBetween(entrytrip.getDepartureDate(),
-									returntrip.getDepartureDate());
-							map.put("stayday", String.valueOf(stayday) + "天");
-						}
+					//入境机场名
+					String airportName = goFlightNum.substring(
+							goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+							goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
+					TFlightEntity airCity = dbDao
+							.fetch(TFlightEntity.class, Cnd.where("landingName", "=", airportName));
+					String aircode = "";
+					if (!Util.isEmpty(airCity)) {
+						aircode = airCity.getLandingCode();
+					}
+					//入境口岸
+					map.put("goArrivedCity", cityName + " " + airportName + " " + aircode);
+
+					String firstnum = goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" "));
+					//航空公司
+					if (Util.isEmpty(ordertripjp.getGotransferarrivedcity())) {//去程没有第一行，只取第二行的航班号
+						map.put("goFlightNum", firstnum);
+					} else {
+						String gotransferflightnum = ordertripjp.getGotransferflightnum();
+						StringBuffer stringBuffer = new StringBuffer(gotransferflightnum.substring(
+								gotransferflightnum.indexOf(" ") + 1, gotransferflightnum.lastIndexOf(" ")));
+						stringBuffer.append("//" + firstnum);
+						map.put("goFlightNum", stringBuffer.toString());
 					}
 				}
 			}
@@ -2173,79 +2103,20 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 			String pointpattren = "yyyy-MM-dd";
 			int count = 0;
 			Integer lasthotel = null;
+
+			Map<String, Object> result = getFirstdayAndLastday(ordertripjp);
+			String firstday = (String) result.get("firstday");
+			String lastday = (String) result.get("lastday");
+
 			for (TOrderTravelplanJpEntity ordertravelplan : ordertravelplans) {
 				count++;
 				//行程安排
 				String scenic = "";
-				//出发城市
-				Integer goDepartureCity = ordertripjp.getGoDepartureCity();
-				TCityEntity goCity = dbDao.fetch(TCityEntity.class, goDepartureCity.longValue());
-				String province = goCity.getProvince();
-				if (province.endsWith("省") || province.endsWith("市")) {
-					province = province.substring(0, province.length() - 1);
-				}
-				if (province.length() > 3 && province.endsWith("自治区")) {
-					province = province.substring(0, province.length() - 3);
-				}
+				//第一天
 				if (count == 1) {
-					if (ordertripjp.getTripType().equals(1)) {
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
-						String goFlightNum = ordertripjp.getGoFlightNum();
-						/*scenic = " " + province + "から" + goflight.getFlightnum().replace("*", "") + "便にて"
-								+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";*/
-						scenic = province
-								+ "から"
-								+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
-								+ "便にて"
-								+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-										goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n到着後、ホテルへ";
-					} else if (ordertripjp.getTripType().equals(2)) {
-						//多程出发航班
-						if (!Util.isEmpty(mutiltrip)) {
-							//多程第一程为出发日期
-							TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
-							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-							String goFlightNum = entrytrip.getFlightNum();
-							/*scenic = " " + province + goflight.getFlightnum().replace("*", "") + "便にて"
-									+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";*/
-							scenic = province
-									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
-									+ "便にて"
-									+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-											goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n到着後、ホテルへ";
-						}
-					}
-				} else if (count == ordertravelplans.size()) {
-					if (ordertripjp.getTripType().equals(1)) {
-						TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
-						String goFlightNum = ordertripjp.getReturnFlightNum();
-						/*scenic = " " + returnflight.getTakeOffName() + "から"
-								+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";*/
-						scenic = goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
-								+ "から"
-								+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて帰国";
-					} else if (ordertripjp.getTripType().equals(2)) {
-						//多程出发航班
-						if (!Util.isEmpty(mutiltrip)) {
-							//最后一程作为返回日期
-							TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
-							TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-							String goFlightNum = returntrip.getFlightNum();
-							/*scenic = " " + returnflight.getTakeOffName() + "から"
-									+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";*/
-							scenic = goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
-									+ "から"
-									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて帰国";
-						}
-					}
+					scenic = firstday;
+				} else if (count == ordertravelplans.size()) {//最后一天
+					scenic = lastday;
 				} else {
 					scenic = ordertravelplan.getScenic();
 				}
@@ -2328,6 +2199,100 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 			e.printStackTrace();
 		}
 		return stream;
+	}
+
+	public Map<String, Object> getFirstdayAndLastday(TOrderTripJpEntity ordertripjp) {
+		Map<String, Object> result = Maps.newHashMap();
+		//返回时的出发城市
+		TCityEntity returngoCity = null;
+		//出发城市
+		TCityEntity goCity = null;
+		//省份
+		String province = "";
+		//第一天
+		String firstday = "";
+		//最后一天
+		String lastday = "";
+		//出发城市
+		int gotransferdeparturecity = 0;
+		if (!Util.isEmpty(ordertripjp.getNewgodeparturecity())) {//第一行出发城市不为空，说明为转机
+			gotransferdeparturecity = ordertripjp.getNewgodeparturecity();
+		} else {
+			gotransferdeparturecity = ordertripjp.getGotransferdeparturecity();
+		}
+		goCity = dbDao.fetch(TCityEntity.class, gotransferdeparturecity);
+		province = goCity.getProvince();
+		if (province.endsWith("省") || province.endsWith("市")) {
+			province = province.substring(0, province.length() - 1);
+		}
+		if (province.length() > 3 && province.endsWith("自治区")) {
+			province = province.substring(0, province.length() - 3);
+		}
+		//返回时的出发城市
+		Integer returnDepartureCity = ordertripjp.getNewreturndeparturecity();
+		returngoCity = dbDao.fetch(TCityEntity.class, returnDepartureCity.longValue());
+		//出发航班
+		if (!Util.isEmpty(ordertripjp.getGotransferflightnum())) {//有第一行航班,说明是转机
+			String gotransferflightnum = ordertripjp.getGotransferflightnum();
+			String newgoflightnum = ordertripjp.getNewgoflightnum();
+
+			StringBuffer stringBuilder = new StringBuffer(gotransferflightnum.substring(
+					gotransferflightnum.indexOf(" ") + 1, gotransferflightnum.lastIndexOf(" ")));
+			stringBuilder.append("//"
+					+ newgoflightnum.substring(newgoflightnum.indexOf(" ") + 1, newgoflightnum.lastIndexOf(" ")));
+
+			//第一天
+			firstday = " "
+					+ province
+					+ "から"
+					+ stringBuilder.toString()
+					+ "便にて"
+					+ newgoflightnum.substring(newgoflightnum.indexOf("-", newgoflightnum.lastIndexOf("-")) + 1,
+							newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+		} else {
+			String newgoflightnum = ordertripjp.getNewgoflightnum();
+			//第一天
+			firstday = " "
+					+ province
+					+ "から"
+					+ newgoflightnum.substring(newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" ")) + 1,
+							newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" ") + 1))
+					+ "便にて"
+					+ newgoflightnum.substring(newgoflightnum.indexOf("-", newgoflightnum.lastIndexOf("-")) + 1,
+							newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+		}
+
+		if (!Util.isEmpty(ordertripjp.getNewreturnflightnum())) {
+			String returntransferflightnum = ordertripjp.getReturntransferflightnum();
+			String newreturnflightnum = ordertripjp.getNewreturnflightnum();
+
+			StringBuffer stringBuilder = new StringBuffer(returntransferflightnum.substring(
+					returntransferflightnum.indexOf(" ") + 1, returntransferflightnum.lastIndexOf(" ")));
+			stringBuilder.append("//"
+					+ newreturnflightnum.substring(newreturnflightnum.indexOf(" ") + 1,
+							newreturnflightnum.lastIndexOf(" ")));
+
+			//最后一天
+			lastday = " "
+					+ returntransferflightnum.substring(0,
+							returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-"))) + "から"
+					+ stringBuilder.toString() + "便にて帰国";
+		} else {
+			String returntransferflightnum = ordertripjp.getReturntransferflightnum();
+			//最后一天
+			lastday = " "
+					+ returntransferflightnum.substring(0,
+							returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-")))
+					+ "から"
+					+ returntransferflightnum.substring(
+							returntransferflightnum.indexOf(" ", returntransferflightnum.indexOf(" ")) + 1,
+							returntransferflightnum.indexOf(" ", returntransferflightnum.indexOf(" ") + 1)) + "便にて帰国";
+		}
+
+		result.put("firstday", firstday);
+		result.put("lastday", lastday);
+		result.put("returngocity", returngoCity);
+		return result;
 	}
 
 	/**

@@ -2133,30 +2133,53 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//出行信息
 		TOrderTripJpEntity ordertripjp = dbDao.fetch(TOrderTripJpEntity.class,
 				Cnd.where("orderId", "=", orderjp.getId()));
-		if (Util.isEmpty(ordertripjp.getGoDate())) {
-			resultstrbuf.append("出行时间、");
+
+		if (orderinfo.getCityId() > 2) {//重庆
+			if (Util.isEmpty(ordertripjp.getGotransferdeparturecity())) {
+				resultstrbuf.append("国际段出发城市(去程)、");
+			}
+			if (Util.isEmpty(ordertripjp.getNewgoarrivedcity())) {
+				resultstrbuf.append("国际段抵达城市(去程)、");
+			}
+			if (Util.isEmpty(ordertripjp.getNewgoflightnum())) {
+				resultstrbuf.append("国际段航班号(去程)");
+			}
+			if (Util.isEmpty(ordertripjp.getNewreturndeparturecity())) {
+				resultstrbuf.append("国际段返回城市(返程)、");
+			}
+			if (Util.isEmpty(ordertripjp.getReturntransferarrivedcity())) {
+				resultstrbuf.append("国际段抵达城市(返程)、");
+			}
+			if (Util.isEmpty(ordertripjp.getReturntransferflightnum())) {
+				resultstrbuf.append("国际段航班号(返程)");
+			}
+		} else {//北京，上海
+			if (Util.isEmpty(ordertripjp.getGoDate())) {
+				resultstrbuf.append("出行时间、");
+			}
+			if (Util.isEmpty(ordertripjp.getReturnDate())) {
+				resultstrbuf.append("返回时间、");
+			}
+			if (Util.isEmpty(ordertripjp.getGoDepartureCity())) {
+				resultstrbuf.append("出发城市(去程)、");
+			}
+			if (Util.isEmpty(ordertripjp.getGoArrivedCity())) {
+				resultstrbuf.append("抵达城市(去程)、");
+			}
+			if (Util.isEmpty(ordertripjp.getGoFlightNum())) {
+				resultstrbuf.append("航班号(去程)、");
+			}
+			if (Util.isEmpty(ordertripjp.getReturnDepartureCity())) {
+				resultstrbuf.append("出发城市(返程)、");
+			}
+			if (Util.isEmpty(ordertripjp.getReturnArrivedCity())) {
+				resultstrbuf.append("返回城市(返程)、");
+			}
+			if (Util.isEmpty(ordertripjp.getReturnFlightNum())) {
+				resultstrbuf.append("航班号(返程)、");
+			}
 		}
-		if (Util.isEmpty(ordertripjp.getReturnDate())) {
-			resultstrbuf.append("返回时间、");
-		}
-		if (Util.isEmpty(ordertripjp.getGoDepartureCity())) {
-			resultstrbuf.append("出发城市(去程)、");
-		}
-		if (Util.isEmpty(ordertripjp.getGoArrivedCity())) {
-			resultstrbuf.append("抵达城市(去程)、");
-		}
-		if (Util.isEmpty(ordertripjp.getGoFlightNum())) {
-			resultstrbuf.append("航班号(去程)、");
-		}
-		if (Util.isEmpty(ordertripjp.getReturnDepartureCity())) {
-			resultstrbuf.append("出发城市(返程)、");
-		}
-		if (Util.isEmpty(ordertripjp.getReturnArrivedCity())) {
-			resultstrbuf.append("返回城市(返程)、");
-		}
-		if (Util.isEmpty(ordertripjp.getReturnFlightNum())) {
-			resultstrbuf.append("航班号(返程)、");
-		}
+
 		List<TOrderTripMultiJpEntity> mutiltrip = new ArrayList<TOrderTripMultiJpEntity>();
 		if (!Util.isEmpty(ordertripjp)) {
 			mutiltrip = dbDao.query(TOrderTripMultiJpEntity.class, Cnd.where("tripid", "=", ordertripjp.getId()), null);
