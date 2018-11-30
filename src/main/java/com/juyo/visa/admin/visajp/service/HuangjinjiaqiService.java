@@ -2269,20 +2269,22 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
-		if (!Util.isEmpty(ordertripjp.getNewreturnflightnum())) {
-			String returntransferflightnum = ordertripjp.getReturntransferflightnum();
+		if (!Util.isEmpty(ordertripjp.getNewreturnflightnum())) {//有第二行，说明是转机，第一行和第二行需要组合
 			String newreturnflightnum = ordertripjp.getNewreturnflightnum();
+			if (!Util.isEmpty(ordertripjp.getReturntransferflightnum())) {
+				String returntransferflightnum = ordertripjp.getReturntransferflightnum();
 
-			StringBuffer stringBuilder = new StringBuffer(returntransferflightnum.substring(
-					returntransferflightnum.indexOf(" ") + 1, returntransferflightnum.lastIndexOf(" ")));
-			stringBuilder.append("//"
-					+ newreturnflightnum.substring(newreturnflightnum.indexOf(" ") + 1,
-							newreturnflightnum.lastIndexOf(" ")));
+				StringBuffer stringBuilder = new StringBuffer(returntransferflightnum.substring(
+						returntransferflightnum.indexOf(" ") + 1, returntransferflightnum.lastIndexOf(" ")));
+				stringBuilder.append("//"
+						+ newreturnflightnum.substring(newreturnflightnum.indexOf(" ") + 1,
+								newreturnflightnum.lastIndexOf(" ")));
 
-			//最后一天
-			lastday = returntransferflightnum.substring(0,
-					returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-")))
-					+ "から" + stringBuilder.toString() + "便にて帰国";
+				//最后一天
+				lastday = returntransferflightnum.substring(0,
+						returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-")))
+						+ "から" + stringBuilder.toString() + "便にて帰国";
+			}
 		} else {
 			if (!Util.isEmpty(ordertripjp.getReturntransferflightnum())) {
 				String returntransferflightnum = ordertripjp.getReturntransferflightnum();
