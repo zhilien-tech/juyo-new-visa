@@ -150,8 +150,8 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 		//准备合并的PDF文件
 		List<ByteArrayOutputStream> pdffiles = Lists.newArrayList();
 		//准备封皮信息
-		ByteArrayOutputStream note = note(tempdata);
-		pdffiles.add(note);
+		/*ByteArrayOutputStream note = note(tempdata);
+		pdffiles.add(note);*/
 		//査 証 申 請 人 名 簿
 		ByteArrayOutputStream book = book(tempdata);
 		pdffiles.add(book);
@@ -490,9 +490,9 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 
 					String firstnum = goFlightNum.substring(goFlightNum.indexOf(" ") + 1, goFlightNum.lastIndexOf(" "));
 					//航空公司
-					if (Util.isEmpty(ordertripjp.getGotransferarrivedcity())) {//去程没有第一行，只取第二行的航班号
+					if (Util.isEmpty(ordertripjp.getGotransferflightnum())) {//去程没有第一行，只取第二行的航班号
 						map.put("goFlightNum", firstnum);
-					} else {
+					} else {//有第一行，则第一行和第二行的航班组合
 						String gotransferflightnum = ordertripjp.getGotransferflightnum();
 						StringBuffer stringBuffer = new StringBuffer(gotransferflightnum.substring(
 								gotransferflightnum.indexOf(" ") + 1, gotransferflightnum.lastIndexOf(" ")));
@@ -2099,10 +2099,9 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				table.addCell(cell);
 			}
-			//格式化为日本的日期
-			String pointpattren = "yyyy-MM-dd";
-			int count = 0;
+
 			Integer lasthotel = null;
+			int count = 0;
 
 			Map<String, Object> result = getFirstdayAndLastday(ordertripjp);
 			String firstday = (String) result.get("firstday");
@@ -2112,7 +2111,7 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 				count++;
 				//行程安排
 				String scenic = "";
-				//第一天
+				//第一天  
 				if (count == 1) {
 					scenic = firstday;
 				} else if (count == ordertravelplans.size()) {//最后一天
@@ -2218,7 +2217,7 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(ordertripjp.getNewgodeparturecity())) {//第一行出发城市不为空，说明为转机
 			gotransferdeparturecity = ordertripjp.getNewgodeparturecity();
 		} else {
-			if (!Util.isEmpty(ordertripjp.getGotransferflightnum())) {
+			if (!Util.isEmpty(ordertripjp.getGotransferdeparturecity())) {
 				gotransferdeparturecity = ordertripjp.getGotransferdeparturecity();
 			}
 		}
@@ -2239,34 +2238,34 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 		}
 		//出发航班
 		if (!Util.isEmpty(ordertripjp.getGotransferflightnum())) {//有第一行航班,说明是转机
-			String gotransferflightnum = ordertripjp.getGotransferflightnum();
-			String newgoflightnum = ordertripjp.getNewgoflightnum();
+			if (!Util.isEmpty(ordertripjp.getNewgoflightnum())) {
+				String gotransferflightnum = ordertripjp.getGotransferflightnum();
+				String newgoflightnum = ordertripjp.getNewgoflightnum();
 
-			StringBuffer stringBuilder = new StringBuffer(gotransferflightnum.substring(
-					gotransferflightnum.indexOf(" ") + 1, gotransferflightnum.lastIndexOf(" ")));
-			stringBuilder.append("//"
-					+ newgoflightnum.substring(newgoflightnum.indexOf(" ") + 1, newgoflightnum.lastIndexOf(" ")));
+				StringBuffer stringBuilder = new StringBuffer(gotransferflightnum.substring(
+						gotransferflightnum.indexOf(" ") + 1, gotransferflightnum.lastIndexOf(" ")));
+				stringBuilder.append("//"
+						+ newgoflightnum.substring(newgoflightnum.indexOf(" ") + 1, newgoflightnum.lastIndexOf(" ")));
 
-			//第一天
-			firstday = " "
-					+ province
-					+ "から"
-					+ stringBuilder.toString()
-					+ "便にて"
-					+ newgoflightnum.substring(newgoflightnum.indexOf("-", newgoflightnum.lastIndexOf("-")) + 1,
-							newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+				//第一天
+				firstday = province
+						+ "から"
+						+ stringBuilder.toString()
+						+ "便にて"
+						+ newgoflightnum.substring(newgoflightnum.indexOf("-", newgoflightnum.lastIndexOf("-")) + 1,
+								newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" "))) + "へ" + "\n到着後、ホテルへ";
+			}
 		} else {
 			if (!Util.isEmpty(ordertripjp.getNewgoflightnum())) {
 				String newgoflightnum = ordertripjp.getNewgoflightnum();
 				//第一天
-				firstday = " "
-						+ province
+				firstday = province
 						+ "から"
 						+ newgoflightnum.substring(newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" ")) + 1,
 								newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" ") + 1))
 						+ "便にて"
 						+ newgoflightnum.substring(newgoflightnum.indexOf("-", newgoflightnum.lastIndexOf("-")) + 1,
-								newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+								newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" "))) + "へ" + "\n到着後、ホテルへ";
 			}
 		}
 
@@ -2281,17 +2280,15 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 							newreturnflightnum.lastIndexOf(" ")));
 
 			//最后一天
-			lastday = " "
-					+ returntransferflightnum.substring(0,
-							returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-"))) + "から"
-					+ stringBuilder.toString() + "便にて帰国";
+			lastday = returntransferflightnum.substring(0,
+					returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-")))
+					+ "から" + stringBuilder.toString() + "便にて帰国";
 		} else {
 			if (!Util.isEmpty(ordertripjp.getReturntransferflightnum())) {
 				String returntransferflightnum = ordertripjp.getReturntransferflightnum();
 				//最后一天
-				lastday = " "
-						+ returntransferflightnum.substring(0,
-								returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-")))
+				lastday = returntransferflightnum.substring(0,
+						returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-")))
 						+ "から"
 						+ returntransferflightnum.substring(
 								returntransferflightnum.indexOf(" ", returntransferflightnum.indexOf(" ")) + 1,
@@ -2449,6 +2446,8 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 			TtfClassLoader ttf = new TtfClassLoader();
 			Font font = ttf.getFont();
 			font.setSize(15);
+			int count = 1;
+
 			//第一行
 			String firstStr = "";
 			String genderstr = " ";
@@ -2466,11 +2465,12 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 
 			}
 			if (!Util.isEmpty(firstStr)) {
-				Paragraph p = new Paragraph("1." + firstStr, font);
+				Paragraph p = new Paragraph(count + "." + firstStr, font);
 				p.setSpacingBefore(5);
 				p.setIndentationLeft(20);
 				p.setAlignment(Paragraph.ALIGN_LEFT);
 				document.add(p);
+				count++;
 			} else {
 				Paragraph p = new Paragraph(" ", font);
 				p.setSpacingBefore(5);
@@ -2495,33 +2495,40 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 			}
 
 			if (!Util.isEmpty(ordertripjp)) {
-				if (!Util.isEmpty(ordertripjp.getGotransferflightnum())) {//第一行不为空，为secondeStr
-					secondStr = getLineStr(ordertripjp, ordertripjp.getGotransferflightnum(), applyinfo.size(), 2,
+				if (!Util.isEmpty(ordertripjp.getGotransferflightnum())) {//航班第一行不为空，为secondeStr
+					secondStr = getLineStr(ordertripjp, ordertripjp.getGotransferflightnum(), applyinfo.size(), count,
 							godateStr);
+					count++;
 					if (!Util.isEmpty(ordertripjp.getNewgoflightnum())) {
-						thirdStr = getLineStr(ordertripjp, ordertripjp.getNewgoflightnum(), applyinfo.size(), 3,
+						thirdStr = getLineStr(ordertripjp, ordertripjp.getNewgoflightnum(), applyinfo.size(), count,
 								godateStr);
+						count++;
 					}
 					if (!Util.isEmpty(ordertripjp.getReturntransferflightnum())) {
 						fourthStr = getLineStr(ordertripjp, ordertripjp.getReturntransferflightnum(), applyinfo.size(),
-								4, returndateStr);
+								count, returndateStr);
+						count++;
 					}
 					if (!Util.isEmpty(ordertripjp.getNewreturnflightnum())) {
-						fifthStr = getLineStr(ordertripjp, ordertripjp.getNewreturnflightnum(), applyinfo.size(), 5,
-								returndateStr);
+						fifthStr = getLineStr(ordertripjp, ordertripjp.getNewreturnflightnum(), applyinfo.size(),
+								count, returndateStr);
+						count++;
 					}
-				} else {//第一行为空，则第二行为secondeStr
+				} else {//航班第一行为空，则第二行为secondeStr
 					if (!Util.isEmpty(ordertripjp.getNewgoflightnum())) {
-						secondStr = getLineStr(ordertripjp, ordertripjp.getNewgoflightnum(), applyinfo.size(), 2,
+						secondStr = getLineStr(ordertripjp, ordertripjp.getNewgoflightnum(), applyinfo.size(), count,
 								godateStr);
+						count++;
 					}
 					if (!Util.isEmpty(ordertripjp.getReturntransferflightnum())) {
 						thirdStr = getLineStr(ordertripjp, ordertripjp.getReturntransferflightnum(), applyinfo.size(),
-								3, returndateStr);
+								count, returndateStr);
+						count++;
 					}
 					if (!Util.isEmpty(ordertripjp.getNewreturnflightnum())) {
-						fourthStr = getLineStr(ordertripjp, ordertripjp.getNewreturnflightnum(), applyinfo.size(), 4,
-								returndateStr);
+						fourthStr = getLineStr(ordertripjp, ordertripjp.getNewreturnflightnum(), applyinfo.size(),
+								count, returndateStr);
+						count++;
 					}
 				}
 			}

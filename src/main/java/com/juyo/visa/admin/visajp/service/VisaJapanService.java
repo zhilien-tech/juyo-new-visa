@@ -931,9 +931,15 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				if (count > 1) {
 					if (hotelname.equals(prehotelname)) {
 
-						record.put("hotelname", "連泊");
-						record.put("hoteladdress", "");
-						record.put("hotelmobile", "");
+						if (Util.eq(count, travelplans.size())) {
+							record.put("hotelname", "");
+							record.put("hoteladdress", "");
+							record.put("hotelmobile", "");
+						} else {
+							record.put("hotelname", "連泊");
+							record.put("hoteladdress", "");
+							record.put("hotelmobile", "");
+						}
 					}
 				}
 				prehotelname = hotelname;

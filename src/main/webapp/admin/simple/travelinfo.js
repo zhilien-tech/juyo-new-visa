@@ -18,7 +18,6 @@ $('#newgodeparturecity').select2({
 			var selectdata = $.map(data, function (obj) {
 				obj.id = obj.id; // replace pk with your identifier
 				obj.text = obj.city; // replace pk with your identifier
-				/*obj.text = obj.dictCode;*/
 				return obj;
 			});
 			return {
@@ -27,7 +26,6 @@ $('#newgodeparturecity').select2({
 		},
 		cache : false
 	},
-	//templateSelection: formatRepoSelection,
 	escapeMarkup : function(markup) {
 		return markup;
 	}, // let our custom formatter work
@@ -483,10 +481,6 @@ $('#gotransferflightnum').select2({
 		delay : 250,
 		type : 'post',
 		data : function(params) {
-			/*var cArrivalcity = $('#cArrivalcity').val();
-			if(cArrivalcity){
-				cArrivalcity = cArrivalcity.join(',');
-			}*/
 			//去程出发城市
 			var goDepartureCity = $('#newgodeparturecity').val();
 			if (goDepartureCity) {
@@ -504,7 +498,6 @@ $('#gotransferflightnum').select2({
 			var date = $('#goDate').val();
 			return {
 				date:date,
-				//exname : cArrivalcity,
 				gocity:goDepartureCity,
 				arrivecity:goArrivedCity,
 				flight : params.term, // search term
@@ -523,7 +516,6 @@ $('#gotransferflightnum').select2({
 					obj.id = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
 					obj.text = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
 				}
-				/*obj.text = obj.dictCode;*/
 				return obj;
 			});
 			return {
@@ -532,7 +524,6 @@ $('#gotransferflightnum').select2({
 		},
 		cache : false
 	},
-	//templateSelection: formatRepoSelection,
 	escapeMarkup : function(markup) {
 		return markup;
 	}, // let our custom formatter work
@@ -1334,9 +1325,13 @@ function initTravalPlanTable(data){
 		}
 		if(value.hotelname != undefined){
 			//html += '<td>'+value.hotelname+'</td>';
-			html += '<td><table style="width:100%;"><tr><td style="text-align:center;">'+value.hotelname+'</td></tr><tr><td style="text-align:center;">'+value.hoteladdress+'</td></tr><tr><td style="text-align:center;">'+value.hotelmobile+'</td></tr></table></td>';
+			if(index != data.length - 1){
+				html += '<td><table style="width:100%;"><tr><td style="text-align:center;">'+value.hotelname+'</td></tr><tr><td style="text-align:center;">'+value.hoteladdress+'</td></tr><tr><td style="text-align:center;">'+value.hotelmobile+'</td></tr></table></td>';
+			}else{
+				html += '<td></td>';
+			}
 		}else{
-			if(index != data.length -1){
+			if(index != data.length - 1){
 				html += '<td>連泊</td>';
 			}else{
 				html += '<td></td>';

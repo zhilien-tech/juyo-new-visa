@@ -2002,8 +2002,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		if (visatype == 6 || visatype == 1 || visatype == 14 || visatype == 2 || visatype == 7) {//除去东北六县
 			//如果去程抵达城市和返回出发城市一样，则什么都不需要分
 			if (lastcityid != cityid) {
-				if (daysBetween < 4) {
-					result.put("message", "停留天数必须大于4天");
+				if (daysBetween < 3) {
+					result.put("message", "停留天数必须大于3天");
+					return result;
+				}
+			} else {
+				if (daysBetween < 1) {
+					result.put("message", "停留天数必须大于1天");
 					return result;
 				}
 			}
@@ -2129,13 +2134,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				List<Integer> datesList = null;
 				//最多随机几个城市
 				int totalstyle = subday / 2;
-				//intArray为所有有景点的城市并且出去东北六县的Id组成的数组
+				//获取指定城市的ID数组
 				int[] intArray = generrateCityArray();
+				//获取去除抵达城市和返回城市的指定城市的ID数组
 				intArray = getCitysArray(intArray, cityid, lastcityid);
 				//randomArray为获取的不重复随机数
 				int j = 0;
 				if (subday != 0) {
-					//随机城市和天数
+					//获取随机城市和天数
 					citysandDates = getRandomCity(intArray, totalstyle, subday);
 					datesList = citysandDates.get("days");
 					citysList = citysandDates.get("citys");
@@ -2176,6 +2182,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						travelplan.setCreateTime(new Date());
 						travelplans.add(travelplan);
 					}
+				} else {//为0时说明是4天
+					j++;
+					citysList = new ArrayList<>();
+					citysList.add(cityid);
 				}
 				if (daysBetween % 2 == 0) {
 					//最后三天
@@ -2765,11 +2775,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			if (paramArray[i] == arrcityid) {
 				paramArray = ArrayUtils.remove(paramArray, i);
 			}
+		}
+		for (int i = 0; i < paramArray.length; i++) {
 			if (paramArray[i] == returngocityid) {
 				paramArray = ArrayUtils.remove(paramArray, i);
 			}
 		}
-
 		return paramArray;
 	}
 
@@ -5730,38 +5741,27 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		if (Util.isEmpty(cityname)) {
 			if (Util.eq("goDepartureCity", citytype)) {
 				sqlStr = sqlManager.get("cityselectBygodeparturecity");
-			}
-			if (Util.eq("newgodeparturecity", citytype)) {
+			} else if (Util.eq("newgodeparturecity", citytype)) {
 				sqlStr = sqlManager.get("cityselectBynewgodeparturecity");
-			}
-			if (Util.eq("goArrivedCity", citytype)) {
+			} else if (Util.eq("goArrivedCity", citytype)) {
 				sqlStr = sqlManager.get("cityselectBygoarrivedcity");
-			}
-			if (Util.eq("newgoarrivedcity", citytype)) {
+			} else if (Util.eq("newgoarrivedcity", citytype)) {
 				sqlStr = sqlManager.get("cityselectBynewgoarrivedcity");
-			}
-			if (Util.eq("newreturndeparturecity", citytype)) {
+			} else if (Util.eq("newreturndeparturecity", citytype)) {
 				sqlStr = sqlManager.get("cityselectBynewreturndeparturecity");
-			}
-			if (Util.eq("newreturnarrivedcity", citytype)) {
+			} else if (Util.eq("newreturnarrivedcity", citytype)) {
 				sqlStr = sqlManager.get("cityselectBynewreturnarrivedcity");
-			}
-			if (Util.eq("returnDepartureCity", citytype)) {
+			} else if (Util.eq("returnDepartureCity", citytype)) {
 				sqlStr = sqlManager.get("cityselectByreturndeparturecity");
-			}
-			if (Util.eq("returnArrivedCity", citytype)) {
+			} else if (Util.eq("returnArrivedCity", citytype)) {
 				sqlStr = sqlManager.get("cityselectByreturnarrivedcity");
-			}
-			if (Util.eq("gotransferarrivedcity", citytype)) {
+			} else if (Util.eq("gotransferarrivedcity", citytype)) {
 				sqlStr = sqlManager.get("cityselectBygotransferarrivedcity");
-			}
-			if (Util.eq("gotransferdeparturecity", citytype)) {
+			} else if (Util.eq("gotransferdeparturecity", citytype)) {
 				sqlStr = sqlManager.get("cityselectBygotransferdeparturecity");
-			}
-			if (Util.eq("returntransferarrivedcity", citytype)) {
+			} else if (Util.eq("returntransferarrivedcity", citytype)) {
 				sqlStr = sqlManager.get("cityselectByreturntransferarrivedcity");
-			}
-			if (Util.eq("returntransferdeparturecity", citytype)) {
+			} else if (Util.eq("returntransferdeparturecity", citytype)) {
 				sqlStr = sqlManager.get("cityselectByreturntransferdeparturecity");
 			}
 			Sql applysql = Sqls.create(sqlStr);

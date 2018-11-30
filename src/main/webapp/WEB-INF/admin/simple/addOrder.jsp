@@ -51,7 +51,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>客户来源：</label> <select id="customerType"
-											name="customerType" class="form-control input-sm">
+											name="customerType" class="form-control input-sm" tabindex="1">
 											<option value="">--请选择--</option>
 											<c:forEach var="map" items="${obj.customerTypeEnum}">
 												<option value="${map.key}">${map.value}</option>
@@ -67,7 +67,7 @@
 											<input type="hidden" id="customerid" name="customerid" value="">
 											<select id="compName"
 												name="name" class="form-control select2 cityselect2 "
-												multiple="multiple" data-placeholder="">
+												multiple="multiple" data-placeholder="" tabindex="2">
 											</select>
 										</div>
 									</div>
@@ -76,7 +76,7 @@
 											<label><span>*</span>公司简称：</label> 
 											<select id="comShortName"
 												name="shortname" class="form-control select2 cityselect2 "
-												multiple="multiple" data-placeholder="">
+												multiple="multiple" data-placeholder="" tabindex="3">
 											</select>
 										</div>
 									</div>
@@ -90,14 +90,14 @@
 										<div class="form-group">
 											<label><span>*</span>公司全称：</label> <input id="compName2"
 												name="name" type="text" class="form-control input-sm"
-												placeholder=" " />
+												placeholder=" " tabindex="2"/>
 										</div>
 									</div>
 									<div class="col-sm-3">
 										<div class="form-group">
 											<label><span>*</span>公司简称：</label> <input id="comShortName2"
 												name="shortname" type="text" class="form-control input-sm"
-												placeholder=" " />
+												placeholder=" " tabindex="3"/>
 										</div>
 									</div>
 								</div>
@@ -110,7 +110,7 @@
 										<label><span>*</span>付款方式：</label> 
 											<select id="payType"
 												name="payType" type="text" class="form-control input-sm"
-												placeholder=" " >
+												placeholder=" " tabindex="4">
 												<c:forEach var="map" items="${obj.mainSalePayTypeEnum}">
 													<option value="${map.key}">${map.value}</option>
 												</c:forEach>
@@ -121,7 +121,7 @@
 									<div class="form-group">
 										<label><span>*</span>签证类型：</label> <select id="visatype"
 											name="visatype" type="text" class="form-control input-sm"
-											placeholder=" " >
+											placeholder=" " tabindex="5">
 												<option value="">请选择</option>
 												<c:forEach var="map" items="${obj.mainSaleVisaTypeEnum}">
 													<option value="${map.key}">${map.value}</option>
@@ -133,7 +133,7 @@
 									<div class="form-group">
 										<label><span>*</span>金额：</label> <input id="amount"
 											name="amount" type="text" class="form-control input-sm"
-											placeholder=" " />
+											placeholder=" " tabindex="6"/>
 									</div>
 								</div>
 							</div>
@@ -149,7 +149,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>领区：</label> <select
-											class="form-control input-sm" id="cityid" name="cityid">
+											class="form-control input-sm" id="cityid" name="cityid" tabindex="7">
 											<c:forEach var="map" items="${obj.collarAreaEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -160,7 +160,7 @@
 								<div class="col-sm-1 show-select">
 									<div class="form-group">
 										<label><span>*</span>加急：</label> <select id="urgentType"
-											name="urgenttype" class="form-control input-sm sm">
+											name="urgenttype" class="form-control input-sm sm" tabindex="8">
 											<c:forEach var="map" items="${obj.mainSaleUrgentEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -171,7 +171,7 @@
 								<div class="col-sm-2 none none-select" id="urgentDays">
 									<div class="form-group">
 										<label>&nbsp;</label> <select id="urgentDay" name="urgentday"
-											class="form-control input-sm none-sm">
+											class="form-control input-sm none-sm" tabindex="9">
 											<c:forEach var="map" items="${obj.mainSaleUrgentTimeEnum}">
 												<option value=${map.key}>${map.value}</option>
 											</c:forEach>
@@ -193,6 +193,7 @@
 											type="text" 
 											class="form-control input-sm"
 											placeholder=" "  
+											tabindex="10"
 										/>
 									</div>
 								</div>
@@ -200,13 +201,13 @@
 									<div class="form-group">
 										<label><span>*</span>预计出签时间：</label> <input id="outVisaDate" autocomplete="off"
 											name="outvisadate" type="text" class="form-control input-sm datetimepickercss"
-											placeholder=" "  />
+											placeholder=" "  tabindex="11"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>送签编号：</label>
-										<input id="sendvisanum" type="text" autocomplete="off" class="form-control input-sm"/>
+										<input id="sendvisanum" type="text" autocomplete="off" class="form-control input-sm" tabindex="12"/>
 									</div>
 								</div>
 							</div>
@@ -220,14 +221,14 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行目的：</label>
-										<input id="tripPurpose" name="tripPurpose" autocomplete="off" type="text" class="form-control input-sm" placeholder=" " value="旅游"/>
+										<input id="tripPurpose" name="tripPurpose" autocomplete="off" type="text" class="form-control input-sm" placeholder=" " tabindex="13" value="旅游"/>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>往返/多程：</label>
-										<select id="triptype" class="form-control input-sm">
+										<select id="triptype" class="form-control input-sm" tabindex="14">
 											<option value="1">往返</option>
 											<!-- <option value="2">多程</option> -->
 										</select>
@@ -239,19 +240,19 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出行时间：</label>
-										<input id="goDate" name="" type="text" autocomplete="off"  class="form-control input-sm datetimepickercss"/>
+										<input id="goDate" name="" type="text" autocomplete="off"  class="form-control input-sm datetimepickercss" tabindex="15"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>停留天数：</label>
-										<input id="stayday" type="text" autocomplete="off" class="form-control input-sm"/>
+										<input id="stayday" type="text" autocomplete="off" class="form-control input-sm" tabindex="16"/>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回时间：</label>
-										<input id="returnDate" type="text" autocomplete="off" class="form-control input-sm datetimepickercss"/>
+										<input id="returnDate" type="text" autocomplete="off" class="form-control input-sm datetimepickercss" tabindex="17"/>
 									</div>
 								</div>
 							</div>
@@ -275,7 +276,7 @@
 										<div class="col-sm-3 paddingRight">
 											<div class="form-group">
 												<label><span>*</span>航班号：</label>
-												<select id="gotransferflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="19" >
+												<select id="gotransferflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="17" >
 												</select>
 												<!-- <i class="bulb"></i> -->
 											</div>
@@ -286,7 +287,7 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>国际段出发城市：</label>
-												<select id="gotransferdeparturecity" class="form-control input-sm select2City" oninput="clearplan()" multiple="multiple" tabindex="18">
+												<select id="gotransferdeparturecity" class="form-control input-sm select2City" oninput="clearplan()" multiple="multiple" tabindex="17">
 												</select>
 												<!-- <i class="bulb"></i> -->
 											</div>
@@ -294,7 +295,7 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>抵达城市：</label>
-												<select id="newgoarrivedcity" class="form-control input-sm select2City" oninput="clearplan()" multiple="multiple" tabindex="18">
+												<select id="newgoarrivedcity" class="form-control input-sm select2City" oninput="clearplan()" multiple="multiple" tabindex="17">
 												</select>
 												<!-- <i class="bulb"></i> -->
 											</div>
@@ -302,7 +303,7 @@
 										<div class="col-sm-3 paddingRight">
 											<div class="form-group">
 												<label><span>*</span>航班号：</label>
-												<select id="newgoflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="19" >
+												<select id="newgoflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="17" >
 												</select>
 												<!-- <i class="bulb"></i> -->
 											</div>
@@ -313,21 +314,21 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>国际段返回城市：</label>
-												<select id="newreturndeparturecity" class="form-control select2 select2City" multiple="multiple" tabindex="20">
+												<select id="newreturndeparturecity" class="form-control select2 select2City" multiple="multiple" tabindex="17">
 												</select>
 											</div>
 										</div>
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>抵达城市：</label>
-												<select id="returntransferarrivedcity" class="form-control select2 select2City" multiple="multiple" tabindex="20">
+												<select id="returntransferarrivedcity" class="form-control select2 select2City" multiple="multiple" tabindex="27">
 												</select>
 											</div>
 										</div>
 										<div class="col-sm-3 paddingRight">
 											<div class="form-group">
 												<label><span>*</span>航班号：</label>
-												<select id="returntransferflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="22">
+												<select id="returntransferflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="17">
 												</select>
 												<!-- <i class="bulb"></i> -->
 											</div>
@@ -337,7 +338,7 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>国内段返回城市：</label>
-												<select id="returntransferdeparturecity" class="form-control input-sm select2City" multiple="multiple" tabindex="21">
+												<select id="returntransferdeparturecity" class="form-control input-sm select2City" multiple="multiple" tabindex="17">
 												</select>
 												<!-- <i class="bulb"></i> -->
 											</div>
@@ -345,7 +346,7 @@
 										<div class="col-sm-3">
 											<div class="form-group">
 												<label><span>*</span>抵达城市：</label>
-												<select id="newreturnarrivedcity" class="form-control input-sm select2City" multiple="multiple" tabindex="21">
+												<select id="newreturnarrivedcity" class="form-control input-sm select2City" multiple="multiple" tabindex="17">
 												</select>
 												<!-- <i class="bulb"></i> -->
 											</div>
@@ -353,7 +354,7 @@
 										<div class="col-sm-3 paddingRight">
 											<div class="form-group">
 												<label><span>*</span>航班号：</label>
-												<select id="newreturnflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="22">
+												<select id="newreturnflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="17">
 												</select>
 												<!-- <i class="bulb"></i> -->
 											</div>
@@ -366,14 +367,14 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
-										<select id="goDepartureCity" class="form-control select2 select2City" multiple="multiple" >
+										<select id="goDepartureCity" class="form-control select2 select2City" multiple="multiple" tabindex="17">
 										</select>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>抵达城市：</label>
-										<select id="goArrivedCity" class="form-control input-sm select2City" multiple="multiple">
+										<select id="goArrivedCity" class="form-control input-sm select2City" multiple="multiple" tabindex="17">
 										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
@@ -381,7 +382,7 @@
 								<div class="col-sm-3 paddingRight">
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
-										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" >
+										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="17">
 										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
@@ -392,14 +393,14 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
-										<select id="returnDepartureCity" class="form-control select2 select2City" multiple="multiple">
+										<select id="returnDepartureCity" class="form-control select2 select2City" multiple="multiple" tabindex="17">
 										</select>
 									</div>
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>返回城市：</label>
-										<select id="returnArrivedCity" class="form-control input-sm select2City" multiple="multiple">
+										<select id="returnArrivedCity" class="form-control input-sm select2City" multiple="multiple" tabindex="17">
 										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
@@ -407,7 +408,7 @@
 								<div class="col-sm-3 paddingRight">
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
-										<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple">
+										<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="17">
 										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>

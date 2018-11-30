@@ -100,9 +100,13 @@ function initTravelPlanTable(){
 					}
 					if(value.hotelname != undefined ){
 						//html += '<td>'+value.hotelname+'</td>';
-						html += '<td><table style="width:100%;"><tr><td style="text-align:center;">'+value.hotelname+'</td></tr><tr><td style="text-align:center;">'+value.hoteladdress+'</td></tr><tr><td style="text-align:center;">'+value.hotelmobile+'</td></tr></table></td>';
+						if(index != data.length - 1){
+							html += '<td><table style="width:100%;"><tr><td style="text-align:center;">'+value.hotelname+'</td></tr><tr><td style="text-align:center;">'+value.hoteladdress+'</td></tr><tr><td style="text-align:center;">'+value.hotelmobile+'</td></tr></table></td>';
+						}else{
+							html += '<td></td>';
+						}
 					}else{
-						if(index != data.length -1){
+						if(index != data.length - 1){
 							html += '<td>連泊</td>';
 						}else{
 							html += '<td></td>';

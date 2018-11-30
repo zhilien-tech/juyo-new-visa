@@ -963,6 +963,7 @@
 		$("#goDate").change(function(){
 			var godate = $("#goDate").val(); //出发日期
 			var sendvisadate = $("#sendVisaDate").val(); //抵达美国日期
+			//$("#sendVisaDate").val(godate);
 			if(sendvisadate == ""){
 				$("#sendVisaDate").val(godate);
 			}

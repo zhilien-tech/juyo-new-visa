@@ -14,6 +14,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class TestChinest {
 
@@ -21,19 +22,45 @@ public class TestChinest {
 
 	public static void main(String[] args) {
 
+		long first = System.currentTimeMillis();
+
+		int[] paramArray = { 22, 51, 38, 50, 85, 53, 37 };
+		int arrcityid = 51;
+		int returngocityid = 22;
+
+		for (int i = 0; i < paramArray.length; i++) {
+			if (paramArray[i] == arrcityid) {
+				paramArray = ArrayUtils.remove(paramArray, i);
+			}
+		}
+		for (int i = 0; i < paramArray.length; i++) {
+			if (paramArray[i] == returngocityid) {
+				paramArray = ArrayUtils.remove(paramArray, i);
+			}
+		}
+
+		long last = System.currentTimeMillis();
+		System.out.println((last - first) + "ms");
+
+		for (int i = 0; i < paramArray.length; i++) {
+			System.out.println(paramArray[i]);
+		}
+
 		/*Random random = new Random();
+		System.out.println(random.nextInt(1));
 		for (int i = 0; i < 100; i++) {
+			System.out.println(random.nextInt(1));
 			int nextInt = random.nextInt(31);
 			if (nextInt + 2 > 30) {
 				System.out.println(nextInt + 2);
 			}
 		}*/
 
-		int[] arr = { 1, 2, 3, 4, 5, 6 };
+		/*int[] arr = { 1, 2, 3, 4, 5, 6 };
 		List<Integer> randomDates = getRandomDates(arr, 32);
 		for (Integer integer : randomDates) {
 			System.out.println(integer);
-		}
+		}*/
 		/*int str = 1200;
 		DecimalFormat df = new DecimalFormat("#,###");
 		System.out.println(df.format(str));*/
