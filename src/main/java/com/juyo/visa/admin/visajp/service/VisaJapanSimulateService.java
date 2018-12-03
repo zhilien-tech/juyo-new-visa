@@ -117,6 +117,9 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	//重庆黄金假期文件下载
 	@Inject
 	private HuangjinjiaqiService huangjinjiaqiService;
+	//浙江康泰文件下载
+	@Inject
+	private ZhejiangKangtaiService zhejiangKangtaiService;
 
 	private static final Integer VISA_PROCESS = JPOrderProcessTypeEnum.VISA_PROCESS.intKey();
 
@@ -257,6 +260,8 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 				byteArray = kanghuiService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.HUANGJINJIAQI_TYPE.intKey()) {
 				byteArray = huangjinjiaqiService.generateFile(orderjp, request).toByteArray();
+			} else if (pdftype == PdfTypeEnum.ZHEJIANGKANGTAI_TYPE.intKey()) {
+				byteArray = zhejiangKangtaiService.generateFile(orderjp, request).toByteArray();
 			}
 
 			// 获取订单信息，准备文件名称
