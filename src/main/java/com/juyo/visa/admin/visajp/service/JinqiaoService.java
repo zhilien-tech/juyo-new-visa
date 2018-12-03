@@ -1832,6 +1832,7 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 			Map<String, String> map = new HashMap<String, String>();
 			StringBuffer strb = new StringBuffer("");
 
+			int namecount = 1;
 			for (Record record : applyinfo) {
 				if (!Util.isEmpty(record.get("firstnameen"))) {
 					strb.append(record.getString("firstnameen"));
@@ -1840,6 +1841,10 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 					strb.append("/" + record.getString("lastnameen"));
 				}
 				strb.append("；");
+				if (namecount == 6) {
+					strb.append("\n");
+				}
+				namecount++;
 			}
 			//旅客姓名
 			map.put("Text1", strb.toString().toUpperCase());

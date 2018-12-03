@@ -219,7 +219,7 @@ function saveAddOrder(status){
 		async: false,
 		url : '/admin/simple/saveAddOrderinfo.html',
 		success : function(data) {
-			console.log(JSON.stringify(data));
+			//console.log(JSON.stringify(data));
 			layer.closeAll("loading");
 			if(status == 1){
 				window.location.href = '/admin/simple/list.html';

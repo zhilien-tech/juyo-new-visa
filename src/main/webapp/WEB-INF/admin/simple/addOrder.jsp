@@ -515,6 +515,7 @@
 		$(".transfer").hide();
 		$(".direct").show();
 	
+	
 		$("#cityid").change(function(){
 			var cityid = $(this).val();
 			$("#cityid").val(cityid);
