@@ -2693,7 +2693,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				//发送短信
 				//分享
 				if (Util.eq(sendType, "share")) {
-					sendSMSUS(staffId, QRUrl, orderid, sendType, "neworderustemp/order_us_share_sms.txt");
+					sendSMSUS(staffId, QRUrl, orderid, sendType, "orderustemp/neworder_us_share_sms.txt");
 				}
 				//合格
 				if (Util.eq(sendType, "qualified")) {

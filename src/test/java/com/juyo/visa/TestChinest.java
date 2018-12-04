@@ -6,15 +6,17 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.ArrayUtils;
 
 public class TestChinest {
 
@@ -22,7 +24,27 @@ public class TestChinest {
 
 	public static void main(String[] args) {
 
-		long first = System.currentTimeMillis();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String string = "2018-12-03 17:40:26";
+		Date first;
+		try {
+			first = sdf.parse(string);
+			Date last = new Date();
+			System.out.println(first);
+			System.out.println(last);
+			long datePoor = getDatePoor(last, first);
+			System.out.println(datePoor);
+			if (datePoor > 6) {
+				System.out.println("==============");
+			}
+		} catch (ParseException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+
+		/*long first = System.currentTimeMillis();
 
 		int[] paramArray = { 22, 51, 38, 50, 85, 53, 37 };
 		int arrcityid = 51;
@@ -44,7 +66,7 @@ public class TestChinest {
 
 		for (int i = 0; i < paramArray.length; i++) {
 			System.out.println(paramArray[i]);
-		}
+		}*/
 
 		/*Random random = new Random();
 		System.out.println(random.nextInt(1));
@@ -144,7 +166,7 @@ public class TestChinest {
 			e.printStackTrace();
 
 		}
-		*/
+		 */
 		/*NutMap resultMap = new NutMap();
 		TIdcardEntity cardentity = new TIdcardEntity();
 		cardentity.setCity("北京");
@@ -235,6 +257,28 @@ public class TestChinest {
 		System.out.println(stringBuilder1.toString());*/
 
 		//System.out.println(s.substring(s.indexOf(".", s.indexOf(".")) + 1, s.indexOf(".", s.indexOf(".") + 1)));
+	}
+
+	public static long getDatePoor(Date endDate, Date nowDate) {
+
+		long nd = 1000 * 24 * 60 * 60;
+		long nh = 1000 * 60 * 60;
+		long nm = 1000 * 60;
+		long ns = 1000;
+		// 获得两个时间的毫秒时间差异
+		long diff = endDate.getTime() - nowDate.getTime();
+		// 计算差多少天
+		long day = diff / nd;
+		// 计算差多少小时
+		long hour = diff % nd / nh;
+		// 计算差多少分钟
+		long min = diff % nd % nh / nm;
+		//return day + "天" + hour + "小时" + min + "分钟";
+
+		// 计算差多少秒//输出结果
+		long sec = diff % nd % nh % nm / ns;
+		long result = (day * 24 * 60 * 60 + hour * 60 * 60 + min * 60 + sec) / 60;
+		return result;
 	}
 
 	public static boolean isLegalStr(String str) {

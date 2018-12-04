@@ -10,6 +10,7 @@ import javax.servlet.ServletContext;
 
 import org.nutz.dao.entity.annotation.Table;
 import org.nutz.dao.impl.NutDao;
+import org.nutz.integration.quartz.NutQuartzCronJobFactory;
 import org.nutz.ioc.Ioc;
 import org.nutz.lang.Tasks;
 import org.nutz.mvc.NutConfig;
@@ -65,6 +66,10 @@ public class WeSetup implements Setup {
 	@Override
 	public void init(final NutConfig config) {
 		Ioc ioc = config.getIoc();
+
+		// 触发quartz 工厂,将扫描job任务
+		ioc.get(NutQuartzCronJobFactory.class);
+
 		//初始全局变量：比如通用的域名
 		KvConfig kvConfig = ioc.get(KvConfig.class, "kvConfig");
 		initWebGlobalConfig(kvConfig, config.getServletContext());
