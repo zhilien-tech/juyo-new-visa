@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,8 +164,11 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			String fileqiniupath = CommonConstants.IMAGES_SERVER_ADDR + qiniuurl;
 			// 保存生成的七牛excel路径
 			orderjp.setExcelurl(fileqiniupath);
-			dbDao.update(orderjp);
 		}
+		//更新发招宝时间
+		orderjp.setZhaobaotime(new Date());
+		dbDao.update(orderjp);
+
 		// 添加日志
 		//orderJpViewService.insertLogs(orderinfo.getId(), visastatus, session);
 		// 订单负责人变更
