@@ -37,7 +37,7 @@ import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
 
 @IocBean
-@Scheduled(cron = "0 /2 17-23 * * ? *")
+@Scheduled(cron = "0 /2 6-23 * * ? *")
 //每天的早上6点到晚上12点，每隔一分钟执行一次， 秒 分 时 天 月 每周 年(可选)
 //直接使用注解来声明cron
 public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
@@ -132,7 +132,7 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 							//将该订单放入缓存中，以记录此订单是否发过短信
 							redisDao.set("autofillJP" + String.valueOf(order.getId()), order.getOrderNum());
 							//设置过期时间为1天
-							redisDao.expire(String.valueOf(order.getId()), 60 * 60 * 24);
+							redisDao.expire("autofillJP" + String.valueOf(order.getId()), 60 * 60 * 24);
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -141,6 +141,8 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 
 				}
 			}
+		} else {
+			System.out.println("没有疑似有问题的订单☺");
 		}
 	}
 
