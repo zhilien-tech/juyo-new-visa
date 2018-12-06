@@ -96,6 +96,8 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 		if (!Util.isEmpty(orderList) && orderList.size() > 0) {
 			TOrderEntity order = orderList.get(0);
 
+			System.out.println("发现疑似有问题的订单，订单号为:" + order.getOrderNum());
+
 			//先查询缓存，如果缓存中有，说明已经发过短信，就不要再发了
 			String string = redisDao.get("autofillJP" + String.valueOf(order.getId()));
 			System.out.println("查询redis缓存内容：" + string);
@@ -107,14 +109,22 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 				Date zhaobaotime = orderjp.getZhaobaotime();
 				if (Util.isEmpty(zhaobaotime)) {
 					//没有发招宝时间说明点发招宝的时候发生错误，暂不处理
+					System.out.println("没有发招宝时间，可能是测试数据吧~~~");
+
 				} else {
 					//相差几分钟
 					long differMin = getDatePoor(new Date(), zhaobaotime);
-					/*int mincount = 0;
-					if (order.getStatus() == JPOrderStatusEnum.READYCOMMING.intKey()) {
-
-					}*/
-					if (differMin > 5) {//超过5分钟发短信
+					int mincount = 0;
+					//发招宝中相差时间2分钟以上发短信
+					if (order.getStatus() == JPOrderStatusEnum.READYCOMMING.intKey()
+							|| order.getStatus() == JPOrderStatusEnum.BIANGENGZHONG.intKey()
+							|| order.getStatus() == JPOrderStatusEnum.QUXIAOZHONG.intKey()
+							|| order.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey()) {
+						mincount = 2;
+					} else if (order.getStatus() == JPOrderStatusEnum.COMMITING.intKey()) {//订单状态为提交中时，时间差为5分钟以上发短信
+						mincount = 5;
+					}
+					if (differMin > mincount) {//超过特定时间发短信
 						System.out.println("orderid=====:" + order.getId());
 						System.out.println("时间差differMin:" + differMin);
 						try {
@@ -129,7 +139,7 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 									}
 								}
 							}
-							//将该订单放入缓存中，以记录此订单是否发过短信
+							//将该订单放入缓存中，以记录此订单是否发过短信，防止重复发送短信
 							redisDao.set("autofillJP" + String.valueOf(order.getId()), order.getOrderNum());
 							//设置过期时间为1天
 							redisDao.expire("autofillJP" + String.valueOf(order.getId()), 60 * 60 * 24);

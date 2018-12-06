@@ -426,8 +426,8 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		int errorCode = form.getErrorCode();
 		int orderstatus = form.getOrderstatus();
 		String errorMsg = form.getErrorMsg();
-		System.out.println(errorCode);
-		System.out.println(errorMsg);
+		System.out.println("orderstatus:" + orderstatus);
+		System.out.println("errorCode:" + errorCode);
 		System.out.println("errorMsg============:" + errorMsg);
 
 		TOrderEntity orderinfo = null;
@@ -440,6 +440,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			dbDao.update(orderjp);
 			//如果cookie过期，直接返回，等待定时任务获取
 			if (Util.eq("cookie expired", errorMsg)) {
+				System.out.println("cookie超时！！！");
 				return null;
 			}
 
@@ -460,7 +461,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		//发招宝时出现错误，errorCode为1或10时直接重新跑，如果为2时说明有受付番号，这时走16，省略前边一部分步骤
 		if (orderstatus == JPOrderStatusEnum.READYCOMMING.intKey()) {//发招宝失败 18
 			if (errorCode == 10) {//cid=1
-				System.out.println("发招宝时cid==1");
+				System.out.println("发招宝时cid==-1");
 				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
 			} else if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
 				System.out.println("不仅失败了，收付番号也没有");
@@ -477,9 +478,9 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 
 		}
 		//招宝变更时出错，如果errorCode为10直接重新跑，为1时没有受付番号重新发招宝，为2时有受付番号走16流程
-		if (orderstatus == JPOrderStatusEnum.BIANGENGZHONG.intKey()) {//招宝变更失败21
+		else if (orderstatus == JPOrderStatusEnum.BIANGENGZHONG.intKey()) {//招宝变更失败21
 			if (errorCode == 10) {
-				System.out.println("变更时cid==1");
+				System.out.println("变更时cid==-1");
 				orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
 				orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
 				orderinfo.setReceptionOpid(1);
@@ -502,8 +503,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 				dbDao.update(orderjp);
 			}
 
-		}
-		if (orderstatus == JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey()) {//失败重发时再失败
+		} else if (orderstatus == JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey()) {//失败重发时再失败
 			System.out.println("失败重发之后又失败了，继续发");
 			orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
 			orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
@@ -511,8 +511,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 				orderjp.setZhaobaotime(new Date());
 				dbDao.update(orderjp);
 			}
-		}
-		if (orderstatus == JPOrderStatusEnum.QUXIAOZHONG.intKey()) {//招宝取消失败 24
+		} else if (orderstatus == JPOrderStatusEnum.QUXIAOZHONG.intKey()) {//招宝取消失败 24
 			orderinfo.setStatus(JPOrderStatusEnum.QUXIAOZHONG.intKey());
 			if (!Util.isEmpty(orderjp)) {
 				orderjp.setZhaobaotime(new Date());
@@ -551,6 +550,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		orderinfo.setUpdateTime(new Date());
 		//更新订单状态为发招保失败
 		dbDao.update(orderinfo);
+		System.out.println("捕捉到错误后改变订单状态为正确状态");
 		if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()
 				|| orderinfo.getStatus() == JPOrderStatusEnum.BIANGENGSHIBAI.intKey()) {
 			Integer visaOpid = orderinfo.getVisaOpid();

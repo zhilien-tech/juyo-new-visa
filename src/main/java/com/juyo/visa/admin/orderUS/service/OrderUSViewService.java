@@ -1846,6 +1846,15 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			while (Util.eq("正在申请", statusname) || Util.eq("已保存", statusname)) {
 				count++;
 				System.out.println(passportnum + ":" + count + "!!!!!!!!!!!!!!!!!!!");
+				//跑4次，凑够2分钟
+				if (count == 5) {
+					statusname = "申请失败";
+					applyResult.setStatus("申请失败");
+					applyResult.setErrorMsg("");
+					System.out.println("申请了4次，手动失败~~~");
+					return applyResult;
+				}
+
 				try {
 					System.out.println("申请30秒等待中————————");
 					Thread.sleep(30000);
@@ -1866,13 +1875,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				AAcode = applyResult.getApp_id();
 				System.out.println("while循环里申请statusname:" + statusname);
 				System.out.println("while循环里申请AAcode:" + AAcode);
-				if (count == 4) {
-					statusname = "申请失败";
-					applyResult.setStatus("申请失败");
-					applyResult.setErrorMsg("");
-					System.out.println("申请了4次，手动失败~~~");
-					return applyResult;
-				}
 
 			}
 			if (Util.eq("申请失败", statusname)) {
