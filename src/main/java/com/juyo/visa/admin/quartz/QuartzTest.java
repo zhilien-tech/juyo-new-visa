@@ -88,12 +88,15 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 
 		}*/
 
-		//查询发招宝中、提交中、变更中、取消中的订单
+		//查询发招宝中、提交中、变更中、取消中的订单,注意作废的订单不需要
 		Integer[] orderstatus = { JPOrderStatusEnum.READYCOMMING.intKey(), JPOrderStatusEnum.BIANGENGZHONG.intKey(),
 				JPOrderStatusEnum.QUXIAOZHONG.intKey(), JPOrderStatusEnum.COMMITING.intKey(),
 				JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey() };
-		List<TOrderEntity> orderList = dbDao.query(TOrderEntity.class, Cnd.where("status", "in", orderstatus), null);
+		List<TOrderEntity> orderList = dbDao.query(TOrderEntity.class,
+				Cnd.where("status", "in", orderstatus).and("isDisabled", "=", 0), null);
+		//判断是否有满足需要的订单
 		if (!Util.isEmpty(orderList) && orderList.size() > 0) {
+			//取第一个
 			TOrderEntity order = orderList.get(0);
 
 			System.out.println("发现疑似有问题的订单，订单号为:" + order.getOrderNum());
@@ -101,6 +104,7 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 			//先查询缓存，如果缓存中有，说明已经发过短信，就不要再发了
 			String string = redisDao.get("autofillJP" + String.valueOf(order.getId()));
 			System.out.println("查询redis缓存内容：" + string);
+			//缓存中有，暂不处理
 			if (!Util.isEmpty(string)) {
 				System.out.println("订单号为" + order.getOrderNum() + "的订单已经发送过短信了");
 			} else {
@@ -115,7 +119,7 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 					//相差几分钟
 					long differMin = getDatePoor(new Date(), zhaobaotime);
 					int mincount = 0;
-					//发招宝中相差时间2分钟以上发短信
+					//订单状态为发招宝中时相差时间2分钟以上发短信
 					if (order.getStatus() == JPOrderStatusEnum.READYCOMMING.intKey()
 							|| order.getStatus() == JPOrderStatusEnum.BIANGENGZHONG.intKey()
 							|| order.getStatus() == JPOrderStatusEnum.QUXIAOZHONG.intKey()
@@ -148,7 +152,6 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 							e.printStackTrace();
 						}
 					}
-
 				}
 			}
 		} else {
@@ -175,6 +178,16 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 
 	}
 
+	/**
+	 * 计算两个时间相差多少分钟
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param endDate
+	 * @param nowDate
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public static long getDatePoor(Date endDate, Date nowDate) {
 
 		long nd = 1000 * 24 * 60 * 60;

@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -33,6 +34,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Files;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.admin.simulate.form.JapanSimulateErrorForm;
 import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
 import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
@@ -65,6 +67,8 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 
 	@Inject
 	private QiniuUploadServiceImpl qiniuUploadService;
+	@Inject
+	private OrderUSViewService orderUSViewService;
 
 	/*private VisaInfoWSHandler visaInfoWSHandler = (VisaInfoWSHandler) SpringContextUtil.getBean("myVisaInfoHander",
 			VisaInfoWSHandler.class);*/
@@ -422,10 +426,30 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 
 	}
 
+	//发送短信
+	public Object sendSMS(String ordernum, String orderstatus) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
+				"messagetmp/autofilljp_sms.txt"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+		String telephone = "15600027715";
+		String result = "";
+		String smsContent = tmp.toString();
+		smsContent = smsContent.replace("${ordernum}", ordernum).replace("${orderstatus}", orderstatus);
+		System.out.println("短信分享内容：" + smsContent);
+		result = orderUSViewService.sendSMS(telephone, smsContent);
+
+		return result;
+
+	}
+
 	public Object japanErrorHandle(JapanSimulateErrorForm form, Long cid) {
 		int errorCode = form.getErrorCode();
 		int orderstatus = form.getOrderstatus();
 		String errorMsg = form.getErrorMsg();
+		System.out.println("cid:" + cid);
 		System.out.println("orderstatus:" + orderstatus);
 		System.out.println("errorCode:" + errorCode);
 		System.out.println("errorMsg============:" + errorMsg);
@@ -438,13 +462,21 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			orderjp.setErrorcode(errorCode);
 			orderjp.setErrormsg(errorMsg);
 			dbDao.update(orderjp);
+			orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 			//如果cookie过期，直接返回，等待定时任务获取
 			if (Util.eq("cookie expired", errorMsg)) {
 				System.out.println("cookie超时！！！");
+				try {
+					sendSMS(orderinfo.getOrderNum(), "cookie过期了!!!");
+				} catch (IOException e) {
+
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+
+				}
 				return null;
 			}
 
-			orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		}
 		//订单号为-1时，errorMsg为订单号，依此可查询出对应的order和orderjp
 		if (Util.eq(-1, cid)) {

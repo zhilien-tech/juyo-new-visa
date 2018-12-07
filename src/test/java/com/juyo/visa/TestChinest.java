@@ -36,6 +36,7 @@ public class TestChinest {
 			System.out.println(datePoor);
 			if (datePoor > 6) {
 				System.out.println("==============");
+				System.out.println("超时了，需要发通知了~~~");
 			}
 		} catch (ParseException e) {
 
