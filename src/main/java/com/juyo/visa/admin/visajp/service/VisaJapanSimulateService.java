@@ -277,9 +277,11 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			List<TApplicantOrderJpEntity> jpapplicants = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("orderId", "=", orderid).orderBy("isMainApplicant", "DESC"), null);
 
-			TApplicantEntity mainapply = dbDao.fetch(TApplicantEntity.class, jpapplicants.get(0).getApplicantId()
-					.longValue());
-			mainapplicantname = mainapply.getFirstName() + mainapply.getLastName();
+			if (jpapplicants.size() > 0) {
+				TApplicantEntity mainapply = dbDao.fetch(TApplicantEntity.class, jpapplicants.get(0).getApplicantId()
+						.longValue());
+				mainapplicantname = mainapply.getFirstName() + mainapply.getLastName();
+			}
 
 			for (TApplicantOrderJpEntity applicantjp : jpapplicants) {
 				if (!Util.isEmpty(applicantjp.getIsMainApplicant()) && applicantjp.getIsMainApplicant().equals(1)) {

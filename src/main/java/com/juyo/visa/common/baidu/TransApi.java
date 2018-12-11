@@ -18,7 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TransApi {
-	private static final String TRANS_API_HOST = "http://api.fanyi.baidu.com/api/trans/vip/translate";
+	//private static final String TRANS_API_HOST = "http://api.fanyi.baidu.com/api/trans/vip/translate";
+	private static final String TRANS_API_HOST = "https://fanyi-api.baidu.com/api/trans/vip/translate";
 	private static final String APP_ID = "20181211000246598";
 	private static final String SECURITY_KEY = "8_MjFaIQyqSO5FvZCvm7";
 

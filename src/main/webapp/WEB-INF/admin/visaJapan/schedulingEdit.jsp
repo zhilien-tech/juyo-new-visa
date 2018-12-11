@@ -91,7 +91,7 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label><span>*</span>房间数：</label>
-									<input class="form-control input-sm" style="height: 28px;" id="roomcount" name="roomcount" value="${obj.orderjp.roomcount }"/>
+									<input class="form-control input-sm" style="height: 28px;" id="roomcount" name="roomcount" onkeyup="value=value.replace(/[^\d]/g,'')" value="${obj.orderjp.roomcount }"/>
 							</div>
 						</div>
 					</div>

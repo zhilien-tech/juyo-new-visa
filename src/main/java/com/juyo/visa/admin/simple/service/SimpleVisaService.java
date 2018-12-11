@@ -2403,11 +2403,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		dbDao.updateRelations(before, travelplans);
 
 		//房间数
-		int roomCount = getRoomCount(orderjpid);
 
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
-		orderjp.setRoomcount(roomCount);
-		dbDao.update(orderjp, "roomcount");
+		if (Util.isEmpty(orderjp.getRoomcount())) {
+			int roomCount = getRoomCount(orderjpid);
+			orderjp.setRoomcount(roomCount);
+			dbDao.update(orderjp, "roomcount");
+		}
 
 		result.put("status", "success");
 		result.put("orderid", orderjpid);
