@@ -40,6 +40,7 @@ import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
 import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
+import com.juyo.visa.common.baidu.TransApi;
 import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
@@ -805,7 +806,36 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//英文
 		familyinfo.setSpousebirthdayen(form.getSpousebirthday());
 		familyinfo.setSpouseaddressen(form.getSpouseaddress());
-		familyinfo.setSpousecityen(translate(form.getSpousecity()));
+
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
+		if (!Util.isEmpty(form.getSpousecity())) {
+			String issuedplace = form.getSpousecity();
+			if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+				familyinfo.setSpousecityen("NEI MONGOL");
+			} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+				familyinfo.setSpousecityen("SHAANXI");
+			} else {
+				if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				if (issuedplace.endsWith("自治区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+				}
+				if (issuedplace.endsWith("区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				try {
+					familyinfo.setSpousecityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
+
+		//familyinfo.setSpousecityen(translate(form.getSpousecity()));
+
 		familyinfo.setSpousecountryen(form.getSpousecountry());
 		familyinfo.setSpousenationalityen(form.getSpousenationality());
 		return null;
@@ -1918,12 +1948,17 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	public String translate(String str) {
 		String result = "";
 		if (!Util.isEmpty(str)) {
-			try {
+
+			TransApi api = new TransApi();
+			result = api.getTransResult(str, "auto", "en");
+			System.out.println("翻译内容为：" + str + ",翻译结果为result：" + result);
+
+			/*try {
 				result = TranslateUtil.translate(str, "en");
 				System.out.println("翻译内容为：" + str + "，翻译结果为result:" + result);
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
+			}*/
 		} else {
 			System.out.println("没有内容你让我翻译什么啊，神经病啊o(╥﹏╥)o");
 		}

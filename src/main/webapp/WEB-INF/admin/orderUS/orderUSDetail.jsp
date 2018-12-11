@@ -516,10 +516,10 @@
 								</div>
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label>街道英文</label> <input id="planaddress" name="planaddress" onchange="translateZhToEn(this,'planaddressen','')"
+										<label>街道英文</label> <input id="planaddress" name="planaddress"
 											type="text" value="${obj.travelInfo.address}"
 											class="form-control input-sm" placeholder="" />
-											<input id="planaddressen" name="planaddressen" type="hidden" value="${obj.travelInfo.addressen }"/>
+											<%-- <input id="planaddressen" name="planaddressen" type="hidden" value="${obj.travelInfo.addressen }"/> --%>
 									</div>
 								</div>
 								<!-- 街道END -->

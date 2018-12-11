@@ -1438,6 +1438,15 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		return "ok";
 	}
 
+	/**
+	 * 正式填写
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object formallyfilling(int orderid) {
 
 		TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
@@ -1493,12 +1502,14 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					dbDao.update(basicinfo);
 					return applyResult;
 				}
-				applyResult = (AutofillSearchJsonEntity) applyToDS160(passportnum, imgurl, orderid, staffid, orderus);
+				//这里是从神开始重复
+				/*applyResult = (AutofillSearchJsonEntity) applyToDS160(passportnum, imgurl, orderid, staffid, orderus);
 				reviewurl = applyResult.getReview_url();
 				if (Util.isEmpty(applyResult.getReview_url())) {
 					return applyResult;
 				}
-				applyidcode = applyResult.getCode();
+				applyidcode = applyResult.getCode();*/
+				//从提交开始重复
 				successStatus = (int) applyorsubmit(applyidcode, 2);
 				if (successStatus == 1) {
 					applyResult = (AutofillSearchJsonEntity) infinitQuery(applyidcode, passportnum, 2);
@@ -2497,7 +2508,6 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderTravelInfo.setLeavedate(form.getLeavedate());
 		orderTravelInfo.setArrivedate(form.getArrivedate());
 		orderTravelInfo.setStaydays(form.getStaydays());
-		orderTravelInfo.setAddress(form.getPlanaddress());
 		orderTravelInfo.setHotelname(form.getHotelname());
 		if (!Util.isEmpty(form.getHotelname())) {
 			THotelUsEntity hotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("name", "=", form.getHotelname()));
@@ -2508,7 +2518,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			orderTravelInfo.setHotelnameen("");
 		}
 		//orderTravelInfo.setAddressen(form.getPlanaddressen());
-		orderTravelInfo.setAddressen(translate(form.getPlanaddress()));
+		//orderTravelInfo.setAddressen(translate(form.getPlanaddress()));
+		orderTravelInfo.setAddressen(form.getPlanaddress());
+		orderTravelInfo.setAddress(form.getPlanaddress());
 		orderTravelInfo.setCity(form.getPlancity());
 		orderTravelInfo.setCityen(form.getPlancityen());
 		orderTravelInfo.setState(form.getPlanstate());

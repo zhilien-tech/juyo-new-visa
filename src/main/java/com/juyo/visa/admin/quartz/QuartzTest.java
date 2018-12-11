@@ -168,11 +168,13 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 			tmp.append(line);
 		}
 		String telephone = "15600027715";
+		String telephone2 = "18612131435";
 		String result = "";
 		String smsContent = tmp.toString();
 		smsContent = smsContent.replace("${ordernum}", ordernum).replace("${orderstatus}", orderstatus);
 		System.out.println("短信分享内容：" + smsContent);
 		result = orderUSViewService.sendSMS(telephone, smsContent);
+		result = orderUSViewService.sendSMS(telephone2, smsContent);
 
 		return result;
 

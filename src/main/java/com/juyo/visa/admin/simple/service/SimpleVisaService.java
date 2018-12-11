@@ -285,19 +285,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		List<Record> totallist = (List<Record>) sql.getResult();
 		int orderscount = totallist.size();
 		int peopletotal = 0;
-		/*int disableorder = 0;
-		int disablepeople = 0;*/
 		int zhaobaoorder = 0;
 		int zhaobaopeople = 0;
 		for (Record record : totallist) {
-			//作废单子、人数
-			/*if (Util.eq(1, record.get("isdisabled"))) {
-				disableorder++;
-				if (!Util.eq(0, record.get("peoplenumber"))) {
-					disablepeople += record.getInt("peoplenumber");
-				}
-			}*/
-
 			//收费单子，人数
 			if (Util.eq(1, record.get("zhaobaoupdate"))) {
 				zhaobaoorder++;
@@ -305,7 +295,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					zhaobaopeople += record.getInt("peoplenumber");
 				}
 			}
-
 			//单子人数
 			if (!Util.eq(0, record.get("peoplenumber"))) {
 				peopletotal += record.getInt("peoplenumber");
@@ -318,12 +307,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		long middleTime = System.currentTimeMillis();
 		System.out.println("上头数据所用时间:" + (middleTime - startTime) + "ms");
-
-		/*Cnd cnd = Cnd.NEW();
-		cnd.and("tr.zhaobaoupdate", "=", 1);
-		cnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
-		sql.setCondition(cnd);
-		List<Record> singleperson = (List<Record>) sql.getResult();*/
 
 		@SuppressWarnings("unchecked")
 		//主sql数据
@@ -357,44 +340,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					applysql,
 					Cnd.where("taoj.orderId", "=", orderid).orderBy("taoj.isMainApplicant", "DESC")
 							.orderBy("ta.id", "ASC"), null);
-			/*for (Record apply : query) {
-
-				if (!Util.isEmpty(apply.get("province"))) {
-					String province = (String) apply.get("province");
-					if (province.endsWith("省") || province.endsWith("市")) {
-						apply.put("province", province.substring(0, province.length() - 1));
-					}
-					if (province.length() > 3 && province.endsWith("自治区")) {
-						apply.put("province", province.substring(0, province.length() - 3));
-					}
-				}*/
-
-			/*Integer dataType = (Integer) apply.get("dataType");
-			for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
-				if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
-					apply.put("dataType", dataTypeEnum.value());
-				}
-			}
-			String data = "";
-			String blue = "";
-			if (!Util.isEmpty(apply.get("blue"))) {
-				blue = (String) apply.get("blue");
-			}
-			String black = "";
-			if (!Util.isEmpty(apply.get("black"))) {
-				black = (String) apply.get("black");
-			}
-			if (Util.isEmpty(blue)) {
-				data = black;
-			} else {
-				data = blue;
-				if (!Util.isEmpty(black)) {
-					data += "、";
-					data += black;
-				}
-			}
-			apply.put("data", data);*/
-			//}
 			record.put("everybodyInfo", query);
 			//签证状态
 			Integer visastatus = record.getInt("japanState");
@@ -409,8 +354,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		List<Record> singleperson = getSingleperson(form);
 
 		StatisticsEntity entity = new StatisticsEntity();
-		/*entity.setDisableorder(disableorder);
-		entity.setDisablepeople(disablepeople);*/
 		entity.setOrderscount(orderscount);
 		entity.setPeopletotal(peopletotal);
 		entity.setZhaobaoorder(zhaobaoorder);

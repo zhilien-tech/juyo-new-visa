@@ -1,13 +1,13 @@
 package com.juyo.visa;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,13 +18,29 @@ import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 
+import com.juyo.visa.common.baidu.TransApi;
+
 public class TestChinest {
 
 	static final int N = 50000;
+	private final static String PreUrl = "http://www.baidu.com/s?wd="; //百度搜索URL
+	private final static String TransResultStartFlag = "<span class=\"op_dict_text2\">"; //翻译开始标签
+	private final static String TransResultEndFlag = "</span>"; //翻译结束标签
+
+	private static final String APP_ID = "20181211000246598";
+	private static final String SECURITY_KEY = "8_MjFaIQyqSO5FvZCvm7";
 
 	public static void main(String[] args) {
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		TransApi api = new TransApi(APP_ID, SECURITY_KEY);
+
+		String query = "高度600米";
+		System.out.println(api.getTransResult(query, "auto", "en"));
+
+		//String translateResult = getTranslateResult("日本");
+		//System.out.println(translateResult + "======");
+
+		/*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String string = "2018-12-03 17:40:26";
 		Date first;
 		try {
@@ -43,7 +59,7 @@ public class TestChinest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
-		}
+		}*/
 
 		/*long first = System.currentTimeMillis();
 
@@ -258,6 +274,45 @@ public class TestChinest {
 		System.out.println(stringBuilder1.toString());*/
 
 		//System.out.println(s.substring(s.indexOf(".", s.indexOf(".")) + 1, s.indexOf(".", s.indexOf(".") + 1)));
+	}
+
+	public static String getTranslateResult(String urlString) { //传入要搜索的单词
+		URL url;
+		String content = "";
+		try {
+			url = new URL(PreUrl + urlString);
+			// 打开URL
+			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			// 得到输入流，即获得了网页的内容
+			BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+			String preLine = "";
+			String line;
+			int flag = 1;
+			// 读取输入流的数据，并显示
+
+			while ((line = reader.readLine()) != null) { //获取翻译结果的算法
+				System.out.println(line);
+
+				if (preLine.indexOf(TransResultStartFlag) != -1 && line.indexOf(TransResultEndFlag) == -1) {
+					System.out.println("111111111111");
+					System.out.println(line);
+					content += line.replaceAll("　| ", "") + "\n"; //去电源代码上面的半角以及全角字符
+					flag = 0;
+				}
+				if (line.indexOf(TransResultEndFlag) != -1) {
+					flag = 1;
+				}
+				if (flag == 1) {
+					preLine = line;
+				}
+			}
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		} //生成完整的URL
+		return content;//返回翻译结果
 	}
 
 	public static long getDatePoor(Date endDate, Date nowDate) {
