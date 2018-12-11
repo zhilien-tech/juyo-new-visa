@@ -20,14 +20,11 @@ function translateZhToEn(from, to, param){
 	}
 	$.ajax({
 		//async : false,
-		url : '/admin/translate/translate',
+		url : '/admin/neworderUS/baiduTranslate',
 		data : {
-			api : 'google',
-			strType : to,
-			en : 'en',
 			q : toval
 		},
-		type : 'POST',
+		type : 'GET',
 		dataType : 'json',
 		success : function(data) {
 			$("#" + to).val(data).change();

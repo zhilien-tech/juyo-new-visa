@@ -21,6 +21,8 @@ import javax.servlet.http.HttpSession;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import org.apache.http.HttpResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -40,6 +42,7 @@ import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
 import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
+import com.juyo.visa.common.baidu.BaidutranslateEntity;
 import com.juyo.visa.common.baidu.TransApi;
 import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.UploadService;
@@ -1948,11 +1951,20 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	public String translate(String str) {
 		String result = "";
 		if (!Util.isEmpty(str)) {
+			try {
+				TransApi api = new TransApi();
+				result = api.getTransResult(str, "auto", "en");
+				System.out.println(result);
+				JSONObject resultStr = new JSONObject(result);
+				JSONArray resultArray = (JSONArray) resultStr.get("trans_result");
+				List<BaidutranslateEntity> resultList = com.alibaba.fastjson.JSONObject.parseArray(
+						resultArray.toString(), BaidutranslateEntity.class);
 
-			TransApi api = new TransApi();
-			result = api.getTransResult(str, "auto", "en");
-			System.out.println("翻译内容为：" + str + ",翻译结果为result：" + result);
-
+				result = resultList.get(0).getDst();
+				System.out.println("翻译内容为：" + str + ",翻译结果为result：" + result);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			/*try {
 				result = TranslateUtil.translate(str, "en");
 				System.out.println("翻译内容为：" + str + "，翻译结果为result:" + result);

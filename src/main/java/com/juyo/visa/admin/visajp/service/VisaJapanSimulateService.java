@@ -239,7 +239,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 				byteArray = huanyuService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.JINQIAO_TYPE.intKey()) {
 				byteArray = jinqiaoService.generateFile(orderjp, request).toByteArray();
-				//byteArray = huangjinjiaqiService.generateFile(orderjp, request).toByteArray();
+				//byteArray = yiqiyouService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.SHENZHOU_TYPE.intKey()) {
 				byteArray = shenzhouService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.FENGSHANG_TYPE.intKey()) {
@@ -275,7 +275,12 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			String visaType = "";
 			// 查询申请人信息
 			List<TApplicantOrderJpEntity> jpapplicants = dbDao.query(TApplicantOrderJpEntity.class,
-					Cnd.where("orderId", "=", orderid), null);
+					Cnd.where("orderId", "=", orderid).orderBy("isMainApplicant", "DESC"), null);
+
+			TApplicantEntity mainapply = dbDao.fetch(TApplicantEntity.class, jpapplicants.get(0).getApplicantId()
+					.longValue());
+			mainapplicantname = mainapply.getFirstName() + mainapply.getLastName();
+
 			for (TApplicantOrderJpEntity applicantjp : jpapplicants) {
 				if (!Util.isEmpty(applicantjp.getIsMainApplicant()) && applicantjp.getIsMainApplicant().equals(1)) {
 					TOrderJpEntity orderJp = new TOrderJpEntity();
@@ -306,7 +311,7 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 							}*/
 						}
 					}
-					mainapplicantname = "  " + applicat.getFirstName() + applicat.getLastName();
+					//mainapplicantname = "  " + applicat.getFirstName() + applicat.getLastName();
 				}
 			}
 			String filename = "";

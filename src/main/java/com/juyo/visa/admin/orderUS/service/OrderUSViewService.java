@@ -74,6 +74,8 @@ import com.juyo.visa.admin.orderUS.form.OrderUSListDataForm;
 import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
 import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
+import com.juyo.visa.common.baidu.BaidutranslateEntity;
+import com.juyo.visa.common.baidu.TransApi;
 import com.juyo.visa.common.base.SystemProperties;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
@@ -99,7 +101,6 @@ import com.juyo.visa.common.ocr.RecognizeData;
 import com.juyo.visa.common.util.PinyinTool;
 import com.juyo.visa.common.util.PinyinTool.Type;
 import com.juyo.visa.common.util.SpringContextUtil;
-import com.juyo.visa.common.util.TranslateUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffContactpointEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
@@ -2518,8 +2519,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			orderTravelInfo.setHotelnameen("");
 		}
 		//orderTravelInfo.setAddressen(form.getPlanaddressen());
-		//orderTravelInfo.setAddressen(translate(form.getPlanaddress()));
-		orderTravelInfo.setAddressen(form.getPlanaddress());
+		orderTravelInfo.setAddressen(translate(form.getPlanaddress()));
+		//orderTravelInfo.setAddressen(form.getPlanaddress());
 		orderTravelInfo.setAddress(form.getPlanaddress());
 		orderTravelInfo.setCity(form.getPlancity());
 		orderTravelInfo.setCityen(form.getPlancityen());
@@ -3395,13 +3396,33 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 	//翻译英文
 	public String translate(String str) {
-		String result = null;
+		/*String result = null;
 		try {
 			result = TranslateUtil.translate(str, "en");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		System.out.println("翻译结果：" + result);
+		return result;*/
+		String result = "";
+		if (!Util.isEmpty(str)) {
+			try {
+				TransApi api = new TransApi();
+				result = api.getTransResult(str, "auto", "en");
+				System.out.println(result);
+				JSONObject resultStr = new JSONObject(result);
+				JSONArray resultArray = (JSONArray) resultStr.get("trans_result");
+				List<BaidutranslateEntity> resultList = com.alibaba.fastjson.JSONObject.parseArray(
+						resultArray.toString(), BaidutranslateEntity.class);
+
+				result = resultList.get(0).getDst();
+				System.out.println("翻译内容为：" + str + ",翻译结果为result：" + result);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("没有内容你让我翻译什么啊，神经病啊o(╥﹏╥)o");
+		}
 		return result;
 
 	}

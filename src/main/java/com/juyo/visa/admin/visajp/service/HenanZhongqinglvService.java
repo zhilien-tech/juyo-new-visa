@@ -920,6 +920,14 @@ public class HenanZhongqinglvService extends BaseService<TOrderJpEntity> {
 						.where("orderId", "=", orderjp.getId()).orderBy("outDate", "ASC"), null);
 				Integer visatype = orderjp.getVisaType();
 				if (!Util.isEmpty(ordertravelplanList)) {
+
+					String room = "";
+					if (Util.isEmpty(orderjp.getRoomcount())) {
+						room = String.valueOf(getRoomcount(orderjp.getId().intValue()));
+					} else {
+						room = String.valueOf(orderjp.getRoomcount());
+					}
+
 					if (ordertravelplanList.get(1).getCityId() != ordertravelplanList.get(2).getCityId()) {//第二个和第三个城市不同，中间会随机别的城市
 						ArrayList<Integer> cityidList = new ArrayList<Integer>();
 
@@ -929,15 +937,6 @@ public class HenanZhongqinglvService extends BaseService<TOrderJpEntity> {
 							}
 						}
 
-						/*if(ordertravelplanList.get(0).getCityId() == ordertravelplanList.get(ordertravelplanList.size() - 1).getCityId()){//第一个城市和最后一个城市相同，需要特殊处理
-						if(i == cityidList.size() - 1){//返回城市的第一天
-							outDate = query.get(2).getOutDate();
-						}else{
-							outDate = fetch.getOutDate();
-						}
-						}else{
-						outDate = fetch.getOutDate();
-						}*/
 						if (ordertravelplanList.get(0).getCityId() != ordertravelplanList.get(
 								ordertravelplanList.size() - 1).getCityId()) {
 							for (int i = 0; i < cityidList.size(); i++) {
@@ -990,14 +989,6 @@ public class HenanZhongqinglvService extends BaseService<TOrderJpEntity> {
 								maintable.addCell(cell);
 
 								//第五列，需要几间房子
-								String room = "";
-								if (applyinfo.size() > 0) {
-									if (applyinfo.size() % 2 == 1) {
-										room = String.valueOf(applyinfo.size() / 2 + 1);
-									} else {
-										room = String.valueOf(applyinfo.size() / 2);
-									}
-								}
 								cell = new PdfPCell(new Paragraph(room, font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1052,14 +1043,6 @@ public class HenanZhongqinglvService extends BaseService<TOrderJpEntity> {
 							maintable.addCell(cell);
 
 							//第五列，需要几间房子
-							String room = "";
-							if (applyinfo.size() > 0) {
-								if (applyinfo.size() % 2 == 1) {
-									room = String.valueOf(applyinfo.size() / 2 + 1);
-								} else {
-									room = String.valueOf(applyinfo.size() / 2);
-								}
-							}
 							cell = new PdfPCell(new Paragraph(room, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1132,15 +1115,7 @@ public class HenanZhongqinglvService extends BaseService<TOrderJpEntity> {
 								maintable.addCell(cell);
 
 								//第五列，需要几间房子
-								String room1 = "";
-								if (applyinfo.size() > 0) {
-									if (applyinfo.size() % 2 == 1) {
-										room1 = String.valueOf(applyinfo.size() / 2 + 1);
-									} else {
-										room1 = String.valueOf(applyinfo.size() / 2);
-									}
-								}
-								cell = new PdfPCell(new Paragraph(room1, font));
+								cell = new PdfPCell(new Paragraph(room, font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 								cell.setFixedHeight(50);
@@ -1195,14 +1170,6 @@ public class HenanZhongqinglvService extends BaseService<TOrderJpEntity> {
 						maintable.addCell(cell);
 
 						//第五列，需要几间房子
-						String room = "";
-						if (applyinfo.size() > 0) {
-							if (applyinfo.size() % 2 == 1) {
-								room = String.valueOf(applyinfo.size() / 2 + 1);
-							} else {
-								room = String.valueOf(applyinfo.size() / 2);
-							}
-						}
 						cell = new PdfPCell(new Paragraph(room, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1279,80 +1246,26 @@ public class HenanZhongqinglvService extends BaseService<TOrderJpEntity> {
 			e.printStackTrace();
 		}
 
-		/*Map<String, String> map = new HashMap<String, String>();
-		if (!Util.isEmpty(ordertripjp)) {
-			if (ordertripjp.getTripType().equals(1)) {
-				if (!Util.isEmpty(ordertripjp.getGoDate())) {
-					map.put("Text22", hoteldateformat.format(ordertripjp.getGoDate()));
-				}
-				//逗留时间
-				if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
-					int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
-					map.put("Text24", String.valueOf(stayday) + "泊朝食");
-				}
-			} else if (ordertripjp.getTripType().equals(2)) {
-				if (!Util.isEmpty(mutiltrip)) {
-					//逗留时间
-					if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
-						int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
-						map.put("Text24", String.valueOf(stayday) + "泊朝食");
-					}
-					//多程第一程为出发日期
-					TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
-					//入住日期（出发日期）
-					if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-						map.put("Text22", hoteldateformat.format(entrytrip.getDepartureDate()));
-					}
-				}
-			}
-		}
-		StringBuffer strb = new StringBuffer("");
-		Collections.reverse(applyinfo);
-
-		for (Record record : applyinfo) {
-			//判断为主申请人
-			if (Util.eq(1, record.get("ismainapplicant"))) {
-				if (!Util.isEmpty(record.get("firstname"))) {
-					strb.append(record.getString("firstname"));
-				}
-				if (!Util.isEmpty(record.get("lastname"))) {
-					strb.append(record.getString("lastname"));
-				}
-			}
-		}
-		int applysize = applyinfo.size() - 1;
-		strb.append(" 他 ").append(applysize).append(" 名");
-		map.put("Text21", strb.toString());
-		String room = null;
-		if (applyinfo.size() > 0) {
-			if (applyinfo.size() % 2 == 1) {
-
-				int c = applyinfo.size() / 2 + 1;
-				map.put("Text25", c + "");
-			} else {
-				int c = applyinfo.size() / 2;
-				room = "TWN " + c + " 室";
-				map.put("Text25", c + "");
-			}
-		}
-		//酒店信息
-		if (!Util.isEmpty(ordertravelplan)) {
-			TOrderTravelplanJpEntity travelplanEntity = ordertravelplan.get(0);
-			if (!Util.isEmpty(travelplanEntity.getHotel())) {
-				THotelEntity hotelinfo = hotelViewService.fetch(travelplanEntity.getHotel());
-				map.put("Text23",
-						"\n" + hotelinfo.getNamejp() + "\n" + hotelinfo.getAddressjp() + "\n"
-								+ hotelinfo.getMobile());
-			}
-		}
-		//获取模板文件
-		URL resource = getClass().getClassLoader().getResource("japanfile/huanyu/hotel.pdf");
-		TemplateUtil templateUtil = new TemplateUtil();
-		stream = templateUtil.pdfTemplateStream(resource, map);
-		} catch (Exception e) {
-		e.printStackTrace();
-		}*/
 		return stream;
+	}
+
+	public int getRoomcount(int orderjpid) {
+		int roomCount = 0;
+		List<TApplicantOrderJpEntity> allCount = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpid), null);
+		List<TApplicantOrderJpEntity> mainCount = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpid).and("isMainApplicant", "=", 1), null);
+		int viceCount = allCount.size() - mainCount.size();
+		if (viceCount > 0) {
+			if (viceCount % 2 == 1) {
+				roomCount = viceCount / 2 + 1;
+			} else {
+				roomCount = viceCount / 2;
+			}
+		}
+		roomCount += mainCount.size();
+
+		return roomCount;
 	}
 
 	/**

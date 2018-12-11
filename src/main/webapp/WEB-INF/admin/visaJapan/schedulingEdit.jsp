@@ -87,6 +87,14 @@
 							</div>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label><span>*</span>房间数：</label>
+									<input class="form-control input-sm" style="height: 28px;" id="roomcount" name="roomcount" value="${obj.orderjp.roomcount }"/>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</form>
@@ -120,6 +128,7 @@
 		 $('#addBtn').click(function(){
 			var id  = $('#id').val();
 			var day = $('#day').val();
+			var roomcount = $('#roomcount').val();
 			var outDate = $('#outDate').val();
 			var cityId = $('#cityId').val();
 			if (cityId) {
@@ -144,7 +153,7 @@
 			layer.load(1);
 			$.ajax({
 				type : 'POST',
-				data : {id:id,day:day,outDate:outDate,cityId:cityId,scenic:scenic,hotel:hotel},
+				data : {id:id,day:day,outDate:outDate,cityId:cityId,scenic:scenic,hotel:hotel,roomcount:roomcount},
 				url : '${base}/admin/visaJapan/saveEditPlanData.html',
 				success : function(data) {
 					layer.closeAll('loading');

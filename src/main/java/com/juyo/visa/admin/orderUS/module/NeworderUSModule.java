@@ -276,4 +276,11 @@ public class NeworderUSModule {
 	public Object autoCalculategoDate(@Param("gotripdate") Date gotripdate, @Param("stayday") Integer stayday) {
 		return neworderUSViewService.autoCalculategoDate(gotripdate, stayday);
 	}
+
+	@At
+	@GET
+	public Object baiduTranslate(@Param("q") String q) {
+		return neworderUSViewService.translate(q);
+	}
+
 }

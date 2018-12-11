@@ -592,14 +592,11 @@ function translateZhToEn(from, to, param){
 	}
 	$.ajax({
 		//async : false,
-		url : BASE_PATH+'/admin/neworderUS/translate',
+		url : BASE_PATH+'/admin/neworderUS/baiduTranslate',
 		data : {
-			api : 'google',
-			strType : to,
-			en : 'en',
 			q : toval
 		},
-		type : 'POST',
+		type : 'GET',
 		dataType : 'json',
 		success : function(data) {
 			$("#" + to).val(data).change();

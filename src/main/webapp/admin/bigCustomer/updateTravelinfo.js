@@ -9,11 +9,12 @@ function translateZhToEn(from, to, param){
 	}
 	$.ajax({
 		//async : false,
-		url : '/admin/translate/translate',
+		//url : '/admin/translate/translate',
+		url : '/admin/neworderUS/baiduTranslate',
 		data : {
-			api : 'google',
+			/*api : 'google',
 			strType : to,
-			en : 'en',
+			en : 'en',*/
 			q : toval
 		},
 		type : 'POST',

@@ -150,6 +150,7 @@
 									<div class="form-group">
 										<label><span>*</span>领区：</label> <select
 											class="form-control input-sm" id="cityid" name="cityid" tabindex="7">
+											<option value="">请选择</option>
 											<c:forEach var="map" items="${obj.collarAreaEnum}">
 												<option value="${map.key}">${map.value}</option>
 											</c:forEach>
@@ -520,7 +521,9 @@
 			var cityid = $(this).val();
 			$("#cityid").val(cityid);
 			cityidstr = cityid;
-			if($(this).val() > 2){
+			if($(this).val() == ""){
+				
+			}else if($(this).val() > 2){
 				$(".transfer").show();
 				$(".direct").hide();
 				$("#goDepartureCity").empty();

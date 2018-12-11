@@ -892,6 +892,14 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 						.where("orderId", "=", orderjp.getId()).orderBy("outDate", "ASC"), null);
 				Integer visatype = orderjp.getVisaType();
 				if (!Util.isEmpty(ordertravelplanList)) {
+
+					String room = "";
+					if (Util.isEmpty(orderjp.getRoomcount())) {
+						room = String.valueOf(getRoomcount(orderjp.getId().intValue()));
+					} else {
+						room = String.valueOf(orderjp.getRoomcount());
+					}
+
 					if (ordertravelplanList.get(1).getCityId() != ordertravelplanList.get(2).getCityId()) {//第二个和第三个城市不同，中间会随机别的城市
 						ArrayList<Integer> cityidList = new ArrayList<Integer>();
 
@@ -901,15 +909,6 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 							}
 						}
 
-						/*if(ordertravelplanList.get(0).getCityId() == ordertravelplanList.get(ordertravelplanList.size() - 1).getCityId()){//第一个城市和最后一个城市相同，需要特殊处理
-							if(i == cityidList.size() - 1){//返回城市的第一天
-								outDate = query.get(2).getOutDate();
-							}else{
-								outDate = fetch.getOutDate();
-							}
-						}else{
-							outDate = fetch.getOutDate();
-						}*/
 						if (ordertravelplanList.get(0).getCityId() != ordertravelplanList.get(
 								ordertravelplanList.size() - 1).getCityId()) {
 							for (int i = 0; i < cityidList.size(); i++) {
@@ -962,14 +961,6 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 								maintable.addCell(cell);
 
 								//第五列，需要几间房子
-								String room = "";
-								if (applyinfo.size() > 0) {
-									if (applyinfo.size() % 2 == 1) {
-										room = String.valueOf(applyinfo.size() / 2 + 1);
-									} else {
-										room = String.valueOf(applyinfo.size() / 2);
-									}
-								}
 								cell = new PdfPCell(new Paragraph(room, font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1024,14 +1015,6 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 							maintable.addCell(cell);
 
 							//第五列，需要几间房子
-							String room = "";
-							if (applyinfo.size() > 0) {
-								if (applyinfo.size() % 2 == 1) {
-									room = String.valueOf(applyinfo.size() / 2 + 1);
-								} else {
-									room = String.valueOf(applyinfo.size() / 2);
-								}
-							}
 							cell = new PdfPCell(new Paragraph(room, font));
 							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1104,15 +1087,7 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 								maintable.addCell(cell);
 
 								//第五列，需要几间房子
-								String room1 = "";
-								if (applyinfo.size() > 0) {
-									if (applyinfo.size() % 2 == 1) {
-										room1 = String.valueOf(applyinfo.size() / 2 + 1);
-									} else {
-										room1 = String.valueOf(applyinfo.size() / 2);
-									}
-								}
-								cell = new PdfPCell(new Paragraph(room1, font));
+								cell = new PdfPCell(new Paragraph(room, font));
 								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 								cell.setFixedHeight(50);
@@ -1167,14 +1142,6 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 						maintable.addCell(cell);
 
 						//第五列，需要几间房子
-						String room = "";
-						if (applyinfo.size() > 0) {
-							if (applyinfo.size() % 2 == 1) {
-								room = String.valueOf(applyinfo.size() / 2 + 1);
-							} else {
-								room = String.valueOf(applyinfo.size() / 2);
-							}
-						}
 						cell = new PdfPCell(new Paragraph(room, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1251,6 +1218,25 @@ public class HuanyuService extends BaseService<TOrderJpEntity> {
 			e.printStackTrace();
 		}
 		return stream;
+	}
+
+	public int getRoomcount(int orderjpid) {
+		int roomCount = 0;
+		List<TApplicantOrderJpEntity> allCount = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpid), null);
+		List<TApplicantOrderJpEntity> mainCount = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpid).and("isMainApplicant", "=", 1), null);
+		int viceCount = allCount.size() - mainCount.size();
+		if (viceCount > 0) {
+			if (viceCount % 2 == 1) {
+				roomCount = viceCount / 2 + 1;
+			} else {
+				roomCount = viceCount / 2;
+			}
+		}
+		roomCount += mainCount.size();
+
+		return roomCount;
 	}
 
 	/**

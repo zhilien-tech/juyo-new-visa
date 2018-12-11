@@ -2401,11 +2401,38 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				Cnd.where("orderid", "=", orderjpid), null);
 		//更新行程安排
 		dbDao.updateRelations(before, travelplans);
+
+		//房间数
+		int roomCount = getRoomCount(orderjpid);
+
+		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
+		orderjp.setRoomcount(roomCount);
+		dbDao.update(orderjp, "roomcount");
+
 		result.put("status", "success");
 		result.put("orderid", orderjpid);
 		result.put("data", getTravelPlanByOrderId(orderjpid));
 		result.put("orderjpid", orderjpid);
 		return result;
+	}
+
+	public int getRoomCount(int orderjpid) {
+		int roomCount = 0;
+		List<TApplicantOrderJpEntity> allCount = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpid), null);
+		List<TApplicantOrderJpEntity> mainCount = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpid).and("isMainApplicant", "=", 1), null);
+		int viceCount = allCount.size() - mainCount.size();
+		if (viceCount > 0) {
+			if (viceCount % 2 == 1) {
+				roomCount = viceCount / 2 + 1;
+			} else {
+				roomCount = viceCount / 2;
+			}
+		}
+		roomCount += mainCount.size();
+
+		return roomCount;
 	}
 
 	public int thirddayCity(int visatype) {
