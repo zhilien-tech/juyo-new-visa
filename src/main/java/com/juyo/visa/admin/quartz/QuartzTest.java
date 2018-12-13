@@ -102,58 +102,58 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 			System.out.println("发现疑似有问题的订单，订单号为:" + order.getOrderNum());
 
 			//先查询缓存，如果缓存中有，说明已经发过短信，就不要再发了
-			String string = redisDao.get("autofillJP" + String.valueOf(order.getId()));
-			System.out.println("查询redis缓存内容：" + string);
+			//String string = redisDao.get("autofillJP" + String.valueOf(order.getId()));
+			//System.out.println("查询redis缓存内容：" + string);
 			//缓存中有，暂不处理
-			if (!Util.isEmpty(string)) {
+			/*if (!Util.isEmpty(string)) {
 				System.out.println("订单号为" + order.getOrderNum() + "的订单已经发送过短信了");
-			} else {
-				TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class,
-						Cnd.where("orderId", "=", order.getId().longValue()));
-				Date zhaobaotime = orderjp.getZhaobaotime();
-				if (Util.isEmpty(zhaobaotime)) {
-					//没有发招宝时间说明点发招宝的时候发生错误，暂不处理
-					System.out.println("没有发招宝时间，可能是测试数据吧~~~");
+			} else {*/
+			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class,
+					Cnd.where("orderId", "=", order.getId().longValue()));
+			Date zhaobaotime = orderjp.getZhaobaotime();
+			if (Util.isEmpty(zhaobaotime)) {
+				//没有发招宝时间说明点发招宝的时候发生错误，暂不处理
+				System.out.println("没有发招宝时间，可能是测试数据吧~~~");
 
-				} else {
-					//相差几分钟
-					long differMin = getDatePoor(new Date(), zhaobaotime);
-					int mincount = 0;
-					//订单状态为发招宝中时相差时间2分钟以上发短信
-					if (order.getStatus() == JPOrderStatusEnum.READYCOMMING.intKey()
-							|| order.getStatus() == JPOrderStatusEnum.BIANGENGZHONG.intKey()
-							|| order.getStatus() == JPOrderStatusEnum.QUXIAOZHONG.intKey()
-							|| order.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey()) {
-						mincount = 2;
-					} else if (order.getStatus() == JPOrderStatusEnum.COMMITING.intKey()) {//订单状态为提交中时，时间差为5分钟以上发短信
-						mincount = 5;
-					}
-					if (differMin > mincount) {//超过特定时间发短信
-						System.out.println("orderid=====:" + order.getId());
-						System.out.println("时间差differMin:" + differMin);
-						try {
-							//cookie过期的情况
-							if (Util.eq("cookie expired", orderjp.getErrormsg())) {
-								sendSMS(order.getOrderNum(), "cookie过期");
-							} else {
-								//将订单状态放在短信中
-								for (JPOrderStatusEnum jpenum : JPOrderStatusEnum.values()) {
-									if (order.getStatus() == jpenum.intKey()) {
-										sendSMS(order.getOrderNum(), jpenum.value());
-									}
+			} else {
+				//相差几分钟
+				long differMin = getDatePoor(new Date(), zhaobaotime);
+				int mincount = 0;
+				//订单状态为发招宝中时相差时间2分钟以上发短信
+				if (order.getStatus() == JPOrderStatusEnum.READYCOMMING.intKey()
+						|| order.getStatus() == JPOrderStatusEnum.BIANGENGZHONG.intKey()
+						|| order.getStatus() == JPOrderStatusEnum.QUXIAOZHONG.intKey()
+						|| order.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey()) {
+					mincount = 2;
+				} else if (order.getStatus() == JPOrderStatusEnum.COMMITING.intKey()) {//订单状态为提交中时，时间差为5分钟以上发短信
+					mincount = 5;
+				}
+				if (differMin > mincount) {//超过特定时间发短信
+					System.out.println("orderid=====:" + order.getId());
+					System.out.println("时间差differMin:" + differMin);
+					try {
+						//cookie过期的情况
+						if (Util.eq("cookie expired", orderjp.getErrormsg())) {
+							sendSMS(order.getOrderNum(), "cookie过期");
+						} else {
+							//将订单状态放在短信中
+							for (JPOrderStatusEnum jpenum : JPOrderStatusEnum.values()) {
+								if (order.getStatus() == jpenum.intKey()) {
+									sendSMS(order.getOrderNum(), jpenum.value());
 								}
 							}
-							//将该订单放入缓存中，以记录此订单是否发过短信，防止重复发送短信
-							redisDao.set("autofillJP" + String.valueOf(order.getId()), order.getOrderNum());
-							//设置过期时间为1天
-							redisDao.expire("autofillJP" + String.valueOf(order.getId()), 60 * 60 * 24);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
+						//将该订单放入缓存中，以记录此订单是否发过短信，防止重复发送短信
+						//redisDao.set("autofillJP" + String.valueOf(order.getId()), order.getOrderNum());
+						//设置过期时间为1天
+						//redisDao.expire("autofillJP" + String.valueOf(order.getId()), 60 * 60 * 24);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			}
+			//}
 		} else {
 			System.out.println("没有疑似有问题的订单☺");
 		}
