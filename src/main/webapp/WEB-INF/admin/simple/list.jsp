@@ -168,7 +168,11 @@
 						<div><label>受付番号：</label><span>{{data.acceptdesign}}</span></div>
 						<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 						<div><label>操作人：</label><span>{{data.opname}}</span></div>
-						<div><label>送签社：</label><span>{{data.shortname}}</span></div>
+						<div>
+							<label>送签社：</label>
+							<span>{{data.shortname}}</span>
+							<span style="margin-left: 20px;">{{data.comshortname}}</span>
+						</div>
 						<div><label></label><span>{{data.visatype}}</span></div>
 						<!-- <div><label></label><span style="font-weight:bold;font-size:16px;">
 							<span v-if="data.visastatus === '招宝成功'">

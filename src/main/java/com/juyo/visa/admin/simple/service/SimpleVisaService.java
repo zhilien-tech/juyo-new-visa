@@ -333,6 +333,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 			}
 
+			if (!Util.isEmpty(record.get("comshortname"))) {
+				record.set("comshortname", record.get("comshortname"));
+			} else if (!Util.isEmpty(record.get("customershotname"))) {
+				record.set("comshortname", record.get("customershotname"));
+			} else {
+				record.set("comshortname", "");
+			}
+
 			Integer orderid = (Integer) record.get("id");
 			String sqlStr = sqlManager.get("get_simplelist_data_apply");
 			Sql applysql = Sqls.create(sqlStr);
@@ -2404,12 +2412,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		//房间数
 
-		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
+		/*TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
 		if (Util.isEmpty(orderjp.getRoomcount())) {
 			int roomCount = getRoomCount(orderjpid);
 			orderjp.setRoomcount(roomCount);
 			dbDao.update(orderjp, "roomcount");
-		}
+		}*/
 
 		result.put("status", "success");
 		result.put("orderid", orderjpid);
@@ -2418,7 +2426,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public int getRoomCount(int orderjpid) {
+	/*public int getRoomCount(int orderjpid) {
 		int roomCount = 0;
 		List<TApplicantOrderJpEntity> allCount = dbDao.query(TApplicantOrderJpEntity.class,
 				Cnd.where("orderId", "=", orderjpid), null);
@@ -2433,6 +2441,33 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		roomCount += mainCount.size();
+
+		return roomCount;
+	}*/
+
+	public int getRoomcount(int orderjpid) {
+		int roomCount = 0;
+		//所有人
+		List<TApplicantOrderJpEntity> allCount = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpid), null);
+		//主申请人
+		List<TApplicantOrderJpEntity> mainCount = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpid).and("isMainApplicant", "=", 1), null);
+		//副申请人数
+		int viceCount = allCount.size() - mainCount.size();
+
+		//规则：如果主申请人数大于副申请人数，则房间数为主申请人数，反之则两人一间
+		if (mainCount.size() >= viceCount) {
+			roomCount = mainCount.size();
+		} else {
+			if (allCount.size() > 0) {
+				if (allCount.size() % 2 == 1) {
+					roomCount = allCount.size() / 2 + 1;
+				} else {
+					roomCount = allCount.size() / 2;
+				}
+			}
+		}
 
 		return roomCount;
 	}

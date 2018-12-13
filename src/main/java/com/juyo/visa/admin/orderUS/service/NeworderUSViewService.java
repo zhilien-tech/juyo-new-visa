@@ -2191,7 +2191,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		List<THotelUsEntity> hotelList = new ArrayList<>();
 		TCityUsEntity city = dbDao.fetch(TCityUsEntity.class, Cnd.where("cityname", "=", plancity));
-		List<THotelUsEntity> hotels = dbDao.query(THotelUsEntity.class, Cnd.where("cityid", "=", city.getId()), null);
+		List<THotelUsEntity> hotels = dbDao.query(THotelUsEntity.class,
+				Cnd.where("cityid", "=", city.getId()).and("name", "like", "%" + Strings.trim(searchstr) + "%"), null);
 
 		for (THotelUsEntity hotel : hotels) {
 			if (!hotelList.contains(hotel)) {

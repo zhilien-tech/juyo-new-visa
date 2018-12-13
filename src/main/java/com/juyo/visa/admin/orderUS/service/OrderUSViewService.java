@@ -1594,7 +1594,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 					errorMsg = applyResult.getErrorMsg();
 					if (errorMsg.contains("Connection") || errorMsg.contains("打码工超时未打码")
 							|| errorMsg.contains("图片服务器连接错误") || errorMsg.contains("Cannot allocate memory")
-							|| errorMsg.contains("EOF occurred")) {
+							|| errorMsg.contains("EOF occurred") || errorMsg.contains("URL + img_src")) {
 						repeatResult = repeatInsertandupdate(imgurl, orderid, staffid);
 						successStatus = (int) repeatResult.get("successStatus");
 						applyidcode = (String) repeatResult.get("applyidcode");

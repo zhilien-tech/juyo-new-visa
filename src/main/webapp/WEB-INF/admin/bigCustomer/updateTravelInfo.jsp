@@ -64,6 +64,10 @@ input:focus{
 	margin: 0!important;
 	margin-top: 5px!important;
 }
+.select2, .select2-container, .select2-container--default{
+	width:182px !important;
+	margin-left:5px;
+}
 
 </style>
 </head>
@@ -403,10 +407,16 @@ input:focus{
 					</div>
 					<div class="refuseExplain grouptextareaInfo paddingTop-9">
 						<label><span class="s">*</span> 说明</label> <input autocomplete="new-password"
-							name="refusedexplain" style="padding-left: 10px; width: 182px !important;"
+							name="refusedexplain" style="padding-left: 10px; width: 382px !important;"
 							class="areaInputPic" onchange="translateZhToEn(this,'refusedexplainen','')" id='refusedexplain'
 							value="${obj.tripinfo.refusedexplain }" />
-							<input type="hidden" id="refusedexplainen" name="refusedexplainen" value="${obj.tripinfo.refusedexplainen }"/>
+					</div>
+					<div class="refuseExplain grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> Explain</label> <input autocomplete="new-password"
+							name="refusedexplainen" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" id='refusedexplainen'
+							value="${obj.tripinfo.refusedexplainen }" />
+							<%-- <input type="hidden" id="refusedexplainen" name="refusedexplainen" value="${obj.tripinfo.refusedexplainen }"/> --%>
 					</div>
 				</div>
 
@@ -438,13 +448,34 @@ input:focus{
 
 							</select>
 						</div>
-						<div class="col-sm-3 youRelationship">
+						
+					</div>
+					<div class="row immigrantpetition_US">
+						<div class=" youRelationship ">
+						
+							<div class="col-sm-3 youRelationship">
 							<label><span class="s">*</span> 其他理由</label> <input autocomplete="new-password"
-								style="height: 34px;padding-left: 10px" id="immigrantpetitionexplain" onchange="translateZhToEn(this,'immigrantpetitionexplainen','')"
+								style="width: 382px;height: 30px;padding-left: 10px" id="immigrantpetitionexplain" onchange="translateZhToEn(this,'immigrantpetitionexplainen','')"
 								value="${obj.tripinfo.immigrantpetitionexplain }"
 								name="immigrantpetitionexplain" type="text" placeholder="" />
-								<input id="immigrantpetitionexplainen" name="immigrantpetitionexplainen" type="hidden" value="${obj.tripinfo.immigrantpetitionexplainen }"/>
 						</div>
+						</div>
+						
+					</div>
+					<div class="row immigrantpetition_US">
+						<div class=" youRelationship ">
+						
+							<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> Other reasons</label> <input autocomplete="new-password"
+								style="width: 382px;height: 30px;padding-left: 10px" id="immigrantpetitionexplainen" value="${obj.tripinfo.immigrantpetitionexplainen }"
+								name="immigrantpetitionexplainen" type="text" placeholder="" />
+								<%-- <input id="immigrantpetitionexplainen" name="immigrantpetitionexplainen" type="hidden" value="${obj.tripinfo.immigrantpetitionexplainen }"/> --%>
+						</div>
+						
+						
+						
+						</div>
+						
 					</div>
 				</div>
 

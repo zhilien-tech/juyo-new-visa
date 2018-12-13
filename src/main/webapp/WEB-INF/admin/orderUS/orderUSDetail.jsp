@@ -99,10 +99,10 @@
 					<input type="button" onclick="pass()" value="通过" class="btn btn-primary btn-sm pull-right" />
 					<c:choose>
 						<c:when test="${!empty obj.orderinfo.reviewurl && obj.orderinfo.ispreautofilling == 0  }">
-							<input type="button" id="autofill" onclick="autofill()" value="正式填写" class="btn btn-primary btn-sm pull-right btn-Big" />
+							<input type="button" id="autofill" onclick="autofill()" value="正式填表" class="btn btn-primary btn-sm pull-right btn-Big" />
 						</c:when>
 						<c:otherwise>
-							<input type="button" disabled="disabled" id="autofill" onclick="autofill()" value="正式填写" class="btn btn-primary btn-sm pull-right btn-Big" />
+							<input type="button" disabled="disabled" id="autofill" onclick="autofill()" value="正式填表" class="btn btn-primary btn-sm pull-right btn-Big" />
 						</c:otherwise>
 					</c:choose>
 					<%-- <c:choose>
@@ -1837,9 +1837,9 @@
 			
 		}
 		
-		//正式填写
+		//正式填表
 		function autofill(orderid){
-			$("#orderstatus_US").html("自动填表中");
+			$("#orderstatus_US").html("正式填表中");
  			$("#autofill").attr("disabled",true);
 			
 			var orderid = '${obj.orderid}';
@@ -1867,10 +1867,10 @@
 							success : function(data) {
 								if(data.orderstatus == 9){
 									$("#autofill").attr("disabled",false);
-									$("#orderstatus_US").html("自动填表成功");
+									$("#orderstatus_US").html("正式填表成功");
 									clearInterval(getstatus);
-									console.log("自动填表成功，轮询停止了~~~");
-									layer.msg("自动填表成功");
+									console.log("正式填表成功，轮询停止了~~~");
+									layer.msg("正式填表成功");
 									if(data.pdf_url){
 										$("#pdfurl").attr("disabled",false);
 										//$("#pdfurl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.pdfurl); });
@@ -1886,10 +1886,10 @@
 								}
 								if(data.orderstatus == 10){
 									$("#autofill").attr("disabled",false);
-									$("#orderstatus_US").html("自动填表失败");
+									$("#orderstatus_US").html("正式填表失败");
 									clearInterval(getstatus);
-									console.log("正式填写失败，轮询停止了~~~");
-									layer.msg("自动填表失败");
+									console.log("正式填表失败，轮询停止了~~~");
+									layer.msg("正式填表失败");
 									if(data.pdf_url){
 										$("#pdfurl").attr("disabled",false);
 										//$("#pdfurl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.pdfurl); });

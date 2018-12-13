@@ -65,8 +65,9 @@
 				width: 100%!important;
 			}
 			.select2-container{
-				height: 34px;
+				height: 30px;
 				border: 1px solid #aaa;
+				margin-top: 10px;
 			}
 			.select2-selection,
 			.selection{
@@ -122,7 +123,7 @@
                         <label><span class="s">*</span>电话号码</label>
                         <input autocomplete="new-password" name="telephone" value="${obj.workinfo.telephone }" id="jobtelphone"  type="text" />
                     </div>
-					<div class="paddingRight groupSelectInfo" style="width: 190px;padding-left: 15px;">
+					<div class="paddingRight groupSelectInfo" style="width: 190px;padding-left: 10px;">
                         <label><span class="s">*</span>工作国家</label>
                         <select id='jobcountry'  class="form-control input-sm select2" multiple="multiple" name="country">
                         

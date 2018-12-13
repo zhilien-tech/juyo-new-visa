@@ -34,7 +34,7 @@ public class TestChinest {
 
 		TransApi api = new TransApi(APP_ID, SECURITY_KEY);
 
-		String query = "高度600米";
+		String query = "不知道";
 		System.out.println(api.getTransResult(query, "auto", "en"));
 
 		//String translateResult = getTranslateResult("日本");

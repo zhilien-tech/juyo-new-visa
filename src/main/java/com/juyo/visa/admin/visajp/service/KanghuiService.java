@@ -54,6 +54,7 @@ import com.juyo.visa.admin.city.service.CityViewService;
 import com.juyo.visa.admin.flight.service.FlightViewService;
 import com.juyo.visa.admin.hotel.service.HotelViewService;
 import com.juyo.visa.admin.scenic.service.ScenicViewService;
+import com.juyo.visa.admin.simple.service.SimpleVisaService;
 import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.admin.visajp.util.TtfClassLoader;
 import com.juyo.visa.common.base.QrCodeService;
@@ -98,6 +99,8 @@ public class KanghuiService extends BaseService<TOrderJpEntity> {
 	private CityViewService cityViewService;
 	@Inject
 	private QrCodeService qrCodeService;
+	@Inject
+	private SimpleVisaService simpleVisaService;
 
 	private static DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -858,7 +861,7 @@ public class KanghuiService extends BaseService<TOrderJpEntity> {
 
 					String room = "";
 					if (Util.isEmpty(orderjp.getRoomcount())) {
-						room = String.valueOf(getRoomcount(orderjp.getId().intValue()));
+						room = String.valueOf(simpleVisaService.getRoomcount(orderjp.getId().intValue()));
 					} else {
 						room = String.valueOf(orderjp.getRoomcount());
 					}
@@ -1182,25 +1185,6 @@ public class KanghuiService extends BaseService<TOrderJpEntity> {
 		}
 
 		return stream;
-	}
-
-	public int getRoomcount(int orderjpid) {
-		int roomCount = 0;
-		List<TApplicantOrderJpEntity> allCount = dbDao.query(TApplicantOrderJpEntity.class,
-				Cnd.where("orderId", "=", orderjpid), null);
-		List<TApplicantOrderJpEntity> mainCount = dbDao.query(TApplicantOrderJpEntity.class,
-				Cnd.where("orderId", "=", orderjpid).and("isMainApplicant", "=", 1), null);
-		int viceCount = allCount.size() - mainCount.size();
-		if (viceCount > 0) {
-			if (viceCount % 2 == 1) {
-				roomCount = viceCount / 2 + 1;
-			} else {
-				roomCount = viceCount / 2;
-			}
-		}
-		roomCount += mainCount.size();
-
-		return roomCount;
 	}
 
 	/**

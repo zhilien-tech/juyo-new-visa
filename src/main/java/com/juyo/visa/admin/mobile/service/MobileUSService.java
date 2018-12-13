@@ -16,6 +16,7 @@ import java.util.Map;
 
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
+import org.json.JSONArray;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -34,6 +35,8 @@ import com.juyo.visa.admin.mobile.form.PassportinfoUSForm;
 import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
 import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
 import com.juyo.visa.admin.order.form.RecognitionForm;
+import com.juyo.visa.common.baidu.BaidutranslateEntity;
+import com.juyo.visa.common.baidu.TransApi;
 import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
@@ -53,7 +56,6 @@ import com.juyo.visa.common.util.HttpUtil;
 import com.juyo.visa.common.util.PinyinTool;
 import com.juyo.visa.common.util.PinyinTool.Type;
 import com.juyo.visa.common.util.SpringContextUtil;
-import com.juyo.visa.common.util.TranslateUtil;
 import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
 import com.juyo.visa.entities.TAppStaffBeforeworkEntity;
@@ -1702,7 +1704,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public String translate(String str) {
-		String result = "";
+		/*String result = "";
 		if (!Util.isEmpty(str)) {
 			try {
 				result = TranslateUtil.translate(str, "en");
@@ -1711,6 +1713,27 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			}
 		} else {
 			System.out.println("没有内容你让我翻译什么啊，神经病啊☺");
+		}
+		return result;*/
+
+		String result = "";
+		if (!Util.isEmpty(str)) {
+			try {
+				TransApi api = new TransApi();
+				result = api.getTransResult(str, "auto", "en");
+				System.out.println(result);
+				org.json.JSONObject resultStr = new org.json.JSONObject(result);
+				JSONArray resultArray = (JSONArray) resultStr.get("trans_result");
+				List<BaidutranslateEntity> resultList = com.alibaba.fastjson.JSONObject.parseArray(
+						resultArray.toString(), BaidutranslateEntity.class);
+
+				result = resultList.get(0).getDst();
+				System.out.println("翻译内容为：" + str + ",翻译结果为result：" + result);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("没有内容你让我翻译什么啊，神经病啊o(╥﹏╥)o");
 		}
 		return result;
 	}

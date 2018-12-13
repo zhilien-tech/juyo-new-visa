@@ -17,7 +17,7 @@ function translateZhToEn(from, to, param){
 			en : 'en',*/
 			q : toval
 		},
-		type : 'POST',
+		type : 'GET',
 		dataType : 'json',
 		success : function(data) {
 			$("#" + to).val(data).change();
