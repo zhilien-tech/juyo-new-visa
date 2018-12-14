@@ -1487,7 +1487,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	}
 
 	/**
-	 * 自动计算返回日期
+	 * 根据预计送签时间，自动计算预计出签时间
 	 * <p>
 	 * TODO(这里描述这个方法详情– 可选)
 	 *
@@ -1508,27 +1508,42 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		return format.format(DateUtil.addDay(gotripdate, stayday - 1));
 	}
 
+	//获取周末和假期，需要刨除在外
 	public List<String> getHolidayDate() {
 		List<String> holidayDate = getWeekendayofyear();
-		holidayDate.add("2018-9-24");
-		holidayDate.add("2018-9-29");
-		holidayDate.add("2018-9-30");
-		holidayDate.add("2018-10-1");
-		holidayDate.add("2018-10-2");
-		holidayDate.add("2018-10-3");
-		holidayDate.add("2018-10-4");
-		holidayDate.add("2018-10-5");
 		holidayDate.add("2018-12-31");
+		holidayDate.add("2019-1-1");
+		holidayDate.add("2019-1-2");
+		holidayDate.add("2019-1-3");
+		holidayDate.add("2019-2-4");
+		holidayDate.add("2019-2-5");
+		holidayDate.add("2019-2-6");
+		holidayDate.add("2019-2-7");
+		holidayDate.add("2019-2-8");
+		holidayDate.add("2019-4-5");
+		holidayDate.add("2019-5-1");
+		holidayDate.add("2019-6-7");
+		holidayDate.add("2019-9-13");
+		holidayDate.add("2019-10-1");
+		holidayDate.add("2019-10-2");
+		holidayDate.add("2019-10-3");
+		holidayDate.add("2019-10-4");
+		holidayDate.add("2019-10-7");
+		holidayDate.add("2019-10-22");
+		holidayDate.add("2019-11-4");
+		holidayDate.add("2019-12-30");
+		holidayDate.add("2019-12-31");
 
 		return holidayDate;
 	}
 
+	//刨去假期，获取实际应该加上的天数
 	public int getCount(Date gotripdate, Integer stayday, int count) {
 		DateFormat format = new SimpleDateFormat("YYYY-M-d");
 		List<String> holidayDate = getHolidayDate();
 		int totalday = stayday + count;
 		for (int i = 0; i < totalday; i++) {
-			String dateStr = format.format(DateUtil.addDay(gotripdate, i + 1));
+			String dateStr = plusDay(i + 1, gotripdate);
 			if (holidayDate.contains(dateStr)) {
 				count++;
 				totalday++;
@@ -1537,9 +1552,28 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		return count;
 	}
 
+	//获取今年和明年的所有周末日期
 	public List<String> getWeekendayofyear() {
-		List<String> result = new ArrayList<>(getYearDoubleWeekend(2018));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		Date date = new Date();
+		String yearStr = sdf.format(date);
+		int nowyear = Integer.valueOf(yearStr);
+		List<String> result = new ArrayList<>(getYearDoubleWeekend(nowyear));
+		List<String> result2 = new ArrayList<>(getYearDoubleWeekend(nowyear + 1));
+		result.addAll(result2);
 		return result;
+	}
+
+	//指定日期加上指定天数
+	public static String plusDay(int num, Date newDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
+		Calendar cl = Calendar.getInstance();
+		cl.setTime(newDate);
+		cl.add(Calendar.DATE, num);
+		String temp = "";
+		temp = sdf.format(cl.getTime());
+
+		return temp;
 	}
 
 	public Object autofillsendvisatime() {
@@ -1555,7 +1589,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		List<String> holidayDate = getHolidayDate();
 		int totalday = stayday + count;
 		for (int i = 0; i < totalday; i++) {
-			String dateStr = format.format(DateUtil.addDay(gotripdate, i + 1));
+			String dateStr = plusDay(i + 1, gotripdate);
 			if (holidayDate.contains(dateStr)) {
 				count++;
 				totalday++;

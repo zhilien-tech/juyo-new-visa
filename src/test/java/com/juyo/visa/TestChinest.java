@@ -8,6 +8,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,8 +20,6 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
-
-import com.juyo.visa.common.baidu.TransApi;
 
 public class TestChinest {
 
@@ -32,10 +33,24 @@ public class TestChinest {
 
 	public static void main(String[] args) {
 
-		TransApi api = new TransApi(APP_ID, SECURITY_KEY);
+		DateFormat format = new SimpleDateFormat("yyyy-M-d");
+		String datestr = "2018-12-30";
+		try {
+			Date parse = format.parse(datestr);
+			System.out.println(parse);
+			String plusDay = plusDay(1, parse);
+			System.out.println(plusDay);
+		} catch (ParseException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+
+		/*TransApi api = new TransApi(APP_ID, SECURITY_KEY);
 
 		String query = "不知道";
-		System.out.println(api.getTransResult(query, "auto", "en"));
+		System.out.println(api.getTransResult(query, "auto", "en"));*/
 
 		//String translateResult = getTranslateResult("日本");
 		//System.out.println(translateResult + "======");
@@ -274,6 +289,20 @@ public class TestChinest {
 		System.out.println(stringBuilder1.toString());*/
 
 		//System.out.println(s.substring(s.indexOf(".", s.indexOf(".")) + 1, s.indexOf(".", s.indexOf(".") + 1)));
+	}
+
+	public static String plusDay(int num, Date newDate) {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-d");
+		Calendar cl = Calendar.getInstance();
+		cl.setTime(newDate);
+		// cl.set(Calendar.DATE, day);
+		cl.add(Calendar.DATE, num);
+		String temp = "";
+		temp = sdf.format(cl.getTime());
+		System.out.println(temp);
+
+		return temp;
 	}
 
 	public static String getTranslateResult(String urlString) { //传入要搜索的单词
