@@ -962,11 +962,37 @@
 		//抵达美国日期和预计出发日期一致
 		$("#goDate").change(function(){
 			var godate = $("#goDate").val(); //出发日期
-			var sendvisadate = $("#sendVisaDate").val(); //抵达美国日期
-			//$("#sendVisaDate").val(godate);
-			if(sendvisadate == ""){
+			$("#sendVisaDate").val(godate);
+			/* if(sendvisadate == ""){
 				$("#sendVisaDate").val(godate);
+			} */
+			
+			var stayday = $("#stayday").val();
+			var startDate = $("#sendVisaDate").val();
+			var returnDate = $("#returnDate").val();
+			if(stayday != ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalculateBackDate.html',
+					dataType: "json",
+					data: { gotripdate: startDate, stayday: stayday },
+					type: 'post',
+					success: function (data) {
+						$("#returnDate").val(data);
+					}
+				});
 			}
+			if(returnDate != "" && stayday == ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalCulateStayday.html',
+					dataType: "json",
+					data: { gotripdate: startDate, returnDate: returnDate },
+					type: 'post',
+					success: function (data) {
+						$("#stayday").val(data);
+					}
+				});
+			}
+			
 		});
 		
 		//计划去美国的州改变，城市自动清空

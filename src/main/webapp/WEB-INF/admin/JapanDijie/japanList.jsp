@@ -156,7 +156,7 @@
 								</select>
 							</div>
 							<div class="col-md col-md-1 left-5px right-0px card-list-date" style="width:18.5%;">
-								<input type="text" class="input-sm input-class form-control" style="height:30px;" autocomplete="new-password" id="orderDate" name="orderDate" placeholder="下单时间" onkeypress="onkeyEnter()"/>
+								<input type="text" class="input-sm input-class form-control" style="height:30px;" autocomplete="off" id="orderDate" name="orderDate" placeholder="下单时间" onkeypress="onkeyEnter()"/>
 								<input type="hidden" id="orderstartdate" name="orderstartdate"/>
 								<input type="hidden" id="orderenddate" name="orderenddate"/>
 							</div>
