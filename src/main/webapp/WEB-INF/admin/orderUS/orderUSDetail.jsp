@@ -2246,8 +2246,8 @@
 		//取消
 		function closeWindow(){
 			
-			/*  $.ajax({
-				url : "${base}/admin/mobileus/travelinfo",
+			/* $.ajax({
+				url : "${base}/admin/mobileus/basicinfo",
 				dataType : "json",
 				data : {
 					encode:"str",
@@ -2263,14 +2263,14 @@
 						}
 					});
 				}
-			});  */
+			}); */
 			
 			
 			if(addorder == 1){
 				window.location.href = '/admin/orderUS/listUS.html';
 			}else{
 				self.window.close();
-			} 
+			}
 		}
 		
 		//拍摄资料

@@ -444,6 +444,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			result.put("staffid", staffid);
 			result.put("encode", encode);
 			result.put("marrystatusenum", EnumUtil.enum2(MarryStatusEnum.class));
+			System.out.println("基本信息回显result:" + result);
 			return JuYouResult.ok(result);
 		}
 
@@ -459,30 +460,32 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveBasicinfo(BasicinfoUSForm form) {
-		String encode = form.getEncode();
+		System.out.println("基本信息保存form:" + form);
+
+		/*String encode = form.getEncode();
 		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
-		} else {
-			//基本信息
-			updateBasicinfo(form);
+		} else {*/
+		//基本信息
+		updateBasicinfo(form);
 
-			//护照信息
-			TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
-					Cnd.where("staffid", "=", form.getStaffid().longValue()));
-			passportinfo.setFirstname(form.getFirstname());
-			passportinfo.setFirstnameen(form.getFirstnameen());
-			passportinfo.setLastname(form.getLastname());
-			passportinfo.setLastnameen(form.getLastnameen());
-			passportinfo.setSex(form.getSex());
-			if (Util.eq("女", form.getSex())) {
-				passportinfo.setSexen("F");
-			} else {
-				passportinfo.setSexen("M");
-			}
-			passportinfo.setBirthday(form.getBirthday());
-			dbDao.update(passportinfo);
+		//护照信息
+		TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
+				Cnd.where("staffid", "=", form.getStaffid().longValue()));
+		passportinfo.setFirstname(form.getFirstname());
+		passportinfo.setFirstnameen(form.getFirstnameen());
+		passportinfo.setLastname(form.getLastname());
+		passportinfo.setLastnameen(form.getLastnameen());
+		passportinfo.setSex(form.getSex());
+		if (Util.eq("女", form.getSex())) {
+			passportinfo.setSexen("F");
+		} else {
+			passportinfo.setSexen("M");
 		}
+		passportinfo.setBirthday(form.getBirthday());
+		dbDao.update(passportinfo);
+		//}
 		return JuYouResult.ok();
 	}
 
@@ -688,6 +691,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			} else {
 				result.put("validenddate", "");
 			}
+			System.out.println("护照信息回显result:" + result);
 			return JuYouResult.ok(result);
 		}
 	}
@@ -702,6 +706,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object savePassportInfo(PassportinfoUSForm form) {
+		System.out.println("护照信息保存form:" + form);
 		String encode = form.getEncode();
 		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
@@ -832,6 +837,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			result.put("spousecontactaddressenum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
 			result.put("familyinfoenum", EnumUtil.enum2(VisaFamilyInfoEnum.class));
 			result.put("immediaterelationshipenum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));
+			System.out.println("家庭信息回显result:" + result);
 			return JuYouResult.ok(result);
 		}
 	}
@@ -846,6 +852,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveFamilyinfo(FamilyinfoUSForm form) {
+		System.out.println("家庭信息保存form:" + form);
 		String encode = form.getEncode();
 		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
@@ -1078,6 +1085,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 
 			result.put("careersenum", EnumUtil.enum2(VisaCareersEnum.class));
 			result.put("highesteducationenum", EnumUtil.enum2(VisaHighestEducationEnum.class));
+			System.out.println("职业与教育信息回显result:" + result);
 			return JuYouResult.ok(result);
 		}
 	}
@@ -1092,6 +1100,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveWorkandeducation(WorkandeducateinfoUSForm form) {
+		System.out.println("工作教育信息保存form:" + form);
 		String encode = form.getEncode();
 		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
@@ -1453,6 +1462,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			result.put("usstatesenum", EnumUtil.enum2(VisaUSStatesEnum.class));
 			result.put("emigrationreasonenumenum", EnumUtil.enum2(EmigrationreasonEnum.class));
 			result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
+			System.out.println("旅行信息回显result");
 			return JuYouResult.ok(result);
 		}
 	}
@@ -1467,6 +1477,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveTravelinfo(TravelinfoUSForm form) {
+		System.out.println("旅行信息保存form:" + form);
 		String encode = form.getEncode();
 		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {

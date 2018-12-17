@@ -275,14 +275,14 @@ function save(status){
 			}else if(status ==3){
 				//往左跳基本信息
 				window.location.href = '/admin/neworderUS/updateBaseInfo.html?staffid='+staffId;
-				$.ajax({
+				/*$.ajax({
 					type: 'POST',
 					data : passportInfo,
 					url: '/admin/neworderUS/savePassportinfo',
 					success :function(data) {
 						parent.successCallback(2);
 					}
-				});
+				});*/
 			}
 		}
 	}, 500);
@@ -316,13 +316,13 @@ function save(status){
 		}else if(status ==3){
 			//往左跳基本信息
 			window.location.href = '/admin/neworderUS/updateBaseInfo.html?staffid='+staffId;
-			$.ajax({
+			/*$.ajax({
 				type: 'POST',
 				data : passportInfo,
 				url: '/admin/neworderUS/savePassportinfo',
 				success :function(data) {
 				}
-			});
+			});*/
 		}
 	}
 }

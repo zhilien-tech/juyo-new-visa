@@ -418,14 +418,14 @@ function save(status){
 		if(status == 2){
 			//左箭头跳转 
 			window.location.href = '/admin/neworderUS/updateWorkInfo.html?staffid='+staffId;
-			$.ajax({
+			/*$.ajax({
 				type: 'POST',
 				data : familyinfo,
 				url: '/admin/neworderUS/saveTravelinfo.html',
 				success :function(data) {
 					parent.successCallback(2);
 				}
-			});
+			});*/
 		}else{
 			layer.load(1);
 			$.ajax({

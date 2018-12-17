@@ -685,14 +685,14 @@ function save(status){
 		if(status == 2){
 			//左箭头跳转 
 			window.location.href = '/admin/neworderUS/updateFamilyInfo.html?staffid='+staffId;
-			$.ajax({
+			/*$.ajax({
 				type: 'POST',
 				data : familyinfo,
 				url: '/admin/neworderUS/saveWorkandeducation.html',
 				success :function(data) {
 					parent.successCallback(2);
 				}
-			});
+			});*/
 		}else if(status == 3){
 			//右箭头跳转
 			window.location.href = '/admin/neworderUS/updateTravelInfo.html?staffid='+staffId;
