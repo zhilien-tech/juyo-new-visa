@@ -158,12 +158,14 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object listData(String encode, String telephone) {
+		System.out.println("telephone=======:" + telephone);
 		//先验证是否登录过期
 		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			//如果为空则过期
 			return -1;
 		} else {
+			System.out.println("openid:" + openid);
 			String sqlStr = sqlManager.get("orderUS_mobile_listdata");
 			Sql orderussql = Sqls.create(sqlStr);
 			orderussql.setParam("telephone", telephone);
@@ -412,6 +414,10 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
 			TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 					Cnd.where("staffid", "=", staffid));
+
+			if (Util.isEmpty(basic.getSex())) {
+				basic.setSex("男");
+			}
 
 			SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 			//日期渲染
@@ -669,13 +675,18 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
 			TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
 					Cnd.where("staffid", "=", staffid));
+
 			result.put("passport", passportinfo);
 			//日期相关处理
 			if (!Util.isEmpty(passportinfo.getIssueddate())) {
 				result.put("issueddate", format.format(passportinfo.getIssueddate()));
+			} else {
+				result.put("issueddate", "");
 			}
 			if (!Util.isEmpty(passportinfo.getValidenddate())) {
 				result.put("validenddate", format.format(passportinfo.getValidenddate()));
+			} else {
+				result.put("validenddate", "");
 			}
 			return JuYouResult.ok(result);
 		}
@@ -776,6 +787,14 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 					Cnd.where("staffid", "=", staffid));
 			result.put("family", familyinfo);
+
+			TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+			if (Util.isEmpty(basicinfo.getMarrystatus())) {
+				result.put("marrystatus", 4);
+			} else {
+				result.put("marrystatus", basicinfo.getMarrystatus());
+			}
+
 			//日期格式处理
 			if (!Util.isEmpty(familyinfo.getSpousebirthday())) {
 				result.put("spousebirthday", format.format(familyinfo.getSpousebirthday()));
@@ -1388,6 +1407,10 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			//以前的美国旅游信息
 			TAppStaffPrevioustripinfoEntity previoustripinfo = dbDao.fetch(TAppStaffPrevioustripinfoEntity.class,
 					Cnd.where("staffid", "=", staffid));
+			if (Util.isEmpty(previoustripinfo.getCostpayer())) {
+				previoustripinfo.setCostpayer(1);
+			}
+
 			result.put("previoustripinfo", previoustripinfo);
 			if (!Util.isEmpty(previoustripinfo.getIssueddate())) {
 				result.put("issueddate", format.format(previoustripinfo.getIssueddate()));
@@ -1449,8 +1472,10 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		if (Util.isEmpty(openid)) {
 			return -1;
 		} else {
+			System.out.println("cookie正常，正式保存开始");
 			Integer staffid = form.getStaffid();
 			//是否有同行人
+			System.out.println("开始保存同行人信息");
 			TAppStaffTravelcompanionEntity travelcompanion = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
 					Cnd.where("staffid", "=", staffid));
 			travelcompanion.setIstravelwithother(form.getIstravelwithother());
@@ -1465,9 +1490,11 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			List<TAppStaffCompanioninfoEntity> companionList_New = JsonUtil.fromJsonAsList(
 					TAppStaffCompanioninfoEntity.class, companioninfoList);
 			dbDao.updateRelations(companionList_old, companionList_New);
+			System.out.println("同行人信息保存完毕");
 
 			//以前的美国旅游信息
 			updatePrevioustripinfo(form);
+			System.out.println("以前的美国旅游信息保存完毕");
 
 			//去过美国信息
 			TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
@@ -1492,6 +1519,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 					dbDao.delete(gousinfo);
 				}
 			}
+			System.out.println("去过美国信息保存完毕");
 
 			//美国驾照信息
 			TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
@@ -1512,6 +1540,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 					dbDao.delete(driverinfo);
 				}
 			}
+			System.out.println("美国驾照信息保存完毕");
 
 			//是否有出境记录
 			TAppStaffWorkEducationTrainingEntity workeducation = dbDao.fetch(
@@ -1528,6 +1557,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			List<TAppStaffGocountryEntity> countryList_New = JsonUtil.fromJsonAsList(TAppStaffGocountryEntity.class,
 					gocountry);
 			dbDao.updateRelations(countryList_old, countryList_New);
+			System.out.println("出境记录信息保存完毕");
 			return JuYouResult.ok();
 		}
 	}

@@ -8,18 +8,18 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
+import org.testng.collections.Maps;
 
 public class TestChinest {
 
@@ -33,7 +33,23 @@ public class TestChinest {
 
 	public static void main(String[] args) {
 
-		DateFormat format = new SimpleDateFormat("yyyy-M-d");
+		int arr[] = { 2, 1, 2, 3, 4, 3, 4, 6, 8, 10, 10, 8, 8, 2, 2, 8 };
+
+		Map<Integer, Integer> result = Maps.newHashMap();
+		ArrayList<Integer> arrayList = new ArrayList<>();
+
+		for (Integer integer : arr) {
+			Integer integer2 = result.get(integer);
+
+			result.put(integer, (integer2 == null) ? 1 : integer2 + 1);
+
+		}
+
+		for (Map.Entry<Integer, Integer> entry : result.entrySet()) {
+			System.out.println("重复的数据为:" + entry.getValue() + "个" + entry.getKey());
+		}
+
+		/*DateFormat format = new SimpleDateFormat("yyyy-M-d");
 		String datestr = "2018-12-30";
 		try {
 			Date parse = format.parse(datestr);
@@ -45,7 +61,7 @@ public class TestChinest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
-		}
+		}*/
 
 		/*TransApi api = new TransApi(APP_ID, SECURITY_KEY);
 

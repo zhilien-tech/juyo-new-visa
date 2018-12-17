@@ -2245,12 +2245,32 @@
 		
 		//取消
 		function closeWindow(){
+			
+			/*  $.ajax({
+				url : "${base}/admin/mobileus/travelinfo",
+				dataType : "json",
+				data : {
+					encode:"str",
+					staffid:4830
+				},
+				type : 'POST',
+				success : function(data) {
+					layer.closeAll();
+					console.log(data);
+					layer.msg("保存成功", {
+						time: 1000,
+						end: function () {
+						}
+					});
+				}
+			});  */
+			
+			
 			if(addorder == 1){
 				window.location.href = '/admin/orderUS/listUS.html';
 			}else{
 				self.window.close();
-			}
-			//parent.window.reload();
+			} 
 		}
 		
 		//拍摄资料
