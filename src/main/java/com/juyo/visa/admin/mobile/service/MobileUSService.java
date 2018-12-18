@@ -405,6 +405,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object basicinfo(String encode, int staffid) {
+		System.out.println("基本信息回显的staffid:" + staffid);
 
 		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
@@ -412,6 +413,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		} else {
 			Map<String, Object> result = Maps.newHashMap();
 			TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+			System.out.println("basic:" + basic);
 			TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 					Cnd.where("staffid", "=", staffid));
 
@@ -670,6 +672,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object passportinfo(String encode, int staffid) {
+		System.out.println("护照信息回显的staffid:" + staffid);
 		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
@@ -783,6 +786,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object familyinfo(String encode, int staffid) {
+		System.out.println("家庭信息回显的staffid:" + staffid);
 		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
@@ -1021,6 +1025,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object workandeducation(String encode, int staffid) {
+		System.out.println("工作教育信息回显的staffid:" + staffid);
 		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
@@ -1400,6 +1405,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object travelinfo(String encode, int staffid) {
+		System.out.println("旅行信息回显的staffid:" + staffid);
 		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
