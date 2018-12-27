@@ -256,6 +256,30 @@ function applyValidate(){
 					}
 				}
 			},
+			birthday : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '出生日期不能为空'
+					}
+				}
+			},
+			cardprovince : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '出生省不能为空'
+					}
+				}
+			},
+			cardcity : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '出生城市不能为空'
+					}
+				}
+			},
 			marryexplainen : {
 				trigger:"change keyup",
 				validators : {

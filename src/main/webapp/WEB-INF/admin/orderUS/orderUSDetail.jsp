@@ -2272,12 +2272,12 @@
 		//取消
 		function closeWindow(){
 			
-			/* $.ajax({
-				url : "${base}/admin/mobileus/basicinfo",
+			 /* $.ajax({
+				url : "${base}/admin/mobileus/travelinfo",
 				dataType : "json",
 				data : {
 					encode:"str",
-					staffid:4830
+					staffid:4776
 				},
 				type : 'POST',
 				success : function(data) {

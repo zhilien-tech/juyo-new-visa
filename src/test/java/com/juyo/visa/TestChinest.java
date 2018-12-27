@@ -1,6 +1,7 @@
 package com.juyo.visa;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +21,16 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
-import org.testng.collections.Maps;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import com.google.common.collect.Maps;
+import com.juyo.visa.common.ocr.HttpUtils;
 
 public class TestChinest {
 
@@ -33,7 +44,44 @@ public class TestChinest {
 
 	public static void main(String[] args) {
 
-		int arr[] = { 2, 1, 2, 3, 4, 3, 4, 6, 8, 10, 10, 8, 8, 2, 2, 8 };
+		Map<String, Object> testPHPMap = testPHP();
+		Header[] cookies = (Header[]) testPHPMap.get("cookies");
+
+		String testPHP = (String) testPHPMap.get("entityStr");
+
+		Document doc = Jsoup.parse(testPHP);
+		Elements select = doc.select("input[name=_sid]");
+		String val = select.val();
+		System.out.println(val);
+
+		/*Map<String, Object> resultData = Maps.newHashMap();
+		resultData.put("email", "52350750@qq.com");
+		resultData.put("pwd", "xiong321");
+		resultData.put("process", "login");
+		resultData.put("_sid", val);
+
+		String json = JsonUtil.toJson(resultData);*/
+		/*String json = "";
+		try {
+			json = URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode("52350750@qq.com", "UTF-8") + "&"
+					+ URLEncoder.encode("pwd", "UTF-8") + "=" + URLEncoder.encode("xiong321", "UTF-8") + "&"
+					+ URLEncoder.encode("process", "UTF-8") + "=" + URLEncoder.encode("login", "UTF-8") + "&"
+					+ URLEncoder.encode("_sid", "UTF-8") + "=" + URLEncoder.encode(val, "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
+		String json = "process=login&_sid=" + val + "&email=52350750@qq.com&pwd=xiong321";
+
+		String postRequest = toPostRequest(json, cookies);
+		System.out.println(postRequest);
+
+		/*UUID randomUUID = UUID.randomUUID();
+		System.out.println(randomUUID.toString().replace("-", ""));
+
+		String str = "1d3a2a75c7169551506b741243fd3ab0";
+		System.out.println(str);*/
+
+		/*int arr[] = { 2, 1, 2, 3, 4, 3, 4, 6, 8, 10, 10, 8, 8, 2, 2, 8 };
 
 		Map<Integer, Integer> result = Maps.newHashMap();
 		ArrayList<Integer> arrayList = new ArrayList<>();
@@ -47,7 +95,7 @@ public class TestChinest {
 
 		for (Map.Entry<Integer, Integer> entry : result.entrySet()) {
 			System.out.println("重复的数据为:" + entry.getValue() + "个" + entry.getKey());
-		}
+		}*/
 
 		/*DateFormat format = new SimpleDateFormat("yyyy-M-d");
 		String datestr = "2018-12-30";
@@ -319,6 +367,170 @@ public class TestChinest {
 		System.out.println(temp);
 
 		return temp;
+	}
+
+	public static Map<String, Object> testPHP() {
+
+		Map<String, Object> result = Maps.newHashMap();
+		String entityStr = "";
+		String host = "https://fr.tlscontact.com";
+		String path = "/cn/BJS/login.php";
+		String method = "GET";
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Content-Type", "application/json; charset=UTF-8");
+		Map<String, String> querys = new HashMap<String, String>();
+		HttpResponse response;
+		try {
+			response = HttpUtils.doGet(host, path, method, headers, querys);
+			entityStr = EntityUtils.toString(response.getEntity());
+
+			Header[] allHeaders = response.getAllHeaders();
+			for (Header header : allHeaders) {
+				System.out.println("headers:" + header.toString());
+			}
+
+			Header[] cookies = response.getHeaders("Set-Cookie");
+
+			result.put("entityStr", entityStr);
+			result.put("cookies", cookies);
+
+			//System.out.println("GET请求返回的数据：" + entityStr);
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		//System.out.println(entityStr);
+		return result;
+	}
+
+	public static String toPostRequest(String json, Header[] cookies) {
+		String entityStr = "";
+		try {
+			// 创建URL
+			URL url = new URL("https://fr.tlscontact.com/cn/BJS/login.php");
+			// 创建链接
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("POST");
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
+			//conn.setFollowRedirects(false);
+			conn.setInstanceFollowRedirects(false);
+
+			String headerstr = "";
+
+			for (int i = 0; i < cookies.length; i++) {
+				String string = cookies[i].toString().substring(11);
+				headerstr += string + ";";
+			}
+			headerstr += " current_locale=en";
+			System.out.println(headerstr);
+
+			conn.setRequestProperty("Accept",
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+			conn.setRequestProperty("Accept-Encoding", "gzip, deflate, br");
+			conn.setRequestProperty("Accept-Language", "zh-CN,zh;q=0.9");
+			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
+			conn.setRequestProperty("Cache-Control", "max-age=0");
+			conn.setRequestProperty("Connection", "keep-alive");
+			conn.setRequestProperty("Host", "fr.tlscontact.com");
+			conn.setRequestProperty("Origin", "https://fr.tlscontact.com");
+			conn.setRequestProperty("Cookie", headerstr);
+			conn.setRequestProperty("Referer", "https://fr.tlscontact.com/cn/BJS/login.php");
+			conn.setRequestProperty("Upgrade-Insecure-Requests", "1");
+			conn.setRequestProperty("User-Agent",
+					"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36");
+
+			DataOutputStream printout = new DataOutputStream(conn.getOutputStream());
+			printout.write(json.getBytes());
+			printout.flush();
+			printout.close();
+
+			int code = conn.getResponseCode();
+			System.out.println("code:" + code);
+
+			InputStream in = conn.getInputStream();
+
+			BufferedReader tBufferedReader = new BufferedReader(new InputStreamReader(in));
+
+			StringBuffer tStringBuffer = new StringBuffer();
+			String line = "";
+			while ((line = tBufferedReader.readLine()) != null) {
+				tStringBuffer.append(line);
+			}
+
+			entityStr = tStringBuffer.toString();
+
+			in.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		/*String path = "";
+		String host = "https://fr.tlscontact.com";
+		path = "/cn/BJS/login.php";
+		String method = "POST";
+		String entityStr = "";
+		Map<String, String> headers = new HashMap<String, String>();
+		//headers.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,/;q=0.8");
+		//headers.put("Content-Length", String.valueOf(json.length()));
+		headers.put("Accept-Encoding", "gzip, deflate, br");
+		headers.put("User-Agent",
+				"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36");
+		headers.put("Accept-Language", "zh-CN,zh;q=0.9");
+		headers.put("Connection", "keep-alive");
+		headers.put("Content-Type", "application/x-www-form-urlencoded");
+		headers.put(
+				"Cookie",
+				"current_locale=en; TLScontact=FOYBeoPLcTgZZtQXhJdUUfmqAXELSGOcupnYhaan; uid=CltUFlwaBesiprKTBhA9Ag==; _ga=GA1.2.327101560.1545209345; _gid=GA1.2.1691881604.1545621668; _gat_UA-28256030-1=1");
+		headers.put("Host", "fr.tlscontact.com");
+		headers.put("Origin", "https://fr.tlscontact.com");
+		headers.put("Referer", "https://fr.tlscontact.com/cn/BJS/login.php");
+		headers.put("Upgrade-Insecure-Requests", "1");
+		String headerstr = "";
+
+		for (int i = 0; i < cookies.length; i++) {
+			String string = cookies[i].toString().substring(11);
+			headerstr += string + ";";
+		}
+		headerstr += " _ga=GA1.2.327101560.1545209345; _gid=GA1.2.1691881604.1545621668; _gat_UA-28256030-1=1";
+		String[] split = headerstr.split(";");
+		headerstr = " current_locale=en;"
+				+ split[0]
+				+ ";"
+				+ split[3]
+				+ ";"
+				+ split[7]
+				+ ";"
+				+ split[8]
+				+ ";"
+				+ split[9]
+				+ "; XSRF-TOKEN=3dZbRV0RRxqjmqn6kL6l4cgIKn21meOGS9tBWYk3; TLScontact=2iLhsfp2ddo5UOj6IxPigngT9fvHf6R1hLF6UKJt";
+		//headerstr.replace(" expires=Wed, 25-Dec-19 07:43:41 GMT; domain=tlscontact.com; path=/;", "");
+		System.out.println(headerstr);
+		headers.put("Cookie", headerstr);
+
+		Map<String, String> querys = new HashMap<String, String>();
+		HttpResponse response;
+		System.out.println("headers:" + headers);
+		System.out.println("httpurl:" + (host + path));
+		System.out.println("json:" + json);
+		try {
+			response = HttpUtils.doPost(host, path, method, headers, querys, json);
+			entityStr = EntityUtils.toString(response.getEntity(), "utf-8");
+			//System.out.println("POST请求返回的数据：" + entityStr);
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}*/
+
+		JSONObject object = new JSONObject(entityStr);
+		System.out.println(object.toString());
+		return entityStr;
 	}
 
 	public static String getTranslateResult(String urlString) { //传入要搜索的单词

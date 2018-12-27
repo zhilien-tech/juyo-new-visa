@@ -1280,15 +1280,15 @@
 				applicantId: applicantid,
 				isyaoqing: isyaoqing
 			}) + "&" + $("#passportInfo").serialize();
-			console.log(wealthInfoObject);
-			console.log(passportInfo);
+			console.log("passportInfo:"+passportInfo);
 
 			ajaxConnection();
 			var count = 0;
 			function ajaxConnection(){
 				$.ajax({
 					type: 'POST',
-					//async: false,
+					async: false,
+					//dataType:'json',
 					data : passportInfo,
 					url: '${base}/admin/simple/saveEditVisa.html',
 					success :function(data) {

@@ -176,3 +176,60 @@ LEFT JOIN t_city_us tcu ON tcu.id = thu.cityid
 LEFT JOIN t_state_us tsu ON tcu.stateid = tsu.id
 WHERE tsu.id=@stateid
 GROUP BY cityname
+
+
+/*orderusmobile_getbasic*/
+SELECT
+tasb.*,
+tasf.divorcedate,
+tasf.marrieddate
+FROM
+t_app_staff_basicinfo tasb
+LEFT JOIN t_app_staff_familyinfo tasf ON tasf.staffid = tasb.id
+WHERE
+staffid=@staffid
+
+/*orderusmobile_getpassport*/
+SELECT
+*
+FROM
+t_app_staff_passport
+WHERE
+staffid=@staffid
+
+
+/*orderusmobile_getworkandeducation*/
+SELECT
+*
+FROM
+t_app_staff_work_education_training
+WHERE
+staffid = @staffid
+
+
+/*orderusmobile_getbeforework*/
+SELECT
+*
+FROM
+t_app_staff_beforework
+WHERE
+staffid = @staffid
+
+
+/*orderusmobile_getbeforeeducation*/
+SELECT
+*
+FROM
+t_app_staff_beforeeducation
+WHERE
+staffid = @staffid
+
+
+
+/*orderusmobile_getprevioustrip*/
+SELECT
+*
+FROM
+t_app_staff_previoustripinfo
+WHERE
+staffid = @staffid

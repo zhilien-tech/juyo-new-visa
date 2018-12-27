@@ -55,19 +55,7 @@ input:focus{
 	outline: 0;
 
 }
-.select2-container .select2-selection--multiple{
-	height: 28px!important;
-	min-height: 28px!important;
-}
 
-.select2-container .select2-search__field{
-	margin: 0!important;
-	margin-top: 5px!important;
-}
-.select2, .select2-container, .select2-container--default{
-	width:182px !important;
-	margin-left:5px;
-}
 
 </style>
 </head>

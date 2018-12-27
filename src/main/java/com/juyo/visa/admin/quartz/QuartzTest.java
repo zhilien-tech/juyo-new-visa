@@ -50,43 +50,25 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
-		/*
-		在别的类中调用
-		QuartzTest wxTokenJob = Mvcs.getIoc().get(QuartzTest.class);
-		try {
-			wxTokenJob.execute(null);
-		} catch (JobExecutionException e) {
-
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-
-		}*/
-
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 		System.out.println("Just do it");
 		System.out.println(sdf.format(new Date()));
 
-		/*JobDetail jobDetail = context.getJobDetail();
-		jobDetail.getJobDataMap().put("myjob", "testjob");
+		/*String result = "";
 
-		String object = context.getJobDetail().getJobDataMap().getString("myjob");
-		System.out.println(object);
-
-		Trigger trigger = context.getTrigger();
-		System.out.println(trigger);
-
-		Scheduler scheduler = context.getScheduler();
 		try {
-			List<String> triggerGroupNames = scheduler.getTriggerGroupNames();
-			for (String string : triggerGroupNames) {
-				System.out.println(string);
-			}
-
-		} catch (SchedulerException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-
-		}*/
+			Process process = Runtime.getRuntime().exec("python C:/Users/Administrator/Desktop/日本自动填表/syste.py");
+			//            process.waitFor();
+			InputStreamReader ir = new InputStreamReader(process.getInputStream());
+			LineNumberReader input = new LineNumberReader(ir);
+			result = input.readLine();
+			input.close();
+			ir.close();
+			//            process.waitFor();
+		} catch (IOException e) {
+			System.out.println("调用python脚本并读取结果时出错：" + e.getMessage());
+		}
+		System.out.println(result);*/
 
 		//查询发招宝中、提交中、变更中、取消中的订单,注意作废的订单不需要
 		Integer[] orderstatus = { JPOrderStatusEnum.READYCOMMING.intKey(), JPOrderStatusEnum.BIANGENGZHONG.intKey(),
@@ -100,21 +82,12 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 			TOrderEntity order = orderList.get(0);
 
 			System.out.println("发现疑似有问题的订单，订单号为:" + order.getOrderNum());
-
-			//先查询缓存，如果缓存中有，说明已经发过短信，就不要再发了
-			//String string = redisDao.get("autofillJP" + String.valueOf(order.getId()));
-			//System.out.println("查询redis缓存内容：" + string);
-			//缓存中有，暂不处理
-			/*if (!Util.isEmpty(string)) {
-				System.out.println("订单号为" + order.getOrderNum() + "的订单已经发送过短信了");
-			} else {*/
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class,
 					Cnd.where("orderId", "=", order.getId().longValue()));
 			Date zhaobaotime = orderjp.getZhaobaotime();
 			if (Util.isEmpty(zhaobaotime)) {
 				//没有发招宝时间说明点发招宝的时候发生错误，暂不处理
 				System.out.println("没有发招宝时间，可能是测试数据吧~~~");
-
 			} else {
 				//相差几分钟
 				long differMin = getDatePoor(new Date(), zhaobaotime);

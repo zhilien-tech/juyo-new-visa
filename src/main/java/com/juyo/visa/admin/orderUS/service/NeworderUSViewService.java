@@ -1217,7 +1217,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		workinfo.setPosition(form.getPosition());
 
-		workinfo.setWorkstartdateen(form.getWorkstartdateen());
+		workinfo.setWorkstartdateen(form.getWorkstartdate());
 		workinfo.setSalaryen(form.getSalary());
 		workinfo.setIssecondarylevelen(form.getIssecondarylevel());
 		workinfo.setIsemployeden(form.getIsemployed());
@@ -1688,7 +1688,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		updateGousinfo(form);
 
 		//美国驾照
-		updateDriverinfo(form);
+		//updateDriverinfo(form);
 
 		//是否有出境记录
 		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
@@ -1742,6 +1742,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		Integer staffid = form.getStaffid();
 		TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		//美国驾照信息
+		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
 		if (form.getHasbeeninus() == 1) {//去过美国，则添加或者修改
 			if (Util.isEmpty(gousinfo)) {
 				gousinfo = new TAppStaffGousinfoEntity();
@@ -1751,15 +1754,39 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			if (!Util.isEmpty(form.getArrivedate())) {
 				gousinfo.setArrivedate(form.getArrivedate());
 				gousinfo.setArrivedateen(form.getArrivedate());
+			} else {
+				gousinfo.setArrivedate(null);
+				gousinfo.setArrivedateen(null);
 			}
 			gousinfo.setDateunit(form.getDateunit());
 			gousinfo.setDateuniten(form.getDateunit());
 			gousinfo.setStaydays(form.getStaydays());
 			gousinfo.setStaydaysen(form.getStaydays());
 			dbDao.update(gousinfo);
+
+			if (form.getHasdriverlicense() == 1) {//有美国驾照，添加或者修改
+				if (Util.isEmpty(driverinfo)) {
+					driverinfo = new TAppStaffDriverinfoEntity();
+					driverinfo.setStaffid(staffid);
+					dbDao.insert(driverinfo);
+				}
+				driverinfo.setDriverlicensenumber(form.getDriverlicensenumber());
+				driverinfo.setWitchstateofdriver(form.getWitchstateofdriver());
+				driverinfo.setDriverlicensenumberen(form.getDriverlicensenumber());
+				driverinfo.setWitchstateofdriveren(form.getWitchstateofdriver());
+				dbDao.update(driverinfo);
+			} else {
+				if (!Util.isEmpty(driverinfo)) {
+					dbDao.delete(driverinfo);
+				}
+			}
+
 		} else {
 			if (!Util.isEmpty(gousinfo)) {
 				dbDao.delete(gousinfo);
+			}
+			if (!Util.isEmpty(driverinfo)) {
+				dbDao.delete(driverinfo);
 			}
 		}
 		return null;
@@ -1811,14 +1838,27 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid));
 		tripinfo.setCostpayer(form.getCostpayer());
 		tripinfo.setHasbeeninus(form.getHasbeeninus());
-		tripinfo.setHasdriverlicense(form.getHasdriverlicense());
+
+		if (form.getHasbeeninus() == 2) {
+			tripinfo.setHasdriverlicense(2);
+			tripinfo.setHasdriverlicenseen(2);
+		} else {
+			tripinfo.setHasdriverlicense(form.getHasdriverlicense());
+			tripinfo.setHasdriverlicenseen(form.getHasdriverlicense());
+
+		}
+
 		tripinfo.setIsissuedvisa(form.getIsissuedvisa());
 		if (form.getIsissuedvisa() == 1) {
 			tripinfo.setIssueddate(form.getIssueddate());
+			tripinfo.setIssueddateen(form.getIssueddate());
 			tripinfo.setVisanumber(form.getVisanumber());
+			tripinfo.setVisanumberen(form.getVisanumber());
 		} else {
 			tripinfo.setIssueddate(null);
+			tripinfo.setIssueddateen(null);
 			tripinfo.setVisanumber("");
+			tripinfo.setVisanumberen("");
 		}
 
 		if (form.getIsrefused() == 1) {
@@ -1883,7 +1923,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//英文
 		tripinfo.setCostpayeren(form.getCostpayer());
 		tripinfo.setHasbeeninusen(form.getHasbeeninus());
-		tripinfo.setHasdriverlicenseen(form.getHasdriverlicense());
+		//tripinfo.setHasdriverlicenseen(form.getHasdriverlicense());
 		tripinfo.setIsissuedvisaen(form.getIsissuedvisa());
 		tripinfo.setIsapplyingsametypevisaen(form.getIsapplyingsametypevisa());
 		tripinfo.setIstenprinteden(form.getIstenprinted());
