@@ -478,6 +478,17 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 				}
 				return null;
 			}
+			if (errorMsg.contains("applicant_count")) {
+				try {
+					sendSMS(orderinfo.getOrderNum(), "人数出错了!!!");
+				} catch (IOException e) {
+
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+
+				}
+				return null;
+			}
 
 		}
 		//订单号为-1时，errorMsg为订单号，依此可查询出对应的order和orderjp

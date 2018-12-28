@@ -36,6 +36,7 @@ import com.juyo.visa.admin.mobile.form.FamilyinfoUSForm;
 import com.juyo.visa.admin.mobile.form.PassportinfoUSDateForm;
 import com.juyo.visa.admin.mobile.form.PassportinfoUSForm;
 import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
+import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSDateForm;
 import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
 import com.juyo.visa.admin.order.form.RecognitionForm;
 import com.juyo.visa.common.baidu.BaidutranslateEntity;
@@ -414,73 +415,73 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 
 		System.out.println("基本信息回显的staffid:" + staffid);
 
-		/*String openid = redisDao.get(encode);
+		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
-		} else {*/
-		Map<String, Object> result = Maps.newHashMap();
-
-		String sqlStr = sqlManager.get("orderusmobile_getbasic");
-		Sql basicsql = Sqls.create(sqlStr);
-		basicsql.setParam("staffid", staffid);
-		Record basic = dbDao.fetch(basicsql);
-		System.out.println("basic:" + basic);
-
-		//性别处理
-		String sex = basic.getString("sex");
-		if (Util.isEmpty(sex)) {
-			basic.set("sex", "男");
-		}
-
-		SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-		//日期渲染，如果为空，给空字符串
-		if (!Util.isEmpty(basic.get("birthday"))) {
-			String birthday = format.format(basic.get("birthday"));
-			basic.put("birthday", birthday);
 		} else {
-			basic.put("birthday", "");
-		}
-		if (!Util.isEmpty(basic.get("marrieddate"))) {
-			basic.put("marrieddate", format.format(basic.get("marrieddate")));
-		} else {
-			basic.put("marrieddate", "");
-		}
-		if (!Util.isEmpty(basic.get("divorcedate"))) {
-			basic.put("divorcedate", format.format(basic.get("divorcedate")));
-		} else {
-			basic.put("divorcedate", "");
-		}
+			Map<String, Object> result = Maps.newHashMap();
 
-		/*TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
-		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		BasicinfoUSDateForm resultbasicinfo = new BasicinfoUSDateForm();
+			String sqlStr = sqlManager.get("orderusmobile_getbasic");
+			Sql basicsql = Sqls.create(sqlStr);
+			basicsql.setParam("staffid", staffid);
+			Record basic = dbDao.fetch(basicsql);
+			System.out.println("basic:" + basic);
 
-		BasicinfoUSDateForm basic = removeDataToNewEntity(basicinfo, resultbasicinfo, familyinfo);*/
-
-		//婚姻状况处理
-		/*if (!Util.isEmpty(basic.getMarrystatus())) {
-			Integer marrystatus = basic.getMarrystatus();
-			for (MarryStatusEnum marry : MarryStatusEnum.values()) {
-				if (marrystatus == marry.intKey()) {
-					result.put("marrystatus", marry.value());
-				}
+			//性别处理
+			String sex = basic.getString("sex");
+			if (Util.isEmpty(sex)) {
+				basic.set("sex", "男");
 			}
-		}*/
-		//基本信息
-		result.put("basic", basic);
-		//人员id
-		result.put("staffid", staffid);
-		//登录标记encode
-		result.put("encode", encode);
-		//婚姻状况枚举
-		result.put("marrystatusenum", EnumUtil.enum2(MarryStatusEnum.class));
-		System.out.println("基本信息回显result:" + result);
-		long last = System.currentTimeMillis();
-		System.out.println("基本信息回显所用时间:" + (last - start) + "ms");
 
-		return JuYouResult.ok(result);
-		//}
+			SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+			//日期渲染，如果为空，给空字符串
+			if (!Util.isEmpty(basic.get("birthday"))) {
+				String birthday = format.format(basic.get("birthday"));
+				basic.put("birthday", birthday);
+			} else {
+				basic.put("birthday", "");
+			}
+			if (!Util.isEmpty(basic.get("marrieddate"))) {
+				basic.put("marrieddate", format.format(basic.get("marrieddate")));
+			} else {
+				basic.put("marrieddate", "");
+			}
+			if (!Util.isEmpty(basic.get("divorcedate"))) {
+				basic.put("divorcedate", format.format(basic.get("divorcedate")));
+			} else {
+				basic.put("divorcedate", "");
+			}
+
+			/*TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+			TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			BasicinfoUSDateForm resultbasicinfo = new BasicinfoUSDateForm();
+
+			BasicinfoUSDateForm basic = removeDataToNewEntity(basicinfo, resultbasicinfo, familyinfo);*/
+
+			//婚姻状况处理
+			/*if (!Util.isEmpty(basic.getMarrystatus())) {
+				Integer marrystatus = basic.getMarrystatus();
+				for (MarryStatusEnum marry : MarryStatusEnum.values()) {
+					if (marrystatus == marry.intKey()) {
+						result.put("marrystatus", marry.value());
+					}
+				}
+			}*/
+			//基本信息
+			result.put("basic", basic);
+			//人员id
+			result.put("staffid", staffid);
+			//登录标记encode
+			result.put("encode", encode);
+			//婚姻状况枚举
+			result.put("marrystatusenum", EnumUtil.enum2(MarryStatusEnum.class));
+			System.out.println("基本信息回显result:" + result);
+			long last = System.currentTimeMillis();
+			System.out.println("基本信息回显所用时间:" + (last - start) + "ms");
+
+			return JuYouResult.ok(result);
+		}
 
 	}
 
@@ -589,30 +590,30 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	public Object saveBasicinfo(BasicinfoUSForm form) {
 		System.out.println("基本信息保存form:" + form);
 
-		/*String encode = form.getEncode();
+		String encode = form.getEncode();
 		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
-		} else {*/
-		//基本信息
-		updateBasicinfo(form);
-
-		//护照信息
-		TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
-				Cnd.where("staffid", "=", form.getStaffid().longValue()));
-		passportinfo.setFirstname(form.getFirstname());
-		passportinfo.setFirstnameen(form.getFirstnameen());
-		passportinfo.setLastname(form.getLastname());
-		passportinfo.setLastnameen(form.getLastnameen());
-		passportinfo.setSex(form.getSex());
-		if (Util.eq("女", form.getSex())) {
-			passportinfo.setSexen("F");
 		} else {
-			passportinfo.setSexen("M");
+			//基本信息
+			updateBasicinfo(form);
+
+			//护照信息
+			TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
+					Cnd.where("staffid", "=", form.getStaffid().longValue()));
+			passportinfo.setFirstname(form.getFirstname());
+			passportinfo.setFirstnameen(form.getFirstnameen());
+			passportinfo.setLastname(form.getLastname());
+			passportinfo.setLastnameen(form.getLastnameen());
+			passportinfo.setSex(form.getSex());
+			if (Util.eq("女", form.getSex())) {
+				passportinfo.setSexen("F");
+			} else {
+				passportinfo.setSexen("M");
+			}
+			passportinfo.setBirthday(form.getBirthday());
+			dbDao.update(passportinfo);
 		}
-		passportinfo.setBirthday(form.getBirthday());
-		dbDao.update(passportinfo);
-		//}
 		return JuYouResult.ok();
 	}
 
@@ -800,68 +801,68 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 
 		long first = System.currentTimeMillis();
 		System.out.println("护照信息回显的staffid:" + staffid);
-		/*String openid = redisDao.get(encode);
+		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
-		} else {*/
-		Map<String, Object> result = Maps.newHashMap();
-		SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-
-		/*String sqlStr = sqlManager.get("orderusmobile_getpassport");
-		Sql passportsql = Sqls.create(sqlStr);
-		passportsql.setParam("staffid", staffid);
-		Record passportinfo = dbDao.fetch(passportsql);
-
-		//性别处理
-		String sex = passportinfo.getString("sex");
-		if (Util.isEmpty(sex)) {
-			passportinfo.put("sex", "男");
-		}
-		//日期相关处理
-		if (!Util.isEmpty(passportinfo.get("issueddate"))) {
-			passportinfo.put("issueddate", format.format(passportinfo.get("issueddate")));
 		} else {
-			passportinfo.put("issueddate", "");
+			Map<String, Object> result = Maps.newHashMap();
+			SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+
+			/*String sqlStr = sqlManager.get("orderusmobile_getpassport");
+			Sql passportsql = Sqls.create(sqlStr);
+			passportsql.setParam("staffid", staffid);
+			Record passportinfo = dbDao.fetch(passportsql);
+
+			//性别处理
+			String sex = passportinfo.getString("sex");
+			if (Util.isEmpty(sex)) {
+				passportinfo.put("sex", "男");
+			}
+			//日期相关处理
+			if (!Util.isEmpty(passportinfo.get("issueddate"))) {
+				passportinfo.put("issueddate", format.format(passportinfo.get("issueddate")));
+			} else {
+				passportinfo.put("issueddate", "");
+			}
+			if (!Util.isEmpty(passportinfo.get("validenddate"))) {
+				passportinfo.put("validenddate", format.format(passportinfo.get("validenddate")));
+			} else {
+				passportinfo.put("validenddate", "");
+			}*/
+
+			TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			Map<String, String> passportinfo = MapUtil.obj2Map(passport);
+
+			//性别处理
+			String sex = passport.getSex();
+			if (Util.isEmpty(sex)) {
+				passportinfo.put("sex", "男");
+			}
+			//日期相关处理
+
+			if (!Util.isEmpty(passport.getIssueddate())) {
+				passportinfo.put("issueddate", format.format(passport.getIssueddate()));
+			} else {
+				passportinfo.put("issueddate", "");
+			}
+			if (!Util.isEmpty(passport.getValidenddate())) {
+				passportinfo.put("validenddate", format.format(passport.getValidenddate()));
+			} else {
+				passportinfo.put("validenddate", "");
+			}
+
+			//PassportinfoUSDateForm passportMap = new PassportinfoUSDateForm();
+
+			//PassportinfoUSDateForm passportinfo = removeDataToNewPassport(passport, passportMap);
+
+			result.put("passport", passportinfo);
+			System.out.println("护照信息回显result:" + result);
+
+			long last = System.currentTimeMillis();
+			System.out.println("护照信息回显所用时间:" + (last - first) + "ms");
+			return JuYouResult.ok(result);
 		}
-		if (!Util.isEmpty(passportinfo.get("validenddate"))) {
-			passportinfo.put("validenddate", format.format(passportinfo.get("validenddate")));
-		} else {
-			passportinfo.put("validenddate", "");
-		}*/
-
-		TAppStaffPassportEntity passport = dbDao.fetch(TAppStaffPassportEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		Map<String, String> passportinfo = MapUtil.obj2Map(passport);
-
-		//性别处理
-		String sex = passport.getSex();
-		if (Util.isEmpty(sex)) {
-			passportinfo.put("sex", "男");
-		}
-		//日期相关处理
-
-		if (!Util.isEmpty(passport.getIssueddate())) {
-			passportinfo.put("issueddate", format.format(passport.getIssueddate()));
-		} else {
-			passportinfo.put("issueddate", "");
-		}
-		if (!Util.isEmpty(passport.getValidenddate())) {
-			passportinfo.put("validenddate", format.format(passport.getValidenddate()));
-		} else {
-			passportinfo.put("validenddate", "");
-		}
-
-		//PassportinfoUSDateForm passportMap = new PassportinfoUSDateForm();
-
-		//PassportinfoUSDateForm passportinfo = removeDataToNewPassport(passport, passportMap);
-
-		result.put("passport", passportinfo);
-		System.out.println("护照信息回显result:" + result);
-
-		long last = System.currentTimeMillis();
-		System.out.println("护照信息回显所用时间:" + (last - first) + "ms");
-		return JuYouResult.ok(result);
-		//}
 	}
 
 	public PassportinfoUSDateForm removeDataToNewPassport(TAppStaffPassportEntity passport,
@@ -1010,78 +1011,78 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	public Object familyinfo(String encode, int staffid) {
 		long first = System.currentTimeMillis();
 		System.out.println("家庭信息回显的staffid:" + staffid);
-		/*String openid = redisDao.get(encode);
+		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
-		} else {*/
-		Map<String, Object> result = Maps.newHashMap();
-		SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-
-		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
-				Cnd.where("staffid", "=", staffid));
-
-		//FamilyinfoUSDateForm family = new FamilyinfoUSDateForm();
-		//FamilyinfoUSDateForm familyinfoMap = removeDataToNewFamilyinfo(familyinfo, family);
-
-		Map<String, String> familyinfoMap = MapUtil.obj2Map(familyinfo);
-
-		//日期格式处理
-		if (!Util.isEmpty(familyinfo.getSpousebirthday())) {
-			familyinfoMap.put("spousebirthday", format.format(familyinfo.getSpousebirthday()));
 		} else {
-			familyinfoMap.put("spousebirthday", "");
+			Map<String, Object> result = Maps.newHashMap();
+			SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+
+			TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
+					Cnd.where("staffid", "=", staffid));
+
+			//FamilyinfoUSDateForm family = new FamilyinfoUSDateForm();
+			//FamilyinfoUSDateForm familyinfoMap = removeDataToNewFamilyinfo(familyinfo, family);
+
+			Map<String, String> familyinfoMap = MapUtil.obj2Map(familyinfo);
+
+			//日期格式处理
+			if (!Util.isEmpty(familyinfo.getSpousebirthday())) {
+				familyinfoMap.put("spousebirthday", format.format(familyinfo.getSpousebirthday()));
+			} else {
+				familyinfoMap.put("spousebirthday", "");
+			}
+			if (!Util.isEmpty(familyinfo.getFatherbirthday())) {
+				familyinfoMap.put("fatherbirthday", format.format(familyinfo.getFatherbirthday()));
+			} else {
+				familyinfoMap.put("fatherbirthday", "");
+			}
+			if (!Util.isEmpty(familyinfo.getMotherbirthday())) {
+				familyinfoMap.put("motherbirthday", format.format(familyinfo.getMotherbirthday()));
+			} else {
+				familyinfoMap.put("motherbirthday", "");
+			}
+			result.put("family", familyinfoMap);
+
+			TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+			if (Util.isEmpty(basicinfo.getMarrystatus())) {
+				result.put("marrystatus", 4);
+			} else {
+				result.put("marrystatus", basicinfo.getMarrystatus());
+			}
+
+			TAppStaffImmediaterelativesEntity immediaterelatives = dbDao.fetch(TAppStaffImmediaterelativesEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			if (!Util.isEmpty(immediaterelatives)) {
+				result.put("immediaterelatives", immediaterelatives);
+			} else {
+				TAppStaffImmediaterelativesEntity emptyimmediaterelatives = new TAppStaffImmediaterelativesEntity();
+				result.put("immediaterelatives", emptyimmediaterelatives);
+			}
+
+			long second = System.currentTimeMillis();
+			//System.out.println("只有家庭信息所用时间:" + (second - first) + "ms");
+
+			//国家下拉
+			List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
+			result.put("gocountryfivelist", gocountryFiveList);
+			//城市下拉
+			String sqlStr = sqlManager.get("orderUS_mobile_getProvince");
+			Sql provincesql = Sqls.create(sqlStr);
+			List<Record> provinceList = dbDao.query(provincesql, null, null);
+			result.put("provincelist", provinceList);
+
+			long third = System.currentTimeMillis();
+			System.out.println("下拉所用时间:" + (third - second) + "ms");
+
+			result.put("spousecontactaddressenum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
+			result.put("familyinfoenum", EnumUtil.enum2(VisaFamilyInfoEnum.class));
+			result.put("immediaterelationshipenum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));
+			System.out.println("家庭信息回显result:" + result);
+			long last = System.currentTimeMillis();
+			System.out.println("家庭信息回显所用时间:" + (last - first) + "ms");
+			return JuYouResult.ok(result);
 		}
-		if (!Util.isEmpty(familyinfo.getFatherbirthday())) {
-			familyinfoMap.put("fatherbirthday", format.format(familyinfo.getFatherbirthday()));
-		} else {
-			familyinfoMap.put("fatherbirthday", "");
-		}
-		if (!Util.isEmpty(familyinfo.getMotherbirthday())) {
-			familyinfoMap.put("motherbirthday", format.format(familyinfo.getMotherbirthday()));
-		} else {
-			familyinfoMap.put("motherbirthday", "");
-		}
-		result.put("family", familyinfoMap);
-
-		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
-		if (Util.isEmpty(basicinfo.getMarrystatus())) {
-			result.put("marrystatus", 4);
-		} else {
-			result.put("marrystatus", basicinfo.getMarrystatus());
-		}
-
-		TAppStaffImmediaterelativesEntity immediaterelatives = dbDao.fetch(TAppStaffImmediaterelativesEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		if (!Util.isEmpty(immediaterelatives)) {
-			result.put("immediaterelatives", immediaterelatives);
-		} else {
-			TAppStaffImmediaterelativesEntity emptyimmediaterelatives = new TAppStaffImmediaterelativesEntity();
-			result.put("immediaterelatives", emptyimmediaterelatives);
-		}
-
-		long second = System.currentTimeMillis();
-		//System.out.println("只有家庭信息所用时间:" + (second - first) + "ms");
-
-		//国家下拉
-		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
-		result.put("gocountryfivelist", gocountryFiveList);
-		//城市下拉
-		String sqlStr = sqlManager.get("orderUS_mobile_getProvince");
-		Sql provincesql = Sqls.create(sqlStr);
-		List<Record> provinceList = dbDao.query(provincesql, null, null);
-		result.put("provincelist", provinceList);
-
-		long third = System.currentTimeMillis();
-		System.out.println("下拉所用时间:" + (third - second) + "ms");
-
-		result.put("spousecontactaddressenum", EnumUtil.enum2(VisaSpouseContactAddressEnum.class));
-		result.put("familyinfoenum", EnumUtil.enum2(VisaFamilyInfoEnum.class));
-		result.put("immediaterelationshipenum", EnumUtil.enum2(ImmediateFamilyMembersRelationshipEnum.class));
-		System.out.println("家庭信息回显result:" + result);
-		long last = System.currentTimeMillis();
-		System.out.println("家庭信息回显所用时间:" + (last - first) + "ms");
-		return JuYouResult.ok(result);
-		//}
 	}
 
 	public FamilyinfoUSDateForm removeDataToNewFamilyinfo(TAppStaffFamilyinfoEntity family,
@@ -1367,136 +1368,153 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 */
 	public Object workandeducation(String encode, int staffid) {
 		System.out.println("工作教育信息回显的staffid:" + staffid);
-		/*String openid = redisDao.get(encode);
+		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
-		} else {*/
-		Map<String, Object> result = Maps.newHashMap();
-		SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-		//职业信息
-		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		Map<String, String> workinfoMap = MapUtil.obj2Map(workinfo);
-		if (!Util.isEmpty(workinfo.getWorkstartdate())) {
-			workinfoMap.put("workstartdate", format.format(workinfo.getWorkstartdate()));
 		} else {
-			workinfoMap.put("workstartdate", "");
-		}
-
-		result.put("workinfo", workinfoMap);
-
-		//上份工作信息
-		TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
-				Cnd.where("staffid", "=", staffid));
-
-		if (Util.isEmpty(beforework)) {
-			TAppStaffBeforeworkEntity newbeforework = new TAppStaffBeforeworkEntity();
-			result.put("beforework", newbeforework);
-		} else {
-			Map<String, String> beforeworkMap = MapUtil.obj2Map(beforework);
-
-			if (!Util.isEmpty(beforework.getEmploystartdate())) {
-				beforeworkMap.put("employstartdate", format.format(beforework.getEmploystartdate()));
+			Map<String, Object> result = Maps.newHashMap();
+			SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+			//职业信息
+			TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			Map<String, String> workinfoMap = MapUtil.obj2Map(workinfo);
+			if (!Util.isEmpty(workinfo.getWorkstartdate())) {
+				workinfoMap.put("workstartdate", format.format(workinfo.getWorkstartdate()));
 			} else {
-				beforeworkMap.put("employstartdate", "");
+				workinfoMap.put("workstartdate", "");
 			}
 
-			if (!Util.isEmpty(beforework.getEmployenddate())) {
-				beforeworkMap.put("employenddate", format.format(beforework.getEmployenddate()));
+			result.put("workinfo", workinfoMap);
+
+			//上份工作信息
+			TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
+					Cnd.where("staffid", "=", staffid));
+
+			if (Util.isEmpty(beforework)) {
+				TAppStaffBeforeworkEntity newbeforework = new TAppStaffBeforeworkEntity();
+				result.put("beforework", newbeforework);
 			} else {
-				beforeworkMap.put("employenddate", "");
+				Map<String, String> beforeworkMap = MapUtil.obj2Map(beforework);
+
+				if (!Util.isEmpty(beforework.getEmploystartdate())) {
+					beforeworkMap.put("employstartdate", format.format(beforework.getEmploystartdate()));
+				} else {
+					beforeworkMap.put("employstartdate", "");
+				}
+
+				if (!Util.isEmpty(beforework.getEmployenddate())) {
+					beforeworkMap.put("employenddate", format.format(beforework.getEmployenddate()));
+				} else {
+					beforeworkMap.put("employenddate", "");
+				}
+
+				result.put("beforework", beforeworkMap);
 			}
 
-			result.put("beforework", beforeworkMap);
-		}
+			//教育信息
 
-		//教育信息
+			TAppStaffBeforeeducationEntity beforeeducate = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
+					Cnd.where("staffid", "=", staffid));
 
-		TAppStaffBeforeeducationEntity beforeeducate = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
-				Cnd.where("staffid", "=", staffid));
-
-		if (Util.isEmpty(beforeeducate)) {
-			TAppStaffBeforeeducationEntity newbeforeeducate = new TAppStaffBeforeeducationEntity();
-			result.put("beforeeducate", newbeforeeducate);
-		} else {
-			Map<String, String> beforeeducateMap = MapUtil.obj2Map(beforeeducate);
-
-			if (!Util.isEmpty(beforeeducate.getCoursestartdate())) {
-				beforeeducateMap.put("coursestartdate", format.format(beforeeducate.getCoursestartdate()));
+			if (Util.isEmpty(beforeeducate)) {
+				TAppStaffBeforeeducationEntity newbeforeeducate = new TAppStaffBeforeeducationEntity();
+				result.put("beforeeducate", newbeforeeducate);
 			} else {
-				beforeeducateMap.put("coursestartdate", "");
+				Map<String, String> beforeeducateMap = MapUtil.obj2Map(beforeeducate);
+
+				if (!Util.isEmpty(beforeeducate.getCoursestartdate())) {
+					beforeeducateMap.put("coursestartdate", format.format(beforeeducate.getCoursestartdate()));
+				} else {
+					beforeeducateMap.put("coursestartdate", "");
+				}
+				if (!Util.isEmpty(beforeeducate.getCourseenddate())) {
+					beforeeducateMap.put("courseenddate", format.format(beforeeducate.getCourseenddate()));
+				} else {
+					beforeeducateMap.put("courseenddate", "");
+				}
+				result.put("beforeeducate", beforeeducateMap);
 			}
-			if (!Util.isEmpty(beforeeducate.getCourseenddate())) {
-				beforeeducateMap.put("courseenddate", format.format(beforeeducate.getCourseenddate()));
-			} else {
-				beforeeducateMap.put("courseenddate", "");
-			}
-			result.put("beforeeducate", beforeeducateMap);
-		}
 
-		/*
-		//职业信息
-		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		result.put("workinfo", workinfo);
-		if (!Util.isEmpty(workinfo.getWorkstartdate())) {
-			result.put("workstartdate", format.format(workinfo.getWorkstartdate()));
-		} else {
-			result.put("workstartdate", "");
-		}
-		 
-		//上份工作信息
-		TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		if (!Util.isEmpty(beforework)) {
-			result.put("beforework", beforework);
-			if (!Util.isEmpty(beforework.getEmploystartdate())) {
-				result.put("employstartdate", format.format(beforework.getEmploystartdate()));
+			/*//职业信息
+			TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
+					Cnd.where("staffid", "=", staffid));
+
+			WorkandeducateinfoUSDateForm work = new WorkandeducateinfoUSDateForm();
+			WorkandeducateinfoUSDateForm workinfoMap = removeDataToNewWorkandeducate(workinfo, work);
+			result.put("workinfo", workinfoMap);*/
+
+			/*
+			//职业信息
+			TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			result.put("workinfo", workinfo);
+			if (!Util.isEmpty(workinfo.getWorkstartdate())) {
+				result.put("workstartdate", format.format(workinfo.getWorkstartdate()));
 			} else {
+				result.put("workstartdate", "");
+			}
+			 
+			//上份工作信息
+			TAppStaffBeforeworkEntity beforework = dbDao.fetch(TAppStaffBeforeworkEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			if (!Util.isEmpty(beforework)) {
+				result.put("beforework", beforework);
+				if (!Util.isEmpty(beforework.getEmploystartdate())) {
+					result.put("employstartdate", format.format(beforework.getEmploystartdate()));
+				} else {
+					result.put("employstartdate", "");
+				}
+				if (!Util.isEmpty(beforework.getEmployenddate())) {
+					result.put("employenddate", format.format(beforework.getEmployenddate()));
+				} else {
+					result.put("employenddate", "");
+				}
+			} else {
+				TAppStaffBeforeworkEntity newbeforework = new TAppStaffBeforeworkEntity();
+				result.put("beforework", newbeforework);
 				result.put("employstartdate", "");
-			}
-			if (!Util.isEmpty(beforework.getEmployenddate())) {
-				result.put("employenddate", format.format(beforework.getEmployenddate()));
-			} else {
 				result.put("employenddate", "");
 			}
-		} else {
-			TAppStaffBeforeworkEntity newbeforework = new TAppStaffBeforeworkEntity();
-			result.put("beforework", newbeforework);
-			result.put("employstartdate", "");
-			result.put("employenddate", "");
-		}
-		//教育信息
-		TAppStaffBeforeeducationEntity beforeeducate = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		if (!Util.isEmpty(beforeeducate)) {
-			result.put("beforeeducate", beforeeducate);
-			if (!Util.isEmpty(beforeeducate.getCoursestartdate())) {
-				result.put("coursestartdate", format.format(beforeeducate.getCoursestartdate()));
+			//教育信息
+			TAppStaffBeforeeducationEntity beforeeducate = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			if (!Util.isEmpty(beforeeducate)) {
+				result.put("beforeeducate", beforeeducate);
+				if (!Util.isEmpty(beforeeducate.getCoursestartdate())) {
+					result.put("coursestartdate", format.format(beforeeducate.getCoursestartdate()));
+				} else {
+					result.put("coursestartdate", "");
+				}
+				if (!Util.isEmpty(beforeeducate.getCourseenddate())) {
+					result.put("courseenddate", format.format(beforeeducate.getCourseenddate()));
+				} else {
+					result.put("courseenddate", "");
+				}
 			} else {
+				TAppStaffBeforeeducationEntity newbeforeeducate = new TAppStaffBeforeeducationEntity();
+				result.put("beforeeducate", newbeforeeducate);
 				result.put("coursestartdate", "");
-			}
-			if (!Util.isEmpty(beforeeducate.getCourseenddate())) {
-				result.put("courseenddate", format.format(beforeeducate.getCourseenddate()));
-			} else {
 				result.put("courseenddate", "");
-			}
-		} else {
-			TAppStaffBeforeeducationEntity newbeforeeducate = new TAppStaffBeforeeducationEntity();
-			result.put("beforeeducate", newbeforeeducate);
-			result.put("coursestartdate", "");
-			result.put("courseenddate", "");
-		}*/
+			}*/
 
-		//国家下拉
-		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
-		result.put("gocountryfivelist", gocountryFiveList);
+			//国家下拉
+			List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
+			result.put("gocountryfivelist", gocountryFiveList);
 
-		result.put("careersenum", EnumUtil.enum2(VisaCareersEnum.class));
-		result.put("highesteducationenum", EnumUtil.enum2(VisaHighestEducationEnum.class));
-		System.out.println("职业与教育信息回显result:" + result);
-		return JuYouResult.ok(result);
-		//}
+			result.put("careersenum", EnumUtil.enum2(VisaCareersEnum.class));
+			result.put("highesteducationenum", EnumUtil.enum2(VisaHighestEducationEnum.class));
+			System.out.println("职业与教育信息回显result:" + result);
+			return JuYouResult.ok(result);
+		}
+	}
+
+	public WorkandeducateinfoUSDateForm removeDataToNewWorkandeducate(TAppStaffWorkEducationTrainingEntity workinfo,
+			WorkandeducateinfoUSDateForm workinfoMap) {
+
+		//workinfoMap.setAddress(workinfo.getAddress());
+		//workinfoMap.setAddressen(workinfo.getAddressen());
+
+		return workinfoMap;
 	}
 
 	/**
@@ -1530,8 +1548,8 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				}
 			}
 			//教育信息
-			updateBeforeeducation(form);
-			/*if (Util.eq(1, form.getIssecondarylevel())) {
+			//updateBeforeeducation(form);
+			if (Util.eq(1, form.getIssecondarylevel())) {
 				updateBeforeeducation(form);
 			} else {
 				TAppStaffBeforeeducationEntity beforeeducation = dbDao.fetch(TAppStaffBeforeeducationEntity.class,
@@ -1539,7 +1557,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				if (!Util.isEmpty(beforeeducation)) {
 					dbDao.delete(beforeeducation);
 				}
-			}*/
+			}
 
 			return JuYouResult.ok();
 		}
@@ -1873,101 +1891,101 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 	 */
 	public Object travelinfo(String encode, int staffid) {
 		System.out.println("旅行信息回显的staffid:" + staffid);
-		/*String openid = redisDao.get(encode);
+		String openid = redisDao.get(encode);
 		if (Util.isEmpty(openid)) {
 			return -1;
-		} else {*/
-		Map<String, Object> result = Maps.newHashMap();
-		SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
-		//同行人信息
-		TAppStaffTravelcompanionEntity travelcompanion = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		result.put("istravelwithother", travelcompanion.getIstravelwithother());
-		List<TAppStaffCompanioninfoEntity> companioninfoList = dbDao.query(TAppStaffCompanioninfoEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
-		result.put("companioninfoList", companioninfoList);
-		//以前的美国旅游信息
-
-		TAppStaffPrevioustripinfoEntity previoustripinfo = dbDao.fetch(TAppStaffPrevioustripinfoEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		Map<String, String> previoustripinfoMap = MapUtil.obj2Map(previoustripinfo);
-
-		if (Util.isEmpty(previoustripinfo.getCostpayer())) {
-			previoustripinfoMap.put("costpayer", "1");
-		}
-		if (!Util.isEmpty(previoustripinfo.getIssueddate())) {
-			previoustripinfoMap.put("issueddate", format.format(previoustripinfo.getIssueddate()));
 		} else {
-			previoustripinfoMap.put("issueddate", "");
-		}
-		result.put("previoustripinfo", previoustripinfoMap);
+			Map<String, Object> result = Maps.newHashMap();
+			SimpleDateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+			//同行人信息
+			TAppStaffTravelcompanionEntity travelcompanion = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			result.put("istravelwithother", travelcompanion.getIstravelwithother());
+			List<TAppStaffCompanioninfoEntity> companioninfoList = dbDao.query(TAppStaffCompanioninfoEntity.class,
+					Cnd.where("staffid", "=", staffid), null);
+			result.put("companioninfoList", companioninfoList);
+			//以前的美国旅游信息
 
-		/*TAppStaffPrevioustripinfoEntity previoustripinfo = dbDao.fetch(TAppStaffPrevioustripinfoEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		if (Util.isEmpty(previoustripinfo.getCostpayer())) {
-			previoustripinfo.setCostpayer(1);
-		}
+			TAppStaffPrevioustripinfoEntity previoustripinfo = dbDao.fetch(TAppStaffPrevioustripinfoEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			Map<String, String> previoustripinfoMap = MapUtil.obj2Map(previoustripinfo);
 
-		result.put("previoustripinfo", previoustripinfo);
-		if (!Util.isEmpty(previoustripinfo.getIssueddate())) {
-			result.put("issueddate", format.format(previoustripinfo.getIssueddate()));
-		} else {
-			result.put("issueddate", "");
-		}*/
-		//去过美国信息
-		ArrayList<Map<String, String>> resultList = new ArrayList<>();
-		List<TAppStaffGousinfoEntity> gousinfoList = dbDao.query(TAppStaffGousinfoEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
-		for (TAppStaffGousinfoEntity gousinfo : gousinfoList) {
-			Map<String, String> gousinfoMap = MapUtil.obj2Map(gousinfo);
-			if (!Util.isEmpty(gousinfo.getArrivedate())) {
-				gousinfoMap.put("arrivedate", format.format(gousinfo.getArrivedate()));
+			if (Util.isEmpty(previoustripinfo.getCostpayer())) {
+				previoustripinfoMap.put("costpayer", "1");
 			}
-			resultList.add(gousinfoMap);
+			if (!Util.isEmpty(previoustripinfo.getIssueddate())) {
+				previoustripinfoMap.put("issueddate", format.format(previoustripinfo.getIssueddate()));
+			} else {
+				previoustripinfoMap.put("issueddate", "");
+			}
+			result.put("previoustripinfo", previoustripinfoMap);
 
+			/*TAppStaffPrevioustripinfoEntity previoustripinfo = dbDao.fetch(TAppStaffPrevioustripinfoEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			if (Util.isEmpty(previoustripinfo.getCostpayer())) {
+				previoustripinfo.setCostpayer(1);
+			}
+
+			result.put("previoustripinfo", previoustripinfo);
+			if (!Util.isEmpty(previoustripinfo.getIssueddate())) {
+				result.put("issueddate", format.format(previoustripinfo.getIssueddate()));
+			} else {
+				result.put("issueddate", "");
+			}*/
+			//去过美国信息
+			ArrayList<Map<String, String>> resultList = new ArrayList<>();
+			List<TAppStaffGousinfoEntity> gousinfoList = dbDao.query(TAppStaffGousinfoEntity.class,
+					Cnd.where("staffid", "=", staffid), null);
+			for (TAppStaffGousinfoEntity gousinfo : gousinfoList) {
+				Map<String, String> gousinfoMap = MapUtil.obj2Map(gousinfo);
+				if (!Util.isEmpty(gousinfo.getArrivedate())) {
+					gousinfoMap.put("arrivedate", format.format(gousinfo.getArrivedate()));
+				}
+				resultList.add(gousinfoMap);
+
+			}
+			result.put("gousinfo", resultList);
+
+			/*TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
+					Cnd.where("staffid", "=", staffid));
+			if (!Util.isEmpty(gousinfo)) {
+				result.put("gousinfo", gousinfo);
+			} else {
+				TAppStaffGousinfoEntity newgousinfo = new TAppStaffGousinfoEntity();
+				result.put("gousinfo", newgousinfo);
+
+			}*/
+
+			//美国的驾照信息
+			TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
+					Cnd.where("staffid", "=", staffid));
+
+			if (!Util.isEmpty(driverinfo)) {
+				result.put("driverinfo", driverinfo);
+			} else {
+				TAppStaffDriverinfoEntity newdriverinfo = new TAppStaffDriverinfoEntity();
+				result.put("driverinfo", newdriverinfo);
+			}
+
+			//是否有出境记录
+			TAppStaffWorkEducationTrainingEntity workeducation = dbDao.fetch(
+					TAppStaffWorkEducationTrainingEntity.class, Cnd.where("staffid", "=", staffid));
+			result.put("istraveledanycountry", workeducation.getIstraveledanycountry());
+			//出境记录
+			List<TAppStaffGocountryEntity> gocountry = dbDao.query(TAppStaffGocountryEntity.class,
+					Cnd.where("staffid", "=", staffid), null);
+			result.put("gocountry", gocountry);
+
+			//国家下拉
+			List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
+			result.put("gocountryfivelist", gocountryFiveList);
+			result.put("timeunitstatusenum", EnumUtil.enum2(NewTimeUnitStatusEnum.class));
+			result.put("usstatesenum", EnumUtil.enum2(VisaUSStatesEnum.class));
+			result.put("emigrationreasonenumenum", EnumUtil.enum2(EmigrationreasonEnum.class));
+			result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
+			System.out.println("旅行信息回显result");
+			return JuYouResult.ok(result);
 		}
-		result.put("gousinfo", resultList);
-
-		/*TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		if (!Util.isEmpty(gousinfo)) {
-			result.put("gousinfo", gousinfo);
-		} else {
-			TAppStaffGousinfoEntity newgousinfo = new TAppStaffGousinfoEntity();
-			result.put("gousinfo", newgousinfo);
-
-		}*/
-
-		//美国的驾照信息
-		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
-				Cnd.where("staffid", "=", staffid));
-
-		if (!Util.isEmpty(driverinfo)) {
-			result.put("driverinfo", driverinfo);
-		} else {
-			TAppStaffDriverinfoEntity newdriverinfo = new TAppStaffDriverinfoEntity();
-			result.put("driverinfo", newdriverinfo);
-		}
-
-		//是否有出境记录
-		TAppStaffWorkEducationTrainingEntity workeducation = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
-				Cnd.where("staffid", "=", staffid));
-		result.put("istraveledanycountry", workeducation.getIstraveledanycountry());
-		//出境记录
-		List<TAppStaffGocountryEntity> gocountry = dbDao.query(TAppStaffGocountryEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
-		result.put("gocountry", gocountry);
-
-		//国家下拉
-		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
-		result.put("gocountryfivelist", gocountryFiveList);
-		result.put("timeunitstatusenum", EnumUtil.enum2(NewTimeUnitStatusEnum.class));
-		result.put("usstatesenum", EnumUtil.enum2(VisaUSStatesEnum.class));
-		result.put("emigrationreasonenumenum", EnumUtil.enum2(EmigrationreasonEnum.class));
-		result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
-		System.out.println("旅行信息回显result");
-		return JuYouResult.ok(result);
-		//}
 	}
 
 	/**
@@ -1997,13 +2015,19 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			dbDao.update(travelcompanion);
 
 			//同行人信息
-			String companioninfoList = form.getCompanioninfoList();
-
 			List<TAppStaffCompanioninfoEntity> companionList_old = dbDao.query(TAppStaffCompanioninfoEntity.class,
 					Cnd.where("staffid", "=", staffid), null);
-			List<TAppStaffCompanioninfoEntity> companionList_New = JsonUtil.fromJsonAsList(
-					TAppStaffCompanioninfoEntity.class, companioninfoList);
-			dbDao.updateRelations(companionList_old, companionList_New);
+			if (form.getIstravelwithother() == 2) {//没有同行人时，需要清掉同行人信息
+				if (!Util.isEmpty(companionList_old)) {
+					dbDao.delete(companionList_old);
+				}
+			} else {
+				String companioninfoList = form.getCompanioninfoList();
+				List<TAppStaffCompanioninfoEntity> companionList_New = JsonUtil.fromJsonAsList(
+						TAppStaffCompanioninfoEntity.class, companioninfoList);
+				dbDao.updateRelations(companionList_old, companionList_New);
+			}
+
 			System.out.println("同行人信息保存完毕");
 
 			//以前的美国旅游信息
@@ -2092,13 +2116,19 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			dbDao.update(workeducation);
 
 			//出境记录
-			String gocountry = form.getGocountry();
-
 			List<TAppStaffGocountryEntity> countryList_old = dbDao.query(TAppStaffGocountryEntity.class,
 					Cnd.where("staffid", "=", staffid), null);
-			List<TAppStaffGocountryEntity> countryList_New = JsonUtil.fromJsonAsList(TAppStaffGocountryEntity.class,
-					gocountry);
-			dbDao.updateRelations(countryList_old, countryList_New);
+			if (form.getIstraveledanycountry() == 2) {
+				if (!Util.isEmpty(countryList_old)) {
+					dbDao.delete(countryList_old);
+				}
+			} else {
+				String gocountry = form.getGocountry();
+				List<TAppStaffGocountryEntity> countryList_New = JsonUtil.fromJsonAsList(
+						TAppStaffGocountryEntity.class, gocountry);
+				dbDao.updateRelations(countryList_old, countryList_New);
+			}
+
 			System.out.println("出境记录信息保存完毕");
 			return JuYouResult.ok();
 		}

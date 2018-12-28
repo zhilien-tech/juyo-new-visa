@@ -968,9 +968,9 @@ $("#newgoarrivedcity").on("select2:select",function(e){
 });
 $("#newgoarrivedcity").on("select2:unselect",function(e){
 	$(this).text('');
-	//$('#newreturndeparturecity').empty();
+	$('#newreturndeparturecity').empty();
 	$('#newgoflightnum').empty();
-	//$('#returntransferflightnum').empty();
+	$('#returntransferflightnum').empty();
 });
 $("#gotransferdeparturecity").on("select2:unselect",function(e){
 	$(this).text('');
@@ -1027,12 +1027,18 @@ $("#gotransferarrivedcity").on("select2:select",function(e){
 	//设置回程抵达城市
 	var thistext = $(this).text();
 	$("#gotransferdeparturecity").html('<option selected="selected" value="'+thisval+'">'+thistext+'</option>');
+	$("#returntransferarrivedcity").html('<option selected="selected" value="'+thisval+'">'+thistext+'</option>');
+	$("#returntransferdeparturecity").html('<option selected="selected" value="'+thisval+'">'+thistext+'</option>');
 });
 $("#gotransferarrivedcity").on("select2:unselect",function(e){
 	$(this).text('');
 	$('#gotransferdeparturecity').empty();
+	$('#returntransferarrivedcity').empty();
+	$('#returntransferdeparturecity').empty();
 	$('#gotransferflightnum').empty();
 	$('#newgoflightnum').empty();
+	$('#returntransferflightnum').empty();
+	$('#newreturnflightnum').empty();
 });
 //去程抵达城市
 $("#goArrivedCity").on("select2:select",function(e){
