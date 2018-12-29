@@ -98,7 +98,9 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 						|| order.getStatus() == JPOrderStatusEnum.QUXIAOZHONG.intKey()
 						|| order.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey()) {
 					mincount = 2;
-				} else if (order.getStatus() == JPOrderStatusEnum.COMMITING.intKey()) {//订单状态为提交中时，时间差为5分钟以上发短信
+				} else if (order.getStatus() == JPOrderStatusEnum.COMMITING.intKey()
+						|| order.getStatus() == JPOrderStatusEnum.WANGZHANBIANGENGZHONG.intKey()
+						|| order.getStatus() == JPOrderStatusEnum.WANGZHANQUXIAOZHONG.intKey()) {//订单状态为提交中时，时间差为5分钟以上发短信
 					mincount = 5;
 				}
 				if (differMin > mincount) {//超过特定时间发短信
