@@ -298,3 +298,25 @@ body {
 .inviterCB input[type=checkbox]:checked + label {
     background: #26ca28;
 }
+
+/*单位名称、电话、地址检索*/
+.IdInfo {
+	border: 1px solid #7a9cd3;
+}
+
+.IdInfo li {
+	padding-left: 2%;
+}
+
+.IdInfo li:hover {
+	background: #1e90ff;
+	cursor: pointer;
+}
+
+.IdInfo li:hover a {
+	color: #FFF;
+}
+
+.IdInfo li a {
+	color: #000;
+}

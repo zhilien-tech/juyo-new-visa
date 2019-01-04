@@ -5739,6 +5739,55 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
+	public Object getUnitname(String searchstr) {
+
+		List<String> nameList = new ArrayList<>();
+
+		String sqlStr = sqlManager.get("simpleJP_getUnitname");
+		Sql sql = Sqls.create(sqlStr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("name", "like", "%" + Strings.trim(searchstr) + "%");
+		List<Record> names = dbDao.query(sql, cnd, null);
+		for (Record record : names) {
+			String name = record.getString("name");
+			String telephone = record.getString("telephone");
+			String address = record.getString("address");
+			String result = Strings.trim(name) + " " + Strings.trim(telephone) + " " + Strings.trim(address);
+			if (!nameList.contains(result)) {
+				nameList.add(result);
+			}
+			if (Util.eq(nameList.size(), 5)) {
+				break;
+			}
+		}
+
+		return nameList;
+	}
+
+	public Object getUnittelephone(String searchstr) {
+		List<String> telephoneList = new ArrayList<>();
+
+		String sqlStr = sqlManager.get("simpleJP_getUnittelephone");
+		Sql sql = Sqls.create(sqlStr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("telephone", "like", "%" + Strings.trim(searchstr) + "%");
+		List<Record> telephones = dbDao.query(sql, cnd, null);
+		for (Record record : telephones) {
+			String name = record.getString("name");
+			String telephone = record.getString("telephone");
+			String address = record.getString("address");
+			String result = Strings.trim(name) + " " + Strings.trim(telephone) + " " + Strings.trim(address);
+			if (!telephoneList.contains(result)) {
+				telephoneList.add(result);
+			}
+			if (Util.eq(telephoneList.size(), 5)) {
+				break;
+			}
+		}
+
+		return telephoneList;
+	}
+
 	public Object getCustomerCitySelect(String cityname, String citytype, String exname, HttpSession session) {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		Integer comid = loginCompany.getId();

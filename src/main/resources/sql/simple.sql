@@ -204,3 +204,32 @@ INNER JOIN t_order_jp toj ON taoj.orderId = toj.id
 INNER JOIN t_applicant ta ON taoj.applicantId = ta.id
 WHERE
 toj.id=@id AND taoj.isMainApplicant = 1
+
+/*simpleJP_getUnitname*/
+SELECT
+name,
+telephone,
+address
+FROM
+t_applicant_work_jp
+$condition
+
+
+/*simpleJP_getUnittelephone*/
+SELECT
+name,
+telephone,
+address
+FROM
+t_applicant_work_jp
+$condition
+
+
+/*simpleJP_getUnitaddress*/
+SELECT
+name,
+telephone,
+address
+FROM
+t_applicant_work_jp
+$condition

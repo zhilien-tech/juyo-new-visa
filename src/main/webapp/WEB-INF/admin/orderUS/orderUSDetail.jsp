@@ -1278,6 +1278,7 @@
 			}, // let our custom formatter work
 			minimumInputLength : 1,
 			maximumInputLength : 20,
+			//allowClear: true,//是否允许清空选中
 			language : "zh-CN", //设置 提示语言
 			maximumSelectionLength : 1, //设置最多可以选择多少项
 			tags : false

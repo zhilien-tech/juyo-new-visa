@@ -297,6 +297,24 @@ public class SimpleVisaModule {
 	}
 
 	/**
+	 * 获取单位名称
+	 */
+	@At
+	@POST
+	public Object getUnitname(@Param("searchStr") String searchStr) {
+		return simpleVisaService.getUnitname(searchStr);
+	}
+
+	/**
+	 * 获取单位电话
+	 */
+	@At
+	@POST
+	public Object getUnittelephone(@Param("searchStr") String searchStr) {
+		return simpleVisaService.getUnittelephone(searchStr);
+	}
+
+	/**
 	 * 获取城市下拉列表
 	 */
 	@At

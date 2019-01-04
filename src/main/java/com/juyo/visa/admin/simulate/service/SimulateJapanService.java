@@ -565,7 +565,8 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 		}
 
 		//出现指定错误时，直接返回失败
-		if (errorMsg.contains("氏名") || errorMsg.contains("居住地域") || errorMsg.contains("半角英数字")) {
+		if (errorMsg.contains("氏名") || errorMsg.contains("居住地域") || errorMsg.contains("半角英数字")
+				|| errorMsg.contains("停牌")) {
 			//orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
 			if (Util.isEmpty(orderinfo.getReceptionOpid())) {
 				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());

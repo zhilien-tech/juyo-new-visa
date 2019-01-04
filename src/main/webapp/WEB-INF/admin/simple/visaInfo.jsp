@@ -10,6 +10,7 @@
 	<title>签证信息</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v=<%=System.currentTimeMillis() %>">
@@ -328,30 +329,53 @@
 									</div>
 								</div>
 								<div class="col-sm-4 preSchool">
-									<div class="form-group">
+									<div class="form-group" id="nameDiv">
 										<label id="schoolName"><span>*</span>单位名称</label>
-										<input id="name" name="name" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.name }"/>
+										
+										<%-- <select id ="name" name="name" autocomplete="off" class="form-control select2 cityselect2 " multiple="multiple"
+														data-placeholder="" >
+														<c:if test="${ !empty obj.workJp.name }">
+															<option value="${obj.workJp.name }" selected="selected">${obj.workJp.name }</option>
+														</c:if>
+													</select> --%>
+										
+										
+										<input id="name" name="name" type="text" autocomplete="off" class="form-control input-sm" placeholder=" " value="${obj.workJp.name }"/>
 									</div>
 								</div>
 								<div class="col-sm-4 preSchool">
-									<div class="form-group">
+									<div class="form-group" id="telephoneDiv">
 										<label id="schoolTelephone"><span>*</span>单位电话</label>
-										<input id="telephone" name="telephone" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.telephone }"/>
+										<%-- <select id ="telephone" autocomplete="off" name="telephone"
+														class="form-control select2 cityselect2 " multiple="multiple"
+														data-placeholder="" >
+														<c:if test="${ !empty obj.workJp.telephone }">
+															<option value="${obj.workJp.telephone }" selected="selected">${obj.workJp.telephone }</option>
+														</c:if>
+													</select> --%>
+										<input id="telephone" name="telephone" autocomplete="off" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.telephone }"/>
 									</div>
 								</div>
 							</div><!-- end 我的职业/单位名称/单位电话 -->
 							<div class="row"><!-- 单位地址 -->
 								<div class="col-sm-8 preSchool">
-									<div class="form-group">
+									<div class="form-group" id="addressDiv">
 										<label id="schoolAddress"><span>*</span>单位地址</label>
-										<input id="address" name="address" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.address }"/>
+										<%-- <select id ="address" autocomplete="off" name="address"
+														class="form-control select2 cityselect2 " multiple="multiple"
+														data-placeholder="" >
+														<c:if test="${ !empty obj.workJp.address }">
+															<option value="${obj.workJp.address }" selected="selected">${obj.workJp.address }</option>
+														</c:if>
+													</select> --%>
+										<input id="address" name="address" autocomplete="new-password" type="text" class="form-control input-sm" placeholder=" " value="${obj.workJp.address }"/>
 									</div>
 								</div>
 								<!-- 父母单位名称/配偶单位名称 -->
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>职业</label>
-										<input id="position" name="position"  type="text" class="form-control input-sm" value="${obj.workJp.position }"/>
+										<input id="position" autocomplete="off" name="position"  type="text" class="form-control input-sm" value="${obj.workJp.position }"/>
 									</div>
 								</div>
 							</div>
@@ -359,7 +383,7 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label id="unitNameLabel"><span></span>配偶职业</label>
-										<input id="unitName" name="unitName" type="text" class="form-control input-sm" placeholder="如无职业，不必填写" value="${obj.unitName }"/>
+										<input id="unitName" autocomplete="off" name="unitName" type="text" class="form-control input-sm" placeholder="如无职业，不必填写" value="${obj.unitName }"/>
 									</div>
 								</div>
 							</div>
@@ -639,6 +663,9 @@
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/fastclick/fastclick.js"></script>
 	<script src="${base}/references/public/dist/newvisacss/js/bootstrapValidator.js"></script>
+	<!-- select2 -->
+	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+	<script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>	
@@ -648,7 +675,7 @@
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
-	<script type="text/javascript" src="${base}/admin/orderJp/visaInfo.js"></script>
+	<script type="text/javascript" src="${base}/admin/orderJp/visaInfo.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script>
 	
@@ -678,6 +705,8 @@
 				200010: '特定高校在读生'
 			},{
 				200011: '特定高校毕业生'
+			},{
+				200012: '过去三年内两次及以上入境日本'
 			}
 		];
 		function getPlaceholderAndExtenText(id) {
@@ -739,6 +768,11 @@
 					p = '学信网电子学历认证书';
 					e = '';
 					n = 'graduatefree';
+					break;
+				case 200012:
+					p = '';
+					e = '';
+					n = 'beentojapan';
 					break;
 				default:
 					p = '';
@@ -958,7 +992,7 @@
 				var $addWealthInfoBtn = $('#addWealthInfoBtn');
 				var $wealthInputGroup = $('.wealth-input-group');
 
-				var totalNum = 17;
+				var totalNum = 18;
 				var wealthInputBtnLen = 0;
 
 				var wealthData = JSON.parse('${obj.wealthJp}');
@@ -966,7 +1000,7 @@
 				
 				console.log(wealthData);
 				function getNewAddId() {
-					var newAddId = 200011;
+					var newAddId = 200012;
 					var len = wealthData.length;
 					if (len != 0 && wealthData[len-1]['sequence'] > newAddId) {
 						newAddId = wealthData[len-1]['sequence']
@@ -979,8 +1013,8 @@
 					var n = 0;
 					wealthData.forEach(function(item) {
 						var sequence = item['sequence'];
-						if (sequence > 200011)n++;
-						if (sequence < 12) sequence = 200000 + sequence;
+						if (sequence > 200012)n++;
+						if (sequence < 13) sequence = 200000 + sequence;
 						
 						$wealthmain.find('input').each(function(idx, input) {
 							if (sequence == $(input).attr('data-id')) {
@@ -1043,7 +1077,7 @@
 								$(this).removeClass('btnState-true');
 							}
 						});
-						if (id > 200011) wealthInputBtnLen--;
+						if (id > 200012) wealthInputBtnLen--;
 						$parent.remove();
 					}
 				}
@@ -1082,7 +1116,7 @@
 
 				function createHtml(it) {
 					var key = '';
-					if (it.sequence < 12) {
+					if (it.sequence < 13) {
 						it.sequence = 200000 + it.sequence;
 						key = it[getPlaceholderAndExtenText(parseInt(it.sequence)).name];
 					} else {
@@ -1633,6 +1667,8 @@
 				$('#lastreturndate').val('');
 			}
 		});
+		
+		
 	</script>
 </body>
 </html>
