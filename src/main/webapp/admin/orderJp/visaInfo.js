@@ -150,7 +150,7 @@
     });
     
     
-  /*//单位名称检索
+  //单位名称检索
     $("#name").on('input',function(){
     	$("#name").nextAll("ul.ui-autocomplete").remove();
     	$.ajax({
@@ -206,7 +206,7 @@
     //单位名称 检索下拉项
     function setName(name){
     	$("#name").nextAll("ul.ui-autocomplete").remove();
-    	$("#name").val(name).change();
+    	$("#name").val(name.substring(0,name.indexOf(" "))).change();
     	var regex=/\ (.+?)\ /g;
         var result;
         while((result=regex.exec(name))!=null) {
@@ -274,12 +274,19 @@
     //单位电话 检索下拉项
     function setTelephone(telephone){
     	$("#telephone").nextAll("ul.ui-autocomplete").remove();
-    	$("#telephone").val(telephone).change();
+    	
+    	var regex=/\ (.+?)\ /g;
+        var result;
+        while((result=regex.exec(telephone))!=null) {
+          $("#telephone").val(result[1]);
+        }
+        $("#name").val(telephone.substring(0,telephone.indexOf(" ")));
+        $("#address").val(telephone.substring(telephone.lastIndexOf(" ")+1,telephone.length));
+    	
     } 
     $("#telephoneDiv").mouseleave(function(){
     	$("#telephone").nextAll("ul.ui-autocomplete").remove();
     });
-    
     
     $(document).on("input","#name",function(){
     	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
@@ -290,7 +297,7 @@
     		$("#telephone").val("");
     		$("#address").val("");
     	}
-    });*/
+    });
     /*$(document).on("input","#telephone",function(){
     	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
     		return;

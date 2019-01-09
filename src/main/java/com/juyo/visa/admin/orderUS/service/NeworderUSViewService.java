@@ -430,9 +430,55 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			basicinfo.setMailprovince(form.getMailprovince());
 			basicinfo.setMailcity(form.getMailcity());
 
-			basicinfo.setMailcountryen(form.getMailcountryen());
-			basicinfo.setMailprovinceen(form.getMailprovinceen());
-			basicinfo.setMailcityen(form.getMailcityen());
+			//中文翻译成拼音并大写工具
+			PinyinTool tool = new PinyinTool();
+			if (!Util.isEmpty(form.getMailprovince())) {
+				String issuedplace = form.getMailprovince();
+				if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+					basicinfo.setMailprovinceen("NEI MONGOL");
+				} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+					basicinfo.setMailprovinceen("SHAANXI");
+				} else {
+					if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+						issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+					}
+					if (issuedplace.endsWith("自治区")) {
+						issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+					}
+					if (issuedplace.endsWith("区")) {
+						issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+					}
+					try {
+						basicinfo.setMailprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+					} catch (BadHanyuPinyinOutputFormatCombination e1) {
+						e1.printStackTrace();
+					}
+				}
+
+			}
+
+			if (!Util.isEmpty(form.getMailcity())) {
+				String issuedplace = form.getMailcity();
+				try {
+					basicinfo.setMailcityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+
+			}
+			if (!Util.isEmpty(form.getMailcountry())) {
+				String issuedplace = form.getMailcountry();
+				try {
+					basicinfo.setMailcountryen(getCountrycode(issuedplace));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+			}
+
+			//basicinfo.setMailcountryen(form.getMailcountryen());
+			//basicinfo.setMailprovinceen(form.getMailprovinceen());
+			//basicinfo.setMailcityen(form.getMailcityen());
 
 			if (Util.isEmpty(form.getMailaddressen())) {
 				basicinfo.setMailaddressen(translate(form.getMailaddress()));
@@ -454,7 +500,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setSex(form.getSex());
 		basicinfo.setTelephone(form.getTelephone());
 		basicinfo.setEmail(form.getEmail());
-		basicinfo.setCardId(form.getCardId());
+		basicinfo.setCardId(form.getCardid());
 		basicinfo.setProvince(form.getProvince());
 		basicinfo.setCity(form.getCity());
 		basicinfo.setCardprovince(form.getCardprovince());
@@ -478,6 +524,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setMarrystatus(form.getMarrystatus());
 		basicinfo.setBirthday(form.getBirthday());
 		basicinfo.setBirthcountry(form.getBirthcountry());
+		basicinfo.setBirthcountryen(getCountrycode(form.getBirthcountry()));
 		//basicinfo.setNationality(form.getNationality());
 		basicinfo.setHasothername(form.getHasothername());
 		basicinfo.setHasothernameen(form.getHasothername());
@@ -499,7 +546,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		basicinfo.setTelephoneen(form.getTelephone());
 		basicinfo.setEmailen(form.getEmail());
-		basicinfo.setCardIden(form.getCardId());
+		basicinfo.setCardIden(form.getCardid());
 
 		//中文翻译成拼音并大写工具
 		PinyinTool tool = new PinyinTool();
@@ -549,7 +596,18 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//basicinfo.setCityen(form.getCityen());
 
 		basicinfo.setCardprovinceen(form.getCardprovinceen());
-		basicinfo.setCardcityen(form.getCardcityen());
+
+		if (!Util.isEmpty(form.getCardcity())) {
+			String issuedplace = form.getCardcity();
+			try {
+				basicinfo.setCardcityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+			} catch (BadHanyuPinyinOutputFormatCombination e1) {
+				e1.printStackTrace();
+			}
+
+		}
+
+		//basicinfo.setCardcityen(form.getCardcityen());
 		//basicinfo.setNationalityen(form.getNationalityen());
 		/*basicinfo.setBirthcountryen(translate(form.getBirthcountry()));
 		basicinfo.setProvinceen(translate(form.getProvince()));
@@ -569,6 +627,17 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		System.out.println("保存英文用了" + (endTime - startTime) + "ms=====");
 		dbDao.update(basicinfo);
 		return null;
+	}
+
+	//根据国家名称查询国籍代码
+	public String getCountrycode(String countryname) {
+		String countrycode = "";
+		TCountryRegionEntity fetch = dbDao
+				.fetch(TCountryRegionEntity.class, Cnd.where("chinesename", "=", countryname));
+		if (!Util.isEmpty(fetch)) {
+			countrycode = fetch.getInternationalcode();
+		}
+		return countrycode;
 	}
 
 	/**

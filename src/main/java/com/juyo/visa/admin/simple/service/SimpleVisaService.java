@@ -99,6 +99,7 @@ import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.newairline.ResultflyEntity;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.util.HttpUtil;
+import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.common.util.TokenUtil;
 import com.juyo.visa.entities.TApplicantEntity;
@@ -5877,6 +5878,218 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		}
 
+	}
+
+	public Object getInfobyOrdernum(String ordernum, int orderid, HttpSession session) {//orderid为orderjp的id
+		Map<String, Object> result = Maps.newHashMap();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		String errMsg = "";
+		int orderjpid = 0;
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, Cnd.where("orderNum", "=", ordernum));
+		//判断订单是否存在
+		if (!Util.isEmpty(orderinfo)) {
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			//跟所查询订单相关的数据
+			TOrderJpEntity orderjpinfo = dbDao
+					.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderinfo.getId()));
+			TOrderTripJpEntity tripjpinfo = dbDao.fetch(TOrderTripJpEntity.class,
+					Cnd.where("orderId", "=", orderjpinfo.getId()));
+			List<TOrderTravelplanJpEntity> travelplans = dbDao.query(TOrderTravelplanJpEntity.class,
+					Cnd.where("orderId", "=", orderjpinfo.getId()), null);
+
+			result.put("data", getTravelPlanByOrderId(orderjpinfo.getId()));
+			result.put("orderjpinfo", orderjpinfo);
+
+			Map<String, String> orderMap = MapUtil.obj2Map(orderinfo);
+			if (!Util.isEmpty(orderinfo.getSendVisaDate())) {
+				orderMap.put("sendVisaDate", sdf.format(orderinfo.getSendVisaDate()));
+			}
+			if (!Util.isEmpty(orderinfo.getOutVisaDate())) {
+				orderMap.put("outVisaDate", sdf.format(orderinfo.getOutVisaDate()));
+			}
+			result.put("orderinfo", orderMap);
+
+			Map<String, String> tripMap = MapUtil.obj2Map(tripjpinfo);
+			if (!Util.isEmpty(tripjpinfo.getGoDate())) {
+				tripMap.put("goDate", sdf.format(tripjpinfo.getGoDate()));
+			}
+			if (!Util.isEmpty(tripjpinfo.getReturnDate())) {
+				tripMap.put("returnDate", sdf.format(tripjpinfo.getReturnDate()));
+			}
+			tripMap = getTripinfoCitys(tripMap, tripjpinfo);
+			result.put("tripjpinfo", tripMap);
+
+			//没有Orderid说明为下单，需保存订单
+			if (Util.isEmpty(orderid) || Util.eq(0, orderid)) {
+				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
+				orderid = generrateorder.get("orderid");
+				orderjpid = generrateorder.get("orderjpid");
+				orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+			} else {
+				orderjpid = orderid;
+				TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+				TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+				orderid = order.getId();
+			}
+
+			//跟自己相关的数据
+			TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
+			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", order.getId()));
+			TOrderTripJpEntity selftripjpinfo = dbDao.fetch(TOrderTripJpEntity.class,
+					Cnd.where("orderId", "=", orderjp.getId()));
+			if (Util.isEmpty(selftripjpinfo)) {
+				selftripjpinfo = new TOrderTripJpEntity();
+				selftripjpinfo.setOrderId(orderjpid);
+				selftripjpinfo.setCreateTime(new Date());
+				selftripjpinfo.setUpdateTime(new Date());
+				dbDao.insert(selftripjpinfo);
+			}
+			List<TOrderTravelplanJpEntity> selftravelplans = dbDao.query(TOrderTravelplanJpEntity.class,
+					Cnd.where("orderId", "=", orderjp.getId()), null);
+
+			//数据复制
+
+			//客户信息
+			/*TCustomerEntity customer = new TCustomerEntity();
+			if (!Util.isEmpty(orderinfo.getCustomerId())) {
+				customer = dbDao.fetch(TCustomerEntity.class, orderinfo.getCustomerId().longValue());
+			}
+			result.put("customer", customer);
+			order.setCustomerId(orderinfo.getCustomerId());*/
+
+			//订单信息
+			order.setCityId(orderinfo.getCityId());
+			order.setUrgentType(orderinfo.getUrgentType());
+			order.setUrgentDay(orderinfo.getUrgentDay());
+			order.setSendVisaDate(orderinfo.getSendVisaDate());
+			order.setOutVisaDate(orderinfo.getOutVisaDate());
+			order.setSendVisaNum(orderinfo.getSendVisaNum());
+			order.setStayDay(orderinfo.getStayDay());
+			dbDao.update(order);
+
+			//日本订单信息
+			orderjp.setVisaType(orderjpinfo.getVisaType());
+			orderjp.setAmount(orderjpinfo.getAmount());
+			dbDao.update(orderjp);
+
+			//出行信息
+			String tripjpSqlstr = sqlManager.get("simpleJP_copyordertripjp");
+			Sql tripjpSql = Sqls.create(tripjpSqlstr);
+			Cnd tripjpCnd = Cnd.NEW();
+			tripjpCnd.and("totj2.id", "=", tripjpinfo.getId());//被复制的出行信息
+			tripjpCnd.and("totj.id", "=", selftripjpinfo.getId());//自己的出行信息
+			tripjpSql.setCondition(tripjpCnd);
+			nutDao.execute(tripjpSql);
+
+			//行程安排
+			//dbDao.updateRelations(selftravelplans, travelplans);
+			//先把原来的删掉
+			if (!Util.isEmpty(selftravelplans)) {
+				dbDao.delete(selftravelplans);
+			}
+
+			Sql sql = Sqls
+					.create("INSERT INTO t_order_travelplan_jp(orderid,day,outDate,scenic,hotel,cityId,cityName,isupdatecity) SELECT @orderid,day,outDate,scenic,hotel,cityId,cityName,0 FROM t_order_travelplan_jp WHERE id=@planid");
+
+			for (TOrderTravelplanJpEntity planjp : travelplans) {
+				sql.setParam("orderid", orderjpid).setParam("planid", planjp.getId());
+				sql.addBatch();
+				System.out.println(planjp);
+			}
+			dbDao.execute(sql);
+
+			result.put("orderid", orderjpid);
+
+		} else {
+			errMsg = "没有此订单号";
+		}
+		result.put("errMsg", errMsg);
+		return result;
+	}
+
+	/**
+	 * 根据订单号复制订单信息时，回显select2的城市名称
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param tripMap
+	 * @param tripjp
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Map<String, String> getTripinfoCitys(Map<String, String> tripMap, TOrderTripJpEntity tripjp) {
+		if (!Util.isEmpty(tripjp.getGoArrivedCity())) {
+			tripMap.put("goarrivedcityname", getTripinfoCityname(tripjp.getGoArrivedCity()));
+		} else {
+			tripMap.put("goarrivedcityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getGoDepartureCity())) {
+			tripMap.put("godeparturecityname", getTripinfoCityname(tripjp.getGoDepartureCity()));
+		} else {
+			tripMap.put("godeparturecityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getGotransferarrivedcity())) {
+			tripMap.put("gotransferarrivedcityname", getTripinfoCityname(tripjp.getGotransferarrivedcity()));
+		} else {
+			tripMap.put("gotransferarrivedcityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getGotransferdeparturecity())) {
+			tripMap.put("gotransferdeparturecityname", getTripinfoCityname(tripjp.getGotransferdeparturecity()));
+		} else {
+			tripMap.put("gotransferdeparturecityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getNewgoarrivedcity())) {
+			tripMap.put("newgoarrivedcityname", getTripinfoCityname(tripjp.getNewgoarrivedcity()));
+		} else {
+			tripMap.put("newgoarrivedcityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getNewgodeparturecity())) {
+			tripMap.put("newgodeparturecityname", getTripinfoCityname(tripjp.getNewgodeparturecity()));
+		} else {
+			tripMap.put("newgodeparturecityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getNewreturnarrivedcity())) {
+			tripMap.put("newreturnarrivedcityname", getTripinfoCityname(tripjp.getNewreturnarrivedcity()));
+		} else {
+			tripMap.put("newreturnarrivedcityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getNewreturndeparturecity())) {
+			tripMap.put("newreturndeparturecityname", getTripinfoCityname(tripjp.getNewreturndeparturecity()));
+		} else {
+			tripMap.put("newreturndeparturecityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getReturnArrivedCity())) {
+			tripMap.put("returnarrivedcityname", getTripinfoCityname(tripjp.getReturnArrivedCity()));
+		} else {
+			tripMap.put("returnarrivedcityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getReturnDepartureCity())) {
+			tripMap.put("returndeparturecityname", getTripinfoCityname(tripjp.getReturnDepartureCity()));
+		} else {
+			tripMap.put("returndeparturecityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getReturntransferarrivedcity())) {
+			tripMap.put("returntransferarrivedcityname", getTripinfoCityname(tripjp.getReturntransferarrivedcity()));
+		} else {
+			tripMap.put("returntransferarrivedcityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getReturntransferdeparturecity())) {
+			tripMap.put("returntransferdeparturecityname", getTripinfoCityname(tripjp.getReturntransferdeparturecity()));
+		} else {
+			tripMap.put("returntransferdeparturecityname", "");
+		}
+		return tripMap;
+	}
+
+	public String getTripinfoCityname(int cityid) {
+		String cityname = "";
+		TCityEntity city = dbDao.fetch(TCityEntity.class, cityid);
+		if (!Util.isEmpty(city)) {
+			cityname = city.getCity();
+		}
+		return cityname;
 	}
 
 	/**

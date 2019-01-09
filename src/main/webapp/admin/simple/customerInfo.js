@@ -74,6 +74,13 @@ $("#comShortName").select2({
 
 //客户类型选中事件
 $('#customerType').on('change',function(){
+	//清除值
+	$("#compName").empty();
+	$("#comShortName").empty();
+	$("#compName2").val("");
+	$("#comShortName2").val("");
+	$("#payType").val(1);
+	
 	var thisval = $(this).val();
 	if (thisval == 4) {
 		$('.zhiKe').removeClass('none');
@@ -114,7 +121,7 @@ $("#compName").on("select2:unselect",function(e){
 	$('#customerType').val('');
 	$('#customerid').val('');
 	$('#comShortName').html('');
-	$('#payType').val(0);
+	$('#payType').val(1);
 	$('#visatype').val('');
 	$('#amount').val('');
 });
@@ -146,7 +153,7 @@ $("#comShortName").on("select2:unselect",function(e){
 	$('#customerType').val('');
 	$('#customerid').val('');
 	$('#compName').html('');
-	$('#payType').val(0);
+	$('#payType').val(1);
 	$('#visatype').val('');
 	$('#amount').val('');
 });

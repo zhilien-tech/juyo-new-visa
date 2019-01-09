@@ -325,6 +325,16 @@ public class SimpleVisaModule {
 	}
 
 	/**
+	 * 根据历史订单号，查询相关信息
+	 */
+	@At
+	@POST
+	public Object getInfobyOrdernum(@Param("ordernum") String ordernum, @Param("orderid") int orderid,
+			HttpSession session) {
+		return simpleVisaService.getInfobyOrdernum(ordernum, orderid, session);
+	}
+
+	/**
 	 * 保存姓名中没有翻译的中文，以便在 汉字转拼音 js中加入对应的中文拼音
 	 */
 	@At

@@ -155,7 +155,7 @@
 							<div class="col-sm-11 col-sm-offset-1 padding-right-0">
 								<div class="form-group">
 									<label><span>*</span>公民身份证</label> 
-									<input autocomplete="new-password" id="cardId" name="cardId"  type="text" class="form-control input-sm"  tabIndex="6" placeholder=" " value="${obj.basicinfo.cardId }" />
+									<input autocomplete="new-password" id="cardId" name="cardid"  type="text" class="form-control input-sm"  tabIndex="6" placeholder=" " value="${obj.basicinfo.cardId }" />
 								</div>
 							</div>
 						</div>
@@ -170,7 +170,7 @@
 									<input autocomplete="new-password" type="hidden" name="cardcity" id="cardCity" value="${obj.applicant.cardcity }"/>
 									<input autocomplete="new-password" type="hidden" id="sameAddress" value=""/>
 									<input autocomplete="new-password" class="nowProvince" type="checkbox" name="addressIssamewithcard" value="1" />  --%>
-									<input autocomplete="new-password" id="province" autocomplete="new-password" name="province" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.basicinfo.province }" />
+									<input autocomplete="off" id="province" autocomplete="new-password" name="province" type="text" class="form-control input-sm"  tabIndex="12" placeholder="省" value="${obj.basicinfo.province }" />
 									<input id="provinceen" name="provinceen" value="${obj.basicinfo.provinceen }" type="hidden"/>
 								</div>
 							</div>

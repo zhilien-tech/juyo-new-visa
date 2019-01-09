@@ -243,4 +243,13 @@ public class MobileUSModule {
 		return mobileUSService.getUSstate(encode, searchstr);
 	}
 
+	/**
+	 * 美国的州模糊查询
+	 */
+	@At
+	@POST
+	public Object translate(@Param("searchstr") String searchstr) {
+		return mobileUSService.translate(searchstr);
+	}
+
 }

@@ -33,6 +33,7 @@ $('#newgodeparturecity').select2({
 	maximumInputLength : 20,
 	language : "zh-CN", //设置 提示语言
 	maximumSelectionLength : 1, //设置最多可以选择多少项
+	//allowClear: true,
 	tags : false //设置必须存在的选项 才能选中
 });
 $('#goDepartureCity').select2({
@@ -223,6 +224,7 @@ $('#gotransferarrivedcity').select2({
 	maximumInputLength : 20,
 	language : "zh-CN", //设置 提示语言
 	maximumSelectionLength : 1, //设置最多可以选择多少项
+	//allowClear: true,//清除
 	tags : false //设置必须存在的选项 才能选中
 });
 $('#gotransferdeparturecity').select2({
@@ -261,6 +263,7 @@ $('#gotransferdeparturecity').select2({
 	maximumInputLength : 20,
 	language : "zh-CN", //设置 提示语言
 	maximumSelectionLength : 1, //设置最多可以选择多少项
+	//allowClear: true,//清空功能
 	tags : false //设置必须存在的选项 才能选中
 });
 $('#goArrivedCity').select2({
@@ -429,6 +432,7 @@ $('#returntransferdeparturecity').select2({
 	maximumInputLength : 20,
 	language : "zh-CN", //设置 提示语言
 	maximumSelectionLength : 1, //设置最多可以选择多少项
+	//allowClear: true,//清空功能
 	tags : false //设置必须存在的选项 才能选中
 });
 $('#returnArrivedCity').select2({

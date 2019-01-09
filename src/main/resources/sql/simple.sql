@@ -233,3 +233,20 @@ address
 FROM
 t_applicant_work_jp
 $condition
+
+
+
+/*simpleJP_insertCustomertoAnother*/
+insert into
+t_customer(name,shortname,source,payType,isCustomerAdd,linkman,mobile,email)
+select name,shortname,source,payType,isCustomerAdd,linkman,mobile,email
+from t_customer
+where id = @customerid
+
+
+/*simpleJP_copyordertripjp*/
+UPDATE 
+	t_order_trip_jp totj,t_order_trip_jp totj2
+SET
+	totj.tripType=totj2.tripType,totj.tripPurpose=totj2.tripPurpose,totj.goDate=totj2.goDate,totj.goDepartureCity=totj2.goDepartureCity,totj.goArrivedCity=totj2.goArrivedCity,totj.goFlightNum=totj2.goFlightNum,totj.returnDate=totj2.returnDate,totj.returnDepartureCity=totj2.returnDepartureCity,totj.returnArrivedCity=totj2.returnArrivedCity,totj.returnFlightNum=totj2.returnFlightNum,totj.gotransferarrivedcity=totj2.gotransferarrivedcity,totj.gotransferdeparturecity=totj2.gotransferdeparturecity,totj.returntransferarrivedcity=totj2.returntransferarrivedcity,totj.returntransferdeparturecity=totj2.returntransferdeparturecity,totj.gotransferflightnum=totj2.gotransferflightnum,totj.returntransferflightnum=totj2.returntransferflightnum,totj.newgodeparturecity=totj2.newgodeparturecity,totj.newgoarrivedcity=totj2.newgoarrivedcity,totj.newgoflightnum=totj2.newgoflightnum,totj.newreturndeparturecity=totj2.newreturndeparturecity,totj.newreturnarrivedcity=totj2.newreturnarrivedcity,totj.newreturnflightnum=totj2.newreturnflightnum
+$condition

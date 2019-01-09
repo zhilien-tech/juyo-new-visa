@@ -124,7 +124,9 @@ public class BasicinfoUSForm {
 	private String cardnumen;
 
 	/**身份证号*/
-	private String cardId;
+	private String cardid;
+
+	//private String cardid;
 
 	/**公民身份证号(英文)*/
 	private String cardIden;

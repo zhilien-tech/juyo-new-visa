@@ -229,6 +229,13 @@
 					<div class="orderInfo info" id="orderInfo">
 						<p class="info-head">订单信息</p>
 						<div class="info-body-from" style="margin-left:6%;">
+						<div class="row body-from-input">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<input id="historyOrdernum" class="form-control input-sm" value="" placeholder="输入需要复制行程的订单号，回车" onkeypress="onkeyEnter()"/>
+								</div>
+							</div>
+						</div>
 							<div class="row body-from-input">
 								<div class="col-sm-3">
 									<div class="form-group">
@@ -900,7 +907,18 @@
 					$("#urgentDays").addClass("none");
 				}
 			});
-			$('#customerType').trigger('change');
+			
+			if("${obj.customerinfo.source}" == 4){
+				$('.zhiKe').removeClass('none');
+				$('.on-line').addClass('none');
+				$('#customamount').removeClass('none');
+			}else{
+				$('.zhiKe').addClass('none');
+				$('.on-line').removeClass('none');
+				$('#customamount').addClass('none');
+			}
+			
+			//$('#customerType').trigger('change');
 		});
 			$("#addCustomer").click(function(){
 				layer.open({
@@ -1222,6 +1240,7 @@
 			function clearplan(){
 					$( ".select2-selection__choice").val("");
 			}
+			
 		</script>
 </body>
 </html>

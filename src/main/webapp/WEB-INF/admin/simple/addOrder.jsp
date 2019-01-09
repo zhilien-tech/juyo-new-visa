@@ -218,6 +218,14 @@
 					<div class="orderInfo info" id="orderInfo">
 						<p class="info-head">出行信息</p>
 						<div class="info-body-from" style="margin-left:6%;">
+						
+							<div class="row body-from-input">
+								<div class="col-sm-3">
+									<div class="form-group">
+										<input id="historyOrdernum" class="form-control input-sm" value="" placeholder="输入需要复制行程的订单号，回车" onkeypress="onkeyEnter()"/>
+									</div>
+								</div>
+							</div>
 							<div class="row body-from-input"><!-- 往返/多程 / 出行目的 -->
 								<div class="col-sm-3">
 									<div class="form-group">
