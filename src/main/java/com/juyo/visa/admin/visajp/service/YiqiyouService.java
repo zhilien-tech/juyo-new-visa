@@ -1978,6 +1978,12 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 									wealthType += tApplicantWealthJpEntity.getBankflowfree() + "\n";
 								}
 								detail += "元\n";
+							} else if ("过去三年内两次及以上入境日本".equals(tApplicantWealthJpEntity.getType())) {
+								if (!Util.isEmpty(tApplicantWealthJpEntity.getBankflowfree())) {
+									wealthType += tApplicantWealthJpEntity.getBankflowfree() + "\n";
+								}
+								detail += "\n";
+								detail += "\n";
 							} else {
 								if (!Util.isEmpty(tApplicantWealthJpEntity.getBankflowfree())) {
 									wealthType += tApplicantWealthJpEntity.getBankflowfree() + "\n";

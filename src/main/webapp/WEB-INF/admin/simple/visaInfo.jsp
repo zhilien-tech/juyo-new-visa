@@ -375,7 +375,7 @@
 								<div class="col-sm-4">
 									<div class="form-group">
 										<label><span>*</span>职业</label>
-										<input id="position" autocomplete="off" name="position"  type="text" class="form-control input-sm" value="${obj.workJp.position }"/>
+										<input id="position" autocomplete=on name="position"  type="text" class="form-control input-sm" value="${obj.workJp.position }"/>
 									</div>
 								</div>
 							</div>

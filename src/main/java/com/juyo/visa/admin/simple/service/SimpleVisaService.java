@@ -4536,17 +4536,17 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 									String wealthtype = wealthEntity.getWealthtype();
 									String wealthname = wealthEntity.getWealthname();
 
-									if (Util.isEmpty(wealthtype)
-											|| (!Util.isEmpty(wealthtype) && !Util.isEmpty(wealthvalue))) {
-										TApplicantWealthJpEntity wealthjp = new TApplicantWealthJpEntity();
-										wealthjp.setSequence(Integer.valueOf(sequence));
-										wealthjp.setBankflowfree(wealthtitle);
-										wealthjp.setDetails(wealthvalue);
-										wealthjp.setType(wealthtype);
-										wealthjp.setApplicantId(applicantOrderJpEntity.getId());
-										wealthjp.setCreateTime(new Date());
-										dbDao.insert(wealthjp);
-									}
+									/*if (Util.isEmpty(wealthtype)
+											|| (!Util.isEmpty(wealthtype) && !Util.isEmpty(wealthvalue))) {*/
+									TApplicantWealthJpEntity wealthjp = new TApplicantWealthJpEntity();
+									wealthjp.setSequence(Integer.valueOf(sequence));
+									wealthjp.setBankflowfree(wealthtitle);
+									wealthjp.setDetails(wealthvalue);
+									wealthjp.setType(wealthtype);
+									wealthjp.setApplicantId(applicantOrderJpEntity.getId());
+									wealthjp.setCreateTime(new Date());
+									dbDao.insert(wealthjp);
+									//}
 								}
 							}
 
