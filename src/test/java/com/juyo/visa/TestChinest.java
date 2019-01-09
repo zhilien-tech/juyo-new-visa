@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -57,9 +58,46 @@ public class TestChinest {
 
 	public static void main(String[] args) throws FailingHttpStatusCodeException, IOException {
 
+		Character str = new Character(' ');
+		System.out.println(Pattern.compile("^[A-Za-z0-9-&'#$*%;!,?.<>^@]+$").matcher(String.valueOf(str)).find());
+		System.out.println(Pattern.compile("^[A-Za-z0-9-&']+$").matcher(String.valueOf(str)).find());
+
+		String text = "s+     d*!?o   <f>h.os  i66-&'@#$%^^.";
+		/*boolean find1 = Pattern.compile("^[A-Za-z0-9-&'#$*%;!,?.<>^@]+$").matcher(text).find();
+		System.out.println("find1:" + find1);
+		StringBuffer result = new StringBuffer();
+
+		for (int i = 0; i < text.length(); i++) {
+			char character = text.charAt(i);
+			boolean find = Pattern.compile("^[ A-Za-z0-9-&'#$*%;!,?.<>^@]+$").matcher(String.valueOf(character)).find();
+			System.out.println("find:" + find + ";character:" + character);
+			if (find) {
+				result.append(character);
+			}
+		}
+		System.out.println(result.toString() + "++++++++++");*/
+
+		//text = text.replaceAll("\\s{2,}", " ").trim();
+		StringBuffer result = new StringBuffer();
+		//text = text.replaceAll("\\s+", " ").trim();
+		System.out.println(text);
+
+		for (int i = 0; i < text.length(); i++) {
+			char character = text.charAt(i);
+			boolean find = Pattern.compile("^[A-Za-z0-9+]+$").matcher(String.valueOf(character)).find();
+			System.out.println("find:" + find + ";character:" + character);
+			if (find) {
+				result.append(character);
+			}
+		}
+		System.out.println(result.toString() + "++++++++++");
+
+		/*Matcher m = Pattern.compile("^[A-Za-z0-9-&']+$").matcher(text);
+		System.out.println(m.find());*/
+
 		//loginFrance("755706503@qq.com", "xiong321");
 		//loginUSA("BEJ", "wt4ae");
-		loginUSATEST("BEJ", "wt4ae");
+		//loginUSATEST("BEJ", "wt4ae");
 
 		/*Map<String, String> resultData = Maps.newHashMap();
 		resultData.put("755706503@qq.com", "xiong321");

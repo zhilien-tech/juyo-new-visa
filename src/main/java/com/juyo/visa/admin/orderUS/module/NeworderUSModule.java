@@ -277,6 +277,9 @@ public class NeworderUSModule {
 		return neworderUSViewService.autoCalculategoDate(gotripdate, stayday);
 	}
 
+	/**
+	 * 百度翻译
+	 */
 	@At
 	@GET
 	public Object baiduTranslate(@Param("q") String q) {

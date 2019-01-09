@@ -8,6 +8,7 @@
 	<title>更新基本信息</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="${base}/references/public/plugins/select2/select2.css">
 	<link rel="stylesheet" href="${base}/references/public/bootstrap/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="${base}/references/public/plugins/datatables/dataTables.bootstrap.css">
 	<link rel="stylesheet" href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
@@ -263,7 +264,23 @@
 									<label>
 										<span>*</span>出生国家
 									</label>
-									<input autocomplete="new-password" id="birthcountry" onchange="translateZhToEn(this,'birthcountryen','')" name="birthcountry" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="17" value="${obj.basicinfo.birthcountry }" />
+									
+									<select id='birthcountry'  tabIndex="17"  class="form-control input-sm select2" multiple="multiple" name="birthcountry">
+                        
+			                        	<c:forEach items="${obj.gocountryfivelist }" var="country">
+										<c:choose>
+											<c:when test="${country.chinesename eq obj.basicinfo.birthcountry }">
+												<option value="${country.chinesename }" selected="selected">${country.chinesename }</option>
+											</c:when>
+											<c:otherwise>
+												<option value="${country.chinesename }">${country.chinesename }</option>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
+			                        
+			                        </select>
+									
+									<%-- <input autocomplete="new-password" id="birthcountry" name="birthcountry" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="17" value="${obj.basicinfo.birthcountry }" /> --%>
 									<input name="birthcountryen" id="birthcountryen" value="${obj.basicinfo.birthcountryen }" type="hidden"/>
 								</div>
 							</div>
@@ -277,7 +294,16 @@
 									<label>
 										<span>*</span>出生省
 									</label> 
-									<input autocomplete="new-password" id="cardprovince" name="cardprovince" type="text"  class="form-control input-sm"  tabIndex="18" placeholder=" " value="${obj.basicinfo.cardprovince }" />
+									
+									
+									<select name="cardprovince" tabIndex="18" class="form-control input-sm select2"  multiple="multiple"  id="cardprovince" >
+				                        <c:if test="${not empty obj.basicinfo.cardprovince }">
+											<option value="${obj.basicinfo.cardprovince }" selected="selected">${obj.basicinfo.cardprovince }</option>
+										</c:if>
+			                        </select>
+									
+									
+									<%-- <input autocomplete="new-password" id="cardprovince" name="cardprovince" type="text"  class="form-control input-sm"  tabIndex="18" placeholder=" " value="${obj.basicinfo.cardprovince }" /> --%>
 									<input id="cardprovinceen" name="cardprovinceen" value="${obj.basicinfo.cardprovinceen }" type="hidden"/>
 								</div>
 							</div>
@@ -286,7 +312,15 @@
 									<label>
 										<span>*</span>出生城市
 									</label>
-									<input autocomplete="new-password" id="cardcity" name="cardcity" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="19" value="${obj.basicinfo.cardcity }" />
+									
+									<select name="cardcity" tabIndex="19" class="form-control input-sm select2"  multiple="multiple"  id="cardcity" >
+				                   		<c:if test="${not empty obj.basicinfo.cardcity }">
+											<option value="${obj.basicinfo.cardcity }" selected="selected">${obj.basicinfo.cardcity }</option>
+										</c:if>
+			                        </select>
+									
+									
+									<%-- <input autocomplete="new-password" id="cardcity" name="cardcity" type="text"  class="form-control input-sm" placeholder=" "  tabIndex="19" value="${obj.basicinfo.cardcity }" /> --%>
 									<input id="cardcityen" name="cardcityen" value="${obj.basicinfo.cardcityen }" type="hidden"/>
 								</div>
 							</div>
@@ -310,7 +344,23 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1 mailingAddressTrue">
 								<div class="form-group">
 									<label><span>*</span>国家</label> 
-									<input autocomplete="new-password" id="mailcountry" onchange="translateZhToEn(this,'mailcountryen','')" name="mailcountry"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailcountry }"/>
+									
+									<select id='mailcountry'  tabIndex="19"  class="form-control input-sm select2" multiple="multiple" name="mailcountry">
+                        
+			                        	<c:forEach items="${obj.gocountryfivelist }" var="country">
+										<c:choose>
+											<c:when test="${country.chinesename eq obj.basicinfo.mailcountry }">
+												<option value="${country.chinesename }" selected="selected">${country.chinesename }</option>
+											</c:when>
+											<c:otherwise>
+												<option value="${country.chinesename }">${country.chinesename }</option>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
+			                        
+			                        </select>
+									
+									<%-- <input autocomplete="new-password" id="mailcountry" name="mailcountry"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailcountry }"/> --%>
 								</div>
 							</div>
 						</div>
@@ -319,21 +369,38 @@
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label><span>*</span>省</label> 
-									<input autocomplete="new-password" id="mailprovince" name="mailprovince"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailprovince }"/>
+									
+									<select name="mailprovince" tabIndex="19" class="form-control input-sm select2"  multiple="multiple"  id="mailprovince" >
+				                        <c:if test="${not empty obj.basicinfo.mailprovince }">
+											<option value="${obj.basicinfo.mailprovince }" selected="selected">${obj.basicinfo.mailprovince }</option>
+										</c:if>
+			                        </select>
+									
+									
+									<%-- <input autocomplete="new-password" id="mailprovince" name="mailprovince"  type="text" class="form-control input-sm" tabIndex="19" value="${obj.basicinfo.mailprovince }"/> --%>
 								</div>
 							</div>
 							
 							<div class="col-sm-5 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label><span>*</span>市</label> 
-									<input autocomplete="new-password" id="mailcity" name="mailcity"  type="text" class="form-control input-sm" tabIndex="21" value="${obj.basicinfo.mailcity }"/>
+									
+									<select name="mailcity" tabIndex="19" class="form-control input-sm select2"  multiple="multiple"  id="mailcity" >
+				                   		<c:if test="${not empty obj.basicinfo.mailcity }">
+											<option value="${obj.basicinfo.mailcity }" selected="selected">${obj.basicinfo.mailcity }</option>
+										</c:if>
+			                        </select>
+									
+									
+									
+									<%-- <input autocomplete="new-password" id="mailcity" name="mailcity"  type="text" class="form-control input-sm" tabIndex="19" value="${obj.basicinfo.mailcity }"/> --%>
 								</div>
 							</div>
 							
 							<div class="col-sm-11 padding-right-0 col-sm-offset-1">
 								<div class="form-group">
 									<label><span>*</span>街道地址</label> 
-									<input autocomplete="new-password" onchange="translateZhToEn(this,'mailaddressen','')" id="mailaddress"  name="mailaddress" type="text" class="form-control input-sm " tabIndex="20" value="${obj.basicinfo.mailaddress }"/>
+									<input autocomplete="new-password" onchange="translateZhToEn(this,'mailaddressen','')" id="mailaddress"  name="mailaddress" type="text" class="form-control input-sm " tabIndex="19" value="${obj.basicinfo.mailaddress }"/>
 								</div>
 							</div>
 						</div>
@@ -636,6 +703,10 @@
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="${base}/references/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
+	<!-- select2 -->
+	<script src="${base}/references/public/plugins/select2/select2.full.min.js"></script>
+    <script src="${base}/references/public/plugins/select2/i18n/zh-CN.js"></script>
+	
 	<!-- 公用js文件 -->
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>

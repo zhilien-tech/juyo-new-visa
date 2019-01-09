@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
@@ -746,15 +747,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			//basicinfo.setMailaddressen(translate(form.getMailaddress()));
 
 			if (Util.isEmpty(form.getMailaddressen())) {
-				basicinfo.setMailaddressen(translate(form.getMailaddress()));
+				basicinfo.setMailaddressen(translationHandle(2, translate(form.getMailaddress())));
 			} else {
 				if (Util.eq(form.getMailaddress(), basicinfo.getMailaddress())) {
-					basicinfo.setMailaddressen(form.getMailaddressen());
+					basicinfo.setMailaddressen(translationHandle(2, form.getMailaddressen()));
 				} else {
 					if (Util.eq(form.getMailaddressen(), basicinfo.getMailaddressen())) {
-						basicinfo.setMailaddressen(translate(form.getMailaddress()));
+						basicinfo.setMailaddressen(translationHandle(2, translate(form.getMailaddress())));
 					} else {
-						basicinfo.setMailaddressen(form.getMailaddressen());
+						basicinfo.setMailaddressen(translationHandle(2, form.getMailaddressen()));
 					}
 				}
 			}
@@ -836,15 +837,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 
 		//如果地址英文为空，直接翻译中文地址
 		if (Util.isEmpty(form.getDetailedaddressen())) {
-			basicinfo.setDetailedaddressen(translate(form.getDetailedaddress()));
+			basicinfo.setDetailedaddressen(translationHandle(2, translate(form.getDetailedaddress())));
 		} else {//地址英文不为空时，比较地址中文，如果一样，直接保存地址英文
 			if (Util.eq(form.getDetailedaddress(), basicinfo.getDetailedaddress())) {
-				basicinfo.setDetailedaddressen(form.getDetailedaddressen());
+				basicinfo.setDetailedaddressen(translationHandle(2, form.getDetailedaddressen()));
 			} else {//中文地址变了，比较英文地址是否一样,如果英文地址一样，则翻译，否则直接存
 				if (Util.eq(form.getDetailedaddressen(), basicinfo.getDetailedaddressen())) {
-					basicinfo.setDetailedaddressen(translate(form.getDetailedaddress()));
+					basicinfo.setDetailedaddressen(translationHandle(2, translate(form.getDetailedaddress())));
 				} else {
-					basicinfo.setDetailedaddressen(form.getDetailedaddressen());
+					basicinfo.setDetailedaddressen(translationHandle(2, form.getDetailedaddressen()));
 				}
 			}
 		}
@@ -912,7 +913,8 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		//basicinfo.setCityen(translate(form.getCity()));
 
 		basicinfo.setMarrystatusen(form.getMarrystatus());
-		basicinfo.setTelephoneen(form.getTelephone());
+		basicinfo.setTelephone(translationHandle(3, form.getTelephone()));
+		basicinfo.setTelephoneen(translationHandle(3, form.getTelephone()));
 		basicinfo.setEmailen(form.getEmail());
 		basicinfo.setCardIden(form.getCardid());
 		dbDao.update(basicinfo);
@@ -1794,15 +1796,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		workinfo.setOccupation(Integer.valueOf(form.getOccupation()));
 
 		if (Util.isEmpty(form.getUnitnameen())) {
-			workinfo.setUnitnameen(translate(form.getUnitname()));
+			workinfo.setUnitnameen(translationHandle(1, translate(form.getUnitname())));
 		} else {
 			if (Util.eq(form.getUnitname(), workinfo.getUnitname())) {
-				workinfo.setUnitnameen(form.getUnitnameen());
+				workinfo.setUnitnameen(translationHandle(1, form.getUnitnameen()));
 			} else {
 				if (Util.eq(form.getUnitnameen(), workinfo.getUnitnameen())) {
-					workinfo.setUnitnameen(translate(form.getUnitname()));
+					workinfo.setUnitnameen(translationHandle(1, translate(form.getUnitname())));
 				} else {
-					workinfo.setUnitnameen(form.getUnitnameen());
+					workinfo.setUnitnameen(translationHandle(1, form.getUnitnameen()));
 				}
 			}
 		}
@@ -1810,21 +1812,21 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		workinfo.setUnitname(form.getUnitname());
 		//workinfo.setUnitnameen(form.getUnitnameen());
 
-		workinfo.setTelephone(form.getTelephone());
+		workinfo.setTelephone(translationHandle(3, form.getTelephone()));
 		workinfo.setCountry(form.getCountry());
 		workinfo.setProvince(form.getProvince());
 		workinfo.setCity(form.getCity());
 
 		if (Util.isEmpty(form.getAddressen())) {
-			workinfo.setAddressen(translate(form.getAddress()));
+			workinfo.setAddressen(translationHandle(2, translate(form.getAddress())));
 		} else {
 			if (Util.eq(form.getAddress(), workinfo.getAddress())) {
-				workinfo.setAddressen(form.getAddressen());
+				workinfo.setAddressen(translationHandle(2, form.getAddressen()));
 			} else {
 				if (Util.eq(form.getAddressen(), workinfo.getAddressen())) {
-					workinfo.setAddressen(translate(form.getAddress()));
+					workinfo.setAddressen(translationHandle(2, translate(form.getAddress())));
 				} else {
-					workinfo.setAddressen(form.getAddressen());
+					workinfo.setAddressen(translationHandle(2, form.getAddressen()));
 				}
 			}
 		}
@@ -1870,7 +1872,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		workinfo.setIssecondarylevel(form.getIssecondarylevel());
 		//英文翻译保存
 		workinfo.setOccupationen(form.getOccupation());
-		workinfo.setTelephoneen(form.getTelephone());
+		workinfo.setTelephoneen(translationHandle(3, form.getTelephone()));
 
 		//中文翻译成拼音并大写工具
 		PinyinTool tool = new PinyinTool();
@@ -1950,20 +1952,81 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			beforework.setStaffid(staffid);
 			dbDao.insert(beforework);
 		}
+
+		if (Util.isEmpty(form.getEmployernameen())) {
+			beforework.setEmployernameen(translationHandle(1, translate(form.getEmployername())));
+		} else {
+			if (Util.eq(form.getEmployername(), beforework.getEmployername())) {
+				beforework.setEmployernameen(translationHandle(1, form.getEmployernameen()));
+			} else {
+				if (Util.eq(form.getEmployernameen(), beforework.getEmployernameen())) {
+					beforework.setEmployernameen(translationHandle(1, translate(form.getEmployername())));
+				} else {
+					beforework.setEmployernameen(translationHandle(1, form.getEmployernameen()));
+				}
+			}
+		}
+
 		beforework.setEmployername(form.getEmployername());
-		beforework.setEmployernameen(form.getEmployernameen());
-		beforework.setEmployertelephone(form.getEmployertelephone());
+
+		beforework.setEmployertelephone(translationHandle(3, form.getEmployertelephone()));
 		beforework.setEmployercountry(form.getEmployercountry());
 		beforework.setEmployerprovince(form.getEmployerprovince());
 		beforework.setEmployercity(form.getEmployercity());
+
+		if (Util.isEmpty(form.getEmployeraddressen())) {
+			beforework.setEmployeraddressen(translationHandle(2, translate(form.getEmployeraddress())));
+		} else {
+			if (Util.eq(form.getEmployeraddress(), beforework.getEmployeraddress())) {
+				beforework.setEmployeraddressen(translationHandle(2, form.getEmployeraddressen()));
+			} else {
+				if (Util.eq(form.getEmployeraddressen(), beforework.getEmployeraddressen())) {
+					beforework.setEmployeraddressen(translationHandle(2, translate(form.getEmployeraddress())));
+				} else {
+					beforework.setEmployeraddressen(translationHandle(2, form.getEmployeraddressen()));
+				}
+			}
+		}
+
 		beforework.setEmployeraddress(form.getEmployeraddress());
-		beforework.setEmployeraddressen(form.getEmployeraddressen());
+
 		beforework.setEmploystartdate(form.getEmploystartdate());
 		beforework.setEmployenddate(form.getEmployenddate());
+
+		if (Util.isEmpty(form.getJobtitleen())) {
+			beforework.setJobtitleen(translate(form.getJobtitle()));
+		} else {
+			if (Util.eq(form.getJobtitle(), beforework.getJobtitle())) {
+				beforework.setJobtitleen(form.getJobtitleen());
+			} else {
+				if (Util.eq(form.getJobtitleen(), beforework.getJobtitleen())) {
+					beforework.setJobtitleen(translate(form.getJobtitle()));
+				} else {
+					beforework.setJobtitleen(form.getJobtitleen());
+				}
+			}
+		}
+
 		beforework.setJobtitle(form.getJobtitle());
+
+		if (Util.isEmpty(form.getPreviousdutyen())) {
+			beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+		} else {
+			if (Util.eq(form.getPreviousduty(), beforework.getPreviousduty())) {
+				beforework.setPreviousdutyen(form.getPreviousdutyen());
+			} else {
+				if (Util.eq(form.getPreviousdutyen(), beforework.getPreviousdutyen())) {
+					beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+				} else {
+					beforework.setPreviousdutyen(form.getPreviousdutyen());
+				}
+			}
+		}
+
 		beforework.setPreviousduty(form.getPreviousduty());
+
 		//英文
-		beforework.setEmployertelephoneen(form.getEmployertelephone());
+		beforework.setEmployertelephoneen(translationHandle(3, form.getEmployertelephone()));
 		beforework.setEmployercountryen(form.getEmployercountry());
 
 		//中文翻译成拼音并大写工具
@@ -2008,8 +2071,6 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 
 		beforework.setEmploystartdateen(form.getEmploystartdate());
 		beforework.setEmployenddateen(form.getEmployenddate());
-		beforework.setJobtitleen(translate(form.getJobtitle()));
-		beforework.setPreviousdutyen(translate(form.getPreviousduty()));
 		dbDao.update(beforework);
 		return null;
 	}
@@ -2033,19 +2094,64 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			dbDao.insert(beforeeducate);
 		}
 		beforeeducate.setHighesteducation(form.getHighesteducation());
+
+		if (Util.isEmpty(form.getInstitutionen())) {
+			beforeeducate.setInstitutionen(translationHandle(1, translate(form.getInstitution())));
+		} else {
+			if (Util.eq(form.getInstitution(), beforeeducate.getInstitution())) {
+				beforeeducate.setInstitutionen(translationHandle(1, form.getInstitutionen()));
+			} else {
+				if (Util.eq(form.getInstitutionen(), beforeeducate.getInstitutionen())) {
+					beforeeducate.setInstitutionen(translationHandle(1, translate(form.getInstitution())));
+				} else {
+					beforeeducate.setInstitutionen(translationHandle(1, form.getInstitutionen()));
+				}
+			}
+		}
+
 		beforeeducate.setInstitution(form.getInstitution());
-		beforeeducate.setInstitutionen(form.getInstitutionen());
+
+		if (Util.isEmpty(form.getCourseen())) {//如果英文为空，直接翻译
+			beforeeducate.setCourseen(translate(form.getCourse()));
+		} else {
+			if (Util.eq(form.getCourse(), beforeeducate.getCourse())) {//英文不为空，中文相同说明没变，直接存英文
+				beforeeducate.setCourseen(form.getCourseen());
+			} else {
+				if (Util.eq(form.getCourseen(), beforeeducate.getCourseen())) {//中文不同，英文相同，说明没有翻译过来，需要翻译
+					beforeeducate.setCourseen(translate(form.getCourse()));
+				} else {
+					beforeeducate.setCourseen(form.getCourseen());//中文、英文都不一样，直接存英文
+				}
+			}
+		}
+
 		beforeeducate.setCourse(form.getCourse());
+
 		beforeeducate.setInstitutioncountry(form.getInstitutioncountry());
 		beforeeducate.setInstitutionprovince(form.getInstitutionprovince());
 		beforeeducate.setInstitutioncity(form.getInstitutioncity());
+
+		if (Util.isEmpty(form.getInstitutionaddressen())) {
+			beforeeducate.setInstitutionaddressen(translationHandle(2, translate(form.getInstitutionaddress())));
+		} else {
+			if (Util.eq(form.getInstitutionaddress(), beforeeducate.getInstitutionaddress())) {
+				beforeeducate.setInstitutionaddressen(translationHandle(2, form.getInstitutionaddressen()));
+			} else {
+				if (Util.eq(form.getInstitutionaddressen(), beforeeducate.getInstitutionaddressen())) {
+					beforeeducate
+							.setInstitutionaddressen(translationHandle(2, translate(form.getInstitutionaddress())));
+				} else {
+					beforeeducate.setInstitutionaddressen(translationHandle(2, form.getInstitutionaddressen()));
+				}
+			}
+		}
+
 		beforeeducate.setInstitutionaddress(form.getInstitutionaddress());
-		beforeeducate.setInstitutionaddressen(form.getInstitutionaddressen());
+
 		beforeeducate.setCoursestartdate(form.getCoursestartdate());
 		beforeeducate.setCourseenddate(form.getCourseenddate());
 		//英文
 		beforeeducate.setHighesteducationen(form.getHighesteducation());
-		beforeeducate.setCourseen(translate(form.getCourse()));
 		beforeeducate.setInstitutioncountryen(form.getInstitutioncountry());
 
 		//中文翻译成拼音并大写工具
@@ -2585,6 +2691,60 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 				return stateList;
 			}
 		}
+	}
+
+	/**
+	 * 特殊字符处理
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param translation
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public String translationHandle(int type, String translation) {
+		StringBuffer result = new StringBuffer();
+		if (!Util.isEmpty(translation)) {
+			//translation = translate(translation);
+			if (type == 1) {//工作教育信息单位、学校名称特殊字符处理
+				//先把连续空格转成单空格
+				translation = translation.replaceAll("\\s+", " ").trim();
+				//去掉不合格的字符
+			} else if (type == 2) {//地址
+
+			}
+			for (int i = 0; i < translation.length(); i++) {
+				char character = translation.charAt(i);
+				boolean isLegal = isLegal(type, character);
+				if (isLegal) {
+					result.append(character);
+				}
+			}
+		}
+
+		return result.toString();
+	}
+
+	/**
+	 * 正则表达式匹配特殊字符
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param character
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public boolean isLegal(int type, char character) {
+		boolean isLegal = false;
+
+		if (type == 1) {//工作教育信息单位、学校名称,只允许数字，字母，-,',&和单空格
+			isLegal = Pattern.compile("^[ A-Za-z0-9-&']+$").matcher(String.valueOf(character)).find();
+		} else if (type == 2) {//地址特殊字符处理
+			isLegal = Pattern.compile("^[ A-Za-z0-9-&'#$*%;!,?.<>@^]+$").matcher(String.valueOf(character)).find();
+		} else if (type == 3) {//电话号码特殊字符处理，只允许数字和+
+			isLegal = Pattern.compile("^[0-9+]+$").matcher(String.valueOf(character)).find();
+		}
+		return isLegal;
 	}
 
 	/**

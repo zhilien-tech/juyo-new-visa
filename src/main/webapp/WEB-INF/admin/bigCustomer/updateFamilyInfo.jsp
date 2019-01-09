@@ -155,7 +155,9 @@
                 <div class="floatLeft groupcheckBoxInfo" style="width: 197px;">
                     <label><span class="s">*</span> 配偶出生省份</label>
                     <select name="spousecity" class="form-control input-sm select2" multiple="multiple"  id="spousecity" >
-	                   <option selected="selected" value="${obj.familyinfo.spousecity }">${obj.familyinfo.spousecity}</option>
+                    	<c:if test="${not empty obj.familyinfo.spousecity }">
+							<option value="${obj.familyinfo.spousecity }" selected="selected">${obj.familyinfo.spousecity }</option>
+						</c:if>
                     </select>
                 </div>
                 <div class="floatRight groupSelectInfo"  style="width: 180px;">

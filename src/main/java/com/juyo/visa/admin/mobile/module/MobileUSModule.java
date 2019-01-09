@@ -244,7 +244,7 @@ public class MobileUSModule {
 	}
 
 	/**
-	 * 美国的州模糊查询
+	 * 百度翻译
 	 */
 	@At
 	@POST

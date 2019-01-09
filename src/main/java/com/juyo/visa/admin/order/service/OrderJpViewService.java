@@ -1895,23 +1895,31 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getCity(String province, String searchStr) {
-		List<String> cityList = new ArrayList<>();
-		List<TIdcardEntity> city = dbDao.query(TIdcardEntity.class,
-				Cnd.where("province", "=", province).and("city", "like", "%" + Strings.trim(searchStr) + "%"), null);
-		for (TIdcardEntity tIdcardEntity : city) {
-			if (!cityList.contains(tIdcardEntity.getCity())) {
-				cityList.add(tIdcardEntity.getCity());
-			}
-		}
 		List<String> list = new ArrayList<>();
-		if (!Util.isEmpty(cityList) && cityList.size() >= 6) {
-			for (int i = 1; i < 6; i++) {
-				list.add(cityList.get(i));
-			}
-			return list;
+		List<String> cityList = new ArrayList<>();
+
+		if (province.endsWith("市")) {
+			list.add(province);
 		} else {
-			return cityList;
+			List<TIdcardEntity> city = dbDao
+					.query(TIdcardEntity.class,
+							Cnd.where("province", "=", province).and("city", "like",
+									"%" + Strings.trim(searchStr) + "%"), null);
+			for (TIdcardEntity tIdcardEntity : city) {
+				if (!cityList.contains(tIdcardEntity.getCity())) {
+					cityList.add(tIdcardEntity.getCity());
+				}
+			}
+			if (!Util.isEmpty(cityList) && cityList.size() >= 6) {
+				for (int i = 1; i < 6; i++) {
+					list.add(cityList.get(i));
+				}
+			} else {
+				list.addAll(cityList);
+			}
 		}
+		return list;
+
 	}
 
 	public Object sendEmail(int orderid, String applicantid, HttpSession session, HttpServletRequest request) {

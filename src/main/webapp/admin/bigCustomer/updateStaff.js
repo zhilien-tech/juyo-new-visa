@@ -1482,3 +1482,182 @@ $("#taxpayernumberen").on('input',function(){
     $(".help-ratepayingen").attr("style","display: none;");  
     $("#taxpayernumberen").attr("style", null);
 });
+
+
+//国家
+$('#birthcountry,#mailcountry').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectCountry.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.chinesename; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+
+//省
+$('#cardprovince,#mailprovince').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectProvince.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.province; // replace pk with your identifier
+				obj.text = obj.province; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+
+/* 取消选中时 */
+$("#cardprovince").on('select2:unselect', function (evt) {
+	//市清空
+	$("#cardcity").val(null).trigger("change");
+});
+$("#mailprovince").on('select2:unselect', function (evt) {
+	//市清空
+	$("#mailcity").val(null).trigger("change");
+});
+
+//市
+$('#cardcity').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectCity.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+		    var province = $('#cardprovince').val();
+		    if(province){
+		    	province = province.join(',');
+			}
+			return {
+				province : province,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.city; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+$('#mailcity').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectCity.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			var province = $('#mailprovince').val();
+			if(province){
+				province = province.join(',');
+			}
+			return {
+				province : province,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.city; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});

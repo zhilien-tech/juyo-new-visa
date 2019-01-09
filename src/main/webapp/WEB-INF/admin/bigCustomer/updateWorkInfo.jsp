@@ -332,15 +332,15 @@
                                             <label><span class="s">*</span>学校名称</label>
 											<input autocomplete="new-password" name="institution" onchange="translateZhToEn(this,'institutionen','')" value="${obj.beforeeducate.institution }" type="text"/>
 										</div>                                        
-                                        <div class="paddingLeft leftNo groupInputInfo courseClass" style="margin-right: 20px;">
-                                            <label><span class="s">*</span> 专业名称</label>
+                                        <div class="draBig leftNo margintop-10 groupInputInfo courseClass">
+                                            <label><span class="s">*</span>专业名称</label>
                                             <input autocomplete="new-password" onchange="translateZhToEn(this,'courseen','')" id="course" name="course" value="${obj.beforeeducate.course }" type="text" />
-                                            <input id="courseen" name="courseen" type="hidden" value="${obj.beforeeducate.courseen }"/>
+                                            <%-- <input id="courseen" name="courseen" type="hidden" value="${obj.beforeeducate.courseen }"/> --%>
                                         </div>
                                         
                                         
                                         <div class="paddingLeft leftNo groupSelectInfo" style="width: 180px;">
-                                            <label><span class="s">*</span> 所在国家</label>
+                                            <label><span class="s">*</span>所在国家</label>
                                             <select name="institutioncountry" class=" select2" multiple="multiple" id="institutioncountry">
                                             	<c:forEach items="${obj.gocountryfivelist }" var="country">
 													<c:choose>
@@ -357,7 +357,7 @@
                                         <div class="clear"></div>
 
 										<div class="paddingLeft leftNo groupcheckBoxInfo" style="width: 180px;">
-                                            <label><span class="s">*</span> 学校地址（省）</label>
+                                            <label><span class="s">*</span>学校地址（省）</label>
                                             
                                             <%-- <select name="institutionprovince" class="form-control input-sm select2" multiple="multiple"  id="institutionprovince" >
 							                   <option selected="selected" value="${obj.beforeeducate.institutionprovince }">${obj.beforeeducate.institutionprovince}</option>
@@ -366,7 +366,7 @@
 						                    <input id="institutionprovinceen" name="institutionprovinceen" type="hidden" value="${obj.beforeeducate.institutionprovinceen }"/>
 										</div>
 										<div class="paddingRight leftNo groupInputInfo aaa" style="width: 180px;">
-                                            <label><span class="s">*</span> 学校地址（市）</label>
+                                            <label><span class="s">*</span>学校地址（市）</label>
                                             <%-- <select name="institutioncity" class="form-control input-sm select2" multiple="multiple"  id="institutioncity" >
 							                   <option selected="selected" value="${obj.beforeeducate.institutioncity }">${obj.beforeeducate.institutioncity}</option>
 						                    </select> --%>
@@ -475,7 +475,11 @@
 											<label><span class="s">*</span> School Name</label>
 											<input autocomplete="new-password" id="institutionen" name="institutionen" class="institutionen" value="${obj.beforeeducate.institutionen }" type="text"/>
 										</div>
-										<div class="draBig leftNo margintop-10 groupInputInfo" style="margin-top: 145px!important;">
+										<div class="draBig leftNo margintop-10 groupInputInfo courseClass" style="margin-top: 13px!important;">
+                                            <label><span class="s">*</span> Professional name</label>
+											<input autocomplete="new-password" id="courseen" name="courseen" class="institutionaddressen" value="${obj.beforeeducate.courseen }" type="text" />
+										</div>
+										<div class="draBig leftNo margintop-10 groupInputInfo" style="margin-top: 147px!important;">
                                             <label><span class="s">*</span> Street Address</label>
 											<input autocomplete="new-password" id="institutionaddressen" name="institutionaddressen" class="institutionaddressen" value="${obj.beforeeducate.institutionaddressen }" type="text" />
 										</div>

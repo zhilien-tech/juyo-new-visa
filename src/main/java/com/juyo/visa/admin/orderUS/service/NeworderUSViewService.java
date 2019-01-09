@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -486,15 +487,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			//basicinfo.setMailcityen(form.getMailcityen());
 
 			if (Util.isEmpty(form.getMailaddressen())) {
-				basicinfo.setMailaddressen(translate(form.getMailaddress()));
+				basicinfo.setMailaddressen(translationHandle(2, translate(form.getMailaddress())));
 			} else {
 				if (Util.eq(form.getMailaddress(), basicinfo.getMailaddress())) {
-					basicinfo.setMailaddressen(form.getMailaddressen());
+					basicinfo.setMailaddressen(translationHandle(2, form.getMailaddressen()));
 				} else {
 					if (Util.eq(form.getMailaddressen(), basicinfo.getMailaddressen())) {
-						basicinfo.setMailaddressen(translate(form.getMailaddress()));
+						basicinfo.setMailaddressen(translationHandle(2, translate(form.getMailaddress())));
 					} else {
-						basicinfo.setMailaddressen(form.getMailaddressen());
+						basicinfo.setMailaddressen(translationHandle(2, form.getMailaddressen()));
 					}
 				}
 			}
@@ -503,7 +504,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 
 		basicinfo.setSex(form.getSex());
-		basicinfo.setTelephone(form.getTelephone());
+		basicinfo.setTelephone(translationHandle(3, form.getTelephone()));
 		basicinfo.setEmail(form.getEmail());
 		basicinfo.setCardId(form.getCardid());
 		basicinfo.setProvince(form.getProvince());
@@ -513,15 +514,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		//如果地址英文为空，直接翻译中文地址
 		if (Util.isEmpty(form.getDetailedaddressen())) {
-			basicinfo.setDetailedaddressen(translate(form.getDetailedaddress()));
+			basicinfo.setDetailedaddressen(translationHandle(2, translate(form.getDetailedaddress())));
 		} else {//地址英文不为空时，比较地址中文，如果一样，直接保存地址英文
 			if (Util.eq(form.getDetailedaddress(), basicinfo.getDetailedaddress())) {
-				basicinfo.setDetailedaddressen(form.getDetailedaddressen());
+				basicinfo.setDetailedaddressen(translationHandle(2, form.getDetailedaddressen()));
 			} else {//中文地址变了，比较英文地址是否一样,如果英文地址一样，则翻译，否则直接存
 				if (Util.eq(form.getDetailedaddressen(), basicinfo.getDetailedaddressen())) {
-					basicinfo.setDetailedaddressen(translate(form.getDetailedaddress()));
+					basicinfo.setDetailedaddressen(translationHandle(2, translate(form.getDetailedaddress())));
 				} else {
-					basicinfo.setDetailedaddressen(form.getDetailedaddressen());
+					basicinfo.setDetailedaddressen(translationHandle(2, form.getDetailedaddressen()));
 				}
 			}
 		}
@@ -549,7 +550,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		System.out.println("开始保存英文====");
 		basicinfo.setIsmailsamewithliveen(form.getIsmailsamewithliveen());
 
-		basicinfo.setTelephoneen(form.getTelephone());
+		basicinfo.setTelephoneen(translationHandle(3, form.getTelephone()));
 		basicinfo.setEmailen(form.getEmail());
 		basicinfo.setCardIden(form.getCardid());
 
@@ -1132,6 +1133,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object updateWorkinfo(WorkandeducateinfoUSForm form) {
 		Integer staffid = form.getStaffid();
+		String translation = "";
 		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		workinfo.setOccupation(form.getOccupation());
@@ -1141,23 +1143,24 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		} else {
 			workinfo.setUnitnameen(translate(form.getUnitname()));
 		}*/
+		//translation = translationHandle(form.getUnitname());
 		if (Util.isEmpty(form.getUnitnameen())) {
-			workinfo.setUnitnameen(translate(form.getUnitname()));
+			workinfo.setUnitnameen(translationHandle(1, translate(form.getUnitname())));
 		} else {
 			if (Util.eq(form.getUnitname(), workinfo.getUnitname())) {
-				workinfo.setUnitnameen(form.getUnitnameen());
+				workinfo.setUnitnameen(translationHandle(1, form.getUnitnameen()));
 			} else {
 				if (Util.eq(form.getUnitnameen(), workinfo.getUnitnameen())) {
-					workinfo.setUnitnameen(translate(form.getUnitname()));
+					workinfo.setUnitnameen(translationHandle(1, translate(form.getUnitname())));
 				} else {
-					workinfo.setUnitnameen(form.getUnitnameen());
+					workinfo.setUnitnameen(translationHandle(1, form.getUnitnameen()));
 				}
 			}
 		}
 
 		workinfo.setUnitname(form.getUnitname());
 
-		workinfo.setTelephone(form.getTelephone());
+		workinfo.setTelephone(translationHandle(3, form.getTelephone()));
 		workinfo.setCountry(form.getCountry());
 		workinfo.setProvince(form.getProvince());
 		workinfo.setCity(form.getCity());
@@ -1169,15 +1172,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}*/
 
 		if (Util.isEmpty(form.getAddressen())) {
-			workinfo.setAddressen(translate(form.getAddress()));
+			workinfo.setAddressen(translationHandle(2, translate(form.getAddress())));
 		} else {
 			if (Util.eq(form.getAddress(), workinfo.getAddress())) {
-				workinfo.setAddressen(form.getAddressen());
+				workinfo.setAddressen(translationHandle(2, form.getAddressen()));
 			} else {
 				if (Util.eq(form.getAddressen(), workinfo.getAddressen())) {
-					workinfo.setAddressen(translate(form.getAddress()));
+					workinfo.setAddressen(translationHandle(2, translate(form.getAddress())));
 				} else {
-					workinfo.setAddressen(form.getAddressen());
+					workinfo.setAddressen(translationHandle(2, form.getAddressen()));
 				}
 			}
 		}
@@ -1199,15 +1202,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}*/
 
 		if (Util.isEmpty(form.getDutyen())) {
-			workinfo.setDutyen(translate(form.getDuty()));
+			workinfo.setDutyen(translationHandle(4, translate(form.getDuty())));
 		} else {
 			if (Util.eq(form.getDuty(), workinfo.getDuty())) {
-				workinfo.setDutyen(form.getDutyen());
+				workinfo.setDutyen(translationHandle(4, form.getDutyen()));
 			} else {
 				if (Util.eq(form.getDutyen(), workinfo.getDutyen())) {
-					workinfo.setDutyen(translate(form.getDuty()));
+					workinfo.setDutyen(translationHandle(4, translate(form.getDuty())));
 				} else {
-					workinfo.setDutyen(form.getDutyen());
+					workinfo.setDutyen(translationHandle(4, form.getDutyen()));
 				}
 			}
 		}
@@ -1217,7 +1220,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//英文
 		long startTime = System.currentTimeMillis();
 		workinfo.setOccupationen(form.getOccupation());
-		workinfo.setTelephoneen(form.getTelephone());
+		workinfo.setTelephoneen(translationHandle(3, form.getTelephone()));
 		workinfo.setCountryen(form.getCountry());
 		/*workinfo.setProvinceen(form.getProvinceen());
 		workinfo.setCityen(form.getCityen());
@@ -1274,15 +1277,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//workinfo.setCityen(translate(form.getCity()));
 
 		if (Util.isEmpty(form.getPositionen())) {
-			workinfo.setPositionen(translate(form.getPosition()));
+			workinfo.setPositionen(translationHandle(4, translate(form.getPosition())));
 		} else {
 			if (Util.eq(form.getPosition(), workinfo.getPosition())) {
-				workinfo.setPositionen(form.getPositionen());
+				workinfo.setPositionen(translationHandle(4, form.getPositionen()));
 			} else {
 				if (Util.eq(form.getPositionen(), workinfo.getPositionen())) {
-					workinfo.setPositionen(translate(form.getPosition()));
+					workinfo.setPositionen(translationHandle(4, translate(form.getPosition())));
 				} else {
-					workinfo.setPositionen(form.getPositionen());
+					workinfo.setPositionen(translationHandle(4, form.getPositionen()));
 				}
 			}
 		}
@@ -1327,22 +1330,22 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}*/
 
 		if (Util.isEmpty(form.getEmployernameen())) {
-			beforework.setEmployernameen(translate(form.getEmployername()));
+			beforework.setEmployernameen(translationHandle(1, translate(form.getEmployername())));
 		} else {
 			if (Util.eq(form.getEmployername(), beforework.getEmployername())) {
-				beforework.setEmployernameen(form.getEmployernameen());
+				beforework.setEmployernameen(translationHandle(1, form.getEmployernameen()));
 			} else {
 				if (Util.eq(form.getEmployernameen(), beforework.getEmployernameen())) {
-					beforework.setEmployernameen(translate(form.getEmployername()));
+					beforework.setEmployernameen(translationHandle(1, translate(form.getEmployername())));
 				} else {
-					beforework.setEmployernameen(form.getEmployernameen());
+					beforework.setEmployernameen(translationHandle(1, form.getEmployernameen()));
 				}
 			}
 		}
 
 		beforework.setEmployername(form.getEmployername());
 
-		beforework.setEmployertelephone(form.getEmployertelephone());
+		beforework.setEmployertelephone(translationHandle(3, form.getEmployertelephone()));
 		beforework.setEmployercountry(form.getEmployercountry());
 		beforework.setEmployerprovince(form.getEmployerprovince());
 		beforework.setEmployercity(form.getEmployercity());
@@ -1354,15 +1357,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}*/
 
 		if (Util.isEmpty(form.getEmployeraddressen())) {
-			beforework.setEmployeraddressen(translate(form.getEmployeraddress()));
+			beforework.setEmployeraddressen(translationHandle(2, translate(form.getEmployeraddress())));
 		} else {
 			if (Util.eq(form.getEmployeraddress(), beforework.getEmployeraddress())) {
-				beforework.setEmployeraddressen(form.getEmployeraddressen());
+				beforework.setEmployeraddressen(translationHandle(2, form.getEmployeraddressen()));
 			} else {
 				if (Util.eq(form.getEmployeraddressen(), beforework.getEmployeraddressen())) {
-					beforework.setEmployeraddressen(translate(form.getEmployeraddress()));
+					beforework.setEmployeraddressen(translationHandle(2, translate(form.getEmployeraddress())));
 				} else {
-					beforework.setEmployeraddressen(form.getEmployeraddressen());
+					beforework.setEmployeraddressen(translationHandle(2, form.getEmployeraddressen()));
 				}
 			}
 		}
@@ -1414,7 +1417,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		beforework.setEmployerzipcodeen(beforework.getEmployerzipcode());
 		//英文
 		long startTime = System.currentTimeMillis();
-		beforework.setEmployertelephoneen(form.getEmployertelephone());
+		beforework.setEmployertelephoneen(translationHandle(3, form.getEmployertelephone()));
 		beforework.setEmployercountryen(form.getEmployercountry());
 		beforework.setEmploystartdateen(form.getEmploystartdate());
 		beforework.setEmployenddateen(form.getEmployenddate());
@@ -1524,15 +1527,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}*/
 
 		if (Util.isEmpty(form.getInstitutionen())) {
-			beforeeducation.setInstitutionen(translate(form.getInstitution()));
+			beforeeducation.setInstitutionen(translationHandle(1, translate(form.getInstitution())));
 		} else {
 			if (Util.eq(form.getInstitution(), beforeeducation.getInstitution())) {
-				beforeeducation.setInstitutionen(form.getInstitutionen());
+				beforeeducation.setInstitutionen(translationHandle(1, form.getInstitutionen()));
 			} else {
 				if (Util.eq(form.getInstitutionen(), beforeeducation.getInstitutionen())) {
-					beforeeducation.setInstitutionen(translate(form.getInstitution()));
+					beforeeducation.setInstitutionen(translationHandle(1, translate(form.getInstitution())));
 				} else {
-					beforeeducation.setInstitutionen(form.getInstitutionen());
+					beforeeducation.setInstitutionen(translationHandle(1, form.getInstitutionen()));
 				}
 			}
 		}
@@ -1568,15 +1571,16 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}*/
 
 		if (Util.isEmpty(form.getInstitutionaddressen())) {
-			beforeeducation.setInstitutionaddressen(translate(form.getInstitutionaddress()));
+			beforeeducation.setInstitutionaddressen(translationHandle(2, translate(form.getInstitutionaddress())));
 		} else {
 			if (Util.eq(form.getInstitutionaddress(), beforeeducation.getInstitutionaddress())) {
-				beforeeducation.setInstitutionaddressen(form.getInstitutionaddressen());
+				beforeeducation.setInstitutionaddressen(translationHandle(2, form.getInstitutionaddressen()));
 			} else {
 				if (Util.eq(form.getInstitutionaddressen(), beforeeducation.getInstitutionaddressen())) {
-					beforeeducation.setInstitutionaddressen(translate(form.getInstitutionaddress()));
+					beforeeducation.setInstitutionaddressen(translationHandle(2,
+							translate(form.getInstitutionaddress())));
 				} else {
-					beforeeducation.setInstitutionaddressen(form.getInstitutionaddressen());
+					beforeeducation.setInstitutionaddressen(translationHandle(2, form.getInstitutionaddressen()));
 				}
 			}
 		}
@@ -2150,20 +2154,26 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	public Object selectCity(String province, String searchstr) {
-		List<TIdcardEntity> cityList = dbDao.query(
-				TIdcardEntity.class,
-				Cnd.where("province", "=", province).and("city", "!=", "")
-						.and("city", "like", "%" + Strings.trim(searchstr) + "%").groupBy("city"), null);
-
 		List<TIdcardEntity> list = new ArrayList<>();
-		if (!Util.isEmpty(cityList) && cityList.size() >= 5) {
-			for (int i = 0; i < 5; i++) {
-				list.add(cityList.get(i));
-			}
-			return list;
+		if (province.endsWith("市")) {
+			TIdcardEntity fetch = dbDao.fetch(TIdcardEntity.class, Cnd.where("province", "=", province));
+			fetch.setCity(province);
+			list.add(fetch);
 		} else {
-			return cityList;
+			List<TIdcardEntity> cityList = dbDao.query(
+					TIdcardEntity.class,
+					Cnd.where("province", "=", province).and("city", "!=", "")
+							.and("city", "like", "%" + Strings.trim(searchstr) + "%").groupBy("city"), null);
+
+			if (!Util.isEmpty(cityList) && cityList.size() >= 5) {
+				for (int i = 0; i < 5; i++) {
+					list.add(cityList.get(i));
+				}
+			} else {
+				list.addAll(cityList);
+			}
 		}
+		return list;
 	}
 
 	/**
@@ -2289,6 +2299,66 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		}
 		return result;
+	}
+
+	/**
+	 * 特殊字符处理
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param translation
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public String translationHandle(int type, String translation) {
+		StringBuffer result = new StringBuffer();
+		if (!Util.isEmpty(translation)) {
+			//translation = translate(translation);
+			if (type == 1) {//工作教育信息单位、学校名称特殊字符处理
+				//先把连续空格转成单空格
+				translation = translation.replaceAll("\\s+", " ").trim();
+				//去掉不合格的字符
+			} else if (type == 2) {//地址
+
+			} else if (type == 3) {//电话
+
+			} else {
+
+			}
+			for (int i = 0; i < translation.length(); i++) {
+				char character = translation.charAt(i);
+				boolean isLegal = isLegal(type, character);
+				if (isLegal) {
+					result.append(character);
+				}
+			}
+		}
+
+		return result.toString();
+	}
+
+	/**
+	 * 正则表达式匹配特殊字符
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param character
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public boolean isLegal(int type, char character) {
+		boolean isLegal = false;
+
+		if (type == 1) {//工作教育信息单位、学校名称,只允许数字，字母，-,',&和单空格
+			isLegal = Pattern.compile("^[ A-Za-z0-9-&']+$").matcher(String.valueOf(character)).find();
+		} else if (type == 2) {//地址特殊字符处理
+			isLegal = Pattern.compile("^[ A-Za-z0-9-&'#$*%;!,?.<>@^]+$").matcher(String.valueOf(character)).find();
+		} else if (type == 3) {//电话号码特殊字符处理，只允许数字和+
+			isLegal = Pattern.compile("^[0-9+]+$").matcher(String.valueOf(character)).find();
+		} else {
+			isLegal = Pattern.compile("^[A-Za-z]+$").matcher(String.valueOf(character)).find();
+		}
+		return isLegal;
 	}
 
 	/**
