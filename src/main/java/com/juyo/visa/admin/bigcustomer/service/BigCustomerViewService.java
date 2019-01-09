@@ -1685,12 +1685,16 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		addForm.setIstaxpayernumberapplyen(IsYesOrNoEnum.YES.intKey());
 		addForm.setIsmailsamewithlive(IsYesOrNoEnum.YES.intKey());
 		addForm.setIsmailsamewithliveen(IsYesOrNoEnum.YES.intKey());
+
 		//国家默认为中国
 		addForm.setNationality("中国");
 		addForm.setNationalityen("China");
 
 		addForm.setBirthcountry("中国");
 		addForm.setBirthcountryen("China");
+
+		addForm.setMailcountry("中国");
+		addForm.setMailcountryen("China");
 
 		//中文翻译成拼音并大写工具
 		PinyinTool tool = new PinyinTool();

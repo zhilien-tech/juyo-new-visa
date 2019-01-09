@@ -313,6 +313,11 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			sb.append("/").append(basicinfo.getLastnameen());
 			result.put("lastnameen", sb.toString());
 		}
+
+		//国家下拉
+		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
+		result.put("gocountryfivelist", gocountryFiveList);
+
 		return result;
 	}
 
@@ -415,12 +420,12 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		basicinfo.setIsmailsamewithlive(form.getIsmailsamewithlive());
 		if (form.getIsmailsamewithlive() == 1) {
 
-			basicinfo.setMailcountry("");
+			basicinfo.setMailcountry("中国");
 			basicinfo.setMailprovince("");
 			basicinfo.setMailcity("");
 			basicinfo.setMailaddress("");
 
-			basicinfo.setMailcountryen("");
+			basicinfo.setMailcountryen("China");
 			basicinfo.setMailprovinceen("");
 			basicinfo.setMailcityen("");
 			basicinfo.setMailaddressen("");

@@ -537,6 +537,11 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			result.put("staffid", staffid);
 			//登录标记encode
 			result.put("encode", encode);
+
+			//国家下拉
+			List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
+			result.put("gocountryfivelist", gocountryFiveList);
+
 			//婚姻状况枚举
 			result.put("marrystatusenum", EnumUtil.enum2(MarryStatusEnum.class));
 			System.out.println("基本信息回显result:" + result);
@@ -735,8 +740,8 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 			basicinfo.setMailcityen("");
 			basicinfo.setMailprovince("");
 			basicinfo.setMailprovinceen("");
-			basicinfo.setMailcountry("");
-			basicinfo.setMailcountryen("");
+			basicinfo.setMailcountry("中国");
+			basicinfo.setMailcountryen("China");
 		} else {
 			//basicinfo.setMailaddressen(translate(form.getMailaddress()));
 
