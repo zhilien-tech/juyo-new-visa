@@ -71,12 +71,14 @@ import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
 import com.juyo.visa.entities.TAppStaffBeforeworkEntity;
 import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
+import com.juyo.visa.entities.TAppStaffConscientiousEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TAppStaffDriverinfoEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffGocountryEntity;
 import com.juyo.visa.entities.TAppStaffGousinfoEntity;
 import com.juyo.visa.entities.TAppStaffImmediaterelativesEntity;
+import com.juyo.visa.entities.TAppStaffOrganizationEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
@@ -1277,15 +1279,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//workinfo.setCityen(translate(form.getCity()));
 
 		if (Util.isEmpty(form.getPositionen())) {
-			workinfo.setPositionen(translationHandle(4, translate(form.getPosition())));
+			workinfo.setPositionen(translationHandle(1, translate(form.getPosition())));
 		} else {
 			if (Util.eq(form.getPosition(), workinfo.getPosition())) {
-				workinfo.setPositionen(translationHandle(4, form.getPositionen()));
+				workinfo.setPositionen(translationHandle(1, form.getPositionen()));
 			} else {
 				if (Util.eq(form.getPositionen(), workinfo.getPositionen())) {
-					workinfo.setPositionen(translationHandle(4, translate(form.getPosition())));
+					workinfo.setPositionen(translationHandle(1, translate(form.getPosition())));
 				} else {
-					workinfo.setPositionen(translationHandle(4, form.getPositionen()));
+					workinfo.setPositionen(translationHandle(1, form.getPositionen()));
 				}
 			}
 		}
@@ -1376,15 +1378,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		beforework.setEmployenddate(form.getEmployenddate());
 
 		if (Util.isEmpty(form.getJobtitleen())) {
-			beforework.setJobtitleen(translate(form.getJobtitle()));
+			beforework.setJobtitleen(translationHandle(1, translate(form.getJobtitle())));
 		} else {
 			if (Util.eq(form.getJobtitle(), beforework.getJobtitle())) {
-				beforework.setJobtitleen(form.getJobtitleen());
+				beforework.setJobtitleen(translationHandle(1, form.getJobtitleen()));
 			} else {
 				if (Util.eq(form.getJobtitleen(), beforework.getJobtitleen())) {
-					beforework.setJobtitleen(translate(form.getJobtitle()));
+					beforework.setJobtitleen(translationHandle(1, translate(form.getJobtitle())));
 				} else {
-					beforework.setJobtitleen(form.getJobtitleen());
+					beforework.setJobtitleen(translationHandle(1, form.getJobtitleen()));
 				}
 			}
 		}
@@ -1398,15 +1400,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}*/
 
 		if (Util.isEmpty(form.getPreviousdutyen())) {
-			beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+			beforework.setPreviousdutyen(translationHandle(4, translate(form.getPreviousduty())));
 		} else {
 			if (Util.eq(form.getPreviousduty(), beforework.getPreviousduty())) {
-				beforework.setPreviousdutyen(form.getPreviousdutyen());
+				beforework.setPreviousdutyen(translationHandle(4, form.getPreviousdutyen()));
 			} else {
 				if (Util.eq(form.getPreviousdutyen(), beforework.getPreviousdutyen())) {
-					beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+					beforework.setPreviousdutyen(translationHandle(4, translate(form.getPreviousduty())));
 				} else {
-					beforework.setPreviousdutyen(form.getPreviousdutyen());
+					beforework.setPreviousdutyen(translationHandle(4, form.getPreviousdutyen()));
 				}
 			}
 		}
@@ -1716,6 +1718,21 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 		result.put("gocountry", gocountry);*/
 
+		//慈善组织
+		//是否参加慈善组织
+		result.put("isworkedcharitableorganization", workinfo.getIsworkedcharitableorganization());
+
+		TAppStaffOrganizationEntity organization = dbDao.fetch(TAppStaffOrganizationEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		result.put("organization", organization);
+
+		//是否服兵役
+		result.put("hasservedinmilitary", workinfo.getHasservedinmilitary());
+
+		TAppStaffConscientiousEntity conscientious = dbDao.fetch(TAppStaffConscientiousEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		result.put("conscientious", conscientious);
+
 		//国家下拉
 		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
 		result.put("gocountryfivelist", gocountryFiveList);
@@ -1773,11 +1790,155 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid));
 		workinfo.setIstraveledanycountry(form.getIstraveledanycountry());
 		workinfo.setIstraveledanycountryen(form.getIstraveledanycountry());
+		//是否为慈善组织工作
+		workinfo.setIsworkedcharitableorganization(form.getIsworkedcharitableorganization());
+		workinfo.setIsworkedcharitableorganizationen(form.getIsworkedcharitableorganization());
+		//是否服兵役
+		workinfo.setHasservedinmilitary(form.getHasservedinmilitary());
+		workinfo.setHasservedinmilitaryen(form.getHasservedinmilitary());
 		dbDao.update(workinfo);
+
+		//慈善组织
+		updateOrganization(form);
+
+		//服兵役信息
+		updateMilitary(form);
 
 		//出境记录
 		updateGocountryinfo(form);
 
+		return JuYouResult.ok();
+	}
+
+	/**
+	 * 慈善组织信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateOrganization(TravelinfoUSForm form) {
+		Integer staffid = form.getStaffid();
+		TAppStaffOrganizationEntity organization = dbDao.fetch(TAppStaffOrganizationEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		if (form.getIsworkedcharitableorganization() == 1) {
+			if (Util.isEmpty(organization)) {
+				organization = new TAppStaffOrganizationEntity();
+				organization.setStaffid(staffid);
+				dbDao.insert(organization);
+			}
+
+			if (Util.isEmpty(form.getOrganizationnameen())) {
+				organization.setOrganizationnameen(translationHandle(1, translate(form.getOrganizationname())));
+			} else {
+				if (Util.eq(form.getOrganizationname(), organization.getOrganizationname())) {
+					organization.setOrganizationnameen(translationHandle(1, form.getOrganizationnameen()));
+				} else {
+					if (Util.eq(form.getOrganizationnameen(), organization.getOrganizationnameen())) {
+						organization.setOrganizationnameen(translationHandle(1, translate(form.getOrganizationname())));
+					} else {
+						organization.setOrganizationnameen(translationHandle(1, form.getOrganizationnameen()));
+					}
+				}
+			}
+
+			organization.setOrganizationname(form.getOrganizationname());
+			dbDao.update(organization);
+		} else {
+			if (!Util.isEmpty(organization)) {
+				dbDao.delete(organization);
+			}
+		}
+		return JuYouResult.ok();
+	}
+
+	/**
+	 * 服兵役处理
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateMilitary(TravelinfoUSForm form) {
+		Integer staffid = form.getStaffid();
+		TAppStaffConscientiousEntity conscientious = dbDao.fetch(TAppStaffConscientiousEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		if (form.getHasservedinmilitary() == 1) {
+			if (Util.isEmpty(conscientious)) {
+				conscientious = new TAppStaffConscientiousEntity();
+				conscientious.setStaffid(staffid);
+				dbDao.insert(conscientious);
+			}
+			conscientious.setMilitarycountry(form.getMilitarycountry());
+			conscientious.setMilitarycountryen(form.getMilitarycountry());
+			conscientious.setServicestartdate(form.getServicestartdate());
+			conscientious.setServicestartdateen(form.getServicestartdate());
+			conscientious.setServiceenddate(form.getServiceenddate());
+			conscientious.setServiceenddateen(form.getServiceenddate());
+
+			//服务分支
+			if (Util.isEmpty(form.getServicebranchen())) {
+				conscientious.setServicebranchen(translationHandle(1, translate(form.getServicebranch())));
+			} else {
+				if (Util.eq(form.getServicebranch(), conscientious.getServicebranch())) {
+					conscientious.setServicebranchen(translationHandle(1, form.getOrganizationnameen()));
+				} else {
+					if (Util.eq(form.getServicebranchen(), conscientious.getServicebranchen())) {
+						conscientious.setServicebranchen(translationHandle(1, translate(form.getServicebranch())));
+					} else {
+						conscientious.setServicebranchen(translationHandle(1, form.getServicebranchen()));
+					}
+				}
+			}
+
+			conscientious.setServicebranch(form.getServicebranch());
+
+			//排名
+			if (Util.isEmpty(form.getRanken())) {
+				conscientious.setRanken(translationHandle(1, translate(form.getRank())));
+			} else {
+				if (Util.eq(form.getRank(), conscientious.getRank())) {
+					conscientious.setRanken(translationHandle(1, form.getRanken()));
+				} else {
+					if (Util.eq(form.getRanken(), conscientious.getRanken())) {
+						conscientious.setRanken(translationHandle(1, translate(form.getRank())));
+					} else {
+						conscientious.setRanken(translationHandle(1, form.getRanken()));
+					}
+				}
+			}
+
+			conscientious.setRank(form.getRank());
+
+			//军事专业
+			if (Util.isEmpty(form.getMilitaryspecialtyen())) {
+				conscientious.setMilitaryspecialtyen(translationHandle(1, translate(form.getMilitaryspecialty())));
+			} else {
+				if (Util.eq(form.getMilitaryspecialty(), conscientious.getMilitaryspecialty())) {
+					conscientious.setMilitaryspecialtyen(translationHandle(1, form.getMilitaryspecialtyen()));
+				} else {
+					if (Util.eq(form.getMilitaryspecialtyen(), conscientious.getMilitaryspecialtyen())) {
+						conscientious.setMilitaryspecialtyen(translationHandle(1,
+								translate(form.getMilitaryspecialty())));
+					} else {
+						conscientious.setMilitaryspecialtyen(translationHandle(1, form.getMilitaryspecialtyen()));
+					}
+				}
+			}
+
+			conscientious.setMilitaryspecialty(form.getMilitaryspecialty());
+
+			dbDao.update(conscientious);
+
+		} else {
+			if (!Util.isEmpty(conscientious)) {
+				dbDao.delete(conscientious);
+			}
+		}
 		return JuYouResult.ok();
 	}
 
@@ -1932,11 +2093,92 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			tripinfo.setIssueddateen(form.getIssueddate());
 			tripinfo.setVisanumber(form.getVisanumber());
 			tripinfo.setVisanumberen(form.getVisanumber());
+
+			//radio
+			tripinfo.setIsapplyingsametypevisa(form.getIsapplyingsametypevisa());
+			tripinfo.setIsapplyingsametypevisaen(form.getIsapplyingsametypevisa());
+			tripinfo.setIstenprinted(form.getIstenprinted());
+			tripinfo.setIstenprinteden(form.getIstenprinted());
+			tripinfo.setIslost(form.getIslost());
+			tripinfo.setIslosten(form.getIslost());
+
+			//丢失年份和说明
+			if (form.getIslost() == 1) {
+				tripinfo.setLostyear(form.getLostyear());
+				tripinfo.setLostyearen(form.getLostyear());
+
+				if (Util.isEmpty(form.getLostexplainen())) {//如果没有英文，则直接翻译
+					tripinfo.setLostexplainen(translate(form.getLostexplain()));
+				} else {
+					if (Util.eq(form.getLostexplain(), tripinfo.getLostexplain())) {//英文不为空，中文不变，直接保存英文
+						tripinfo.setLostexplainen(form.getLostexplainen());
+					} else {//英文不为空，中文改变，分两种情况：一种英文不变，说明没翻译，需要翻译，另一种英文改变，直接保存英文
+						if (Util.eq(form.getLostexplainen(), tripinfo.getLostexplainen())) {
+							tripinfo.setLostexplainen(translate(form.getLostexplain()));
+						} else {
+							tripinfo.setLostexplainen(form.getLostexplainen());
+						}
+					}
+				}
+
+				tripinfo.setLostexplain(form.getLostexplain());
+
+			} else {
+				tripinfo.setLostyear("");
+				tripinfo.setLostyearen("");
+				tripinfo.setLostexplain("");
+				tripinfo.setLostexplainen("");
+			}
+
+			tripinfo.setIscancelled(form.getIscancelled());
+			tripinfo.setIscancelleden(form.getIscancelled());
+
+			//取消说明
+			if (form.getIscancelled() == 1) {
+
+				if (Util.isEmpty(form.getCancelexplainen())) {//如果没有英文，则直接翻译
+					tripinfo.setCancelexplainen(translate(form.getCancelexplain()));
+				} else {
+					if (Util.eq(form.getCancelexplain(), tripinfo.getCancelexplain())) {//英文不为空，中文不变，直接保存英文
+						tripinfo.setCancelexplainen(form.getCancelexplainen());
+					} else {//英文不为空，中文改变，分两种情况：一种英文不变，说明没翻译，需要翻译，另一种英文改变，直接保存英文
+						if (Util.eq(form.getCancelexplainen(), tripinfo.getCancelexplainen())) {
+							tripinfo.setCancelexplainen(translate(form.getCancelexplain()));
+						} else {
+							tripinfo.setCancelexplainen(form.getCancelexplainen());
+						}
+					}
+				}
+
+				tripinfo.setCancelexplain(form.getCancelexplain());
+
+			} else {
+				tripinfo.setCancelexplain("");
+				tripinfo.setCancelexplainen("");
+			}
+
 		} else {
 			tripinfo.setIssueddate(null);
 			tripinfo.setIssueddateen(null);
 			tripinfo.setVisanumber("");
 			tripinfo.setVisanumberen("");
+
+			//radio
+			tripinfo.setIsapplyingsametypevisa(2);
+			tripinfo.setIsapplyingsametypevisaen(2);
+			tripinfo.setIstenprinted(2);
+			tripinfo.setIstenprinteden(2);
+			tripinfo.setIslost(2);
+			tripinfo.setIslosten(2);
+			tripinfo.setIscancelled(2);
+			tripinfo.setIscancelleden(2);
+
+			tripinfo.setLostyear("");
+			tripinfo.setLostyearen("");
+			tripinfo.setLostexplain("");
+			tripinfo.setLostexplainen("");
+			tripinfo.setCancelexplain("");
+			tripinfo.setCancelexplainen("");
 		}
 
 		if (form.getIsrefused() == 1) {
@@ -1960,10 +2202,10 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			tripinfo.setRefusedexplainen("");
 		}
 
-		tripinfo.setIsapplyingsametypevisa(form.getIsapplyingsametypevisa());
+		/*tripinfo.setIsapplyingsametypevisa(form.getIsapplyingsametypevisa());
 		tripinfo.setIstenprinted(form.getIstenprinted());
 		tripinfo.setIslost(form.getIslost());
-		tripinfo.setIscancelled(form.getIscancelled());
+		tripinfo.setIscancelled(form.getIscancelled());*/
 		tripinfo.setIsrefused(form.getIsrefused());
 
 		//tripinfo.setRefusedexplainen(translate(form.getRefusedexplain()));
@@ -2003,10 +2245,10 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		tripinfo.setHasbeeninusen(form.getHasbeeninus());
 		//tripinfo.setHasdriverlicenseen(form.getHasdriverlicense());
 		tripinfo.setIsissuedvisaen(form.getIsissuedvisa());
-		tripinfo.setIsapplyingsametypevisaen(form.getIsapplyingsametypevisa());
+		/*tripinfo.setIsapplyingsametypevisaen(form.getIsapplyingsametypevisa());
 		tripinfo.setIstenprinteden(form.getIstenprinted());
 		tripinfo.setIslosten(form.getIslost());
-		tripinfo.setIscancelleden(form.getIscancelled());
+		tripinfo.setIscancelleden(form.getIscancelled());*/
 		tripinfo.setIsrefuseden(form.getIsrefused());
 		tripinfo.setIsfiledimmigrantpetitionen(form.getIsfiledimmigrantpetition());
 		//tripinfo.setEmigrationreasonen(form.getEmigrationreason());
@@ -2314,13 +2556,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		StringBuffer result = new StringBuffer();
 		if (!Util.isEmpty(translation)) {
 			//translation = translate(translation);
-			if (type == 1) {//工作教育信息单位、学校名称特殊字符处理
+			if (type == 1) {//工作教育信息单位、学校名称,职位,慈善组织特殊字符处理
 				//先把连续空格转成单空格
 				translation = translation.replaceAll("\\s+", " ").trim();
 				//去掉不合格的字符
 			} else if (type == 2) {//地址
 
 			} else if (type == 3) {//电话
+
+			} else if (type == 4) {//职位、职责
 
 			} else {
 
@@ -2347,14 +2591,16 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public boolean isLegal(int type, char character) {
-		boolean isLegal = false;
+		boolean isLegal = true;
 
-		if (type == 1) {//工作教育信息单位、学校名称,只允许数字，字母，-,',&和单空格
+		if (type == 1) {//工作教育信息单位、学校名称,职位,慈善组织，只允许数字，字母，-,',&和单空格
 			isLegal = Pattern.compile("^[ A-Za-z0-9-&']+$").matcher(String.valueOf(character)).find();
 		} else if (type == 2) {//地址特殊字符处理
-			isLegal = Pattern.compile("^[ A-Za-z0-9-&'#$*%;!,?.<>@^]+$").matcher(String.valueOf(character)).find();
+			isLegal = Pattern.compile("^[ A-Za-z0-9-&'#$*%;!,?.()<>@^]+$").matcher(String.valueOf(character)).find();
 		} else if (type == 3) {//电话号码特殊字符处理，只允许数字和+
 			isLegal = Pattern.compile("^[0-9+]+$").matcher(String.valueOf(character)).find();
+		} else if (type == 4) {//专业名称  暂时无限制
+			//isLegal = Pattern.compile("^[ A-Za-z0-9]+$").matcher(String.valueOf(character)).find();
 		} else {
 			isLegal = Pattern.compile("^[A-Za-z]+$").matcher(String.valueOf(character)).find();
 		}

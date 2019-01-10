@@ -156,7 +156,13 @@ $("#courseenddate").datetimepicker({
 $("#servicestartdate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	autoclose: true,//选中日期后 自动关闭
+    weekStart: 1,
+    todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+    showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
@@ -164,7 +170,13 @@ $("#servicestartdate").datetimepicker({
 $("#serviceenddate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	autoclose: true,//选中日期后 自动关闭
+    weekStart: 1,
+    todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+    showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });

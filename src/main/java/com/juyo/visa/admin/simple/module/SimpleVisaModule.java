@@ -301,8 +301,8 @@ public class SimpleVisaModule {
 	 */
 	@At
 	@POST
-	public Object getUnitname(@Param("searchStr") String searchStr) {
-		return simpleVisaService.getUnitname(searchStr);
+	public Object getUnitname(@Param("searchStr") String searchStr, HttpServletRequest request) {
+		return simpleVisaService.getUnitname(searchStr, request);
 	}
 
 	/**
@@ -310,8 +310,8 @@ public class SimpleVisaModule {
 	 */
 	@At
 	@POST
-	public Object getUnittelephone(@Param("searchStr") String searchStr) {
-		return simpleVisaService.getUnittelephone(searchStr);
+	public Object getUnittelephone(@Param("searchStr") String searchStr, HttpServletRequest request) {
+		return simpleVisaService.getUnittelephone(searchStr, request);
 	}
 
 	/**

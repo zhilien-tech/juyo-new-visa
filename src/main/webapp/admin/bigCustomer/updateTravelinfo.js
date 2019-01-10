@@ -185,6 +185,24 @@ $(".visaUS").change(function () {
 		$(".dateIssue").hide();
 	}
 });
+//是否丢失过radio
+$(".lose").change(function () {
+	let checked = $("input[name='islost']:checked").val();
+	if (checked == 1) {
+		$(".lostExplain").show();
+	} else {
+		$(".lostExplain").hide();
+	}
+});
+//是否被取消过radio
+$(".revoke").change(function () {
+	let checked = $("input[name='iscancelled']:checked").val();
+	if (checked == 1) {
+		$(".cancelExplain").show();
+	} else {
+		$(".cancelExplain").hide();
+	}
+});
 //是否被拒签过radio
 $(".refuse").change(function () {
 	let checked = $("input[name='isrefused']:checked").val();
@@ -212,6 +230,24 @@ $(".istraveledanycountry").change(function () {
 	} else {
 		$(".travelCountry").hide();
 		$(".gocountrysave").hide();
+	}
+});
+//是否为慈善组织工作radio
+$(".isworkedcharitableorganization").change(function () {
+	let checked = $("input[name='isworkedcharitableorganization']:checked").val();
+	if (checked == 1) {
+		$(".organizationName").show();
+	} else {
+		$(".organizationName").hide();
+	}
+});
+//是否服兵役radio
+$(".hasservedinmilitary").change(function () {
+	let checked = $("input[name='hasservedinmilitary']:checked").val();
+	if (checked == 1) {
+		$(".military").show();
+	} else {
+		$(".military").hide();
 	}
 });
 
@@ -251,6 +287,49 @@ $(".istraveledanycountry").change(function () {
 	maximumSelectionLength : 1, //设置最多可以选择多少项
 	tags : false //设置必须存在的选项 才能选中
 });*/
+
+//服兵役国家
+$('#militarycountry').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectCountry.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.chinesename; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
 
 $(document).on("input","#firstname",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){

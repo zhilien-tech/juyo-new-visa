@@ -369,6 +369,24 @@ input:focus{
 											type="radio" style="margin-left: 20px;" name="islost"
 											class="lose" value="2" checked />否
 									</div>
+									<div class="lostExplain grouptextareaInfo paddingTop-9">
+										<label><span class="s">*</span>丢失年份</label> <input autocomplete="new-password"
+											name="lostyear" style="padding-left: 10px; width: 382px !important;"
+											class="areaInputPic" id='lostyear'
+											value="${obj.tripinfo.lostyear }" />
+									</div>
+									<div class="lostExplain grouptextareaInfo paddingTop-9">
+										<label><span class="s">*</span> 说明</label> <input autocomplete="new-password"
+											name="lostexplain" style="padding-left: 10px; width: 382px !important;"
+											class="areaInputPic" onchange="translateZhToEn(this,'lostexplainen','')" id='lostexplain'
+											value="${obj.tripinfo.lostexplain }" />
+									</div>
+									<div class="lostExplain grouptextareaInfo paddingTop-9">
+										<label><span class="s">*</span> Explain</label> <input autocomplete="new-password"
+											name="lostexplainen" style="padding-left: 10px; width: 382px !important;"
+											class="areaInputPic" id='lostexplainen'
+											value="${obj.tripinfo.lostexplainen }" />
+									</div>
 								</div>
 								<div class="clear"></div>
 								<div class="paddingTop">
@@ -378,6 +396,18 @@ input:focus{
 												type="radio" name="iscancelled" class="revoke" value="1" />是
 											<input autocomplete="new-password" type="radio" style="margin-left: 20px;"
 												name="iscancelled" class="revoke" value="2" checked />否
+										</div>
+										<div class="cancelExplain grouptextareaInfo paddingTop-9">
+											<label><span class="s">*</span> 说明</label> <input autocomplete="new-password"
+												name="cancelexplain" style="padding-left: 10px; width: 382px !important;"
+												class="areaInputPic" onchange="translateZhToEn(this,'cancelexplainen','')" id='cancelexplain'
+												value="${obj.tripinfo.cancelexplain }" />
+										</div>
+										<div class="cancelExplain grouptextareaInfo paddingTop-9">
+											<label><span class="s">*</span> Explain</label> <input autocomplete="new-password"
+												name="cancelexplainen" style="padding-left: 10px; width: 382px !important;"
+												class="areaInputPic" onchange="translateZhToEn(this,'refusedexplainen','')" id='cancelexplainen'
+												value="${obj.tripinfo.cancelexplainen }" />
 										</div>
 									</div>
 								</div>
@@ -532,9 +562,111 @@ input:focus{
 						</div>
 						
 					</div>
-					<div style="height: 150px;"></div>
+					<div style="height: 50px;"></div>
 				</div>
 				<!--以前的美国旅游信息END-->
+				
+				<%-- <div class="paddingBottom">
+					<div class="groupRadioInfo" style="margin-top: 10px;">
+						<label><span class="s">*</span> 是否为任何慈善组织而工作</label> <input autocomplete="new-password" type="radio"
+							name="isworkedcharitableorganization" class="isworkedcharitableorganization" value="1" />是 <input autocomplete="new-password"
+							type="radio" style="margin-left: 20px;" name="isworkedcharitableorganization"
+							class="isworkedcharitableorganization" value="2" checked />否
+					</div>
+					<div class="organizationName grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> 机构名称</label> <input autocomplete="new-password"
+							name="organizationname" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" onchange="translateZhToEn(this,'organizationnameen','')" id='organizationname'
+							value="${obj.organization.organizationname }" />
+					</div>
+					<div class="organizationName grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> Organization name</label> <input autocomplete="new-password"
+							name="organizationnameen" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" id='organizationnameen'
+							value="${obj.organization.organizationnameen }" />
+					</div>
+				</div>
+				<div class="paddingBottom">
+					<div class="groupRadioInfo" style="margin-top: 10px;">
+						<label><span class="s">*</span> 是否曾服兵役</label> <input autocomplete="new-password" type="radio"
+							name="hasservedinmilitary" class="hasservedinmilitary" value="1" />是 <input autocomplete="new-password"
+							type="radio" style="margin-left: 20px;" name="hasservedinmilitary"
+							class="hasservedinmilitary" value="2" checked />否
+					</div>
+					<div class="military grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> 国家/地区</label> 
+						
+						<select id='militarycountry' style="padding-left: 10px; width: 382px !important;"  class="form-control input-sm select2" multiple="multiple" name="militarycountry">
+                        
+                        	<c:forEach items="${obj.gocountryfivelist }" var="country">
+							<c:choose>
+								<c:when test="${country.id eq obj.conscientious.militarycountry }">
+									<option value="${country.id }" selected="selected">${country.chinesename }</option>
+								</c:when>
+								<c:otherwise>
+									<option value="${country.id }">${country.chinesename }</option>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+                        
+                        </select>
+					</div>
+					<div class="military grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> 服务分支</label> <input autocomplete="new-password"
+							name="servicebranch" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" onchange="translateZhToEn(this,'servicebranchen','')" id='servicebranch'
+							value="${obj.conscientious.servicebranch }" />
+					</div>
+					<div class="military grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> Branch of Service</label> <input autocomplete="new-password"
+							name="servicebranchen" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" id='servicebranchen'
+							value="${obj.conscientious.servicebranchen }" />
+					</div>
+					<div class="military grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> 排名/位置</label> <input autocomplete="new-password"
+							name="rank" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" onchange="translateZhToEn(this,'ranken','')" id='rank'
+							value="${obj.conscientious.rank }" />
+					</div>
+					<div class="military grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> Rank/Position</label> <input autocomplete="new-password"
+							name="ranken" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" id='ranken'
+							value="${obj.conscientious.ranken }" />
+					</div>
+					<div class="military grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> 军事专业</label> <input autocomplete="new-password"
+							name="militaryspecialty" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" onchange="translateZhToEn(this,'militaryspecialtyen','')" id='militaryspecialty'
+							value="${obj.conscientious.militaryspecialty }" />
+					</div>
+					<div class="military grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> Military Specialty</label> <input autocomplete="new-password"
+							name="militaryspecialtyen" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" id='militaryspecialtyen'
+							value="${obj.conscientious.militaryspecialtyen }" />
+					</div>
+					<div class="military grouptextareaInfo paddingTop-9">
+						<div class="row">
+							<div class="col-sm-3">
+								<label><span class="s">*</span> 服兵役开始时间</label> <input autocomplete="new-password"
+									name="servicestartdate" style="padding-left: 10px; width: 180px !important;"
+									class="areaInputPic" id='servicestartdate'
+									value="${obj.conscientious.servicestartdate }" />
+							</div>
+							<div class="col-sm-3">
+								<label><span class="s">*</span> 结束时间</label> <input autocomplete="new-password"
+							name="serviceenddate" style="padding-left: 10px; width: 180px !important;"
+							class="areaInputPic" id='serviceenddate'
+							value="${obj.conscientious.serviceenddate }" />
+							</div>
+						
+						</div>
+					</div>
+				</div> --%>
+				
+				
 				<div style="height: 50px;"></div>
 			</div>
 		</form>
@@ -622,9 +754,19 @@ input:focus{
         //是否丢失过美国签证
         var islost = '${obj.tripinfo.islost}';
 		$("input[name='islost'][value='" + islost + "']").attr("checked", 'checked');
+		if(islost == 1){
+			$(".lostExplain").show();
+		}else{
+			$(".lostExplain").hide();
+		}
         //是否被取消过
         var iscancelled = '${obj.tripinfo.iscancelled}';
 		$("input[name='iscancelled'][value='" + iscancelled + "']").attr("checked", 'checked');
+		if(iscancelled == 1){
+			$(".cancelExplain").show();
+		}else{
+			$(".cancelExplain").hide();
+		}
         //是否被拒签过
         var isrefused = '${obj.tripinfo.isrefused}';
 		$("input[name='isrefused'][value='" + isrefused + "']").attr("checked", 'checked');
@@ -661,6 +803,22 @@ input:focus{
 				$('.cjjlSave').hide();
 			}
 		});
+		//是否工作于慈善组织
+        var isworkedcharitableorganization = '${obj.isworkedcharitableorganization}';
+		$("input[name='isworkedcharitableorganization'][value='" + isworkedcharitableorganization + "']").attr("checked", 'checked');
+		if (isworkedcharitableorganization == 1) {
+			$(".organizationName").show();
+		} else {
+			$(".organizationName").hide();
+		}
+		//是否服兵役
+        var hasservedinmilitary = '${obj.hasservedinmilitary}';
+		$("input[name='hasservedinmilitary'][value='" + hasservedinmilitary + "']").attr("checked", 'checked');
+		if (hasservedinmilitary == 1) {
+			$(".military").show();
+		} else {
+			$(".military").hide();
+		}
 		
 		
 		//跳转到基本信息页

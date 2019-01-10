@@ -1864,7 +1864,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			Supplement.put("special_skills", "");
 		}
 
-		//MilitaryService
+		//MilitaryService 服兵役
 		Map<String, Object> MilitaryService = Maps.newHashMap();
 		MilitaryService.put("country", "");
 		MilitaryService.put("armed_services", "");

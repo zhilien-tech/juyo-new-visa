@@ -207,11 +207,14 @@ toj.id=@id AND taoj.isMainApplicant = 1
 
 /*simpleJP_getUnitname*/
 SELECT
-name,
-telephone,
-address
+tawj.name,
+tawj.telephone,
+tawj.address
 FROM
-t_applicant_work_jp
+t_applicant_work_jp tawj
+LEFT JOIN t_applicant_order_jp taoj ON taoj.id = tawj.applicantId
+INNER JOIN t_order_jp toj ON toj.id = taoj.orderId
+LEFT JOIN t_order tr ON tr.id = toj.orderId
 $condition
 
 

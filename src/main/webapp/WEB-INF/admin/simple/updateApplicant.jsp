@@ -265,7 +265,7 @@
 					<div class="col-sm-6">
 						<div class="form-group">
 							<label><span>*</span>公民身份证</label>
-							<input id="cardId"  onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="cardId" autocomplete="off" type="text" tabindex="10" class="form-control input-sm" value="${obj.applicant.cardId }"/>
+							<input id="cardId"  onkeyup="this.value=this.value.replace(/^ +| +$/g,'')" name="cardId" maxlength="18" autocomplete="off" type="text" tabindex="10" class="form-control input-sm" value="${obj.applicant.cardId }"/>
 						</div>
 					</div>
 					<div class="col-sm-6">
@@ -591,13 +591,23 @@
 							}
 						}
 					},
+					cardId: {
+						trigger: "change keyup",
+						validators: {
+							stringLength: {
+								min: 18,
+								max: 18,
+								message: '身份证号必须为18位'
+							},
+						}
+					},
 					passport: {
 						trigger: "change keyup",
 						validators: {
 							stringLength: {
-								min: 1,
+								min: 9,
 								max: 9,
-								message: ''
+								message: '护照号必须为9位'
 							},
 							regexp: {
 								regexp: /^[0-9a-zA-Z]+$/,

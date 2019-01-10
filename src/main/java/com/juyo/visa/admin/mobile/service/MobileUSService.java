@@ -1837,15 +1837,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		workinfo.setWorkstartdate(form.getWorkstartdate());
 
 		if (Util.isEmpty(form.getPositionen())) {
-			workinfo.setPositionen(translate(form.getPosition()));
+			workinfo.setPositionen(translationHandle(1, translate(form.getPosition())));
 		} else {
 			if (Util.eq(form.getPosition(), workinfo.getPosition())) {
-				workinfo.setPositionen(form.getPositionen());
+				workinfo.setPositionen(translationHandle(1, form.getPositionen()));
 			} else {
 				if (Util.eq(form.getPositionen(), workinfo.getPositionen())) {
-					workinfo.setPositionen(translate(form.getPosition()));
+					workinfo.setPositionen(translationHandle(1, translate(form.getPosition())));
 				} else {
-					workinfo.setPositionen(form.getPositionen());
+					workinfo.setPositionen(translationHandle(1, form.getPositionen()));
 				}
 			}
 		}
@@ -1994,15 +1994,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		beforework.setEmployenddate(form.getEmployenddate());
 
 		if (Util.isEmpty(form.getJobtitleen())) {
-			beforework.setJobtitleen(translate(form.getJobtitle()));
+			beforework.setJobtitleen(translationHandle(1, translate(form.getJobtitle())));
 		} else {
 			if (Util.eq(form.getJobtitle(), beforework.getJobtitle())) {
-				beforework.setJobtitleen(form.getJobtitleen());
+				beforework.setJobtitleen(translationHandle(1, form.getJobtitleen()));
 			} else {
 				if (Util.eq(form.getJobtitleen(), beforework.getJobtitleen())) {
-					beforework.setJobtitleen(translate(form.getJobtitle()));
+					beforework.setJobtitleen(translationHandle(1, translate(form.getJobtitle())));
 				} else {
-					beforework.setJobtitleen(form.getJobtitleen());
+					beforework.setJobtitleen(translationHandle(1, form.getJobtitleen()));
 				}
 			}
 		}
@@ -2010,15 +2010,15 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		beforework.setJobtitle(form.getJobtitle());
 
 		if (Util.isEmpty(form.getPreviousdutyen())) {
-			beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+			beforework.setPreviousdutyen(translationHandle(4, translate(form.getPreviousduty())));
 		} else {
 			if (Util.eq(form.getPreviousduty(), beforework.getPreviousduty())) {
-				beforework.setPreviousdutyen(form.getPreviousdutyen());
+				beforework.setPreviousdutyen(translationHandle(4, form.getPreviousdutyen()));
 			} else {
 				if (Util.eq(form.getPreviousdutyen(), beforework.getPreviousdutyen())) {
-					beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+					beforework.setPreviousdutyen(translationHandle(4, translate(form.getPreviousduty())));
 				} else {
-					beforework.setPreviousdutyen(form.getPreviousdutyen());
+					beforework.setPreviousdutyen(translationHandle(4, form.getPreviousdutyen()));
 				}
 			}
 		}
@@ -2740,7 +2740,7 @@ public class MobileUSService extends BaseService<TApplicantEntity> {
 		if (type == 1) {//工作教育信息单位、学校名称,只允许数字，字母，-,',&和单空格
 			isLegal = Pattern.compile("^[ A-Za-z0-9-&']+$").matcher(String.valueOf(character)).find();
 		} else if (type == 2) {//地址特殊字符处理
-			isLegal = Pattern.compile("^[ A-Za-z0-9-&'#$*%;!,?.<>@^]+$").matcher(String.valueOf(character)).find();
+			isLegal = Pattern.compile("^[ A-Za-z0-9-&'#$*%;!,?.()<>@^]+$").matcher(String.valueOf(character)).find();
 		} else if (type == 3) {//电话号码特殊字符处理，只允许数字和+
 			isLegal = Pattern.compile("^[0-9+]+$").matcher(String.valueOf(character)).find();
 		}

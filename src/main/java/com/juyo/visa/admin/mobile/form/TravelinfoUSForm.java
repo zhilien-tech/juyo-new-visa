@@ -61,6 +61,51 @@ public class TravelinfoUSForm {
 
 	private Integer emigrationreasonen;
 
+	/**是否为慈善组织工作*/
+	private Integer isworkedcharitableorganization;
+
+	private Integer isworkedcharitableorganizationen;
+
+	/**慈善机构名称*/
+	private String organizationname;
+
+	private String organizationnameen;
+
+	/**是否服兵役*/
+	private Integer hasservedinmilitary;
+
+	private Integer hasservedinmilitaryen;
+
+	/**服兵役国家*/
+	private Integer militarycountry;
+
+	private Integer militarycountryen;
+
+	/**服兵役服务分支*/
+	private String servicebranch;
+
+	private String servicebranchen;
+
+	/**服兵役排名*/
+	private String rank;
+
+	private String ranken;
+
+	/**服兵役军事专业*/
+	private String militaryspecialty;
+
+	private String militaryspecialtyen;
+
+	/**服兵役开始时间*/
+	private Date servicestartdate;
+
+	private Date servicestartdateen;
+
+	/**服兵役结束时间*/
+	private Date serviceenddate;
+
+	private Date serviceenddateen;
+
 	/**是否有美国签证*/
 	private Integer isissuedvisa;
 

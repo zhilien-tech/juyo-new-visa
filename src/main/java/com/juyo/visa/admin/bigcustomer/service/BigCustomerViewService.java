@@ -1776,6 +1776,8 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		previUSTripInfo.setIsrefused(DEFAULT_IS_NO);
 		previUSTripInfo.setIslegalpermanentresident(DEFAULT_IS_NO);
 		previUSTripInfo.setIsfiledimmigrantpetition(DEFAULT_IS_NO);
+		previUSTripInfo.setCostpayer(1);
+		previUSTripInfo.setCostpayeren(1);
 
 		previUSTripInfo.setHasbeeninusen(DEFAULT_IS_NO);
 		previUSTripInfo.setHasdriverlicenseen(DEFAULT_IS_NO);

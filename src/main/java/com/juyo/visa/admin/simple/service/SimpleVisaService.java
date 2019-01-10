@@ -5740,14 +5740,17 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
-	public Object getUnitname(String searchstr) {
+	public Object getUnitname(String searchstr, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 
 		List<String> nameList = new ArrayList<>();
 
 		String sqlStr = sqlManager.get("simpleJP_getUnitname");
 		Sql sql = Sqls.create(sqlStr);
 		Cnd cnd = Cnd.NEW();
-		cnd.and("name", "like", "%" + Strings.trim(searchstr) + "%");
+		cnd.and("tawj.name", "like", "%" + Strings.trim(searchstr) + "%");
+		cnd.and("tr.comId", "=", loginCompany.getId());
 		List<Record> names = dbDao.query(sql, cnd, null);
 		for (Record record : names) {
 			String name = record.getString("name");
@@ -5765,13 +5768,18 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return nameList;
 	}
 
-	public Object getUnittelephone(String searchstr) {
+	public Object getUnittelephone(String searchstr, HttpServletRequest request) {
+
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+
 		List<String> telephoneList = new ArrayList<>();
 
-		String sqlStr = sqlManager.get("simpleJP_getUnittelephone");
+		String sqlStr = sqlManager.get("simpleJP_getUnitname");
 		Sql sql = Sqls.create(sqlStr);
 		Cnd cnd = Cnd.NEW();
-		cnd.and("telephone", "like", "%" + Strings.trim(searchstr) + "%");
+		cnd.and("tawj.telephone", "like", "%" + Strings.trim(searchstr) + "%");
+		cnd.and("tr.comId", "=", loginCompany.getId());
 		List<Record> telephones = dbDao.query(sql, cnd, null);
 		for (Record record : telephones) {
 			String name = record.getString("name");
