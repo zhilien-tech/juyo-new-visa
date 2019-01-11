@@ -23,6 +23,7 @@ import com.juyo.visa.common.enums.orderUS.USOrderListStatusEnum;
 import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
 import com.juyo.visa.entities.TAppStaffBeforeworkEntity;
 import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
+import com.juyo.visa.entities.TAppStaffConscientiousEntity;
 import com.juyo.visa.entities.TAppStaffDriverinfoEntity;
 import com.juyo.visa.entities.TAppStaffFormerspouseEntity;
 import com.juyo.visa.entities.TAppStaffGocountryEntity;
@@ -563,324 +564,332 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		//WorkEducation
 		Map<String, Object> WorkEducation = Maps.newHashMap();
-
-		//职业(签证信息)
-		if (!Util.isEmpty(info.get("occupation")) && !Util.eq(0, info.get("occupation"))) {
-			int status = (int) info.get("occupation");
-			WorkEducation.put("current_status", getOccupation(status));
-		} else {
-			errorMsg += "工作教育信息：主要职业,</br>";
-		}
-		//请说明  没有
-		WorkEducation.put("describe", "Have nothing to do");
 		//Works
 		ArrayList<Object> works = new ArrayList<>();
-
-		Map<String, Object> nowWork = Maps.newHashMap();
-		TAppStaffWorkEducationTrainingEntity nowWorkinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
-				Cnd.where("staffid", "=", staffid));
-
-		//单位名称(签证信息)
-		if (!Util.isEmpty(nowWorkinfo.getUnitname())) {
-			nowWork.put("unit_name_cn", nowWorkinfo.getUnitname());
-		} else {
-			errorMsg += "工作教育信息：目前的工作单位名称中文,</br>";
-		}
-		//单位名称 拼音(签证信息)
-		if (!Util.isEmpty(nowWorkinfo.getUnitnameen())) {
-			nowWork.put("unit_name_en", nowWorkinfo.getUnitnameen());
-		} else {
-			errorMsg += "工作教育信息：目前的工作单位名称英文,</br>";
-		}
-		//单位电话(签证信息)
-		if (!Util.isEmpty(nowWorkinfo.getTelephone())) {
-			nowWork.put("phone", nowWorkinfo.getTelephone());
-		} else {
-			errorMsg += "工作教育信息：目前的工作单位电话,</br>";
-		}
-		//职务(签证信息)
-		if (!Util.isEmpty(nowWorkinfo.getPositionen())) {
-			nowWork.put("job_title", nowWorkinfo.getPositionen());
-		} else {
-			errorMsg += "工作教育信息：目前的工作职位,</br>";
-		}
-		//职责(签证信息)
-		if (!Util.isEmpty(nowWorkinfo.getDutyen())) {
-			nowWork.put("job_description", nowWorkinfo.getDutyen());
-		} else {
-			errorMsg += "工作教育信息：目前的工作职责简述,</br>";
-		}
-		//月收入 
-		if (!Util.isEmpty(nowWorkinfo.getSalary())) {
-			nowWork.put("monthly_income", nowWorkinfo.getSalary().intValue());
-		} else {
-			errorMsg += "工作教育信息：目前的工作月收入,</br>";
-		}
-		//入职时间(签证信息)
-		if (!Util.isEmpty(nowWorkinfo.getWorkstartdate())) {
-			nowWork.put("start_date", sdf.format(nowWorkinfo.getWorkstartdate()));
-		} else {
-			nowWork.put("start_date", "");
-		}
-		nowWork.put("end_date", "");
-
-		//AddressInfo
-		Map<String, Object> nowaddressinfo = Maps.newHashMap();
-		//雇主街道(签证信息)
-		if (!Util.isEmpty(nowWorkinfo.getAddressen())) {
-			nowaddressinfo.put("street", nowWorkinfo.getAddressen());
-		} else {
-			errorMsg += "工作教育信息：目前的工作详细地址,</br>";
-		}
-		//雇主城市(签证信息)
-		if (!Util.isEmpty(nowWorkinfo.getCityen())) {
-			nowaddressinfo.put("city", nowWorkinfo.getCityen());
-		} else {
-			errorMsg += "工作教育信息：目前的工作单位地址(市),</br>";
-		}
-		//雇主省份(签证信息)
-		if (!Util.isEmpty(nowWorkinfo.getProvinceen())) {
-			nowaddressinfo.put("province", nowWorkinfo.getProvinceen());
-		} else {
-			errorMsg += "工作教育信息：目前的工作单位地址(省),</br>";
-		}
-		//雇主国家(签证信息)
-		if (!Util.isEmpty(nowWorkinfo.getCountry())) {
-			String country = getCountry(nowWorkinfo.getCountry());
-			nowaddressinfo.put("country", country);
-		} else {
-			errorMsg += "工作教育信息：目前的工作国家,</br>";
-		}
-		//雇主邮政编码(签证信息)
-		if (!Util.isEmpty(nowWorkinfo.getZipcode())) {
-			nowaddressinfo.put("zip_code", nowWorkinfo.getZipcode());
-		} else {
-			nowaddressinfo.put("zip_code", "");
-		}
-
-		nowWork.put("AdderssInfo", nowaddressinfo);
-
-		//directorsname
-		Map<String, Object> nowdirectorsname = Maps.newHashMap();
-
-		nowdirectorsname.put("surnames_cn", "");
-		nowdirectorsname.put("surnames_en", "");
-		nowdirectorsname.put("given_names_cn", "");
-		nowdirectorsname.put("given_names_en", "");
-
-		nowWork.put("DirectorsName", nowdirectorsname);
-
-		works.add(nowWork);
-
-		Map<String, Object> work = Maps.newHashMap();
-		Map<String, Object> preaddressinfo = Maps.newHashMap();
-		Map<String, Object> directorsname = Maps.newHashMap();
-		if (info.getInt("isemployed") == 1) {
-			//以前的工作
-			TAppStaffBeforeworkEntity workEntity = dbDao.fetch(TAppStaffBeforeworkEntity.class,
-					Cnd.where("staffid", "=", staffid));
-			//单位名称(签证信息)
-			if (!Util.isEmpty(workEntity.getEmployername())) {
-				work.put("unit_name_cn", workEntity.getEmployername());
-			} else {
-				errorMsg += "工作教育信息：上份工作单位名称中文,</br>";
-			}
-			//单位名称 拼音(签证信息)
-			if (!Util.isEmpty(workEntity.getEmployernameen())) {
-				work.put("unit_name_en", workEntity.getEmployernameen());
-			} else {
-				errorMsg += "工作教育信息：上份工作单位名称英文,</br>";
-			}
-			//单位电话(签证信息)
-			if (!Util.isEmpty(workEntity.getEmployertelephone())) {
-				work.put("phone", workEntity.getEmployertelephone());
-			} else {
-				errorMsg += "工作教育信息：上份工作单位电话,</br>";
-			}
-			//职务(签证信息)
-			if (!Util.isEmpty(workEntity.getJobtitleen())) {
-				work.put("job_title", workEntity.getJobtitleen());
-			} else {
-				errorMsg += "工作教育信息：上份工作职位,</br>";
-			}
-			//职责(签证信息)
-			if (!Util.isEmpty(workEntity.getPreviousdutyen())) {
-				work.put("job_description", workEntity.getPreviousdutyen());
-			} else {
-				errorMsg += "工作教育信息：上份工作职责简述,</br>";
-			}
-			//月收入 没有
-			//work.put("monthly_income", "20000");
-			//入职时间(签证信息)
-			if (!Util.isEmpty(workEntity.getEmploystartdate())) {
-				work.put("start_date", sdf.format(workEntity.getEmploystartdate()));
-			} else {
-				work.put("start_date", "");
-			}
-			//离职时间(签证信息)
-			if (!Util.isEmpty(workEntity.getEmployenddate())) {
-				work.put("end_date", sdf.format(workEntity.getEmployenddate()));
-			} else {
-				work.put("end_date", "");
-			}
-
-			//AddressInfo
-
-			//雇主街道(签证信息)
-			if (!Util.isEmpty(workEntity.getEmployeraddressen())) {
-				preaddressinfo.put("street", workEntity.getEmployeraddressen());
-			} else {
-				errorMsg += "工作教育信息：上份工作详细地址,</br>";
-			}
-			//雇主城市(签证信息)
-			if (!Util.isEmpty(workEntity.getEmployercityen())) {
-				preaddressinfo.put("city", workEntity.getEmployercityen());
-			} else {
-				errorMsg += "工作教育信息：上份工作单位地址(市),</br>";
-			}
-			//雇主省份(签证信息)
-			if (!Util.isEmpty(workEntity.getEmployerprovinceen())) {
-				preaddressinfo.put("province", workEntity.getEmployerprovinceen());
-			} else {
-				preaddressinfo.put("province", "");
-			}
-			//雇主国家(签证信息)
-			if (!Util.isEmpty(workEntity.getEmployercountry())) {
-				String country = getCountry(workEntity.getEmployercountry());
-				preaddressinfo.put("country", country);
-			} else {
-				preaddressinfo.put("country", "");
-			}
-			//雇主邮政编码(签证信息)
-			if (!Util.isEmpty(workEntity.getEmployerzipcode())) {
-				preaddressinfo.put("zip_code", workEntity.getEmployerzipcode());
-			} else {
-				preaddressinfo.put("zip_code", "");
-			}
-
-			//directorsname
-
-			//主管的姓(签证信息)
-			if (!Util.isEmpty(workEntity.getSupervisorfirstname())) {
-				directorsname.put("surnames_cn", workEntity.getSupervisorfirstname());
-			} else {
-				directorsname.put("surnames_cn", "");
-			}
-			//主管的姓 拼音(签证信息)
-			if (!Util.isEmpty(workEntity.getSupervisorfirstnameen())) {
-				directorsname.put("surnames_en", workEntity.getSupervisorfirstnameen());
-			} else {
-				directorsname.put("surnames_en", "");
-			}
-			//主管的名(签证信息)
-			if (!Util.isEmpty(workEntity.getSupervisorlastname())) {
-				directorsname.put("given_names_cn", workEntity.getSupervisorlastname());
-			} else {
-				directorsname.put("given_names_cn", "");
-			}
-			//主管的名 拼音(签证信息)
-			if (!Util.isEmpty(workEntity.getSupervisorlastnameen())) {
-				directorsname.put("given_names_en", workEntity.getSupervisorlastnameen());
-			} else {
-				directorsname.put("given_names_en", "");
-			}
-
-		} else {
-			preaddressinfo.put("country", "");
-			preaddressinfo.put("province", "");
-			preaddressinfo.put("city", "");
-			preaddressinfo.put("street", "");
-			preaddressinfo.put("zip_code", "");
-
-			directorsname.put("surnames_en", "");
-			directorsname.put("surnames_cn", "");
-			directorsname.put("given_names_cn", "");
-			directorsname.put("given_names_en", "");
-		}
-		work.put("AdderssInfo", preaddressinfo);
-		work.put("DirectorsName", directorsname);
-		works.add(work);
-
-		WorkEducation.put("Works", works);
-
 		//Educations
 		ArrayList<Object> educations = new ArrayList<>();
+		//只有大于14岁才有工作信息
+		if (yearsBetween > 14) {
+			//职业(签证信息)
+			if (!Util.isEmpty(info.get("occupation")) && !Util.eq(0, info.get("occupation"))) {
+				int status = (int) info.get("occupation");
+				WorkEducation.put("current_status", getOccupation(status));
+			} else {
+				errorMsg += "工作教育信息：主要职业,</br>";
+			}
+			//请说明  没有
+			WorkEducation.put("describe", "Have nothing to do");
 
-		//以前的教育信息
-		List<TAppStaffBeforeeducationEntity> beforeeducations = dbDao.query(TAppStaffBeforeeducationEntity.class,
-				Cnd.where("staffid", "=", staffid), null);
-		for (TAppStaffBeforeeducationEntity educationEntity : beforeeducations) {
-			Map<String, Object> education = Maps.newHashMap();
-			//机构名称(签证信息)
-			if (!Util.isEmpty(educationEntity.getInstitution())) {
-				education.put("unit_name_cn", educationEntity.getInstitution());
+			Map<String, Object> nowWork = Maps.newHashMap();
+			TAppStaffWorkEducationTrainingEntity nowWorkinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
+					Cnd.where("staffid", "=", staffid));
+
+			//单位名称(签证信息)
+			if (!Util.isEmpty(nowWorkinfo.getUnitname())) {
+				nowWork.put("unit_name_cn", nowWorkinfo.getUnitname());
 			} else {
-				errorMsg += "工作教育信息：教育信息学校名称中文,</br>";
+				errorMsg += "工作教育信息：目前的工作单位名称中文,</br>";
 			}
-			//机构名称 英文(签证信息)
-			if (!Util.isEmpty(educationEntity.getInstitutionen())) {
-				education.put("unit_name_en", educationEntity.getInstitutionen());
+			//单位名称 拼音(签证信息)
+			if (!Util.isEmpty(nowWorkinfo.getUnitnameen())) {
+				nowWork.put("unit_name_en", nowWorkinfo.getUnitnameen());
 			} else {
-				errorMsg += "工作教育信息：教育信息学校名称英文,</br>";
+				errorMsg += "工作教育信息：目前的工作单位名称英文,</br>";
 			}
-			//学科(签证信息)
-			if (!Util.isEmpty(educationEntity.getCourseen())) {
-				education.put("major", educationEntity.getCourseen());
+			//单位电话(签证信息)
+			if (!Util.isEmpty(nowWorkinfo.getTelephone())) {
+				nowWork.put("phone", nowWorkinfo.getTelephone());
 			} else {
-				errorMsg += "工作教育信息：教育信息专业,</br>";
+				errorMsg += "工作教育信息：目前的工作单位电话,</br>";
 			}
-			//参加课程开始时间(签证信息)
-			if (!Util.isEmpty(educationEntity.getCoursestartdate())) {
-				education.put("start_date", sdf.format(educationEntity.getCoursestartdate()));
+			//职务(签证信息)
+			if (!Util.isEmpty(nowWorkinfo.getPositionen())) {
+				nowWork.put("job_title", nowWorkinfo.getPositionen());
 			} else {
-				errorMsg += "工作教育信息：教育信息开始时间,</br>";
+				errorMsg += "工作教育信息：目前的工作职位,</br>";
 			}
-			//结束时间(签证信息)
-			if (!Util.isEmpty(educationEntity.getCourseenddate())) {
-				education.put("end_date", sdf.format(educationEntity.getCourseenddate()));
+			//职责(签证信息)
+			if (!Util.isEmpty(nowWorkinfo.getDutyen())) {
+				nowWork.put("job_description", nowWorkinfo.getDutyen());
 			} else {
-				errorMsg += "工作教育信息：教育信息结束时间,</br>";
+				errorMsg += "工作教育信息：目前的工作职责简述,</br>";
+			}
+			//月收入 
+			if (!Util.isEmpty(nowWorkinfo.getSalary())) {
+				nowWork.put("monthly_income", nowWorkinfo.getSalary().intValue());
+			} else {
+				errorMsg += "工作教育信息：目前的工作月收入,</br>";
+			}
+			//入职时间(签证信息)
+			if (!Util.isEmpty(nowWorkinfo.getWorkstartdate())) {
+				nowWork.put("start_date", sdf.format(nowWorkinfo.getWorkstartdate()));
+			} else {
+				nowWork.put("start_date", "");
+			}
+			nowWork.put("end_date", "");
+
+			//AddressInfo
+			Map<String, Object> nowaddressinfo = Maps.newHashMap();
+			//雇主街道(签证信息)
+			if (!Util.isEmpty(nowWorkinfo.getAddressen())) {
+				nowaddressinfo.put("street", nowWorkinfo.getAddressen());
+			} else {
+				errorMsg += "工作教育信息：目前的工作详细地址,</br>";
+			}
+			//雇主城市(签证信息)
+			if (!Util.isEmpty(nowWorkinfo.getCityen())) {
+				nowaddressinfo.put("city", nowWorkinfo.getCityen());
+			} else {
+				errorMsg += "工作教育信息：目前的工作单位地址(市),</br>";
+			}
+			//雇主省份(签证信息)
+			if (!Util.isEmpty(nowWorkinfo.getProvinceen())) {
+				nowaddressinfo.put("province", nowWorkinfo.getProvinceen());
+			} else {
+				errorMsg += "工作教育信息：目前的工作单位地址(省),</br>";
+			}
+			//雇主国家(签证信息)
+			if (!Util.isEmpty(nowWorkinfo.getCountry())) {
+				String country = getCountry(nowWorkinfo.getCountry());
+				nowaddressinfo.put("country", country);
+			} else {
+				errorMsg += "工作教育信息：目前的工作国家,</br>";
+			}
+			//雇主邮政编码(签证信息)
+			if (!Util.isEmpty(nowWorkinfo.getZipcode())) {
+				nowaddressinfo.put("zip_code", nowWorkinfo.getZipcode());
+			} else {
+				nowaddressinfo.put("zip_code", "");
 			}
 
-			//addressinfo
-			Map<String, Object> addressinfo = Maps.newHashMap();
-			//街道地址(签证信息)
-			if (!Util.isEmpty(educationEntity.getInstitutionaddressen())) {
-				addressinfo.put("street", educationEntity.getInstitutionaddressen());
-			} else {
-				errorMsg += "工作教育信息：教育信息详细地址,</br>";
-			}
-			//市(签证信息)
-			if (!Util.isEmpty(educationEntity.getInstitutioncityen())) {
-				addressinfo.put("city", educationEntity.getInstitutioncityen());
-			} else {
-				errorMsg += "工作教育信息：教育信息学校地址(市),</br>";
-			}
-			//省(签证信息)
-			if (!Util.isEmpty(educationEntity.getInstitutionprovinceen())) {
-				addressinfo.put("province", educationEntity.getInstitutionprovinceen());
-			} else {
-				addressinfo.put("province", "");
-			}
-			//国家(签证信息)
-			if (!Util.isEmpty(educationEntity.getInstitutioncountry())) {
-				String country = getCountry(educationEntity.getInstitutioncountry());
-				addressinfo.put("country", country);
-			} else {
-				errorMsg += "工作教育信息：教育信息所在国家,</br>";
-			}
-			//邮政编码(签证信息)
-			if (!Util.isEmpty(educationEntity.getInstitutionzipcode())) {
-				addressinfo.put("zip_code", educationEntity.getInstitutionzipcode());
-			} else {
-				addressinfo.put("zip_code", "");
-			}
-			education.put("AdderssInfo", addressinfo);
+			nowWork.put("AdderssInfo", nowaddressinfo);
 
-			educations.add(education);
+			//directorsname
+			Map<String, Object> nowdirectorsname = Maps.newHashMap();
+
+			nowdirectorsname.put("surnames_cn", "");
+			nowdirectorsname.put("surnames_en", "");
+			nowdirectorsname.put("given_names_cn", "");
+			nowdirectorsname.put("given_names_en", "");
+
+			nowWork.put("DirectorsName", nowdirectorsname);
+
+			works.add(nowWork);
+
+			Map<String, Object> work = Maps.newHashMap();
+			Map<String, Object> preaddressinfo = Maps.newHashMap();
+			Map<String, Object> directorsname = Maps.newHashMap();
+			if (info.getInt("isemployed") == 1) {
+				//以前的工作
+				TAppStaffBeforeworkEntity workEntity = dbDao.fetch(TAppStaffBeforeworkEntity.class,
+						Cnd.where("staffid", "=", staffid));
+				//单位名称(签证信息)
+				if (!Util.isEmpty(workEntity.getEmployername())) {
+					work.put("unit_name_cn", workEntity.getEmployername());
+				} else {
+					errorMsg += "工作教育信息：上份工作单位名称中文,</br>";
+				}
+				//单位名称 拼音(签证信息)
+				if (!Util.isEmpty(workEntity.getEmployernameen())) {
+					work.put("unit_name_en", workEntity.getEmployernameen());
+				} else {
+					errorMsg += "工作教育信息：上份工作单位名称英文,</br>";
+				}
+				//单位电话(签证信息)
+				if (!Util.isEmpty(workEntity.getEmployertelephone())) {
+					work.put("phone", workEntity.getEmployertelephone());
+				} else {
+					errorMsg += "工作教育信息：上份工作单位电话,</br>";
+				}
+				//职务(签证信息)
+				if (!Util.isEmpty(workEntity.getJobtitleen())) {
+					work.put("job_title", workEntity.getJobtitleen());
+				} else {
+					errorMsg += "工作教育信息：上份工作职位,</br>";
+				}
+				//职责(签证信息)
+				if (!Util.isEmpty(workEntity.getPreviousdutyen())) {
+					work.put("job_description", workEntity.getPreviousdutyen());
+				} else {
+					errorMsg += "工作教育信息：上份工作职责简述,</br>";
+				}
+				//月收入 没有
+				//work.put("monthly_income", "20000");
+				//入职时间(签证信息)
+				if (!Util.isEmpty(workEntity.getEmploystartdate())) {
+					work.put("start_date", sdf.format(workEntity.getEmploystartdate()));
+				} else {
+					work.put("start_date", "");
+				}
+				//离职时间(签证信息)
+				if (!Util.isEmpty(workEntity.getEmployenddate())) {
+					work.put("end_date", sdf.format(workEntity.getEmployenddate()));
+				} else {
+					work.put("end_date", "");
+				}
+
+				//AddressInfo
+
+				//雇主街道(签证信息)
+				if (!Util.isEmpty(workEntity.getEmployeraddressen())) {
+					preaddressinfo.put("street", workEntity.getEmployeraddressen());
+				} else {
+					errorMsg += "工作教育信息：上份工作详细地址,</br>";
+				}
+				//雇主城市(签证信息)
+				if (!Util.isEmpty(workEntity.getEmployercityen())) {
+					preaddressinfo.put("city", workEntity.getEmployercityen());
+				} else {
+					errorMsg += "工作教育信息：上份工作单位地址(市),</br>";
+				}
+				//雇主省份(签证信息)
+				if (!Util.isEmpty(workEntity.getEmployerprovinceen())) {
+					preaddressinfo.put("province", workEntity.getEmployerprovinceen());
+				} else {
+					preaddressinfo.put("province", "");
+				}
+				//雇主国家(签证信息)
+				if (!Util.isEmpty(workEntity.getEmployercountry())) {
+					String country = getCountry(workEntity.getEmployercountry());
+					preaddressinfo.put("country", country);
+				} else {
+					preaddressinfo.put("country", "");
+				}
+				//雇主邮政编码(签证信息)
+				if (!Util.isEmpty(workEntity.getEmployerzipcode())) {
+					preaddressinfo.put("zip_code", workEntity.getEmployerzipcode());
+				} else {
+					preaddressinfo.put("zip_code", "");
+				}
+
+				//directorsname
+
+				//主管的姓(签证信息)
+				if (!Util.isEmpty(workEntity.getSupervisorfirstname())) {
+					directorsname.put("surnames_cn", workEntity.getSupervisorfirstname());
+				} else {
+					directorsname.put("surnames_cn", "");
+				}
+				//主管的姓 拼音(签证信息)
+				if (!Util.isEmpty(workEntity.getSupervisorfirstnameen())) {
+					directorsname.put("surnames_en", workEntity.getSupervisorfirstnameen());
+				} else {
+					directorsname.put("surnames_en", "");
+				}
+				//主管的名(签证信息)
+				if (!Util.isEmpty(workEntity.getSupervisorlastname())) {
+					directorsname.put("given_names_cn", workEntity.getSupervisorlastname());
+				} else {
+					directorsname.put("given_names_cn", "");
+				}
+				//主管的名 拼音(签证信息)
+				if (!Util.isEmpty(workEntity.getSupervisorlastnameen())) {
+					directorsname.put("given_names_en", workEntity.getSupervisorlastnameen());
+				} else {
+					directorsname.put("given_names_en", "");
+				}
+
+			} else {
+				preaddressinfo.put("country", "");
+				preaddressinfo.put("province", "");
+				preaddressinfo.put("city", "");
+				preaddressinfo.put("street", "");
+				preaddressinfo.put("zip_code", "");
+
+				directorsname.put("surnames_en", "");
+				directorsname.put("surnames_cn", "");
+				directorsname.put("given_names_cn", "");
+				directorsname.put("given_names_en", "");
+			}
+			work.put("AdderssInfo", preaddressinfo);
+			work.put("DirectorsName", directorsname);
+			works.add(work);
+
+			WorkEducation.put("Works", works);
+
+			//以前的教育信息
+			List<TAppStaffBeforeeducationEntity> beforeeducations = dbDao.query(TAppStaffBeforeeducationEntity.class,
+					Cnd.where("staffid", "=", staffid), null);
+			for (TAppStaffBeforeeducationEntity educationEntity : beforeeducations) {
+				Map<String, Object> education = Maps.newHashMap();
+				//机构名称(签证信息)
+				if (!Util.isEmpty(educationEntity.getInstitution())) {
+					education.put("unit_name_cn", educationEntity.getInstitution());
+				} else {
+					errorMsg += "工作教育信息：教育信息学校名称中文,</br>";
+				}
+				//机构名称 英文(签证信息)
+				if (!Util.isEmpty(educationEntity.getInstitutionen())) {
+					education.put("unit_name_en", educationEntity.getInstitutionen());
+				} else {
+					errorMsg += "工作教育信息：教育信息学校名称英文,</br>";
+				}
+				//学科(签证信息)
+				if (!Util.isEmpty(educationEntity.getCourseen())) {
+					education.put("major", educationEntity.getCourseen());
+				} else {
+					education.put("major", "");
+					//errorMsg += "工作教育信息：教育信息专业,</br>";
+				}
+				//参加课程开始时间(签证信息)
+				if (!Util.isEmpty(educationEntity.getCoursestartdate())) {
+					education.put("start_date", sdf.format(educationEntity.getCoursestartdate()));
+				} else {
+					errorMsg += "工作教育信息：教育信息开始时间,</br>";
+				}
+				//结束时间(签证信息)
+				if (!Util.isEmpty(educationEntity.getCourseenddate())) {
+					education.put("end_date", sdf.format(educationEntity.getCourseenddate()));
+				} else {
+					errorMsg += "工作教育信息：教育信息结束时间,</br>";
+				}
+
+				//addressinfo
+				Map<String, Object> addressinfo = Maps.newHashMap();
+				//街道地址(签证信息)
+				if (!Util.isEmpty(educationEntity.getInstitutionaddressen())) {
+					addressinfo.put("street", educationEntity.getInstitutionaddressen());
+				} else {
+					errorMsg += "工作教育信息：教育信息详细地址,</br>";
+				}
+				//市(签证信息)
+				if (!Util.isEmpty(educationEntity.getInstitutioncityen())) {
+					addressinfo.put("city", educationEntity.getInstitutioncityen());
+				} else {
+					errorMsg += "工作教育信息：教育信息学校地址(市),</br>";
+				}
+				//省(签证信息)
+				if (!Util.isEmpty(educationEntity.getInstitutionprovinceen())) {
+					addressinfo.put("province", educationEntity.getInstitutionprovinceen());
+				} else {
+					addressinfo.put("province", "");
+				}
+				//国家(签证信息)
+				if (!Util.isEmpty(educationEntity.getInstitutioncountry())) {
+					String country = getCountry(educationEntity.getInstitutioncountry());
+					addressinfo.put("country", country);
+				} else {
+					errorMsg += "工作教育信息：教育信息所在国家,</br>";
+				}
+				//邮政编码(签证信息)
+				if (!Util.isEmpty(educationEntity.getInstitutionzipcode())) {
+					addressinfo.put("zip_code", educationEntity.getInstitutionzipcode());
+				} else {
+					addressinfo.put("zip_code", "");
+				}
+				education.put("AdderssInfo", addressinfo);
+
+				educations.add(education);
+			}
+
+			WorkEducation.put("Education", educations);
+
+		} else {
+			WorkEducation.put("current_status", "");
+			WorkEducation.put("describe", "");
+			WorkEducation.put("Works", works);
+			WorkEducation.put("Education", educations);
 		}
-
-		WorkEducation.put("Education", educations);
 
 		InforMation.put("WorkEducation", WorkEducation);
 
@@ -932,7 +941,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//有具体的旅行计划
 		if (hastripplan == 1) {
 			//未满14岁，不需要离开时间，不出现是否有具体的旅行计划
-			if (yearsBetween < 14) {
+			if (yearsBetween <= 14) {
 				travelInfo.put("leave_date", "");
 				travelInfo.put("leave_street", "");
 				travelInfo.put("in_street", "");
@@ -1644,14 +1653,29 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> LostOrStolen = Maps.newHashMap();
 
 		//丢失年份(签证信息)
-		LostOrStolen.put("year", 0);
+
+		if (Util.eq(1, info.get("islost"))) {
+			if (!Util.isEmpty(info.get("lostyear"))) {
+				LostOrStolen.put("year", info.get("lostyear"));
+			} else {
+				errorMsg += "旅行信息：签证丢失年份,</br>";
+			}
+			if (!Util.isEmpty(info.get("lostexplainen"))) {
+				LostOrStolen.put("explain", info.get("lostexplainen"));
+			} else {
+				errorMsg += "旅行信息：签证丢失说明,</br>";
+			}
+		} else {
+			LostOrStolen.put("year", 0);
+			LostOrStolen.put("explain", "");
+		}
+
 		/*if (!Util.isEmpty(info.get("lostyear"))) {
 		LostOrStolen.put("year", info.get("lostyear"));
 		} else {
 		errorMsg += "丢失年份,";
 		}*/
 		//说明(签证信息)
-		LostOrStolen.put("explain", "");
 		/*if (!Util.isEmpty(info.get("lostexplain"))) {
 		LostOrStolen.put("explain", info.get("lostexplain"));
 		} else {
@@ -1847,8 +1871,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				Cnd.where("staffid", "=", staffid), null);
 		for (TAppStaffOrganizationEntity organizationEntity : organizations) {
 			Map<String, Object> Charitable = Maps.newHashMap();
-			if (!Util.isEmpty(organizationEntity.getOrganizationname())) {
-				Charitable.put("organization", organizationEntity.getOrganizationname());
+			if (!Util.isEmpty(organizationEntity.getOrganizationnameen())) {
+				Charitable.put("organization", organizationEntity.getOrganizationnameen());
 			} else {
 				Charitable.put("organization", "");
 			}
@@ -1866,12 +1890,26 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 		//MilitaryService 服兵役
 		Map<String, Object> MilitaryService = Maps.newHashMap();
-		MilitaryService.put("country", "");
-		MilitaryService.put("armed_services", "");
-		MilitaryService.put("level", "");
-		MilitaryService.put("specialty", "");
-		MilitaryService.put("start_date", "");
-		MilitaryService.put("end_date", "");
+
+		TAppStaffConscientiousEntity conscientious = dbDao.fetch(TAppStaffConscientiousEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		if (!Util.isEmpty(conscientious)) {
+
+			MilitaryService.put("country", getCountry(conscientious.getMilitarycountry()));
+			MilitaryService.put("armed_services", conscientious.getServicebranchen());
+			MilitaryService.put("level", conscientious.getRanken());
+			MilitaryService.put("specialty", conscientious.getMilitaryspecialtyen());
+			MilitaryService.put("start_date", sdf.format(conscientious.getServicestartdate()));
+			MilitaryService.put("end_date", sdf.format(conscientious.getServiceenddate()));
+		} else {
+
+			MilitaryService.put("country", "");
+			MilitaryService.put("armed_services", "");
+			MilitaryService.put("level", "");
+			MilitaryService.put("specialty", "");
+			MilitaryService.put("start_date", "");
+			MilitaryService.put("end_date", "");
+		}
 
 		Supplement.put("MilitaryService", MilitaryService);
 		Supplement.put("paramilitary", "");

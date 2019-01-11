@@ -1528,7 +1528,10 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		holidayDate.add("2019-10-2");
 		holidayDate.add("2019-10-3");
 		holidayDate.add("2019-10-4");
+		holidayDate.add("2019-10-5");
+		holidayDate.add("2019-10-6");
 		holidayDate.add("2019-10-7");
+		holidayDate.add("2019-10-12");
 		holidayDate.add("2019-10-22");
 		holidayDate.add("2019-11-4");
 		holidayDate.add("2019-12-30");

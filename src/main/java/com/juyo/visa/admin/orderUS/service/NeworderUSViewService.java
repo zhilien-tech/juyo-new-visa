@@ -603,7 +603,32 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//basicinfo.setProvinceen(form.getProvinceen());
 		//basicinfo.setCityen(form.getCityen());
 
-		basicinfo.setCardprovinceen(form.getCardprovinceen());
+		//basicinfo.setCardprovinceen(form.getCardprovinceen());
+
+		if (!Util.isEmpty(form.getCardprovince())) {
+			String issuedplace = form.getCardprovince();
+			if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+				basicinfo.setCardprovinceen("NEI MONGOL");
+			} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+				basicinfo.setCardprovinceen("SHAANXI");
+			} else {
+				if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				if (issuedplace.endsWith("自治区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+				}
+				if (issuedplace.endsWith("区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				try {
+					basicinfo.setCardprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
 
 		if (!Util.isEmpty(form.getCardcity())) {
 			String issuedplace = form.getCardcity();
@@ -1731,6 +1756,13 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		TAppStaffConscientiousEntity conscientious = dbDao.fetch(TAppStaffConscientiousEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		//日期处理
+		if (!Util.isEmpty(conscientious.getServicestartdate())) {
+			result.put("servicestartdate", sdf.format(conscientious.getServicestartdate()));
+		}
+		if (!Util.isEmpty(conscientious.getServiceenddate())) {
+			result.put("serviceenddate", sdf.format(conscientious.getServiceenddate()));
+		}
 		result.put("conscientious", conscientious);
 
 		//国家下拉
@@ -2104,8 +2136,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 			//丢失年份和说明
 			if (form.getIslost() == 1) {
-				tripinfo.setLostyear(form.getLostyear());
-				tripinfo.setLostyearen(form.getLostyear());
+				tripinfo.setLostyear(translationHandle(5, form.getLostyear()));
+				tripinfo.setLostyearen(translationHandle(5, form.getLostyear()));
 
 				if (Util.isEmpty(form.getLostexplainen())) {//如果没有英文，则直接翻译
 					tripinfo.setLostexplainen(translate(form.getLostexplain()));
@@ -2556,7 +2588,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		StringBuffer result = new StringBuffer();
 		if (!Util.isEmpty(translation)) {
 			//translation = translate(translation);
-			if (type == 1) {//工作教育信息单位、学校名称,职位,慈善组织特殊字符处理
+			if (type == 1) {//工作教育信息单位、学校名称,职位,慈善机构名称,服兵役相关内容特殊字符处理
 				//先把连续空格转成单空格
 				translation = translation.replaceAll("\\s+", " ").trim();
 				//去掉不合格的字符
@@ -2565,6 +2597,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			} else if (type == 3) {//电话
 
 			} else if (type == 4) {//职位、职责
+
+			} else if (type == 5) {//美国签证丢失年份
 
 			} else {
 
@@ -2601,6 +2635,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			isLegal = Pattern.compile("^[0-9+]+$").matcher(String.valueOf(character)).find();
 		} else if (type == 4) {//专业名称  暂时无限制
 			//isLegal = Pattern.compile("^[ A-Za-z0-9]+$").matcher(String.valueOf(character)).find();
+		} else if (type == 5) {//美国签证丢失年份处理，只允许数字
+			isLegal = Pattern.compile("^[0-9]+$").matcher(String.valueOf(character)).find();
 		} else {
 			isLegal = Pattern.compile("^[A-Za-z]+$").matcher(String.valueOf(character)).find();
 		}

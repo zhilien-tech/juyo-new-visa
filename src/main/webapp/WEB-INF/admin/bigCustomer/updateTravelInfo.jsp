@@ -57,6 +57,7 @@ input:focus{
 }
 
 
+
 </style>
 </head>
 <body>
@@ -342,7 +343,7 @@ input:focus{
 									<div class="col-sm-4 groupcheckBoxInfo visaisnumber">
 										<label><span class="s">*</span> 签证号码</label> <input autocomplete="new-password"
 											style="width: 180px;"
-											name="visanumber" class="visanumber"
+											name="visanumber" maxlength="8" class="visanumber"
 											value="${obj.tripinfo.visanumber }" type="text" />
 										<!-- <input autocomplete="new-password" id="idknowvisanumber" onchange="AddSingle(this,'idknowvisanumberen')" name="idknowvisanumber" v-on:click="idknowvisanumberChange" value="visaInfo.previUSTripInfo.idknowvisanumber" type="checkbox"/> -->
 									</div>
@@ -370,7 +371,7 @@ input:focus{
 											class="lose" value="2" checked />否
 									</div>
 									<div class="lostExplain grouptextareaInfo paddingTop-9">
-										<label><span class="s">*</span>丢失年份</label> <input autocomplete="new-password"
+										<label><span class="s">*</span>丢失年份</label> <input autocomplete="new-password" maxlength="4"
 											name="lostyear" style="padding-left: 10px; width: 382px !important;"
 											class="areaInputPic" id='lostyear'
 											value="${obj.tripinfo.lostyear }" />
@@ -565,8 +566,10 @@ input:focus{
 					<div style="height: 50px;"></div>
 				</div>
 				<!--以前的美国旅游信息END-->
+				<!-- 横线分隔 -->
+				<hr style="height:1px;background-color:black;margin-left:15px;" width="380px;" />
 				
-				<%-- <div class="paddingBottom">
+				<div class="paddingBottom">
 					<div class="groupRadioInfo" style="margin-top: 10px;">
 						<label><span class="s">*</span> 是否为任何慈善组织而工作</label> <input autocomplete="new-password" type="radio"
 							name="isworkedcharitableorganization" class="isworkedcharitableorganization" value="1" />是 <input autocomplete="new-password"
@@ -612,7 +615,7 @@ input:focus{
                         </select>
 					</div>
 					<div class="military grouptextareaInfo paddingTop-9">
-						<label><span class="s">*</span> 服务分支</label> <input autocomplete="new-password"
+						<label><span class="s">*</span> 军种</label> <input autocomplete="new-password"
 							name="servicebranch" style="padding-left: 10px; width: 382px !important;"
 							class="areaInputPic" onchange="translateZhToEn(this,'servicebranchen','')" id='servicebranch'
 							value="${obj.conscientious.servicebranch }" />
@@ -624,7 +627,7 @@ input:focus{
 							value="${obj.conscientious.servicebranchen }" />
 					</div>
 					<div class="military grouptextareaInfo paddingTop-9">
-						<label><span class="s">*</span> 排名/位置</label> <input autocomplete="new-password"
+						<label><span class="s">*</span> 级别</label> <input autocomplete="new-password"
 							name="rank" style="padding-left: 10px; width: 382px !important;"
 							class="areaInputPic" onchange="translateZhToEn(this,'ranken','')" id='rank'
 							value="${obj.conscientious.rank }" />
@@ -636,7 +639,7 @@ input:focus{
 							value="${obj.conscientious.ranken }" />
 					</div>
 					<div class="military grouptextareaInfo paddingTop-9">
-						<label><span class="s">*</span> 军事专业</label> <input autocomplete="new-password"
+						<label><span class="s">*</span> 特长</label> <input autocomplete="new-password"
 							name="militaryspecialty" style="padding-left: 10px; width: 382px !important;"
 							class="areaInputPic" onchange="translateZhToEn(this,'militaryspecialtyen','')" id='militaryspecialty'
 							value="${obj.conscientious.militaryspecialty }" />
@@ -653,18 +656,18 @@ input:focus{
 								<label><span class="s">*</span> 服兵役开始时间</label> <input autocomplete="new-password"
 									name="servicestartdate" style="padding-left: 10px; width: 180px !important;"
 									class="areaInputPic" id='servicestartdate'
-									value="${obj.conscientious.servicestartdate }" />
+									value="${obj.servicestartdate }" />
 							</div>
 							<div class="col-sm-3">
 								<label><span class="s">*</span> 结束时间</label> <input autocomplete="new-password"
 							name="serviceenddate" style="padding-left: 10px; width: 180px !important;"
 							class="areaInputPic" id='serviceenddate'
-							value="${obj.conscientious.serviceenddate }" />
+							value="${obj.serviceenddate }" />
 							</div>
 						
 						</div>
 					</div>
-				</div> --%>
+				</div>
 				
 				
 				<div style="height: 50px;"></div>

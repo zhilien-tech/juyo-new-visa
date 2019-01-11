@@ -152,6 +152,8 @@
     
   //单位名称检索
     $("#name").on('input',function(){
+    	var temp = $(this).val();
+    	if(temp.length == 0){
     	$("#name").nextAll("ul.ui-autocomplete").remove();
     	$.ajax({
     		type : 'POST',
@@ -171,6 +173,7 @@
     			}
     		}
     	});
+    	}
     });
     //单位名称上下键
     var nameindex = -1;
@@ -220,6 +223,8 @@
 
     //单位电话检索
     $("#telephone").on('input',function(){
+    	var temp = $(this).val();
+    	if(temp.length == 0){
     	$("#telephone").nextAll("ul.ui-autocomplete").remove();
     	$.ajax({
     		type : 'POST',
@@ -239,6 +244,7 @@
     			}
     		}
     	});
+    	}
     });
     //单位电话
     var telephoneindex = -1;

@@ -120,8 +120,9 @@ taspt.isapplyingsametypevisa,
 taspt.isissuedvisa,
 taspt.issamecountry,
 taspt.istenprinted,
+taspt.islost,
 taspt.lostyear,
-taspt.lostexplain,
+taspt.lostexplainen,
 taspt.iscancelled,
 taspt.cancelexplain,
 taspt.isrefused,
@@ -134,6 +135,7 @@ taswet.occupation,
 taswet.clanname,
 taswet.skillexplain,
 taswet.isemployed,
+taswet.hasservedinmilitary,
 taswet.issecondarylevel
 FROM
 t_order_us tou
