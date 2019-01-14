@@ -807,81 +807,97 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 
 			WorkEducation.put("Works", works);
 
-			//以前的教育信息
-			List<TAppStaffBeforeeducationEntity> beforeeducations = dbDao.query(TAppStaffBeforeeducationEntity.class,
-					Cnd.where("staffid", "=", staffid), null);
-			for (TAppStaffBeforeeducationEntity educationEntity : beforeeducations) {
-				Map<String, Object> education = Maps.newHashMap();
-				//机构名称(签证信息)
-				if (!Util.isEmpty(educationEntity.getInstitution())) {
-					education.put("unit_name_cn", educationEntity.getInstitution());
-				} else {
-					errorMsg += "工作教育信息：教育信息学校名称中文,</br>";
-				}
-				//机构名称 英文(签证信息)
-				if (!Util.isEmpty(educationEntity.getInstitutionen())) {
-					education.put("unit_name_en", educationEntity.getInstitutionen());
-				} else {
-					errorMsg += "工作教育信息：教育信息学校名称英文,</br>";
-				}
-				//学科(签证信息)
-				if (!Util.isEmpty(educationEntity.getCourseen())) {
-					education.put("major", educationEntity.getCourseen());
-				} else {
-					education.put("major", "");
-					//errorMsg += "工作教育信息：教育信息专业,</br>";
-				}
-				//参加课程开始时间(签证信息)
-				if (!Util.isEmpty(educationEntity.getCoursestartdate())) {
-					education.put("start_date", sdf.format(educationEntity.getCoursestartdate()));
-				} else {
-					errorMsg += "工作教育信息：教育信息开始时间,</br>";
-				}
-				//结束时间(签证信息)
-				if (!Util.isEmpty(educationEntity.getCourseenddate())) {
-					education.put("end_date", sdf.format(educationEntity.getCourseenddate()));
-				} else {
-					errorMsg += "工作教育信息：教育信息结束时间,</br>";
+			Map<String, Object> education = Maps.newHashMap();
+			//addressinfo
+			Map<String, Object> addressinfo = Maps.newHashMap();
+			if (info.getInt("issecondarylevel") == 1) {
+				//以前的教育信息
+				List<TAppStaffBeforeeducationEntity> beforeeducations = dbDao.query(
+						TAppStaffBeforeeducationEntity.class, Cnd.where("staffid", "=", staffid), null);
+				for (TAppStaffBeforeeducationEntity educationEntity : beforeeducations) {
+					//机构名称(签证信息)
+					if (!Util.isEmpty(educationEntity.getInstitution())) {
+						education.put("unit_name_cn", educationEntity.getInstitution());
+					} else {
+						errorMsg += "工作教育信息：教育信息学校名称中文,</br>";
+					}
+					//机构名称 英文(签证信息)
+					if (!Util.isEmpty(educationEntity.getInstitutionen())) {
+						education.put("unit_name_en", educationEntity.getInstitutionen());
+					} else {
+						errorMsg += "工作教育信息：教育信息学校名称英文,</br>";
+					}
+					//学科(签证信息)
+					if (!Util.isEmpty(educationEntity.getCourseen())) {
+						education.put("major", educationEntity.getCourseen());
+					} else {
+						education.put("major", "");
+						//errorMsg += "工作教育信息：教育信息专业,</br>";
+					}
+					//参加课程开始时间(签证信息)
+					if (!Util.isEmpty(educationEntity.getCoursestartdate())) {
+						education.put("start_date", sdf.format(educationEntity.getCoursestartdate()));
+					} else {
+						errorMsg += "工作教育信息：教育信息开始时间,</br>";
+					}
+					//结束时间(签证信息)
+					if (!Util.isEmpty(educationEntity.getCourseenddate())) {
+						education.put("end_date", sdf.format(educationEntity.getCourseenddate()));
+					} else {
+						errorMsg += "工作教育信息：教育信息结束时间,</br>";
+					}
+
+					//街道地址(签证信息)
+					if (!Util.isEmpty(educationEntity.getInstitutionaddressen())) {
+						addressinfo.put("street", educationEntity.getInstitutionaddressen());
+					} else {
+						errorMsg += "工作教育信息：教育信息详细地址,</br>";
+					}
+					//市(签证信息)
+					if (!Util.isEmpty(educationEntity.getInstitutioncityen())) {
+						addressinfo.put("city", educationEntity.getInstitutioncityen());
+					} else {
+						errorMsg += "工作教育信息：教育信息学校地址(市),</br>";
+					}
+					//省(签证信息)
+					if (!Util.isEmpty(educationEntity.getInstitutionprovinceen())) {
+						addressinfo.put("province", educationEntity.getInstitutionprovinceen());
+					} else {
+						addressinfo.put("province", "");
+					}
+					//国家(签证信息)
+					if (!Util.isEmpty(educationEntity.getInstitutioncountry())) {
+						String country = getCountry(educationEntity.getInstitutioncountry());
+						addressinfo.put("country", country);
+					} else {
+						errorMsg += "工作教育信息：教育信息所在国家,</br>";
+					}
+					//邮政编码(签证信息)
+					if (!Util.isEmpty(educationEntity.getInstitutionzipcode())) {
+						addressinfo.put("zip_code", educationEntity.getInstitutionzipcode());
+					} else {
+						addressinfo.put("zip_code", "");
+					}
+
+					//educations.add(education);
 				}
 
-				//addressinfo
-				Map<String, Object> addressinfo = Maps.newHashMap();
-				//街道地址(签证信息)
-				if (!Util.isEmpty(educationEntity.getInstitutionaddressen())) {
-					addressinfo.put("street", educationEntity.getInstitutionaddressen());
-				} else {
-					errorMsg += "工作教育信息：教育信息详细地址,</br>";
-				}
-				//市(签证信息)
-				if (!Util.isEmpty(educationEntity.getInstitutioncityen())) {
-					addressinfo.put("city", educationEntity.getInstitutioncityen());
-				} else {
-					errorMsg += "工作教育信息：教育信息学校地址(市),</br>";
-				}
-				//省(签证信息)
-				if (!Util.isEmpty(educationEntity.getInstitutionprovinceen())) {
-					addressinfo.put("province", educationEntity.getInstitutionprovinceen());
-				} else {
-					addressinfo.put("province", "");
-				}
-				//国家(签证信息)
-				if (!Util.isEmpty(educationEntity.getInstitutioncountry())) {
-					String country = getCountry(educationEntity.getInstitutioncountry());
-					addressinfo.put("country", country);
-				} else {
-					errorMsg += "工作教育信息：教育信息所在国家,</br>";
-				}
-				//邮政编码(签证信息)
-				if (!Util.isEmpty(educationEntity.getInstitutionzipcode())) {
-					addressinfo.put("zip_code", educationEntity.getInstitutionzipcode());
-				} else {
-					addressinfo.put("zip_code", "");
-				}
-				education.put("AdderssInfo", addressinfo);
+			} else {
+				education.put("unit_name_cn", "");
+				education.put("unit_name_en", "");
+				education.put("major", "");
+				education.put("start_date", "");
+				education.put("end_date", "");
 
-				educations.add(education);
+				addressinfo.put("street", "");
+				addressinfo.put("city", "");
+				addressinfo.put("province", "");
+				addressinfo.put("country", "");
+				addressinfo.put("zip_code", "");
 			}
 
+			education.put("AdderssInfo", addressinfo);
+			educations.add(education);
 			WorkEducation.put("Education", educations);
 
 		} else {

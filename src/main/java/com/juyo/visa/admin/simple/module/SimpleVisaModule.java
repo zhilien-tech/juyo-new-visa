@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
@@ -348,6 +349,15 @@ public class SimpleVisaModule {
 	public Object dataUpload(@Param("orderid") Integer orderid, HttpServletRequest request) {
 		return simpleVisaService.dataUpload(orderid, request);
 	}*/
+
+	/**
+	 * 根据搜索条件下载excel
+	 */
+	@At
+	@GET
+	public Object downloadOrder(@Param("..") ListDataForm form, HttpServletRequest request) {
+		return simpleVisaService.downloadOrder(form, request);
+	}
 
 	@At
 	@POST

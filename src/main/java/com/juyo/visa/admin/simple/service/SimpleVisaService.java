@@ -7,6 +7,7 @@
 package com.juyo.visa.admin.simple.service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -21,6 +22,7 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -29,6 +31,13 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -6239,6 +6248,18 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return inputStream;
 	}
 
+	/**
+	 * 判断是否有申请人，没有的话新建，有的话修改
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param applyid
+	 * @param orderid
+	 * @param token
+	 * @param request
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object hasApplyInfo(int applyid, int orderid, String token, HttpServletRequest request) {
 
 		boolean isRepeat = isRepeatSubmit(token, request);//判断用户是否是重复提交
@@ -6373,6 +6394,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return daysBetween + 1;
 	}
 
+	/**
+	 * 判断是否有主申请人
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @param applicantid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object ishaveMainapply(int orderid, int applicantid) {
 		String applicantSqlstr = sqlManager.get("ishaveMainapply");
 		Sql applicantSql = Sqls.create(applicantSqlstr);
@@ -6398,6 +6429,166 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderjp.setGroundconnectid(groundconnectid);
 		dbDao.update(orderjp);
 		return null;
+	}
+
+	/**
+	 * 列表页根据搜索条件下载excel
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param request
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object downloadOrder(ListDataForm form, HttpServletRequest request) {
+
+		HttpSession session = request.getSession();
+		//获取当前公司
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		//获取当前用户
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		loginUser.getId();
+		form.setUserid(loginUser.getId());
+		form.setCompanyid(loginCompany.getId());
+		form.setAdminId(loginCompany.getAdminId());
+		Map<String, Object> result = Maps.newHashMap();
+		Sql sql = form.sql(sqlManager);
+
+		sql.setCallback(Sqls.callback.records());
+		nutDao.execute(sql);
+
+		@SuppressWarnings("unchecked")
+		//主sql数据
+		List<Record> recordList = (List<Record>) sql.getResult();
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		try {
+
+			//1.创建工作簿
+			HSSFWorkbook workbook = new HSSFWorkbook();
+			//1.1创建合并单元格对象
+			//日本签证处理系统
+			CellRangeAddress callRangeAddress = new CellRangeAddress(0, 0, 0, 22);//起始行,结束行,起始列,结束列
+			//时间
+			CellRangeAddress time = new CellRangeAddress(1, 1, 2, 22);//起始行,结束行,起始列,结束列
+
+			//基本信息
+			CellRangeAddress basic = new CellRangeAddress(2, 2, 2, 8);//起始行,结束行,起始列,结束列
+			//出行信息
+			CellRangeAddress trip = new CellRangeAddress(2, 2, 9, 16);//起始行,结束行,起始列,结束列
+			//备注信息
+			CellRangeAddress remark = new CellRangeAddress(2, 2, 17, 22);//起始行,结束行,起始列,结束列
+
+			//标题样式
+			HSSFCellStyle colStyle = createCellStyle(workbook, (short) 10, true, true, 2);
+			HSSFCellStyle timecolStyle = createCellStyle(workbook, (short) 10, true, true, 1);
+			//2.创建工作表
+			HSSFSheet sheet = workbook.createSheet("visa");
+			//2.1加载合并单元格对象
+			sheet.addMergedRegion(callRangeAddress);
+			sheet.addMergedRegion(time);
+			sheet.addMergedRegion(basic);
+			sheet.addMergedRegion(trip);
+			sheet.addMergedRegion(remark);
+
+			//设置默认列宽
+			sheet.setDefaultColumnWidth(15);
+			//3.创建行
+			//3.1创建头标题行;并且设置头标题
+			HSSFRow row = sheet.createRow(0);
+			HSSFCell cell = row.createCell(0);
+			//加载单元格样式
+			cell.setCellStyle(colStyle);
+			cell.setCellValue("日本签证处理系统");
+
+			HSSFRow secondrow = sheet.createRow(1);
+			HSSFCell secondcell = secondrow.createCell(2);
+			//加载单元格样式
+			secondcell.setCellStyle(timecolStyle);
+			String orderstartdate = "";
+			String orderenddate = "";
+			if (Util.isEmpty(form.getOrderstartdate())) {
+				TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class,
+						Cnd.where("comId", "=", loginCompany.getId()));
+				TOrderEntity orderEntity2 = dbDao.fetch(TOrderEntity.class,
+						Cnd.where("comId", "=", loginCompany.getId()).orderBy("createTime", "DESC"));
+				orderstartdate = sdf.format(orderEntity.getCreateTime());
+				orderenddate = sdf.format(orderEntity2.getCreateTime());
+
+			} else {
+				orderstartdate = form.getOrderstartdate().substring(0, form.getOrderstartdate().indexOf(" "));
+				orderenddate = form.getOrderenddate().substring(0, form.getOrderenddate().indexOf(" "));
+			}
+			secondcell.setCellValue("时间:" + orderstartdate + " 至 " + orderenddate);
+
+			HSSFRow thirdrow = sheet.createRow(2);
+			HSSFCell thirdcell = thirdrow.createCell(2);
+			//加载单元格样式
+			thirdcell.setCellStyle(colStyle);
+			thirdcell.setCellValue("基本信息");
+			HSSFCell thirdcell2 = thirdrow.createCell(9);
+			//加载单元格样式
+			thirdcell2.setCellStyle(colStyle);
+			thirdcell2.setCellValue("出行信息");
+			HSSFCell thirdcell3 = thirdrow.createCell(17);
+			//加载单元格样式
+			thirdcell3.setCellStyle(colStyle);
+			thirdcell3.setCellValue("备注信息");
+
+			//3.2创建列标题;并且设置列标题
+			HSSFRow row2 = sheet.createRow(3);
+			String[] titles = { "序号", "订单号", "签证种类", "姓名", "姓名(拼音)", "性别", "护照号码", "居住地", "人数", "出发日期", "结束日期", "入境口岸",
+					"出境口岸", "入境航班", "出境航班", "出发城市", "返回城市", "客户来源", "申请人备注", "备注", "客户备注", "送签时间", "创建人" };//""为占位字符串
+			for (int i = 0; i < titles.length; i++) {
+				HSSFCell cell2 = row2.createCell(i);
+				//加载单元格样式
+				cell2.setCellStyle(colStyle);
+				cell2.setCellValue(titles[i]);
+			}
+
+			//正文内容
+			//=====
+
+			FileOutputStream fout = new FileOutputStream("E:/students.xls");
+			workbook.write(fout);
+			workbook.close();
+			IOUtils.closeQuietly(fout);
+
+		} catch (Exception e) {
+
+		}
+
+		return stream;
+	}
+
+	private static HSSFCellStyle createCellStyle(HSSFWorkbook workbook, short fontsize, boolean flag, boolean flag1,
+			int count) {
+		// TODO Auto-generated method stub
+		HSSFCellStyle style = workbook.createCellStyle();
+		//是否水平居中
+		if (flag1) {
+			style.setAlignment(HSSFCellStyle.ALIGN_CENTER);//水平居中
+		}
+
+		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);//垂直居中
+		//创建字体
+		HSSFFont font = workbook.createFont();
+		//是否加粗字体
+		/*if (flag) {
+			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		}*/
+
+		font.setFontHeightInPoints(fontsize);
+		//加载字体
+		style.setFont(font);
+		//时间
+		if (count == 1) {
+			style.setAlignment(HSSFCellStyle.ALIGN_RIGHT);//右对齐
+		}
+		return style;
 	}
 
 }

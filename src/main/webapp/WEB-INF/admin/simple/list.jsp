@@ -138,10 +138,13 @@
 			<div class="col-md col-md-3 left-5px right-0px" style="margin-left:0%;width:15.5%">
 				<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="护照号/申请人/受付番号" onkeypress="onkeyEnter()"/>
 			</div>
-			<div class="col-md col-md-1 ">
-				<a class="btn btn-primary btn-sm pull-left" style="width:6%;" href="javascript:search();" id="searchbtn">搜索</a>
+			<div class="col-md col-md-1 " style="width: 6% !important;">
+				<a class="btn btn-primary btn-sm pull-right" style="" href="javascript:search();" id="searchbtn">搜索</a>
 			</div>
-			<div class="col-md col-md-1  " style="    margin-left: 0%;">
+			<div class="col-md col-md-1  " style="width: 6% !important;margin-left: 0%;">
+				<a class="btn btn-primary btn-sm pull-right" onclick="downloadOrder();">下载</a>
+			</div>
+			<div class="col-md col-md-1  " style="width: 6% !important;margin-left: 0%;">
 				<a class="btn btn-primary btn-sm pull-right" onclick="addOrder();">下单</a>
 			</div>
 		</div>
@@ -953,8 +956,31 @@
 		});
 	});
 
+	//下单
 	function addOrder(){
 		window.location.href = "/admin/simple/addOrder.html";
+	}
+	//下载
+	function downloadOrder(){
+		var status = $("#status").val();
+		var songqianshe = $("#songqianshe").val();
+		var employee = $("#employee").val();
+		var visatype = $("#visatype").val();
+		var orderstartdate = $("#orderstartdate").val();
+		var orderenddate = $("#orderenddate").val();
+		var sendstartdate = $("#sendstartdate").val();
+		var sendenddate = $("#sendenddate").val();
+		var searchstr = $("#searchStr").val();
+		layer.load(1);
+		$.fileDownload("${base}/admin/simple/downloadOrder.html?status=" + status+"&songqianshe="+songqianshe+"&employee="+employee+"&visatype="+visatype+"&orderstartdate="+orderstartdate+"&orderenddate="+orderenddate+"&sendstartdate="+sendstartdate+"&sendenddate="+sendenddate+"&searchstr="+searchstr, {
+	         successCallback: function (url) {
+	        	 layer.closeAll('loading');
+	         },
+	         failCallback: function (html, url) {
+	        	layer.closeAll('loading');
+	        	layer.msg("下载失败");
+	         }
+	     });
 	}
 
 	//连接websocket
