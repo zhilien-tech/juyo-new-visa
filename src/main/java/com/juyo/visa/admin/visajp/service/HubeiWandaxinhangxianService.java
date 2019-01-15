@@ -206,6 +206,7 @@ public class HubeiWandaxinhangxianService extends BaseService<TOrderJpEntity> {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy 年 MM 月  dd 日");
 		DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat sdf = new SimpleDateFormat("MM月dd日");
 		//公司信息
 		TCompanyEntity company = (TCompanyEntity) tempdata.get("company");
 		//出行信息
@@ -233,25 +234,42 @@ public class HubeiWandaxinhangxianService extends BaseService<TOrderJpEntity> {
 		StringBuffer content = new StringBuffer();
 		//地接社未做
 		String dijie = "";
+		String dijiecdesignnum = "";
 		if (!Util.isEmpty(orderjp.getGroundconnectid())) {
 			TCompanyEntity dijiecompany = dbDao.fetch(TCompanyEntity.class, orderjp.getGroundconnectid().longValue());
 			dijie = dijiecompany.getName();
+			if (!Util.isEmpty(dijiecompany.getCdesignNum())) {
+				dijiecdesignnum = dijiecompany.getCdesignNum();
+			}
 		}
 		String companyname = "";
 		if (!Util.isEmpty(company.getName())) {
 			companyname = company.getName();
 		}
+		String cdesignnum = "";
+		if (!Util.isEmpty(company.getCdesignNum())) {
+			cdesignnum = company.getCdesignNum();
+		}
+
+		String applyname = "";
+		if (!Util.isEmpty(applyinfo)) {
+			Record record = applyinfo.get(0);
+			applyname += record.getString("firstname");
+			applyname += record.getString("lastname");
+		}
+
 		//受理号为送签编号
 		String sendVisaNum = orderinfo.getSendVisaNum();
-		content.append("　　" + companyname).append("根据与").append(dijie).append("的合同约定，组织").append(applyinfo.size())
-				.append("人访日观光团,请协助办理赴日").append(visatypestr).append("签证。");
+		content.append("　　" + companyname).append("(").append(cdesignnum).append(")根据与").append(dijie).append("(指定番号:")
+				.append(dijiecdesignnum).append(")的合同约定,组织").append(applyinfo.size()).append("人(").append(applyname)
+				.append(")访日旅游，请协助办理赴日").append(visatypestr).append("签证。该申请表填写内容无误。");
 
 		map.put("Text1", content.toString());
 		map.put("Text11", company.getName());
 		if (!Util.isEmpty(ordertripjp)) {
 			if (ordertripjp.getTripType().equals(1)) {
 				if (!Util.isEmpty(ordertripjp.getGoDate())) {
-					map.put("Text2", dateFormat.format(ordertripjp.getGoDate()));
+					map.put("Text2", dateFormat1.format(ordertripjp.getGoDate()));
 				}
 				//入境航班
 				if (!Util.isEmpty(ordertripjp.getGoFlightNum())) {
@@ -274,7 +292,10 @@ public class HubeiWandaxinhangxianService extends BaseService<TOrderJpEntity> {
 					}
 					map.put("Text3",
 							cityName
+									+ " "
 									+ airportName
+									+ " "
+									+ aircode
 									+ "："
 									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
@@ -284,20 +305,13 @@ public class HubeiWandaxinhangxianService extends BaseService<TOrderJpEntity> {
 
 					map.put("Text4",
 							String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate()) + 1)
-									+ "日");
+									+ "天");
 				}
 				//去除*号
 				//map.put("Text13", ordertripjp.getGoFlightNum().replace("*", ""));
 				if (!Util.isEmpty(ordertripjp.getReturnDate())) {
-					map.put("Text5", dateFormat.format(ordertripjp.getReturnDate()));
+					map.put("Text5", dateFormat1.format(ordertripjp.getReturnDate()));
 				}
-				//天数
-				/*if (!Util.isEmpty(ordertripjp.getGoDate()) && !Util.isEmpty(ordertripjp.getReturnDate())) {
-
-					map.put("stay",
-							String.valueOf(DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate()) + 1)
-									+ "天");
-				}*/
 				if (!Util.isEmpty(ordertripjp.getReturnFlightNum())) {
 					//出境航班
 					String goFlightNum = ordertripjp.getReturnFlightNum();
@@ -317,56 +331,22 @@ public class HubeiWandaxinhangxianService extends BaseService<TOrderJpEntity> {
 					}
 					map.put("Text6",
 							cityName
+									+ " "
 									+ airportName
-									+ "，"
+									+ " "
+									+ aircode
+									+ "："
 									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)));
 				}
 				//map.put("Text14", ordertripjp.getReturnFlightNum().replace("*", ""));
-			} else if (ordertripjp.getTripType().equals(2)) {
-				//多程处理
-				if (!Util.isEmpty(mutiltrip)) {
-					//多程第一程为出发日期
-					TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
-					if (!Util.isEmpty(entrytrip.getDepartureDate())) {
-						map.put("Text4", dateFormat.format(entrytrip.getDepartureDate()));
-					}
-					//入境航班
-					if (!Util.isEmpty(entrytrip.getFlightNum())) {
-						//						TFlightEntity goflight = flightViewService.fetch(entrytrip.getFlightNum().longValue());
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-						map.put("Text5", goflight.getLandingName() + "、 " + entrytrip.getFlightNum().replace("*", ""));
-					}
-					//map.put("Text13", entrytrip.getFlightNum());
-					//最后一程作为返回日期
-					TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
-					if (!Util.isEmpty(returntrip.getDepartureDate())) {
-						map.put("Text7", dateFormat.format(returntrip.getDepartureDate()));
-					}
-					if (!Util.isEmpty(returntrip.getFlightNum())) {
-						//出境航班
-						//						TFlightEntity returnflight = flightViewService.fetch(returntrip.getFlightNum().longValue());
-						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-						map.put("Text8", goflight.getTakeOffName() + "、 " + returntrip.getFlightNum().replace("*", ""));
-					}
-					//map.put("Text14", returntrip.getFlightNum().replace("*", ""));
-					//停留天数
-					if (!Util.isEmpty(entrytrip.getDepartureDate()) && !Util.isEmpty(returntrip.getDepartureDate())) {
-						map.put("Text6",
-								String.valueOf(DateUtil.daysBetween(entrytrip.getDepartureDate(),
-										returntrip.getDepartureDate()) + 1)
-										+ "天");
-					}
-				}
 			}
 		}
 		map.put("Text7", company.getLinkman());
 		map.put("Text8", company.getMobile());
 		Date sendVisaDate = orderinfo.getSendVisaDate();
 		if (!Util.isEmpty(sendVisaDate)) {
-			map.put("Text9", dateFormat1.format(sendVisaDate));
+			map.put("Text9", sdf.format(sendVisaDate));
 			map.put("Text12", dateFormat.format(sendVisaDate));
 		} else {
 			map.put("Text9", "");
@@ -375,10 +355,42 @@ public class HubeiWandaxinhangxianService extends BaseService<TOrderJpEntity> {
 		//出签时间
 		Date outVisaDate = orderinfo.getOutVisaDate();
 		if (!Util.isEmpty(outVisaDate)) {
-			map.put("Text10", dateFormat1.format(outVisaDate));
+			map.put("Text10", sdf.format(outVisaDate));
 		} else {
 			map.put("Text10", "");
 		}
+
+		String lastStr = "";
+		List<String> provinceList = new ArrayList<>();
+		List<String> resultList = new ArrayList<>();
+		if (!Util.isEmpty(applyinfo)) {
+			for (Record record : applyinfo) {
+				String province = record.getString("province");
+				if (province.endsWith("省") || province.endsWith("市")) {
+					province = province.substring(0, province.length() - 1);
+				}
+				if (province.length() > 3 && province.endsWith("自治区")) {
+					province = province.substring(0, province.length() - 3);
+				}
+				if (!Util.isEmpty(province)) {
+					provinceList.add(province);
+				}
+				if (!Util.isEmpty(province) && !resultList.contains(province)) {
+					resultList.add(province);
+				}
+			}
+
+			System.out.println("provinceList:" + provinceList);
+			System.out.println("resultList:" + resultList);
+			for (int i = 0; i < resultList.size(); i++) {
+				int frequency = Collections.frequency(provinceList, resultList.get(i));
+				lastStr += resultList.get(i) + "：" + frequency + "名\n";
+			}
+			lastStr += "合计：" + applyinfo.size() + "名";
+		}
+
+		map.put("Text13", lastStr);
+
 		//获取模板文件
 		URL resource = getClass().getClassLoader().getResource("japanfile/hubeiwandaxinhangxian/note.pdf");
 		TemplateUtil templateUtil = new TemplateUtil();

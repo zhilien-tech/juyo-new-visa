@@ -7,8 +7,8 @@
 package com.juyo.visa.admin.simple.service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
@@ -37,7 +38,12 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -6441,26 +6447,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 * @param request
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object downloadOrder(ListDataForm form, HttpServletRequest request) {
+	public Object downloadOrder(ListDataForm form, HttpServletRequest request, HttpServletResponse response) {
 
 		HttpSession session = request.getSession();
 		//获取当前公司
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
-		//获取当前用户
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		loginUser.getId();
-		form.setUserid(loginUser.getId());
-		form.setCompanyid(loginCompany.getId());
-		form.setAdminId(loginCompany.getAdminId());
-		Map<String, Object> result = Maps.newHashMap();
-		Sql sql = form.sql(sqlManager);
-
-		sql.setCallback(Sqls.callback.records());
-		nutDao.execute(sql);
-
-		@SuppressWarnings("unchecked")
-		//主sql数据
-		List<Record> recordList = (List<Record>) sql.getResult();
+		List<Record> downloadinfo = getDownloadinfo(form, request);
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -6550,18 +6542,613 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 
 			//正文内容
-			//=====
+			int count = 1;
+			for (int i = 0; i < downloadinfo.size(); i++) {
 
-			FileOutputStream fout = new FileOutputStream("E:/students.xls");
-			workbook.write(fout);
+				//CellRangeAddress firstline = new CellRangeAddress(i + 3 + query.size(), 0, 0, 0);
+				//sheet.addMergedRegion(firstline);
+
+				HSSFRow row3 = sheet.createRow(i + 4);
+				HSSFCell cell0 = row3.createCell(0);
+				cell0.setCellStyle(colStyle);
+				//判断跟上一行是否是同一个订单
+				if (i > 0 && downloadinfo.get(i).getInt("id") == downloadinfo.get(i - 1).getInt("id")) {
+					cell0.setCellValue(count - 1);
+
+				} else {
+					cell0.setCellValue(count++);
+				}
+
+				HSSFCell cell1 = row3.createCell(1);
+				cell1.setCellStyle(colStyle);
+				cell1.setCellValue(downloadinfo.get(i).getString("orderNum"));
+
+				HSSFCell cell2 = row3.createCell(2);
+				cell2.setCellStyle(colStyle);
+
+				String visatypestr = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("visaType"))) {
+					for (SimpleVisaTypeEnum typeEnum : SimpleVisaTypeEnum.values()) {
+						if (downloadinfo.get(i).get("visaType").equals(typeEnum.intKey())) {
+							visatypestr = typeEnum.value();
+						}
+					}
+				}
+				cell2.setCellValue(visatypestr);
+
+				HSSFCell cell3 = row3.createCell(3);
+				cell3.setCellStyle(colStyle);
+				cell3.setCellValue(downloadinfo.get(i).getString("applyname"));
+
+				HSSFCell cell4 = row3.createCell(4);
+				cell4.setCellStyle(colStyle);
+				cell4.setCellValue(downloadinfo.get(i).getString("applynameen"));
+
+				HSSFCell cell5 = row3.createCell(5);
+				cell5.setCellStyle(colStyle);
+				cell5.setCellValue(downloadinfo.get(i).getString("sex"));
+
+				HSSFCell cell6 = row3.createCell(6);
+				cell6.setCellStyle(colStyle);
+				cell6.setCellValue(downloadinfo.get(i).getString("passport"));
+
+				HSSFCell cell7 = row3.createCell(7);
+				cell7.setCellStyle(colStyle);
+
+				String province = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("province"))) {
+					province = downloadinfo.get(i).getString("province");
+				}
+				if (province.endsWith("省") || province.endsWith("市")) {
+					province = province.substring(0, province.length() - 1);
+				}
+				if (province.length() > 3 && province.endsWith("自治区")) {
+					province = province.substring(0, province.length() - 3);
+				}
+
+				cell7.setCellValue(province);
+
+				HSSFCell cell8 = row3.createCell(8);
+				cell8.setCellStyle(colStyle);
+				cell8.setCellValue(downloadinfo.get(i).getInt("peopleNumber"));
+
+				HSSFCell cell9 = row3.createCell(9);
+				cell9.setCellStyle(colStyle);
+				cell9.setCellValue(downloadinfo.get(i).getString("godate"));
+
+				HSSFCell cell10 = row3.createCell(10);
+				cell10.setCellStyle(colStyle);
+				cell10.setCellValue(downloadinfo.get(i).getString("returndate"));
+
+				HSSFCell cell11 = row3.createCell(11);
+				cell11.setCellStyle(colStyle);
+
+				int cityid = downloadinfo.get(i).getInt("cityId");
+				//入境口岸
+				String entryport = "";
+				//出境口岸
+				String leaveport = "";
+				//入境航班
+				String entryflight = "";
+				//出境航班
+				String leaveflight = "";
+				//出发城市
+				String entrycity = "";
+				//返回城市
+				String leavecity = "";
+				//重庆
+				if (cityid > 2) {
+
+					//出发城市
+					if (!Util.isEmpty(downloadinfo.get(i).getInt("newgodeparturecity"))
+							&& downloadinfo.get(i).getInt("newgodeparturecity") > 0) {
+						TCityEntity fetch = dbDao.fetch(TCityEntity.class,
+								downloadinfo.get(i).getInt("newgodeparturecity"));
+						entrycity = fetch.getCity();
+
+						/*if (entrycity.endsWith("市") || entrycity.endsWith("县")) {
+							entrycity = entrycity.substring(0, entrycity.length() - 1);
+						}
+						if (entrycity.length() > 3 && entrycity.endsWith("自治区")) {
+							entrycity = entrycity.substring(0, entrycity.length() - 3);
+						}*/
+					} else {
+						if (!Util.isEmpty(downloadinfo.get(i).getInt("gotransferdeparturecity"))
+								&& downloadinfo.get(i).getInt("gotransferdeparturecity") > 0) {
+							TCityEntity fetch = dbDao.fetch(TCityEntity.class,
+									downloadinfo.get(i).getInt("gotransferdeparturecity"));
+							entrycity = fetch.getCity();
+
+						}
+					}
+					if (entrycity.endsWith("市") || entrycity.endsWith("县")) {
+						entrycity = entrycity.substring(0, entrycity.length() - 1);
+					}
+					if (entrycity.length() > 3 && entrycity.endsWith("自治区")) {
+						entrycity = entrycity.substring(0, entrycity.length() - 3);
+					}
+
+					//返回城市
+					if (!Util.isEmpty(downloadinfo.get(i).getInt("newreturnarrivedcity"))
+							&& downloadinfo.get(i).getInt("newreturnarrivedcity") > 0) {
+						TCityEntity fetch = dbDao.fetch(TCityEntity.class,
+								downloadinfo.get(i).getInt("newreturnarrivedcity"));
+						leavecity = fetch.getCity();
+
+					} else {
+						if (!Util.isEmpty(downloadinfo.get(i).getInt("returntransferarrivedcity"))
+								&& downloadinfo.get(i).getInt("returntransferarrivedcity") > 0) {
+							TCityEntity fetch = dbDao.fetch(TCityEntity.class,
+									downloadinfo.get(i).getInt("returntransferarrivedcity"));
+							leavecity = fetch.getCity();
+
+						}
+					}
+					if (leavecity.endsWith("市") || leavecity.endsWith("县")) {
+						leavecity = leavecity.substring(0, leavecity.length() - 1);
+					}
+					if (leavecity.length() > 3 && leavecity.endsWith("自治区")) {
+						leavecity = leavecity.substring(0, leavecity.length() - 3);
+					}
+
+					//入境
+					if (!Util.isEmpty(downloadinfo.get(i).getString("newgoflightnum"))) {
+						TCityEntity goCity = dbDao.fetch(TCityEntity.class,
+								downloadinfo.get(i).getInt("newgoarrivedcity"));
+						String cityName = goCity.getCity();
+						if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
+							cityName = cityName.substring(0, cityName.length() - 1);
+						}
+						String goFlightNum = downloadinfo.get(i).getString("newgoflightnum");
+						//入境机场名
+						String airportName = goFlightNum.substring(
+								goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
+						TFlightEntity airCity = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("landingName", "=", airportName));
+						String aircode = "";
+						if (!Util.isEmpty(airCity)) {
+							aircode = airCity.getLandingCode();
+						}
+
+						String lastnum = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
+						if (!Util.isEmpty(downloadinfo.get(i).getString("gotransferflightnum"))) {//有第一行，航班号要组合
+							String gotransferflightnum = downloadinfo.get(i).getString("gotransferflightnum");
+							StringBuffer stringBuffer = new StringBuffer(gotransferflightnum.substring(
+									gotransferflightnum.indexOf(" ", gotransferflightnum.indexOf(" ")) + 1,
+									gotransferflightnum.indexOf(" ", gotransferflightnum.indexOf(" ") + 1)));
+							stringBuffer.append("//" + lastnum);
+							lastnum = stringBuffer.toString();
+						}
+
+						entryport = cityName + airportName;
+						entryflight = lastnum;
+
+					}
+					//出境
+					if (!Util.isEmpty(downloadinfo.get(i).getString("returntransferflightnum"))) {
+						TCityEntity goCity = dbDao.fetch(TCityEntity.class,
+								downloadinfo.get(i).getInt("newreturndeparturecity"));
+						String cityName = goCity.getCity();
+						if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
+							cityName = cityName.substring(0, cityName.length() - 1);
+						}
+						String goFlightNum = downloadinfo.get(i).getString("returntransferflightnum");
+
+						//出境机场名
+						String airportName = goFlightNum.substring(0,
+								goFlightNum.indexOf("-", goFlightNum.indexOf("-")));
+						TFlightEntity airCity = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("takeOffName", "=", airportName));
+						String aircode = "";
+						if (!Util.isEmpty(airCity)) {
+							aircode = airCity.getTakeOffCode();
+						}
+
+						String lastnum = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
+
+						if (!Util.isEmpty(downloadinfo.get(i).getString("newreturnflightnum"))) {
+							String newreturnflightnum = downloadinfo.get(i).getString("newreturnflightnum");
+							String substring = newreturnflightnum.substring(
+									newreturnflightnum.indexOf(" ", newreturnflightnum.indexOf(" ")) + 1,
+									newreturnflightnum.indexOf(" ", newreturnflightnum.indexOf(" ") + 1));
+							StringBuffer stringBuffer = new StringBuffer(lastnum);
+							stringBuffer.append("//" + substring);
+							lastnum = stringBuffer.toString();
+						}
+
+						leaveport = cityName + airportName;
+						leaveflight = lastnum;
+					}
+
+				} else {//北京，上海
+					//入境
+					if (!Util.isEmpty(downloadinfo.get(i).getString("goFlightNum"))) {
+
+						TCityEntity fetch = dbDao.fetch(TCityEntity.class, downloadinfo.get(i)
+								.getInt("goDepartureCity"));
+						entrycity = fetch.getCity();
+						if (entrycity.endsWith("市") || entrycity.endsWith("县")) {
+							entrycity = entrycity.substring(0, entrycity.length() - 1);
+						}
+						if (entrycity.length() > 3 && entrycity.endsWith("自治区")) {
+							entrycity = entrycity.substring(0, entrycity.length() - 3);
+						}
+
+						String goFlightNum = downloadinfo.get(i).getString("goFlightNum");
+						int arrivedCityid = downloadinfo.get(i).getInt("goArrivedCity");
+
+						TCityEntity goCity = dbDao.fetch(TCityEntity.class, arrivedCityid);
+						String cityName = goCity.getCity();
+						if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
+							cityName = cityName.substring(0, cityName.length() - 1);
+						}
+						//入境机场名
+						String airportName = goFlightNum.substring(
+								goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
+						TFlightEntity airCity = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("takeOffName", "=", airportName));
+						String aircode = "";
+						if (!Util.isEmpty(airCity)) {
+							aircode = airCity.getTakeOffCode();
+						}
+						entryport = cityName + airportName;
+
+						entryflight = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
+					}
+					//出境
+					if (!Util.isEmpty(downloadinfo.get(i).getString("returnFlightNum"))) {
+
+						TCityEntity fetch = dbDao.fetch(TCityEntity.class,
+								downloadinfo.get(i).getInt("returnArrivedCity"));
+						leavecity = fetch.getCity();
+						if (leavecity.endsWith("市") || leavecity.endsWith("县")) {
+							leavecity = leavecity.substring(0, leavecity.length() - 1);
+						}
+						if (leavecity.length() > 3 && leavecity.endsWith("自治区")) {
+							leavecity = leavecity.substring(0, leavecity.length() - 3);
+						}
+
+						String goFlightNum = downloadinfo.get(i).getString("returnFlightNum");
+						TCityEntity leaveCity = dbDao.fetch(TCityEntity.class,
+								downloadinfo.get(i).getInt("returnDepartureCity"));
+						String cityName = leaveCity.getCity();
+						if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
+							cityName = cityName.substring(0, cityName.length() - 1);
+						}
+						//出境机场名
+						String airportName = goFlightNum.substring(0,
+								goFlightNum.indexOf("-", goFlightNum.indexOf("-")));
+						TFlightEntity airCity = dbDao.fetch(TFlightEntity.class,
+								Cnd.where("takeOffName", "=", airportName));
+						String aircode = "";
+						if (!Util.isEmpty(airCity)) {
+							aircode = airCity.getTakeOffCode();
+						}
+						leaveport = cityName + airportName;
+
+						leaveflight = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
+					}
+				}
+
+				cell11.setCellValue(entryport);
+
+				HSSFCell cell12 = row3.createCell(12);
+				cell12.setCellStyle(colStyle);
+				cell12.setCellValue(leaveport);
+
+				HSSFCell cell13 = row3.createCell(13);
+				cell13.setCellStyle(colStyle);
+				cell13.setCellValue(entryflight);
+
+				HSSFCell cell14 = row3.createCell(14);
+				cell14.setCellStyle(colStyle);
+				cell14.setCellValue(leaveflight);
+
+				HSSFCell cell15 = row3.createCell(15);
+				cell15.setCellStyle(colStyle);
+				cell15.setCellValue(entrycity);
+
+				HSSFCell cell16 = row3.createCell(16);
+				cell16.setCellStyle(colStyle);
+				cell16.setCellValue(leavecity);
+
+				HSSFCell cell17 = row3.createCell(17);
+				cell17.setCellStyle(colStyle);
+				cell17.setCellValue("客户来源");
+
+				HSSFCell cell18 = row3.createCell(18);
+				cell18.setCellStyle(colStyle);
+				cell18.setCellValue(downloadinfo.get(i).getString("mainRelation"));
+
+				HSSFCell cell19 = row3.createCell(19);
+				cell19.setCellStyle(colStyle);
+				cell19.setCellValue("");
+
+				HSSFCell cell20 = row3.createCell(20);
+				cell20.setCellStyle(colStyle);
+				cell20.setCellValue("");
+
+				HSSFCell cell21 = row3.createCell(21);
+				cell21.setCellStyle(colStyle);
+				cell21.setCellValue(downloadinfo.get(i).getString("sendvisadate"));
+
+				HSSFCell cell22 = row3.createCell(22);
+				cell22.setCellStyle(colStyle);
+				cell22.setCellValue(downloadinfo.get(i).getString("name"));
+
+				//i += query.size();
+
+			}
+
+			CellRange(sheet, downloadinfo.size() + 4, 0, colStyle);
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			workbook.write(baos);
+
+			// 将文件进行编码
+			String fileName = URLEncoder.encode("日本签证申请名单.xls", "UTF-8");
+			// 设置下载的响应头
+			//response.setContentType("application/zip");
+			//通过response.reset()刷新可能存在一些未关闭的getWriter(),避免可能出现未关闭的getWriter()
+			response.reset();
+			response.setContentType("application/octet-stream");
+			response.setHeader("Set-Cookie", "fileDownload=true; path=/");
+			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
+			// 将字节流相应到浏览器（下载）
+			IOUtils.write(baos.toByteArray(), response.getOutputStream());
+			response.flushBuffer();
 			workbook.close();
-			IOUtils.closeQuietly(fout);
+			IOUtils.closeQuietly(baos);
 
 		} catch (Exception e) {
 
 		}
 
 		return stream;
+	}
+
+	/**
+	 * 合并单元格
+	 * @param rowcount 总行数
+	 * @param colNum 合并哪一列
+	 */
+	private void CellRange(Sheet sheet, int rowcount, int colNum, CellStyle cs) {
+		int currnetRow = 4;
+		for (int p = 4; p < rowcount; p++) {
+			Cell currentCell = sheet.getRow(p).getCell(colNum);
+			String current = getStringCellValue(currentCell);
+			Cell nextCell = null;
+			String next = "";
+
+			if (p < rowcount + 1) {
+				Row nowRow = sheet.getRow(p + 1);
+				if (nowRow != null) {
+					nextCell = nowRow.getCell(colNum);
+					next = getStringCellValue(nextCell);
+				} else {
+					next = "";
+				}
+			} else {
+				next = "";
+			}
+			if (current.equals(next)) {
+				//currentCell.setCellValue("");
+				//currnetRow = p + 1;
+				continue;
+			} else {
+
+				if (p != currnetRow) {
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 0, 0));
+					Cell nowCell = sheet.getRow(currnetRow).getCell(0);
+					nowCell.setCellValue(Integer.valueOf(current.substring(0, current.indexOf("."))));
+					nowCell.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 1, 1));
+
+					Cell currentCell1 = sheet.getRow(p).getCell(1);
+					String current1 = getStringCellValue(currentCell1);
+
+					Cell nowCell1 = sheet.getRow(currnetRow).getCell(1);
+					nowCell1.setCellValue(current1);
+					nowCell1.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 2, 2));
+
+					Cell currentCell2 = sheet.getRow(p).getCell(2);
+					String current2 = getStringCellValue(currentCell2);
+
+					Cell nowCell2 = sheet.getRow(currnetRow).getCell(2);
+					nowCell2.setCellValue(current2);
+					nowCell2.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 8, 8));
+
+					Cell currentCell8 = sheet.getRow(p).getCell(8);
+					String current8 = getStringCellValue(currentCell8);
+					if (current8.contains(".")) {
+						current8 = current8.substring(0, current8.indexOf("."));
+					}
+
+					Cell nowCell8 = sheet.getRow(currnetRow).getCell(8);
+					nowCell8.setCellValue(Integer.valueOf(current8));
+					nowCell8.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 9, 9));
+
+					Cell currentCell9 = sheet.getRow(p).getCell(9);
+					String current9 = getStringCellValue(currentCell9);
+
+					Cell nowCell9 = sheet.getRow(currnetRow).getCell(9);
+					nowCell9.setCellValue(current9);
+					nowCell9.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 10, 10));
+
+					Cell currentCell10 = sheet.getRow(p).getCell(10);
+					String current10 = getStringCellValue(currentCell10);
+
+					Cell nowCell10 = sheet.getRow(currnetRow).getCell(10);
+					nowCell10.setCellValue(current10);
+					nowCell10.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 11, 11));
+
+					Cell currentCell11 = sheet.getRow(p).getCell(11);
+					String current11 = getStringCellValue(currentCell11);
+					Cell nowCell11 = sheet.getRow(currnetRow).getCell(11);
+					nowCell11.setCellValue(current11);
+					nowCell11.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 12, 12));
+
+					Cell currentCell12 = sheet.getRow(p).getCell(12);
+					String current12 = getStringCellValue(currentCell12);
+
+					Cell nowCell12 = sheet.getRow(currnetRow).getCell(12);
+					nowCell12.setCellValue(current12);
+					nowCell12.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 13, 13));
+
+					Cell currentCell13 = sheet.getRow(p).getCell(13);
+					String current13 = getStringCellValue(currentCell13);
+
+					Cell nowCell13 = sheet.getRow(currnetRow).getCell(11);
+					nowCell13.setCellValue(current13);
+					nowCell13.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 14, 14));
+
+					Cell currentCell14 = sheet.getRow(p).getCell(14);
+					String current14 = getStringCellValue(currentCell14);
+
+					Cell nowCell14 = sheet.getRow(currnetRow).getCell(14);
+					nowCell14.setCellValue(current14);
+					nowCell14.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 15, 15));
+
+					Cell currentCell15 = sheet.getRow(p).getCell(15);
+					String current15 = getStringCellValue(currentCell15);
+
+					Cell nowCell15 = sheet.getRow(currnetRow).getCell(15);
+					nowCell15.setCellValue(current15);
+					nowCell15.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 16, 16));
+
+					Cell currentCell16 = sheet.getRow(p).getCell(16);
+					String current16 = getStringCellValue(currentCell16);
+
+					Cell nowCell16 = sheet.getRow(currnetRow).getCell(16);
+					nowCell16.setCellValue(current16);
+					nowCell16.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 17, 17));
+
+					Cell currentCell17 = sheet.getRow(p).getCell(17);
+					String current17 = getStringCellValue(currentCell17);
+
+					Cell nowCell17 = sheet.getRow(currnetRow).getCell(17);
+					nowCell17.setCellValue(current17);
+					nowCell17.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 19, 19));
+
+					Cell currentCell19 = sheet.getRow(p).getCell(19);
+					String current19 = getStringCellValue(currentCell19);
+
+					Cell nowCell19 = sheet.getRow(currnetRow).getCell(19);
+					nowCell19.setCellValue(current19);
+					nowCell19.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 20, 20));
+
+					Cell currentCell20 = sheet.getRow(p).getCell(20);
+					String current20 = getStringCellValue(currentCell20);
+
+					Cell nowCell20 = sheet.getRow(currnetRow).getCell(20);
+					nowCell20.setCellValue(current20);
+					nowCell20.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 21, 21));
+
+					Cell currentCell21 = sheet.getRow(p).getCell(21);
+					String current21 = getStringCellValue(currentCell21);
+
+					Cell nowCell21 = sheet.getRow(currnetRow).getCell(21);
+					nowCell21.setCellValue(current21);
+					nowCell21.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 22, 22));
+
+					Cell currentCell22 = sheet.getRow(p).getCell(22);
+					String current22 = getStringCellValue(currentCell22);
+
+					Cell nowCell22 = sheet.getRow(currnetRow).getCell(22);
+					nowCell22.setCellValue(current22);
+					nowCell22.setCellStyle(cs);
+
+					/*if (colNum == 0 || colNum == 8) {
+						nowCell = sheet.getRow(currnetRow).getCell(0);
+						nowCell.setCellValue(Integer.valueOf(current.substring(0, 1)));
+					}else if(colNum == 1){
+						Cell currentCell1 = sheet.getRow(p).getCell(1);
+						current = getStringCellValue(currentCell1);
+					}
+					
+					
+					else {
+						nowCell.setCellValue(current);
+					}
+					nowCell.setCellStyle(cs);*/
+				}
+				currnetRow = p + 1;
+
+			}
+		}
+	}
+
+	/**
+	 * 获取单元格的值
+	 * 
+	 * @param currentCell
+	 * @return
+	 */
+	private String getStringCellValue(Cell currentCell) {
+		String strCell = "";
+		if (currentCell != null) {
+			switch (currentCell.getCellType()) {
+			case XSSFCell.CELL_TYPE_STRING:
+				strCell = currentCell.getStringCellValue();
+				break;
+			case XSSFCell.CELL_TYPE_NUMERIC:
+				strCell = String.valueOf(currentCell.getNumericCellValue());
+				break;
+			case XSSFCell.CELL_TYPE_BOOLEAN:
+				strCell = String.valueOf(currentCell.getBooleanCellValue());
+				break;
+			case XSSFCell.CELL_TYPE_BLANK:
+				strCell = "";
+				break;
+			default:
+				strCell = "";
+				break;
+			}
+			if (strCell.equals("") || strCell == null) {
+				return "";
+			}
+			if (currentCell == null) {
+				return "";
+			}
+		}
+		return strCell;
 	}
 
 	private static HSSFCellStyle createCellStyle(HSSFWorkbook workbook, short fontsize, boolean flag, boolean flag1,
@@ -6589,6 +7176,81 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			style.setAlignment(HSSFCellStyle.ALIGN_RIGHT);//右对齐
 		}
 		return style;
+	}
+
+	public List<Record> getDownloadinfo(ListDataForm form, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+
+		String singlesqlStr = sqlManager.get("simpleJP_downloadExcel");
+		Sql singlesql = Sqls.create(singlesqlStr);
+
+		Cnd singlecnd = Cnd.NEW();
+		if (!Util.isEmpty(form.getSearchStr())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.orderNum", "like", "%" + form.getSearchStr() + "%")
+					.or("tc.linkman", "like", "%" + form.getSearchStr() + "%")
+					.or("tc.mobile", "like", "%" + form.getSearchStr() + "%")
+					.or("tc.email", "like", "%" + form.getSearchStr() + "%")
+					.or("CONCAT(ta.firstName,ta.lastName)", "like", "%" + form.getSearchStr() + "%")
+					.or("toj.acceptDesign", "like", "%" + form.getSearchStr() + "%")
+					.or("tap.passport", "like", "%" + form.getSearchStr() + "%");
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getSendstartdate()) && !Util.isEmpty(form.getSendenddate())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.sendVisaDate", "between", new Object[] { form.getSendstartdate(), form.getSendenddate() });
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getOrderstartdate()) && !Util.isEmpty(form.getOrderenddate())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.createTime", "between", new Object[] { form.getOrderstartdate(), form.getOrderenddate() });
+			singlecnd.and(exp);
+		}
+		if (!Util.isEmpty(form.getStatus())) {
+			if (Util.eq(form.getStatus(), JPOrderStatusEnum.DISABLED.intKey())) {
+				singlecnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
+			} else {
+				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).and("tr.isDisabled", "=",
+						IsYesOrNoEnum.NO.intKey());
+				singlecnd.and(e1);
+			}
+		}
+
+		if (!Util.isEmpty(form.getSongqianshe())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("toj.sendsignid", "=", form.getSongqianshe());
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getEmployee())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tu.id", "=", form.getEmployee());
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getVisatype())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("toj.visatype", "=", form.getVisatype());
+			singlecnd.and(exp);
+		}
+
+		if (loginUser.getId().equals(loginCompany.getAdminId())) {
+			//公司管理员
+			singlecnd.and("tr.comId", "=", loginCompany.getId());
+		} else {
+			//普通的操作员
+			singlecnd.and("tr.salesOpid", "=", loginUser.getId());
+		}
+		singlecnd.and("tr.zhaobaoupdate", "=", 1);
+		singlecnd.and("tr.isDisabled", "=", 0);
+
+		singlesql.setCondition(singlecnd);
+		List<Record> singleperson = dbDao.query(singlesql, singlecnd, null);
+		return singleperson;
 	}
 
 }

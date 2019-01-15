@@ -253,3 +253,55 @@ UPDATE
 SET
 	totj.tripType=totj2.tripType,totj.tripPurpose=totj2.tripPurpose,totj.goDate=totj2.goDate,totj.goDepartureCity=totj2.goDepartureCity,totj.goArrivedCity=totj2.goArrivedCity,totj.goFlightNum=totj2.goFlightNum,totj.returnDate=totj2.returnDate,totj.returnDepartureCity=totj2.returnDepartureCity,totj.returnArrivedCity=totj2.returnArrivedCity,totj.returnFlightNum=totj2.returnFlightNum,totj.gotransferarrivedcity=totj2.gotransferarrivedcity,totj.gotransferdeparturecity=totj2.gotransferdeparturecity,totj.returntransferarrivedcity=totj2.returntransferarrivedcity,totj.returntransferdeparturecity=totj2.returntransferdeparturecity,totj.gotransferflightnum=totj2.gotransferflightnum,totj.returntransferflightnum=totj2.returntransferflightnum,totj.newgodeparturecity=totj2.newgodeparturecity,totj.newgoarrivedcity=totj2.newgoarrivedcity,totj.newgoflightnum=totj2.newgoflightnum,totj.newreturndeparturecity=totj2.newreturndeparturecity,totj.newreturnarrivedcity=totj2.newreturnarrivedcity,totj.newreturnflightnum=totj2.newreturnflightnum
 $condition
+
+
+/*simpleJP_downloadExcel*/
+SELECT
+tr.id,
+tr.orderNum,
+tr.cityId,
+toj.visaType,
+CONCAT(ta.firstName,ta.lastName) applyname,
+CONCAT(ta.firstNameEn,' ',ta.lastNameEn) applynameen,
+ta.sex,
+tap.passport,
+ta.province,
+(
+SELECT
+count(*)
+FROM
+t_applicant_order_jp
+WHERE
+orderId = toj.id
+) peopleNumber,
+DATE_FORMAT(totj.goDate, '%Y-%m-%d') godate,
+DATE_FORMAT(totj.returnDate,'%Y-%m-%d') returndate,
+totj.goFlightNum,
+totj.newgodeparturecity,
+totj.gotransferdeparturecity,
+totj.newreturnarrivedcity,
+totj.returntransferarrivedcity,
+totj.goArrivedCity,
+totj.newgoflightnum,
+totj.newgoarrivedcity,
+totj.gotransferflightnum,
+totj.returntransferflightnum,
+totj.newreturndeparturecity,
+totj.newreturnflightnum,
+totj.returnFlightNum,
+totj.returnDepartureCity,
+totj.goDepartureCity,
+totj.returnArrivedCity,
+taoj.mainRelation,
+DATE_FORMAT(tr.sendVisaDate,'%Y-%m-%d') sendvisadate,
+tu.`name`
+FROM
+t_applicant ta
+LEFT JOIN t_applicant_order_jp taoj ON taoj.applicantId = ta.id
+LEFT JOIN t_order_jp toj ON taoj.orderId = toj.id
+LEFT JOIN t_order tr ON toj.orderId = tr.id
+LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
+LEFT JOIN t_order_trip_jp totj ON totj.orderId = toj.id
+LEFT JOIN t_user tu ON tr.salesOpid = tu.id
+LEFT JOIN t_customer tc ON tr.customerId = tc.id
+$condition

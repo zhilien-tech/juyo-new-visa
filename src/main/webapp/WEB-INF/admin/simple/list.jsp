@@ -142,7 +142,7 @@
 				<a class="btn btn-primary btn-sm pull-right" style="" href="javascript:search();" id="searchbtn">搜索</a>
 			</div>
 			<div class="col-md col-md-1  " style="width: 6% !important;margin-left: 0%;">
-				<a class="btn btn-primary btn-sm pull-right" onclick="downloadOrder();">下载</a>
+				<!-- <a class="btn btn-primary btn-sm pull-right" onclick="downloadOrder();">下载</a> -->
 			</div>
 			<div class="col-md col-md-1  " style="width: 6% !important;margin-left: 0%;">
 				<a class="btn btn-primary btn-sm pull-right" onclick="addOrder();">下单</a>
@@ -972,7 +972,7 @@
 		var sendenddate = $("#sendenddate").val();
 		var searchstr = $("#searchStr").val();
 		layer.load(1);
-		$.fileDownload("${base}/admin/simple/downloadOrder.html?status=" + status+"&songqianshe="+songqianshe+"&employee="+employee+"&visatype="+visatype+"&orderstartdate="+orderstartdate+"&orderenddate="+orderenddate+"&sendstartdate="+sendstartdate+"&sendenddate="+sendenddate+"&searchstr="+searchstr, {
+		$.fileDownload("${base}/admin/simple/downloadOrder.html?status=" + status+"&songqianshe="+songqianshe+"&employee="+employee+"&visatype="+visatype+"&orderstartdate="+orderstartdate+"&orderenddate="+orderenddate+"&sendstartdate="+sendstartdate+"&sendenddate="+sendenddate+"&searchStr="+searchstr, {
 	         successCallback: function (url) {
 	        	 layer.closeAll('loading');
 	         },

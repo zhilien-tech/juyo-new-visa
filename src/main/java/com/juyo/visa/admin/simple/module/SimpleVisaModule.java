@@ -9,6 +9,7 @@ package com.juyo.visa.admin.simple.module;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
@@ -355,8 +356,8 @@ public class SimpleVisaModule {
 	 */
 	@At
 	@GET
-	public Object downloadOrder(@Param("..") ListDataForm form, HttpServletRequest request) {
-		return simpleVisaService.downloadOrder(form, request);
+	public Object downloadOrder(@Param("..") ListDataForm form, HttpServletRequest request, HttpServletResponse response) {
+		return simpleVisaService.downloadOrder(form, request, response);
 	}
 
 	@At
