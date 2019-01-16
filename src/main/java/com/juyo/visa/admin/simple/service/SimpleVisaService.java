@@ -6831,8 +6831,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			long fifthtime = System.currentTimeMillis();
 			System.out.println("合并单元格所用时间：" + (fifthtime - fourthtime) + "ms");
 
-			//sheet.createFreezePane(0, 4, 0, 4);
-			sheet.createFreezePane(2, 4);
+			sheet.createFreezePane(2, 4, 2, 4);
+			//sheet.createFreezePane(2, 4); 跟上边的一样，两者等价，但这个需要多跳一层到上边的方法
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			workbook.write(baos);
