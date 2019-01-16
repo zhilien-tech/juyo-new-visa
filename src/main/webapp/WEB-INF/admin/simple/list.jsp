@@ -68,6 +68,7 @@
 			.card-content-2 span {
 				top: 50%;
 				left: 0;
+				width: 100%;
 				position: absolute;
 				margin-top: -12px;
 				height: 24px;
@@ -142,7 +143,7 @@
 				<a class="btn btn-primary btn-sm pull-right" style="" href="javascript:search();" id="searchbtn">搜索</a>
 			</div>
 			<div class="col-md col-md-1  " style="width: 6% !important;margin-left: 0%;">
-				<!-- <a class="btn btn-primary btn-sm pull-right" onclick="downloadOrder();">下载</a> -->
+				<a class="btn btn-primary btn-sm pull-right" onclick="downloadOrder();">下载</a>
 			</div>
 			<div class="col-md col-md-1  " style="width: 6% !important;margin-left: 0%;">
 				<a class="btn btn-primary btn-sm pull-right" onclick="addOrder();">下单</a>
@@ -264,6 +265,11 @@
 							</li>
 						</ul>
 						<div class="card-content-2">
+						
+							<span v-if="data.isdisabled == 1">
+								作废
+							</span>
+							<span v-else>
 							<span v-if="data.visastatus === '招宝成功'">
 								<font color="red">{{data.visastatus}}</font>
 							</span>
@@ -277,9 +283,6 @@
 								</div>
 							</span>
 
-							<span v-else-if="data.isdisabled == 1">
-								作废
-							</span>
 
 							<span v-else-if="data.visastatus === '发招宝失败'">
 								{{data.visastatus}}
@@ -290,6 +293,10 @@
 							<span v-else>
 								{{data.visastatus}}
 							</span>
+							
+							</span>
+							
+						
 
 						</div>
 					</div>
@@ -398,35 +405,39 @@
     	                 	dataType:"json",
     	                 	type:'post',
     	                 	success: function(data){
-    	                 		if(visastatus == 19){
-    	                 			parent.successCallBack(5);
-    		                 		//layer.msg('招宝变更');
-    	                 		}else if(visastatus == 22){
-    	                 			parent.successCallBack(6);
-    		                 		//layer.msg('招宝取消');
-    	                 		}else if(visastatus == 27){
-    	                 			parent.successCallBack(7);
-    		                 		//layer.msg('报告拒签');
-    	                 		}else if(visastatus == 26){
-    	                 			parent.successCallBack(10);
+    	                 		if(data){
+    	                 			layer.msg(data);
+    	                 		}else{
+	    	                 		if(visastatus == 19){
+	    	                 			parent.successCallBack(5);
+	    		                 		//layer.msg('招宝变更');
+	    	                 		}else if(visastatus == 22){
+	    	                 			parent.successCallBack(6);
+	    		                 		//layer.msg('招宝取消');
+	    	                 		}else if(visastatus == 27){
+	    	                 			parent.successCallBack(7);
+	    		                 		//layer.msg('报告拒签');
+	    	                 		}else if(visastatus == 26){
+	    	                 			parent.successCallBack(10);
+	    	                 		}
+	    	                 		//更新列表数据
+	    	                 		var orderAuthority = "allOrder";
+	    							$(".searchOrderBtn").each(function(){
+	    								if($(this).hasClass("bgColor")){
+	    									orderAuthority = $(this).attr("name");
+	    								}
+	    							});
+	    	                 		$.ajax({
+	    	                        	url: url,
+	    	                        	data:{orderAuthority:orderAuthority},
+	    	                        	dataType:"json",
+	    	                        	type:'post',
+	    	                        	success: function(data){
+	    	                        		_self.visaJapanData = data.visaJapanData;
+	    	                          	}
+	    	                        });
     	                 		}
-    	                 		//更新列表数据
-    	                 		var orderAuthority = "allOrder";
-    							$(".searchOrderBtn").each(function(){
-    								if($(this).hasClass("bgColor")){
-    									orderAuthority = $(this).attr("name");
-    								}
-    							});
-    	                 		$.ajax({
-    	                        	url: url,
-    	                        	data:{orderAuthority:orderAuthority},
-    	                        	dataType:"json",
-    	                        	type:'post',
-    	                        	success: function(data){
-    	                        		_self.visaJapanData = data.visaJapanData;
-    	                          	}
-    	                        });
-    	                 		layer.close(index);
+	    	                 	layer.close(index);
     	                   	}
     	                 });
     				});
@@ -467,6 +478,9 @@
                  	type:'post',
                  	async:false,
                  	success: function(data){
+                 		if(data == 14){
+                 			layer.msg("签证类型为普通五年多次时不能进行此操作");
+                 		}else{
                  		var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
                  		if(data.data){
                  			url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
@@ -482,6 +496,9 @@
 		        		    area: ['400px', '300px'],
 		        		    content: url
 		        		  });
+                 			
+                 		}
+                 		
                    	}
                  });
         	},

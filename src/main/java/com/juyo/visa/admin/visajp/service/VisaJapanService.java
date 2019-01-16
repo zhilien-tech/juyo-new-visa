@@ -1942,100 +1942,106 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	public Object validateInfoIsFull(Integer orderjpid) {
 		StringBuffer resultstrbuf = new StringBuffer("");
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
-		//订单信息
-		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
-		//出行信息
-		TOrderTripJpEntity ordertripjp = dbDao.fetch(TOrderTripJpEntity.class,
-				Cnd.where("orderId", "=", orderjp.getId()));
-		List<TOrderTripMultiJpEntity> mutiltrip = new ArrayList<TOrderTripMultiJpEntity>();
-		if (!Util.isEmpty(ordertripjp)) {
-			mutiltrip = dbDao.query(TOrderTripMultiJpEntity.class, Cnd.where("tripid", "=", ordertripjp.getId()), null);
-		}
-		//申请人信息
-		String applysqlstr = sqlManager.get("get_applyinfo_from_filedown_by_orderid_jp");
-		Sql applysql = Sqls.create(applysqlstr);
-		Cnd cnd = Cnd.NEW();
-		cnd.and("taoj.orderId", "=", orderjp.getId());
-		List<Record> applyinfo = dbDao.query(applysql, cnd, null);
-		//行程安排
-		List<TOrderTravelplanJpEntity> ordertravelplan = dbDao.query(TOrderTravelplanJpEntity.class,
-				Cnd.where("orderId", "=", orderjp.getId()), null);
-		//公司信息
-		TCompanyEntity company = new TCompanyEntity();
-		company = dbDao.fetch(TCompanyEntity.class, orderinfo.getComId().longValue());
-
-		//判断签证类型
-		if (Util.isEmpty(orderjp.getVisaType())) {
-			resultstrbuf.append("签证类型、");
+		if (orderjp.getVisaType() == 14) {
+			return 14;
 		} else {
-			/*if (!orderjp.getVisaType().equals(MainSaleVisaTypeEnum.SINGLE.intKey())) {
+			//订单信息
+			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+			//出行信息
+			TOrderTripJpEntity ordertripjp = dbDao.fetch(TOrderTripJpEntity.class,
+					Cnd.where("orderId", "=", orderjp.getId()));
+			List<TOrderTripMultiJpEntity> mutiltrip = new ArrayList<TOrderTripMultiJpEntity>();
+			if (!Util.isEmpty(ordertripjp)) {
+				mutiltrip = dbDao.query(TOrderTripMultiJpEntity.class, Cnd.where("tripid", "=", ordertripjp.getId()),
+						null);
+			}
+			//申请人信息
+			String applysqlstr = sqlManager.get("get_applyinfo_from_filedown_by_orderid_jp");
+			Sql applysql = Sqls.create(applysqlstr);
+			Cnd cnd = Cnd.NEW();
+			cnd.and("taoj.orderId", "=", orderjp.getId());
+			List<Record> applyinfo = dbDao.query(applysql, cnd, null);
+			//行程安排
+			List<TOrderTravelplanJpEntity> ordertravelplan = dbDao.query(TOrderTravelplanJpEntity.class,
+					Cnd.where("orderId", "=", orderjp.getId()), null);
+			//公司信息
+			TCompanyEntity company = new TCompanyEntity();
+			company = dbDao.fetch(TCompanyEntity.class, orderinfo.getComId().longValue());
+
+			//判断签证类型
+			if (Util.isEmpty(orderjp.getVisaType())) {
+				resultstrbuf.append("签证类型、");
+			} else {
+				/*if (!orderjp.getVisaType().equals(MainSaleVisaTypeEnum.SINGLE.intKey())) {
 				if (Util.isEmpty(orderjp.getVisaCounty())) {
 					resultstrbuf.append("签证县、");
 				}
-			}*/
-		}
-		//领区
-		if (Util.isEmpty(orderinfo.getCityId())) {
-			resultstrbuf.append("领区、");
-		}
-		if (Util.isEmpty(orderinfo.getGoTripDate())) {
-			resultstrbuf.append("出发日期、");
-		}
-		if (Util.isEmpty(orderinfo.getBackTripDate())) {
-			resultstrbuf.append("返回日期、");
-		}
-		int count = 1;
-		int passportflag = 0;
-		if (Util.isEmpty(applyinfo)) {
-			resultstrbuf.append("申请人、");
-		} else {
-			for (Record record : applyinfo) {
-				if (count == 1) {
+				}*/
+			}
+			//领区
+			if (Util.isEmpty(orderinfo.getCityId())) {
+				resultstrbuf.append("领区、");
+			}
+			if (Util.isEmpty(orderinfo.getGoTripDate())) {
+				resultstrbuf.append("出发日期、");
+			}
+			if (Util.isEmpty(orderinfo.getBackTripDate())) {
+				resultstrbuf.append("返回日期、");
+			}
+			int count = 1;
+			int passportflag = 0;
+			if (Util.isEmpty(applyinfo)) {
+				resultstrbuf.append("申请人、");
+			} else {
+				for (Record record : applyinfo) {
+					if (count == 1) {
 
-					if (Util.isEmpty(record.get("firstname")) && Util.isEmpty(record.get("lastname"))) {
-						resultstrbuf.append("申请人" + count + "的姓名、");
+						if (Util.isEmpty(record.get("firstname")) && Util.isEmpty(record.get("lastname"))) {
+							resultstrbuf.append("申请人" + count + "的姓名、");
+						}
+						if (Util.isEmpty(record.get("firstnameen")) && Util.isEmpty(record.get("lastnameen"))) {
+							resultstrbuf.append("申请人" + count + "的姓名英文、");
+						}
+						if (Util.isEmpty(record.get("sex"))) {
+							resultstrbuf.append("申请人" + count + "的性别、");
+						}
+						if (Util.isEmpty(record.get("passportno"))) {
+							resultstrbuf.append("申请人" + count + "的护照号、");
+						}
+						if (Util.isEmpty(record.get("position"))) {
+							resultstrbuf.append("申请人" + count + "的职位、");
+						}
+						if (Util.isEmpty(record.get("unitName"))) {
+							resultstrbuf.append("申请人" + count + "的父母（配偶）职业、");
+						}
 					}
-					if (Util.isEmpty(record.get("firstnameen")) && Util.isEmpty(record.get("lastnameen"))) {
-						resultstrbuf.append("申请人" + count + "的姓名英文、");
-					}
-					if (Util.isEmpty(record.get("sex"))) {
-						resultstrbuf.append("申请人" + count + "的性别、");
-					}
-					if (Util.isEmpty(record.get("passportno"))) {
-						resultstrbuf.append("申请人" + count + "的护照号、");
-					}
-					if (Util.isEmpty(record.get("position"))) {
-						resultstrbuf.append("申请人" + count + "的职位、");
-					}
-					if (Util.isEmpty(record.get("unitName"))) {
-						resultstrbuf.append("申请人" + count + "的父母（配偶）职业、");
-					}
-				}
-				count++;
-			}
-		}
-		String resultstr = resultstrbuf.toString();
-		//姓名长度限制
-		String namelength = "";
-		for (Record record : applyinfo) {
-			if (Util.isEmpty(record.get("firstname")) && Util.isEmpty(record.get("lastname"))) {
-				String name = record.getString("firstname") + record.getString("lastname");
-				if (name.length() > 8) {
-					namelength = "申请人姓名不能超过八位！";
+					count++;
 				}
 			}
-		}
-		if (!Util.isEmpty(resultstr)) {
-			resultstr = resultstr.substring(0, resultstr.length() - 1);
-			resultstr += "不能为空";
-			if (!Util.isEmpty(namelength)) {
-				resultstr += namelength;
+			String resultstr = resultstrbuf.toString();
+			//姓名长度限制
+			String namelength = "";
+			for (Record record : applyinfo) {
+				if (Util.isEmpty(record.get("firstname")) && Util.isEmpty(record.get("lastname"))) {
+					String name = record.getString("firstname") + record.getString("lastname");
+					if (name.length() > 8) {
+						namelength = "申请人姓名不能超过八位！";
+					}
+				}
 			}
-			return JuYouResult.ok(resultstr);
-		} else if (!Util.isEmpty(namelength)) {
-			return JuYouResult.ok(namelength);
-		} else {
-			return JuYouResult.ok();
+			if (!Util.isEmpty(resultstr)) {
+				resultstr = resultstr.substring(0, resultstr.length() - 1);
+				resultstr += "不能为空";
+				if (!Util.isEmpty(namelength)) {
+					resultstr += namelength;
+				}
+				return JuYouResult.ok(resultstr);
+			} else if (!Util.isEmpty(namelength)) {
+				return JuYouResult.ok(namelength);
+			} else {
+				return JuYouResult.ok();
+			}
+
 		}
 	}
 

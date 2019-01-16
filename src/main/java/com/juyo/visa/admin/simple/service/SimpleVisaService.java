@@ -305,7 +305,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		int zhaobaopeople = 0;
 		for (Record record : totallist) {
 			//收费单子，人数
-			if (Util.eq(1, record.get("zhaobaoupdate"))) {
+			if (Util.eq(1, record.get("zhaobaoupdate")) && Util.eq(0, record.get("isDisabled"))) {
 				zhaobaoorder++;
 				if (!Util.eq(0, record.get("peoplenumber"))) {
 					zhaobaopeople += record.getInt("peoplenumber");
@@ -434,12 +434,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 		if (!Util.isEmpty(form.getStatus())) {
 			if (Util.eq(form.getStatus(), JPOrderStatusEnum.DISABLED.intKey())) {
-				singlecnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
+				singlecnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey()).and("tr.isDisabled", "=",
+						IsYesOrNoEnum.NO.intKey());
 			} else {
 				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).and("tr.isDisabled", "=",
 						IsYesOrNoEnum.NO.intKey());
 				singlecnd.and(e1);
 			}
+		} else {
+			SqlExpressionGroup e1 = Cnd.exps("tr.isDisabled", "=", IsYesOrNoEnum.NO.intKey());
+			singlecnd.and(e1);
 		}
 
 		if (!Util.isEmpty(form.getSongqianshe())) {
@@ -6449,10 +6453,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 */
 	public Object downloadOrder(ListDataForm form, HttpServletRequest request, HttpServletResponse response) {
 
+		long firsttime = System.currentTimeMillis();
+
 		HttpSession session = request.getSession();
 		//获取当前公司
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		List<Record> downloadinfo = getDownloadinfo(form, request);
+		long secondtime = System.currentTimeMillis();
+		System.out.println("查询数据所用时间：" + (secondtime - firsttime) + "ms");
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -6475,8 +6483,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			CellRangeAddress remark = new CellRangeAddress(2, 2, 17, 22);//起始行,结束行,起始列,结束列
 
 			//标题样式
-			HSSFCellStyle colStyle = createCellStyle(workbook, (short) 10, true, true, 2);
-			HSSFCellStyle timecolStyle = createCellStyle(workbook, (short) 10, true, true, 1);
+			HSSFCellStyle titlecolStyle = createCellStyle(workbook, (short) 18, true, true, 2);
+			//时间
+			HSSFCellStyle timeStyle = createCellStyle(workbook, (short) 12, false, true, 1);
+			//正文
+			HSSFCellStyle colStyle = createCellStyle(workbook, (short) 12, false, true, 2);
 			//2.创建工作表
 			HSSFSheet sheet = workbook.createSheet("visa");
 			//2.1加载合并单元格对象
@@ -6493,13 +6504,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			HSSFRow row = sheet.createRow(0);
 			HSSFCell cell = row.createCell(0);
 			//加载单元格样式
-			cell.setCellStyle(colStyle);
+			cell.setCellStyle(titlecolStyle);
 			cell.setCellValue("日本签证处理系统");
 
 			HSSFRow secondrow = sheet.createRow(1);
 			HSSFCell secondcell = secondrow.createCell(2);
 			//加载单元格样式
-			secondcell.setCellStyle(timecolStyle);
+			secondcell.setCellStyle(timeStyle);
 			String orderstartdate = "";
 			String orderenddate = "";
 			if (Util.isEmpty(form.getOrderstartdate())) {
@@ -6541,6 +6552,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				cell2.setCellValue(titles[i]);
 			}
 
+			long thirdtime = System.currentTimeMillis();
+			System.out.println("标题所用时间：" + (thirdtime - secondtime) + "ms");
 			//正文内容
 			int count = 1;
 			for (int i = 0; i < downloadinfo.size(); i++) {
@@ -6632,85 +6645,41 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				String entryflight = "";
 				//出境航班
 				String leaveflight = "";
-				//出发城市
-				String entrycity = "";
-				//返回城市
-				String leavecity = "";
+				//入境日本城市
+				String gocityName = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("goport"))) {
+					gocityName = downloadinfo.get(i).getString("goport");
+					if (gocityName.endsWith("市") || gocityName.endsWith("县") || gocityName.endsWith("府")) {
+						gocityName = gocityName.substring(0, gocityName.length() - 1);
+					}
+				}
+				//入境日本机场
+				String goportname = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("goportname"))) {
+					goportname = downloadinfo.get(i).getString("goportname");
+				}
+				entryport = gocityName + goportname;
+				//出境日本城市
+				String leavecityName = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("leaveport"))) {
+					leavecityName = downloadinfo.get(i).getString("leaveport");
+					if (leavecityName.endsWith("市") || leavecityName.endsWith("县") || leavecityName.endsWith("府")) {
+						leavecityName = leavecityName.substring(0, leavecityName.length() - 1);
+					}
+				}
+				//出境日本机场
+				String leaveportname = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("leaveportname"))) {
+					leaveportname = downloadinfo.get(i).getString("leaveportname");
+				}
+				leaveport = leavecityName + leaveportname;
+
 				//重庆
 				if (cityid > 2) {
-
-					//出发城市
-					if (!Util.isEmpty(downloadinfo.get(i).getInt("newgodeparturecity"))
-							&& downloadinfo.get(i).getInt("newgodeparturecity") > 0) {
-						TCityEntity fetch = dbDao.fetch(TCityEntity.class,
-								downloadinfo.get(i).getInt("newgodeparturecity"));
-						entrycity = fetch.getCity();
-
-						/*if (entrycity.endsWith("市") || entrycity.endsWith("县")) {
-							entrycity = entrycity.substring(0, entrycity.length() - 1);
-						}
-						if (entrycity.length() > 3 && entrycity.endsWith("自治区")) {
-							entrycity = entrycity.substring(0, entrycity.length() - 3);
-						}*/
-					} else {
-						if (!Util.isEmpty(downloadinfo.get(i).getInt("gotransferdeparturecity"))
-								&& downloadinfo.get(i).getInt("gotransferdeparturecity") > 0) {
-							TCityEntity fetch = dbDao.fetch(TCityEntity.class,
-									downloadinfo.get(i).getInt("gotransferdeparturecity"));
-							entrycity = fetch.getCity();
-
-						}
-					}
-					if (entrycity.endsWith("市") || entrycity.endsWith("县")) {
-						entrycity = entrycity.substring(0, entrycity.length() - 1);
-					}
-					if (entrycity.length() > 3 && entrycity.endsWith("自治区")) {
-						entrycity = entrycity.substring(0, entrycity.length() - 3);
-					}
-
-					//返回城市
-					if (!Util.isEmpty(downloadinfo.get(i).getInt("newreturnarrivedcity"))
-							&& downloadinfo.get(i).getInt("newreturnarrivedcity") > 0) {
-						TCityEntity fetch = dbDao.fetch(TCityEntity.class,
-								downloadinfo.get(i).getInt("newreturnarrivedcity"));
-						leavecity = fetch.getCity();
-
-					} else {
-						if (!Util.isEmpty(downloadinfo.get(i).getInt("returntransferarrivedcity"))
-								&& downloadinfo.get(i).getInt("returntransferarrivedcity") > 0) {
-							TCityEntity fetch = dbDao.fetch(TCityEntity.class,
-									downloadinfo.get(i).getInt("returntransferarrivedcity"));
-							leavecity = fetch.getCity();
-
-						}
-					}
-					if (leavecity.endsWith("市") || leavecity.endsWith("县")) {
-						leavecity = leavecity.substring(0, leavecity.length() - 1);
-					}
-					if (leavecity.length() > 3 && leavecity.endsWith("自治区")) {
-						leavecity = leavecity.substring(0, leavecity.length() - 3);
-					}
-
 					//入境
 					if (!Util.isEmpty(downloadinfo.get(i).getString("newgoflightnum"))) {
-						TCityEntity goCity = dbDao.fetch(TCityEntity.class,
-								downloadinfo.get(i).getInt("newgoarrivedcity"));
-						String cityName = goCity.getCity();
-						if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
-							cityName = cityName.substring(0, cityName.length() - 1);
-						}
 						String goFlightNum = downloadinfo.get(i).getString("newgoflightnum");
 						//入境机场名
-						String airportName = goFlightNum.substring(
-								goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
-						TFlightEntity airCity = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("landingName", "=", airportName));
-						String aircode = "";
-						if (!Util.isEmpty(airCity)) {
-							aircode = airCity.getLandingCode();
-						}
-
 						String lastnum = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
 						if (!Util.isEmpty(downloadinfo.get(i).getString("gotransferflightnum"))) {//有第一行，航班号要组合
@@ -6722,30 +6691,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							lastnum = stringBuffer.toString();
 						}
 
-						entryport = cityName + airportName;
 						entryflight = lastnum;
 
 					}
 					//出境
 					if (!Util.isEmpty(downloadinfo.get(i).getString("returntransferflightnum"))) {
-						TCityEntity goCity = dbDao.fetch(TCityEntity.class,
-								downloadinfo.get(i).getInt("newreturndeparturecity"));
-						String cityName = goCity.getCity();
-						if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
-							cityName = cityName.substring(0, cityName.length() - 1);
-						}
 						String goFlightNum = downloadinfo.get(i).getString("returntransferflightnum");
 
 						//出境机场名
-						String airportName = goFlightNum.substring(0,
-								goFlightNum.indexOf("-", goFlightNum.indexOf("-")));
-						TFlightEntity airCity = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("takeOffName", "=", airportName));
-						String aircode = "";
-						if (!Util.isEmpty(airCity)) {
-							aircode = airCity.getTakeOffCode();
-						}
-
 						String lastnum = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
 
@@ -6759,7 +6712,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							lastnum = stringBuffer.toString();
 						}
 
-						leaveport = cityName + airportName;
 						leaveflight = lastnum;
 					}
 
@@ -6767,35 +6719,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					//入境
 					if (!Util.isEmpty(downloadinfo.get(i).getString("goFlightNum"))) {
 
-						TCityEntity fetch = dbDao.fetch(TCityEntity.class, downloadinfo.get(i)
-								.getInt("goDepartureCity"));
-						entrycity = fetch.getCity();
-						if (entrycity.endsWith("市") || entrycity.endsWith("县")) {
-							entrycity = entrycity.substring(0, entrycity.length() - 1);
-						}
-						if (entrycity.length() > 3 && entrycity.endsWith("自治区")) {
-							entrycity = entrycity.substring(0, entrycity.length() - 3);
-						}
-
 						String goFlightNum = downloadinfo.get(i).getString("goFlightNum");
-						int arrivedCityid = downloadinfo.get(i).getInt("goArrivedCity");
 
-						TCityEntity goCity = dbDao.fetch(TCityEntity.class, arrivedCityid);
-						String cityName = goCity.getCity();
-						if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
-							cityName = cityName.substring(0, cityName.length() - 1);
-						}
 						//入境机场名
-						String airportName = goFlightNum.substring(
-								goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")));
-						TFlightEntity airCity = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("takeOffName", "=", airportName));
-						String aircode = "";
-						if (!Util.isEmpty(airCity)) {
-							aircode = airCity.getTakeOffCode();
-						}
-						entryport = cityName + airportName;
 
 						entryflight = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
@@ -6803,33 +6729,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					//出境
 					if (!Util.isEmpty(downloadinfo.get(i).getString("returnFlightNum"))) {
 
-						TCityEntity fetch = dbDao.fetch(TCityEntity.class,
-								downloadinfo.get(i).getInt("returnArrivedCity"));
-						leavecity = fetch.getCity();
-						if (leavecity.endsWith("市") || leavecity.endsWith("县")) {
-							leavecity = leavecity.substring(0, leavecity.length() - 1);
-						}
-						if (leavecity.length() > 3 && leavecity.endsWith("自治区")) {
-							leavecity = leavecity.substring(0, leavecity.length() - 3);
-						}
-
 						String goFlightNum = downloadinfo.get(i).getString("returnFlightNum");
-						TCityEntity leaveCity = dbDao.fetch(TCityEntity.class,
-								downloadinfo.get(i).getInt("returnDepartureCity"));
-						String cityName = leaveCity.getCity();
-						if (cityName.endsWith("市") || cityName.endsWith("县") || cityName.endsWith("府")) {
-							cityName = cityName.substring(0, cityName.length() - 1);
-						}
 						//出境机场名
-						String airportName = goFlightNum.substring(0,
-								goFlightNum.indexOf("-", goFlightNum.indexOf("-")));
-						TFlightEntity airCity = dbDao.fetch(TFlightEntity.class,
-								Cnd.where("takeOffName", "=", airportName));
-						String aircode = "";
-						if (!Util.isEmpty(airCity)) {
-							aircode = airCity.getTakeOffCode();
-						}
-						leaveport = cityName + airportName;
 
 						leaveflight = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
@@ -6852,15 +6753,37 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 				HSSFCell cell15 = row3.createCell(15);
 				cell15.setCellStyle(colStyle);
-				cell15.setCellValue(entrycity);
+				String gocity = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("gocity"))) {
+					gocity = downloadinfo.get(i).getString("gocity");
+
+					if (gocity.endsWith("市") || gocity.endsWith("县")) {
+						gocity = gocity.substring(0, gocity.length() - 1);
+					}
+					if (gocity.length() > 3 && gocity.endsWith("自治区")) {
+						gocity = gocity.substring(0, gocity.length() - 3);
+					}
+
+				}
+				cell15.setCellValue(gocity);
 
 				HSSFCell cell16 = row3.createCell(16);
 				cell16.setCellStyle(colStyle);
+				String leavecity = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("leavecity"))) {
+					leavecity = downloadinfo.get(i).getString("leavecity");
+					if (leavecity.endsWith("市") || leavecity.endsWith("县")) {
+						leavecity = leavecity.substring(0, leavecity.length() - 1);
+					}
+					if (leavecity.length() > 3 && leavecity.endsWith("自治区")) {
+						leavecity = leavecity.substring(0, leavecity.length() - 3);
+					}
+				}
 				cell16.setCellValue(leavecity);
 
 				HSSFCell cell17 = row3.createCell(17);
 				cell17.setCellStyle(colStyle);
-				cell17.setCellValue("客户来源");
+				cell17.setCellValue(downloadinfo.get(i).getString("shortname"));
 
 				HSSFCell cell18 = row3.createCell(18);
 				cell18.setCellStyle(colStyle);
@@ -6886,7 +6809,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 			}
 
+			long fourthtime = System.currentTimeMillis();
+			System.out.println("正文所用时间：" + (fourthtime - thirdtime) + "ms");
+
 			CellRange(sheet, downloadinfo.size() + 4, 0, colStyle);
+			long fifthtime = System.currentTimeMillis();
+			System.out.println("合并单元格所用时间：" + (fifthtime - fourthtime) + "ms");
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			workbook.write(baos);
@@ -6909,6 +6837,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		} catch (Exception e) {
 
 		}
+		long lasttime = System.currentTimeMillis();
+		System.out.println("下载所用时间：" + (lasttime - firsttime) + "ms");
 
 		return stream;
 	}
@@ -6938,8 +6868,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				next = "";
 			}
 			if (current.equals(next)) {
-				//currentCell.setCellValue("");
-				//currnetRow = p + 1;
 				continue;
 			} else {
 
@@ -7095,19 +7023,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					nowCell22.setCellValue(current22);
 					nowCell22.setCellStyle(cs);
 
-					/*if (colNum == 0 || colNum == 8) {
-						nowCell = sheet.getRow(currnetRow).getCell(0);
-						nowCell.setCellValue(Integer.valueOf(current.substring(0, 1)));
-					}else if(colNum == 1){
-						Cell currentCell1 = sheet.getRow(p).getCell(1);
-						current = getStringCellValue(currentCell1);
-					}
-					
-					
-					else {
-						nowCell.setCellValue(current);
-					}
-					nowCell.setCellStyle(cs);*/
 				}
 				currnetRow = p + 1;
 
@@ -7163,10 +7078,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);//垂直居中
 		//创建字体
 		HSSFFont font = workbook.createFont();
+		font.setFontName("宋体");
 		//是否加粗字体
-		/*if (flag) {
+		if (flag) {
 			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		}*/
+		}
 
 		font.setFontHeightInPoints(fontsize);
 		//加载字体

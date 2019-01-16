@@ -138,58 +138,65 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 	 */
 	public Object sendInsurance(Integer orderid, Integer visastatus, HttpSession session) {
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
-		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
-		orderinfo.setStatus(visastatus);
-		if (!Util.isEmpty(visastatus) && visastatus.equals(JPOrderStatusEnum.BIANGENGZHONG.intKey())) {
-			// orderjp.setVisastatus(visastatus);
-			// 生成excel
-			// 申请人信息
-			Map<String, Object> tempdata = new HashMap<String, Object>();
-			String applysqlstr = sqlManager.get("get_applyinfo_from_filedown_by_orderid_jp");
-			Sql applysql = Sqls.create(applysqlstr);
-			Cnd cnd = Cnd.NEW();
-			cnd.and("taoj.orderId", "=", orderjp.getId());
-			List<Record> applyinfo = dbDao.query(applysql, cnd, null);
-			tempdata.put("applyinfo", applyinfo);
-			// excel导出
-			ByteArrayOutputStream excelExport = downLoadVisaFileService.excelExport(tempdata);
-			// 生成excel临时文件
-			TemplateUtil templateUtil = new TemplateUtil();
-			File excelfile = templateUtil.createTempFile(excelExport);
-			FileInputStream fileInputStream = null;
-			try {
-				fileInputStream = new FileInputStream(excelfile);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			String qiniuurl = qiniuUpService.uploadImage(fileInputStream, "xlsx", null);
-			// 返回上传后七牛云的路径
-			String fileqiniupath = CommonConstants.IMAGES_SERVER_ADDR + qiniuurl;
-			// 保存生成的七牛excel路径
-			orderjp.setExcelurl(fileqiniupath);
-		}
-		//更新发招宝时间
-		orderjp.setZhaobaotime(new Date());
-		dbDao.update(orderjp);
 
-		// 添加日志
-		//orderJpViewService.insertLogs(orderinfo.getId(), visastatus, session);
-		// 订单负责人变更
-		//TUserEntity loginuser = LoginUtil.getLoginUser(session);
-		//Integer userId = loginuser.getId();
-		//changePrincipalViewService.ChangePrincipal(orderid, JPOrderProcessTypeEnum.SALES_PROCESS.intKey(), userId);
-		TUserEntity loginuser = LoginUtil.getLoginUser(session);
-		Integer userId = loginuser.getId();
-		//楽旅点击招宝变更或招宝取消处理,记录操作人为订单的原操作人，而不是楽旅
-		if (Util.eq("lelv", loginuser.getName())) {
-			orderinfo.setVisaOpid(orderinfo.getSalesOpid());
+		if (orderjp.getVisaType() == 14) {
+			String resultstr = "签证类型为普通五年多次时不能进行此操作";
+			return resultstr;
 		} else {
-			orderinfo.setVisaOpid(userId);
+			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+			orderinfo.setStatus(visastatus);
+			if (!Util.isEmpty(visastatus) && visastatus.equals(JPOrderStatusEnum.BIANGENGZHONG.intKey())) {
+				// orderjp.setVisastatus(visastatus);
+				// 生成excel
+				// 申请人信息
+				Map<String, Object> tempdata = new HashMap<String, Object>();
+				String applysqlstr = sqlManager.get("get_applyinfo_from_filedown_by_orderid_jp");
+				Sql applysql = Sqls.create(applysqlstr);
+				Cnd cnd = Cnd.NEW();
+				cnd.and("taoj.orderId", "=", orderjp.getId());
+				List<Record> applyinfo = dbDao.query(applysql, cnd, null);
+				tempdata.put("applyinfo", applyinfo);
+				// excel导出
+				ByteArrayOutputStream excelExport = downLoadVisaFileService.excelExport(tempdata);
+				// 生成excel临时文件
+				TemplateUtil templateUtil = new TemplateUtil();
+				File excelfile = templateUtil.createTempFile(excelExport);
+				FileInputStream fileInputStream = null;
+				try {
+					fileInputStream = new FileInputStream(excelfile);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				String qiniuurl = qiniuUpService.uploadImage(fileInputStream, "xlsx", null);
+				// 返回上传后七牛云的路径
+				String fileqiniupath = CommonConstants.IMAGES_SERVER_ADDR + qiniuurl;
+				// 保存生成的七牛excel路径
+				orderjp.setExcelurl(fileqiniupath);
+			}
+			//更新发招宝时间
+			orderjp.setZhaobaotime(new Date());
+			dbDao.update(orderjp);
+
+			// 添加日志
+			//orderJpViewService.insertLogs(orderinfo.getId(), visastatus, session);
+			// 订单负责人变更
+			//TUserEntity loginuser = LoginUtil.getLoginUser(session);
+			//Integer userId = loginuser.getId();
+			//changePrincipalViewService.ChangePrincipal(orderid, JPOrderProcessTypeEnum.SALES_PROCESS.intKey(), userId);
+			TUserEntity loginuser = LoginUtil.getLoginUser(session);
+			Integer userId = loginuser.getId();
+			//楽旅点击招宝变更或招宝取消处理,记录操作人为订单的原操作人，而不是楽旅
+			if (Util.eq("lelv", loginuser.getName())) {
+				orderinfo.setVisaOpid(orderinfo.getSalesOpid());
+			} else {
+				orderinfo.setVisaOpid(userId);
+			}
+
+			//orderinfo.setVisaOpid(userId);
+			dbDao.update(orderinfo);
+			return null;
 		}
 
-		//orderinfo.setVisaOpid(userId);
-		dbDao.update(orderinfo);
-		return null;
 	}
 
 	/**
@@ -241,8 +248,8 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			} else if (pdftype == PdfTypeEnum.HUANYU_TYPE.intKey()) {
 				byteArray = huanyuService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.JINQIAO_TYPE.intKey()) {
-				//byteArray = jinqiaoService.generateFile(orderjp, request).toByteArray();
-				byteArray = hubeiWandaxinhangxianService.generateFile(orderjp, request).toByteArray();
+				byteArray = jinqiaoService.generateFile(orderjp, request).toByteArray();
+				//byteArray = hubeiWandaxinhangxianService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.SHENZHOU_TYPE.intKey()) {
 				byteArray = shenzhouService.generateFile(orderjp, request).toByteArray();
 			} else if (pdftype == PdfTypeEnum.FENGSHANG_TYPE.intKey()) {

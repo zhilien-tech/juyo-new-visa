@@ -260,6 +260,7 @@ SELECT
 tr.id,
 tr.orderNum,
 tr.cityId,
+tcus.shortname,
 toj.visaType,
 CONCAT(ta.firstName,ta.lastName) applyname,
 CONCAT(ta.firstNameEn,' ',ta.lastNameEn) applynameen,
@@ -294,14 +295,71 @@ totj.goDepartureCity,
 totj.returnArrivedCity,
 taoj.mainRelation,
 DATE_FORMAT(tr.sendVisaDate,'%Y-%m-%d') sendvisadate,
-tu.`name`
+tu.`name`,
+(
+CASE
+WHEN tr.cityId < 3 THEN entrycity.city
+ELSE
+	CASE
+	WHEN totj.newgodeparturecity THEN transentrycity1.city
+	ELSE transentrycity2.city
+	END
+END
+) AS gocity,
+(
+CASE
+WHEN tr.cityId < 3 THEN leavecity.city
+ELSE
+	CASE
+	WHEN totj.newreturnarrivedcity THEN transleavecity1.city
+	ELSE transleavecity2.city
+	END
+END
+) AS leavecity,
+(
+CASE
+WHEN tr.cityId < 3 THEN goportcity2.city
+ELSE goportcity.city
+END
+)AS goport,
+(
+CASE
+WHEN tr.cityId < 3 THEN leaveportcity2.city
+ELSE leaveportcity.city
+END
+)AS leaveport,
+substring_index(totj.returntransferflightnum, ' ', 1) as portname,
+SUBSTRING_INDEX(substring_index(totj.returntransferflightnum, ' ', 1),'-',1) as portname2,
+(
+CASE
+WHEN tr.cityId < 3 THEN SUBSTRING_INDEX(substring_index(totj.goFlightNum, ' ', 1),'-',-1)
+ELSE SUBSTRING_INDEX(substring_index(totj.newgoflightnum, ' ', 1),'-',-1)
+END
+)AS goportname,
+(
+CASE
+WHEN tr.cityId < 3 THEN SUBSTRING_INDEX(substring_index(totj.returnFlightNum, ' ', 1),'-',1)
+ELSE SUBSTRING_INDEX(substring_index(totj.returntransferflightnum, ' ', 1),'-',1)
+END
+)AS leaveportname
 FROM
 t_applicant ta
 LEFT JOIN t_applicant_order_jp taoj ON taoj.applicantId = ta.id
 LEFT JOIN t_order_jp toj ON taoj.orderId = toj.id
 LEFT JOIN t_order tr ON toj.orderId = tr.id
+LEFT JOIN t_customer tcus ON tr.customerId = tcus.id
 LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
 LEFT JOIN t_order_trip_jp totj ON totj.orderId = toj.id
 LEFT JOIN t_user tu ON tr.salesOpid = tu.id
 LEFT JOIN t_customer tc ON tr.customerId = tc.id
+LEFT JOIN t_city entrycity ON totj.goDepartureCity = entrycity.id
+LEFT JOIN t_city transentrycity1 ON totj.newgodeparturecity = transentrycity1.id
+LEFT JOIN t_city transentrycity2 ON totj.gotransferdeparturecity = transentrycity2.id
+LEFT JOIN t_city leavecity ON totj.returnArrivedCity = leavecity.id
+LEFT JOIN t_city transleavecity1 ON totj.newreturnarrivedcity = transleavecity1.id
+LEFT JOIN t_city transleavecity2 ON totj.returntransferarrivedcity = transleavecity2.id
+LEFT JOIN t_city goportcity ON totj.newgoarrivedcity = goportcity.id
+LEFT JOIN t_city goportcity2 ON totj.goArrivedCity = goportcity2.id
+LEFT JOIN t_city leaveportcity2 ON totj.returnDepartureCity = leaveportcity2.id
+LEFT JOIN t_city leaveportcity ON totj.newreturndeparturecity = leaveportcity.id
 $condition
