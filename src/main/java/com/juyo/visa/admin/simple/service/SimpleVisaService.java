@@ -6457,7 +6457,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		HttpSession session = request.getSession();
 		//获取当前公司
-		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		//TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		//当前登录人员
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		List<Record> downloadinfo = getDownloadinfo(form, request);
 		long secondtime = System.currentTimeMillis();
 		System.out.println("查询数据所用时间：" + (secondtime - firsttime) + "ms");
@@ -6515,16 +6517,22 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 
 			HSSFRow secondrow = sheet.createRow(1);
-			HSSFCell secondcell = secondrow.createCell(2);
+			HSSFCell secondcell = secondrow.createCell(0);
 			//加载单元格样式
 			secondcell.setCellStyle(timeStyle);
 			String orderstartdate = "";
 			String orderenddate = "";
 			if (Util.isEmpty(form.getOrderstartdate())) {
-				TOrderEntity orderEntity = dbDao.fetch(TOrderEntity.class,
-						Cnd.where("comId", "=", loginCompany.getId()));
-				TOrderEntity orderEntity2 = dbDao.fetch(TOrderEntity.class,
-						Cnd.where("comId", "=", loginCompany.getId()).orderBy("createTime", "DESC"));
+				TOrderEntity orderEntity = dbDao.fetch(
+						TOrderEntity.class,
+						Cnd.where("salesOpid", "=", loginUser.getId())
+								.and("isDisabled", "=", IsYesOrNoEnum.NO.intKey())
+								.and("zhaobaoupdate", "=", IsYesOrNoEnum.YES.intKey()));
+				TOrderEntity orderEntity2 = dbDao.fetch(
+						TOrderEntity.class,
+						Cnd.where("salesOpid", "=", loginUser.getId())
+								.and("isDisabled", "=", IsYesOrNoEnum.NO.intKey())
+								.and("zhaobaoupdate", "=", IsYesOrNoEnum.YES.intKey()).orderBy("createTime", "DESC"));
 				orderstartdate = sdf.format(orderEntity.getCreateTime());
 				orderenddate = sdf.format(orderEntity2.getCreateTime());
 
@@ -6535,8 +6543,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			secondcell.setCellValue("时间:" + orderstartdate + " 至 " + orderenddate);
 
 			for (int i = 1; i < 23; i++) {
-				cell = secondrow.createCell(i);
-				cell.setCellStyle(colStyle);
+				HSSFCell createCell = secondrow.createCell(i);
+				createCell.setCellStyle(timeStyle);
 			}
 
 			HSSFRow thirdrow = sheet.createRow(2);
@@ -6965,7 +6973,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					Cell currentCell13 = sheet.getRow(p).getCell(13);
 					String current13 = getStringCellValue(currentCell13);
 
-					Cell nowCell13 = sheet.getRow(currnetRow).getCell(11);
+					Cell nowCell13 = sheet.getRow(currnetRow).getCell(13);
 					nowCell13.setCellValue(current13);
 					nowCell13.setCellStyle(cs);
 
