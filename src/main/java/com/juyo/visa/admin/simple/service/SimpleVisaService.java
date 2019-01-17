@@ -6452,7 +6452,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object downloadOrder(ListDataForm form, HttpServletRequest request, HttpServletResponse response) {
-
 		long firsttime = System.currentTimeMillis();
 
 		HttpSession session = request.getSession();
@@ -6656,9 +6655,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				//出境口岸
 				String leaveport = "";
 				//入境航班
-				String entryflight = "";
+				String entryflight = downloadinfo.get(i).getString("goflight");
 				//出境航班
-				String leaveflight = "";
+				String leaveflight = downloadinfo.get(i).getString("returnflight");
 				//入境日本城市
 				String gocityName = "";
 				if (!Util.isEmpty(downloadinfo.get(i).getString("goport"))) {
@@ -6688,7 +6687,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 				leaveport = leavecityName + leaveportname;
 
-				//重庆
+				/*//重庆
 				if (cityid > 2) {
 					//入境
 					if (!Util.isEmpty(downloadinfo.get(i).getString("newgoflightnum"))) {
@@ -6749,7 +6748,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						leaveflight = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
 					}
-				}
+				}*/
 
 				cell11.setCellValue(entryport);
 

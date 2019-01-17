@@ -330,8 +330,18 @@ WHEN tr.cityId < 3 THEN leaveportcity2.city
 ELSE leaveportcity.city
 END
 )AS leaveport,
-substring_index(totj.returntransferflightnum, ' ', 1) as portname,
-SUBSTRING_INDEX(substring_index(totj.returntransferflightnum, ' ', 1),'-',1) as portname2,
+(
+CASE
+WHEN tr.cityId < 3 THEN SUBSTRING_INDEX(SUBSTRING_INDEX(totj.goFlightNum,' ',-2), ' ',1)
+ELSE SUBSTRING_INDEX(SUBSTRING_INDEX(totj.newgoflightnum,' ',-2),' ',1)
+END
+)AS goflight,
+(
+CASE
+WHEN tr.cityId < 3 THEN SUBSTRING_INDEX(SUBSTRING_INDEX(totj.returnFlightNum,' ',-2),' ',1)
+ELSE SUBSTRING_INDEX(SUBSTRING_INDEX(totj.returntransferflightnum,' ',-2),' ',1)
+END
+)AS returnflight,
 (
 CASE
 WHEN tr.cityId < 3 THEN SUBSTRING_INDEX(substring_index(totj.goFlightNum, ' ', 1),'-',-1)
@@ -353,7 +363,6 @@ LEFT JOIN t_customer tcus ON tr.customerId = tcus.id
 LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id
 LEFT JOIN t_order_trip_jp totj ON totj.orderId = toj.id
 LEFT JOIN t_user tu ON tr.salesOpid = tu.id
-LEFT JOIN t_customer tc ON tr.customerId = tc.id
 LEFT JOIN t_city entrycity ON totj.goDepartureCity = entrycity.id
 LEFT JOIN t_city transentrycity1 ON totj.newgodeparturecity = transentrycity1.id
 LEFT JOIN t_city transentrycity2 ON totj.gotransferdeparturecity = transentrycity2.id
