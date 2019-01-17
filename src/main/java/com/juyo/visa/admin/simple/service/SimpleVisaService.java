@@ -6801,11 +6801,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				HSSFCell cell18 = row3.createCell(18);
 				cell18.setCellStyle(colStyle);
 				String relation = "";
-				if (!Util.isEmpty(downloadinfo.get(i).getString("relationRemark"))) {
-					relation = downloadinfo.get(i).getString("relationRemark");
-				}
-				if (!Util.isEmpty(downloadinfo.get(i).getString("mainRelation"))) {
-					relation = downloadinfo.get(i).getString("mainRelation");
+
+				//主申请人时取relationRemark
+				if (downloadinfo.get(i).getInt("isMainApplicant") == 1) {
+					if (!Util.isEmpty(downloadinfo.get(i).getString("relationRemark"))) {
+						relation = downloadinfo.get(i).getString("relationRemark");
+					}
+				} else {
+					if (!Util.isEmpty(downloadinfo.get(i).getString("mainRelation"))) {
+						relation = downloadinfo.get(i).getString("mainRelation");
+					}
 				}
 				cell18.setCellValue(relation);
 

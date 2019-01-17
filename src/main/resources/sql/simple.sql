@@ -260,6 +260,7 @@ SELECT
 tr.id,
 tr.orderNum,
 tr.cityId,
+taoj.isMainApplicant,
 DATE_FORMAT(tr.createTime, '%Y-%m-%d') createdate,
 tcus.shortname,
 toj.visaType,
