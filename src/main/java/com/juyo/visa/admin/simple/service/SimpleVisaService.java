@@ -6522,24 +6522,15 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			secondcell.setCellStyle(timeStyle);
 			String orderstartdate = "";
 			String orderenddate = "";
-			if (Util.isEmpty(form.getOrderstartdate())) {
-				TOrderEntity orderEntity = dbDao.fetch(
-						TOrderEntity.class,
-						Cnd.where("salesOpid", "=", loginUser.getId())
-								.and("isDisabled", "=", IsYesOrNoEnum.NO.intKey())
-								.and("zhaobaoupdate", "=", IsYesOrNoEnum.YES.intKey()));
-				TOrderEntity orderEntity2 = dbDao.fetch(
-						TOrderEntity.class,
-						Cnd.where("salesOpid", "=", loginUser.getId())
-								.and("isDisabled", "=", IsYesOrNoEnum.NO.intKey())
-								.and("zhaobaoupdate", "=", IsYesOrNoEnum.YES.intKey()).orderBy("createTime", "DESC"));
-				orderstartdate = sdf.format(orderEntity.getCreateTime());
-				orderenddate = sdf.format(orderEntity2.getCreateTime());
 
-			} else {
-				orderstartdate = form.getOrderstartdate().substring(0, form.getOrderstartdate().indexOf(" "));
-				orderenddate = form.getOrderenddate().substring(0, form.getOrderenddate().indexOf(" "));
+			if (!Util.isEmpty(downloadinfo) && !Util.isEmpty(downloadinfo.get(0).getString("createdate"))) {
+				orderstartdate = downloadinfo.get(0).getString("createdate");
 			}
+			if (!Util.isEmpty(downloadinfo)
+					&& !Util.isEmpty(downloadinfo.get(downloadinfo.size() - 1).getString("createdate"))) {
+				orderenddate = downloadinfo.get(downloadinfo.size() - 1).getString("createdate");
+			}
+
 			secondcell.setCellValue("时间:" + orderstartdate + " 至 " + orderenddate);
 
 			for (int i = 1; i < 23; i++) {
@@ -6810,7 +6801,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 				HSSFCell cell18 = row3.createCell(18);
 				cell18.setCellStyle(colStyle);
-				cell18.setCellValue(downloadinfo.get(i).getString("mainRelation"));
+				String relation = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("relationRemark"))) {
+					relation = downloadinfo.get(i).getString("relationRemark");
+				}
+				if (!Util.isEmpty(downloadinfo.get(i).getString("mainRelation"))) {
+					relation = downloadinfo.get(i).getString("mainRelation");
+				}
+				cell18.setCellValue(relation);
 
 				HSSFCell cell19 = row3.createCell(19);
 				cell19.setCellStyle(colStyle);
