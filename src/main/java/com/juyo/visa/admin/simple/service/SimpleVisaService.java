@@ -6872,6 +6872,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			sheet.createFreezePane(2, 4, 2, 4);
 			//sheet.createFreezePane(2, 4); 跟上边的一样，两者等价，但这个需要多跳一层到上边的方法
 
+			//列宽度自适应，包括合并的单元格
+			for (int i = 0; i < 23; i++) {
+				sheet.autoSizeColumn(i, true);
+			}
+
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			workbook.write(baos);
 
@@ -6962,6 +6967,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					Cell nowCell8 = sheet.getRow(currnetRow).getCell(8);
 					nowCell8.setCellValue(Integer.valueOf(current8));
 					nowCell8.setCellStyle(cs);
+
+					//人数需要用excel计算，所以只能留一个值
+					for (int i = currnetRow + 1; i <= p; i++) {
+						Cell cell = sheet.getRow(i).getCell(8);
+						cell.setCellValue("");
+					}
 
 					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 9, 9));
 
@@ -7168,9 +7179,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(form.getSearchStr())) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("tr.orderNum", "like", "%" + form.getSearchStr() + "%")
-					.or("tc.linkman", "like", "%" + form.getSearchStr() + "%")
-					.or("tc.mobile", "like", "%" + form.getSearchStr() + "%")
-					.or("tc.email", "like", "%" + form.getSearchStr() + "%")
+					.or("tcus.linkman", "like", "%" + form.getSearchStr() + "%")
+					.or("tcus.mobile", "like", "%" + form.getSearchStr() + "%")
+					.or("tcus.email", "like", "%" + form.getSearchStr() + "%")
 					.or("CONCAT(ta.firstName,ta.lastName)", "like", "%" + form.getSearchStr() + "%")
 					.or("toj.acceptDesign", "like", "%" + form.getSearchStr() + "%")
 					.or("tap.passport", "like", "%" + form.getSearchStr() + "%");
