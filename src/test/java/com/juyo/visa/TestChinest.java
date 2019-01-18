@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -58,7 +57,27 @@ public class TestChinest {
 
 	public static void main(String[] args) throws FailingHttpStatusCodeException, IOException {
 
-		Character str = new Character(' ');
+		int[] intlist = { 1, 3, 10 };
+
+		//13
+		//1 3 10
+
+		/*ArrayList<Integer> scenicarray = getScenicarray(intlist);
+
+		int[] d = new int[scenicarray.size()];
+		for (int i = 0; i < scenicarray.size(); i++) {
+			d[i] = scenicarray.get(i);
+		}*/
+
+		ArrayList<Integer> getsomeCount = getsomeCount(intlist, 13);
+		System.out.println(getsomeCount);
+
+		/*//1 3 10
+		Random random = new Random();
+		int nextInt = random.nextInt(1);
+
+		System.out.println(nextInt);*/
+		/*Character str = new Character(' ');
 		System.out.println(Pattern.compile("^[ A-Za-z0-9-&'#$*%;!,?.<>^@]+$").matcher(String.valueOf(str)).find());
 		System.out.println(Pattern.compile("^[ A-Za-z0-9-&']+$").matcher(String.valueOf(str)).find());
 
@@ -66,7 +85,7 @@ public class TestChinest {
 		System.out.println(Pattern.compile("^[ A-Za-z0-9-&'#$*%;!,?.<>^@]+$").matcher(match).find());
 
 		String text = "s+  【】{}[]:'?`~   d*!?o   <f>h.os  i66-&'@#$%^^.";
-		/*boolean find1 = Pattern.compile("^[A-Za-z0-9-&'#$*%;!,?.<>^@]+$").matcher(text).find();
+		boolean find1 = Pattern.compile("^[A-Za-z0-9-&'#$*%;!,?.<>^@]+$").matcher(text).find();
 		System.out.println("find1:" + find1);
 		StringBuffer result = new StringBuffer();
 
@@ -78,7 +97,7 @@ public class TestChinest {
 				result.append(character);
 			}
 		}
-		System.out.println(result.toString() + "++++++++++");*/
+		System.out.println(result.toString() + "++++++++++");
 
 		//text = text.replaceAll("\\s{2,}", " ").trim();
 		StringBuffer result = new StringBuffer();
@@ -94,7 +113,7 @@ public class TestChinest {
 				result.append(character);
 			}
 		}
-		System.out.println("最终过滤结果：" + result.toString());
+		System.out.println("最终过滤结果：" + result.toString());*/
 
 		/*Matcher m = Pattern.compile("^[A-Za-z0-9-&']+$").matcher(text);
 		System.out.println(m.find());*/
@@ -428,6 +447,80 @@ public class TestChinest {
 		System.out.println(stringBuilder1.toString());*/
 
 		//System.out.println(s.substring(s.indexOf(".", s.indexOf(".")) + 1, s.indexOf(".", s.indexOf(".") + 1)));
+	}
+
+	public static ArrayList<Integer> getScenicarray(int[] intlist) {
+		//从所有方位中随机出用几个方位
+		Random random2 = new Random();
+		int nextInt = random2.nextInt(intlist.length) + 1;
+		//随机出具体的方位
+
+		int rans = 0;
+		ArrayList<Integer> arrayList2 = new ArrayList();
+		for (int i = 0; i < nextInt; i++) {
+			Random random3 = new Random();
+			int nextInt2 = random3.nextInt(intlist.length);
+			if (!arrayList2.contains(nextInt2)) {
+				arrayList2.add(nextInt2);
+			}
+		}
+
+		System.out.println(arrayList2);
+		return arrayList2;
+	}
+
+	public static ArrayList<Integer> getsomeCount(int[] intlist, int size) {
+
+		//从所有方位中随机出用几个方位
+		Random random2 = new Random();
+		int nextInt = random2.nextInt(intlist.length) + 1;
+		System.out.println("1:" + nextInt);
+		//随机出具体的方位
+
+		ArrayList<Integer> arrayList2 = new ArrayList();
+		for (int i = 0; i < nextInt; i++) {
+			Random random3 = new Random();
+			int nextInt2 = random3.nextInt(intlist.length);
+			if (!arrayList2.contains(nextInt2)) {
+				arrayList2.add(nextInt2);
+			}
+		}
+		if (arrayList2.size() != nextInt) {
+			return getsomeCount(intlist, size);
+		}
+		System.out.println("2:" + arrayList2);
+
+		/*//list转数组
+		int[] d = new int[arrayList2.size()];
+		for (int i = 0; i < arrayList2.size(); i++) {
+			d[i] = arrayList2.get(i);
+		}*/
+
+		//把随机出的具体方位查出来
+		ArrayList<Integer> arrayList3 = new ArrayList();
+		for (int i = 0; i < arrayList2.size(); i++) {
+			arrayList3.add(intlist[arrayList2.get(i)]);
+
+		}
+		System.out.println("3:" + arrayList3);
+
+		int count = 0;
+		ArrayList<Integer> arrayList = new ArrayList();
+		for (int i = 0; i < arrayList3.size(); i++) {
+			Random random = new Random();
+			int count1 = random.nextInt(arrayList3.get(i)) + 1;
+			System.out.println("4:" + count1);
+			arrayList.add(count1);
+			count += count1;
+
+		}
+		System.out.println("arrayList:" + arrayList);
+		System.out.println("count:" + count);
+		if (count != size) {
+			return getsomeCount(intlist, size);
+		}
+		System.out.println("last:" + arrayList);
+		return arrayList;
 	}
 
 	public static String plusDay(int num, Date newDate) {

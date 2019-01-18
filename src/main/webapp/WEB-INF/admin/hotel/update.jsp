@@ -85,7 +85,7 @@
 
 
 					<div class="row">
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>电话：</label> <input id="mobile"
 									name="mobile" value="${obj.hotel.mobile}" type="text"
@@ -93,7 +93,7 @@
 							</div>
 						</div>
 
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>所属城市：</label> 
 								<select id = "cityId" name="cityId" 
@@ -103,6 +103,14 @@
 										<option value="${obj.city.id }" selected="selected">${obj.city.city }</option>
 										</c:if>
 								</select>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label><span>*</span>所属区域：</label> 
+									<input id="region"
+									name="region" value="${obj.hotel.region}" type="text"
+									class="form-control input-sm" placeholder=" " />
 							</div>
 						</div>
 					</div>

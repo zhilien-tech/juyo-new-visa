@@ -375,3 +375,21 @@ LEFT JOIN t_city goportcity2 ON totj.goArrivedCity = goportcity2.id
 LEFT JOIN t_city leaveportcity2 ON totj.returnDepartureCity = leaveportcity2.id
 LEFT JOIN t_city leaveportcity ON totj.newreturndeparturecity = leaveportcity.id
 $condition
+
+
+/*simpleJP_getHotelinfo*/
+SELECT
+count(*) AS hotelcount,
+region
+FROM
+`t_hotel`
+WHERE cityId = @cityid GROUP BY region
+
+
+/*simpleJP_getScenicinfo*/
+SELECT
+count(*) AS sceniccount,
+region
+FROM
+`t_scenic`
+WHERE cityId = @cityid GROUP BY region

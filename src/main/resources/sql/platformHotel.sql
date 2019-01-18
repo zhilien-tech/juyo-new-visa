@@ -7,6 +7,7 @@ SELECT
 	h.addressJp,
 	h.mobile,
 	c.city,
+	h.region,
 	h.createTime,
 	h.updateTime
 FROM

@@ -4,6 +4,7 @@ SELECT
 	s.`name`,
 	s.nameJp,
 	c.city,
+	s.region,
 	s.createTime,
 	s.updateTime
 FROM

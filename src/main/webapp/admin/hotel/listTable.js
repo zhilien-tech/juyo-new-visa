@@ -95,6 +95,16 @@ function initDatatable() {
 		            	}
 		            } 	
 		            },
+		            {"data": "region", "bSortable": false,render: function(data, type, row, meta) {
+		            	var region = row.region;
+		            	if(null==region || ""==region){
+		            		return "";
+		            	}else{
+		            		/*region = '<span data-toggle="tooltip" data-placement="right" title="'+region+'">'+region+'<span>';*/
+		            		return region;
+		            	}
+		            } 	
+		            },
 		            {"data": " ", "bSortable": false, "width":120,
 		            	render: function(data, type, row, meta) {
 		            		var modify = '<a style="cursor:pointer;" class="edit-icon" onclick="edit('+row.id+');"></a>';

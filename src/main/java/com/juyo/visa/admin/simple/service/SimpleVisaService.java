@@ -2446,6 +2446,34 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
+	public Object getReasonabletripplan(int cityid, int days) {
+		Map<String, Object> result = Maps.newHashMap();
+
+		List<Integer> list = new ArrayList<>();
+
+		//查询所选城市的景区一共分几个方位,positionSize
+		String scenicString = sqlManager.get("simpleJP_getScenicinfo");
+		Sql scenicsql = Sqls.create(scenicString);
+		scenicsql.setParam("cityid", cityid);
+		List<Record> scenics = dbDao.query(scenicsql, null, null);
+		int positionSize = scenics.size();
+		//所选城市的景区最多可以看几天
+		int scenicDays = 0;
+		for (Record record : scenics) {
+			int scenicCount = record.getInt("sceniccount");
+			Random random = new Random();
+			int nextInt = random.nextInt(scenicCount);
+
+			scenicDays += scenicCount;
+		}
+		if (days > scenicDays) {
+			result.put("message", "没有更多的景区");
+			return result;
+		}
+
+		return null;
+	}
+
 	/*public int getRoomCount(int orderjpid) {
 		int roomCount = 0;
 		List<TApplicantOrderJpEntity> allCount = dbDao.query(TApplicantOrderJpEntity.class,

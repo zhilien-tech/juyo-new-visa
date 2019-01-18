@@ -39,6 +39,9 @@ public class THotelForm extends DataTablesParamForm {
 	/**所属城市id*/
 	private Integer cityId;
 
+	/**所属城市区域*/
+	private String region;
+
 	/**所属城市*/
 	private String cityName;
 

@@ -30,6 +30,10 @@ public class TScenicEntity implements Serializable {
 	private Integer cityId;
 
 	@Column
+	@Comment("所属城市区域")
+	private String region;
+
+	@Column
 	@Comment("创建时间")
 	private Date createTime;
 

@@ -31,6 +31,9 @@ public class THotelAddForm extends AddForm implements Serializable {
 	/**所属城市id*/
 	private Integer cityId;
 
+	/**所属城市区域*/
+	private String region;
+
 	/**创建时间*/
 	private Date createTime;
 
