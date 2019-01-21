@@ -393,3 +393,12 @@ region
 FROM
 `t_scenic`
 WHERE cityId = @cityid GROUP BY region
+
+
+/*simpleJP_getScenicnamebyregion*/
+SELECT
+`name`,
+region
+FROM
+t_scenic
+WHERE cityId = @cityid AND region = @region

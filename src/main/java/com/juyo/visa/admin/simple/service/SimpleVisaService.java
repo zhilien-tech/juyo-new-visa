@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -1989,6 +1990,40 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				return result;
 			}
 		}
+
+		long first = System.currentTimeMillis();
+		//随机出景点和方位list
+		Map<String, Object> reasonable = getReasonabletripplan(cityid, daysBetween);
+		String message = (String) reasonable.get("message");
+		if (!Util.isEmpty(message)) {
+			result.put("message", message);
+			return result;
+		}
+
+		Map<String, Object> reasonabletripplan = (Map<String, Object>) reasonable.get("getsomeCount");
+
+		//景点
+		ArrayList<String> scenicsList = (ArrayList<String>) reasonabletripplan.get("scenics");
+		System.out.println("scenics:" + scenicsList);
+		//酒店
+		ArrayList<Integer> hotelsList = (ArrayList<Integer>) reasonabletripplan.get("hotels");
+		System.out.println("hotels:" + hotelsList);
+		/*//酒店
+		ArrayList<List<THotelEntity>> hotelsList = new ArrayList();
+		for (int i = 0; i < reasonabletripplan.size(); i++) {
+			TScenicEntity fetch = dbDao.fetch(TScenicEntity.class, Cnd.where("cityId", "=", cityid).and("name", "=", reasonabletripplan.get(i)));
+			List<THotelEntity> query = dbDao.query(THotelEntity.class,
+					Cnd.where("cityId", "=", cityid).and("region", "=", fetch.getRegion()), null);
+			hotelsList.add(query);
+		}*/
+
+		long last = System.currentTimeMillis();
+		System.out.println("所用时间：" + (last - first) + "ms");
+		/*if (reasonabletripplan.size() > 0) {
+			System.out.println(reasonabletripplan);
+			return null;
+		}*/
+
 		Map<String, Object> firstdayAndLastday = getFirstdayAndLastday(form);
 		String firstday = (String) firstdayAndLastday.get("firstday");
 		String lastday = (String) firstdayAndLastday.get("lastday");
@@ -2042,8 +2077,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					travelplan.setCreateTime(new Date());
 					//酒店
 					if (i != daysBetween) {
-						THotelEntity hotel = hotels.get(hotelindex);
-						travelplan.setHotel(hotel.getId());
+						/*THotelEntity hotel = hotels.get(hotelindex);
+						travelplan.setHotel(hotel.getId());*/
+
+						travelplan.setHotel(hotelsList.get(i));
 					}
 					if (i > 0 && i != daysBetween) {
 						//景区
@@ -2051,10 +2088,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							scenics = dbDao.query(TScenicEntity.class,
 									Cnd.where("cityId", "=", form.getGoArrivedCity()), null);
 						}
-						int scenicindex = random.nextInt(scenics.size());
+						/*int scenicindex = random.nextInt(scenics.size());
 						TScenicEntity scenic = scenics.get(scenicindex);
 						scenics.remove(scenic);
-						travelplan.setScenic(scenic.getName());
+						travelplan.setScenic(scenic.getName());*/
+
+						travelplan.setScenic(scenicsList.get(i));
 					}
 					if (i == 0) {//第一天
 						travelplan.setScenic(firstday);
@@ -2078,18 +2117,22 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					travelplan.setCreateTime(new Date());
 
 					if (i != daysBetween) {
-						THotelEntity hotel = hotels.get(hotelindex);
-						travelplan.setHotel(hotel.getId());
+						/*THotelEntity hotel = hotels.get(hotelindex);
+						travelplan.setHotel(hotel.getId());*/
+
+						travelplan.setHotel(hotelsList.get(i));
 					}
 					if (i == 0) {
 						travelplan.setScenic(firstday);
 					}
 					if (i > 0 && i != daysBetween) {
 						//景区
-						int scenicindex = random.nextInt(scenics.size());
+						/*int scenicindex = random.nextInt(scenics.size());
 						TScenicEntity scenic = scenics.get(scenicindex);
 						scenics.remove(scenic);
-						travelplan.setScenic(scenic.getName());
+						travelplan.setScenic(scenic.getName());*/
+
+						travelplan.setScenic(scenicsList.get(i));
 					}
 					travelplans.add(travelplan);
 				}
@@ -2446,7 +2489,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
-	public Object getReasonabletripplan(int cityid, int days) {
+	public Map<String, Object> getReasonabletripplan(int cityid, int days) {
 		Map<String, Object> result = Maps.newHashMap();
 
 		List<Integer> list = new ArrayList<>();
@@ -2457,21 +2500,169 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		scenicsql.setParam("cityid", cityid);
 		List<Record> scenics = dbDao.query(scenicsql, null, null);
 		int positionSize = scenics.size();
+
+		ArrayList<ArrayList<String>> arrayList = new ArrayList();
+
+		ArrayList<Integer> intList = new ArrayList();
+		ArrayList<String> strList = new ArrayList();
+		ArrayList<String> regionList = new ArrayList();
 		//所选城市的景区最多可以看几天
 		int scenicDays = 0;
 		for (Record record : scenics) {
+
+			regionList.add(record.getString("region"));
+
 			int scenicCount = record.getInt("sceniccount");
-			Random random = new Random();
-			int nextInt = random.nextInt(scenicCount);
+			intList.add(scenicCount);
+			String region = record.getString("region");
+			String scenicString2 = sqlManager.get("simpleJP_getScenicnamebyregion");
+			Sql scenicsql2 = Sqls.create(scenicString2);
+			scenicsql2.setParam("cityid", cityid);
+			scenicsql2.setParam("region", region);
+			List<Record> scenicnames = dbDao.query(scenicsql2, null, null);
+			for (Record record2 : scenicnames) {
+				strList.add(record2.getString("name"));
+			}
+			arrayList.add(strList);
 
 			scenicDays += scenicCount;
 		}
+		System.out.println("days:" + days);
+		System.out.println("scenicDays:" + scenicDays);
+		String message = "";
 		if (days > scenicDays) {
-			result.put("message", "没有更多的景区");
+			message = "没有更多的景区";
+			result.put("message", message);
 			return result;
 		}
 
-		return null;
+		Map<String, Object> getsomeCount = getsomeCount(cityid, intList, days, arrayList, regionList);
+
+		result.put("getsomeCount", getsomeCount);
+		return result;
+	}
+
+	public Map<String, Object> getsomeCount(int cityid, ArrayList<Integer> intlist, int size,
+			ArrayList<ArrayList<String>> arrayList4, ArrayList<String> regionList) {
+
+		Map<String, Object> result = Maps.newHashMap();
+
+		//从所有方位中随机出用几个方位
+		Random random2 = new Random();
+		int nextInt = random2.nextInt(intlist.size()) + 1;
+		System.out.println("1:" + nextInt);
+
+		//随机出给定数组中的具体的哪几个方位的下标
+		ArrayList<Integer> arrayList2 = new ArrayList();
+		for (int i = 0; i < nextInt; i++) {
+			Random random3 = new Random();
+			int nextInt2 = random3.nextInt(intlist.size());
+			//不能取相同的方位
+			if (!arrayList2.contains(nextInt2)) {
+				arrayList2.add(nextInt2);
+			}
+		}
+		//判断下所选取的方位个数和随机出来的是否一致，如果不一致，重新随机
+		if (arrayList2.size() != nextInt) {
+			return getsomeCount(cityid, intlist, size, arrayList4, regionList);
+		}
+		//按从小打到顺序排序
+		Collections.sort(arrayList2);
+		System.out.println("2:" + arrayList2);
+
+		//随机出的方位
+		ArrayList<String> regions = new ArrayList();
+
+		for (int i = 0; i < arrayList2.size(); i++) {
+			regions.add(regionList.get(i));
+		}
+
+		/*//list转数组
+		int[] d = new int[arrayList2.size()];
+		for (int i = 0; i < arrayList2.size(); i++) {
+			d[i] = arrayList2.get(i);
+		}*/
+
+		//把随机出的具体方位查出来
+		ArrayList<Integer> arrayList3 = new ArrayList();
+		for (int i = 0; i < arrayList2.size(); i++) {
+			int j = intlist.get(arrayList2.get(i));
+			//北海道时，如果某个方位只有一天并且随机到的方位小于3个时，重新随机
+			if (cityid == 86 && arrayList2.size() < 3 && j == 1) {
+				return getsomeCount(cityid, intlist, size, arrayList4, regionList);
+			}
+			arrayList3.add(intlist.get(arrayList2.get(i)));
+
+		}
+		System.out.println("3:" + arrayList3);
+
+		//从随机的每个方位中，再随机出几个景点
+		//count1随机出的总景点个数，暂时每个方位最多3个景点
+		int count = 0;
+		ArrayList<Integer> arrayList = new ArrayList();
+		for (int i = 0; i < arrayList3.size(); i++) {
+			Random random = new Random();
+			int count1 = random.nextInt(arrayList3.get(i)) + 1;
+			System.out.println("4:" + count1);
+			//限制每个方位呆几天
+			//北海道,每个方位最多三天
+			if (cityid == 86) {
+				if (count1 > 3) {
+					return getsomeCount(cityid, intlist, size, arrayList4, regionList);
+				}
+			}
+			/*if (count1 > 3) {
+				return getsomeCount(cityid, intlist, size, arrayList4, regionList);
+			}*/
+			arrayList.add(count1);
+			count += count1;
+
+		}
+		System.out.println("arrayList:" + arrayList);
+		System.out.println("count:" + count);
+
+		if (count != size) {
+			return getsomeCount(cityid, intlist, size, arrayList4, regionList);
+		}
+
+		//从随机的每个方位，随机出酒店
+		System.out.println("regions:" + regions);
+		ArrayList<Integer> hotelsList = new ArrayList();
+		for (int i = 0; i < regions.size(); i++) {
+
+			Integer integer = arrayList.get(i);
+
+			List<THotelEntity> query = dbDao.query(THotelEntity.class,
+					Cnd.where("cityId", "=", cityid).and("region", "=", regionList.get(i)), null);
+			Random random = new Random();
+			int nextInt2 = random.nextInt(query.size());
+			THotelEntity tHotelEntity = query.get(nextInt2);
+			for (int j = 0; j < integer; j++) {
+				hotelsList.add(tHotelEntity.getId());
+			}
+		}
+
+		ArrayList<String> arrayList8 = new ArrayList();
+
+		for (int i = 0; i < arrayList2.size(); i++) {
+			//随机出来的每个方位的数据
+			ArrayList<String> arrayList9 = arrayList4.get(arrayList2.get(i));
+			//需要随机的个数
+			Integer integer2 = arrayList.get(i);
+			for (int j = 0; j < integer2; j++) {
+				Random random = new Random();
+				int nextInt2 = random.nextInt(arrayList9.size());
+				String string = arrayList9.get(nextInt2);
+				arrayList8.add(string);
+				arrayList9.remove(string);
+			}
+
+		}
+		System.out.println("5:" + arrayList8);
+		System.out.println("last:" + arrayList);
+		result.put("scenics", arrayList8);
+		result.put("hotels", hotelsList);
+		return result;
 	}
 
 	/*public int getRoomCount(int orderjpid) {

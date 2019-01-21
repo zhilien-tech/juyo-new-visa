@@ -13,6 +13,7 @@ import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -57,7 +58,8 @@ public class TestChinest {
 
 	public static void main(String[] args) throws FailingHttpStatusCodeException, IOException {
 
-		int[] intlist = { 1, 3, 10 };
+		//int[] intlist = { 1, 3, 10 };
+		String[] testlist = {};
 
 		//13
 		//1 3 10
@@ -69,7 +71,16 @@ public class TestChinest {
 			d[i] = scenicarray.get(i);
 		}*/
 
-		ArrayList<Integer> getsomeCount = getsomeCount(intlist, 13);
+		ArrayList<Integer> intlist = new ArrayList();
+		intlist.add(1);
+		intlist.add(3);
+		intlist.add(10);
+
+		long first = System.currentTimeMillis();
+
+		ArrayList<String> getsomeCount = getsomeCount(intlist, 5);
+		long last = System.currentTimeMillis();
+		System.out.println("所用时间：" + (last - first) + "ms");
 		System.out.println(getsomeCount);
 
 		/*//1 3 10
@@ -469,25 +480,29 @@ public class TestChinest {
 		return arrayList2;
 	}
 
-	public static ArrayList<Integer> getsomeCount(int[] intlist, int size) {
+	public static ArrayList<String> getsomeCount(ArrayList<Integer> intlist, int size) {
 
 		//从所有方位中随机出用几个方位
 		Random random2 = new Random();
-		int nextInt = random2.nextInt(intlist.length) + 1;
+		int nextInt = random2.nextInt(intlist.size()) + 1;
 		System.out.println("1:" + nextInt);
-		//随机出具体的方位
 
+		//随机出给定数组中的具体的哪几个方位的下标
 		ArrayList<Integer> arrayList2 = new ArrayList();
 		for (int i = 0; i < nextInt; i++) {
 			Random random3 = new Random();
-			int nextInt2 = random3.nextInt(intlist.length);
+			int nextInt2 = random3.nextInt(intlist.size());
+			//不能取相同的方位
 			if (!arrayList2.contains(nextInt2)) {
 				arrayList2.add(nextInt2);
 			}
 		}
+		//判断下所选取的方位个数和随机出来的是否一致，如果不一致，重新随机
 		if (arrayList2.size() != nextInt) {
 			return getsomeCount(intlist, size);
 		}
+		//按从小打到顺序排序
+		Collections.sort(arrayList2);
 		System.out.println("2:" + arrayList2);
 
 		/*//list转数组
@@ -499,16 +514,25 @@ public class TestChinest {
 		//把随机出的具体方位查出来
 		ArrayList<Integer> arrayList3 = new ArrayList();
 		for (int i = 0; i < arrayList2.size(); i++) {
-			arrayList3.add(intlist[arrayList2.get(i)]);
+			int j = intlist.get(arrayList2.get(i));
+			if (arrayList2.size() < 3 && j == 1) {
+				return getsomeCount(intlist, size);
+			}
+			arrayList3.add(intlist.get(arrayList2.get(i)));
 
 		}
 		System.out.println("3:" + arrayList3);
 
+		//从随机的每个方位中，再随机出几个景点
+		//count1随机出的总景点个数，暂时每个方位最多5个景点
 		int count = 0;
 		ArrayList<Integer> arrayList = new ArrayList();
 		for (int i = 0; i < arrayList3.size(); i++) {
 			Random random = new Random();
 			int count1 = random.nextInt(arrayList3.get(i)) + 1;
+			if (count1 > 3) {
+				return getsomeCount(intlist, size);
+			}
 			System.out.println("4:" + count1);
 			arrayList.add(count1);
 			count += count1;
@@ -519,8 +543,44 @@ public class TestChinest {
 		if (count != size) {
 			return getsomeCount(intlist, size);
 		}
+
+		//假数据
+		ArrayList<ArrayList<String>> arrayList4 = new ArrayList();
+		ArrayList<String> arrayList5 = new ArrayList();
+		arrayList5.add("一");
+		arrayList4.add(arrayList5);
+		ArrayList<String> arrayList6 = new ArrayList();
+		arrayList6.add("你");
+		arrayList6.add("好");
+		arrayList6.add("世界");
+		arrayList4.add(arrayList6);
+		ArrayList<String> arrayList7 = new ArrayList();
+		arrayList7.add("算");
+		arrayList7.add("是");
+		arrayList7.add("换");
+		arrayList7.add("看");
+		arrayList7.add("十多个");
+		arrayList7.add("口蹄疫");
+		arrayList4.add(arrayList7);
+		ArrayList<String> arrayList8 = new ArrayList();
+
+		for (int i = 0; i < arrayList2.size(); i++) {
+			//随机出来的每个方位的数据
+			ArrayList<String> arrayList9 = arrayList4.get(arrayList2.get(i));
+			//需要随机的个数
+			Integer integer2 = arrayList.get(i);
+			for (int j = 0; j < integer2; j++) {
+				Random random = new Random();
+				int nextInt2 = random.nextInt(arrayList9.size());
+				String string = arrayList9.get(nextInt2);
+				arrayList8.add(string);
+				arrayList9.remove(string);
+			}
+
+		}
+		System.out.println("5:" + arrayList8);
 		System.out.println("last:" + arrayList);
-		return arrayList;
+		return arrayList8;
 	}
 
 	public static String plusDay(int num, Date newDate) {
