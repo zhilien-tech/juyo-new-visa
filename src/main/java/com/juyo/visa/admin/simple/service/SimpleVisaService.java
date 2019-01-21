@@ -2743,11 +2743,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			arrayList.add(strList);
 
 			//北海道时，每个方位最多呆3天
-			if (cityid == 86) {
+			/*if (cityid == 86) {
 				if (scenicCount > 3) {
 					scenicCount = 3;
 				}
-			}
+			}*/
 			scenicDays += scenicCount;
 
 		}
@@ -2778,31 +2778,66 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		//随机出给定数组中的具体的哪几个方位的下标
 		ArrayList<Integer> arrayList2 = new ArrayList();
+		//冲绳机场所在方位(南)，放在第一个
+		if (cityid == 77) {
+			arrayList2.add(2);
+		}
+		//北海道机场所在方位(西),放在第一个
+		if (cityid == 86) {
+			arrayList2.add(3);
+		}
 		for (int i = 0; i < nextInt; i++) {
 
-			arrayList2.add(i);
+			//arrayList2.add(i);
 
-			/*Random random3 = new Random();
+			Random random3 = new Random();
 			int nextInt2 = random3.nextInt(intlist.size());
 			//不能取相同的方位
 			if (!arrayList2.contains(nextInt2)) {
 				arrayList2.add(nextInt2);
-			}*/
+			}
 		}
-		/*//判断下所选取的方位个数和随机出来的是否一致，如果不一致，重新随机
+		//判断下所选取的方位个数和随机出来的是否一致，如果不一致，重新随机
 		if (arrayList2.size() != nextInt) {
 			return getsomeCount(cityid, intlist, size, arrayList4, regionList);
 		}
 
 		//按从小到大顺序排序
-		Collections.sort(arrayList2);*/
+		//Collections.sort(arrayList2);
+		if (cityid == 86) {
+			for (int i = 0; i < arrayList2.size(); i++) {
+				//是否包含东，东在查询的List中排在第一位
+				if (arrayList2.get(i) == 0) {
+					//如果东不在最后一位,把东挪到最后一位
+					if (i != arrayList2.size() - 1) {
+						arrayList2.remove(i);
+						arrayList2.add(arrayList2.size(), 0);
+					}
+				}
+			}
+		}
+
+		if (cityid == 77) {
+			for (int i = 0; i < arrayList2.size(); i++) {
+				//是否包含北，北在查询的List中排在第二位
+				if (arrayList2.get(i) == 1) {
+					//如果北不在最后一位,把北挪到最后一位
+					if (i != arrayList2.size() - 1) {
+						arrayList2.remove(i);
+						arrayList2.add(arrayList2.size(), 1);
+					}
+				}
+			}
+		}
+
 		System.out.println("2:" + arrayList2);
 
 		//随机出的方位
 		ArrayList<String> regions = new ArrayList();
 
+		System.out.println("regionList:" + regionList);
 		for (int i = 0; i < arrayList2.size(); i++) {
-			regions.add(regionList.get(i));
+			regions.add(regionList.get(arrayList2.get(i)));
 		}
 
 		/*//list转数组
@@ -2835,11 +2870,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			count1 = random.nextInt(arrayList3.get(i)) + 1;
 			//限制每个方位呆几天
 			//北海道,每个方位最多三天
-			if (cityid == 86) {
+			/*if (cityid == 86) {
 				if (arrayList3.get(i) > 3) {
 					count1 = random.nextInt(3) + 1;
 				}
-			}
+			}*/
 
 			System.out.println("4:" + count1);
 
