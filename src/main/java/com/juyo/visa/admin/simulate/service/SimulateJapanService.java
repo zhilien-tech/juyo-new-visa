@@ -238,6 +238,13 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					//如果是招宝取消状态，变为网站招宝取消中
 					orderinfo.setStatus(JPOrderStatusEnum.WANGZHANQUXIAOZHONG.intKey());
 				}
+
+				//更新发招宝时间
+				if (!Util.isEmpty(orderjp)) {
+					orderjp.setZhaobaotime(new Date());
+					dbDao.update(orderjp);
+				}
+
 				dbDao.update(orderinfo);
 				map.put("ordernum", orderinfo.getOrderNum());
 			}
