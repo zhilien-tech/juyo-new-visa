@@ -592,6 +592,9 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		//TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		//Integer userId = loginUser.getId();
 		TOrderTravelplanJpEntity plan = dbDao.fetch(TOrderTravelplanJpEntity.class, planid.longValue());
+
+		THotelEntity hotel = dbDao.fetch(THotelEntity.class, plan.getHotel().longValue());
+
 		List<TOrderTravelplanJpEntity> planlist = dbDao.query(TOrderTravelplanJpEntity.class,
 				Cnd.where("orderId", "=", orderid).orderBy("outDate", "ASC"), null);
 		/*int days = 0;
@@ -608,6 +611,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			sql.setParam("orderid", orderid);
 			sql.setParam("cityid", plan.getCityId());
 			sql.setParam("scenicname", plan.getScenic());
+			sql.setParam("region", hotel.getRegion());
 			List<Record> scenics = dbDao.query(sql, null, null);
 			Random random = new Random();
 			plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
@@ -621,6 +625,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 				sql.setParam("orderid", orderid);
 				sql.setParam("cityid", plan.getCityId());
 				sql.setParam("scenicname", plan.getScenic());
+				sql.setParam("region", hotel.getRegion());
 				List<Record> scenics = dbDao.query(sql, null, null);
 				Random random = new Random();
 				plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
@@ -637,6 +642,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 					sql.setParam("orderid", orderid);
 					sql.setParam("cityid", plan.getCityId());
 					sql.setParam("scenicname", plan.getScenic());
+					sql.setParam("region", hotel.getRegion());
 					List<Record> scenics = dbDao.query(sql, null, null);
 					Random random = new Random();
 					plan.setScenic(scenics.get(random.nextInt(scenics.size())).getString("name"));
@@ -656,6 +662,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 						Sql sql = Sqls.create(sqlString);
 						sql.setParam("orderid", orderid);
 						sql.setParam("cityid", plan.getCityId());
+						sql.setParam("region", hotel.getRegion());
 						sql.setParam("scenicname", plan.getScenic());
 						List<Record> scenics = dbDao.query(sql, null, null);
 						Random random = new Random();
@@ -672,6 +679,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 						sql.setParam("orderid", orderid);
 						sql.setParam("cityid", plan.getCityId());
 						sql.setParam("scenicname", plan.getScenic());
+						sql.setParam("region", hotel.getRegion());
 						List<Record> scenics = dbDao.query(sql, null, null);
 						Random random = new Random();
 						plan.setScenic(countryAirline + "。"

@@ -75,13 +75,23 @@ public class TestChinest {
 		intlist.add(1);
 		intlist.add(3);
 		intlist.add(10);
+		intlist.add(12);
+		intlist.add(13);
 
-		long first = System.currentTimeMillis();
+		for (int i = 0; i < intlist.size(); i++) {
+			if (intlist.get(i) == 10) {
+				intlist.remove(i);
+				intlist.add(1, 10);
+			}
+		}
+		System.out.println(intlist);
+
+		/*long first = System.currentTimeMillis();
 
 		ArrayList<String> getsomeCount = getsomeCount(intlist, 5);
 		long last = System.currentTimeMillis();
 		System.out.println("所用时间：" + (last - first) + "ms");
-		System.out.println(getsomeCount);
+		System.out.println(getsomeCount);*/
 
 		/*//1 3 10
 		Random random = new Random();
@@ -482,6 +492,7 @@ public class TestChinest {
 
 	public static ArrayList<String> getsomeCount(ArrayList<Integer> intlist, int size) {
 
+		System.out.println("intlist:" + intlist);
 		//从所有方位中随机出用几个方位
 		Random random2 = new Random();
 		int nextInt = random2.nextInt(intlist.size()) + 1;
@@ -492,15 +503,22 @@ public class TestChinest {
 		for (int i = 0; i < nextInt; i++) {
 			Random random3 = new Random();
 			int nextInt2 = random3.nextInt(intlist.size());
+
 			//不能取相同的方位
-			if (!arrayList2.contains(nextInt2)) {
-				arrayList2.add(nextInt2);
+
+			while (arrayList2.contains(nextInt2)) {
+				nextInt2 = random3.nextInt(intlist.size());
 			}
+
+			arrayList2.add(nextInt2);
+			/*if (!arrayList2.contains(nextInt2)) {
+				arrayList2.add(nextInt2);
+			}*/
 		}
 		//判断下所选取的方位个数和随机出来的是否一致，如果不一致，重新随机
-		if (arrayList2.size() != nextInt) {
+		/*if (arrayList2.size() != nextInt) {
 			return getsomeCount(intlist, size);
-		}
+		}*/
 		//按从小打到顺序排序
 		Collections.sort(arrayList2);
 		System.out.println("2:" + arrayList2);
@@ -538,6 +556,7 @@ public class TestChinest {
 			count += count1;
 
 		}
+
 		System.out.println("arrayList:" + arrayList);
 		System.out.println("count:" + count);
 		if (count != size) {

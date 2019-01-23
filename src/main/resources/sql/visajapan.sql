@@ -199,4 +199,4 @@ WHERE
 			orderId = @orderid
 		AND scenic != @scenicname
 	)
-and cityId = @cityid
+and cityId = @cityid and region = @region

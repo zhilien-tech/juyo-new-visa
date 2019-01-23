@@ -2377,8 +2377,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							travelplan.setScenic(lastday);
 						} else {
 							String countryAirline = countryAirline(citysList.get(j - 1), lastcityid, 2);
-							int nextInt = random.nextInt(lastscenics.size());
-							countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
+							if (lastcityid == 77 || lastcityid == 86) {
+								countryAirline = countryAirline + "。" + scenicsList.get(k1);
+							} else {
+
+								int nextInt = random.nextInt(lastscenics.size());
+								countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
+							}
+
 							travelplan.setScenic(countryAirline);
 						}
 						travelplans.add(travelplan);
@@ -2669,13 +2675,23 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					} else {
 						if (daysBetween == 4) {
 							String countryAirline = countryAirline(threeCityid, lastcityid, 2);
-							int nextInt = random.nextInt(lastscenics.size());
-							countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
+							if (lastcityid == 77 || lastcityid == 86) {
+								countryAirline = countryAirline + "。" + scenicsList.get(k1);
+							} else {
+								int nextInt = random.nextInt(lastscenics.size());
+								countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
+
+							}
 							travelplan.setScenic(countryAirline);
 						} else {
 							String countryAirline = countryAirline(citysList.get(j - 1), lastcityid, 2);
-							int nextInt = random.nextInt(lastscenics.size());
-							countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
+							if (lastcityid == 77 || lastcityid == 86) {
+								int nextInt = random.nextInt(lastscenics.size());
+								countryAirline = countryAirline + "。" + scenicsList.get(k1);
+							} else {
+								int nextInt = random.nextInt(lastscenics.size());
+								countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
+							}
 							travelplan.setScenic(countryAirline);
 						}
 					}
@@ -2721,7 +2737,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		ArrayList<ArrayList<String>> arrayList = new ArrayList();
 
 		ArrayList<Integer> intList = new ArrayList();
-		ArrayList<String> strList = new ArrayList();
+
 		ArrayList<String> regionList = new ArrayList();
 		//所选城市的景区最多可以看几天
 		int scenicDays = 0;
@@ -2737,6 +2753,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			scenicsql2.setParam("cityid", cityid);
 			scenicsql2.setParam("region", region);
 			List<Record> scenicnames = dbDao.query(scenicsql2, null, null);
+
+			ArrayList<String> strList = new ArrayList();
 			for (Record record2 : scenicnames) {
 				strList.add(record2.getString("name"));
 			}
@@ -2761,6 +2779,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 
 		Map<String, Object> getsomeCount = getsomeCount(cityid, intList, days, arrayList, regionList);
+		if (!Util.isEmpty(getsomeCount.get("message"))) {
+			result.put("message", getsomeCount.get("message"));
+			return result;
+		}
 
 		result.put("getsomeCount", getsomeCount);
 		return result;
@@ -2770,170 +2792,206 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			ArrayList<ArrayList<String>> arrayList4, ArrayList<String> regionList) {
 
 		Map<String, Object> result = Maps.newHashMap();
+		String message = "";
 
-		//从所有方位中随机出用几个方位
-		Random random2 = new Random();
-		int nextInt = random2.nextInt(intlist.size()) + 1;
-		System.out.println("1:" + nextInt);
+		try {
+			//从所有方位中随机出用几个方位
+			Random random2 = new Random();
+			int nextInt = random2.nextInt(intlist.size()) + 1;
+			System.out.println("1:" + nextInt);
 
-		//随机出给定数组中的具体的哪几个方位的下标
-		ArrayList<Integer> arrayList2 = new ArrayList();
-		//冲绳机场所在方位(南)，放在第一个
-		if (cityid == 77) {
-			arrayList2.add(2);
-		}
-		//北海道机场所在方位(西),放在第一个
-		if (cityid == 86) {
-			arrayList2.add(3);
-		}
-		for (int i = 0; i < nextInt; i++) {
-
-			//arrayList2.add(i);
-
-			Random random3 = new Random();
-			int nextInt2 = random3.nextInt(intlist.size());
-			//不能取相同的方位
-			if (!arrayList2.contains(nextInt2)) {
-				arrayList2.add(nextInt2);
+			//随机出给定数组中的具体的哪几个方位的下标
+			ArrayList<Integer> arrayList2 = new ArrayList();
+			//冲绳机场所在方位(南)，放在第一个
+			if (cityid == 77) {
+				arrayList2.add(2);
 			}
-		}
-		//判断下所选取的方位个数和随机出来的是否一致，如果不一致，重新随机
-		if (arrayList2.size() != nextInt) {
-			return getsomeCount(cityid, intlist, size, arrayList4, regionList);
-		}
-
-		//按从小到大顺序排序
-		//Collections.sort(arrayList2);
-		if (cityid == 86) {
-			for (int i = 0; i < arrayList2.size(); i++) {
-				//是否包含东，东在查询的List中排在第一位
-				if (arrayList2.get(i) == 0) {
-					//如果东不在最后一位,把东挪到最后一位
-					if (i != arrayList2.size() - 1) {
-						arrayList2.remove(i);
-						arrayList2.add(arrayList2.size(), 0);
+			//北海道机场所在方位(西),放在第一个
+			if (cityid == 86) {
+				arrayList2.add(3);
+			}
+			//所有方位都有
+			if (nextInt == intlist.size()) {
+				for (int i = 0; i < nextInt; i++) {
+					if (cityid == 77) {
+						if (i != 2) {
+							arrayList2.add(i);
+						}
+					}
+					if (cityid == 86) {
+						if (i != 3) {
+							arrayList2.add(i);
+						}
 					}
 				}
-			}
-		}
+			} else {
+				for (int i = 0; i < nextInt - 1; i++) {
 
-		if (cityid == 77) {
-			for (int i = 0; i < arrayList2.size(); i++) {
-				//是否包含北，北在查询的List中排在第二位
-				if (arrayList2.get(i) == 1) {
-					//如果北不在最后一位,把北挪到最后一位
-					if (i != arrayList2.size() - 1) {
-						arrayList2.remove(i);
-						arrayList2.add(arrayList2.size(), 1);
+					//arrayList2.add(i);
+
+					Random random3 = new Random();
+					int nextInt2 = random3.nextInt(intlist.size());
+
+					while (arrayList2.contains(nextInt2)) {
+						nextInt2 = random3.nextInt(intlist.size());
 					}
+
+					arrayList2.add(nextInt2);
+
+					/*if (!arrayList2.contains(nextInt2)) {
+					arrayList2.add(nextInt2);
+					}*/
 				}
 			}
-		}
 
-		System.out.println("2:" + arrayList2);
-
-		//随机出的方位
-		ArrayList<String> regions = new ArrayList();
-
-		System.out.println("regionList:" + regionList);
-		for (int i = 0; i < arrayList2.size(); i++) {
-			regions.add(regionList.get(arrayList2.get(i)));
-		}
-
-		/*//list转数组
-		int[] d = new int[arrayList2.size()];
-		for (int i = 0; i < arrayList2.size(); i++) {
-			d[i] = arrayList2.get(i);
-		}*/
-
-		//把随机出的具体方位查出来
-		ArrayList<Integer> arrayList3 = new ArrayList();
-		for (int i = 0; i < arrayList2.size(); i++) {
-			int j = intlist.get(arrayList2.get(i));
-			//北海道时，如果某个方位只有一天并且随机到的方位小于3个时，重新随机
-			if (cityid == 86 && arrayList2.size() < 3 && j == 1) {
+			//判断下所选取的方位个数和随机出来的是否一致，如果不一致，重新随机
+			/*if (arrayList2.size() != nextInt) {
 				return getsomeCount(cityid, intlist, size, arrayList4, regionList);
-			}
-			arrayList3.add(intlist.get(arrayList2.get(i)));
-
-		}
-		System.out.println("3:" + arrayList3);
-
-		//从随机的每个方位中，再随机出几个景点
-		//count1随机出的总景点个数，暂时每个方位最多3个景点
-		int count = 0;
-		ArrayList<Integer> arrayList = new ArrayList();
-		for (int i = 0; i < arrayList3.size(); i++) {
-			int count1 = 0;
-			Random random = new Random();
-
-			count1 = random.nextInt(arrayList3.get(i)) + 1;
-			//限制每个方位呆几天
-			//北海道,每个方位最多三天
-			/*if (cityid == 86) {
-				if (arrayList3.get(i) > 3) {
-					count1 = random.nextInt(3) + 1;
-				}
 			}*/
 
-			System.out.println("4:" + count1);
+			//按从小到大顺序排序
+			//Collections.sort(arrayList2);
+			if (cityid == 86) {
+				for (int i = 0; i < arrayList2.size(); i++) {
+					//是否包含东，东在查询的List中排在第一位
+					if (arrayList2.get(i) == 0) {
+						//如果东不在最后一位,把东挪到最后一位
+						if (i != arrayList2.size() - 1) {
+							arrayList2.remove(i);
+							arrayList2.add(arrayList2.size(), 0);
+						}
+					}
+					//是否包含西南，东在查询的List中排在第四位
+					if (arrayList2.get(i) == 4) {
+						//如果西南不在第二位,把西南挪到第二位
+						if (i != 1) {
+							arrayList2.remove(i);
+							arrayList2.add(1, 4);
+						}
+					}
+				}
+			}
 
-			/*if (cityid == 86) {
-				if (count1 > 3) {
+			if (cityid == 77) {
+				for (int i = 0; i < arrayList2.size(); i++) {
+					//是否包含北，北在查询的List中排在第二位
+					if (arrayList2.get(i) == 1) {
+						//如果北不在最后一位,把北挪到最后一位
+						if (i != arrayList2.size() - 1) {
+							arrayList2.remove(i);
+							arrayList2.add(arrayList2.size(), 1);
+						}
+					}
+				}
+			}
+
+			System.out.println("2:" + arrayList2);
+
+			//随机出的方位
+			ArrayList<String> regions = new ArrayList();
+
+			System.out.println("regionList:" + regionList);
+			for (int i = 0; i < arrayList2.size(); i++) {
+				regions.add(regionList.get(arrayList2.get(i)));
+			}
+
+			/*//list转数组
+			int[] d = new int[arrayList2.size()];
+			for (int i = 0; i < arrayList2.size(); i++) {
+				d[i] = arrayList2.get(i);
+			}*/
+
+			//把随机出的具体方位查出来
+			ArrayList<Integer> arrayList3 = new ArrayList();
+			for (int i = 0; i < arrayList2.size(); i++) {
+				int j = intlist.get(arrayList2.get(i));
+				//北海道时，如果某个方位只有一天并且随机到的方位小于3个时，重新随机
+				if (cityid == 86 && arrayList2.size() < 3 && j == 1) {
 					return getsomeCount(cityid, intlist, size, arrayList4, regionList);
 				}
-			}*/
-			/*if (count1 > 3) {
-				return getsomeCount(cityid, intlist, size, arrayList4, regionList);
-			}*/
-			arrayList.add(count1);
-			count += count1;
+				arrayList3.add(intlist.get(arrayList2.get(i)));
 
-		}
-		System.out.println("arrayList:" + arrayList);
-		System.out.println("count:" + count);
-
-		if (count != size) {
-			return getsomeCount(cityid, intlist, size, arrayList4, regionList);
-		}
-
-		//从随机的每个方位，随机出酒店
-		System.out.println("regions:" + regions);
-		ArrayList<Integer> hotelsList = new ArrayList();
-		for (int i = 0; i < regions.size(); i++) {
-
-			Integer integer = arrayList.get(i);
-
-			List<THotelEntity> query = dbDao.query(THotelEntity.class,
-					Cnd.where("cityId", "=", cityid).and("region", "=", regionList.get(i)), null);
-			Random random = new Random();
-			int nextInt2 = random.nextInt(query.size());
-			THotelEntity tHotelEntity = query.get(nextInt2);
-			for (int j = 0; j < integer; j++) {
-				hotelsList.add(tHotelEntity.getId());
 			}
-		}
+			System.out.println("3:" + arrayList3);
 
-		ArrayList<String> arrayList8 = new ArrayList();
-
-		for (int i = 0; i < arrayList2.size(); i++) {
-			//随机出来的每个方位的数据
-			ArrayList<String> arrayList9 = arrayList4.get(arrayList2.get(i));
-			//需要随机的个数
-			Integer integer2 = arrayList.get(i);
-			for (int j = 0; j < integer2; j++) {
+			//从随机的每个方位中，再随机出几个景点
+			//count1随机出的总景点个数
+			int count = 0;
+			ArrayList<Integer> arrayList = new ArrayList();
+			for (int i = 0; i < arrayList3.size(); i++) {
+				int count1 = 0;
 				Random random = new Random();
-				int nextInt2 = random.nextInt(arrayList9.size());
-				String string = arrayList9.get(nextInt2);
-				arrayList8.add(string);
-				arrayList9.remove(string);
+
+				count1 = random.nextInt(arrayList3.get(i)) + 1;
+				//限制每个方位呆几天
+				//北海道,每个方位最多三天
+				/*if (cityid == 86) {
+					if (arrayList3.get(i) > 3) {
+						count1 = random.nextInt(3) + 1;
+					}
+				}*/
+
+				/*if (cityid == 86) {
+					if (count1 > 3) {
+						return getsomeCount(cityid, intlist, size, arrayList4, regionList);
+					}
+				}*/
+				System.out.println("4:" + count1);
+
+				arrayList.add(count1);
+				count += count1;
+
+			}
+			System.out.println("arrayList:" + arrayList);
+			System.out.println("count:" + count);
+
+			if (count != size) {
+				return getsomeCount(cityid, intlist, size, arrayList4, regionList);
 			}
 
+			//从随机的每个方位，随机出酒店
+			System.out.println("regions:" + regions);
+			ArrayList<Integer> hotelsList = new ArrayList();
+			for (int i = 0; i < regions.size(); i++) {
+
+				Integer integer = arrayList.get(i);
+
+				List<THotelEntity> query = dbDao.query(THotelEntity.class,
+						Cnd.where("cityId", "=", cityid).and("region", "=", regions.get(i)), null);
+				Random random = new Random();
+				int nextInt2 = random.nextInt(query.size());
+				THotelEntity tHotelEntity = query.get(nextInt2);
+				for (int j = 0; j < integer; j++) {
+					hotelsList.add(tHotelEntity.getId());
+				}
+			}
+
+			ArrayList<String> arrayList8 = new ArrayList();
+
+			for (int i = 0; i < arrayList2.size(); i++) {
+				//随机出来的每个方位的数据
+				ArrayList<String> arrayList9 = arrayList4.get(arrayList2.get(i));
+				//需要随机的个数
+				Integer integer2 = arrayList.get(i);
+				for (int j = 0; j < integer2; j++) {
+					Random random = new Random();
+					int nextInt2 = random.nextInt(arrayList9.size());
+					String string = arrayList9.get(nextInt2);
+					arrayList8.add(string);
+					arrayList9.remove(string);
+				}
+
+			}
+			System.out.println("5:" + arrayList8);
+			System.out.println("last:" + arrayList);
+			result.put("scenics", arrayList8);
+			result.put("hotels", hotelsList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "请重试";
+			result.put("message", message);
 		}
-		System.out.println("5:" + arrayList8);
-		System.out.println("last:" + arrayList);
-		result.put("scenics", arrayList8);
-		result.put("hotels", hotelsList);
+
 		return result;
 	}
 
