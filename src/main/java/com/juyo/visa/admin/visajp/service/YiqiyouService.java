@@ -1924,13 +1924,11 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 			}
 			//格式化为日本的日期
 			String pointpattren = "yyyy-MM-dd";
-			int count = 0;
 			Integer lasthotel = null;
 			for (TOrderTravelplanJpEntity ordertravelplan : ordertravelplans) {
-				count++;
 				//行程安排
 				String scenic = "";
-				//出发城市
+				/*//出发城市
 				Integer goDepartureCity = ordertripjp.getGoDepartureCity();
 				TCityEntity goCity = dbDao.fetch(TCityEntity.class, goDepartureCity.longValue());
 				String province = goCity.getProvince();
@@ -1945,8 +1943,8 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
 						String goFlightNum = ordertripjp.getGoFlightNum();
-						/*scenic = " " + province + "から" + goflight.getFlightnum().replace("*", "") + "便にて"
-								+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";*/
+						scenic = " " + province + "から" + goflight.getFlightnum().replace("*", "") + "便にて"
+								+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";
 						scenic = province
 								+ "から"
 								+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
@@ -1962,8 +1960,8 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
 							String goFlightNum = entrytrip.getFlightNum();
-							/*scenic = " " + province + goflight.getFlightnum().replace("*", "") + "便にて"
-									+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";*/
+							scenic = " " + province + goflight.getFlightnum().replace("*", "") + "便にて"
+									+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";
 							scenic = province
 									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
@@ -1977,8 +1975,8 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 						TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
 						String goFlightNum = ordertripjp.getReturnFlightNum();
-						/*scenic = " " + returnflight.getTakeOffName() + "から"
-								+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";*/
+						scenic = " " + returnflight.getTakeOffName() + "から"
+								+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";
 						scenic = goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
 								+ "から"
 								+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
@@ -1991,8 +1989,8 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 							TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
 									Cnd.where("flightnum", "=", returntrip.getFlightNum()));
 							String goFlightNum = returntrip.getFlightNum();
-							/*scenic = " " + returnflight.getTakeOffName() + "から"
-									+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";*/
+							scenic = " " + returnflight.getTakeOffName() + "から"
+									+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";
 							scenic = goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
 									+ "から"
 									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
@@ -2001,7 +1999,8 @@ public class YiqiyouService extends BaseService<TOrderJpEntity> {
 					}
 				} else {
 					scenic = ordertravelplan.getScenic();
-				}
+				}*/
+				scenic = ordertravelplan.getScenic();
 				//酒店信息
 				String hotel = "";
 				if (!Util.isEmpty(ordertravelplan.getHotel())) {

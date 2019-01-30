@@ -1746,24 +1746,23 @@ public class HuangjinjiaqiService extends BaseService<TOrderJpEntity> {
 			}
 
 			Integer lasthotel = null;
-			int count = 0;
 
 			Map<String, Object> result = getFirstdayAndLastday(ordertripjp);
 			String firstday = (String) result.get("firstday");
 			String lastday = (String) result.get("lastday");
 
 			for (TOrderTravelplanJpEntity ordertravelplan : ordertravelplans) {
-				count++;
 				//行程安排
 				String scenic = "";
-				//第一天  
+				/*//第一天  
 				if (count == 1) {
 					scenic = firstday;
 				} else if (count == ordertravelplans.size()) {//最后一天
 					scenic = lastday;
 				} else {
 					scenic = ordertravelplan.getScenic();
-				}
+				}*/
+				scenic = ordertravelplan.getScenic();
 				//酒店信息
 				String hotel = "";
 				if (!Util.isEmpty(ordertravelplan.getHotel())) {
