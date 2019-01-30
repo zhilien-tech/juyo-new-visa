@@ -686,6 +686,21 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 								+ scenics.get(random.nextInt(scenics.size())).getString("name"));
 						dbDao.update(plan);
 
+					} else if (lastplanList.size() > 3 && plan.getCityId() != formerPlan.getCityId()
+							&& Integer.valueOf(plan.getDay()) == planlist.size() - 1) {
+						String countryAirline = simpleVisaService.countryAirline(formerPlan.getCityId(),
+								plan.getCityId(), 1);
+						String sqlString = sqlManager.get("get_reset_travel_plan_scenic");
+						Sql sql = Sqls.create(sqlString);
+						sql.setParam("orderid", orderid);
+						sql.setParam("cityid", plan.getCityId());
+						sql.setParam("scenicname", plan.getScenic());
+						sql.setParam("region", hotel.getRegion());
+						List<Record> scenics = dbDao.query(sql, null, null);
+						Random random = new Random();
+						plan.setScenic(countryAirline + "。"
+								+ scenics.get(random.nextInt(scenics.size())).getString("name"));
+						dbDao.update(plan);
 					} else {
 						String countryAirline = simpleVisaService.countryAirline(formerPlan.getCityId(),
 								plan.getCityId(), 1);

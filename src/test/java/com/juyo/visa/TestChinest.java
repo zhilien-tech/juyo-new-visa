@@ -58,8 +58,10 @@ public class TestChinest {
 
 	public static void main(String[] args) throws FailingHttpStatusCodeException, IOException {
 
+		System.out.println(10 % 2);
+
 		//int[] intlist = { 1, 3, 10 };
-		String[] testlist = {};
+		//String[] testlist = {};
 
 		//13
 		//1 3 10
@@ -71,7 +73,7 @@ public class TestChinest {
 			d[i] = scenicarray.get(i);
 		}*/
 
-		ArrayList<Integer> intlist = new ArrayList();
+		/*ArrayList<Integer> intlist = new ArrayList();
 		intlist.add(1);
 		intlist.add(3);
 		intlist.add(10);
@@ -84,7 +86,7 @@ public class TestChinest {
 				intlist.add(1, 10);
 			}
 		}
-		System.out.println(intlist);
+		System.out.println(intlist);*/
 
 		/*long first = System.currentTimeMillis();
 

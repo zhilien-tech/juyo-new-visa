@@ -1756,12 +1756,14 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		TAppStaffConscientiousEntity conscientious = dbDao.fetch(TAppStaffConscientiousEntity.class,
 				Cnd.where("staffid", "=", staffid));
-		//日期处理
-		if (!Util.isEmpty(conscientious.getServicestartdate())) {
-			result.put("servicestartdate", sdf.format(conscientious.getServicestartdate()));
-		}
-		if (!Util.isEmpty(conscientious.getServiceenddate())) {
-			result.put("serviceenddate", sdf.format(conscientious.getServiceenddate()));
+		if (!Util.isEmpty(conscientious)) {
+			//日期处理
+			if (!Util.isEmpty(conscientious.getServicestartdate())) {
+				result.put("servicestartdate", sdf.format(conscientious.getServicestartdate()));
+			}
+			if (!Util.isEmpty(conscientious.getServiceenddate())) {
+				result.put("serviceenddate", sdf.format(conscientious.getServiceenddate()));
+			}
 		}
 		result.put("conscientious", conscientious);
 
