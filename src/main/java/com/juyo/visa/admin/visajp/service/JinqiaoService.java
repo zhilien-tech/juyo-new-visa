@@ -923,27 +923,45 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 					ArrayList<Integer> hotelidList = new ArrayList<Integer>();
 
 					for (TOrderTravelplanJpEntity tOrderTravelplanJpEntity : ordertravelplanList) {
-						if (!hotelidList.contains(tOrderTravelplanJpEntity.getHotel())) {
-							hotelidList.add(tOrderTravelplanJpEntity.getHotel());
-						}
-					}
-
-					if (ordertravelplanList.get(1).getCityId() != ordertravelplanList.get(2).getCityId()) {//第二个和第三个城市不同，中间会随机别的城市
-						if (ordertravelplanList.size() % 2 == 0) {//最后有三天
-
-							if (ordertravelplanList.get(0).getHotel() == ordertravelplanList.get(
-									ordertravelplanList.size() - 3).getHotel()) {
-
-								hotelidList.add(ordertravelplanList.get(ordertravelplanList.size() - 3).getHotel());
+						if (tOrderTravelplanJpEntity != ordertravelplanList.get(ordertravelplanList.size() - 1)) {
+							if (!hotelidList.contains(tOrderTravelplanJpEntity.getHotel())) {
+								hotelidList.add(tOrderTravelplanJpEntity.getHotel());
 							}
 						}
-						if (ordertravelplanList.get(0).getHotel() == ordertravelplanList.get(
-								ordertravelplanList.size() - 1).getHotel()) {
+					}
 
-							hotelidList.add(ordertravelplanList.get(ordertravelplanList.size() - 1).getHotel());
+					if (ordertravelplanList.get(1).getCityId() != ordertravelplanList.get(2).getCityId()
+							&& ordertravelplanList.size() > 4) {//第二个和第三个城市不同，中间会随机别的城市
+						if (ordertravelplanList.size() % 2 == 0) {//最后有三天
+							//倒数第三天和倒数第二天一样，说明后酒店都一样
+							if (ordertravelplanList.get(ordertravelplanList.size() - 3).getHotel() == ordertravelplanList
+									.get(ordertravelplanList.size() - 2).getHotel()) {
+								hotelidList.add(ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel());
+							} else {
+								if (Util.eq(ordertravelplanList.get(0).getHotel(),
+										ordertravelplanList.get(ordertravelplanList.size() - 3).getHotel())) {
+
+									hotelidList.add(hotelidList.size() - 1,
+											ordertravelplanList.get(ordertravelplanList.size() - 3).getHotel());
+								}
+
+								if (Util.eq(ordertravelplanList.get(0).getHotel(),
+										ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel())) {
+
+									hotelidList.add(ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel());
+								}
+							}
+
+						} else {
+							if (Util.eq(ordertravelplanList.get(0).getHotel(),
+									ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel())) {
+
+								hotelidList.add(ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel());
+							}
 						}
 					}
 
+					System.out.println("hotelidList:" + hotelidList);
 					for (int i = 0; i < hotelidList.size(); i++) {
 
 						TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
@@ -951,28 +969,64 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 
 						List<TOrderTravelplanJpEntity> query = dbDao.query(TOrderTravelplanJpEntity.class,
 								Cnd.where("orderId", "=", orderjp.getId()).and("hotel", "=", hotelidList.get(i)), null);
-						if (ordertravelplanList.get(1).getCityId() != ordertravelplanList.get(2).getCityId()) {//第二个和第三个城市不同，中间会随机别的城市
+						int querysize = query.size();
+						if (ordertravelplanList.get(1).getCityId() != ordertravelplanList.get(2).getCityId()
+								&& ordertravelplanList.size() > 4) {//第二个和第三个城市不同，中间会随机别的城市
 							if (ordertravelplanList.size() % 2 == 0) {//最后有三天
-								//如果倒数第三天和第一天酒店一样
-								if (ordertravelplanList.get(0).getHotel() == ordertravelplanList.get(
-										ordertravelplanList.size() - 3).getHotel()) {
-									if (i == hotelidList.size() - 2) {
-										fetch = ordertravelplanList.get(ordertravelplanList.size() - 3);
+
+								//倒数第二天和倒数第三天一样
+								if (!Util.eq(ordertravelplanList.get(ordertravelplanList.size() - 3).getHotel(),
+										ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel())) {
+									//如果倒数第三天和第一天酒店一样
+									if (Util.eq(ordertravelplanList.get(0).getHotel(),
+											ordertravelplanList.get(ordertravelplanList.size() - 3).getHotel())) {
+										if (Util.eq(i, 0)) {
+											fetch = ordertravelplanList.get(0);
+											querysize = 2;
+										}
+										if (Util.eq(i, hotelidList.size() - 2)) {
+											fetch = ordertravelplanList.get(ordertravelplanList.size() - 3);
+											querysize = 1;
+										}
+									}
+									//如果倒数第二天和第一天酒店一样
+									if (Util.eq(ordertravelplanList.get(0).getHotel(),
+											ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel())) {
+										if (Util.eq(i, 0)) {
+											fetch = ordertravelplanList.get(0);
+											querysize = 2;
+										}
+										if (Util.eq(i, hotelidList.size() - 1)) {
+											fetch = ordertravelplanList.get(ordertravelplanList.size() - 2);
+											querysize = 2;
+										}
+									}
+
+								} else {
+									if (Util.eq(ordertravelplanList.get(0).getHotel(),
+											ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel())) {
+										if (Util.eq(i, 0)) {
+											fetch = ordertravelplanList.get(0);
+											querysize = 2;
+										}
+										if (Util.eq(i, hotelidList.size() - 1)) {
+											fetch = ordertravelplanList.get(ordertravelplanList.size() - 2);
+											querysize = 2;
+										}
 									}
 								}
-								//如果倒数第二天和第一天酒店一样
-								if (ordertravelplanList.get(0).getHotel() == ordertravelplanList.get(
-										ordertravelplanList.size() - 2).getHotel()) {
-									if (i == hotelidList.size() - 1) {
-										fetch = ordertravelplanList.get(ordertravelplanList.size() - 2);
-									}
-								}
+
 							} else {//最后有两天
 									//如果倒数第一天和第一天酒店一样
-								if (ordertravelplanList.get(0).getHotel() == ordertravelplanList.get(
-										ordertravelplanList.size() - 1).getHotel()) {
+								if (Util.eq(ordertravelplanList.get(0).getHotel(),
+										ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel())) {
+									if (Util.eq(i, 0)) {
+										fetch = ordertravelplanList.get(0);
+										querysize = 2;
+									}
 									if (i == hotelidList.size() - 1) {
 										fetch = ordertravelplanList.get(ordertravelplanList.size() - 2);
+										querysize = 2;
 									}
 								}
 							}
@@ -1009,10 +1063,10 @@ public class JinqiaoService extends BaseService<TOrderJpEntity> {
 
 						//第四列，停留几晚
 						if (i == hotelidList.size() - 1) {
-							cell = new PdfPCell(new Paragraph((query.size() - 1) + "泊朝食", font));
+							cell = new PdfPCell(new Paragraph((querysize - 1) + "泊朝食", font));
 
 						} else {
-							cell = new PdfPCell(new Paragraph(query.size() + "泊朝食", font));
+							cell = new PdfPCell(new Paragraph(querysize + "泊朝食", font));
 
 						}
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);

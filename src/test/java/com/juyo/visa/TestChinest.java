@@ -73,20 +73,21 @@ public class TestChinest {
 			d[i] = scenicarray.get(i);
 		}*/
 
-		/*ArrayList<Integer> intlist = new ArrayList();
+		ArrayList<Integer> intlist = new ArrayList();
 		intlist.add(1);
 		intlist.add(3);
 		intlist.add(10);
 		intlist.add(12);
 		intlist.add(13);
 
-		for (int i = 0; i < intlist.size(); i++) {
+		/*for (int i = 0; i < intlist.size(); i++) {
 			if (intlist.get(i) == 10) {
 				intlist.remove(i);
 				intlist.add(1, 10);
 			}
-		}
-		System.out.println(intlist);*/
+		}*/
+		intlist.add(intlist.size() - 2, 10);
+		System.out.println(intlist);
 
 		/*long first = System.currentTimeMillis();
 
