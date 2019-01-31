@@ -169,7 +169,7 @@
 							
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>是否付款</label>
+									<label>是否付款</label>
 									<select id="ispayed" name="ispayed"  class="form-control input-sm" >
 									<c:forEach var="map" items="${obj.ispayedenum}">
 										<option value="${map.key}"  ${map.key==obj.orderinfo.ispayed?"selected":"" } >${map.value}</option>
@@ -180,7 +180,7 @@
 							
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>面签时间</label>
+									<label>面签时间</label>
 									<input id="Interviewdate" type="text" class="interviewformat input-sm form-control" name="Interviewdate" value="${obj.Interviewdate }" />
 								</div>
 							</div>
