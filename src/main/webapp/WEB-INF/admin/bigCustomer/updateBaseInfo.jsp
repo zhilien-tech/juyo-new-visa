@@ -59,8 +59,8 @@
 										<span class="promptInfo">点击上传身份证正面</span>
 										<input autocomplete="new-password" id="cardFront" name="cardfront" type="hidden" value="${obj.front.url }"/>
 										<img id="imgShow" name="sqimg" alt="" src="${obj.front.url }" >
-										<input autocomplete="new-password" id="uploadFileImg" name="uploadfile" class="btn btn-primary btn-sm" type="file" value="上传" />
-										<i class="delete" onclick="deleteApplicantFrontImg();"></i>
+										<input autocomplete="new-password" id="uploadFile" style="height:183px !important; left: 0 !important; top: -20px;" name="uploadfile" class="btn btn-primary btn-sm" type="file" value="上传" />
+										<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 									</div>
 								</div>
 								<div class="front has-error" style="width:100%; height:30px; border:0 !important; color:red;margin:0px 0 -20px 0px !important">
@@ -77,7 +77,7 @@
 										<span class="inchInfo">二寸免冠照片</span>
 										<input autocomplete="new-password" id="cardInch" name="twoinchphoto" type="hidden" value="${obj.twoinch.url }"/>
 										<img id="imgInch" name="imgInch" alt="" src="${obj.twoinch.url }" >
-										<input autocomplete="new-password" id="uploadFileInchImg" name="uploadFileInchImg" class="btn btn-primary btn-sm" type="file"  value="上传"/>
+										<input autocomplete="new-password" id="uploadFileBack" name="uploadFileInchImg" class="btn btn-primary btn-sm" type="file"  value="上传"/>
 										<!-- <i class="delete" onclick="deleteApplicantInchImg()"></i> -->
 									</div>
 								</div>

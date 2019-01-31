@@ -58,7 +58,9 @@ public class TestChinest {
 
 	public static void main(String[] args) throws FailingHttpStatusCodeException, IOException {
 
-		System.out.println(10 % 2);
+		String name = "欧阳健康";
+		System.out.println(name.substring(0, 2));
+		System.out.println(name.substring(2, name.length()));
 
 		//int[] intlist = { 1, 3, 10 };
 		//String[] testlist = {};

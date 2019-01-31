@@ -1661,3 +1661,115 @@ $('#mailcity').select2({
 	maximumSelectionLength : 1, //设置最多可以选择多少项
 	tags : false //设置必须存在的选项 才能选中
 });
+
+
+//正面上传,扫描
+$('#uploadFile').change(function() {
+	var layerIndex = layer.load(1, {
+		shade : "#000"
+	});
+	$("#addBtn").attr('disabled', true);
+	//$("#updateBtn").attr('disabled', true);
+	var file = this.files[0];
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var dataUrl = e.target.result;
+		var blob = dataURLtoBlob(dataUrl);
+		var formData = new FormData();
+		formData.append("image", blob, file.name);
+		$.ajax({
+			type : "POST",//提交类型  
+			//dataType : "json",//返回结果格式  
+			url : BASE_PATH + '/admin/orderJp/IDCardRecognitionUS',//请求地址  
+			async : true,
+			processData : false, //当FormData在jquery中使用的时候需要设置此项
+			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+			//请求数据  
+			data : formData,
+			success : function(obj) {//请求成功后的函数 
+				//关闭加载层
+				layer.close(layerIndex);
+				if (true === obj.success) {
+					layer.msg("识别成功");
+					$('#cardFront').val(obj.url);
+					$('#firstName').val(obj.xingCn);
+					$('#firstNameEn').val("/"+obj.xingEn);
+					$('#lastName').val(obj.mingCn);
+					$('#lastNameEn').val("/"+obj.mingEn);
+					$('#imgShow').attr('src', obj.url);
+					//$("#uploadFile").siblings("i").css("display","block");
+					//$('#detailedAddress').val(obj.address);
+					//$('#nation').val(obj.nationality);
+					$('#cardId').val(obj.num);
+					//searchByCard();
+					$("#cardprovince").html('<option selected="selected" value="'+obj.province+'">'+obj.province+'</option>');
+					$("#cardcity").html('<option selected="selected" value="'+obj.city+'">'+obj.city+'</option>');
+					$('#birthday').val(obj.birth);
+					$('#sex').val(obj.sex);
+				}
+				$("#addBtn").attr('disabled', false);
+				//$("#updateBtn").attr('disabled', false);
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				layer.close(layerIndex);
+				$("#addBtn").attr('disabled', false);
+				//$("#updateBtn").attr('disabled', false);
+			}
+		}); // end of ajaxSubmit
+	};
+	reader.readAsDataURL(file);
+});
+//二寸照片上传
+$('#uploadFileBack').change(function() {
+	var layerIndex = layer.load(1, {
+		shade : "#000"
+	});
+	$("#addBtn").attr('disabled', true);
+	//$("#updateBtn").attr('disabled', true);
+	var file = this.files[0];
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var dataUrl = e.target.result;
+		var blob = dataURLtoBlob(dataUrl);
+		var formData = new FormData();
+		formData.append("image", blob, file.name);
+		$.ajax({
+			type : "POST",//提交类型  
+			//dataType : "json",//返回结果格式  
+			url : BASE_PATH + '/admin/orderJp/twoinchphotoUpload',//请求地址  
+			async : true,
+			processData : false, //当FormData在jquery中使用的时候需要设置此项
+			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+			//请求数据  
+			data : formData,
+			success : function(obj) {//请求成功后的函数 
+				//关闭加载层
+				layer.close(layerIndex);
+				if (obj) {
+					$('#cardInch').val(obj);
+					$('#imgInch').attr('src', obj);
+				}
+				$("#addBtn").attr('disabled', false);
+				//$("#updateBtn").attr('disabled', false);
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				layer.close(layerIndex);
+				$("#addBtn").attr('disabled', false);
+				//$("#updateBtn").attr('disabled', false);
+			}
+		}); // end of ajaxSubmit
+	};
+	reader.readAsDataURL(file);
+});
+
+//把dataUrl类型的数据转为blob
+function dataURLtoBlob(dataurl) {
+	var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(
+			n);
+	while (n--) {
+		u8arr[n] = bstr.charCodeAt(n);
+	}
+	return new Blob([ u8arr ], {
+		type : mime
+	});
+}

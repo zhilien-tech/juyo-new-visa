@@ -391,6 +391,17 @@ public class OrderJpModule {
 	}
 
 	/**
+	 * 美国二寸照片上传
+	 */
+	@At
+	@Ok("json")
+	@Filters
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object twoinchphotoUpload(@Param("image") File file) {
+		return saleViewService.twoinchphotoUpload(file);
+	}
+
+	/**
 	 * 身份证背面上传、扫描
 	 */
 	@At

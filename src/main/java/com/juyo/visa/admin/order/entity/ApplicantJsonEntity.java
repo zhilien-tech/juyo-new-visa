@@ -19,6 +19,14 @@ public class ApplicantJsonEntity implements Serializable {
 
 	private String name;
 
+	private String xingCn;
+
+	private String mingCn;
+
+	private String xingEn;
+
+	private String mingEn;
+
 	private String nationality;
 
 	private String num;

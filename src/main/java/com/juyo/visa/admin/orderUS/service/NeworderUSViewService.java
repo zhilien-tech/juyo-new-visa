@@ -393,6 +393,41 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object updateBasicinfo(BasicinfoUSForm form) {
 		Integer staffid = form.getStaffid();
 
+		//身份证正面保存
+		TAppStaffCredentialsEntity credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", 3));
+		//先查询是否有图片，有的话只需更新图片，没有的话添加
+		if (Util.isEmpty(credentials)) {
+			TAppStaffCredentialsEntity credentialsEntity = new TAppStaffCredentialsEntity();
+			credentialsEntity.setCreatetime(new Date());
+			credentialsEntity.setStaffid(staffid);
+			credentialsEntity.setType(3);
+			credentialsEntity.setUpdatetime(new Date());
+			credentialsEntity.setUrl(form.getCardfront());
+			dbDao.insert(credentialsEntity);
+		} else {
+			credentials.setUpdatetime(new Date());
+			credentials.setUrl(form.getCardfront());
+			dbDao.update(credentials);
+		}
+		//二寸照片保存
+		TAppStaffCredentialsEntity twoinch = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", 13));
+		//先查询是否有图片，有的话只需更新图片，没有的话添加
+		if (Util.isEmpty(twoinch)) {
+			TAppStaffCredentialsEntity credentialsEntity = new TAppStaffCredentialsEntity();
+			credentialsEntity.setCreatetime(new Date());
+			credentialsEntity.setStaffid(staffid);
+			credentialsEntity.setType(13);
+			credentialsEntity.setUpdatetime(new Date());
+			credentialsEntity.setUrl(form.getTwoinchphoto());
+			dbDao.insert(credentialsEntity);
+		} else {
+			twoinch.setUpdatetime(new Date());
+			twoinch.setUrl(form.getTwoinchphoto());
+			dbDao.update(twoinch);
+		}
+
 		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		if (form.getMarrystatus() == 2) {//离异时，有结婚日期和离婚日期
@@ -734,6 +769,25 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object savePassportinfo(PassportinfoUSForm form) {
 		Integer staffid = form.getStaffid();
+
+		//护照保存
+		TAppStaffCredentialsEntity credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", 1));
+		//先查询是否有图片，有的话只需更新图片，没有的话添加
+		if (Util.isEmpty(credentials)) {
+			TAppStaffCredentialsEntity credentialsEntity = new TAppStaffCredentialsEntity();
+			credentialsEntity.setCreatetime(new Date());
+			credentialsEntity.setStaffid(staffid);
+			credentialsEntity.setType(1);
+			credentialsEntity.setUpdatetime(new Date());
+			credentialsEntity.setUrl(form.getPassporturl());
+			dbDao.insert(credentialsEntity);
+		} else {
+			credentials.setUpdatetime(new Date());
+			credentials.setUrl(form.getPassporturl());
+			dbDao.update(credentials);
+		}
+
 		TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		passportinfo.setPassport(form.getPassport());
