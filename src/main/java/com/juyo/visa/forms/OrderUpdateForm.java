@@ -49,6 +49,8 @@ public class OrderUpdateForm {
 
 	private String planaddressen;
 
+	private String telephone;
+
 	/*
 	 * 市
 	 */

@@ -613,6 +613,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		/*for (VisaUSStatesEnum e : VisaUSStatesEnum.values()) {
 			stateMap.put(e.intKey(), e.value());
 		}*/
+
 		result.put("state", stateMap);
 
 		//跟进信息
@@ -2506,6 +2507,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			orderTravelInfo = dbDao.insert(orderTravelInfo);
 		}
 		orderTravelInfo.setGodate(form.getGodate());
+		orderTravelInfo.setTelephone(form.getTelephone());
 		orderTravelInfo.setLeavedate(form.getLeavedate());
 		orderTravelInfo.setArrivedate(form.getArrivedate());
 		orderTravelInfo.setStaydays(form.getStaydays());

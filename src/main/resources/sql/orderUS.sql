@@ -158,16 +158,33 @@ staffid=@staffid
 
 /*orderUS_getSomeState*/
 SELECT
+id,
+`name`
+FROM
+t_state_us
+
+
+/*SELECT
 tsu.id,
 tsu.`name`
 FROM
 t_hotel_us thu
 LEFT JOIN t_city_us tcu ON tcu.id = thu.cityid
 LEFT JOIN t_state_us tsu ON tcu.stateid = tsu.id
-GROUP BY tsu.id
+GROUP BY tsu.id*/
 
 /*orderUS_getSomeCity*/
-SELECT
+SELECT 
+id,
+cityname
+FROM
+t_city_us
+WHERE stateid = @stateid
+
+
+
+
+/*SELECT
 tcu.id,
 tcu.cityname
 FROM
@@ -175,7 +192,7 @@ t_hotel_us thu
 LEFT JOIN t_city_us tcu ON tcu.id = thu.cityid
 LEFT JOIN t_state_us tsu ON tcu.stateid = tsu.id
 WHERE tsu.id=@stateid
-GROUP BY cityname
+GROUP BY cityname*/
 
 
 /*orderusmobile_getbasic*/

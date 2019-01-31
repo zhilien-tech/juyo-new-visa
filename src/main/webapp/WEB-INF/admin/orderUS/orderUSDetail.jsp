@@ -458,11 +458,21 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>送签计划去美国地点：</label> <select id="planstate" name="planstate"
-											class="form-control input-sm">
+											class="form-control select2City input-sm" multiple="multiple">
 											<!-- <span>*</span> -->
 											<c:forEach items="${obj.state }" var="planstate" >
-												<option <c:if test="${obj.travelInfo.state==planstate.key}">selected</c:if>  value="${planstate.key }" >${planstate.value }</option>
+												<c:choose>
+													<c:when test="${planstate.key eq obj.travelInfo.state }">
+														<option value="${planstate.key }" selected="selected">${planstate.value }</option>
+													</c:when>
+													<c:otherwise>
+														<option value="${planstate.key }">${planstate.value }</option>
+													</c:otherwise>
+												</c:choose>
+												
+												
 											</c:forEach>
+											
 										</select>
 
 									</div>
@@ -482,7 +492,7 @@
 													selected="selected">${obj.travelInfo.city}</option>
 											</c:if>
 										
-										
+										</select>
 										 
 										<%-- <input name="plancity" id="plancity" type="text" onchange="translateZhToEn(this,'plancityen','')" value="${obj.travelInfo.city}"
 											class="form-control input-sm" placeholder="市" /> --%>
@@ -499,9 +509,13 @@
 											<input id="planaddressen" name="planaddressen" type="hidden" value="${obj.travelInfo.addressen }"/>
 									</div>
 								</div> --%>
+								
+								<!-- 街道END -->
+							</div>
+							<div class="row body-from-input">
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label>酒店</label> 
+										<label>酒店英文</label> 
 										<select
 											id="hotelname" name="hotelname"
 											class="form-control input-sm select2City arrivedcity"
@@ -510,11 +524,12 @@
 												<option value="${obj.travelInfo.hotelname}"
 													selected="selected">${obj.travelInfo.hotelname}</option>
 											</c:if>
+											</select>
 										
 											<input id=""hotelnameen"" name="hotelnameen" type="hidden" value="${obj.travelInfo.hotelnameen }"/>
 									</div>
 								</div>
-								<div class="col-sm-3">
+								<div class="col-sm-6">
 									<div class="form-group">
 										<label>街道英文</label> <input id="planaddress" name="planaddress"
 											type="text" value="${obj.travelInfo.address}"
@@ -522,7 +537,14 @@
 											<%-- <input id="planaddressen" name="planaddressen" type="hidden" value="${obj.travelInfo.addressen }"/> --%>
 									</div>
 								</div>
-								<!-- 街道END -->
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label>电话</label> <input id="telephone" name="telephone"
+											type="text" value="${obj.travelInfo.telephone}"
+											class="form-control input-sm" placeholder="" />
+									</div>
+								</div>
+							
 							</div>
 							<!-- 模块5END -->
 						</div>
@@ -531,7 +553,7 @@
 					<!-- 订单信息END -->
 					<!-- 大模块二 -->
 					<div class="info" id="mySwitch">
-						<!-- 标题以及按钮组 -->
+						<!-- 标题以及按钮组 --> 
 						<p class="info-head">申请人</p>
 						<div class="dataInfoGroup orderInfoGroup">
 							<input id="mypassportId" type="hidden" value="${obj.passport.id }">
@@ -1197,6 +1219,47 @@
 			tags : false
 		//设置必须存在的选项 才能选中
 		});
+		$('#planstate').select2({
+			ajax : {
+				url : "/admin/neworderUS/selectUSstate.html",
+				dataType : 'json',
+				delay : 250,
+				type : 'post',
+				data : function(params) {
+					/* alert(province);
+				    if(province){
+				    	province = province.join(',');
+					} */
+					return {
+						searchstr : params.term, // search term
+						page : params.page
+					};
+				},
+				processResults : function(data, params) {
+					params.page = params.page || 1;
+					var selectdata = $.map(data, function(obj) {
+						obj.id = obj.id; // replace pk with your identifier
+						obj.text = obj.name; // replace pk with your identifier
+						/*obj.text = obj.dictCode;*/
+						return obj;
+					});
+					return {
+						results : selectdata
+					};
+				},
+				cache : false
+			},
+			//templateSelection: formatRepoSelection,
+			escapeMarkup : function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength : 1,
+			maximumInputLength : 20,
+			language : "zh-CN", //设置 提示语言
+			maximumSelectionLength : 1, //设置最多可以选择多少项
+			tags : false
+		//设置必须存在的选项 才能选中
+		});
 		$('#plancity').select2({
 			ajax : {
 				url : "/admin/neworderUS/selectUSstateandcity.html",
@@ -1204,7 +1267,9 @@
 				delay : 250,
 				type : 'post',
 				data : function(params) {
+					alert(111);
 					var province = $('#planstate').val();
+					console.log(province);
 					/* alert(province);
 				    if(province){
 				    	province = province.join(',');
