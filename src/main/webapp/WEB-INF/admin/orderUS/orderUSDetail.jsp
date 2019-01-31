@@ -87,11 +87,11 @@
 				<c:choose>
 				<c:when test="${obj.isaddorder == 1 }">
 					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
-					<input type="button" onclick="save()" value="保存" class="btn btn-primary btn-sm pull-right" /> 
+					<input type="button" onclick="save(1)" value="保存" class="btn btn-primary btn-sm pull-right" /> 
 				</c:when>
 				<c:otherwise>
 					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
-					<input type="button" onclick="save()" value="保存" class="btn btn-primary btn-sm pull-right" /> 
+					<input type="button" onclick="save(1)" value="保存" class="btn btn-primary btn-sm pull-right" /> 
 					<input type="button" id="daturl" style="width:92px !important;" onclick="download(3)" value="下载DAT文件" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" id="pdfurl" style="width:80px !important;" onclick="download(2)" value="下载确认页" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" id="reviewurl" style="width:80px !important;" onclick="download(1)" value="下载预览页" class="btn btn-primary btn-sm pull-right" />
@@ -460,13 +460,13 @@
 										<label><span>*</span>送签计划去美国地点：</label> <select id="planstate" name="planstate"
 											class="form-control select2City input-sm" multiple="multiple">
 											<!-- <span>*</span> -->
-											<c:forEach items="${obj.state }" var="planstate" >
+											<c:forEach items="${obj.state }" var="planstates" >
 												<c:choose>
-													<c:when test="${planstate.key eq obj.travelInfo.state }">
-														<option value="${planstate.key }" selected="selected">${planstate.value }</option>
+													<c:when test="${planstates.key eq obj.travelInfo.state }">
+														<option value="${planstates.key }" selected="selected">${planstates.value }</option>
 													</c:when>
 													<c:otherwise>
-														<option value="${planstate.key }">${planstate.value }</option>
+														<option value="${planstates.key }">${planstates.value }</option>
 													</c:otherwise>
 												</c:choose>
 												
@@ -514,21 +514,17 @@
 							</div>
 							<div class="row body-from-input">
 								<div class="col-sm-3">
-									<div class="form-group">
+									<div class="form-group" id="provinceDiv">
 										<label>酒店英文</label> 
-										<select
+										<input
 											id="hotelname" name="hotelname"
-											class="form-control input-sm select2City arrivedcity"
-											multiple="multiple">
-										<c:if test="${!empty obj.travelInfo.hotelname}">
-												<option value="${obj.travelInfo.hotelname}"
-													selected="selected">${obj.travelInfo.hotelname}</option>
-											</c:if>
-											</select>
+											class="form-control input-sm" type="text" value="${obj.travelInfo.hotelname }">
 										
 											<input id=""hotelnameen"" name="hotelnameen" type="hidden" value="${obj.travelInfo.hotelnameen }"/>
 									</div>
 								</div>
+								
+								
 								<div class="col-sm-6">
 									<div class="form-group">
 										<label>街道英文</label> <input id="planaddress" name="planaddress"
@@ -552,6 +548,12 @@
 					</div>
 					<!-- 订单信息END -->
 					<!-- 大模块二 -->
+					
+					<div class="hideNext" onclick="hideNext();" id="hideNext" style="background-color:#3087f1;color:#FFF;padding:6px 15px;margin-right:10px;border-radius:4px;cursor:pointer;margin:0 auto;width: 20%;text-align:center;">
+						<a id="hideNextButton" style="color:#FFF;">下一步</a>
+					</div>
+					
+					<div class="hideClass" id="hideClass">
 					<div class="info" id="mySwitch">
 						<!-- 标题以及按钮组 --> 
 						<p class="info-head">申请人</p>
@@ -745,10 +747,14 @@
 						</div>
 					</div>	
 					<!-- 大模块3END -->
+					</div>
 				</section>
 			</form>
 		</div>
 	</div>
+	<script type="text/javascript">
+		var BASE_PATH = '${base}';
+	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
@@ -766,8 +772,22 @@
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
+	<script type="text/javascript" src="${base}/admin/orderUS/orderUSDetail.js"></script>
 	<%-- <script src="${base}/admin/pcVisa/updatePhoto.js"></script> --%>
 	<script type="text/javascript">
+	
+		if($("#goDate").val()){
+			$(".hideClass").show();
+			$(".hideNext").hide();
+		}else{
+			$(".hideClass").hide();
+			$(".hideNext").show();
+		}
+		
+		function hideNext(){
+			save(2);
+		}
+	
 		var staffid = '${obj.basicinfo.id}';
 		var orderid = '${obj.orderid}';
 		var addorder = '${obj.isaddorder}';
@@ -1023,7 +1043,7 @@
 			$("#hotelname").empty();
 			$("#planaddress").val("");
 		});
-
+		
 
 		//日期转换 加上指定天数
 		function getNewDay(dateTemp, days) {
@@ -1267,13 +1287,10 @@
 				delay : 250,
 				type : 'post',
 				data : function(params) {
-					alert(111);
 					var province = $('#planstate').val();
-					console.log(province);
-					/* alert(province);
 				    if(province){
 				    	province = province.join(',');
-					} */
+					}
 					return {
 						province : province,
 						searchstr : params.term, // search term
@@ -1305,7 +1322,7 @@
 			tags : false
 		//设置必须存在的选项 才能选中
 		});
-		//酒店名称
+		/* //酒店名称
 		$('#hotelname').select2({
 			ajax : {
 				url : "/admin/neworderUS/selectUSHotel.html",
@@ -1328,7 +1345,6 @@
 					var selectdata = $.map(data, function(obj) {
 						obj.id = obj.name; // replace pk with your identifier
 						obj.text = obj.name; // replace pk with your identifier
-						/*obj.text = obj.dictCode;*/
 						return obj;
 					});
 					return {
@@ -1348,7 +1364,7 @@
 			maximumSelectionLength : 1, //设置最多可以选择多少项
 			tags : false
 		//设置必须存在的选项 才能选中
-		});
+		}); */
 		
 		$("#plancity").on('select2:unselect', function (evt) {
 			$("#hotelname").empty();
@@ -1379,49 +1395,6 @@
 
 		});
 		
-		$('#plancity').select2({
-			ajax : {
-				url : "/admin/neworderUS/selectUSstateandcity.html",
-				dataType : 'json',
-				delay : 250,
-				type : 'post',
-				data : function(params) {
-					var province = $('#planstate').val();
-					/* alert(province);
-				    if(province){
-				    	province = province.join(',');
-					} */
-					return {
-						province : province,
-						searchstr : params.term, // search term
-						page : params.page
-					};
-				},
-				processResults : function(data, params) {
-					params.page = params.page || 1;
-					var selectdata = $.map(data, function(obj) {
-						obj.id = obj.cityname; // replace pk with your identifier
-						obj.text = obj.cityname; // replace pk with your identifier
-						/*obj.text = obj.dictCode;*/
-						return obj;
-					});
-					return {
-						results : selectdata
-					};
-				},
-				cache : false
-			},
-			//templateSelection: formatRepoSelection,
-			escapeMarkup : function(markup) {
-				return markup;
-			}, // let our custom formatter work
-			minimumInputLength : 1,
-			maximumInputLength : 20,
-			language : "zh-CN", //设置 提示语言
-			maximumSelectionLength : 1, //设置最多可以选择多少项
-			tags : false
-		//设置必须存在的选项 才能选中
-		});
 		
 		//出发航班select2
 		$('#goFlightNum').select2(
@@ -2314,7 +2287,7 @@
 		}; */
 		
 		//保存并返回
-		function save(){
+		function save(status){
 			layer.load(1);
 			$.ajax({
 				url : "${base}/admin/orderUS/orderSave",
@@ -2323,13 +2296,18 @@
 				type : 'POST',
 				success : function(data) {
 					layer.closeAll();
-					layer.msg("保存成功", {
-						time: 1000,
-						end: function () {
-							//self.window.close();
-							//location.reload();
-						}
-					});
+					if(status == 1){
+						layer.msg("保存成功", {
+							time: 1000,
+							end: function () {
+								//self.window.close();
+								//location.reload();
+							}
+						});
+					}else{
+						$(".hideNext").hide();
+						$(".hideClass").show();
+					}
 					// window.location.href = '/admin/pcVisa/visaDetail.html'; 
 				}
 			});

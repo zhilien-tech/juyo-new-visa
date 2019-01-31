@@ -2713,21 +2713,26 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		List<THotelUsEntity> hotelList = new ArrayList<>();
 		TCityUsEntity city = dbDao.fetch(TCityUsEntity.class, Cnd.where("cityname", "=", plancity));
-		List<THotelUsEntity> hotels = dbDao.query(THotelUsEntity.class,
-				Cnd.where("cityid", "=", city.getId()).and("name", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		if (!Util.isEmpty(city)) {
+			List<THotelUsEntity> hotels = dbDao.query(THotelUsEntity.class,
+					Cnd.where("cityid", "=", city.getId()).and("nameen", "like", "%" + Strings.trim(searchstr) + "%"),
+					null);
 
-		for (THotelUsEntity hotel : hotels) {
-			if (!hotelList.contains(hotel)) {
-				hotelList.add(hotel);
+			for (THotelUsEntity hotel : hotels) {
+				if (!hotelList.contains(hotel)) {
+					hotelList.add(hotel);
+				}
 			}
-		}
 
-		List<THotelUsEntity> list = new ArrayList<>();
-		if (!Util.isEmpty(hotelList) && hotelList.size() >= 5) {
-			for (int i = 0; i < 5; i++) {
-				list.add(hotelList.get(i));
+			List<THotelUsEntity> list = new ArrayList<>();
+			if (!Util.isEmpty(hotelList) && hotelList.size() >= 5) {
+				for (int i = 0; i < 5; i++) {
+					list.add(hotelList.get(i));
+				}
+				return list;
+			} else {
+				return hotelList;
 			}
-			return list;
 		} else {
 			return hotelList;
 		}

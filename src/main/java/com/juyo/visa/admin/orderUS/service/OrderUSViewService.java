@@ -2513,7 +2513,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderTravelInfo.setStaydays(form.getStaydays());
 		orderTravelInfo.setHotelname(form.getHotelname());
 		if (!Util.isEmpty(form.getHotelname())) {
-			THotelUsEntity hotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("name", "=", form.getHotelname()));
+			THotelUsEntity hotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("nameen", "=", form.getHotelname()));
 			if (!Util.isEmpty(hotel)) {
 				orderTravelInfo.setHotelnameen(hotel.getNameen());
 			}
