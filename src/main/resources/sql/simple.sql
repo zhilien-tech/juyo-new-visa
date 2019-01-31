@@ -259,6 +259,7 @@ $condition
 SELECT
 tr.id,
 tr.orderNum,
+tr.sendVisaNum,
 tr.cityId,
 taoj.isMainApplicant,
 DATE_FORMAT(tr.createTime, '%Y-%m-%d') createdate,

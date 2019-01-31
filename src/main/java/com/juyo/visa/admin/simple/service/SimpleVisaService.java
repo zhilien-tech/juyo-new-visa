@@ -7021,16 +7021,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			HSSFWorkbook workbook = new HSSFWorkbook();
 			//1.1创建合并单元格对象
 			//日本签证处理系统
-			CellRangeAddress callRangeAddress = new CellRangeAddress(0, 0, 0, 22);//起始行,结束行,起始列,结束列
+			CellRangeAddress callRangeAddress = new CellRangeAddress(0, 0, 0, 23);//起始行,结束行,起始列,结束列
 			//时间
-			CellRangeAddress time = new CellRangeAddress(1, 1, 0, 22);//起始行,结束行,起始列,结束列
+			CellRangeAddress time = new CellRangeAddress(1, 1, 0, 23);//起始行,结束行,起始列,结束列
 
 			//基本信息
 			CellRangeAddress basic = new CellRangeAddress(2, 2, 0, 8);//起始行,结束行,起始列,结束列
 			//出行信息
 			CellRangeAddress trip = new CellRangeAddress(2, 2, 9, 16);//起始行,结束行,起始列,结束列
 			//备注信息
-			CellRangeAddress remark = new CellRangeAddress(2, 2, 17, 22);//起始行,结束行,起始列,结束列
+			CellRangeAddress remark = new CellRangeAddress(2, 2, 17, 23);//起始行,结束行,起始列,结束列
 
 			//标题样式
 			HSSFCellStyle titlecolStyle = createCellStyle(workbook, (short) 18, true, true, 2);
@@ -7059,7 +7059,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			cell.setCellValue("日本签证处理系统");
 
 			//加边框，如果不写的话，只有第一列有边框
-			for (int i = 1; i < 23; i++) {
+			for (int i = 1; i < 24; i++) {
 				cell = row.createCell(i);
 				cell.setCellStyle(colStyle);
 			}
@@ -7081,7 +7081,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 			secondcell.setCellValue("时间:" + orderstartdate + " 至 " + orderenddate);
 
-			for (int i = 1; i < 23; i++) {
+			for (int i = 1; i < 24; i++) {
 				HSSFCell createCell = secondrow.createCell(i);
 				createCell.setCellStyle(timeStyle);
 			}
@@ -7100,13 +7100,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			thirdcell3.setCellStyle(colStyle);
 			thirdcell3.setCellValue("备注信息");
 
-			HSSFCell thirdcell22 = thirdrow.createCell(22);
+			HSSFCell thirdcell22 = thirdrow.createCell(23);
 			thirdcell22.setCellStyle(colStyle);
 
 			//3.2创建列标题;并且设置列标题
 			HSSFRow row2 = sheet.createRow(3);
 			String[] titles = { "序号", "订单号", "签证种类", "姓名", "姓名(拼音)", "性别", "护照号码", "居住地", "人数", "出发日期", "结束日期", "入境口岸",
-					"出境口岸", "入境航班", "出境航班", "出发城市", "返回城市", "客户来源", "申请人备注", "备注", "客户备注", "送签时间", "创建人" };
+					"出境口岸", "入境航班", "出境航班", "出发城市", "返回城市", "客户来源", "申请人备注", "备注", "客户备注", "送签时间", "创建人", "送签编号" };
 			for (int i = 0; i < titles.length; i++) {
 				HSSFCell cell2 = row2.createCell(i);
 				//加载单元格样式
@@ -7379,6 +7379,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				cell22.setCellStyle(colStyle);
 				cell22.setCellValue(downloadinfo.get(i).getString("name"));
 
+				HSSFCell cell23 = row3.createCell(23);
+				cell23.setCellStyle(colStyle);
+				cell23.setCellValue(downloadinfo.get(i).getString("sendVisaNum"));
+
 				//i += query.size();
 
 			}
@@ -7390,11 +7394,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			long fifthtime = System.currentTimeMillis();
 			System.out.println("合并单元格所用时间：" + (fifthtime - fourthtime) + "ms");
 
+			//冻结窗格
 			sheet.createFreezePane(2, 4, 2, 4);
 			//sheet.createFreezePane(2, 4); 跟上边的一样，两者等价，但这个需要多跳一层到上边的方法
 
 			//列宽度自适应，包括合并的单元格
-			for (int i = 0; i < 23; i++) {
+			for (int i = 0; i < 24; i++) {
 				sheet.autoSizeColumn(i, true);
 			}
 
@@ -7610,6 +7615,15 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					Cell nowCell22 = sheet.getRow(currnetRow).getCell(22);
 					nowCell22.setCellValue(current22);
 					nowCell22.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 23, 23));
+
+					Cell currentCell23 = sheet.getRow(p).getCell(23);
+					String current23 = getStringCellValue(currentCell23);
+
+					Cell nowCell23 = sheet.getRow(currnetRow).getCell(23);
+					nowCell23.setCellValue(current23);
+					nowCell23.setCellStyle(cs);
 
 				}
 				currnetRow = p + 1;
