@@ -642,7 +642,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 		result.put("followinfo", followList);
 
-		//判断下一步按钮是否出现
+		//判断下一步按钮是否出现,现在规则为：拍照资料和基本信息都至少有内容
 		List<TAppStaffCredentialsEntity> query = dbDao.query(TAppStaffCredentialsEntity.class,
 				Cnd.where("staffid", "=", staffid), null);
 		if (query.size() > 0 && !Util.isEmpty(basicinfo.getProvince())) {
@@ -2566,16 +2566,20 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		//酒店信息添加
 		if (!Util.isEmpty(form.getPlanstate()) && !Util.isEmpty(form.getPlancity())
 				&& !Util.isEmpty(form.getHotelname())) {
-			THotelUsEntity hotelUS = dbDao.fetch(THotelUsEntity.class, Cnd.where("nameen", "=", form.getHotelname()));
-			if (Util.isEmpty(hotelUS)) {
-				TCityUsEntity fetch = dbDao.fetch(TCityUsEntity.class, Cnd.where("cityname", "=", form.getPlancity()));
-				THotelUsEntity newHotel = new THotelUsEntity();
-				newHotel.setAddressen(form.getPlanaddress());
-				newHotel.setTelephone(form.getTelephone());
+			TCityUsEntity fetch = dbDao.fetch(TCityUsEntity.class, Cnd.where("cityname", "=", form.getPlancity()));
+			THotelUsEntity newHotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("nameen", "=", form.getHotelname())
+					.and("cityid", "=", fetch.getId()));
+			if (Util.isEmpty(newHotel)) {
+				newHotel = new THotelUsEntity();
 				newHotel.setNameen(form.getHotelname());
 				newHotel.setCityId(fetch.getId());
+				newHotel.setAddressen(form.getPlanaddress());
+				newHotel.setTelephone(form.getTelephone());
 				dbDao.insert(newHotel);
 			}
+			/*newHotel.setAddressen(form.getPlanaddress());
+			newHotel.setTelephone(form.getTelephone());
+			dbDao.update(newHotel);*/
 		}
 
 		//修改订单信息

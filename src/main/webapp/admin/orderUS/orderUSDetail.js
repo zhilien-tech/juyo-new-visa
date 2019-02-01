@@ -83,7 +83,7 @@ function setProvince(province){
 			var regEx = /\s+/g;
 			$("#telephone").val(telephonestr.replace(regEx, " "));
 			//var reg = /\D-/g;
-			var reg = /[^ 0-9]/g;
+			var reg = /[^0-9]/g;
 			$("#telephone").val(telephonestr.replace(reg, ""));
 			
 			//$("#planaddress").val(data.address);
@@ -114,7 +114,7 @@ $(document).on("input","#hotelname",function(){
 		$("#hotelname").val(temp.replace(reg, ""));
     }
 });
-//电话只能输入数字和-
+//电话只能输入数字
 $(document).on("input","#telephone",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
@@ -125,7 +125,7 @@ $(document).on("input","#telephone",function(){
 	var regEx = /\s+/g;
 	$("#telephone").val(temp.replace(regEx, " "));
 	//var reg = /\D-/g;
-	var reg = /[^ 0-9]/g;
+	var reg = /[^0-9]/g;
 	if(reg.test(temp)){
 		$("#telephone").val(temp.replace(reg, ""));
     }

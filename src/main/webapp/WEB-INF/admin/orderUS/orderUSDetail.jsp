@@ -572,12 +572,12 @@
 					<!-- 订单信息END -->
 					<!-- 大模块二 -->
 					
-					<div class="hideNext" onclick="hideNext();" id="hideNext" style="background-color:#3087f1;color:#FFF;padding:6px 15px;margin-right:10px;border-radius:4px;cursor:pointer;margin:0 auto;width: 20%;text-align:center;">
+					<div class="hideNext" onclick="hideNext();" id="hideNext" style="background-color:#3087f1;color:#FFF;padding:6px 15px;margin-right:10px;border-radius:4px;cursor:pointer;margin:0 auto;width: 20%;text-align:center;margin-top:5px;">
 						<a id="hideNextButton" style="color:#FFF;">下一步</a>
 						
 					</div>
 					
-					<div class="hideClass" id="hideClass">
+					<div class="hideClass" id="hideClass" style="margin-top:5px;">
 					<div class="info" id="mySwitch">
 						<!-- 标题以及按钮组 --> 
 						<p class="info-head">申请人</p>
