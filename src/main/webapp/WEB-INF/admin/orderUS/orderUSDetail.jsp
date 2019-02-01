@@ -82,8 +82,8 @@
 					</c:choose>
 				
 				</span>
-				<a id="errorimgPhoto" style="display:  none;" onclick="toErrorphoto('${obj.orderinfo.errorurl}')"><span style="color:red;"><strong>错误信息图片</strong></span></a>
-				<a id="reviewimgPhoto" style="display:  none;" onclick="toReviewphoto('${obj.orderinfo.reviewurl}')"><span style="color:red;"><strong>预览信息图片</strong></span></a>
+				<a id="errorimgPhoto" style="display:  none;" onclick="toErrorphoto('${obj.orderinfo.errorurl}')"><span style="color:red;"><strong style="cursor:pointer">错误信息图片</strong></span></a>
+				<a id="reviewimgPhoto" style="display:  none;" onclick="toReviewphoto('${obj.orderinfo.reviewurl}')"><span style="color:red;"><strong style="cursor:pointer">预览信息图片</strong></span></a>
 				<%-- <c:choose>
 					<c:when test="${!empty obj.orderinfo.errorurl }">
 						<a id="errorimgPhoto" onclick="toErrorphoto()"><span style="color:red;"><strong>错误信息图片</strong></span></a>
