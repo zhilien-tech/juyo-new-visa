@@ -15,7 +15,7 @@ $("#hotelname").on('input',function(){
 		url : BASE_PATH+'/admin/neworderUS/selectUSHotel.html',
 		success : function(data) {
 			if(data != ""){
-				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' style='border: 1px solid #7a9cd3;' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
 				$.each(data,function(index,element) { 
 					liStr += "<li onclick='setProvince("+JSON.stringify(element.nameen)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element.nameen+"</span></li>";
 				});
@@ -65,15 +65,39 @@ $("#provinceDiv").mouseleave(function(){
 	$("#hotelname").nextAll("ul.ui-autocomplete").remove();
 });
 
-//不能输入中文
+//只能输入字母和特定几个字符
 $(document).on("input","#hotelname",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
 	}
 	var temp = $(this).val();
-	var reg = /([\u4E00-\u9FA5])+/;
-	//var reg =/[\u4e00-\u9fa5]/g;
+	//var reg = /([\u4E00-\u9FA5])+/;
+	var reg = /[^ A-Za-z-'&]/g;
 	if(reg.test(temp)){
 		$("#hotelname").val(temp.replace(reg, ""));
     }
+});
+//电话只能输入数字和-
+$(document).on("input","#telephone",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	//var reg = /\D-/g;
+	var reg = /[^0-9-]/g;
+	if(reg.test(temp)){
+		$("#telephone").val(temp.replace(reg, ""));
+    }
+});
+//只能输入字母和特定字符
+$(document).on("input","#planaddress",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	//var reg = /\D-/g;
+	var reg = /[^ A-Za-z,.]/g;
+	if(reg.test(temp)){
+		$("#planaddress").val(temp.replace(reg, ""));
+	}
 });

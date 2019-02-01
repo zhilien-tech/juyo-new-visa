@@ -36,6 +36,31 @@
 		font-size: 12px;
 		position: inherit;
 	}
+	
+	/*酒店检索*/
+	.IdInfo {
+		border: 1px solid #7a9cd3;
+	}
+	
+	.IdInfo li {
+		padding-left: 2%;
+	}
+	
+	.IdInfo li:hover {
+		/*background: #1e90ff;
+		cursor: pointer;*/
+		
+		background: rgb(30, 144, 255); 
+		color: rgb(255, 255, 255);
+	}
+	
+	.IdInfo li:hover a {
+		color: #FFF;
+	}
+	
+	.IdInfo li a {
+		color: #000;
+	}
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -517,7 +542,7 @@
 									<div class="form-group" id="provinceDiv">
 										<label>酒店英文</label> 
 										<input
-											id="hotelname" name="hotelname"
+											id="hotelname" style="text-transform: none;" name="hotelname"
 											class="form-control input-sm" type="text" value="${obj.travelInfo.hotelname }">
 										
 											<input id=""hotelnameen"" name="hotelnameen" type="hidden" value="${obj.travelInfo.hotelnameen }"/>
@@ -527,7 +552,7 @@
 								
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label>街道英文</label> <input id="planaddress" name="planaddress"
+										<label>街道英文</label> <input id="planaddress" style="text-transform: none;" name="planaddress"
 											type="text" value="${obj.travelInfo.address}"
 											class="form-control input-sm" placeholder="" />
 											<%-- <input id="planaddressen" name="planaddressen" type="hidden" value="${obj.travelInfo.addressen }"/> --%>
@@ -551,7 +576,13 @@
 					
 					<div class="hideNext" onclick="hideNext();" id="hideNext" style="background-color:#3087f1;color:#FFF;padding:6px 15px;margin-right:10px;border-radius:4px;cursor:pointer;margin:0 auto;width: 20%;text-align:center;">
 						<a id="hideNextButton" style="color:#FFF;">下一步</a>
+						
 					</div>
+					
+					
+					
+					
+					
 					
 					<div class="hideClass" id="hideClass">
 					<div class="info" id="mySwitch">
@@ -776,13 +807,16 @@
 	<%-- <script src="${base}/admin/pcVisa/updatePhoto.js"></script> --%>
 	<script type="text/javascript">
 	
-		if($("#goDate").val()){
+	
+		/* if($("#goDate").val()){
 			$(".hideClass").show();
 			$(".hideNext").hide();
 		}else{
 			$(".hideClass").hide();
 			$(".hideNext").show();
-		}
+		} */
+		$(".hideClass").hide();
+		$(".hideNext").show();
 		
 		function hideNext(){
 			save(2);
@@ -1979,6 +2013,7 @@
 		
 		//预检查
  		function preautofill(orderid, staffid){
+			
  			$("#orderstatus_US").html("预检查中");
  			$("#preautofill").attr("disabled",true);
  			$("#errorimgPhoto").hide();

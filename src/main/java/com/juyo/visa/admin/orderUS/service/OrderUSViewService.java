@@ -2512,20 +2512,26 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderTravelInfo.setArrivedate(form.getArrivedate());
 		orderTravelInfo.setStaydays(form.getStaydays());
 		orderTravelInfo.setHotelname(form.getHotelname());
-		if (!Util.isEmpty(form.getHotelname())) {
+
+		orderTravelInfo.setHotelnameen(form.getHotelname());
+
+		/*if (!Util.isEmpty(form.getHotelname())) {
 			THotelUsEntity hotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("nameen", "=", form.getHotelname()));
 			if (!Util.isEmpty(hotel)) {
 				orderTravelInfo.setHotelnameen(hotel.getNameen());
 			}
 		} else {
 			orderTravelInfo.setHotelnameen("");
-		}
-		//orderTravelInfo.setAddressen(form.getPlanaddressen());
-		orderTravelInfo.setAddressen(translate(form.getPlanaddress()));
-		//orderTravelInfo.setAddressen(form.getPlanaddress());
+		}*/
 		orderTravelInfo.setAddress(form.getPlanaddress());
+		orderTravelInfo.setAddressen(form.getPlanaddress());
 		orderTravelInfo.setCity(form.getPlancity());
 		orderTravelInfo.setCityen(form.getPlancityen());
+		if (!Util.isEmpty(form.getPlancity())) {
+			TCityUsEntity fetch = dbDao.fetch(TCityUsEntity.class, Cnd.where("cityname", "=", form.getPlancity()));
+			orderTravelInfo.setCityen(fetch.getCitynameen());
+		}
+
 		orderTravelInfo.setState(form.getPlanstate());
 		if (!Util.isEmpty(form.getTravelpurpose())) {
 			String travelpurpose = form.getTravelpurpose();
@@ -2546,9 +2552,24 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 		orderTravelInfo.setReturnDepartureCity(form.getReturnDepartureCity());
 		orderTravelInfo.setReturnArrivedCity(form.getReturnArrivedCity());
-		//修改订单信息
 		int orderUpdateNum = dbDao.update(orderTravelInfo);
 
+		//酒店信息添加
+		if (!Util.isEmpty(form.getPlanstate()) && !Util.isEmpty(form.getPlancity())
+				&& !Util.isEmpty(form.getHotelname())) {
+			THotelUsEntity hotelUS = dbDao.fetch(THotelUsEntity.class, Cnd.where("nameen", "=", form.getHotelname()));
+			if (Util.isEmpty(hotelUS)) {
+				TCityUsEntity fetch = dbDao.fetch(TCityUsEntity.class, Cnd.where("cityname", "=", form.getPlancity()));
+				THotelUsEntity newHotel = new THotelUsEntity();
+				newHotel.setAddressen(form.getPlanaddress());
+				newHotel.setTelephone(form.getTelephone());
+				newHotel.setNameen(form.getHotelname());
+				newHotel.setCityId(fetch.getId());
+				dbDao.insert(newHotel);
+			}
+		}
+
+		//修改订单信息
 		orderus.setCityid(form.getCityid());
 		orderus.setIspayed(form.getIspayed());
 		orderus.setGroupname(form.getGroupname());
