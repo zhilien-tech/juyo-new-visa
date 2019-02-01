@@ -1430,7 +1430,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		THotelUsEntity hotel = new THotelUsEntity();
 		if (!Util.isEmpty(info.get("hotelnameen"))) {
 			Contacts.put("organization", info.get("hotelnameen"));
-			hotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("name", "=", info.get("hotelname")));
+			hotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("nameen", "=", info.get("hotelnameen")));
 			city = dbDao.fetch(TCityUsEntity.class, hotel.getCityId().longValue());
 		} else {
 			errorMsg += "出行信息：计划去美国的酒店,</br>";
@@ -1483,7 +1483,11 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//电话号码(签证信息)
 		//Contacts.put("phone", "165156");
 		if (!Util.isEmpty(hotel.getId())) {
-			Contacts.put("phone", hotel.getTelephone().replace(" ", "").replace("-", ""));
+			if (!Util.isEmpty(hotel.getTelephone())) {
+				Contacts.put("phone", hotel.getTelephone().replace(" ", "").replace("-", ""));
+			} else {
+				Contacts.put("phone", "");
+			}
 		}
 		//邮箱
 		if (!Util.isEmpty(info.get("tascemail"))) {

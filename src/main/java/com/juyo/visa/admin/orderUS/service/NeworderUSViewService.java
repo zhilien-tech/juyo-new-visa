@@ -2748,11 +2748,16 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object getHoteladdress(String hotelname) {
-		String result = "";
-		THotelUsEntity hotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("name", "=", hotelname));
+		Map<String, String> result = Maps.newHashMap();
+		String address = "";
+		String telephone = "";
+		THotelUsEntity hotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("nameen", "=", hotelname));
 		if (!Util.isEmpty(hotel)) {
-			result = hotel.getAddressen();
+			address = hotel.getAddressen();
+			telephone = hotel.getTelephone();
 		}
+		result.put("address", address);
+		result.put("telephone", telephone);
 		return result;
 	}
 

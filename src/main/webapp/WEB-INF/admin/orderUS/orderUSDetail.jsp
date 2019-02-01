@@ -543,9 +543,7 @@
 										<label>酒店英文</label> 
 										<input
 											id="hotelname" style="text-transform: none;" name="hotelname"
-											class="form-control input-sm" type="text" value="${obj.travelInfo.hotelname }">
-										
-											<input id=""hotelnameen"" name="hotelnameen" type="hidden" value="${obj.travelInfo.hotelnameen }"/>
+											class="form-control input-sm" type="text" value="${obj.travelInfo.hotelnameen }">
 									</div>
 								</div>
 								
@@ -578,11 +576,6 @@
 						<a id="hideNextButton" style="color:#FFF;">下一步</a>
 						
 					</div>
-					
-					
-					
-					
-					
 					
 					<div class="hideClass" id="hideClass">
 					<div class="info" id="mySwitch">
@@ -808,15 +801,13 @@
 	<script type="text/javascript">
 	
 	
-		/* if($("#goDate").val()){
+		if('${obj.nextButtonFlag}' == 1){
 			$(".hideClass").show();
 			$(".hideNext").hide();
 		}else{
 			$(".hideClass").hide();
 			$(".hideNext").show();
-		} */
-		$(".hideClass").hide();
-		$(".hideNext").show();
+		}
 		
 		function hideNext(){
 			save(2);
@@ -1074,8 +1065,9 @@
 		//计划去美国的州改变，城市自动清空
 		$("#planstate").change(function(){
 			$("#plancity").empty();
-			$("#hotelname").empty();
+			$("#hotelname").val("");
 			$("#planaddress").val("");
+			$("#telephone").val("");
 		});
 		
 
@@ -1401,8 +1393,9 @@
 		}); */
 		
 		$("#plancity").on('select2:unselect', function (evt) {
-			$("#hotelname").empty();
+			$("#hotelname").val("");
 			$("#planaddress").val("");
+			$("#telephone").val("");
 		}); 
 		$("#hotelname").on('select2:unselect', function (evt) {
 			$("#planaddress").val("");
@@ -2489,10 +2482,11 @@
 			console.log("错误图片:"+errorurl);
 			layer.open({
 				type: 2,
-				title: false,
-				closeBtn:false,
+				title: "错误信息图片",
+				closeBtn:2,
 				fix: false,
 				maxmin: false,
+				moveOut:true,
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
@@ -2505,10 +2499,11 @@
 			console.log("预览图片:"+errorurl);
 			layer.open({
 				type: 2,
-				title: false,
-				closeBtn:false,
+				title: "预览信息图片",
+				closeBtn:2,
 				fix: false,
 				maxmin: false,
+				moveOut:true,
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],

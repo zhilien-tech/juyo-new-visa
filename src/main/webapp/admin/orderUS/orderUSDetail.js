@@ -56,10 +56,43 @@ $(document).on('keydown','#hotelname',function(e){
 	var li = $(this).next().find('li:eq('+provinceindex+')');
 	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
 });
-//省份 检索下拉项
+//酒店 检索下拉项
 function setProvince(province){
 	$("#hotelname").nextAll("ul.ui-autocomplete").remove();
 	$("#hotelname").val(province).change();
+	
+	//选中酒店的同时，填写上对应的地址和电话
+	$.ajax({
+		url : '/admin/neworderUS/getHoteladdress',
+		type : 'POST',
+		data : {
+			'hotelname' : province
+		},
+		dataType:'json',
+		success : function(data) {
+			
+			var addressstr = data.address;
+			//地址
+			var regEx = /\s+/g;
+			$("#planaddress").val(addressstr.replace(regEx, " "));
+			var reg = /[^ A-Za-z0-9,.&()]/g;
+			$("#planaddress").val(addressstr.replace(reg, ""));
+			
+			//电话
+			var telephonestr = data.telephone;
+			var regEx = /\s+/g;
+			$("#telephone").val(telephonestr.replace(regEx, " "));
+			//var reg = /\D-/g;
+			var reg = /[^ 0-9]/g;
+			$("#telephone").val(telephonestr.replace(reg, ""));
+			
+			//$("#planaddress").val(data.address);
+			//$("#telephone").val(data.telephone);
+		},
+		error : function() {
+		}
+	});
+	
 } 
 $("#provinceDiv").mouseleave(function(){
 	$("#hotelname").nextAll("ul.ui-autocomplete").remove();
@@ -71,6 +104,10 @@ $(document).on("input","#hotelname",function(){
 		return;
 	}
 	var temp = $(this).val();
+	
+	//只保留一个空格
+	var regEx = /\s+/g;
+	$("#hotelname").val(temp.replace(regEx, " "));
 	//var reg = /([\u4E00-\u9FA5])+/;
 	var reg = /[^ A-Za-z-'&]/g;
 	if(reg.test(temp)){
@@ -83,8 +120,12 @@ $(document).on("input","#telephone",function(){
 		return;
 	}
 	var temp = $(this).val();
+	
+	//只保留一个空格
+	var regEx = /\s+/g;
+	$("#telephone").val(temp.replace(regEx, " "));
 	//var reg = /\D-/g;
-	var reg = /[^0-9-]/g;
+	var reg = /[^ 0-9]/g;
 	if(reg.test(temp)){
 		$("#telephone").val(temp.replace(reg, ""));
     }
@@ -95,8 +136,11 @@ $(document).on("input","#planaddress",function(){
 		return;
 	}
 	var temp = $(this).val();
-	//var reg = /\D-/g;
-	var reg = /[^ A-Za-z,.]/g;
+	
+	//只保留一个空格
+	var regEx = /\s+/g;
+	$("#planaddress").val(temp.replace(regEx, " "));
+	var reg = /[^ A-Za-z0-9,.&()]/g;
 	if(reg.test(temp)){
 		$("#planaddress").val(temp.replace(reg, ""));
 	}

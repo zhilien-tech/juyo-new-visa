@@ -642,6 +642,15 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 		result.put("followinfo", followList);
 
+		//判断下一步按钮是否出现
+		List<TAppStaffCredentialsEntity> query = dbDao.query(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid), null);
+		if (query.size() > 0 && !Util.isEmpty(basicinfo.getProvince())) {
+			result.put("nextButtonFlag", 1);
+		} else {
+			result.put("nextButtonFlag", 0);
+		}
+
 		return result;
 	}
 
@@ -2511,18 +2520,18 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		orderTravelInfo.setLeavedate(form.getLeavedate());
 		orderTravelInfo.setArrivedate(form.getArrivedate());
 		orderTravelInfo.setStaydays(form.getStaydays());
-		orderTravelInfo.setHotelname(form.getHotelname());
+		//orderTravelInfo.setHotelname(form.getHotelname());
 
 		orderTravelInfo.setHotelnameen(form.getHotelname());
 
-		/*if (!Util.isEmpty(form.getHotelname())) {
+		if (!Util.isEmpty(form.getHotelname())) {
 			THotelUsEntity hotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("nameen", "=", form.getHotelname()));
 			if (!Util.isEmpty(hotel)) {
-				orderTravelInfo.setHotelnameen(hotel.getNameen());
+				orderTravelInfo.setHotelname(hotel.getName());
 			}
 		} else {
-			orderTravelInfo.setHotelnameen("");
-		}*/
+			orderTravelInfo.setHotelname("");
+		}
 		orderTravelInfo.setAddress(form.getPlanaddress());
 		orderTravelInfo.setAddressen(form.getPlanaddress());
 		orderTravelInfo.setCity(form.getPlancity());
