@@ -251,6 +251,51 @@ $(".hasservedinmilitary").change(function () {
 	}
 });
 
+$(".isclan").change(function () {
+	let checked = $("input[name='isclan']:checked").val();
+	if (checked == 1) {
+		$(".clanName").show();
+	} else {
+		$(".clanName").hide();
+	}
+});
+
+$(".issecuritynumberapply").change(function () {
+	let checked = $("input[name='issecuritynumberapply']:checked").val();
+	if (checked == 1) {
+		$(".socialsecuritynumber").show();
+	} else {
+		$(".socialsecuritynumber").hide();
+	}
+});
+
+$(".istaxpayernumberapply").change(function () {
+	let checked = $("input[name='istaxpayernumberapply']:checked").val();
+	if (checked == 1) {
+		$(".taxpayernumber").show();
+	} else {
+		$(".taxpayernumber").hide();
+	}
+});
+
+$(".hasspecializedskill").change(function () {
+	let checked = $("input[name='hasspecializedskill']:checked").val();
+	if (checked == 1) {
+		$(".skillexplain").show();
+	} else {
+		$(".skillexplain").hide();
+	}
+});
+
+$(".isservedinrebelgroup").change(function () {
+	let checked = $("input[name='isservedinrebelgroup']:checked").val();
+	if (checked == 1) {
+		$(".paramilitaryunitexplain").show();
+	} else {
+		$(".paramilitaryunitexplain").hide();
+	}
+});
+
 //去过的国家
 /*$('#traveledcountry').select2({
 	ajax : {
