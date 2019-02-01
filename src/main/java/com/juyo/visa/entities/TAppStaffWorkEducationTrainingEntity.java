@@ -138,6 +138,10 @@ public class TAppStaffWorkEducationTrainingEntity implements Serializable {
 	private Integer isservedinrebelgroup;
 
 	@Column
+	@Comment("参与准军事单位说明")
+	private Integer paramilitaryunitexplain;
+
+	@Column
 	@Comment("我的职业(英文)")
 	private Integer occupationen;
 
@@ -244,6 +248,10 @@ public class TAppStaffWorkEducationTrainingEntity implements Serializable {
 	@Column
 	@Comment("是否参与或参加过准军事部队、治安单位、叛乱集团、游击队或叛乱组织(英文)")
 	private Integer isservedinrebelgroupen;
+
+	@Column
+	@Comment("参与准军事单位说明(英文)")
+	private Integer paramilitaryunitexplainen;
 
 	@Column
 	@Comment("街道地址(次选)")

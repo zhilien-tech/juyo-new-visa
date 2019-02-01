@@ -1748,6 +1748,10 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object toTravelinfo(int staffid) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("staffId", staffid);
+
+		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+		result.put("basic", basic);
+
 		TAppStaffTravelcompanionEntity travelcompanion = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		result.put("travelwithother", travelcompanion.getIstravelwithother());
@@ -1820,6 +1824,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 		}
 		result.put("conscientious", conscientious);
+
+		result.put("workinfo", workinfo);
 
 		//国家下拉
 		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);

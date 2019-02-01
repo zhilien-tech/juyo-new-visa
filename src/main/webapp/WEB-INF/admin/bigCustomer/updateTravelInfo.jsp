@@ -669,6 +669,100 @@ input:focus{
 					</div>
 				</div>
 				
+				<div class="paddingBottom">
+					<div class="groupRadioInfo" style="margin-top: 10px;">
+						<label><span class="s">*</span> 是否属于一个部落宗教</label> <input autocomplete="new-password" type="radio"
+							name="isclan" class="isclan" value="1" />是 <input autocomplete="new-password"
+							type="radio" style="margin-left: 20px;" name="isclan"
+							class="isclan" value="2" checked />否
+					</div>
+					<div class="clanName grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> 部落名称</label> <input autocomplete="new-password"
+							name="clanname" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" onchange="translateZhToEn(this,'clannameen','')" id='clanname'
+							value="${obj.workinfo.clanname }" />
+					</div>
+					<div class="clanName grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> Clan name</label> <input autocomplete="new-password"
+							name="clannameen" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" id='clannameen'
+							value="${obj.workinfo.clannameen }" />
+					</div>
+				</div>
+				
+				<div class="paddingBottom">
+					<div class="groupRadioInfo" style="margin-top: 10px;">
+						<label><span class="s">*</span> 您是否拥有美国社会安全号</label> <input autocomplete="new-password" type="radio"
+							name="issecuritynumberapply" class="issecuritynumberapply" value="1" />是 <input autocomplete="new-password"
+							type="radio" style="margin-left: 20px;" name="issecuritynumberapply"
+							class="issecuritynumberapply" value="2" checked />否
+					</div>
+					<div class="socialsecuritynumber grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> 美国社会安全号</label> <input autocomplete="new-password"
+							name="socialsecuritynumber" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" id='socialsecuritynumber'
+							value="${obj.basic.socialsecuritynumber }" />
+					</div>
+				</div>
+				
+				<div class="paddingBottom">
+					<div class="groupRadioInfo" style="margin-top: 10px;">
+						<label><span class="s">*</span> 您是否拥有美国纳税人身份号码</label> <input autocomplete="new-password" type="radio"
+							name="istaxpayernumberapply" class="istaxpayernumberapply" value="1" />是 <input autocomplete="new-password"
+							type="radio" style="margin-left: 20px;" name="istaxpayernumberapply"
+							class="istaxpayernumberapply" value="2" checked />否
+					</div>
+					<div class="taxpayernumber grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> 美国纳税人身份号码</label> <input autocomplete="new-password"
+							name="taxpayernumber" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" id='taxpayernumber'
+							value="${obj.basic.taxpayernumber }" />
+					</div>
+				</div>
+				
+				<div class="paddingBottom">
+					<div class="groupRadioInfo" style="margin-top: 10px;">
+						<label><span class="s">*</span> 是否有特殊技能</label> <input autocomplete="new-password" type="radio"
+							name="hasspecializedskill" class="hasspecializedskill" value="1" />是 <input autocomplete="new-password"
+							type="radio" style="margin-left: 20px;" name="hasspecializedskill"
+							class="hasspecializedskill" value="2" checked />否
+					</div>
+					<div class="skillexplain grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> 特殊技能说明</label> <input autocomplete="new-password"
+							name="skillexplain" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" onchange="translateZhToEn(this,'skillexplainen','')" id='skillexplain'
+							value="${obj.workinfo.skillexplain }" />
+					</div>
+					<div class="skillexplain grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> Explain</label> <input autocomplete="new-password"
+							name="skillexplainen" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" id='skillexplainen'
+							value="${obj.workinfo.skillexplainen }" />
+					</div>
+				</div>
+				
+				<div class="paddingBottom">
+					<div class="groupRadioInfo" style="margin-top: 10px;">
+						<label><span class="s">*</span> 是否参与过准军事单位</label> <input autocomplete="new-password" type="radio"
+							name="isservedinrebelgroup" class="isservedinrebelgroup" value="1" />是 <input autocomplete="new-password"
+							type="radio" style="margin-left: 20px;" name="isservedinrebelgroup"
+							class="isservedinrebelgroup" value="2" checked />否
+					</div>
+					<div class="paramilitaryunitexplain grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> 参与准军事单位说明</label> <input autocomplete="new-password"
+							name="paramilitaryunitexplain" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" onchange="translateZhToEn(this,'paramilitaryunitexplainen','')" id='paramilitaryunitexplain'
+							value="${obj.workinfo.paramilitaryunitexplain }" />
+					</div>
+					<div class="paramilitaryunitexplain grouptextareaInfo paddingTop-9">
+						<label><span class="s">*</span> Explain</label> <input autocomplete="new-password"
+							name="paramilitaryunitexplainen" style="padding-left: 10px; width: 382px !important;"
+							class="areaInputPic" id='paramilitaryunitexplainen'
+							value="${obj.workinfo.paramilitaryunitexplainen }" />
+					</div>
+				</div>
+				
+				
 				
 				<div style="height: 50px;"></div>
 			</div>
@@ -823,6 +917,45 @@ input:focus{
 			$(".military").hide();
 		}
 		
+		var isclan = '${obj.workinfo.isclan}';
+		$("input[name='isclan'][value='" + isclan + "']").attr("checked", 'checked');
+		if (isclan == 1) {
+			$(".clanName").show();
+		} else {
+			$(".clanName").hide();
+		}
+		
+		var issecuritynumberapply = '${obj.basic.issecuritynumberapply}';
+		$("input[name='issecuritynumberapply'][value='" + issecuritynumberapply + "']").attr("checked", 'checked');
+		if (issecuritynumberapply == 1) {
+			$(".socialsecuritynumber").show();
+		} else {
+			$(".socialsecuritynumber").hide();
+		}
+		
+		var istaxpayernumberapply = '${obj.basic.istaxpayernumberapply}';
+		$("input[name='istaxpayernumberapply'][value='" + istaxpayernumberapply + "']").attr("checked", 'checked');
+		if (istaxpayernumberapply == 1) {
+			$(".taxpayernumber").show();
+		} else {
+			$(".taxpayernumber").hide();
+		}
+		
+		var hasspecializedskill = '${obj.workinfo.hasspecializedskill}';
+		$("input[name='hasspecializedskill'][value='" + hasspecializedskill + "']").attr("checked", 'checked');
+		if (hasspecializedskill == 1) {
+			$(".skillexplain").show();
+		} else {
+			$(".skillexplain").hide();
+		}
+		
+		var isservedinrebelgroup = '${obj.workinfo.isservedinrebelgroup}';
+		$("input[name='isservedinrebelgroup'][value='" + isservedinrebelgroup + "']").attr("checked", 'checked');
+		if (isservedinrebelgroup == 1) {
+			$(".paramilitaryunitexplain").show();
+		} else {
+			$(".paramilitaryunitexplain").hide();
+		}
 		
 		//跳转到基本信息页
 		function workInfoBtn(){
