@@ -1677,12 +1677,12 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		addForm.setComid(loginComId);
 		//addForm.setUserid(userId);
 		//addForm.setOpid(userId);
-		addForm.setIsidentificationnumberapply(IsYesOrNoEnum.YES.intKey());
-		addForm.setIsidentificationnumberapplyen(IsYesOrNoEnum.YES.intKey());
-		addForm.setIssecuritynumberapply(IsYesOrNoEnum.YES.intKey());
-		addForm.setIssecuritynumberapplyen(IsYesOrNoEnum.YES.intKey());
-		addForm.setIstaxpayernumberapply(IsYesOrNoEnum.YES.intKey());
-		addForm.setIstaxpayernumberapplyen(IsYesOrNoEnum.YES.intKey());
+		addForm.setIsidentificationnumberapply(2);
+		addForm.setIsidentificationnumberapplyen(2);
+		addForm.setIssecuritynumberapply(2);
+		addForm.setIssecuritynumberapplyen(2);
+		addForm.setIstaxpayernumberapply(2);
+		addForm.setIstaxpayernumberapplyen(2);
 		addForm.setIsmailsamewithlive(IsYesOrNoEnum.YES.intKey());
 		addForm.setIsmailsamewithliveen(IsYesOrNoEnum.YES.intKey());
 
