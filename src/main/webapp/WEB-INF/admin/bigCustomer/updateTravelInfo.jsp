@@ -699,7 +699,7 @@ input:focus{
 					</div>
 					<div class="socialsecuritynumber grouptextareaInfo paddingTop-9">
 						<label><span class="s">*</span> 美国社会安全号</label> <input autocomplete="new-password"
-							name="socialsecuritynumber" style="padding-left: 10px; width: 382px !important;"
+							name="socialsecuritynumber" maxlength="9" style="padding-left: 10px; width: 382px !important;"
 							class="areaInputPic" id='socialsecuritynumber'
 							value="${obj.basic.socialsecuritynumber }" />
 					</div>

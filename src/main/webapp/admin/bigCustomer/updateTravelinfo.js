@@ -565,3 +565,24 @@ function save(status){
 		}
 }
 
+
+//只能输入数字
+$(document).on("input","#taxpayernumber",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	
+	var reg = /[^0-9]/g;
+	$("#taxpayernumber").val(temp.replace(reg, ""));
+});
+//只能输入数字
+$(document).on("input","#socialsecuritynumber",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	
+	var reg = /[^0-9]/g;
+	$("#socialsecuritynumber").val(temp.replace(reg, ""));
+});
