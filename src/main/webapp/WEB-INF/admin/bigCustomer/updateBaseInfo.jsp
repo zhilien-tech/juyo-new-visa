@@ -554,7 +554,7 @@
 							</div>
 						</div>
 						
-						<div id="fff" style="height:19px;"></div>
+						<div id="fff" style="height:0;"></div>
 						
 						<div class="row" style="margin-bottom:85px;">
 							<div class="col-sm-10 padding-right-0 col-sm-offset-1">
@@ -720,9 +720,9 @@
 		}
 		
 		if($("#marrystatus").val() == 2 ){
-			$('#fff').height(95);
+			$('#fff').height(71);
 		}else{
-			$('#fff').height(19);
+			$('#fff').height(0);
 		}
 		
 		
@@ -730,9 +730,9 @@
 			$('#marrystatus').change(function() {
 				console.log($(this).val());
 				if ($(this).val() == 2) {
-					$('#fff').height(95);	
+					$('#fff').height(71);	
 				} else {
-					$('#fff').height(19);
+					$('#fff').height(0);
 				}
 			});
 			
