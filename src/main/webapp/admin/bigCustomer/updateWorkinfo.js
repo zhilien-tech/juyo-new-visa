@@ -720,3 +720,128 @@ function save(status){
 	//}
 }
 
+//省份检索
+$("#insprovince").on('input',function(){
+	$("#insprovince").nextAll("ul.ui-autocomplete").remove();
+	$.ajax({
+		type : 'POST',
+		async: false,
+		data : {
+			searchStr : $("#insprovince").val()
+		},
+		url : '/admin/orderJp/getProvince.html',
+		success : function(data) {
+			if(data != ""){
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				$.each(data,function(index,element) { 
+					liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
+				});
+				liStr += "</ul>";
+				$("#insprovince").after(liStr);
+			}
+		}
+	});
+});
+//省份上下键
+var provinceindex = -1;
+$(document).on('keydown','#insprovince',function(e){
+	
+	if(e == undefined)
+		e = window.event;
+	
+	switch(e.keyCode){
+	case 38:
+		e.preventDefault();
+		provinceindex--;
+		if(provinceindex ==0) provinceindex = 0;
+		break;
+	case 40:
+		e.preventDefault();
+		provinceindex++;
+		if(provinceindex ==5) provinceindex = 0;
+		break;
+	case 13:
+		
+		$(this).val($(this).next().find('li:eq('+provinceindex+')').children().html());
+		$("#insprovince").nextAll("ul.ui-autocomplete").remove();
+		$("#insprovince").blur();
+		var province = $("#insprovince").val();
+		setProvince(province);
+		provinceindex = -1;
+		break;
+	}
+	var li = $(this).next().find('li:eq('+provinceindex+')');
+	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
+});
+//省份 检索下拉项
+function setProvince(province){
+	$("#insprovince").nextAll("ul.ui-autocomplete").remove();
+	$("#insprovince").val(province).change();
+} 
+$("#provinceDiv").mouseleave(function(){
+	$("#insprovince").nextAll("ul.ui-autocomplete").remove();
+});
+
+//市检索
+$("#inscity").on('input',function(){
+	$("#inscity").nextAll("ul.ui-autocomplete").remove();
+	$.ajax({
+		type : 'POST',
+		async: false,
+		data : {
+			province : $("#insprovince").val(),
+			searchStr : $("#inscity").val()
+		},
+		url : '/admin/orderJp/getCity.html',
+		success : function(data) {
+			if(data != ""){
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				$.each(data,function(index,element) { 
+					liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
+				});
+				liStr += "</ul>";
+				$("#inscity").after(liStr);
+			}
+		}
+	});
+});
+//市
+var cityindex = -1;
+$(document).on('keydown','#inscity',function(e){
+	
+	if(e == undefined)
+		e = window.event;
+	
+	switch(e.keyCode){
+	case 38:
+		e.preventDefault();
+		cityindex--;
+		if(cityindex ==0) cityindex = 0;
+		break;
+	case 40:
+		e.preventDefault();
+		cityindex++;
+		if(cityindex ==5) cityindex = 0;
+		break;
+	case 13:
+		
+		$(this).val($(this).next().find('li:eq('+cityindex+')').children().html());
+		$("#inscity").nextAll("ul.ui-autocomplete").remove();
+		$("#inscity").blur();
+		var city = $("#inscity").val();
+		setCity(city);
+		cityindex = -1;
+		break;
+	}
+	var li = $(this).next().find('li:eq('+cityindex+')');
+	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
+});
+//市 检索下拉项
+function setCity(city){
+	$("#inscity").nextAll("ul.ui-autocomplete").remove();
+	$("#inscity").val(city).change();
+} 
+$("#cityDiv").mouseleave(function(){
+	$("#inscity").nextAll("ul.ui-autocomplete").remove();
+});
+

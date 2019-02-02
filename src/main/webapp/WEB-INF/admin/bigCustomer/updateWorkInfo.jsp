@@ -77,6 +77,32 @@
 				height: 28px!important;
 				min-height: 28px!important;
 			}
+			
+			/*省市检索*/
+			.IdInfo {
+				border: 1px solid #7a9cd3;
+				list-style:none;
+			}
+			
+			.IdInfo li {
+				padding-left: 2%;
+			}
+			
+			.IdInfo li:hover {
+				/*background: #1e90ff;
+				cursor: pointer;*/
+				
+				background: rgb(30, 144, 255); 
+				color: rgb(255, 255, 255);
+			}
+			
+			.IdInfo li:hover a {
+				color: #FFF;
+			}
+			
+			.IdInfo li a {
+				color: #000;
+			}
     </style>
 </head>
 <body>
@@ -357,6 +383,7 @@
                                         <div class="clear"></div>
 
 										<div class="paddingLeft leftNo groupcheckBoxInfo" style="width: 180px;">
+											<div id="provinceDiv">
                                             <label><span class="s">*</span>学校地址（省）</label>
                                             
                                             <%-- <select name="institutionprovince" class="form-control input-sm select2" multiple="multiple"  id="institutionprovince" >
@@ -364,14 +391,17 @@
 						                    </select> --%>
 						                    <input id="insprovince" autocomplete="new-password" style="width:182px;" name="institutionprovince" type="text" value="${obj.beforeeducate.institutionprovince }"/>
 						                    <input id="institutionprovinceen" name="institutionprovinceen" type="hidden" value="${obj.beforeeducate.institutionprovinceen }"/>
+						                    </div>
 										</div>
-										<div class="paddingRight leftNo groupInputInfo aaa" style="width: 180px;">
+										<div class="paddingRight leftNo groupInputInfo aaa cityDiv" style="width: 180px;">
+											<div id="cityDiv">
                                             <label><span class="s">*</span>学校地址（市）</label>
                                             <%-- <select name="institutioncity" class="form-control input-sm select2" multiple="multiple"  id="institutioncity" >
 							                   <option selected="selected" value="${obj.beforeeducate.institutioncity }">${obj.beforeeducate.institutioncity}</option>
 						                    </select> --%>
 						                    <input id="inscity" autocomplete="new-password" style="width:182px;" name="institutioncity" type="text" value="${obj.beforeeducate.institutioncity }"/>
 						                    <input id="institutioncityen" name="institutioncityen" type="hidden" value="${obj.beforeeducate.institutioncityen }"/>
+						                    </div>
 										</div>
 										<div class="clear"></div>
 										

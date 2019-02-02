@@ -862,7 +862,7 @@ $(document).on('keydown','#city',function(e){
 		break;
 	case 13:
 		
-		$(this).val($(this).next().find('li:eq('+provinceindex+')').children().html());
+		$(this).val($(this).next().find('li:eq('+cityindex+')').children().html());
 		$("#city").nextAll("ul.ui-autocomplete").remove();
 		$("#city").blur();
 		var city = $("#city").val();
