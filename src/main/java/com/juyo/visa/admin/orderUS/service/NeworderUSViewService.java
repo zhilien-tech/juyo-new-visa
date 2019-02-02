@@ -1890,6 +1890,79 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//是否服兵役
 		workinfo.setHasservedinmilitary(form.getHasservedinmilitary());
 		workinfo.setHasservedinmilitaryen(form.getHasservedinmilitary());
+		//是否属于部落宗教
+		workinfo.setIsclan(form.getIsclan());
+		workinfo.setIsclanen(form.getIsclan());
+		//部落宗教名称
+		if (Util.eq(1, form.getIsclan())) {
+			workinfo.setClanname(form.getClanname());
+
+			if (Util.isEmpty(form.getClannameen())) {
+				workinfo.setClannameen(translationHandle(1, translate(form.getClanname())));
+			} else {
+				if (Util.eq(form.getClanname(), workinfo.getClanname())) {
+					workinfo.setClannameen(translationHandle(1, form.getClannameen()));
+				} else {
+					if (Util.eq(form.getClannameen(), workinfo.getClannameen())) {
+						workinfo.setClannameen(translationHandle(1, translate(form.getClanname())));
+					} else {
+						workinfo.setClannameen(translationHandle(1, form.getClannameen()));
+					}
+				}
+			}
+		} else {
+			workinfo.setClanname("");
+			workinfo.setClannameen("");
+		}
+
+		//专业技能
+		workinfo.setHasspecializedskill(form.getHasspecializedskill());
+		workinfo.setHasspecializedskillen(form.getHasspecializedskill());
+		if (Util.eq(1, form.getHasspecializedskill())) {
+			workinfo.setSkillexplain(form.getSkillexplain());
+
+			if (Util.isEmpty(form.getSkillexplainen())) {
+				workinfo.setSkillexplainen(translate(form.getSkillexplain()));
+			} else {
+				if (Util.eq(form.getSkillexplain(), workinfo.getSkillexplain())) {
+					workinfo.setSkillexplainen(form.getSkillexplainen());
+				} else {
+					if (Util.eq(form.getSkillexplainen(), workinfo.getSkillexplainen())) {
+						workinfo.setSkillexplainen(translate(form.getSkillexplain()));
+					} else {
+						workinfo.setSkillexplainen(form.getSkillexplainen());
+					}
+				}
+			}
+		} else {
+			workinfo.setSkillexplain("");
+			workinfo.setSkillexplainen("");
+		}
+
+		//是否参与过准军事单位
+		workinfo.setIsservedinrebelgroup(form.getIsservedinrebelgroup());
+		workinfo.setIsservedinrebelgroupen(form.getIsservedinrebelgroup());
+		if (Util.eq(1, form.getIsservedinrebelgroup())) {
+			workinfo.setParamilitaryunitexplain(form.getParamilitaryunitexplain());
+
+			if (Util.isEmpty(form.getParamilitaryunitexplainen())) {
+				workinfo.setParamilitaryunitexplainen(translate(form.getParamilitaryunitexplain()));
+			} else {
+				if (Util.eq(form.getParamilitaryunitexplain(), workinfo.getParamilitaryunitexplain())) {
+					workinfo.setParamilitaryunitexplainen(form.getParamilitaryunitexplainen());
+				} else {
+					if (Util.eq(form.getParamilitaryunitexplainen(), workinfo.getParamilitaryunitexplainen())) {
+						workinfo.setParamilitaryunitexplainen(translate(form.getParamilitaryunitexplain()));
+					} else {
+						workinfo.setParamilitaryunitexplainen(form.getParamilitaryunitexplainen());
+					}
+				}
+			}
+		} else {
+			workinfo.setParamilitaryunitexplain("");
+			workinfo.setParamilitaryunitexplainen("");
+		}
+
 		dbDao.update(workinfo);
 
 		//慈善组织
@@ -1900,6 +1973,31 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		//出境记录
 		updateGocountryinfo(form);
+
+		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid.longValue());
+		//美国社会安全码
+		basic.setIssecuritynumberapply(form.getIssecuritynumberapply());
+		basic.setIssecuritynumberapplyen(form.getIssecuritynumberapply());
+		if (Util.eq(1, form.getIssecuritynumberapply())) {
+			basic.setSocialsecuritynumber(form.getSocialsecuritynumber());
+			basic.setSocialsecuritynumberen(form.getSocialsecuritynumber());
+		} else {
+			basic.setSocialsecuritynumber("");
+			basic.setSocialsecuritynumberen("");
+		}
+
+		//美国纳税人身份号码
+		basic.setIstaxpayernumberapply(form.getIstaxpayernumberapply());
+		basic.setIstaxpayernumberapplyen(form.getIstaxpayernumberapply());
+		if (Util.eq(1, form.getIstaxpayernumberapply())) {
+			basic.setTaxpayernumber(form.getTaxpayernumber());
+			basic.setTaxpayernumberen(form.getTaxpayernumber());
+		} else {
+			basic.setTaxpayernumber("");
+			basic.setTaxpayernumberen("");
+		}
+
+		dbDao.update(basic);
 
 		return JuYouResult.ok();
 	}
@@ -2583,8 +2681,10 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 		String sqlStr = sqlManager.get("orderUS_getSomeCity");
 		Sql statesql = Sqls.create(sqlStr);
-		statesql.setParam("stateid", stateid);
-		List<Record> state = dbDao.query(statesql, null, null);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("stateid", "=", stateid);
+		cnd.and("cityname", "like", "%" + Strings.trim(searchstr) + "%");
+		List<Record> state = dbDao.query(statesql, cnd, null);
 
 		List<Record> stateList = new ArrayList<>();
 

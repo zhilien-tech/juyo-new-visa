@@ -2920,8 +2920,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object twoinchphotoUpload(File file) {
+		String url = "";
+		long length = file.length();
+		System.out.println(length / 1024 + "KB");
+		if (length / 1024 > 240) {
+			url = "请上传小于240KB的图片";
+			return url;
+		}
+
 		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
-		String url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+		url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
 		return url;
 	}
 
@@ -2938,6 +2946,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}*/
+		//解析扫描的结果，结构化成标准json格式
+		ApplicantJsonEntity jsonEntity = new ApplicantJsonEntity();
+
+		long length = file.length();
+		System.out.println(length / 1024 + "KB");
+		if (length / 1024 > 240) {
+			jsonEntity.setSuccess(false);
+			jsonEntity.setUrl("请上传小于240KB的图片");
+			return jsonEntity;
+		}
 
 		String imageDataValue = saveDiskImageToDisk(file);
 		Input input = new Input(imageDataValue, "face");
@@ -2948,8 +2966,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		long endTime = System.currentTimeMillis();
 		System.out.println("扫描运行时间：" + (endTime - startTime) + "ms");
 		System.out.println("info:" + info);
-		//解析扫描的结果，结构化成标准json格式
-		ApplicantJsonEntity jsonEntity = new ApplicantJsonEntity();
+
 		JSONObject resultObj = null;
 		try {
 			resultObj = new JSONObject(info);
@@ -3727,6 +3744,17 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object passportRecognitionUS(File file, int applyid, int orderid, int userid, HttpServletRequest request,
 			HttpServletResponse response) {
 
+		long length1 = file.length();
+		System.out.println(length1 / 1024 + "KB");
+		//解析扫描的结果，结构化成标准json格式
+		PassportJsonEntity jsonEntity = new PassportJsonEntity();
+
+		if (length1 / 1024 > 240) {
+			jsonEntity.setSuccess(false);
+			jsonEntity.setUrl("请上传小于240KB的图片");
+			return jsonEntity;
+		}
+
 		String imageDataB64 = saveDiskImageToDisk(file);
 
 		Input input = new Input(imageDataB64);
@@ -3736,8 +3764,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String info = (String) aliPassportOcrAppCodeCall(content);
 		System.out.println("info:" + info);
 
-		//解析扫描的结果，结构化成标准json格式
-		PassportJsonEntity jsonEntity = new PassportJsonEntity();
 		JSONObject resultObj = null;
 		try {
 			resultObj = new JSONObject(info);
@@ -3821,8 +3847,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			} catch (JSONException | ParseException e) {
 
 				e.printStackTrace();
-				jsonEntity.setSuccess(false);
-				return jsonEntity;
+				/*jsonEntity.setSuccess(false);
+				return jsonEntity;*/
 
 			}
 			jsonEntity.setSuccess(out.getBoolean("success"));

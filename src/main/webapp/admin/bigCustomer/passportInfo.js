@@ -374,7 +374,13 @@ $('#uploadFile').change(function() {
 			success : function(obj) {//请求成功后的函数 
 				//关闭加载层
 				layer.close(layerIndex);
-				if (true === obj.success) {
+				if (false === obj.success) {
+					if(obj.url.indexOf("240K")){
+						layer.msg(obj.url);
+					}else{
+						layer.msg("识别失败");
+					}
+				}else{
 					layer.msg("识别成功");
 					$('#passportUrl').val(obj.url);
 					$('#sqImg').attr('src', obj.url);

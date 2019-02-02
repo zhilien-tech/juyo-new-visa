@@ -179,7 +179,7 @@ id,
 cityname
 FROM
 t_city_us
-WHERE stateid = @stateid
+$condition
 
 
 

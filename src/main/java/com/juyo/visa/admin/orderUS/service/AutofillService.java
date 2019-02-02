@@ -1858,8 +1858,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Map<String, Object> Supplement = Maps.newHashMap();
 
 		//部落名称(签证信息)
-		if (!Util.isEmpty(info.get("clanname"))) {
-			Supplement.put("religion", info.get("clanname"));
+		if (!Util.isEmpty(info.get("clannameen"))) {
+			Supplement.put("religion", info.get("clannameen"));
 		} else {
 			Supplement.put("religion", "");
 		}
@@ -1902,8 +1902,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		Supplement.put("Charitable", Charitables);
 
 		//特殊技能说明(签证信息)
-		if (!Util.isEmpty(info.get("skillexplain"))) {
-			Supplement.put("special_skills", info.get("skillexplain"));
+		if (!Util.isEmpty(info.get("skillexplainen"))) {
+			Supplement.put("special_skills", info.get("skillexplainen"));
 		} else {
 			Supplement.put("special_skills", "");
 		}
@@ -1932,7 +1932,12 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		}
 
 		Supplement.put("MilitaryService", MilitaryService);
-		Supplement.put("paramilitary", "");
+
+		if (!Util.isEmpty(info.getString("paramilitaryunitexplainen"))) {
+			Supplement.put("paramilitary", info.getString("paramilitaryunitexplainen"));
+		} else {
+			Supplement.put("paramilitary", "");
+		}
 
 		AmericaInfo.put("Supplement", Supplement);
 

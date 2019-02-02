@@ -139,7 +139,7 @@ public class TAppStaffWorkEducationTrainingEntity implements Serializable {
 
 	@Column
 	@Comment("参与准军事单位说明")
-	private Integer paramilitaryunitexplain;
+	private String paramilitaryunitexplain;
 
 	@Column
 	@Comment("我的职业(英文)")
@@ -251,7 +251,7 @@ public class TAppStaffWorkEducationTrainingEntity implements Serializable {
 
 	@Column
 	@Comment("参与准军事单位说明(英文)")
-	private Integer paramilitaryunitexplainen;
+	private String paramilitaryunitexplainen;
 
 	@Column
 	@Comment("街道地址(次选)")

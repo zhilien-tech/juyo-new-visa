@@ -25,7 +25,7 @@ $("#hotelname").on('input',function(){
 		}
 	});
 });
-//省份上下键
+//上下键
 var provinceindex = -1;
 $(document).on('keydown','#hotelname',function(e){
 	
@@ -109,7 +109,7 @@ $(document).on("input","#hotelname",function(){
 	var regEx = /\s+/g;
 	$("#hotelname").val(temp.replace(regEx, " "));
 	//var reg = /([\u4E00-\u9FA5])+/;
-	var reg = /[^ A-Za-z-'&]/g;
+	var reg = /[^ A-Za-z0-9-'&]/g;
 	if(reg.test(temp)){
 		$("#hotelname").val(temp.replace(reg, ""));
     }

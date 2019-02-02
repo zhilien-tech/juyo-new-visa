@@ -106,6 +106,56 @@ public class TravelinfoUSForm {
 
 	private Date serviceenddateen;
 
+	/**是否属于部落宗教*/
+	private Integer isclan;
+
+	private Integer isclanen;
+
+	/**部落名称*/
+	private String clanname;
+
+	private String clannameen;
+
+	/**是否有美国安全号码*/
+	private Integer issecuritynumberapply;
+
+	private Integer issecuritynumberapplyen;
+
+	/**美国社会安全号码*/
+	private String socialsecuritynumber;
+
+	private String socialsecuritynumberen;
+
+	/**是否有美国纳税人身份号码*/
+	private Integer istaxpayernumberapply;
+
+	private Integer istaxpayernumberapplyen;
+
+	/**美国纳税人身份号码*/
+	private String taxpayernumber;
+
+	private String taxpayernumberen;
+
+	/**是否有专业技能*/
+	private Integer hasspecializedskill;
+
+	private Integer hasspecializedskillen;
+
+	/**专业技能说明*/
+	private String skillexplain;
+
+	private String skillexplainen;
+
+	/**是否参与过准军事单位*/
+	private Integer isservedinrebelgroup;
+
+	private Integer isservedinrebelgroupen;
+
+	/**参与准军事单位说明*/
+	private String paramilitaryunitexplain;
+
+	private String paramilitaryunitexplainen;
+
 	/**是否有美国签证*/
 	private Integer isissuedvisa;
 
