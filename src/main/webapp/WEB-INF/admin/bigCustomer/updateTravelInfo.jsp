@@ -58,6 +58,8 @@ input:focus{
 
 
 
+
+
 </style>
 </head>
 <body>
@@ -226,6 +228,152 @@ input:focus{
 								<option value="2" <c:if test="${'2' eq obj.tripinfo.costpayer}">selected</c:if>>其他人</option>
 								<option value="3" <c:if test="${'3' eq obj.tripinfo.costpayer}">selected</c:if>>公司组织</option>
 							</select>
+						</div>
+					</div>
+				</div>
+				
+				<div class="companyPay" style="padding-left: 18px;">
+					<div class="row">
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> 费用支付公司/组织的名称</label>
+							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="comname" name="comname" value="${obj.tripinfo.comname }"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-3 youRelationship" style="width:382px;">
+							<label><span class="s">*</span> Name of Company/Organization Paying for Trip</label>
+							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="comname" name="comname" value="${obj.tripinfo.comname }"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> 电话号码</label>
+							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="comtelephone" name="comtelephone" value="${obj.tripinfo.comtelephone }"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> 与你的关系</label>
+							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="comrelationwithyou" name="comrelationwithyou" value="${obj.tripinfo.comrelationwithyou }"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> Relation to You</label>
+							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="comrelationwithyou" name="comrelationwithyou" value="${obj.tripinfo.comrelationwithyou }"/>
+						</div>
+					</div>
+				
+				</div>
+				
+				<div class="otherPay" style="padding-left: 18px;">
+					<div class="row">
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> 费用支付人的姓</label>
+							<input style="width:182px;height:30px;padding:0 0 0 10px;" type="text" id="payfirstname" name="payfirstname" value="${obj.tripinfo.payfirstname }"/>
+						</div>
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> 费用支付人的名</label>
+							<input style="width:182px;height:30px;padding:0 0 0 10px;" type="text" id="paylastname" name="paylastname" value="${obj.tripinfo.paylastname }"/>
+						</div>
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> Surnames</label>
+							<input style="width:182px;height:30px;padding:0 0 0 10px;" type="text" id="payfirstnameen" name="payfirstnameen" value="${obj.tripinfo.payfirstnameen }"/>
+						</div>
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> Given Names</label>
+							<input style="width:182px;height:30px;padding:0 0 0 10px;" type="text" id="paylastnameen" name="paylastnameen" value="${obj.tripinfo.paylastnameen }"/>
+						</div>
+						
+					</div>
+					
+					<div class="row">
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> 电话</label>
+							<input style="width:182px;height:30px;padding:0 0 0 10px;" type="text" id="paytelephone" name="paytelephone" value="${obj.tripinfo.paytelephone }"/>
+						</div>
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> 邮箱</label>
+							<input style="width:182px;height:30px;padding:0 0 0 10px;" type="text" id="paymail" name="paymail" value="${obj.tripinfo.paymail }"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> 与你的关系</label>
+							<select id="payrelationwithyou" name="payrelationwithyou">
+								<c:forEach items="${obj.payrelationshipenum }"
+															var="map">
+									<option value="${map.key }"
+										${map.key==obj.tripinfo.payrelationwithyou?"selected":"" }>${map.value }</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6" style="padding-top: 10px;">
+							<label><span class="s">*</span> 费用支付人的地址是否与你的居住地址或者邮寄地址一样</label>
+							
+							<input autocomplete="new-password" type="radio"
+							name="payaddressissamewithyou" class="payaddressissamewithyou" value="1" checked />是 <input autocomplete="new-password"
+							type="radio" style="margin-left: 20px;" name="payaddressissamewithyou"
+							class="payaddressissamewithyou" value="2" />否
+							
+						</div>
+					</div>
+					
+				</div>
+				
+				<div class="addressPay" style="padding-left: 18px;">
+					<div class="row">
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> 国家</label>
+							
+							<select name="paycountry" class=" select2" multiple="multiple" id="paycountry">
+                            	<c:forEach items="${obj.gocountryfivelist }" var="country">
+									<c:choose>
+										<c:when test="${country.chinesename eq obj.tripinfo.paycountry }">
+											<option value="${country.chinesename }" selected="selected">${country.chinesename }</option>
+										</c:when>
+										<c:otherwise>
+											<option value="${country.chinesename }">${country.chinesename }</option>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+                            </select>
+							
+						</div>
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> 省</label>
+							
+							<select name="employerprovince" class="form-control input-sm select2" multiple="multiple"  id="payprovince" >
+		                   		<c:if test="${not empty obj.tripinfo.payprovince }">
+									<option value="${obj.tripinfo.payprovince }" selected="selected">${obj.tripinfo.payprovince }</option>
+								</c:if>
+	                        </select>
+							
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> 市</label>
+							
+							<select name="paycity" class="form-control input-sm select2"  multiple="multiple"  id="paycity" >
+		                   		<c:if test="${not empty obj.tripinfo.paycity }">
+									<option value="${obj.tripinfo.paycity }" selected="selected">${obj.tripinfo.paycity }</option>
+								</c:if>
+	                        </select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> 地址</label>
+							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="payaddress" onchange="translateZhToEn(this,'payaddressen','')" name="payaddress" value="${obj.tripinfo.payaddress }"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-3 youRelationship">
+							<label><span class="s">*</span> address</label>
+							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="payaddressen" name="payaddressen" value="${obj.tripinfo.payaddressen }"/>
 						</div>
 					</div>
 				</div>
@@ -817,6 +965,31 @@ input:focus{
 			$(".teamnamefalse").hide();
 			$(".companysave").hide();
 		}
+        
+        //费用支付人
+        var payer = '${obj.tripinfo.costpayer}';
+        if(payer == 2){
+        	$(".otherPay").show();
+        	var payaddressissamewithyou = '${obj.tripinfo.payaddressissamewithyou}';
+        	$("input[name='payaddressissamewithyou'][value='" + payaddressissamewithyou + "']").attr("checked", 'checked');
+        	if(payaddressissamewithyou == 1){
+        		$(".addressPay").hide();
+        	}else{
+        		$(".addressPay").show();
+        	}
+        	
+        	$(".companyPay").hide();
+        	
+        }else if(payer == 3){
+        	$(".companyPay").show();
+        	$(".addressPay").show();
+        	$(".otherPay").hide();
+        }else{
+        	$(".companyPay").hide();
+        	$(".addressPay").hide();
+        	$(".otherPay").hide();
+        }
+        
 		//是否去过美国
 		var hasbeeninus = '${obj.tripinfo.hasbeeninus}';
 		$("input[name='hasbeeninus'][value='" + hasbeeninus + "']").attr("checked", 'checked');

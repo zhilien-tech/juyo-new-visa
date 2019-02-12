@@ -51,6 +51,7 @@ import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
+import com.juyo.visa.common.enums.orderUS.PayRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.EmigrationreasonEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.NewTimeUnitStatusEnum;
@@ -1834,6 +1835,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("usstatesenum", EnumUtil.enum2(VisaUSStatesEnum.class));
 		result.put("emigrationreasonenumenum", EnumUtil.enum2(EmigrationreasonEnum.class));
 		result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
+		result.put("payrelationshipenum", EnumUtil.enum2(PayRelationshipEnum.class));
 		return result;
 	}
 
@@ -2268,6 +2270,108 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffPrevioustripinfoEntity tripinfo = dbDao.fetch(TAppStaffPrevioustripinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		tripinfo.setCostpayer(form.getCostpayer());
+
+		//支付人相关保存
+		//自己
+		if (Util.eq(1, form.getCostpayer())) {
+			tripinfo.setPayaddress(null);
+			tripinfo.setPayaddressen(null);
+			tripinfo.setPayaddressissamewithyou(1);
+			tripinfo.setPaycity(null);
+			tripinfo.setPaycityen(null);
+			tripinfo.setPaycountry(null);
+			tripinfo.setPaycountryen(null);
+			tripinfo.setPaymail(null);
+			tripinfo.setPayprovince(null);
+			tripinfo.setPayprovinceen(null);
+			tripinfo.setPayrelationwithyou(1);
+			tripinfo.setPaytelephone(null);
+
+			tripinfo.setComname(null);
+			tripinfo.setComnameen(null);
+			tripinfo.setComrelationwithyou(null);
+			tripinfo.setComrelationwithyouen(null);
+			tripinfo.setComtelephone(null);
+
+			tripinfo.setPayfirstname(null);
+			tripinfo.setPayfirstnameen(null);
+			tripinfo.setPaylastname(null);
+			tripinfo.setPaylastnameen(null);
+
+		} else if (Util.eq(2, form.getCostpayer())) {//其他人
+			tripinfo.setPayfirstname(form.getPayfirstname());
+			tripinfo.setPayfirstnameen(form.getPayfirstnameen());
+			tripinfo.setPaylastname(form.getPaylastname());
+			tripinfo.setPaylastnameen(form.getPaylastnameen());
+			tripinfo.setPaytelephone(form.getPaytelephone());
+			tripinfo.setPaymail(form.getPaymail());
+			tripinfo.setPayrelationwithyou(form.getPayrelationwithyou());
+			tripinfo.setPayaddressissamewithyou(form.getPayaddressissamewithyou());
+
+			if (Util.eq(1, form.getPayaddressissamewithyou())) {
+				tripinfo.setPaycountry(null);
+				tripinfo.setPaycountryen(null);
+				tripinfo.setPayprovince(null);
+				tripinfo.setPayprovinceen(null);
+				tripinfo.setPaycity(null);
+				tripinfo.setPaycityen(null);
+				tripinfo.setPayaddress(null);
+				tripinfo.setPayaddressen(null);
+			} else {
+				tripinfo.setPaycountry(form.getPaycountry());
+				tripinfo.setPaycountryen(form.getPaycountryen());
+				tripinfo.setPayprovince(form.getPayprovince());
+				tripinfo.setPayprovinceen(form.getPayprovinceen());
+				tripinfo.setPaycity(form.getPaycity());
+				tripinfo.setPaycityen(form.getPaycityen());
+
+				if (Util.isEmpty(form.getPayaddressen())) {
+					tripinfo.setPayaddressen(translationHandle(2, translate(form.getPayaddress())));
+				} else {
+					if (Util.eq(form.getPayaddress(), tripinfo.getPayaddress())) {
+						tripinfo.setPayaddressen(translationHandle(2, form.getPayaddressen()));
+					} else {
+						if (Util.eq(form.getPayaddressen(), tripinfo.getPayaddressen())) {
+							tripinfo.setPayaddressen(translationHandle(2, translate(form.getPayaddress())));
+						} else {
+							tripinfo.setPayaddressen(translationHandle(2, form.getPayaddressen()));
+						}
+					}
+				}
+
+				tripinfo.setPayaddress(form.getPayaddress());
+			}
+		} else {//公司/组织
+			tripinfo.setComname(form.getComname());
+			tripinfo.setComnameen(form.getComnameen());
+			tripinfo.setComrelationwithyou(form.getComrelationwithyou());
+			tripinfo.setComrelationwithyouen(form.getComrelationwithyouen());
+			tripinfo.setComtelephone(form.getComtelephone());
+
+			tripinfo.setPaycountry(form.getPaycountry());
+			tripinfo.setPaycountryen(form.getPaycountryen());
+			tripinfo.setPayprovince(form.getPayprovince());
+			tripinfo.setPayprovinceen(form.getPayprovinceen());
+			tripinfo.setPaycity(form.getPaycity());
+			tripinfo.setPaycityen(form.getPaycityen());
+			if (Util.isEmpty(form.getPayaddressen())) {
+				tripinfo.setPayaddressen(translationHandle(2, translate(form.getPayaddress())));
+			} else {
+				if (Util.eq(form.getPayaddress(), tripinfo.getPayaddress())) {
+					tripinfo.setPayaddressen(translationHandle(2, form.getPayaddressen()));
+				} else {
+					if (Util.eq(form.getPayaddressen(), tripinfo.getPayaddressen())) {
+						tripinfo.setPayaddressen(translationHandle(2, translate(form.getPayaddress())));
+					} else {
+						tripinfo.setPayaddressen(translationHandle(2, form.getPayaddressen()));
+					}
+				}
+			}
+
+			tripinfo.setPayaddress(form.getPayaddress());
+
+		}
+
 		tripinfo.setHasbeeninus(form.getHasbeeninus());
 
 		if (form.getHasbeeninus() == 2) {

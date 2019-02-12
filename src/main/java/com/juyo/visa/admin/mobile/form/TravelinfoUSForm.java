@@ -57,6 +57,48 @@ public class TravelinfoUSForm {
 
 	private Integer costpayeren;
 
+	private Integer payaddressissamewithyou;
+
+	private Integer payrelationwithyou;
+
+	private String paymail;
+
+	private String paytelephone;
+
+	private String paylastname;
+
+	private String paylastnameen;
+
+	private String payfirstnameen;
+
+	private String payfirstname;
+
+	private String payaddress;
+
+	private String payaddressen;
+
+	private String paycityen;
+
+	private String paycity;
+
+	private String payprovinceen;
+
+	private String payprovince;
+
+	private String paycountryen;
+
+	private String paycountry;
+
+	private String comrelationwithyouen;
+
+	private String comrelationwithyou;
+
+	private String comtelephone;
+
+	private String comnameen;
+
+	private String comname;
+
 	private Integer emigrationreason;
 
 	private Integer emigrationreasonen;

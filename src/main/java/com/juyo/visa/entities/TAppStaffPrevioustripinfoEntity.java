@@ -42,6 +42,89 @@ public class TAppStaffPrevioustripinfoEntity implements Serializable {
 	private Integer costpayeren;
 
 	@Column
+	@Comment("公司/组织名称")
+	private String comname;
+	@Column
+	@Comment("公司/组织名称(英文)")
+	private String comnameen;
+
+	@Column
+	@Comment("公司电话")
+	private String comtelephone;
+
+	@Column
+	@Comment("公司与你的关系")
+	private String comrelationwithyou;
+
+	@Column
+	@Comment("公司与你的关系(英文)")
+	private String comrelationwithyouen;
+
+	@Column
+	@Comment("支付人国家")
+	private String paycountry;
+
+	@Column
+	@Comment("支付人国家(英文)")
+	private String paycountryen;
+
+	@Column
+	@Comment("支付人省份(英文)")
+	private String payprovinceen;
+
+	@Column
+	@Comment("支付人省份")
+	private String payprovince;
+
+	@Column
+	@Comment("支付人城市")
+	private String paycity;
+
+	@Column
+	@Comment("支付人城市(英文)")
+	private String paycityen;
+
+	@Column
+	@Comment("支付人地址(英文)")
+	private String payaddressen;
+
+	@Column
+	@Comment("支付人地址")
+	private String payaddress;
+
+	@Column
+	@Comment("支付人姓")
+	private String payfirstname;
+
+	@Column
+	@Comment("支付人姓(英文)")
+	private String payfirstnameen;
+
+	@Column
+	@Comment("支付人名(英文)")
+	private String paylastnameen;
+
+	@Column
+	@Comment("支付人名")
+	private String paylastname;
+
+	@Column
+	@Comment("支付人电话")
+	private String paytelephone;
+
+	@Column
+	@Comment("支付人邮箱")
+	private String paymail;
+
+	@Column
+	@Comment("支付人与你的关系")
+	private Integer payrelationwithyou;
+
+	@Column
+	@Comment("支付人的地址是否与你一样")
+	private Integer payaddressissamewithyou;
+
+	@Column
 	@Comment("是否有美国驾照")
 	private Integer hasdriverlicense;
 

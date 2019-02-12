@@ -157,6 +157,38 @@ function cloneMoreDiv(divClass){
 	$("."+divClass).last().after(cloneDiv);
 	//initDateTimePicker($("."+divClass));
 }
+
+//支付人修改
+$("#costpayer").change(function(){
+	var thisval = $(this).val();
+	if(thisval == 2){
+		let checked = $("input[name='payaddressissamewithyou']:checked").val();
+		if (checked == 1) {
+			$(".addressPay").hide();
+		} else {
+			$(".addressPay").show();
+		}
+		$(".otherPay").show();
+    	$(".companyPay").hide();
+	}else if(thisval == 3){
+		$(".companyPay").show();
+    	$(".addressPay").show();
+    	$(".otherPay").hide();
+	}else{
+		$(".companyPay").hide();
+    	$(".addressPay").hide();
+    	$(".otherPay").hide();
+	}
+});
+$(".payaddressissamewithyou").change(function(){
+	
+	let checked = $("input[name='payaddressissamewithyou']:checked").val();
+	if (checked == 1) {
+		$(".addressPay").hide();
+	} else {
+		$(".addressPay").show();
+	}
+});
 //是否去过美国radio
 $(".goUS").change(function () {
 	
@@ -296,6 +328,141 @@ $(".isservedinrebelgroup").change(function () {
 	}
 });
 
+//国家
+$('#paycountry').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectCountry.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.chinesename; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+//省
+$('#payprovince').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectProvince.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.province; // replace pk with your identifier
+				obj.text = obj.province; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+
+/* 取消选中时 */
+$("#payprovince").on('select2:unselect', function (evt) {
+	//市清空
+	$("#paycity").val(null).trigger("change");
+});
+
+//市
+$('#paycity').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectCity.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+		    var province = $('#payprovince').val();
+		    if(province){
+		    	province = province.join(',');
+			}
+			return {
+				province : province,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.city; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+
+
+
 //去过的国家
 /*$('#traveledcountry').select2({
 	ajax : {
@@ -376,6 +543,30 @@ $('#militarycountry').select2({
 	tags : false //设置必须存在的选项 才能选中
 });
 
+$(document).on("input","#payfirstname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#payfirstnameen").val("").change();
+	}else{
+		$("#payfirstnameen").val(pinyinchar).change();
+	}
+});
+$(document).on("input","#paylastname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#paylastnameen").val("").change();
+	}else{
+		$("#paylastnameen").val(pinyinchar).change();
+	}
+});
 $(document).on("input","#firstname",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
