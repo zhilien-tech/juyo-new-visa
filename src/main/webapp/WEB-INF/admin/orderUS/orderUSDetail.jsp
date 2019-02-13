@@ -609,7 +609,7 @@
 								<!-- 申请人左侧 -->
 								<div class="col-sm-3">
 									<!-- 二寸免冠照片 -->
-									<div class="col-xs-10 picturesInch">
+									<div class="col-xs-10 picturesInch" style="width: 78% !important;">
 										<div class="form-group pictureTop">
 											<div class="uploadInfo">
 												<span class="inchInfo">美签照片51*51mm</span>  
