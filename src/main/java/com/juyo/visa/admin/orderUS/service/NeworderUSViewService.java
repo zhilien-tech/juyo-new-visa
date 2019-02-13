@@ -2280,7 +2280,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			tripinfo.setPaycity(null);
 			tripinfo.setPaycityen(null);
 			tripinfo.setPaycountry("中国");
-			tripinfo.setPaycountryen("China");
+			tripinfo.setPaycountryen("CHIN");
 			tripinfo.setPaymail(null);
 			tripinfo.setPayprovince(null);
 			tripinfo.setPayprovinceen(null);
@@ -2317,7 +2317,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 
 			if (Util.eq(1, form.getPayaddressissamewithyou())) {
 				tripinfo.setPaycountry("中国");
-				tripinfo.setPaycountryen("China");
+				tripinfo.setPaycountryen("CHIN");
 				tripinfo.setPayprovince(null);
 				tripinfo.setPayprovinceen(null);
 				tripinfo.setPaycity(null);
@@ -2335,6 +2335,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 						e1.printStackTrace();
 					}
 
+				} else {
+					tripinfo.setPaycountryen("CHIN");
 				}
 
 				tripinfo.setPayprovince(form.getPayprovince());
@@ -2365,6 +2367,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 						}
 					}
 
+				} else {
+					tripinfo.setPayprovinceen(null);
 				}
 
 				if (!Util.isEmpty(form.getPaycity())) {
@@ -2375,6 +2379,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 						e1.printStackTrace();
 					}
 
+				} else {
+					tripinfo.setPaycityen(null);
 				}
 
 				if (Util.isEmpty(form.getPayaddressen())) {
@@ -2395,6 +2401,13 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 		} else {//公司/组织
 
+			tripinfo.setPayfirstname(null);
+			tripinfo.setPayfirstnameen(null);
+			tripinfo.setPaylastname(null);
+			tripinfo.setPaylastnameen(null);
+
+			tripinfo.setPaymail(null);
+			tripinfo.setPaytelephone(null);
 			tripinfo.setPayrelationwithyou(1);
 			tripinfo.setPayaddressissamewithyou(1);
 
@@ -2442,6 +2455,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 					e1.printStackTrace();
 				}
 
+			} else {
+				tripinfo.setPaycountryen("CHIN");
 			}
 
 			tripinfo.setPayprovince(form.getPayprovince());
@@ -2472,6 +2487,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 					}
 				}
 
+			} else {
+				tripinfo.setPayprovinceen(null);
 			}
 
 			if (!Util.isEmpty(form.getPaycity())) {
@@ -2482,6 +2499,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 					e1.printStackTrace();
 				}
 
+			} else {
+				tripinfo.setPaycityen(null);
 			}
 
 			if (Util.isEmpty(form.getPayaddressen())) {

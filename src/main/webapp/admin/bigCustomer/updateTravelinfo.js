@@ -160,6 +160,13 @@ function cloneMoreDiv(divClass){
 
 //支付人修改
 $("#costpayer").change(function(){
+	
+	$("#paycountry").val("中国").trigger("change");
+	$("#payprovince").val(null);
+	$("#paycity").val(null);
+	$("#payaddress").val(null);
+	$("#payaddressen").val(null);
+	
 	var thisval = $(this).val();
 	if(thisval == 2){
 		let checked = $("input[name='payaddressissamewithyou']:checked").val();
@@ -349,7 +356,7 @@ $('#paycountry').select2({
 		processResults : function(data, params) {
 			params.page = params.page || 1;
 			var selectdata = $.map(data, function (obj) {
-				obj.id = obj.id; // replace pk with your identifier
+				obj.id = obj.chinesename; // replace pk with your identifier
 				obj.text = obj.chinesename; // replace pk with your identifier
 				/*obj.text = obj.dictCode;*/
 				return obj;

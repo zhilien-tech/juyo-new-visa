@@ -257,7 +257,7 @@ input:focus{
 				
 				<div class="companyPay" style="padding-left: 18px;">
 					<div class="row">
-						<div class="col-sm-3 youRelationship">
+						<div class="col-sm-3 youRelationship" style="width:382px;">
 							<label><span class="s">*</span> 费用支付公司/组织的名称</label>
 							<input style="width:382px; height: 30px;padding:0 0 0 10px;" onchange="translateZhToEn(this,'comnameen','')" type="text" id="comname" name="comname" value="${obj.tripinfo.comname }"/>
 						</div>
@@ -400,7 +400,7 @@ input:focus{
 					</div>
 					<div class="row">
 						<div class="col-sm-3 youRelationship">
-							<label><span class="s">*</span> address</label>
+							<label><span class="s">*</span> Street Address</label>
 							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="payaddressen" name="payaddressen" value="${obj.tripinfo.payaddressen }"/>
 						</div>
 					</div>
