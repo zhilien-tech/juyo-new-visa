@@ -56,8 +56,31 @@ input:focus{
 
 }
 
+/*省市检索*/
+.IdInfo {
+	border: 1px solid #7a9cd3;
+	list-style:none;
+}
 
+.IdInfo li {
+	padding-left: 2%;
+}
 
+.IdInfo li:hover {
+	/*background: #1e90ff;
+	cursor: pointer;*/
+	
+	background: rgb(30, 144, 255); 
+	color: rgb(255, 255, 255);
+}
+
+.IdInfo li:hover a {
+	color: #FFF;
+}
+
+.IdInfo li a {
+	color: #000;
+}
 
 
 </style>
@@ -236,31 +259,31 @@ input:focus{
 					<div class="row">
 						<div class="col-sm-3 youRelationship">
 							<label><span class="s">*</span> 费用支付公司/组织的名称</label>
-							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="comname" name="comname" value="${obj.tripinfo.comname }"/>
+							<input style="width:382px; height: 30px;padding:0 0 0 10px;" onchange="translateZhToEn(this,'comnameen','')" type="text" id="comname" name="comname" value="${obj.tripinfo.comname }"/>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-3 youRelationship" style="width:382px;">
 							<label><span class="s">*</span> Name of Company/Organization Paying for Trip</label>
-							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="comname" name="comname" value="${obj.tripinfo.comname }"/>
+							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="comnameen" name="comnameen" value="${obj.tripinfo.comnameen }"/>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-3 youRelationship">
 							<label><span class="s">*</span> 电话号码</label>
-							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="comtelephone" name="comtelephone" value="${obj.tripinfo.comtelephone }"/>
+							<input style="width:382px; height: 30px;padding:0 0 0 10px;" max="20" type="text" id="comtelephone" name="comtelephone" value="${obj.tripinfo.comtelephone }"/>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-3 youRelationship">
 							<label><span class="s">*</span> 与你的关系</label>
-							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="comrelationwithyou" name="comrelationwithyou" value="${obj.tripinfo.comrelationwithyou }"/>
+							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" onchange="translateZhToEn(this,'comrelationwithyouen','')" id="comrelationwithyou" name="comrelationwithyou" value="${obj.tripinfo.comrelationwithyou }"/>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-3 youRelationship">
 							<label><span class="s">*</span> Relation to You</label>
-							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="comrelationwithyou" name="comrelationwithyou" value="${obj.tripinfo.comrelationwithyou }"/>
+							<input style="width:382px; height: 30px;padding:0 0 0 10px;" type="text" id="comrelationwithyouen" name="comrelationwithyouen" value="${obj.tripinfo.comrelationwithyouen }"/>
 						</div>
 					</div>
 				
@@ -290,7 +313,7 @@ input:focus{
 					<div class="row">
 						<div class="col-sm-3 youRelationship">
 							<label><span class="s">*</span> 电话</label>
-							<input style="width:182px;height:30px;padding:0 0 0 10px;" type="text" id="paytelephone" name="paytelephone" value="${obj.tripinfo.paytelephone }"/>
+							<input style="width:182px;height:30px;padding:0 0 0 10px;" maxlength="20" type="text" id="paytelephone" name="paytelephone" value="${obj.tripinfo.paytelephone }"/>
 						</div>
 						<div class="col-sm-3 youRelationship">
 							<label><span class="s">*</span> 邮箱</label>
@@ -343,25 +366,30 @@ input:focus{
 							
 						</div>
 						<div class="col-sm-3 youRelationship">
-							<label><span class="s">*</span> 省</label>
-							
-							<select name="employerprovince" class="form-control input-sm select2" multiple="multiple"  id="payprovince" >
+							<div id="provinceDiv">
+								<label><span class="s">*</span> 省</label>
+								<input type="text" style="width:182px;height:30px;padding:0 0 0 10px;" id="payprovince" name="payprovince" value="${obj.tripinfo.payprovince }"/>
+							</div>
+							<%-- <select name="payprovince" class="form-control input-sm select2" multiple="multiple"  id="payprovince" >
 		                   		<c:if test="${not empty obj.tripinfo.payprovince }">
 									<option value="${obj.tripinfo.payprovince }" selected="selected">${obj.tripinfo.payprovince }</option>
 								</c:if>
-	                        </select>
+	                        </select> --%>
 							
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-sm-3 youRelationship">
-							<label><span class="s">*</span> 市</label>
+							<div id="cityDiv">
+								<label><span class="s">*</span> 市</label>
 							
-							<select name="paycity" class="form-control input-sm select2"  multiple="multiple"  id="paycity" >
+								<input type="text" style="width:182px;height:30px;padding:0 0 0 10px;" id="paycity" name="paycity" value="${obj.tripinfo.paycity }"/>
+							</div>
+							<%-- <select name="paycity" class="form-control input-sm select2"  multiple="multiple"  id="paycity" >
 		                   		<c:if test="${not empty obj.tripinfo.paycity }">
 									<option value="${obj.tripinfo.paycity }" selected="selected">${obj.tripinfo.paycity }</option>
 								</c:if>
-	                        </select>
+	                        </select> --%>
 						</div>
 					</div>
 					<div class="row">

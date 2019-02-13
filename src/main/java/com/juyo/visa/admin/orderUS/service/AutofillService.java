@@ -1815,29 +1815,6 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		//待完善
 		//PayParty 没有？？？
 		Map<String, Object> PayParty = Maps.newHashMap();
-		//PayerInfo
-		Map<String, Object> PayerInfo = Maps.newHashMap();
-		//PayParty.put("PayerInfo",PayerInfo);
-
-		//PayerAddressInfo
-		Map<String, Object> PayerAddressInfo = Maps.newHashMap();
-		PayerAddressInfo.put("province", "");
-		PayerAddressInfo.put("city", "");
-		PayerAddressInfo.put("country", "");
-		PayerAddressInfo.put("street", "");
-		PayerAddressInfo.put("zip_code", "");
-		PayerInfo.put("AdderssInfo", PayerAddressInfo);
-
-		//PayerNameInfo
-		Map<String, Object> PayerNameInfo = Maps.newHashMap();
-		PayerInfo.put("NameInfo", PayerNameInfo);
-
-		PayerInfo.put("relationship", "");
-		PayerInfo.put("phone", "");
-		PayerInfo.put("organization", "");
-		PayerInfo.put("email", "");
-
-		PayParty.put("PayerInfo", PayerInfo);
 
 		if (!Util.isEmpty(info.getInt("costpayer"))) {
 			int costpayer = info.getInt("costpayer");
@@ -1851,6 +1828,160 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				PayParty.put("payer", "C");
 			}
 		}
+
+		//PayerInfo
+		Map<String, Object> PayerInfo = Maps.newHashMap();
+		//PayerAddressInfo
+		Map<String, Object> PayerAddressInfo = Maps.newHashMap();
+		//PayerNameInfo
+		Map<String, Object> PayerNameInfo = Maps.newHashMap();
+
+		//根据支付人不同，分三种
+		if (Util.eq(2, info.getInt("costpayer"))) {//其他人
+
+			if (!Util.isEmpty(info.getString("paytelephone"))) {
+				PayerInfo.put("phone", info.getString("paytelephone"));
+			} else {
+				errorMsg += "旅行信息：费用支付人电话," + "</br>";
+			}
+			if (!Util.isEmpty(info.getString("paymail"))) {
+				PayerInfo.put("mail", info.getString("paymail"));
+			} else {
+				errorMsg += "旅行信息：费用支付人邮箱," + "</br>";
+			}
+
+			//姓名
+			if (!Util.isEmpty(info.getString("payfirstname"))) {
+				PayerNameInfo.put("surnames_cn", info.getString("payfirstname"));
+			} else {
+				errorMsg += "旅行信息：费用支付人姓," + "</br>";
+			}
+			if (!Util.isEmpty(info.getString("payfirstnameen"))) {
+				PayerNameInfo.put("surnames_en", info.getString("payfirstnameen"));
+			} else {
+				errorMsg += "旅行信息：费用支付人姓拼音," + "</br>";
+
+			}
+			if (!Util.isEmpty(info.getString("paylastname"))) {
+				PayerNameInfo.put("given_names_cn", info.getString("paylastname"));
+			} else {
+				errorMsg += "旅行信息：费用支付人名," + "</br>";
+			}
+			if (!Util.isEmpty(info.getString("paylastnameen"))) {
+				PayerNameInfo.put("given_names_en", info.getString("paylastnameen"));
+			} else {
+				errorMsg += "旅行信息：费用支付人名拼音," + "</br>";
+
+			}
+
+			//关系
+			int payrelationwithyou = info.getInt("payrelationwithyou");
+			if (Util.eq(1, payrelationwithyou)) {
+				PayerInfo.put("relationship", "C");
+			} else if (Util.eq(2, payrelationwithyou)) {
+				PayerInfo.put("relationship", "P");
+			} else if (Util.eq(3, payrelationwithyou)) {
+				PayerInfo.put("relationship", "S");
+			} else if (Util.eq(4, payrelationwithyou)) {
+				PayerInfo.put("relationship", "R");
+			} else if (Util.eq(5, payrelationwithyou)) {
+				PayerInfo.put("relationship", "F");
+			} else {
+				PayerInfo.put("relationship", "O");
+			}
+
+			//国家、省、市、地址
+			if (Util.eq(1, info.getInt("payaddressissamewithyou"))) {
+				PayerAddressInfo.put("country", "");
+				PayerAddressInfo.put("province", "");
+				PayerAddressInfo.put("city", "");
+				PayerAddressInfo.put("street", "");
+			} else {
+				if (!Util.isEmpty(info.getString("paycountryen"))) {
+					PayerAddressInfo.put("country", info.getString("paycountryen"));
+				} else {
+					PayerAddressInfo.put("country", "CHIN");
+				}
+				if (!Util.isEmpty(info.getString("payprovinceen"))) {
+					PayerAddressInfo.put("province", info.getString("payprovinceen"));
+				} else {
+					errorMsg += "旅行信息：费用支付人省," + "</br>";
+				}
+				if (!Util.isEmpty(info.getString("paycityen"))) {
+					PayerAddressInfo.put("city", info.getString("paycityen"));
+				} else {
+					errorMsg += "旅行信息：费用支付人市," + "</br>";
+				}
+				if (!Util.isEmpty(info.getString("payaddressen"))) {
+					PayerAddressInfo.put("street", info.getString("payaddressen"));
+				} else {
+					errorMsg += "旅行信息：费用支付人地址," + "</br>";
+				}
+			}
+
+		} else if (Util.eq(3, info.getInt("costpayer"))) {//公司
+			if (!Util.isEmpty(info.getString("comrelationwithyouen"))) {
+				PayerInfo.put("relationship", info.getString("comrelationwithyouen"));
+			} else {
+				errorMsg += "旅行信息：费用支付人与你的关系," + "</br>";
+			}
+			if (!Util.isEmpty(info.getString("comtelephone"))) {
+				PayerInfo.put("phone", info.getString("comtelephone"));
+			} else {
+				errorMsg += "旅行信息：费用支付人电话," + "</br>";
+			}
+			if (!Util.isEmpty(info.getString("comnameen"))) {
+				PayerInfo.put("organization", info.getString("comnameen"));
+			} else {
+				errorMsg += "旅行信息：费用支付公司/组织名称," + "</br>";
+			}
+			if (!Util.isEmpty(info.getString("paycountryen"))) {
+				PayerAddressInfo.put("country", info.getString("paycountryen"));
+			} else {
+				PayerAddressInfo.put("country", "CHIN");
+			}
+			if (!Util.isEmpty(info.getString("payprovinceen"))) {
+				PayerAddressInfo.put("province", info.getString("payprovinceen"));
+			} else {
+				errorMsg += "旅行信息：费用支付人省," + "</br>";
+			}
+			if (!Util.isEmpty(info.getString("paycityen"))) {
+				PayerAddressInfo.put("city", info.getString("paycityen"));
+			} else {
+				errorMsg += "旅行信息：费用支付人市," + "</br>";
+			}
+			if (!Util.isEmpty(info.getString("payaddressen"))) {
+				PayerAddressInfo.put("street", info.getString("payaddressen"));
+			} else {
+				errorMsg += "旅行信息：费用支付人地址," + "</br>";
+			}
+
+			PayerInfo.put("email", "");
+			PayerNameInfo.put("surnames_cn", "");
+			PayerNameInfo.put("surnames_en", "");
+			PayerNameInfo.put("given_names_cn", "");
+			PayerNameInfo.put("given_names_en", "");
+		} else {//自己，全为空
+			PayerInfo.put("relationship", "");
+			PayerInfo.put("phone", "");
+			PayerInfo.put("organization", "");
+			PayerInfo.put("email", "");
+
+			PayerAddressInfo.put("province", "");
+			PayerAddressInfo.put("city", "");
+			PayerAddressInfo.put("country", "");
+			PayerAddressInfo.put("street", "");
+
+			PayerNameInfo.put("surnames_cn", "");
+			PayerNameInfo.put("surnames_en", "");
+			PayerNameInfo.put("given_names_cn", "");
+			PayerNameInfo.put("given_names_en", "");
+		}
+		PayerAddressInfo.put("zip_code", "");
+
+		PayerInfo.put("AdderssInfo", PayerAddressInfo);
+		PayerInfo.put("NameInfo", PayerNameInfo);
+		PayParty.put("PayerInfo", PayerInfo);
 
 		AmericaInfo.put("PayParty", PayParty);
 

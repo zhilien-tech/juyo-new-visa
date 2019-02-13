@@ -1778,6 +1778,10 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		previUSTripInfo.setIsfiledimmigrantpetition(DEFAULT_IS_NO);
 		previUSTripInfo.setCostpayer(1);
 		previUSTripInfo.setCostpayeren(1);
+		previUSTripInfo.setPaycountry("中国");
+		previUSTripInfo.setPaycountryen("China");
+		previUSTripInfo.setPayaddressissamewithyou(1);
+		previUSTripInfo.setPayrelationwithyou(1);
 
 		previUSTripInfo.setHasbeeninusen(DEFAULT_IS_NO);
 		previUSTripInfo.setHasdriverlicenseen(DEFAULT_IS_NO);

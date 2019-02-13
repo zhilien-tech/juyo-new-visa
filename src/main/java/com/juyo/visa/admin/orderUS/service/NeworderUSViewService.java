@@ -2279,8 +2279,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			tripinfo.setPayaddressissamewithyou(1);
 			tripinfo.setPaycity(null);
 			tripinfo.setPaycityen(null);
-			tripinfo.setPaycountry(null);
-			tripinfo.setPaycountryen(null);
+			tripinfo.setPaycountry("中国");
+			tripinfo.setPaycountryen("China");
 			tripinfo.setPaymail(null);
 			tripinfo.setPayprovince(null);
 			tripinfo.setPayprovinceen(null);
@@ -2299,6 +2299,13 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			tripinfo.setPaylastnameen(null);
 
 		} else if (Util.eq(2, form.getCostpayer())) {//其他人
+
+			tripinfo.setComname(null);
+			tripinfo.setComnameen(null);
+			tripinfo.setComrelationwithyou(null);
+			tripinfo.setComrelationwithyouen(null);
+			tripinfo.setComtelephone(null);
+
 			tripinfo.setPayfirstname(form.getPayfirstname());
 			tripinfo.setPayfirstnameen(form.getPayfirstnameen());
 			tripinfo.setPaylastname(form.getPaylastname());
@@ -2309,8 +2316,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			tripinfo.setPayaddressissamewithyou(form.getPayaddressissamewithyou());
 
 			if (Util.eq(1, form.getPayaddressissamewithyou())) {
-				tripinfo.setPaycountry(null);
-				tripinfo.setPaycountryen(null);
+				tripinfo.setPaycountry("中国");
+				tripinfo.setPaycountryen("China");
 				tripinfo.setPayprovince(null);
 				tripinfo.setPayprovinceen(null);
 				tripinfo.setPaycity(null);
@@ -2319,22 +2326,67 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				tripinfo.setPayaddressen(null);
 			} else {
 				tripinfo.setPaycountry(form.getPaycountry());
-				tripinfo.setPaycountryen(form.getPaycountryen());
+
+				if (!Util.isEmpty(form.getPaycountry())) {
+					String issuedplace = form.getPaycountry();
+					try {
+						tripinfo.setPaycountryen(getCountrycode(issuedplace));
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+
+				}
+
 				tripinfo.setPayprovince(form.getPayprovince());
-				tripinfo.setPayprovinceen(form.getPayprovinceen());
 				tripinfo.setPaycity(form.getPaycity());
-				tripinfo.setPaycityen(form.getPaycityen());
+
+				//中文翻译成拼音并大写工具
+				PinyinTool tool = new PinyinTool();
+				if (!Util.isEmpty(form.getPayprovince())) {
+					String issuedplace = form.getPayprovince();
+					if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+						tripinfo.setPayprovinceen("NEI MONGOL");
+					} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+						tripinfo.setPayprovinceen("SHAANXI");
+					} else {
+						if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+							issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+						}
+						if (issuedplace.endsWith("自治区")) {
+							issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+						}
+						if (issuedplace.endsWith("区")) {
+							issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+						}
+						try {
+							tripinfo.setPayprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+						} catch (BadHanyuPinyinOutputFormatCombination e1) {
+							e1.printStackTrace();
+						}
+					}
+
+				}
+
+				if (!Util.isEmpty(form.getPaycity())) {
+					String issuedplace = form.getPaycity();
+					try {
+						tripinfo.setPaycityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+					} catch (BadHanyuPinyinOutputFormatCombination e1) {
+						e1.printStackTrace();
+					}
+
+				}
 
 				if (Util.isEmpty(form.getPayaddressen())) {
-					tripinfo.setPayaddressen(translationHandle(2, translate(form.getPayaddress())));
+					tripinfo.setPayaddressen(translate(form.getPayaddress()));
 				} else {
 					if (Util.eq(form.getPayaddress(), tripinfo.getPayaddress())) {
-						tripinfo.setPayaddressen(translationHandle(2, form.getPayaddressen()));
+						tripinfo.setPayaddressen(form.getPayaddressen());
 					} else {
 						if (Util.eq(form.getPayaddressen(), tripinfo.getPayaddressen())) {
-							tripinfo.setPayaddressen(translationHandle(2, translate(form.getPayaddress())));
+							tripinfo.setPayaddressen(translate(form.getPayaddress()));
 						} else {
-							tripinfo.setPayaddressen(translationHandle(2, form.getPayaddressen()));
+							tripinfo.setPayaddressen(form.getPayaddressen());
 						}
 					}
 				}
@@ -2342,28 +2394,106 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				tripinfo.setPayaddress(form.getPayaddress());
 			}
 		} else {//公司/组织
+
+			tripinfo.setPayrelationwithyou(1);
+			tripinfo.setPayaddressissamewithyou(1);
+
+			if (Util.isEmpty(form.getComnameen())) {
+				tripinfo.setComnameen(translationHandle(2, translate(form.getComname())));
+			} else {
+				if (Util.eq(form.getComname(), tripinfo.getComname())) {
+					tripinfo.setComnameen(translationHandle(2, form.getComnameen()));
+				} else {
+					if (Util.eq(form.getComnameen(), tripinfo.getComnameen())) {
+						tripinfo.setComnameen(translationHandle(2, translate(form.getComname())));
+					} else {
+						tripinfo.setComnameen(translationHandle(2, form.getComnameen()));
+					}
+				}
+			}
+
 			tripinfo.setComname(form.getComname());
-			tripinfo.setComnameen(form.getComnameen());
+
+			if (Util.isEmpty(form.getComrelationwithyouen())) {
+				tripinfo.setComrelationwithyouen(translate(form.getComrelationwithyou()));
+			} else {
+				if (Util.eq(form.getComrelationwithyou(), tripinfo.getComrelationwithyou())) {
+					tripinfo.setComrelationwithyouen(form.getComrelationwithyouen());
+				} else {
+					if (Util.eq(form.getComrelationwithyouen(), tripinfo.getComrelationwithyouen())) {
+						tripinfo.setComrelationwithyouen(translate(form.getComrelationwithyou()));
+					} else {
+						tripinfo.setComrelationwithyouen(form.getComrelationwithyouen());
+					}
+				}
+			}
+
 			tripinfo.setComrelationwithyou(form.getComrelationwithyou());
-			tripinfo.setComrelationwithyouen(form.getComrelationwithyouen());
+
 			tripinfo.setComtelephone(form.getComtelephone());
 
 			tripinfo.setPaycountry(form.getPaycountry());
-			tripinfo.setPaycountryen(form.getPaycountryen());
+
+			if (!Util.isEmpty(form.getPaycountry())) {
+				String issuedplace = form.getPaycountry();
+				try {
+					tripinfo.setPaycountryen(getCountrycode(issuedplace));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+			}
+
 			tripinfo.setPayprovince(form.getPayprovince());
-			tripinfo.setPayprovinceen(form.getPayprovinceen());
 			tripinfo.setPaycity(form.getPaycity());
-			tripinfo.setPaycityen(form.getPaycityen());
+
+			//中文翻译成拼音并大写工具
+			PinyinTool tool = new PinyinTool();
+			if (!Util.isEmpty(form.getPayprovince())) {
+				String issuedplace = form.getPayprovince();
+				if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+					tripinfo.setPayprovinceen("NEI MONGOL");
+				} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+					tripinfo.setPayprovinceen("SHAANXI");
+				} else {
+					if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+						issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+					}
+					if (issuedplace.endsWith("自治区")) {
+						issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+					}
+					if (issuedplace.endsWith("区")) {
+						issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+					}
+					try {
+						tripinfo.setPayprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+					} catch (BadHanyuPinyinOutputFormatCombination e1) {
+						e1.printStackTrace();
+					}
+				}
+
+			}
+
+			if (!Util.isEmpty(form.getPaycity())) {
+				String issuedplace = form.getPaycity();
+				try {
+					tripinfo.setPaycityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+
+			}
+
 			if (Util.isEmpty(form.getPayaddressen())) {
-				tripinfo.setPayaddressen(translationHandle(2, translate(form.getPayaddress())));
+				tripinfo.setPayaddressen(translate(form.getPayaddress()));
 			} else {
 				if (Util.eq(form.getPayaddress(), tripinfo.getPayaddress())) {
-					tripinfo.setPayaddressen(translationHandle(2, form.getPayaddressen()));
+					tripinfo.setPayaddressen(form.getPayaddressen());
 				} else {
 					if (Util.eq(form.getPayaddressen(), tripinfo.getPayaddressen())) {
-						tripinfo.setPayaddressen(translationHandle(2, translate(form.getPayaddress())));
+						tripinfo.setPayaddressen(translate(form.getPayaddress()));
 					} else {
-						tripinfo.setPayaddressen(translationHandle(2, form.getPayaddressen()));
+						tripinfo.setPayaddressen(form.getPayaddressen());
 					}
 				}
 			}
