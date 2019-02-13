@@ -1845,7 +1845,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 				errorMsg += "旅行信息：费用支付人电话," + "</br>";
 			}
 			if (!Util.isEmpty(info.getString("paymail"))) {
-				PayerInfo.put("mail", info.getString("paymail"));
+				PayerInfo.put("email", info.getString("paymail"));
 			} else {
 				errorMsg += "旅行信息：费用支付人邮箱," + "</br>";
 			}
