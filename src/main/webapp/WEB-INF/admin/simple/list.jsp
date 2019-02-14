@@ -143,7 +143,7 @@
 				<a class="btn btn-primary btn-sm pull-right" style="" href="javascript:search();" id="searchbtn">搜索</a>
 			</div>
 			<div class="col-md col-md-1  " style="width: 6% !important;margin-left: 0%;">
-				<a class="btn btn-primary btn-sm pull-right" onclick="downloadOrder();">下载</a>
+				<a class="btn btn-primary btn-sm pull-right" onclick="downloadOrder();">导出</a>
 			</div>
 			<div class="col-md col-md-1  " style="width: 6% !important;margin-left: 0%;">
 				<a class="btn btn-primary btn-sm pull-right" onclick="addOrder();">下单</a>
