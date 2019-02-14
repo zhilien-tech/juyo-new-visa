@@ -1385,7 +1385,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		if (!Util.isEmpty(info.get("planaddress"))) {
 			ResidentialInfo.put("street", info.get("planaddress"));
 		} else {
-			errorMsg += "出行信息：计划去美国的地址,</br>";
+			errorMsg += "出行信息：计划去美国的酒店地址,</br>";
 		}
 		//ResidentialInfo.put("country", "CN");
 		ResidentialInfo.put("zip_code", "");
@@ -1486,7 +1486,7 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			if (!Util.isEmpty(hotel.getTelephone())) {
 				Contacts.put("phone", hotel.getTelephone().replace(" ", "").replace("-", ""));
 			} else {
-				Contacts.put("phone", "");
+				errorMsg += "出行信息：计划去美国的酒店电话,</br>";
 			}
 		}
 		//邮箱
