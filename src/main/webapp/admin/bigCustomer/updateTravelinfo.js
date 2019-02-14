@@ -733,6 +733,15 @@ function getCompanionList(){
 //保存工作信息
 function save(status){
 	
+	if(status != 2){
+		var addresslen = $("#payaddressen").val().length;
+		if(addresslen > 80){
+			layer.msg("费用支付人的地址英文不能超过80个字符");
+			return;
+		}
+				
+	}
+	
 		var companioninfoList = getCompanionList();
 		var	familyinfo = $.param({companionList:JSON.stringify(companioninfoList)}) + "&" +  $("#travelinfo").serialize();
 		//familyinfo.companioninfoList = JSON.stringify(getCompanionList());

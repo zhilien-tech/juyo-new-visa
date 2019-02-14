@@ -673,6 +673,25 @@ function closeWindow() {
 
 //保存工作信息
 function save(status){
+	
+	if(status != 2){
+		var addresslen = $("#jobaddressen").val().length;
+		if(addresslen > 80){
+			layer.msg("现在工作的详细地址英文不能超过80个字符");
+			return;
+		}
+		var addresslen1 = $("#employeraddressen").val().length;
+		if(addresslen1 > 80){
+			layer.msg("上份工作的详细地址英文不能超过80个字符");
+			return;
+		}
+		var addresslen2 = $("#institutionaddressen").val().length;
+		if(addresslen2 > 80){
+			layer.msg("教育信息的详细地址英文不能超过80个字符");
+			return;
+		}
+	}
+	
 	var	familyinfo = $("#workinfo").serialize();
 	console.log(familyinfo);
 	
