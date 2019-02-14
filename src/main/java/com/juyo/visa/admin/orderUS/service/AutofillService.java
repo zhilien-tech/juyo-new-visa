@@ -1482,12 +1482,10 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		}*/
 		//电话号码(签证信息)
 		//Contacts.put("phone", "165156");
-		if (!Util.isEmpty(hotel.getId())) {
-			if (!Util.isEmpty(hotel.getTelephone())) {
-				Contacts.put("phone", hotel.getTelephone().replace(" ", "").replace("-", ""));
-			} else {
-				errorMsg += "出行信息：计划去美国的酒店电话,</br>";
-			}
+		if (!Util.isEmpty(info.getString("plantelephone"))) {
+			Contacts.put("phone", info.getString("plantelephone"));
+		} else {
+			errorMsg += "出行信息：计划去美国的酒店电话,</br>";
 		}
 		//邮箱
 		if (!Util.isEmpty(info.get("tascemail"))) {
