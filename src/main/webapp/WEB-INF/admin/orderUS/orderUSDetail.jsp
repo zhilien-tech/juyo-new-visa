@@ -609,11 +609,11 @@
 								<!-- 申请人左侧 -->
 								<div class="col-sm-3">
 									<!-- 二寸免冠照片 -->
-									<div class="col-xs-10 picturesInch" style="width: 78% !important;">
-										<div class="form-group pictureTop">
+									<div class="col-xs-10 picturesInch" style="width: 202px;height:202px !important;">
+										<div class="form-group pictureTop" style="width: 200px;height:200px !important;">
 											<div class="uploadInfo">
 												<span class="inchInfo">美签照片51*51mm</span>  
-												<img id="imgInch" name="imgInch" alt="" src="${obj.twoinchphoto.url }"> 
+												<img id="imgInch" style="width: 200px;height:200px !important;" name="imgInch" alt="" src="${obj.twoinchphoto.url }"> 
 												<!-- <input id="uploadFileInchImg" name="uploadFileInchImg" disable="true"
 													class="btn btn-primary btn-sm" type="file" value="上传" />  -->
 													<i class="delete" ></i>
@@ -751,7 +751,7 @@
 					<!-- 大模块2END -->
 					<!-- 大模块3 -->
 					<!-- 标题以及按钮组 -->
-					<div class="info solveContent" id="mySwitch">
+					<div class="info solveContent" id="mySwitch" style="margin-bottom: 10px !important;">
 						<p class="info-head followUp">
 							跟进
 							<div class="dataInfoGroup">
