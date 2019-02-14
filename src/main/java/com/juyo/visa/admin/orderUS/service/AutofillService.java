@@ -831,8 +831,8 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 					if (!Util.isEmpty(educationEntity.getCourseen())) {
 						education.put("major", educationEntity.getCourseen());
 					} else {
-						education.put("major", "");
-						//errorMsg += "工作教育信息：教育信息专业,</br>";
+						//education.put("major", "");
+						errorMsg += "工作教育信息：教育信息专业,</br>";
 					}
 					//参加课程开始时间(签证信息)
 					if (!Util.isEmpty(educationEntity.getCoursestartdate())) {

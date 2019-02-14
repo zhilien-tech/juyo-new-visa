@@ -123,14 +123,14 @@ $(".education").change(function () {
 
 //专业处理
 
-$("#highesteducation").change(function(){
+/*$("#highesteducation").change(function(){
 	var highesteducation = $(this).val();
 	if(highesteducation > 2){
 		$(".courseClass").show();
 	}else{
 		$(".courseClass").hide();
 	}
-})
+})*/
 
 
 function workinfoValidate(){

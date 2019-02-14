@@ -617,12 +617,12 @@
 		}
         
         //专业处理
-        var highesteducation = '${obj.beforeeducate.highesteducation}';
+        /* var highesteducation = '${obj.beforeeducate.highesteducation}';
         if(highesteducation > 2){
         	$(".courseClass").show();
         }else{
         	$(".courseClass").hide();
-        }
+        } */
         
        /*  var country = '${obj.workinfo.country}';
         if(country == ""){
