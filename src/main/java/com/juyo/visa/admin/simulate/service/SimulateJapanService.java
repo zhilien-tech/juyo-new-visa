@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -33,6 +34,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Files;
 
 import com.google.common.collect.Maps;
+import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.admin.simulate.form.JapanSimulateErrorForm;
 import com.juyo.visa.admin.simulate.form.JapanSimulatorForm;
 import com.juyo.visa.common.base.impl.QiniuUploadServiceImpl;
@@ -65,6 +67,8 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 
 	@Inject
 	private QiniuUploadServiceImpl qiniuUploadService;
+	@Inject
+	private OrderUSViewService orderUSViewService;
 
 	/*private VisaInfoWSHandler visaInfoWSHandler = (VisaInfoWSHandler) SpringContextUtil.getBean("myVisaInfoHander",
 			VisaInfoWSHandler.class);*/
@@ -234,6 +238,13 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					//如果是招宝取消状态，变为网站招宝取消中
 					orderinfo.setStatus(JPOrderStatusEnum.WANGZHANQUXIAOZHONG.intKey());
 				}
+
+				//更新发招宝时间
+				if (!Util.isEmpty(orderjp)) {
+					orderjp.setZhaobaotime(new Date());
+					dbDao.update(orderjp);
+				}
+
 				dbDao.update(orderinfo);
 				map.put("ordernum", orderinfo.getOrderNum());
 			}
@@ -422,128 +433,193 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 
 	}
 
+	//发送短信
+	public Object sendSMS(String ordernum, String orderstatus) throws IOException {
+		List<String> readLines = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(
+				"messagetmp/autofilljp_sms.txt"));
+		StringBuilder tmp = new StringBuilder();
+		for (String line : readLines) {
+			tmp.append(line);
+		}
+		String telephone = "15600027715";
+		String telephone2 = "18612131435";
+		String result = "";
+		String smsContent = tmp.toString();
+		smsContent = smsContent.replace("${ordernum}", ordernum).replace("${orderstatus}", orderstatus);
+		System.out.println("短信分享内容：" + smsContent);
+		result = orderUSViewService.sendSMS(telephone, smsContent);
+		result = orderUSViewService.sendSMS(telephone2, smsContent);
+
+		return result;
+
+	}
+
 	public Object japanErrorHandle(JapanSimulateErrorForm form, Long cid) {
+		int errorCode = form.getErrorCode();
+		int orderstatus = form.getOrderstatus();
+		String errorMsg = form.getErrorMsg();
+		System.out.println("cid:" + cid);
+		System.out.println("orderstatus:" + orderstatus);
+		System.out.println("errorCode:" + errorCode);
+		System.out.println("errorMsg============:" + errorMsg);
+
+		TOrderEntity orderinfo = null;
+		TOrderJpEntity orderjp = null;
+		//订单号正常的情况下，查询出对应的order和orderjp
 		if (!Util.isEmpty(cid) && cid > 0) {
-			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, cid);
-			int errorCode = form.getErrorCode();
-			int orderstatus = form.getOrderstatus();
-			String errorMsg = form.getErrorMsg();
+			orderjp = dbDao.fetch(TOrderJpEntity.class, cid);
 			orderjp.setErrorcode(errorCode);
 			orderjp.setErrormsg(errorMsg);
 			dbDao.update(orderjp);
-			System.out.println(errorCode);
-			System.out.println(errorMsg);
-			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+			orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+			//如果cookie过期，直接返回，等待定时任务获取
+			if (Util.eq("cookie expired", errorMsg)) {
+				System.out.println("cookie超时！！！");
+				try {
+					sendSMS(orderinfo.getOrderNum(), "cookie过期了!!!");
+				} catch (IOException e) {
 
-			if (orderstatus == JPOrderStatusEnum.READYCOMMING.intKey()) {//发招宝失败 18
-				/*if (!Util.isEmpty(orderjp.getAcceptDesign())) {
-					System.out.println("虽然失败了，但收付番号还是有的");
-					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
-					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
-				} else {
-					System.out.println("不仅失败了，而且没有收付番号");
-					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
-					orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-				}*/
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 
-				if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
-					System.out.println("不仅失败了，收付番号也没有");
-					orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-				} else {
-					System.out.println("虽然失败了，但收付番号还是有的");
-					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
-					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
 				}
-
+				return null;
 			}
-			if (orderstatus == JPOrderStatusEnum.BIANGENGZHONG.intKey()) {//发招宝失败 18
-				if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
-					/*if (Util.eq(errorMsg, "受付番号获取失败")) {
-						System.out.println("受付番号虽然生成了，但并没有获取到");
-						orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
-						orderinfo.setReceptionOpid(1);
-						orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-					} else {
-						System.out.println("不仅失败了，收付番号也没有");
-						orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
-						orderinfo.setStatus(JPOrderStatusEnum.BIANGENGZHONG.intKey());
-					}*/
-					System.out.println("变更失败，受付番号也没有");
-					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
-					orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
-					orderinfo.setReceptionOpid(1);
-					orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-				} else {
-					System.out.println("虽然变更失败了，但收付番号还是有的");
-					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
-					orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
-					orderinfo.setReceptionOpid(1);
-					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
+			if (errorMsg.contains("applicant_count")) {
+				try {
+					sendSMS(orderinfo.getOrderNum(), "人数出错了!!!");
+				} catch (IOException e) {
+
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+
 				}
-
+				return null;
 			}
-			if (orderstatus == JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey()) {//失败重发时再失败
-				System.out.println("失败重发之后又失败了，继续发");
+
+		}
+		//订单号为-1时，errorMsg为订单号，依此可查询出对应的order和orderjp
+		if (Util.eq(-1, cid)) {
+			if (!Util.isEmpty(errorMsg)) {
+				orderinfo = dbDao.fetch(TOrderEntity.class, Cnd.where("orderNum", "=", errorMsg));
+				orderjp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderinfo.getId()));
+
+				orderjp.setErrorcode(errorCode);
+				orderjp.setErrormsg(errorMsg);
+				dbDao.update(orderjp);
+			}
+		}
+
+		//发招宝时出现错误，errorCode为1或10时直接重新跑，如果为2时说明有受付番号，这时走16，省略前边一部分步骤
+		if (orderstatus == JPOrderStatusEnum.READYCOMMING.intKey()) {//发招宝失败 18
+			if (errorCode == 10) {//cid=1
+				System.out.println("发招宝时cid==-1");
+				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
+			} else if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
+				System.out.println("不仅失败了，收付番号也没有");
+				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
+			} else {
+				System.out.println("虽然失败了，但收付番号还是有的");
 				orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
 				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
-
 			}
-			/*if (orderstatus == JPOrderStatusEnum.BIANGENGZHONG.intKey()) {//招宝变更失败 21
-				if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
-					System.out.println("不仅失败了，收付番号也没有");
-					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
-					orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
-				} else {
-					System.out.println("虽然失败了，但收付番号还是有的");
-					orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
-					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
-				}
-			}*/
-			if (orderstatus == JPOrderStatusEnum.QUXIAOZHONG.intKey()) {//招宝取消失败 24
-				orderinfo.setStatus(JPOrderStatusEnum.QUXIAOZHONG.intKey());
+			if (!Util.isEmpty(orderjp)) {
+				orderjp.setZhaobaotime(new Date());
+				dbDao.update(orderjp);
 			}
 
-			int count = 0;
-			if (errorMsg.contains("氏名") || errorMsg.contains("居住地域") || errorMsg.contains("半角英数字")) {
-				//orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+		}
+		//招宝变更时出错，如果errorCode为10直接重新跑，为1时没有受付番号重新发招宝，为2时有受付番号走16流程
+		else if (orderstatus == JPOrderStatusEnum.BIANGENGZHONG.intKey()) {//招宝变更失败21
+			if (errorCode == 10) {
+				System.out.println("变更时cid==-1");
+				orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+				orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
+				orderinfo.setReceptionOpid(1);
+				orderinfo.setStatus(JPOrderStatusEnum.BIANGENGZHONG.intKey());
+			} else if (errorCode == 1) {//没有收付番号，发招宝按钮依然亮
+				System.out.println("变更失败，受付番号也没有");
+				orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+				orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
+				orderinfo.setReceptionOpid(1);
+				orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
+			} else {
+				System.out.println("虽然变更失败了，但收付番号还是有的");
+				orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+				orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
+				orderinfo.setReceptionOpid(1);
+				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
+			}
+			if (!Util.isEmpty(orderjp)) {
+				orderjp.setZhaobaotime(new Date());
+				dbDao.update(orderjp);
+			}
+
+		} else if (orderstatus == JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey()) {//失败重发时再失败
+			System.out.println("失败重发之后又失败了，继续发");
+			orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+			orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
+			if (!Util.isEmpty(orderjp)) {
+				orderjp.setZhaobaotime(new Date());
+				dbDao.update(orderjp);
+			}
+		} else if (orderstatus == JPOrderStatusEnum.QUXIAOZHONG.intKey()) {//招宝取消失败 24
+			orderinfo.setStatus(JPOrderStatusEnum.QUXIAOZHONG.intKey());
+			if (!Util.isEmpty(orderjp)) {
+				orderjp.setZhaobaotime(new Date());
+				dbDao.update(orderjp);
+			}
+		}
+
+		//出现指定错误时，直接返回失败
+		if (errorMsg.contains("氏名") || errorMsg.contains("居住地域") || errorMsg.contains("半角英数字")
+				|| errorMsg.contains("停牌")) {
+			//orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+			if (Util.isEmpty(orderinfo.getReceptionOpid())) {
+				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
+			} else {
+				orderinfo.setStatus(JPOrderStatusEnum.BIANGENGSHIBAI.intKey());
+			}
+		}
+		int count = 0;
+		if (errorMsg.contains("登録可能")) {
+			count++;
+			//orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+			if (count > 3) {
 				if (Util.isEmpty(orderinfo.getReceptionOpid())) {
 					orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
 				} else {
 					orderinfo.setStatus(JPOrderStatusEnum.BIANGENGSHIBAI.intKey());
 				}
-			}
-			if (errorMsg.contains("登録可能")) {
-				count++;
-				//orderinfo.setZhaobaocomplete(IsYesOrNoEnum.YES.intKey());
+			} else {
 				orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey());
-				if (count > 3) {
-					if (Util.isEmpty(orderinfo.getReceptionOpid())) {
-						orderinfo.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey());
-					} else {
-						orderinfo.setStatus(JPOrderStatusEnum.BIANGENGSHIBAI.intKey());
-					}
+				if (!Util.isEmpty(orderjp)) {
+					orderjp.setZhaobaotime(new Date());
+					dbDao.update(orderjp);
 				}
 			}
+		}
 
-			orderinfo.setUpdateTime(new Date());
-			//更新订单状态为发招保失败
-			dbDao.update(orderinfo);
-			if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()
-					|| orderinfo.getStatus() == JPOrderStatusEnum.BIANGENGSHIBAI.intKey()) {
-				Integer visaOpid = orderinfo.getVisaOpid();
-				if (!Util.isEmpty(visaOpid)) {
-					//添加日志
-					TOrderLogsEntity logs = new TOrderLogsEntity();
-					logs.setCreateTime(new Date());
-					logs.setOpId(visaOpid);
-					logs.setOrderId(orderinfo.getId());
-					logs.setOrderStatus(orderinfo.getStatus());
-					logs.setUpdateTime(new Date());
-					dbDao.insert(logs);
-				}
+		orderinfo.setUpdateTime(new Date());
+		//更新订单状态为发招保失败
+		dbDao.update(orderinfo);
+		System.out.println("捕捉到错误后改变订单状态为正确状态");
+		if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()
+				|| orderinfo.getStatus() == JPOrderStatusEnum.BIANGENGSHIBAI.intKey()) {
+			Integer visaOpid = orderinfo.getVisaOpid();
+			if (!Util.isEmpty(visaOpid)) {
+				//添加日志
+				TOrderLogsEntity logs = new TOrderLogsEntity();
+				logs.setCreateTime(new Date());
+				logs.setOpId(visaOpid);
+				logs.setOrderId(orderinfo.getId());
+				logs.setOrderStatus(orderinfo.getStatus());
+				logs.setUpdateTime(new Date());
+				dbDao.insert(logs);
 			}
+		}
 
-			/*if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()) {
+		/*if (orderinfo.getStatus() == JPOrderStatusEnum.AUTO_FILL_FORM_FAILED.intKey()) {
 				//消息通知
 				try {
 					visaInfoWSHandler.broadcast(new TextMessage(""));
@@ -551,7 +627,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 					e.printStackTrace();
 				}
 			}*/
-		}
+
 		return null;
 	}
 
@@ -624,6 +700,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object updateAcceptanceNumber(JapanSimulatorForm form) {
+		System.out.println("更新收付番号CID:" + form.getCid());
 		if (Util.isEmpty(form.getCid())) {
 			return ResultObject.fail("任务id不能为空！");
 		}
@@ -666,6 +743,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object updateYifa(JapanSimulatorForm form) {
+		System.out.println("成功之后更新状态的CID:" + form.getCid());
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, form.getCid());
 		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
 		//order.setStatus(JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey());

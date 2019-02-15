@@ -100,16 +100,21 @@ function initTravelPlanTable(){
 					}
 					if(value.hotelname != undefined ){
 						//html += '<td>'+value.hotelname+'</td>';
-						html += '<td><table style="width:100%;"><tr><td style="text-align:center;">'+value.hotelname+'</td></tr><tr><td style="text-align:center;">'+value.hoteladdress+'</td></tr><tr><td style="text-align:center;">'+value.hotelmobile+'</td></tr></table></td>';
+						if(index != data.length - 1){
+							html += '<td><table style="width:100%;"><tr><td style="text-align:center;">'+value.hotelname+'</td></tr><tr><td style="text-align:center;">'+value.hoteladdress+'</td></tr><tr><td style="text-align:center;">'+value.hotelmobile+'</td></tr></table></td>';
+						}else{
+							html += '<td></td>';
+						}
 					}else{
-						if(index != data.length -1){
+						if(index != data.length - 1){
 							html += '<td>連泊</td>';
 						}else{
 							html += '<td></td>';
 						}
 					}
-					if(index != data.length - 1 && index != 0){
-						html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i></td>';
+					if(index != data.length - 1){
+						//html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i></td>';
+						html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i><i class="addHui" onclick="addHotel('+value.id+')"></i></td>';					
 					}
 					html += '</tr>';
 				});
@@ -143,6 +148,19 @@ function resetPlan(planid){
 			initTravelPlanTable();
 			layer.msg('重置成功');
 		}
+	});
+}
+function addHotel(planid){
+	layer.open({
+		type: 2,
+		title: false,
+		closeBtn:false,
+		fix: false,
+		maxmin: false,
+		shadeClose: false,
+		scrollbar: false,
+		area: ['800px', '460px'],
+		content: '/admin/simple/addHotel.html?planid='+planid+'&visatype='+visatype
 	});
 }
 
@@ -187,23 +205,20 @@ $(document).on("input","#stayday",function(){
 	if(!thisval){
 		$('#returnDate').val('');
 	}
+	
+	var returnDate = $("#returnDate").val();
 	if(gotripdate && thisval){
-		$.ajax({ 
-			url: '/admin/visaJapan/autoCalculateBackDate.html',
-			dataType:"json",
-			data:{gotripdate:gotripdate,stayday:thisval},
-			type:'post',
-			success: function(data){
-				$('#backtripdate').val(data);
-				//设置出行信息返回日期的时间
-				var triptype = $('#triptype').val();
-				if(triptype == 1){
-					//往返设置返回日期
-					$('#returnDate').val(data);
-				}
+		$.ajax({
+			url: '/admin/neworderUS/autoCalculateBackDate.html',
+			dataType: "json",
+			data: { gotripdate: gotripdate, stayday: thisval },
+			type: 'post',
+			success: function (data) {
+				$("#returnDate").val(data);
 			}
 		});
 	}
+	
 });
 $(document).on("focus",".select2-search__field",function(){
 	var thisval = $(this).val();

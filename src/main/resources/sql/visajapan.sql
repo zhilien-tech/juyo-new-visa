@@ -9,6 +9,8 @@ tcompany.shortName,
 tr.orderNum japanNumber,
 tr.sendvisanum,
 tr.`status` orderstatus,
+tr.comshortname,
+tc.shortname customershotname,
 toj.acceptDesign number,
 DATE_FORMAT(tr.sendVisaDate, '%Y-%m-%d') sendingTime,
 DATE_FORMAT(tr.outVisaDate, '%Y-%m-%d') signingTime,
@@ -197,4 +199,4 @@ WHERE
 			orderId = @orderid
 		AND scenic != @scenicname
 	)
-and cityId = @cityid
+and cityId = @cityid and region = @region

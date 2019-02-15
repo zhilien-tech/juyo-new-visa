@@ -1895,23 +1895,31 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getCity(String province, String searchStr) {
-		List<String> cityList = new ArrayList<>();
-		List<TIdcardEntity> city = dbDao.query(TIdcardEntity.class,
-				Cnd.where("province", "=", province).and("city", "like", "%" + Strings.trim(searchStr) + "%"), null);
-		for (TIdcardEntity tIdcardEntity : city) {
-			if (!cityList.contains(tIdcardEntity.getCity())) {
-				cityList.add(tIdcardEntity.getCity());
-			}
-		}
 		List<String> list = new ArrayList<>();
-		if (!Util.isEmpty(cityList) && cityList.size() >= 6) {
-			for (int i = 1; i < 6; i++) {
-				list.add(cityList.get(i));
-			}
-			return list;
+		List<String> cityList = new ArrayList<>();
+
+		if (province.endsWith("市")) {
+			list.add(province);
 		} else {
-			return cityList;
+			List<TIdcardEntity> city = dbDao
+					.query(TIdcardEntity.class,
+							Cnd.where("province", "=", province).and("city", "like",
+									"%" + Strings.trim(searchStr) + "%"), null);
+			for (TIdcardEntity tIdcardEntity : city) {
+				if (!cityList.contains(tIdcardEntity.getCity())) {
+					cityList.add(tIdcardEntity.getCity());
+				}
+			}
+			if (!Util.isEmpty(cityList) && cityList.size() >= 6) {
+				for (int i = 1; i < 6; i++) {
+					list.add(cityList.get(i));
+				}
+			} else {
+				list.addAll(cityList);
+			}
 		}
+		return list;
+
 	}
 
 	public Object sendEmail(int orderid, String applicantid, HttpSession session, HttpServletRequest request) {
@@ -2859,6 +2867,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			} catch (JSONException | ParseException e) {
 				e.printStackTrace();
 				jsonEntity.setSuccess(false);
+				System.out.println("生日识别失败");
 				return jsonEntity;
 			}
 			jsonEntity.setName(name);
@@ -2910,6 +2919,20 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		return jsonEntity;
 	}
 
+	public Object twoinchphotoUpload(File file) {
+		String url = "";
+		long length = file.length();
+		System.out.println(length / 1024 + "KB");
+		if (length / 1024 > 240) {
+			url = "请上传小于240KB的图片";
+			return url;
+		}
+
+		Map<String, Object> map = qiniuUploadService.ajaxUploadImage(file);
+		url = CommonConstants.IMAGES_SERVER_ADDR + map.get("data");
+		return url;
+	}
+
 	public Object IDCardRecognitionUS(File file, int applyid, int orderid, int userid, HttpServletRequest request,
 			HttpServletResponse response) {
 
@@ -2923,6 +2946,16 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}*/
+		//解析扫描的结果，结构化成标准json格式
+		ApplicantJsonEntity jsonEntity = new ApplicantJsonEntity();
+
+		long length = file.length();
+		System.out.println(length / 1024 + "KB");
+		if (length / 1024 > 240) {
+			jsonEntity.setSuccess(false);
+			jsonEntity.setUrl("请上传小于240KB的图片");
+			return jsonEntity;
+		}
 
 		String imageDataValue = saveDiskImageToDisk(file);
 		Input input = new Input(imageDataValue, "face");
@@ -2933,8 +2966,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		long endTime = System.currentTimeMillis();
 		System.out.println("扫描运行时间：" + (endTime - startTime) + "ms");
 		System.out.println("info:" + info);
-		//解析扫描的结果，结构化成标准json格式
-		ApplicantJsonEntity jsonEntity = new ApplicantJsonEntity();
+
 		JSONObject resultObj = null;
 		try {
 			resultObj = new JSONObject(info);
@@ -2973,6 +3005,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 
 			}
 			jsonEntity.setName(name);
+			jsonEntity = handleName(jsonEntity, name);
 			jsonEntity.setNationality(out.getString("nationality"));
 			jsonEntity.setNum(num);
 			jsonEntity.setRequest_id(out.getString("request_id"));
@@ -2989,6 +3022,113 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		}
 		long endTime1 = System.currentTimeMillis();
 		System.out.println("程序运行时间：" + (endTime1 - startTime) + "ms");
+
+		return jsonEntity;
+	}
+
+	//姓名分开处理
+	public ApplicantJsonEntity handleName(ApplicantJsonEntity jsonEntity, String name) {
+		jsonEntity.setXingCn(name.substring(0, 1));
+		jsonEntity.setMingCn(name.substring(1, name.length()));
+		ArrayList<String> nameList = new ArrayList();
+		nameList.add("欧阳");
+		nameList.add("太史");
+		nameList.add("端木");
+		nameList.add("上官");
+		nameList.add("司马");
+		nameList.add("东方");
+		nameList.add("独孤");
+		nameList.add("南宫");
+		nameList.add("万俟");
+		nameList.add("闻人");
+		nameList.add("夏侯");
+		nameList.add("诸葛");
+		nameList.add("尉迟");
+		nameList.add("公羊");
+		nameList.add("赫连");
+		nameList.add("澹台");
+		nameList.add("皇甫");
+		nameList.add("宗政");
+		nameList.add("濮阳");
+		nameList.add("公冶");
+		nameList.add("太叔");
+		nameList.add("申屠");
+		nameList.add("公孙");
+		nameList.add("慕容");
+		nameList.add("仲孙");
+		nameList.add("钟离");
+		nameList.add("长孙");
+		nameList.add("宇文");
+		nameList.add("司徒");
+		nameList.add("鲜于");
+		nameList.add("司空");
+		nameList.add("闾丘");
+		nameList.add("子车");
+		nameList.add("亓官");
+		nameList.add("司寇");
+		nameList.add("巫马");
+		nameList.add("公西");
+		nameList.add("颛孙");
+		nameList.add("壤驷");
+		nameList.add("公良");
+		nameList.add("漆雕");
+		nameList.add("乐正");
+		nameList.add("宰父");
+		nameList.add("谷梁");
+		nameList.add("拓跋");
+		nameList.add("夹谷");
+		nameList.add("轩辕");
+		nameList.add("令狐");
+		nameList.add("段干");
+		nameList.add("百里");
+		nameList.add("呼延");
+		nameList.add("东郭");
+		nameList.add("南门");
+		nameList.add("羊舌");
+		nameList.add("微生");
+		nameList.add("公户");
+		nameList.add("公玉");
+		nameList.add("公仪");
+		nameList.add("梁丘");
+		nameList.add("公仲");
+		nameList.add("公上");
+		nameList.add("公门");
+		nameList.add("公山");
+		nameList.add("公坚");
+		nameList.add("左丘");
+		nameList.add("公伯");
+		nameList.add("西门");
+		nameList.add("公祖");
+		nameList.add("第五");
+		nameList.add("公乘");
+		nameList.add("贯丘");
+		nameList.add("公皙");
+		nameList.add("南荣");
+		nameList.add("东里");
+		nameList.add("东宫");
+		nameList.add("仲长");
+		nameList.add("子书");
+		nameList.add("子桑");
+		nameList.add("即墨");
+		nameList.add("达奚");
+		nameList.add("褚师");
+		for (String string : nameList) {
+			if (name.contains(string)) {
+				jsonEntity.setXingCn(name.substring(0, 2));
+				jsonEntity.setMingCn(name.substring(2, name.length()));
+			}
+		}
+
+		PinyinTool tool = new PinyinTool();
+		try {
+			jsonEntity.setXingEn(tool.toPinYin(jsonEntity.getXingCn(), "", Type.UPPERCASE));
+			jsonEntity.setMingEn(tool.toPinYin(jsonEntity.getMingCn(), "", Type.UPPERCASE));
+		} catch (BadHanyuPinyinOutputFormatCombination e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
 
 		return jsonEntity;
 	}
@@ -3475,6 +3615,7 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			resultObj = new JSONObject(info);
 		} catch (JSONException e) {
 			jsonEntity.setSuccess(false);
+			System.out.println("扫描失败");
 			return jsonEntity;
 		}
 		JSONArray outputArray = resultObj.getJSONArray("outputs");
@@ -3489,10 +3630,11 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			}
 			jsonEntity.setType(substring);
 			jsonEntity.setNum(out.getString("passport_no"));
-			if (Util.isEmpty(jsonEntity.getNum()) || jsonEntity.getNum().length() != 9) {
+			/*if (Util.isEmpty(jsonEntity.getNum()) || jsonEntity.getNum().length() != 9) {
 				jsonEntity.setSuccess(false);
+				System.out.println("护照号识别失败");
 				return jsonEntity;
-			}
+			}*/
 			if (out.getString("sex").equals("F")) {
 				jsonEntity.setSex("女");
 				jsonEntity.setSexEn("F");
@@ -3524,10 +3666,10 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 					e1.printStackTrace();
 				}
 			}
-			if (Util.isEmpty(jsonEntity.getXingCn()) || Util.isEmpty(jsonEntity.getMingCn())) {
+			/*if (Util.isEmpty(jsonEntity.getXingCn()) || Util.isEmpty(jsonEntity.getMingCn())) {
 				jsonEntity.setSuccess(false);
 				return jsonEntity;
-			}
+			}*/
 
 			jsonEntity.setOCRline1(out.getString("line0"));
 			jsonEntity.setOCRline2(out.getString("line1"));
@@ -3558,8 +3700,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			} catch (JSONException | ParseException e) {
 
 				e.printStackTrace();
-				jsonEntity.setSuccess(false);
-				return jsonEntity;
+				/*jsonEntity.setSuccess(false);
+				System.out.println("日期相关识别失败");
+				return jsonEntity;*/
 
 			}
 			//将图片上传到七牛云
@@ -3601,6 +3744,17 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Object passportRecognitionUS(File file, int applyid, int orderid, int userid, HttpServletRequest request,
 			HttpServletResponse response) {
 
+		long length1 = file.length();
+		System.out.println(length1 / 1024 + "KB");
+		//解析扫描的结果，结构化成标准json格式
+		PassportJsonEntity jsonEntity = new PassportJsonEntity();
+
+		if (length1 / 1024 > 240) {
+			jsonEntity.setSuccess(false);
+			jsonEntity.setUrl("请上传小于240KB的图片");
+			return jsonEntity;
+		}
+
 		String imageDataB64 = saveDiskImageToDisk(file);
 
 		Input input = new Input(imageDataB64);
@@ -3610,8 +3764,6 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		String info = (String) aliPassportOcrAppCodeCall(content);
 		System.out.println("info:" + info);
 
-		//解析扫描的结果，结构化成标准json格式
-		PassportJsonEntity jsonEntity = new PassportJsonEntity();
 		JSONObject resultObj = null;
 		try {
 			resultObj = new JSONObject(info);
@@ -3695,8 +3847,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 			} catch (JSONException | ParseException e) {
 
 				e.printStackTrace();
-				jsonEntity.setSuccess(false);
-				return jsonEntity;
+				/*jsonEntity.setSuccess(false);
+				return jsonEntity;*/
 
 			}
 			jsonEntity.setSuccess(out.getBoolean("success"));
@@ -3780,9 +3932,9 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(form.getIssueDate()) && !Util.isEmpty(form.getExpiryDay())) {
 			int yearsBetween = DateUtil.yearsBetween(form.getIssueDate(), form.getExpiryDay());
 			if (yearsBetween == 10) {
-				passport.setValidType(2);
-			} else {
 				passport.setValidType(1);
+			} else {
+				passport.setValidType(2);
 			}
 		}
 		//passport.setValidType(form.getValidType());

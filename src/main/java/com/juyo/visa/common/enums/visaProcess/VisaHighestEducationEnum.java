@@ -6,7 +6,7 @@ import com.uxuexi.core.common.enums.IEnum;
  * 美国各个州 枚举
  */
 public enum VisaHighestEducationEnum implements IEnum {
-	CHUZHONG(1, "初中"), GAOZHONG(2, "高中"), DAZHUAN(3, "大专"), BENKE(4, "本科"), BOSHI(5, "硕士"), SHUOSHI(6, "博士");
+	DAZHUAN(3, "大专"), BENKE(4, "本科"), BOSHI(5, "硕士"), SHUOSHI(6, "博士");
 
 	private int key;
 	private String value;

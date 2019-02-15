@@ -80,6 +80,11 @@ public class MobileUSModule {
 	@AdaptBy(type = UploadAdaptor.class)
 	public Object updateImage(@Param("encode") String encode, @Param("image") File file, @Param("staffid") int staffid,
 			@Param("type") int type, @Param("sequence") int sequence) {
+		System.out.println(encode);
+		System.out.println(file);
+		System.out.println(staffid);
+		System.out.println(type);
+		System.out.println(sequence);
 		return mobileUSService.updateImage(encode, file, staffid, type, sequence);
 	}
 
@@ -236,6 +241,15 @@ public class MobileUSModule {
 	@POST
 	public Object getUSstate(@Param("encode") String encode, @Param("searchstr") String searchstr) {
 		return mobileUSService.getUSstate(encode, searchstr);
+	}
+
+	/**
+	 * 百度翻译
+	 */
+	@At
+	@POST
+	public Object translate(@Param("searchstr") String searchstr) {
+		return mobileUSService.translate(searchstr);
 	}
 
 }

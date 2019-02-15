@@ -51,6 +51,7 @@
 									<th><span>景点(中文)</span></th>
 									<th><span>景点(原文)</span></th>
 									<th><span>所属城市</span></th>
+									<th><span>所属区域</span></th>
 									<th><span>操作</span></th>
 								</tr>
 							</thead>

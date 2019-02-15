@@ -31,6 +31,36 @@
 	.icon-line{
 		width: 2.2%;
 	}
+	#streetspan{
+		display: inline;
+		font-size: 12px;
+		position: inherit;
+	}
+	
+	/*酒店检索*/
+	.IdInfo {
+		border: 1px solid #7a9cd3;
+	}
+	
+	.IdInfo li {
+		padding-left: 2%;
+	}
+	
+	.IdInfo li:hover {
+		/*background: #1e90ff;
+		cursor: pointer;*/
+		
+		background: rgb(30, 144, 255); 
+		color: rgb(255, 255, 255);
+	}
+	
+	.IdInfo li:hover a {
+		color: #FFF;
+	}
+	
+	.IdInfo li a {
+		color: #000;
+	}
 </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -52,14 +82,24 @@
 					</c:choose>
 				
 				</span>
-				<c:choose>
+				<a id="errorimgPhoto" style="display:  none;" onclick="toErrorphoto('${obj.orderinfo.errorurl}')"><span style="color:red;"><strong style="cursor:pointer">错误信息图片</strong></span></a>
+				<a id="reviewimgPhoto" style="display:  none;" onclick="toReviewphoto('${obj.orderinfo.reviewurl}')"><span style="color:red;"><strong style="cursor:pointer">预览信息图片</strong></span></a>
+				<%-- <c:choose>
 					<c:when test="${!empty obj.orderinfo.errorurl }">
-						<a id="errorimgPhoto" onclick="toErrorphoto()">错误信息图片</a>
+						<a id="errorimgPhoto" onclick="toErrorphoto()"><span style="color:red;"><strong>错误信息图片</strong></span></a>
 					</c:when>
 					<c:otherwise>
 						
 					</c:otherwise>
 				</c:choose>
+				<c:choose>
+					<c:when test="${!empty obj.orderinfo.reviewurl }">
+						<a id="reviewimgPhoto" onclick="toReviewphoto()"><span style="color:red;"><strong>预览信息图片</strong></span></a>
+					</c:when>
+					<c:otherwise>
+						
+					</c:otherwise>
+				</c:choose> --%>
 				<!-- <span class="">受付番号：<p>{{orderinfo.acceptdesign}}</p></span> -->
 				<%-- <span class="state">状态： 
 					<c:if test="${obj.orderInfo.status == '1'}">
@@ -72,15 +112,33 @@
 				<c:choose>
 				<c:when test="${obj.isaddorder == 1 }">
 					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
-					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
+					<input type="button" onclick="save(1)" value="保存" class="btn btn-primary btn-sm pull-right" /> 
 				</c:when>
 				<c:otherwise>
 					<input type="button" onclick="closeWindow()" value="取消" class="btn btn-primary btn-sm pull-right" /> 
-					<input type="button" onclick="save()" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-Big" /> 
-					<input type="button" onclick="download()" value="下载" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" onclick="save(1)" value="保存" class="btn btn-primary btn-sm pull-right" /> 
+					<input type="button" id="daturl" style="width:92px !important;" onclick="download(3)" value="下载DAT文件" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" id="pdfurl" style="width:80px !important;" onclick="download(2)" value="下载确认页" class="btn btn-primary btn-sm pull-right" />
+					<input type="button" id="reviewurl" style="width:80px !important;" onclick="download(1)" value="下载预览页" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="refuse()" value="拒签" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" onclick="pass()" value="通过" class="btn btn-primary btn-sm pull-right" />
-					<input type="button" id="autofill" onclick="autofill()" value="自动填表" class="btn btn-primary btn-sm pull-right btn-Big" />
+					<c:choose>
+						<c:when test="${!empty obj.orderinfo.reviewurl && obj.orderinfo.ispreautofilling == 0  }">
+							<input type="button" id="autofill" onclick="autofill()" value="正式填表" class="btn btn-primary btn-sm pull-right btn-Big" />
+						</c:when>
+						<c:otherwise>
+							<input type="button" disabled="disabled" id="autofill" onclick="autofill()" value="正式填表" class="btn btn-primary btn-sm pull-right btn-Big" />
+						</c:otherwise>
+					</c:choose>
+					<%-- <c:choose>
+						<c:when test="${!empty obj.orderinfo.reviewurl }">
+							<input type="button" id="preautofill" disabled="disabled" onclick="preautofill()" value="预检查" class="btn btn-primary btn-sm pull-right btn-Big" />
+						</c:when>
+						<c:otherwise>
+							<input type="button" id="preautofill" onclick="preautofill()" value="预检查" class="btn btn-primary btn-sm pull-right btn-Big" />
+						</c:otherwise>
+					</c:choose> --%>
+					<input type="button" id="preautofill" onclick="preautofill()" value="预检查" class="btn btn-primary btn-sm pull-right btn-Big" />
 					<input type="button" value="通知" onclick="sendEmailUS()" class="btn btn-primary btn-sm pull-right" />
 					<input type="button" value="日志" onclick="toLog()" class="btn btn-primary btn-sm pull-right" />
 				</c:otherwise>
@@ -92,7 +150,7 @@
 				<!-- 主体 -->
 				<section class="content listDetailContent">
 					<!-- 订单信息 -->
-					<p class="info-head">订单信息<span>如不清楚出行信息，可不必填写</span></p>
+					<p class="info-head">订单信息</p>
 					<div class="info-body-from">
 						<!-- 模块 -->
 						<div class="row body-from-input">
@@ -136,7 +194,7 @@
 							
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>是否付款</label>
+									<label>是否付款</label>
 									<select id="ispayed" name="ispayed"  class="form-control input-sm" >
 									<c:forEach var="map" items="${obj.ispayedenum}">
 										<option value="${map.key}"  ${map.key==obj.orderinfo.ispayed?"selected":"" } >${map.value}</option>
@@ -147,7 +205,7 @@
 							
 							<div class="col-sm-3">
 								<div class="form-group">
-									<label><span>*</span>面签时间</label>
+									<label>面签时间</label>
 									<input id="Interviewdate" type="text" class="interviewformat input-sm form-control" name="Interviewdate" value="${obj.Interviewdate }" />
 								</div>
 							</div>
@@ -220,7 +278,7 @@
 								<!-- 预计出发时间 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label>预计出发日期：</label> <input id="goDate"
+										<label><span>*</span>预计出发日期：</label> <input id="goDate"
 											name="godate" type="text"
 											class="form-format form-control input-sm"
 											value="<fmt:formatDate value="${obj.travelInfo.godate }" pattern="yyyy-MM-dd" />" />
@@ -230,7 +288,7 @@
 								<!-- 抵达美国日期 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label>抵达美国日期：</label> <input id="sendVisaDate"
+										<label><span>*</span>抵达美国日期：</label> <input id="sendVisaDate"
 											name="arrivedate" type="text"
 											class="form-format form-control input-sm datetimepickercss"
 											value="<fmt:formatDate value="${obj.travelInfo.arrivedate }" pattern="yyyy-MM-dd" />" />
@@ -240,8 +298,8 @@
 								<!-- 停留天数 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label>停留天数：</label> <input id="stayday"
-											onchange="sendDate()" name="staydays" class="input-sm"
+										<label><span>*</span>停留天数：</label> <input id="stayday"
+											 name="staydays" class="form-format form-control input-sm datetimepickercss"
 											value="${obj.travelInfo.staydays}" type="text" />
 									</div>
 								</div>
@@ -347,7 +405,7 @@
 								<!-- 出发城市 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>出发城市：</label> <select
+										<label><span>*</span>返回城市：</label> <select
 											id="returnDepartureCity" name="returnDepartureCity"
 											class="form-control select2 select2City departurecity"
 											multiple="multiple">
@@ -362,7 +420,7 @@
 								<!-- 返回城市 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span>*</span>返回城市：</label> <select
+										<label><span>*</span>抵达城市：</label> <select
 											id="returnArrivedCity" name="returnArrivedCity"
 											class="form-control input-sm select2City arrivedcity"
 											multiple="multiple">
@@ -424,12 +482,22 @@
 								<!-- 送签计划去美国地点 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label>送签计划去美国地点：</label> <select name="planstate"
-											class="form-control input-sm">
+										<label><span>*</span>送签计划去美国地点：</label> <select id="planstate" name="planstate"
+											class="form-control select2City input-sm" multiple="multiple">
 											<!-- <span>*</span> -->
-											<c:forEach items="${obj.state }" var="planstate" >
-												<option <c:if test="${obj.travelInfo.state==planstate.key}">selected</c:if>  value="${planstate.key }" >${planstate.value }</option>
+											<c:forEach items="${obj.state }" var="planstates" >
+												<c:choose>
+													<c:when test="${planstates.key eq obj.travelInfo.state }">
+														<option value="${planstates.key }" selected="selected">${planstates.value }</option>
+													</c:when>
+													<c:otherwise>
+														<option value="${planstates.key }">${planstates.value }</option>
+													</c:otherwise>
+												</c:choose>
+												
+												
 											</c:forEach>
+											
 										</select>
 
 									</div>
@@ -438,23 +506,64 @@
 								<!-- 市 -->
 								<div class="col-sm-3">
 									<div class="form-group">
-										<label><span></span></label> 
-										<input name="plancity" id="plancity" type="text" onchange="translateZhToEn(this,'plancityen','')" value="${obj.travelInfo.city}"
-											class="form-control input-sm" placeholder="市" />
+										<label>城市</label>
+										
+										<select
+											id="plancity" name="plancity"
+											class="form-control input-sm select2City arrivedcity"
+											multiple="multiple">
+										<c:if test="${!empty obj.travelInfo.city}">
+												<option value="${obj.travelInfo.city}"
+													selected="selected">${obj.travelInfo.city}</option>
+											</c:if>
+										
+										</select>
+										 
+										<%-- <input name="plancity" id="plancity" type="text" onchange="translateZhToEn(this,'plancityen','')" value="${obj.travelInfo.city}"
+											class="form-control input-sm" placeholder="市" /> --%>
 											<input type="hidden" id="plancityen" name="plancityen" value="${obj.travelInfo.cityen }"/>
 									</div>
 								</div>
 								<!-- 市END -->
 								<!-- 街道 -->
-								<div class="col-sm-6">
+								<%-- <div class="col-sm-6">
 									<div class="form-group">
-										<label><span></span></label> <input id="planaddress" name="planaddress" onchange="translateZhToEn(this,'planaddressen','')"
+										<label><span>*</span><span id="streetspan">只能填写英文和数字</span></label> <input id="planaddress" name="planaddress" onchange="translateZhToEn(this,'planaddressen','')"
 											type="text" value="${obj.travelInfo.address}"
-											class="form-control input-sm" placeholder="街道" />
+											class="form-control input-sm" placeholder="街道英文" />
 											<input id="planaddressen" name="planaddressen" type="hidden" value="${obj.travelInfo.addressen }"/>
 									</div>
-								</div>
+								</div> --%>
+								
 								<!-- 街道END -->
+							</div>
+							<div class="row body-from-input">
+								<div class="col-sm-3">
+									<div class="form-group" id="provinceDiv">
+										<label>酒店英文</label> 
+										<input
+											id="hotelname" style="text-transform: none;" name="hotelname"
+											class="form-control input-sm" type="text" value="${obj.travelInfo.hotelnameen }">
+									</div>
+								</div>
+								
+								
+								<div class="col-sm-6">
+									<div class="form-group">
+										<label>街道英文</label> <input id="planaddress" style="text-transform: none;" name="planaddress"
+											type="text" value="${obj.travelInfo.address}"
+											class="form-control input-sm" placeholder="" />
+											<%-- <input id="planaddressen" name="planaddressen" type="hidden" value="${obj.travelInfo.addressen }"/> --%>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group">
+										<label>电话</label> <input id="telephone" name="telephone"
+											type="text" value="${obj.travelInfo.telephone}"
+											class="form-control input-sm" placeholder="" />
+									</div>
+								</div>
+							
 							</div>
 							<!-- 模块5END -->
 						</div>
@@ -462,8 +571,15 @@
 					</div>
 					<!-- 订单信息END -->
 					<!-- 大模块二 -->
+					
+					<div class="hideNext" onclick="hideNext();" id="hideNext" style="background-color:#3087f1;color:#FFF;padding:6px 15px;margin-right:10px;border-radius:4px;cursor:pointer;margin:0 auto;width: 20%;text-align:center;margin-top:5px;">
+						<a id="hideNextButton" style="color:#FFF;">下一步</a>
+						
+					</div>
+					
+					<div class="hideClass" id="hideClass" style="margin-top:5px;">
 					<div class="info" id="mySwitch">
-						<!-- 标题以及按钮组 -->
+						<!-- 标题以及按钮组 --> 
 						<p class="info-head">申请人</p>
 						<div class="dataInfoGroup orderInfoGroup">
 							<input id="mypassportId" type="hidden" value="${obj.passport.id }">
@@ -493,11 +609,11 @@
 								<!-- 申请人左侧 -->
 								<div class="col-sm-3">
 									<!-- 二寸免冠照片 -->
-									<div class="col-xs-10 picturesInch">
-										<div class="form-group pictureTop">
+									<div class="col-xs-10 picturesInch" style="width: 202px;height:202px !important;">
+										<div class="form-group pictureTop" style="width: 200px;height:200px !important;">
 											<div class="uploadInfo">
 												<span class="inchInfo">美签照片51*51mm</span>  
-												<img id="imgInch" name="imgInch" alt="" src="${obj.twoinchphoto.url }"> 
+												<img id="imgInch" style="width: 200px;height:200px !important;" name="imgInch" alt="" src="${obj.twoinchphoto.url }"> 
 												<!-- <input id="uploadFileInchImg" name="uploadFileInchImg" disable="true"
 													class="btn btn-primary btn-sm" type="file" value="上传" />  -->
 													<i class="delete" ></i>
@@ -635,7 +751,7 @@
 					<!-- 大模块2END -->
 					<!-- 大模块3 -->
 					<!-- 标题以及按钮组 -->
-					<div class="info solveContent" id="mySwitch">
+					<div class="info solveContent" id="mySwitch" style="margin-bottom: 10px !important;">
 						<p class="info-head followUp">
 							跟进
 							<div class="dataInfoGroup">
@@ -655,10 +771,14 @@
 						</div>
 					</div>	
 					<!-- 大模块3END -->
+					</div>
 				</section>
 			</form>
 		</div>
 	</div>
+	<script type="text/javascript">
+		var BASE_PATH = '${base}';
+	</script>
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/public/bootstrap/js/bootstrap.js"></script>
 	<script src="${base}/references/public/plugins/datatables/jquery.dataTables.min.js"></script>
@@ -676,8 +796,23 @@
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/references/public/bootstrap/js/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js"></script>
+	<script type="text/javascript" src="${base}/admin/orderUS/orderUSDetail.js"></script>
 	<%-- <script src="${base}/admin/pcVisa/updatePhoto.js"></script> --%>
 	<script type="text/javascript">
+	
+	
+		if('${obj.nextButtonFlag}' == 1){
+			$(".hideClass").show();
+			$(".hideNext").hide();
+		}else{
+			$(".hideClass").hide();
+			$(".hideNext").show();
+		}
+		
+		function hideNext(){
+			save(2);
+		}
+	
 		var staffid = '${obj.basicinfo.id}';
 		var orderid = '${obj.orderid}';
 		var addorder = '${obj.isaddorder}';
@@ -685,6 +820,29 @@
 		var isautofilling = '${obj.orderinfo.isautofilling}';
 		if(isautofilling == 1){
 			$("#autofill").attr("disabled",true);
+		}
+		
+		var ispreautofilling = '${obj.orderinfo.ispreautofilling}';
+		if(ispreautofilling == 1){
+			$("#preautofill").attr("disabled",true);
+		}
+		
+		if('${obj.orderinfo.errorurl}'){
+			$("#errorimgPhoto").show();
+			//$("#errorimgPhoto").attr("src",'${obj.orderinfo.errorurl}');
+		}
+		if('${obj.orderinfo.reviewurl}'){
+			$("#reviewimgPhoto").show();
+			$("#reviewurl").attr("disabled",false);
+			//$("#reviewimgPhoto").attr("src",'${obj.orderinfo.reviewurl}');
+		}else{
+			$("#reviewurl").attr("disabled",true);
+		}
+		if(!'${obj.orderinfo.pdfurl}'){
+			$("#pdfurl").attr("disabled",true);
+		}
+		if(!'${obj.orderinfo.daturl}'){
+			$("#daturl").attr("disabled",true);
 		}
 		
 		//将汉字转为拼音
@@ -707,7 +865,123 @@
 			$(".checkShowORHide").hide();
 		}
 		//日期格式处理
-		$(".form-format").datetimepicker({
+		var now = new Date();
+		//预计出发日期
+		$("#goDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			startDate: now,//日期小于今天
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition: "bottom-right",//显示位置
+			minView: "month"//只显示年月日
+		}).on('changeDate', function (ev) {
+			$("#sendVisaDate").datetimepicker("setStartDate", $("#goDate").val());
+		});
+		
+		//抵达美国日期
+		$("#sendVisaDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			startDate: now,//日期小于今天
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition: "bottom-right",//显示位置
+			minView: "month"//只显示年月日
+		}).on('changeDate', function (ev) {
+			console.log('change..');
+			var stayday = $("#stayday").val();
+			var startDate = $("#sendVisaDate").val();
+			var returnDate = $("#returnDate").val();
+			if(stayday != ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalculateBackDate.html',
+					dataType: "json",
+					data: { gotripdate: startDate, stayday: stayday },
+					type: 'post',
+					success: function (data) {
+						$("#returnDate").val(data);
+					}
+				});
+			}
+			if(returnDate != "" && stayday == ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalCulateStayday.html',
+					dataType: "json",
+					data: { gotripdate: startDate, returnDate: returnDate },
+					type: 'post',
+					success: function (data) {
+						$("#stayday").val(data);
+					}
+				});
+			}
+		});
+		//离开美国日期
+		$("#returnDate").datetimepicker({
+			format: 'yyyy-mm-dd',
+			language: 'zh-CN',
+			startDate: now,
+			autoclose: true,//选中日期后 自动关闭
+			pickerPosition: "bottom-right",//显示位置
+			minView: "month"//只显示年月日
+		}).on("click", function () {
+			console.log('click..');
+			
+			$(this).datetimepicker(
+				"setStartDate", $("#sendVisaDate").val()
+			);
+			
+		}).on('changeDate', function (ev) {
+			console.log('change..');
+			var stayday = $("#stayday").val();
+			var startDate = $("#sendVisaDate").val();
+			var returnDate = $("#returnDate").val();
+			/* if(stayday != ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalculateBackDate.html',
+					dataType: "json",
+					data: { gotripdate: startDate, stayday: stayday },
+					type: 'post',
+					success: function (data) {
+						$("#returnDate").val(data);
+					}
+				});
+			} */
+			if(returnDate != "" && startDate != ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalCulateStayday.html',
+					dataType: "json",
+					data: { gotripdate: startDate, returnDate: returnDate },
+					type: 'post',
+					success: function (data) {
+						$("#stayday").val(data);
+					}
+				});
+			}
+		});
+		
+		$(document).on("input","#stayday",function(){
+			var thisval = $(this).val();
+			thisval = thisval.replace(/[^\d]/g,'');
+			$(this).val(thisval);
+			if(!thisval){
+				$('#returnDate').val('');
+			}
+			
+			var sendvisadate = $("#sendVisaDate").val();
+			var returnDate = $("#returnDate").val();
+			if(sendvisadate != "" && thisval){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalculateBackDate.html',
+					dataType: "json",
+					data: { gotripdate: sendvisadate, stayday: thisval },
+					type: 'post',
+					success: function (data) {
+						$("#returnDate").val(data);
+					}
+				});
+			}
+		});
+		
+		/* $(".form-format").datetimepicker({
 			format: 'yyyy-mm-dd',
 			language: 'zh-CN',
 	        weekStart: 1,
@@ -719,7 +993,7 @@
 	        showMeridian: false,
 			pickerPosition:"bottom-right",//显示位置
 			minView: "month"//只显示年月日
-		}); 
+		});  */
 		//面签时间日期格式处理
 		$(".interviewformat").datetimepicker({
 			format: 'yyyy-mm-dd H:i',
@@ -755,22 +1029,47 @@
 		//抵达美国日期和预计出发日期一致
 		$("#goDate").change(function(){
 			var godate = $("#goDate").val(); //出发日期
-			var sendvisadate = $("#sendVisaDate").val(); //抵达美国日期
 			$("#sendVisaDate").val(godate);
-		});
-
-		//离开美国日期联动
-		function sendDate() {
+			/* if(sendvisadate == ""){
+				$("#sendVisaDate").val(godate);
+			} */
+			
 			var stayday = $("#stayday").val();
-			//自动计算离开美国时间
-			var stayday = stayday;
-			var sendvisadate = $("#sendVisaDate").val();
-			console.log(sendvisadate);
-			console.log(stayday);
-			var days = getNewDay(sendvisadate, stayday);
-			console.log(days);
-			$("#returnDate").val(days);
-		}
+			var startDate = $("#sendVisaDate").val();
+			var returnDate = $("#returnDate").val();
+			if(stayday != ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalculateBackDate.html',
+					dataType: "json",
+					data: { gotripdate: startDate, stayday: stayday },
+					type: 'post',
+					success: function (data) {
+						$("#returnDate").val(data);
+					}
+				});
+			}
+			if(returnDate != "" && stayday == ""){
+				$.ajax({
+					url: '/admin/neworderUS/autoCalCulateStayday.html',
+					dataType: "json",
+					data: { gotripdate: startDate, returnDate: returnDate },
+					type: 'post',
+					success: function (data) {
+						$("#stayday").val(data);
+					}
+				});
+			}
+			
+		});
+		
+		//计划去美国的州改变，城市自动清空
+		$("#planstate").change(function(){
+			$("#plancity").empty();
+			$("#hotelname").val("");
+			$("#planaddress").val("");
+			$("#telephone").val("");
+		});
+		
 
 		//日期转换 加上指定天数
 		function getNewDay(dateTemp, days) {
@@ -923,10 +1222,10 @@
 			tags : false
 		//设置必须存在的选项 才能选中
 		});
-		//加载美国州的select2
+		//加载美国城市的select2
 		$('#goArrivedCity,#returnDepartureCity').select2({
 			ajax : {
-				url : "/admin/neworderUS/selectUSstate.html",
+				url : "/admin/neworderUS/selectUScity.html",
 				dataType : 'json',
 				delay : 250,
 				type : 'post',
@@ -937,6 +1236,47 @@
 					}*/
 					return {
 						//exname : cArrivalcity,
+						searchstr : params.term, // search term
+						page : params.page
+					};
+				},
+				processResults : function(data, params) {
+					params.page = params.page || 1;
+					var selectdata = $.map(data, function(obj) {
+						obj.id = obj.id; // replace pk with your identifier
+						obj.text = obj.cityname; // replace pk with your identifier
+						/*obj.text = obj.dictCode;*/
+						return obj;
+					});
+					return {
+						results : selectdata
+					};
+				},
+				cache : false
+			},
+			//templateSelection: formatRepoSelection,
+			escapeMarkup : function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength : 1,
+			maximumInputLength : 20,
+			language : "zh-CN", //设置 提示语言
+			maximumSelectionLength : 1, //设置最多可以选择多少项
+			tags : false
+		//设置必须存在的选项 才能选中
+		});
+		$('#planstate').select2({
+			ajax : {
+				url : "/admin/neworderUS/selectUSstate.html",
+				dataType : 'json',
+				delay : 250,
+				type : 'post',
+				data : function(params) {
+					/* alert(province);
+				    if(province){
+				    	province = province.join(',');
+					} */
+					return {
 						searchstr : params.term, // search term
 						page : params.page
 					};
@@ -966,7 +1306,123 @@
 			tags : false
 		//设置必须存在的选项 才能选中
 		});
+		$('#plancity').select2({
+			ajax : {
+				url : "/admin/neworderUS/selectUSstateandcity.html",
+				dataType : 'json',
+				delay : 250,
+				type : 'post',
+				data : function(params) {
+					var province = $('#planstate').val();
+				    if(province){
+				    	province = province.join(',');
+					}
+					return {
+						province : province,
+						searchstr : params.term, // search term
+						page : params.page
+					};
+				},
+				processResults : function(data, params) {
+					params.page = params.page || 1;
+					var selectdata = $.map(data, function(obj) {
+						obj.id = obj.cityname; // replace pk with your identifier
+						obj.text = obj.cityname; // replace pk with your identifier
+						/*obj.text = obj.dictCode;*/
+						return obj;
+					});
+					return {
+						results : selectdata
+					};
+				},
+				cache : false
+			},
+			//templateSelection: formatRepoSelection,
+			escapeMarkup : function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength : 1,
+			maximumInputLength : 20,
+			language : "zh-CN", //设置 提示语言
+			maximumSelectionLength : 1, //设置最多可以选择多少项
+			tags : false
+		//设置必须存在的选项 才能选中
+		});
+		/* //酒店名称
+		$('#hotelname').select2({
+			ajax : {
+				url : "/admin/neworderUS/selectUSHotel.html",
+				dataType : 'json',
+				delay : 250,
+				type : 'post',
+				data : function(params) {
+					var cArrivalcity = $('#plancity').val();
+					if(cArrivalcity){
+						cArrivalcity = cArrivalcity.join(',');
+					}
+					return {
+						plancity : cArrivalcity,
+						searchstr : params.term, // search term
+						page : params.page
+					};
+				},
+				processResults : function(data, params) {
+					params.page = params.page || 1;
+					var selectdata = $.map(data, function(obj) {
+						obj.id = obj.name; // replace pk with your identifier
+						obj.text = obj.name; // replace pk with your identifier
+						return obj;
+					});
+					return {
+						results : selectdata
+					};
+				},
+				cache : false
+			},
+			//templateSelection: formatRepoSelection,
+			escapeMarkup : function(markup) {
+				return markup;
+			}, // let our custom formatter work
+			minimumInputLength : 1,
+			maximumInputLength : 20,
+			//allowClear: true,//是否允许清空选中
+			language : "zh-CN", //设置 提示语言
+			maximumSelectionLength : 1, //设置最多可以选择多少项
+			tags : false
+		//设置必须存在的选项 才能选中
+		}); */
+		
+		$("#plancity").on('select2:unselect', function (evt) {
+			$("#hotelname").val("");
+			$("#planaddress").val("");
+			$("#telephone").val("");
+		}); 
+		$("#hotelname").on('select2:unselect', function (evt) {
+			$("#planaddress").val("");
+		}); 
+		
+		$("#hotelname").on('select2:select', function (evt) {
+			var hotelname = $(this).select2("val");
+			if(hotelname){
+				hotelname = hotelname.join(',');
+			}
+			$.ajax({
+				url : '/admin/neworderUS/getHoteladdress',
+				type : 'POST',
+				data : {
+					'hotelname' : hotelname
+				},
+				dataType:'json',
+				success : function(data) {
+					$("#planaddress").val(data);
+				},
+				error : function() {
+				}
+			});
 
+		});
+		
+		
 		//出发航班select2
 		$('#goFlightNum').select2(
 				{
@@ -1149,6 +1605,7 @@
 			$('#goFlightNum').empty();
 			$('#returnFlightNum').empty();
 		});
+		
 		//去程抵达城市
 		$("#goArrivedCity")
 				.on(
@@ -1466,12 +1923,93 @@
 			autofill1(4750, 4777);
 			autofill1(4751, 4778); 
 			autofill1(4752, 4779);
+			autofill1(4753, 4780);
 			autofill1(4755, 4782);
 			autofill1(4756, 4783);
 			
 		}
 		
- 		function autofill(orderid, staffid){
+		//正式填表
+		function autofill(orderid){
+			$("#orderstatus_US").html("正式填表中");
+ 			$("#autofill").attr("disabled",true);
+			
+			var orderid = '${obj.orderid}';
+			var staffid = '${obj.basicinfo.id}';
+			$.ajax({
+				url : '/admin/orderUS/autofill.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					
+					var getstatus = setInterval(function(){
+			 			console.log("轮询开始");
+			 			console.log(count);
+			 			$.ajax({
+							url : '/admin/orderUS/isAutofilled.html',
+							data : {
+								orderid : orderid,
+								staffid : staffid
+							},
+							dataType : "json",
+							type : 'POST',
+							success : function(data) {
+								if(data.orderstatus == 9){
+									$("#autofill").attr("disabled",false);
+									$("#orderstatus_US").html("正式填表成功");
+									clearInterval(getstatus);
+									console.log("正式填表成功，轮询停止了~~~");
+									layer.msg("正式填表成功");
+									if(data.pdf_url){
+										$("#pdfurl").attr("disabled",false);
+										//$("#pdfurl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.pdfurl); });
+									}else{
+										$("#pdfurl").attr("disabled",true);
+									}
+									if(data.dat_url){
+										$("#daturl").attr("disabled",false);
+										//$("#daturl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.daturl); });
+									}else{
+										$("#daturl").attr("disabled",true);
+									}
+								}
+								if(data.orderstatus == 10){
+									$("#autofill").attr("disabled",false);
+									$("#orderstatus_US").html("正式填表失败");
+									clearInterval(getstatus);
+									console.log("正式填表失败，轮询停止了~~~");
+									layer.msg("正式填表失败");
+									if(data.pdf_url){
+										$("#pdfurl").attr("disabled",false);
+										//$("#pdfurl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.pdfurl); });
+									}else{
+										$("#pdfurl").attr("disabled",true);
+									}
+									if(data.dat_url){
+										$("#daturl").attr("disabled",false);
+										//$("#daturl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.daturl); });
+									}else{
+										$("#daturl").attr("disabled",true);
+									}
+								}
+								count++;
+							}
+			 			});
+			 		},"10000");
+					
+				}
+			});
+		}
+		
+		//预检查
+ 		function preautofill(orderid, staffid){
+			
+ 			$("#orderstatus_US").html("预检查中");
+ 			$("#preautofill").attr("disabled",true);
+ 			$("#errorimgPhoto").hide();
  			$("#autofill").attr("disabled",true);
 			var orderid = '${obj.orderid}';
 			var staffid = '${obj.basicinfo.id}';
@@ -1486,7 +2024,10 @@
 				type : 'POST',
 				success : function(data) {
 					if(data.errMsg){
-						$("#autofill").attr("disabled",false);
+						console.log(data.errMsg);
+						$("#preautofill").attr("disabled",false);
+						$("#orderstatus_US").html("预检查失败");
+						$("#downloadButton").attr("disabled",false);
 						layer.open({
 		        		    type: 2,
 		        		    title: false,
@@ -1495,13 +2036,14 @@
 		        		    maxmin: false,
 		        		    shadeClose: false,
 		        		    scrollbar: false,
-		        		    area: ['400px', '300px'],
+		        		    area: ['450px', '300px'],
 		        		    content: '${base}/admin/orderUS/autofillError.html?errData='+data.errMsg
+		        		    //content: '${base}/admin/orderUS/autofillError.html?errData='+data.errMsg
 		        		  });
 					}else{
 						
 						$.ajax({
-							url : '/admin/orderUS/autofill.html',
+							url : '/admin/orderUS/preautofill.html',
 							data : {
 								orderid : orderid
 							},
@@ -1510,7 +2052,65 @@
 							success : function(data) {
 								//alert("申请人识别码为："+data);
 								count++;
-								if(data.errorMsg == ""){
+								console.log(data);
+								//每隔10秒查一次自动填表是否完成
+						 		var getstatus = setInterval(function(){
+						 			console.log("轮询开始");
+						 			console.log(count);
+						 			$.ajax({
+										url : '/admin/orderUS/isAutofilled.html',
+										data : {
+											orderid : orderid,
+											staffid : staffid
+										},
+										dataType : "json",
+										type : 'POST',
+										success : function(data) {
+											if(data.orderstatus == 6){
+												$("#preautofill").attr("disabled",false);
+												$("#orderstatus_US").html("预检查成功");
+												clearInterval(getstatus);
+												console.log("预检查成功，轮询停止了~~~");
+												layer.msg("预检查成功");
+												console.log(data.review_url);
+												if(data.review_url){
+													console.log("预检查成功，进入图片展示环节");
+													$("#reviewimgPhoto").show();
+													$("#errorimgPhoto").hide();
+													$("#autofill").attr("disabled",false);
+													$("#reviewimgPhoto").attr('onclick', '').unbind('click').click( function () { toReviewphoto(data.review_url); });
+													//$("#reviewurl").attr('onclick', '').unbind('click').click( function () { toUpperPhoto(data.reviewurl); });
+													$("#reviewurl").attr("disabled",false);
+												}else{
+													$("#reviewurl").attr("disabled",true);
+												}
+												if(data.AAcode){
+													$("#aacode").val(data.AAcode);
+												}
+											}
+											if(data.orderstatus == 7){
+												$("#preautofill").attr("disabled",false);
+												$("#orderstatus_US").html("预检查失败");
+												clearInterval(getstatus);
+												console.log("预检查失败，轮询停止了~~~");
+												layer.msg("预检查失败");
+												console.log(data.error_url);
+												$("#reviewimgPhoto").hide();
+												if(data.error_url){
+													console.log("预检查失败，进入图片展示环节");
+													$("#errorimgPhoto").show();
+													$("#errorimgPhoto").attr('onclick', '').unbind('click').click( function () { toReviewphoto(data.error_url); });
+													$("#reviewurl").attr("disabled",true);
+												}
+											}
+											count++;
+										}
+						 			});
+						 		},"10000");
+								
+						 		
+								
+								/* if(data.errorMsg == ""){
 									console.log("走了"+count+"次终于成功了☺");
 									console.log("applyidcode:"+data.applyidcode);
 									console.log("AAcode:"+data.AAcode);
@@ -1518,28 +2118,60 @@
 									console.log("pdfurl:"+data.pdfurl);
 									console.log("avatorurl:"+data.avatorurl);
 									console.log("daturl:"+data.daturl);
-									$("#autofill").attr("disabled",false);
+									//$("#autofill").attr("disabled",false);
 								}else{
 									console.log(data.errorMsg);
 									console.log(data.error_url);
 									console.log(data.code);
-									$("#autofill").attr("disabled",false);
-								}
+									//$("#autofill").attr("disabled",false);
+								} */
 							}
 						});
 					}
 				}
 			});
 		}
+ 		
+ 		
+ 		/* function isAutofilled(){
+ 			console.log("轮询开始");
+ 			console.log(count);
+ 			var orderid = '${obj.orderid}';
+ 			$.ajax({
+				url : '/admin/orderUS/isAutofilled.html',
+				data : {
+					orderid : orderid
+				},
+				dataType : "json",
+				type : 'POST',
+				success : function(data) {
+					if(data == 6){
+						$("#autofill").attr("disabled",false);
+						$("#downloadButton").attr("disabled",false);
+						$("#orderstatus_US").html("自动填表成功");
+						//clearInterval(getstatus);
+					}
+					if(data == 7){
+						$("#autofill").attr("disabled",false);
+						$("#downloadButton").attr("disabled",true);
+						$("#orderstatus_US").html("自动填表失败");
+						//clearInterval(getstatus);
+					}
+					count++;
+				}
+ 			});
+ 		} */
+ 		
 		
 		//下载
-		function download(){
+		function download(type){
 			var orderid = '${obj.orderid}';
 			
 			layer.load(1);
-    		$.fileDownload("${base}/admin/orderUS/downloadFile.html?orderid=" + orderid, {
+    		$.fileDownload("${base}/admin/orderUS/downloadFile.html?orderid=" + orderid+"&type="+type, {
 		         successCallback: function (url) {
 		        	 layer.closeAll('loading');
+		        	 layer.msg("下载成功");
 		         },
 		         failCallback: function (html, url) {
 		        	layer.closeAll('loading');
@@ -1683,19 +2315,27 @@
 		}; */
 		
 		//保存并返回
-		function save(){
+		function save(status){
+			layer.load(1);
 			$.ajax({
 				url : "${base}/admin/orderUS/orderSave",
 				dataType : "json",
 				data : $("#orderUpdateForm").serialize(),
 				type : 'POST',
 				success : function(data) {
-					layer.msg("保存成功", {
-						time: 500,
-						end: function () {
-							self.window.close();
-						}
-					});
+					layer.closeAll();
+					if(status == 1){
+						layer.msg("保存成功", {
+							time: 1000,
+							end: function () {
+								//self.window.close();
+								//location.reload();
+							}
+						});
+					}else{
+						$(".hideNext").hide();
+						$(".hideClass").show();
+					}
 					// window.location.href = '/admin/pcVisa/visaDetail.html'; 
 				}
 			});
@@ -1703,12 +2343,32 @@
 		
 		//取消
 		function closeWindow(){
+			
+			 /* $.ajax({
+				url : "${base}/admin/mobileus/travelinfo",
+				dataType : "json",
+				data : {
+					encode:"str",
+					staffid:4776
+				},
+				type : 'POST',
+				success : function(data) {
+					layer.closeAll();
+					console.log(data);
+					layer.msg("保存成功", {
+						time: 1000,
+						end: function () {
+						}
+					});
+				}
+			}); */
+			
+			
 			if(addorder == 1){
 				window.location.href = '/admin/orderUS/listUS.html';
 			}else{
 				self.window.close();
 			}
-			//parent.window.reload();
 		}
 		
 		//拍摄资料
@@ -1817,19 +2477,44 @@
 		}
 		
 		//错误图片信息
-		function toErrorphoto(){
-			var errorurl = '${obj.orderinfo.errorurl }';
+		function toErrorphoto(errorurl){
+			//var errorurl = '${obj.orderinfo.errorurl }';
+			console.log("错误图片:"+errorurl);
 			layer.open({
 				type: 2,
-				title: false,
-				closeBtn:false,
+				title: "错误信息图片",
+				closeBtn:2,
 				fix: false,
 				maxmin: false,
+				moveOut:true,
 				shadeClose: false,
 				scrollbar: false,
 				area: ['900px', '80%'],
-				content: '/admin/orderUS/toErrorphoto.html?errorurl='+errorurl
+				content: '/admin/orderUS/toErrorphoto.html?errorurl='+errorurl+'&type=1'
 			});
+		}
+		//预览图片信息
+		function toReviewphoto(errorurl){
+			//var errorurl = '${obj.orderinfo.reviewurl }';
+			console.log("预览图片:"+errorurl);
+			layer.open({
+				type: 2,
+				title: "预览信息图片",
+				closeBtn:2,
+				fix: false,
+				maxmin: false,
+				moveOut:true,
+				shadeClose: false,
+				scrollbar: false,
+				area: ['900px', '80%'],
+				content: '/admin/orderUS/toErrorphoto.html?errorurl='+errorurl+'&type=2'
+			});
+		}
+		
+		function toUpperPhoto(url){
+			if(url != ""){
+				window.open(url);
+			}
 		}
 		
 		//翻译

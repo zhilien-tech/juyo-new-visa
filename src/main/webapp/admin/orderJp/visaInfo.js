@@ -148,3 +148,165 @@
     		$("#graduate").attr("style", null);
     	}
     });
+    
+    
+  //单位名称检索
+    $("#name").on('input',function(){
+    	var temp = $(this).val();
+    	$("#name").nextAll("ul.ui-autocomplete").remove();
+    	$.ajax({
+    		type : 'POST',
+    		async: false,
+    		data : {
+    			searchStr : $("#name").val()
+    		},
+    		url : BASE_PATH+'/admin/simple/getUnitname.html',
+    		success : function(data) {
+    			if(data != ""){
+    				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+    				$.each(data,function(index,element) { 
+    					liStr += "<li onclick='setName("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
+    				});
+    				liStr += "</ul>";
+    				$("#name").after(liStr);
+    			}
+    		}
+    	});
+    });
+    //单位名称上下键
+    var nameindex = -1;
+    $(document).on('keydown','#name',function(e){
+    	
+    	if(e == undefined)
+    		e = window.event;
+    	
+    	switch(e.keyCode){
+    	case 38:
+    		e.preventDefault();
+    		nameindex--;
+    		if(nameindex ==0) nameindex = 0;
+    		break;
+    	case 40:
+    		e.preventDefault();
+    		nameindex++;
+    		if(nameindex ==5) nameindex = 0;
+    		break;
+    	case 13:
+    		
+    		$(this).val($(this).next().find('li:eq('+nameindex+')').children().html());
+    		$("#name").nextAll("ul.ui-autocomplete").remove();
+    		$("#name").blur();
+    		var name = $("#name").val();
+    		setName(name);
+    		nameindex = -1;
+    		break;
+    	}
+    	var li = $(this).next().find('li:eq('+nameindex+')');
+    	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
+    });
+    //单位名称 检索下拉项
+    function setName(name){
+    	$("#name").nextAll("ul.ui-autocomplete").remove();
+    	$("#name").val(name.substring(0,name.indexOf(" "))).change();
+    	var regex=/\ (.+?)\ /g;
+        var result;
+        while((result=regex.exec(name))!=null) {
+          $("#telephone").val(result[1]);
+        }
+        $("#address").val(name.substring(name.lastIndexOf(" ")+1,name.length));
+    } 
+    $("#nameDiv").mouseleave(function(){
+    	$("#name").nextAll("ul.ui-autocomplete").remove();
+    });
+
+    //单位电话检索
+    $("#telephone").on('input',function(){
+    	var temp = $(this).val();
+    	$("#telephone").nextAll("ul.ui-autocomplete").remove();
+    	$.ajax({
+    		type : 'POST',
+    		async: false,
+    		data : {
+    			searchStr : $("#telephone").val()
+    		},
+    		url : BASE_PATH+'/admin/simple/getUnittelephone.html',
+    		success : function(data) {
+    			if(data != ""){
+    				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+    				$.each(data,function(index,element) { 
+    					liStr += "<li onclick='setTelephone("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
+    				});
+    				liStr += "</ul>";
+    				$("#telephone").after(liStr);
+    			}
+    		}
+    	});
+    });
+    //单位电话
+    var telephoneindex = -1;
+    $(document).on('keydown','#telephone',function(e){
+    	
+    	if(e == undefined)
+    		e = window.event;
+    	
+    	switch(e.keyCode){
+    	case 38:
+    		e.preventDefault();
+    		telephoneindex--;
+    		if(telephoneindex ==0) telephoneindex = 0;
+    		break;
+    	case 40:
+    		e.preventDefault();
+    		telephoneindex++;
+    		if(telephoneindex ==5) telephoneindex = 0;
+    		break;
+    	case 13:
+    		
+    		$(this).val($(this).next().find('li:eq('+telephoneindex+')').children().html());
+    		$("#telephone").nextAll("ul.ui-autocomplete").remove();
+    		$("#telephone").blur();
+    		var telephone = $("#telephone").val();
+    		setTelephone(telephone);
+    		telephoneindex = -1;
+    		break;
+    	}
+    	var li = $(this).next().find('li:eq('+telephoneindex+')');
+    	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
+    });
+    //单位电话 检索下拉项
+    function setTelephone(telephone){
+    	$("#telephone").nextAll("ul.ui-autocomplete").remove();
+    	
+    	var regex=/\ (.+?)\ /g;
+        var result;
+        while((result=regex.exec(telephone))!=null) {
+          $("#telephone").val(result[1]);
+        }
+        $("#name").val(telephone.substring(0,telephone.indexOf(" ")));
+        $("#address").val(telephone.substring(telephone.lastIndexOf(" ")+1,telephone.length));
+    	
+    } 
+    $("#telephoneDiv").mouseleave(function(){
+    	$("#telephone").nextAll("ul.ui-autocomplete").remove();
+    });
+    
+    $(document).on("input","#name",function(){
+    	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+    		return;
+    	}
+    	var name = $(this).val();
+    	if(name == ""){
+    		$("#telephone").val("");
+    		$("#address").val("");
+    	}
+    });
+    /*$(document).on("input","#telephone",function(){
+    	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+    		return;
+    	}
+    	var telephone = $(this).val();
+    	if(telephone == ""){
+    		$("#address").val("");
+    	}
+    });*/
+    

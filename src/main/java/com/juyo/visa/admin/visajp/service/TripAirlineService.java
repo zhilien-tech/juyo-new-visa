@@ -68,22 +68,24 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 		if (!Util.isEmpty(param.getGocity())) {
 			TCityEntity gocity = dbDao.fetch(TCityEntity.class, param.getGocity());
 			//如果有关联城市，则需要按照顺序把所有关联城市的航班都查出来
-			if (!Util.isEmpty(gocity.getRelationcity())) {
+			dep = gocity.getRelationcity();
+			/*if (!Util.isEmpty(gocity.getRelationcity())) {
 				dep = gocity.getRelationcity();
 			} else {
 				dep = gocity.getCode();
-			}
+			}*/
 		} else {
 			return result;
 		}
 		String arr = "";
 		if (!Util.isEmpty(param.getArrivecity())) {
 			TCityEntity arrivecity = dbDao.fetch(TCityEntity.class, param.getArrivecity());
-			if (!Util.isEmpty(arrivecity.getRelationcity())) {
+			arr = arrivecity.getRelationcity();
+			/*if (!Util.isEmpty(arrivecity.getRelationcity())) {
 				arr = arrivecity.getRelationcity();
 			} else {
 				arr = arrivecity.getCode();
-			}
+			}*/
 		} else {
 			return result;
 		}
@@ -111,8 +113,8 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString = sqlManager.get("tripairline_airlines");
 				Sql sql = Sqls.create(sqlString);
 				Cnd appcnd = Cnd.NEW();
-				appcnd.and("tf.takeOffCode", "=", dep);
-				appcnd.and("tf.landingCode", "=", arr);
+				appcnd.and("tf.takeOffCityId", "=", dep);
+				appcnd.and("tf.landingCityId", "=", arr);
 				sql.setCondition(appcnd);
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
@@ -136,8 +138,8 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString2 = sqlManager.get("tripairline_airlines_zhuan");
 				Sql sql2 = Sqls.create(sqlString2);
 				Cnd appcnd2 = Cnd.NEW();
-				appcnd2.and("tf.takeOffCode", "=", dep);
-				appcnd2.and("tf2.landingCode", "=", arr);
+				appcnd2.and("tf.takeOffCityId", "=", dep);
+				appcnd2.and("tf2.landingCityId", "=", arr);
 				sql2.setCondition(appcnd2);
 				List<Record> arrcitys = dbDao.query(sql2, null, null);
 
@@ -201,7 +203,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString = sqlManager.get("tripairline_airlines");
 				Sql sql = Sqls.create(sqlString);
 				Cnd appcnd = Cnd.NEW();
-				appcnd.and("tf.takeOffCode", "=", dep);
+				appcnd.and("tf.takeOffCityId", "=", dep);
 				appcnd.and("tf.landingCityId", "in", arr);
 				sql.setCondition(appcnd);
 				List<Record> depcitys = dbDao.query(sql, null, null);
@@ -226,7 +228,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString2 = sqlManager.get("tripairline_airlines_zhuan");
 				Sql sql2 = Sqls.create(sqlString2);
 				Cnd appcnd2 = Cnd.NEW();
-				appcnd2.and("tf.takeOffCode", "=", dep);
+				appcnd2.and("tf.takeOffCityId", "=", dep);
 				appcnd2.and("tf2.landingCityId", "in", arr);
 				sql2.setCondition(appcnd2);
 				List<Record> arrcitys = dbDao.query(sql2, null, null);
@@ -291,7 +293,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				Sql sql = Sqls.create(sqlString);
 				Cnd appcnd = Cnd.NEW();
 				appcnd.and("tf.takeOffCityId", "in", dep);
-				appcnd.and("tf.landingCode", "=", arr);
+				appcnd.and("tf.landingCityId", "in", arr);
 				sql.setCondition(appcnd);
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
@@ -316,7 +318,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				Sql sql2 = Sqls.create(sqlString2);
 				Cnd appcnd2 = Cnd.NEW();
 				appcnd2.and("tf.takeOffCityId", "in", dep);
-				appcnd2.and("tf2.landingCode", "=", arr);
+				appcnd2.and("tf2.landingCityId", "=", arr);
 				sql2.setCondition(appcnd2);
 				List<Record> arrcitys = dbDao.query(sql2, null, null);
 
@@ -609,8 +611,8 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString = sqlManager.get("tripairline_airlines");
 				Sql sql = Sqls.create(sqlString);
 				Cnd appcnd = Cnd.NEW();
-				appcnd.and("tf.takeOffCode", "=", dep);
-				appcnd.and("tf.landingCode", "=", arr);
+				appcnd.and("tf.takeOffCityId", "=", dep);
+				appcnd.and("tf.landingCityId", "=", arr);
 				sql.setCondition(appcnd);
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
@@ -634,8 +636,8 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString2 = sqlManager.get("tripairline_airlines_zhuan");
 				Sql sql2 = Sqls.create(sqlString2);
 				Cnd appcnd2 = Cnd.NEW();
-				appcnd2.and("tf.takeOffCode", "=", dep);
-				appcnd2.and("tf2.landingCode", "=", arr);
+				appcnd2.and("tf.takeOffCityId", "=", dep);
+				appcnd2.and("tf2.landingCityId", "=", arr);
 				sql2.setCondition(appcnd2);
 				List<Record> arrcitys = dbDao.query(sql2, null, null);
 
@@ -674,7 +676,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString = sqlManager.get("tripairline_airlines");
 				Sql sql = Sqls.create(sqlString);
 				Cnd appcnd = Cnd.NEW();
-				appcnd.and("tf.takeOffCode", "=", dep);
+				appcnd.and("tf.takeOffCityId", "=", dep);
 				appcnd.and("tf.landingCityId", "in", arr);
 				sql.setCondition(appcnd);
 				List<Record> depcitys = dbDao.query(sql, null, null);
@@ -699,7 +701,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				String sqlString2 = sqlManager.get("tripairline_airlines_zhuan");
 				Sql sql2 = Sqls.create(sqlString2);
 				Cnd appcnd2 = Cnd.NEW();
-				appcnd2.and("tf.takeOffCode", "=", dep);
+				appcnd2.and("tf.takeOffCityId", "=", dep);
 				appcnd2.and("tf2.landingCityId", "in", arr);
 				sql2.setCondition(appcnd2);
 				List<Record> arrcitys = dbDao.query(sql2, null, null);
@@ -739,7 +741,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				Sql sql = Sqls.create(sqlString);
 				Cnd appcnd = Cnd.NEW();
 				appcnd.and("tf.takeOffCityId", "in", dep);
-				appcnd.and("tf.landingCode", "=", arr);
+				appcnd.and("tf.landingCityId", "=", arr);
 				sql.setCondition(appcnd);
 				List<Record> depcitys = dbDao.query(sql, null, null);
 				for (Record record : depcitys) {
@@ -764,7 +766,7 @@ public class TripAirlineService extends BaseService<TFlightEntity> {
 				Sql sql2 = Sqls.create(sqlString2);
 				Cnd appcnd2 = Cnd.NEW();
 				appcnd2.and("tf.takeOffCityId", "in", dep);
-				appcnd2.and("tf2.landingCode", "=", arr);
+				appcnd2.and("tf2.landingCityId", "=", arr);
 				sql2.setCondition(appcnd2);
 				List<Record> arrcitys = dbDao.query(sql2, null, null);
 

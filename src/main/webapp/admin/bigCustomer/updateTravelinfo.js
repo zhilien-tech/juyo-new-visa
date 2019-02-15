@@ -9,14 +9,15 @@ function translateZhToEn(from, to, param){
 	}
 	$.ajax({
 		//async : false,
-		url : '/admin/translate/translate',
+		//url : '/admin/translate/translate',
+		url : '/admin/neworderUS/baiduTranslate',
 		data : {
-			api : 'google',
+			/*api : 'google',
 			strType : to,
-			en : 'en',
+			en : 'en',*/
 			q : toval
 		},
-		type : 'POST',
+		type : 'GET',
 		dataType : 'json',
 		success : function(data) {
 			$("#" + to).val(data).change();
@@ -28,7 +29,7 @@ function translateZhToEn(from, to, param){
 }
 
 //日期相关
-$(document).on("input","#arrivedate,#issueddate",function(){
+$(document).on("input","#arrivedate,#issueddate,#servicestartdate,#serviceenddate",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
 	}
@@ -156,6 +157,45 @@ function cloneMoreDiv(divClass){
 	$("."+divClass).last().after(cloneDiv);
 	//initDateTimePicker($("."+divClass));
 }
+
+//支付人修改
+$("#costpayer").change(function(){
+	
+	$("#paycountry").val("中国").trigger("change");
+	$("#payprovince").val(null);
+	$("#paycity").val(null);
+	$("#payaddress").val(null);
+	$("#payaddressen").val(null);
+	
+	var thisval = $(this).val();
+	if(thisval == 2){
+		let checked = $("input[name='payaddressissamewithyou']:checked").val();
+		if (checked == 1) {
+			$(".addressPay").hide();
+		} else {
+			$(".addressPay").show();
+		}
+		$(".otherPay").show();
+    	$(".companyPay").hide();
+	}else if(thisval == 3){
+		$(".companyPay").show();
+    	$(".addressPay").show();
+    	$(".otherPay").hide();
+	}else{
+		$(".companyPay").hide();
+    	$(".addressPay").hide();
+    	$(".otherPay").hide();
+	}
+});
+$(".payaddressissamewithyou").change(function(){
+	
+	let checked = $("input[name='payaddressissamewithyou']:checked").val();
+	if (checked == 1) {
+		$(".addressPay").hide();
+	} else {
+		$(".addressPay").show();
+	}
+});
 //是否去过美国radio
 $(".goUS").change(function () {
 	
@@ -182,6 +222,24 @@ $(".visaUS").change(function () {
 		$(".dateIssue").show();
 	} else {
 		$(".dateIssue").hide();
+	}
+});
+//是否丢失过radio
+$(".lose").change(function () {
+	let checked = $("input[name='islost']:checked").val();
+	if (checked == 1) {
+		$(".lostExplain").show();
+	} else {
+		$(".lostExplain").hide();
+	}
+});
+//是否被取消过radio
+$(".revoke").change(function () {
+	let checked = $("input[name='iscancelled']:checked").val();
+	if (checked == 1) {
+		$(".cancelExplain").show();
+	} else {
+		$(".cancelExplain").hide();
 	}
 });
 //是否被拒签过radio
@@ -213,6 +271,204 @@ $(".istraveledanycountry").change(function () {
 		$(".gocountrysave").hide();
 	}
 });
+//是否为慈善组织工作radio
+$(".isworkedcharitableorganization").change(function () {
+	let checked = $("input[name='isworkedcharitableorganization']:checked").val();
+	if (checked == 1) {
+		$(".organizationName").show();
+	} else {
+		$(".organizationName").hide();
+	}
+});
+//是否服兵役radio
+$(".hasservedinmilitary").change(function () {
+	let checked = $("input[name='hasservedinmilitary']:checked").val();
+	if (checked == 1) {
+		$(".military").show();
+	} else {
+		$(".military").hide();
+	}
+});
+
+$(".isclan").change(function () {
+	let checked = $("input[name='isclan']:checked").val();
+	if (checked == 1) {
+		$(".clanName").show();
+	} else {
+		$(".clanName").hide();
+	}
+});
+
+$(".issecuritynumberapply").change(function () {
+	let checked = $("input[name='issecuritynumberapply']:checked").val();
+	if (checked == 1) {
+		$(".socialsecuritynumber").show();
+	} else {
+		$(".socialsecuritynumber").hide();
+	}
+});
+
+$(".istaxpayernumberapply").change(function () {
+	let checked = $("input[name='istaxpayernumberapply']:checked").val();
+	if (checked == 1) {
+		$(".taxpayernumber").show();
+	} else {
+		$(".taxpayernumber").hide();
+	}
+});
+
+$(".hasspecializedskill").change(function () {
+	let checked = $("input[name='hasspecializedskill']:checked").val();
+	if (checked == 1) {
+		$(".skillexplain").show();
+	} else {
+		$(".skillexplain").hide();
+	}
+});
+
+$(".isservedinrebelgroup").change(function () {
+	let checked = $("input[name='isservedinrebelgroup']:checked").val();
+	if (checked == 1) {
+		$(".paramilitaryunitexplain").show();
+	} else {
+		$(".paramilitaryunitexplain").hide();
+	}
+});
+
+//国家
+$('#paycountry').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectCountry.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.chinesename; // replace pk with your identifier
+				obj.text = obj.chinesename; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+/*//省
+$('#payprovince').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectProvince.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}
+			return {
+				//exname : cArrivalcity,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.province; // replace pk with your identifier
+				obj.text = obj.province; // replace pk with your identifier
+				obj.text = obj.dictCode;
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+
+ 取消选中时 
+$("#payprovince").on('select2:unselect', function (evt) {
+	//市清空
+	$("#paycity").val(null).trigger("change");
+});
+
+//市
+$('#paycity').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectCity.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+		    var province = $('#payprovince').val();
+		    if(province){
+		    	province = province.join(',');
+			}
+			return {
+				province : province,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.city; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});*/
+
+
 
 //去过的国家
 /*$('#traveledcountry').select2({
@@ -251,6 +507,73 @@ $(".istraveledanycountry").change(function () {
 	tags : false //设置必须存在的选项 才能选中
 });*/
 
+//服兵役国家
+$('#militarycountry').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectCountry.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.chinesename; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+
+$(document).on("input","#payfirstname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#payfirstnameen").val("").change();
+	}else{
+		$("#payfirstnameen").val(pinyinchar).change();
+	}
+});
+$(document).on("input","#paylastname",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#paylastnameen").val("").change();
+	}else{
+		$("#paylastnameen").val(pinyinchar).change();
+	}
+});
 $(document).on("input","#firstname",function(){
 	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
 		return;
@@ -410,6 +733,15 @@ function getCompanionList(){
 //保存工作信息
 function save(status){
 	
+	if(status != 2){
+		var addresslen = $("#payaddressen").val().length;
+		if(addresslen > 80){
+			layer.msg("费用支付人的地址英文不能超过80个字符");
+			return;
+		}
+				
+	}
+	
 		var companioninfoList = getCompanionList();
 		var	familyinfo = $.param({companionList:JSON.stringify(companioninfoList)}) + "&" +  $("#travelinfo").serialize();
 		//familyinfo.companioninfoList = JSON.stringify(getCompanionList());
@@ -417,14 +749,14 @@ function save(status){
 		if(status == 2){
 			//左箭头跳转 
 			window.location.href = '/admin/neworderUS/updateWorkInfo.html?staffid='+staffId;
-			$.ajax({
+			/*$.ajax({
 				type: 'POST',
 				data : familyinfo,
 				url: '/admin/neworderUS/saveTravelinfo.html',
 				success :function(data) {
 					parent.successCallback(2);
 				}
-			});
+			});*/
 		}else{
 			layer.load(1);
 			$.ajax({
@@ -439,4 +771,169 @@ function save(status){
 			});
 		}
 }
+
+
+//只能输入数字
+$(document).on("input","#taxpayernumber",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	
+	var reg = /[^0-9]/g;
+	$("#taxpayernumber").val(temp.replace(reg, ""));
+});
+//只能输入数字
+$(document).on("input","#socialsecuritynumber",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	
+	var reg = /[^0-9]/g;
+	$("#socialsecuritynumber").val(temp.replace(reg, ""));
+});
+$(document).on("input","#paytelephone",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	
+	var reg = /[^0-9]/g;
+	$("#paytelephone").val(temp.replace(reg, ""));
+});
+$(document).on("input","#comtelephone",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var temp = $(this).val();
+	
+	var reg = /[^0-9]/g;
+	$("#comtelephone").val(temp.replace(reg, ""));
+});
+
+//省份检索
+$("#payprovince").on('input',function(){
+	$("#payprovince").nextAll("ul.ui-autocomplete").remove();
+	$.ajax({
+		type : 'POST',
+		async: false,
+		data : {
+			searchStr : $("#payprovince").val()
+		},
+		url : '/admin/orderJp/getProvince.html',
+		success : function(data) {
+			if(data != ""){
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' style='width: 182px;' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				$.each(data,function(index,element) { 
+					liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
+				});
+				liStr += "</ul>";
+				$("#payprovince").after(liStr);
+			}
+		}
+	});
+});
+//省份上下键
+var provinceindex = -1;
+$(document).on('keydown','#payprovince',function(e){
+	
+	if(e == undefined)
+		e = window.event;
+	
+	switch(e.keyCode){
+	case 38:
+		e.preventDefault();
+		provinceindex--;
+		if(provinceindex ==0) provinceindex = 0;
+		break;
+	case 40:
+		e.preventDefault();
+		provinceindex++;
+		if(provinceindex ==5) provinceindex = 0;
+		break;
+	case 13:
+		
+		$(this).val($(this).next().find('li:eq('+provinceindex+')').children().html());
+		$("#payprovince").nextAll("ul.ui-autocomplete").remove();
+		$("#payprovince").blur();
+		var province = $("#payprovince").val();
+		setProvince(province);
+		provinceindex = -1;
+		break;
+	}
+	var li = $(this).next().find('li:eq('+provinceindex+')');
+	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
+});
+//省份 检索下拉项
+function setProvince(province){
+	$("#payprovince").nextAll("ul.ui-autocomplete").remove();
+	$("#payprovince").val(province).change();
+} 
+$("#provinceDiv").mouseleave(function(){
+	$("#payprovince").nextAll("ul.ui-autocomplete").remove();
+});
+
+//市检索
+$("#paycity").on('input',function(){
+	$("#paycity").nextAll("ul.ui-autocomplete").remove();
+	$.ajax({
+		type : 'POST',
+		async: false,
+		data : {
+			province : $("#payprovince").val(),
+			searchStr : $("#paycity").val()
+		},
+		url : '/admin/orderJp/getCity.html',
+		success : function(data) {
+			if(data != ""){
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' style='width: 182px;' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				$.each(data,function(index,element) { 
+					liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
+				});
+				liStr += "</ul>";
+				$("#paycity").after(liStr);
+			}
+		}
+	});
+});
+//市
+var cityindex = -1;
+$(document).on('keydown','#paycity',function(e){
+	
+	if(e == undefined)
+		e = window.event;
+	
+	switch(e.keyCode){
+	case 38:
+		e.preventDefault();
+		cityindex--;
+		if(cityindex ==0) cityindex = 0;
+		break;
+	case 40:
+		e.preventDefault();
+		cityindex++;
+		if(cityindex ==5) cityindex = 0;
+		break;
+	case 13:
+		
+		$(this).val($(this).next().find('li:eq('+cityindex+')').children().html());
+		$("#paycity").nextAll("ul.ui-autocomplete").remove();
+		$("#paycity").blur();
+		var city = $("#paycity").val();
+		setCity(city);
+		cityindex = -1;
+		break;
+	}
+	var li = $(this).next().find('li:eq('+cityindex+')');
+	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
+});
+//市 检索下拉项
+function setCity(city){
+	$("#paycity").nextAll("ul.ui-autocomplete").remove();
+	$("#paycity").val(city).change();
+} 
+$("#cityDiv").mouseleave(function(){
+	$("#paycity").nextAll("ul.ui-autocomplete").remove();
+});
 

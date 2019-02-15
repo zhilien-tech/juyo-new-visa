@@ -28,6 +28,10 @@ public class TAppStaffBasicinfoAddForm extends AddForm implements Serializable {
 	/**名*/
 	private String lastname;
 
+	private String mailcountry;
+
+	private String mailcountryen;
+
 	private Integer ismailsamewithlive;
 
 	private Integer ismailsamewithliveen;
@@ -78,6 +82,9 @@ public class TAppStaffBasicinfoAddForm extends AddForm implements Serializable {
 	/**住址*/
 	private String address;
 	private String addressen;
+
+	private String birthcountry;
+	private String birthcountryen;
 
 	/**卡号*/
 	private String cardnum;

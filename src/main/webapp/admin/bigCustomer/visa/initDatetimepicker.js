@@ -2,7 +2,13 @@
 $("#arrivedate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	autoclose: true,//选中日期后 自动关闭
+	weekStart: 1,
+	todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+	showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 }).on("click",function(){  
@@ -13,16 +19,34 @@ $("#arrivedate").datetimepicker({
 $("#issueddate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	autoclose: true,//选中日期后 自动关闭
+	weekStart: 1,
+	todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+	showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 }); 
 
 //家庭信息---配偶的生日
 $("#spousebirthday").datetimepicker({
-	format: 'yyyy-mm-dd',
+	/*format: 'yyyy-mm-dd',
 	language: 'zh-CN',
 	autoclose: true,//选中日期后 自动关闭
+	pickerPosition:"bottom-right",//显示位置
+	minView: "month"//只显示年月日
+	 */		
+	format: 'yyyy-mm-dd',
+	language: 'zh-CN',
+	weekStart: 1,
+	todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+	showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
@@ -30,7 +54,13 @@ $("#spousebirthday").datetimepicker({
 $("#fatherbirthday").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	autoclose: true,//选中日期后 自动关闭
+    weekStart: 1,
+    todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+    showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
@@ -38,7 +68,13 @@ $("#fatherbirthday").datetimepicker({
 $("#motherbirthday").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	autoclose: true,//选中日期后 自动关闭
+    weekStart: 1,
+    todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+    showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 }); 
@@ -47,7 +83,13 @@ $("#motherbirthday").datetimepicker({
 $("#workstartdate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	autoclose: true,//选中日期后 自动关闭
+    weekStart: 1,
+    todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+    showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 }); 
@@ -55,7 +97,13 @@ $("#workstartdate").datetimepicker({
 $("#employstartdate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	autoclose: true,//选中日期后 自动关闭
+    weekStart: 1,
+    todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+    showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
@@ -63,7 +111,13 @@ $("#employstartdate").datetimepicker({
 $("#employenddate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	autoclose: true,//选中日期后 自动关闭
+    weekStart: 1,
+    todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+    showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
@@ -72,7 +126,13 @@ $("#employenddate").datetimepicker({
 $("#coursestartdate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	autoclose: true,//选中日期后 自动关闭
+    weekStart: 1,
+    todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+    showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
@@ -80,7 +140,13 @@ $("#coursestartdate").datetimepicker({
 $("#courseenddate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	autoclose: true,//选中日期后 自动关闭
+    weekStart: 1,
+    todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+    showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
@@ -90,7 +156,13 @@ $("#courseenddate").datetimepicker({
 $("#servicestartdate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	autoclose: true,//选中日期后 自动关闭
+    weekStart: 1,
+    todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+    showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });
@@ -98,7 +170,13 @@ $("#servicestartdate").datetimepicker({
 $("#serviceenddate").datetimepicker({
 	format: 'yyyy-mm-dd',
 	language: 'zh-CN',
-	autoclose: true,//选中日期后 自动关闭
+    weekStart: 1,
+    todayBtn: 1,
+	autoclose: true,
+	todayHighlight: true,//高亮
+	startView: 4,//从年开始选择
+	forceParse: 0,
+    showMeridian: false,
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 });

@@ -1,4 +1,8 @@
 
+/*$(function(){
+	workinfoValidate();
+});*/
+
 //翻译
 function translateZhToEn(from, to, param){
 	var toval = "";
@@ -16,14 +20,11 @@ function translateZhToEn(from, to, param){
 	}
 	$.ajax({
 		//async : false,
-		url : '/admin/translate/translate',
+		url : '/admin/neworderUS/baiduTranslate',
 		data : {
-			api : 'google',
-			strType : to,
-			en : 'en',
 			q : toval
 		},
-		type : 'POST',
+		type : 'GET',
 		dataType : 'json',
 		success : function(data) {
 			$("#" + to).val(data).change();
@@ -122,14 +123,322 @@ $(".education").change(function () {
 
 //专业处理
 
-$("#highesteducation").change(function(){
+/*$("#highesteducation").change(function(){
 	var highesteducation = $(this).val();
 	if(highesteducation > 2){
 		$(".courseClass").show();
 	}else{
 		$(".courseClass").hide();
 	}
-})
+})*/
+
+
+function workinfoValidate(){
+	$('#workinfo').bootstrapValidator({
+		message : '验证不通过',
+		feedbackIcons : {
+			valid : 'glyphicon glyphicon-ok',
+			invalid : 'glyphicon glyphicon-remove',
+			validating : 'glyphicon glyphicon-refresh'
+		},
+		fields : {
+			addressen: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '详细地址英文不能为空'
+					},
+					stringLength: {//检测长度
+                        max: 80,
+                        message: '详细地址英文不能超过80个字符'
+                    }
+				}
+			},
+			employeraddressen: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '详细地址英文不能为空'
+					},
+					stringLength: {//检测长度
+						max: 80,
+						message: '详细地址英文不能超过80个字符'
+					}
+				}
+			},
+			institutionaddressen: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '详细地址英文不能为空'
+					},
+					stringLength: {//检测长度
+						max: 80,
+						message: '详细地址英文不能超过80个字符'
+					}
+				}
+			},
+			unitname: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '工作单位名称不能为空'
+					}
+				}
+			},
+			unitnameen: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '工作单位名称英文不能为空'
+					}
+				}
+			},
+			telephone: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '电话号码不能为空'
+					}
+				}
+			},
+			country: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '工作国家不能为空'
+					}
+				}
+			},
+			province: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '省份不能为空'
+					}
+				}
+			},
+			city: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '城市不能为空'
+					}
+				}
+			},
+			address : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '详细地址不能为空'
+					}
+				}
+			},
+			workstartdate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '入职日期不能为空'
+					}
+				}
+			},
+			position : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '职位不能为空'
+					}
+				}
+			},
+			salary : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '月收入不能为空'
+					}
+				}
+			},
+			duty : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '职责不能为空'
+					}
+				}
+			},
+			dutyen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '职责英文不能为空'
+					}
+				}
+			},
+			employername : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '单位名称不能为空'
+					}
+				}
+			},
+			employernameen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '单位名称英文不能为空'
+					}
+				}
+			},
+			employertelephone : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '电话号码不能为空'
+					}
+				}
+			},
+			employercountry : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国家不能为空'
+					}
+				}
+			},
+			employerprovince : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '省份不能为空'
+					}
+				}
+			},
+			employercity : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '城市不能为空'
+					}
+				}
+			},
+			employeraddress : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '详细地址不能为空'
+					}
+				}
+			},
+			employstartdate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '入职时间不能为空'
+					}
+				}
+			},
+			employenddate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '离职时间不能为空'
+					}
+				}
+			},
+			jobtitle : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '职务不能为空'
+					}
+				}
+			},
+			previousduty : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '职责不能为空'
+					}
+				}
+			},
+			highesteducation : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '最高学历不能为空'
+					}
+				}
+			},
+			institution : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '学校名称不能为空'
+					}
+				}
+			},
+			institutionen : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '学校名称英文不能为空'
+					}
+				}
+			},
+			institutioncountry : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '国家不能为空'
+					}
+				}
+			},
+			institutionprovince : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '省份不能为空'
+					}
+				}
+			},
+			institutioncity : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '城市不能为空'
+					}
+				}
+			},
+			institutionaddress : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '详细地址不能为空'
+					}
+				}
+			},
+			coursestartdate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '开始时间不能为空'
+					}
+				}
+			},
+			courseenddate : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '结束时间不能为空'
+					}
+				}
+			},
+		}
+	});
+	//$('#workinfo').bootstrapValidator('validate');
+}
+
 
 
 //工作国家
@@ -365,19 +674,44 @@ function closeWindow() {
 //保存工作信息
 function save(status){
 	
-		var	familyinfo = $("#workinfo").serialize();
-		console.log(familyinfo);
+	if(status != 2){
+		var addresslen = $("#jobaddressen").val().length;
+		if(addresslen > 80){
+			layer.msg("现在工作的详细地址英文不能超过80个字符");
+			return;
+		}
+		var addresslen1 = $("#employeraddressen").val().length;
+		if(addresslen1 > 80){
+			layer.msg("上份工作的详细地址英文不能超过80个字符");
+			return;
+		}
+		var addresslen2 = $("#institutionaddressen").val().length;
+		if(addresslen2 > 80){
+			layer.msg("教育信息的详细地址英文不能超过80个字符");
+			return;
+		}
+	}
+	
+	var	familyinfo = $("#workinfo").serialize();
+	console.log(familyinfo);
+	
+	
+	/*workinfoValidate();
+	var bootstrapValidator = $("#workinfo").data('bootstrapValidator');
+	// 执行表单验证 
+	bootstrapValidator.validate();
+	if (bootstrapValidator.isValid()){*/
 		if(status == 2){
 			//左箭头跳转 
 			window.location.href = '/admin/neworderUS/updateFamilyInfo.html?staffid='+staffId;
-			$.ajax({
+			/*$.ajax({
 				type: 'POST',
 				data : familyinfo,
 				url: '/admin/neworderUS/saveWorkandeducation.html',
 				success :function(data) {
 					parent.successCallback(2);
 				}
-			});
+			});*/
 		}else if(status == 3){
 			//右箭头跳转
 			window.location.href = '/admin/neworderUS/updateTravelInfo.html?staffid='+staffId;
@@ -402,5 +736,131 @@ function save(status){
 				}
 			});
 		}
+	//}
 }
+
+//省份检索
+$("#insprovince").on('input',function(){
+	$("#insprovince").nextAll("ul.ui-autocomplete").remove();
+	$.ajax({
+		type : 'POST',
+		async: false,
+		data : {
+			searchStr : $("#insprovince").val()
+		},
+		url : '/admin/orderJp/getProvince.html',
+		success : function(data) {
+			if(data != ""){
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				$.each(data,function(index,element) { 
+					liStr += "<li onclick='setProvince("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
+				});
+				liStr += "</ul>";
+				$("#insprovince").after(liStr);
+			}
+		}
+	});
+});
+//省份上下键
+var provinceindex = -1;
+$(document).on('keydown','#insprovince',function(e){
+	
+	if(e == undefined)
+		e = window.event;
+	
+	switch(e.keyCode){
+	case 38:
+		e.preventDefault();
+		provinceindex--;
+		if(provinceindex ==0) provinceindex = 0;
+		break;
+	case 40:
+		e.preventDefault();
+		provinceindex++;
+		if(provinceindex ==5) provinceindex = 0;
+		break;
+	case 13:
+		
+		$(this).val($(this).next().find('li:eq('+provinceindex+')').children().html());
+		$("#insprovince").nextAll("ul.ui-autocomplete").remove();
+		$("#insprovince").blur();
+		var province = $("#insprovince").val();
+		setProvince(province);
+		provinceindex = -1;
+		break;
+	}
+	var li = $(this).next().find('li:eq('+provinceindex+')');
+	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
+});
+//省份 检索下拉项
+function setProvince(province){
+	$("#insprovince").nextAll("ul.ui-autocomplete").remove();
+	$("#insprovince").val(province).change();
+} 
+$("#provinceDiv").mouseleave(function(){
+	$("#insprovince").nextAll("ul.ui-autocomplete").remove();
+});
+
+//市检索
+$("#inscity").on('input',function(){
+	$("#inscity").nextAll("ul.ui-autocomplete").remove();
+	$.ajax({
+		type : 'POST',
+		async: false,
+		data : {
+			province : $("#insprovince").val(),
+			searchStr : $("#inscity").val()
+		},
+		url : '/admin/orderJp/getCity.html',
+		success : function(data) {
+			if(data != ""){
+				var liStr = "<ul class='ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all IdInfo' id='ui-id-1' role='null' tabindex='0' width: 167px;position: relative;top: -16px;left: 0px;'>";
+				$.each(data,function(index,element) { 
+					liStr += "<li onclick='setCity("+JSON.stringify(element)+")' class='ui-menu-item' role='presentation'><span id='ui-id-3' class='ui-corner-all' tabindex='-1'>"+element+"</span></li>";
+				});
+				liStr += "</ul>";
+				$("#inscity").after(liStr);
+			}
+		}
+	});
+});
+//市
+var cityindex = -1;
+$(document).on('keydown','#inscity',function(e){
+	
+	if(e == undefined)
+		e = window.event;
+	
+	switch(e.keyCode){
+	case 38:
+		e.preventDefault();
+		cityindex--;
+		if(cityindex ==0) cityindex = 0;
+		break;
+	case 40:
+		e.preventDefault();
+		cityindex++;
+		if(cityindex ==5) cityindex = 0;
+		break;
+	case 13:
+		
+		$(this).val($(this).next().find('li:eq('+cityindex+')').children().html());
+		$("#inscity").nextAll("ul.ui-autocomplete").remove();
+		$("#inscity").blur();
+		var city = $("#inscity").val();
+		setCity(city);
+		cityindex = -1;
+		break;
+	}
+	var li = $(this).next().find('li:eq('+cityindex+')');
+	li.css({'background':'#1e90ff','color':'#FFF'}).siblings().css({'background':'#FFF','color':'#000'});
+});
+//市 检索下拉项
+function setCity(city){
+	$("#inscity").nextAll("ul.ui-autocomplete").remove();
+	$("#inscity").val(city).change();
+} 
+$("#cityDiv").mouseleave(function(){
+	$("#inscity").nextAll("ul.ui-autocomplete").remove();
+});
 

@@ -8,6 +8,7 @@ package com.juyo.visa.admin.simple.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,8 +20,10 @@ import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -29,6 +32,18 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -55,6 +70,7 @@ import com.juyo.visa.admin.order.service.OrderJpViewService;
 import com.juyo.visa.admin.simple.entity.StatisticsEntity;
 import com.juyo.visa.admin.simple.entity.WealthEntity;
 import com.juyo.visa.admin.simple.form.AddOrderForm;
+import com.juyo.visa.admin.simple.form.AddSimpleHotelForm;
 import com.juyo.visa.admin.simple.form.BasicinfoForm;
 import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
@@ -98,6 +114,7 @@ import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.newairline.ResultflyEntity;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.util.HttpUtil;
+import com.juyo.visa.common.util.MapUtil;
 import com.juyo.visa.common.util.SpringContextUtil;
 import com.juyo.visa.common.util.TokenUtil;
 import com.juyo.visa.entities.TApplicantEntity;
@@ -284,27 +301,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		List<Record> totallist = (List<Record>) sql.getResult();
 		int orderscount = totallist.size();
 		int peopletotal = 0;
-		/*int disableorder = 0;
-		int disablepeople = 0;*/
 		int zhaobaoorder = 0;
 		int zhaobaopeople = 0;
 		for (Record record : totallist) {
-			//作废单子、人数
-			/*if (Util.eq(1, record.get("isdisabled"))) {
-				disableorder++;
-				if (!Util.eq(0, record.get("peoplenumber"))) {
-					disablepeople += record.getInt("peoplenumber");
-				}
-			}*/
-
 			//收费单子，人数
-			if (Util.eq(1, record.get("zhaobaoupdate"))) {
+			if (Util.eq(1, record.get("zhaobaoupdate")) && Util.eq(0, record.get("isDisabled"))) {
 				zhaobaoorder++;
 				if (!Util.eq(0, record.get("peoplenumber"))) {
 					zhaobaopeople += record.getInt("peoplenumber");
 				}
 			}
-
 			//单子人数
 			if (!Util.eq(0, record.get("peoplenumber"))) {
 				peopletotal += record.getInt("peoplenumber");
@@ -317,12 +323,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		long middleTime = System.currentTimeMillis();
 		System.out.println("上头数据所用时间:" + (middleTime - startTime) + "ms");
-
-		/*Cnd cnd = Cnd.NEW();
-		cnd.and("tr.zhaobaoupdate", "=", 1);
-		cnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
-		sql.setCondition(cnd);
-		List<Record> singleperson = (List<Record>) sql.getResult();*/
 
 		@SuppressWarnings("unchecked")
 		//主sql数据
@@ -349,6 +349,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 			}
 
+			if (!Util.isEmpty(record.get("comshortname"))) {
+				record.set("comshortname", record.get("comshortname"));
+			} else if (!Util.isEmpty(record.get("customershotname"))) {
+				record.set("comshortname", record.get("customershotname"));
+			} else {
+				record.set("comshortname", "");
+			}
+
 			Integer orderid = (Integer) record.get("id");
 			String sqlStr = sqlManager.get("get_simplelist_data_apply");
 			Sql applysql = Sqls.create(sqlStr);
@@ -356,44 +364,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					applysql,
 					Cnd.where("taoj.orderId", "=", orderid).orderBy("taoj.isMainApplicant", "DESC")
 							.orderBy("ta.id", "ASC"), null);
-			/*for (Record apply : query) {
-
-				if (!Util.isEmpty(apply.get("province"))) {
-					String province = (String) apply.get("province");
-					if (province.endsWith("省") || province.endsWith("市")) {
-						apply.put("province", province.substring(0, province.length() - 1));
-					}
-					if (province.length() > 3 && province.endsWith("自治区")) {
-						apply.put("province", province.substring(0, province.length() - 3));
-					}
-				}*/
-
-			/*Integer dataType = (Integer) apply.get("dataType");
-			for (JobStatusEnum dataTypeEnum : JobStatusEnum.values()) {
-				if (!Util.isEmpty(dataType) && dataType.equals(dataTypeEnum.intKey())) {
-					apply.put("dataType", dataTypeEnum.value());
-				}
-			}
-			String data = "";
-			String blue = "";
-			if (!Util.isEmpty(apply.get("blue"))) {
-				blue = (String) apply.get("blue");
-			}
-			String black = "";
-			if (!Util.isEmpty(apply.get("black"))) {
-				black = (String) apply.get("black");
-			}
-			if (Util.isEmpty(blue)) {
-				data = black;
-			} else {
-				data = blue;
-				if (!Util.isEmpty(black)) {
-					data += "、";
-					data += black;
-				}
-			}
-			apply.put("data", data);*/
-			//}
 			record.put("everybodyInfo", query);
 			//签证状态
 			Integer visastatus = record.getInt("japanState");
@@ -408,8 +378,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		List<Record> singleperson = getSingleperson(form);
 
 		StatisticsEntity entity = new StatisticsEntity();
-		/*entity.setDisableorder(disableorder);
-		entity.setDisablepeople(disablepeople);*/
 		entity.setOrderscount(orderscount);
 		entity.setPeopletotal(peopletotal);
 		entity.setZhaobaoorder(zhaobaoorder);
@@ -466,12 +434,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 		if (!Util.isEmpty(form.getStatus())) {
 			if (Util.eq(form.getStatus(), JPOrderStatusEnum.DISABLED.intKey())) {
-				singlecnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
+				singlecnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey()).and("tr.isDisabled", "=",
+						IsYesOrNoEnum.NO.intKey());
 			} else {
 				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).and("tr.isDisabled", "=",
 						IsYesOrNoEnum.NO.intKey());
 				singlecnd.and(e1);
 			}
+		} else {
+			SqlExpressionGroup e1 = Cnd.exps("tr.isDisabled", "=", IsYesOrNoEnum.NO.intKey());
+			singlecnd.and(e1);
 		}
 
 		if (!Util.isEmpty(form.getSongqianshe())) {
@@ -633,14 +605,56 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object getHotelSelect(String hotelname, int cityid) {
-		Cnd cnd = Cnd.NEW();
-		/*cnd.and("name", "like", "%" + Strings.trim(hotelname) + "%");
-		if (!Util.isEmpty(cityid)) {
-			cnd.and("cityId", "=", cityid);
-		}*/
-		cnd.and("cityId", "=", cityid);
+		//Cnd cnd = Cnd.NEW();
+
+		Cnd cnd = Cnd.where(
+				Cnd.exps("address", "like", "%" + Strings.trim(hotelname) + "%")
+						.or("addressjp", "like", "%" + Strings.trim(hotelname) + "%")
+						.or("mobile", "like", "%" + Strings.trim(hotelname) + "%")).and("cityId", "=", cityid);
+
+		/*SqlExpressionGroup exp = new SqlExpressionGroup();
+		//exp.and("cityId", "=", cityid);
+		exp.and("address", "like", "%" + Strings.trim(hotelname) + "%")
+				.or("mobile", "like", "%" + Strings.trim(hotelname) + "%")
+				.or("addressjp", "like", "%" + Strings.trim(hotelname) + "%");
+		cnd.and(exp);
+
+		exp = new SqlExpressionGroup();
+		exp.and("cityId", "=", cityid);
+		cnd.and(exp);*/
+
 		List<THotelEntity> hotels = dbDao.query(THotelEntity.class, cnd, null);
 		return hotels;
+	}
+
+	public Object addHotel(Integer planid, int visatype) {
+		Map<String, Object> result = Maps.newHashMap();
+		TOrderTravelplanJpEntity plan = dbDao.fetch(TOrderTravelplanJpEntity.class, planid.longValue());
+		result.put("travelplan", plan);
+		return result;
+
+	}
+
+	public Object addsimplehotel(AddSimpleHotelForm form) {
+		THotelEntity hotel = new THotelEntity();
+		hotel.setAddress(form.getAddress());
+		hotel.setAddressjp(form.getAddressjp());
+		hotel.setCityId(form.getCityId());
+		hotel.setCreateTime(new Date());
+		hotel.setMobile(form.getMobile());
+		hotel.setName(form.getName());
+		hotel.setNamejp(form.getNamejp());
+		hotel.setUpdateTime(new Date());
+		THotelEntity insertHotel = dbDao.insert(hotel);
+		Integer travelplanid = form.getTravelplanid();
+		TCityEntity city = dbDao.fetch(TCityEntity.class, form.getCityId().longValue());
+		TOrderTravelplanJpEntity travelplan = dbDao.fetch(TOrderTravelplanJpEntity.class, travelplanid.longValue());
+		travelplan.setHotel(insertHotel.getId());
+		travelplan.setCityId(form.getCityId());
+		travelplan.setCityName(city.getCity());
+		//travelplan.setIsupdatecity(IsYesOrNoEnum.YES.intKey());
+		dbDao.update(travelplan);
+		return null;
 	}
 
 	/**
@@ -1789,98 +1803,233 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return result;
 	}*/
 
+	/**
+	 * 查询第一天，最后一天喝返回时的出发城市
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Map<String, Object> getFirstdayAndLastday(GenerrateTravelForm form) {
+		Map<String, Object> result = Maps.newHashMap();
+		//返回时的出发城市
+		TCityEntity returngoCity = null;
+		//出发城市
+		TCityEntity goCity = null;
+		//省份
+		String province = "";
+		//出发航班
+		String goFlightNum = "";
+		//返回航班
+		String returnFlightNum = "";
+		//第一天
+		String firstday = "";
+		//最后一天
+		String lastday = "";
+		if (form.getCityid() > 2) {//重庆
+			//出发城市
+			int gotransferdeparturecity = 0;
+			if (!Util.isEmpty(form.getNewgodeparturecity())) {//第一行出发城市不为空，说明为转机
+				gotransferdeparturecity = form.getNewgodeparturecity();
+			} else {
+				gotransferdeparturecity = form.getGotransferdeparturecity();
+			}
+			goCity = dbDao.fetch(TCityEntity.class, gotransferdeparturecity);
+			province = goCity.getProvince();
+			if (province.endsWith("省") || province.endsWith("市")) {
+				province = province.substring(0, province.length() - 1);
+			}
+			if (province.length() > 3 && province.endsWith("自治区")) {
+				province = province.substring(0, province.length() - 3);
+			}
+			//返回时的出发城市
+			Integer returnDepartureCity = form.getNewreturndeparturecity();
+			returngoCity = dbDao.fetch(TCityEntity.class, returnDepartureCity.longValue());
+			//出发航班
+			if (!Util.isEmpty(form.getGotransferflightnum())) {//有第一行航班,说明是转机
+				String gotransferflightnum = form.getGotransferflightnum();
+				String newgoflightnum = form.getNewgoflightnum();
+
+				StringBuffer stringBuilder = new StringBuffer(gotransferflightnum.substring(
+						gotransferflightnum.indexOf(" ") + 1, gotransferflightnum.lastIndexOf(" ")));
+				stringBuilder.append("//"
+						+ newgoflightnum.substring(newgoflightnum.indexOf(" ") + 1, newgoflightnum.lastIndexOf(" ")));
+
+				//第一天
+				firstday = " "
+						+ province
+						+ "から"
+						+ stringBuilder.toString()
+						+ "便にて"
+						+ newgoflightnum.substring(newgoflightnum.indexOf("-", newgoflightnum.lastIndexOf("-")) + 1,
+								newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+			} else {
+				String newgoflightnum = form.getNewgoflightnum();
+				//第一天
+				firstday = " "
+						+ province
+						+ "から"
+						+ newgoflightnum.substring(newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" ")) + 1,
+								newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" ") + 1))
+						+ "便にて"
+						+ newgoflightnum.substring(newgoflightnum.indexOf("-", newgoflightnum.lastIndexOf("-")) + 1,
+								newgoflightnum.indexOf(" ", newgoflightnum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+			}
+
+			if (!Util.isEmpty(form.getNewreturnflightnum())) {
+				String returntransferflightnum = form.getReturntransferflightnum();
+				String newreturnflightnum = form.getNewreturnflightnum();
+
+				StringBuffer stringBuilder = new StringBuffer(returntransferflightnum.substring(
+						returntransferflightnum.indexOf(" ") + 1, returntransferflightnum.lastIndexOf(" ")));
+				stringBuilder.append("//"
+						+ newreturnflightnum.substring(newreturnflightnum.indexOf(" ") + 1,
+								newreturnflightnum.lastIndexOf(" ")));
+
+				//最后一天
+				lastday = " "
+						+ returntransferflightnum.substring(0,
+								returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-"))) + "から"
+						+ stringBuilder.toString() + "便にて帰国";
+			} else {
+				String returntransferflightnum = form.getReturntransferflightnum();
+				//最后一天
+				lastday = " "
+						+ returntransferflightnum.substring(0,
+								returntransferflightnum.indexOf("-", returntransferflightnum.indexOf("-")))
+						+ "から"
+						+ returntransferflightnum.substring(
+								returntransferflightnum.indexOf(" ", returntransferflightnum.indexOf(" ")) + 1,
+								returntransferflightnum.indexOf(" ", returntransferflightnum.indexOf(" ") + 1))
+						+ "便にて帰国";
+			}
+
+		} else {//北京,上海
+			//返回时的出发城市
+			Integer returnDepartureCity = form.getReturnDepartureCity();
+			returngoCity = dbDao.fetch(TCityEntity.class, returnDepartureCity.longValue());
+			//出发城市
+			Integer goDepartureCity = form.getGoDepartureCity();
+			goCity = dbDao.fetch(TCityEntity.class, goDepartureCity.longValue());
+			province = goCity.getProvince();
+			if (province.endsWith("省") || province.endsWith("市")) {
+				province = province.substring(0, province.length() - 1);
+			}
+			if (province.length() > 3 && province.endsWith("自治区")) {
+				province = province.substring(0, province.length() - 3);
+			}
+			//出发航班
+			goFlightNum = form.getGoFlightNum();
+			//返回航班
+			returnFlightNum = form.getReturnFlightNum();
+			//第一天
+			firstday = " "
+					+ province
+					+ "から"
+					+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+							goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
+					+ "便にて"
+					+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
+							goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+
+			//最后一天
+			lastday = " "
+					+ returnFlightNum.substring(0, returnFlightNum.indexOf("-", returnFlightNum.indexOf("-")))
+					+ "から"
+					+ returnFlightNum.substring(returnFlightNum.indexOf(" ", returnFlightNum.indexOf(" ")) + 1,
+							returnFlightNum.indexOf(" ", returnFlightNum.indexOf(" ") + 1)) + "便にて帰国";
+		}
+
+		result.put("firstday", firstday);
+		result.put("lastday", lastday);
+		result.put("returngocity", returngoCity);
+		return result;
+	}
+
 	public Object generateTravelPlan(HttpServletRequest request, GenerrateTravelForm form) {
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Map<String, Object> result = Maps.newHashMap();
-		if (Util.isEmpty(form.getGoDepartureCity())) {
-			result.put("message", "请选择出发城市");
+
+		result = validateIsfull(result, form);
+		if (!Util.isEmpty(result.get("message"))) {
 			return result;
 		}
-		if (Util.isEmpty(form.getGoArrivedCity())) {
-			result.put("message", "请选择抵达城市");
-			return result;
-		}
-		if (Util.isEmpty(form.getGoDate())) {
-			result.put("message", "请选择出发日期");
-			return result;
-		}
-		if (Util.isEmpty(form.getReturnDate())) {
-			result.put("message", "请选择返回日期");
-			return result;
-		}
-		if (Util.isEmpty(form.getGoFlightNum())) {
-			result.put("message", "请选择出发航班号");
-			return result;
-		}
-		if (Util.isEmpty(form.getReturnFlightNum())) {
-			result.put("message", "请选择返回航班号");
-			return result;
-		}
-		if (Util.isEmpty(form.getVisatype())) {
-			result.put("message", "请选择签证类型");
-			return result;
+		//签证类型
+		Integer visatype = form.getVisatype();
+		int cityid = 0;
+		int lastcityid = 0;
+		if (form.getCityid() > 2) {//重庆
+			cityid = form.getNewgoarrivedcity();
+			lastcityid = form.getNewreturndeparturecity();
+		} else {//北京，上海
+			cityid = form.getGoArrivedCity();
+			lastcityid = form.getReturnDepartureCity();
 		}
 		int daysBetween = DateUtil.daysBetween(form.getGoDate(), form.getReturnDate());
-		if (daysBetween < 4) {
-			result.put("message", "停留天数必须大于4天");
+		if (visatype == 6 || visatype == 1 || visatype == 14 || visatype == 2 || visatype == 7) {//除去东北六县
+			//如果去程抵达城市和返回出发城市一样，则什么都不需要分
+			if (lastcityid != cityid) {
+				if (daysBetween < 3) {
+					result.put("message", "停留天数必须大于3天");
+					return result;
+				}
+			} else {
+				if (daysBetween < 1) {
+					result.put("message", "停留天数必须大于1天");
+					return result;
+				}
+			}
+		} else {
+			if (daysBetween < 4) {
+				result.put("message", "停留天数必须大于4天");
+				return result;
+			}
+		}
+
+		long first = System.currentTimeMillis();
+
+		/*//随机出景点和方位list
+		Map<String, Object> reasonable = getReasonabletripplan(cityid, daysBetween);
+		String message = (String) reasonable.get("message");
+		if (!Util.isEmpty(message)) {
+			result.put("message", message);
 			return result;
 		}
-		//返回时的出发城市
-		Integer returnDepartureCity = form.getReturnDepartureCity();
-		TCityEntity returngoCity = dbDao.fetch(TCityEntity.class, returnDepartureCity.longValue());
 
-		//出发城市
-		Integer goDepartureCity = form.getGoDepartureCity();
-		TCityEntity goCity = dbDao.fetch(TCityEntity.class, goDepartureCity.longValue());
-		String province = goCity.getProvince();
-		if (province.endsWith("省") || province.endsWith("市")) {
-			province = province.substring(0, province.length() - 1);
-		}
-		//出发航班
-		String goFlightNum = form.getGoFlightNum();
-		String firstday = " "
-				+ province
-				+ "から"
-				+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-						goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
-				+ "便にて"
-				+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-						goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n 到着後、ホテルへ";
+		Map<String, Object> reasonabletripplan = (Map<String, Object>) reasonable.get("getsomeCount");
 
-		//返回航班
-		String returnFlightNum = form.getReturnFlightNum();
-		String lastday = " "
-				+ returnFlightNum.substring(0, returnFlightNum.indexOf("-", returnFlightNum.indexOf("-")))
-				+ "から"
-				+ returnFlightNum.substring(returnFlightNum.indexOf(" ", returnFlightNum.indexOf(" ")) + 1,
-						returnFlightNum.indexOf(" ", returnFlightNum.indexOf(" ") + 1)) + "便にて帰国";
+		//景点
+		ArrayList<String> scenicsList = (ArrayList<String>) reasonabletripplan.get("scenics");
+		System.out.println("scenics:" + scenicsList);
+		//酒店
+		ArrayList<Integer> hotelsList = (ArrayList<Integer>) reasonabletripplan.get("hotels");
+		System.out.println("hotels:" + hotelsList);*/
 
-		FlightSelectParam param = null;
-		//根据签证类型来决定前两天的城市
-		Integer visatype = form.getVisatype();
+		long last = System.currentTimeMillis();
+		System.out.println("所用时间：" + (last - first) + "ms");
 
+		Map<String, Object> firstdayAndLastday = getFirstdayAndLastday(form);
+		String firstday = (String) firstdayAndLastday.get("firstday");
+		String lastday = (String) firstdayAndLastday.get("lastday");
+		TCityEntity returngoCity = (TCityEntity) firstdayAndLastday.get("returngocity");
 		//获取前两天城市
-		TCityEntity city = dbDao.fetch(TCityEntity.class, form.getGoArrivedCity().longValue());
+		TCityEntity city = dbDao.fetch(TCityEntity.class, cityid);
 		//获取前两天城市所有的酒店
-		List<THotelEntity> hotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", form.getGoArrivedCity()),
-				null);
+		List<THotelEntity> hotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", cityid), null);
 		//获取前两天城市所有的景区
-		List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class,
-				Cnd.where("cityId", "=", form.getGoArrivedCity()), null);
+		List<TScenicEntity> scenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", cityid), null);
 		if (scenics.size() < 2) {
 			result.put("message", "没有更多的景区");
 			return result;
 		}
-		//获取后两天城市
-		TCityEntity lastcity = dbDao.fetch(TCityEntity.class, form.getReturnDepartureCity().longValue());
 		//获取后两天酒店
-		List<THotelEntity> lasthotels = dbDao.query(THotelEntity.class,
-				Cnd.where("cityId", "=", form.getReturnDepartureCity()), null);
+		List<THotelEntity> lasthotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", lastcityid), null);
 		//获取后两天景区
-		List<TScenicEntity> lastscenics = dbDao.query(TScenicEntity.class,
-				Cnd.where("cityId", "=", form.getReturnDepartureCity()), null);
+		List<TScenicEntity> lastscenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", lastcityid), null);
 		if (lastscenics.size() < 2) {
 			result.put("message", "没有更多的景区");
 			return result;
@@ -1898,31 +2047,58 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 		//需要生成的travelplan
 		List<TOrderTravelplanJpEntity> travelplans = Lists.newArrayList();
-		//生成行程安排历史信息
-		//		List<TOrderTravelplanHisJpEntity> travelplansHis = Lists.newArrayList();
-
 		//在一个城市只住一家酒店
 		Random random = new Random();
 		int hotelindex = random.nextInt(hotels.size());
 		int lasthotelindex = random.nextInt(lasthotels.size());
 
+		ArrayList<String> scenicsList = new ArrayList();
+		ArrayList<Integer> hotelsList = new ArrayList();
+
 		if (visatype == 6 || visatype == 1 || visatype == 14 || visatype == 2 || visatype == 7) {//除去东北六县
+
 			//如果去程抵达城市和返回出发城市一样，则什么都不需要分
-			if (form.getGoArrivedCity() == form.getReturnDepartureCity()) {
+			if (lastcityid == cityid) {
+
+				//冲绳和北海道时，按方位随机
+				if (cityid == 77 || cityid == 86) {
+					//随机出景点和方位list
+					Map<String, Object> reasonable = getReasonabletripplan(cityid, daysBetween);
+					String message = (String) reasonable.get("message");
+					if (!Util.isEmpty(message)) {
+						result.put("message", message);
+						return result;
+					}
+
+					Map<String, Object> reasonabletripplan = (Map<String, Object>) reasonable.get("getsomeCount");
+
+					//景点
+					scenicsList = (ArrayList<String>) reasonabletripplan.get("scenics");
+					System.out.println("scenics:" + scenicsList);
+					//酒店
+					hotelsList = (ArrayList<Integer>) reasonabletripplan.get("hotels");
+					System.out.println("hotels:" + hotelsList);
+				}
+
 				for (int i = 0; i <= daysBetween; i++) {
 					TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-					travelplan.setCityId(form.getGoArrivedCity());
+					travelplan.setCityId(cityid);
 					travelplan.setDay(String.valueOf(i + 1));
 					travelplan.setOrderId(orderjpid);
 					travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
 					travelplan.setOutDate(DateUtil.addDay(form.getGoDate(), i));
 					travelplan.setCityName(city.getCity());
 					travelplan.setCreateTime(new Date());
-
 					//酒店
 					if (i != daysBetween) {
-						THotelEntity hotel = hotels.get(hotelindex);
-						travelplan.setHotel(hotel.getId());
+
+						if (cityid == 77 || cityid == 86) {
+							travelplan.setHotel(hotelsList.get(i));
+						} else {
+							THotelEntity hotel = hotels.get(hotelindex);
+							travelplan.setHotel(hotel.getId());
+
+						}
 					}
 					if (i > 0 && i != daysBetween) {
 						//景区
@@ -1930,10 +2106,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							scenics = dbDao.query(TScenicEntity.class,
 									Cnd.where("cityId", "=", form.getGoArrivedCity()), null);
 						}
-						int scenicindex = random.nextInt(scenics.size());
-						TScenicEntity scenic = scenics.get(scenicindex);
-						scenics.remove(scenic);
-						travelplan.setScenic(scenic.getName());
+
+						if (cityid == 77 || cityid == 86) {
+							travelplan.setScenic(scenicsList.get(i));
+						} else {
+							int scenicindex = random.nextInt(scenics.size());
+							TScenicEntity scenic = scenics.get(scenicindex);
+							scenics.remove(scenic);
+							travelplan.setScenic(scenic.getName());
+
+						}
 					}
 					if (i == 0) {//第一天
 						travelplan.setScenic(firstday);
@@ -1945,34 +2127,67 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 			} else {
 				//为什么要<=，因为最后一天也要玩
-				//if (visatype == 6 || visatype == 1 || visatype == 14) {//普通三年多次，日本单次和普通五年多次一样
 				//前两天
+
+				//冲绳和北海道时，按方位随机
+				if (cityid == 77 || cityid == 86) {
+					//随机出景点和方位list
+					Map<String, Object> reasonable = getReasonabletripplan(cityid, 2);
+					String message = (String) reasonable.get("message");
+					if (!Util.isEmpty(message)) {
+						result.put("message", message);
+						return result;
+					}
+
+					Map<String, Object> reasonabletripplan = (Map<String, Object>) reasonable.get("getsomeCount");
+
+					//景点
+					scenicsList = (ArrayList<String>) reasonabletripplan.get("scenics");
+					System.out.println("scenics:" + scenicsList);
+					//酒店
+					hotelsList = (ArrayList<Integer>) reasonabletripplan.get("hotels");
+					System.out.println("hotels:" + hotelsList);
+				}
+
+				int k = 0;
 				for (int i = 0; i < 2; i++) {
 					TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-					travelplan.setCityId(form.getGoArrivedCity());
+					travelplan.setCityId(cityid);
 					travelplan.setCityName(city.getCity());
 					travelplan.setDay(String.valueOf(i + 1));
 					travelplan.setOrderId(orderjpid);
 					travelplan.setOutDate(DateUtil.addDay(form.getGoDate(), i));
 					travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
-
 					travelplan.setCreateTime(new Date());
 
 					if (i != daysBetween) {
-						THotelEntity hotel = hotels.get(hotelindex);
-						travelplan.setHotel(hotel.getId());
+
+						if (cityid == 77 || cityid == 86) {
+							travelplan.setHotel(hotelsList.get(k));
+						} else {
+							THotelEntity hotel = hotels.get(hotelindex);
+							travelplan.setHotel(hotel.getId());
+
+						}
 					}
 					if (i == 0) {
 						travelplan.setScenic(firstday);
 					}
 					if (i > 0 && i != daysBetween) {
 						//景区
-						int scenicindex = random.nextInt(scenics.size());
-						TScenicEntity scenic = scenics.get(scenicindex);
-						scenics.remove(scenic);
-						travelplan.setScenic(scenic.getName());
+
+						if (cityid == 77 || cityid == 86) {
+							travelplan.setScenic(scenicsList.get(k));
+						} else {
+							int scenicindex = random.nextInt(scenics.size());
+							TScenicEntity scenic = scenics.get(scenicindex);
+							scenics.remove(scenic);
+							travelplan.setScenic(scenic.getName());
+
+						}
 					}
 					travelplans.add(travelplan);
+					k++;
 				}
 				//除去开始的前两天和最后两天天，如果天数为2的倍数，则中间多2的倍数个随机城市，有余数则最后变为3天
 				int subday = 0;
@@ -1986,23 +2201,24 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				List<Integer> datesList = null;
 				//最多随机几个城市
 				int totalstyle = subday / 2;
-				//intArray为所有有景点的城市并且出去东北六县的Id组成的数组
+				//获取指定城市的ID数组
 				int[] intArray = generrateCityArray();
-				intArray = getCitysArray(intArray, form.getGoArrivedCity(), form.getReturnDepartureCity());
+				//获取去除抵达城市和返回城市的指定城市的ID数组
+				intArray = getCitysArray(intArray, cityid, lastcityid);
 				//randomArray为获取的不重复随机数
 				int j = 0;
 				if (subday != 0) {
-					//随机城市和天数
+					//获取随机城市和天数
 					citysandDates = getRandomCity(intArray, totalstyle, subday);
 					datesList = citysandDates.get("days");
 					citysList = citysandDates.get("citys");
+
 					for (int i = 2; i < 2 + subday; i++) {
 						TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-
 						if (i == getNum(datesList, j) + 2) {
 							j++;
 							if (i == 2) {
-								String countryAirline = countryAirline(form.getGoArrivedCity(), citysList.get(j - 1), 1);
+								String countryAirline = countryAirline(cityid, citysList.get(j - 1), 1);
 								travelplan.setScenic(countryAirline);
 							} else {
 								String countryAirline = countryAirline(citysList.get(j - 2), citysList.get(j - 1), 1);
@@ -2016,9 +2232,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							travelplan.setHotel(hotel.getId());
 
 						} else {
-							TCityEntity nowcity = dbDao.fetch(TCityEntity.class, citysList.get(j - 1).longValue());
-							List<THotelEntity> nowhotels = dbDao.query(THotelEntity.class,
-									Cnd.where("cityId", "=", citysList.get(j - 1)), null);
 							List<TScenicEntity> nowscenics = dbDao.query(TScenicEntity.class,
 									Cnd.where("cityId", "=", citysList.get(j - 1)), null);
 							int scenicindex = random.nextInt(nowscenics.size());
@@ -2027,12 +2240,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							travelplan.setScenic(scenic.getName());
 
 						}
-
 						TCityEntity nowcity = dbDao.fetch(TCityEntity.class, citysList.get(j - 1).longValue());
-						List<THotelEntity> nowhotels = dbDao.query(THotelEntity.class,
-								Cnd.where("cityId", "=", citysList.get(j - 1)), null);
-						List<TScenicEntity> nowscenics = dbDao.query(TScenicEntity.class,
-								Cnd.where("cityId", "=", citysList.get(j - 1)), null);
 						travelplan.setCityId(citysList.get(j - 1));
 						travelplan.setCityName(nowcity.getCity());
 						travelplan.setDay(String.valueOf(i + 1));
@@ -2040,19 +2248,40 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						travelplan.setOutDate(DateUtil.addDay(form.getGoDate(), i));
 						travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
 						travelplan.setCreateTime(new Date());
-
 						travelplans.add(travelplan);
-
 					}
-				} else {
-
+				} else {//为0时说明是4天
+					j++;
+					citysList = new ArrayList<>();
+					citysList.add(cityid);
 				}
-
 				if (daysBetween % 2 == 0) {
+
+					//冲绳和北海道时，按方位随机
+					if (lastcityid == 77 || lastcityid == 86) {
+						//随机出景点和方位list
+						Map<String, Object> reasonable = getReasonabletripplan(lastcityid, 3);
+						String message = (String) reasonable.get("message");
+						if (!Util.isEmpty(message)) {
+							result.put("message", message);
+							return result;
+						}
+
+						Map<String, Object> reasonabletripplan = (Map<String, Object>) reasonable.get("getsomeCount");
+
+						//景点
+						scenicsList = (ArrayList<String>) reasonabletripplan.get("scenics");
+						System.out.println("scenics:" + scenicsList);
+						//酒店
+						hotelsList = (ArrayList<Integer>) reasonabletripplan.get("hotels");
+						System.out.println("hotels:" + hotelsList);
+					}
+
 					//最后三天
+					int k1 = 0;
 					for (int i = daysBetween - 2; i <= daysBetween; i++) {
 						TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-						travelplan.setCityId(form.getReturnDepartureCity());
+						travelplan.setCityId(lastcityid);
 						travelplan.setDay(String.valueOf(i + 1));
 						travelplan.setOrderId(orderjpid);
 						travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
@@ -2060,43 +2289,72 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						travelplan.setCityName(returngoCity.getCity());
 						travelplan.setCreateTime(new Date());
 						//酒店和航班取返程即第二行的出发城市
-						//酒店
 						if (i != daysBetween) {
-							THotelEntity hotel = lasthotels.get(lasthotelindex);
-							travelplan.setHotel(hotel.getId());
-							//酒店历史信息
-							//				travelPlanHis.setHotel(hotel.getName());
+
+							if (lastcityid == 77 || lastcityid == 86) {
+								travelplan.setHotel(hotelsList.get(k1));
+							} else {
+								THotelEntity hotel = lasthotels.get(lasthotelindex);
+								travelplan.setHotel(hotel.getId());
+
+							}
 						}
 						if (i == daysBetween) {
 							travelplan.setScenic(lastday);
 						} else if (i == daysBetween - 2) {
 							if (daysBetween == 4) {
-								String countryAirline = countryAirline(form.getGoArrivedCity(),
-										form.getReturnDepartureCity(), 2);
+								String countryAirline = countryAirline(cityid, lastcityid, 2);
 								travelplan.setScenic(countryAirline);
 							} else {
-								String countryAirline = countryAirline(citysList.get(j - 1),
-										form.getReturnDepartureCity(), 2);
+								String countryAirline = countryAirline(citysList.get(j - 1), lastcityid, 2);
 								travelplan.setScenic(countryAirline);
 							}
 						} else {
 							//景区
-							if (scenics.size() == 0) {
-								scenics = dbDao.query(TScenicEntity.class,
-										Cnd.where("cityId", "=", form.getGoArrivedCity()), null);
+
+							if (lastcityid == 77 || lastcityid == 86) {
+								travelplan.setScenic(scenicsList.get(k1));
+							} else {
+								if (scenics.size() == 0) {
+									scenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", cityid), null);
+								}
+								int scenicindex = random.nextInt(scenics.size());
+								TScenicEntity scenic = scenics.get(scenicindex);
+								scenics.remove(scenic);
+								travelplan.setScenic(scenic.getName());
+
 							}
-							int scenicindex = random.nextInt(scenics.size());
-							TScenicEntity scenic = scenics.get(scenicindex);
-							scenics.remove(scenic);
-							travelplan.setScenic(scenic.getName());
 						}
 						travelplans.add(travelplan);
+						k1++;
 					}
 				} else {
 					//最后两天
+
+					//冲绳和北海道时，按方位随机
+					if (lastcityid == 77 || lastcityid == 86) {
+						//随机出景点和方位list
+						Map<String, Object> reasonable = getReasonabletripplan(lastcityid, 2);
+						String message = (String) reasonable.get("message");
+						if (!Util.isEmpty(message)) {
+							result.put("message", message);
+							return result;
+						}
+
+						Map<String, Object> reasonabletripplan = (Map<String, Object>) reasonable.get("getsomeCount");
+
+						//景点
+						scenicsList = (ArrayList<String>) reasonabletripplan.get("scenics");
+						System.out.println("scenics:" + scenicsList);
+						//酒店
+						hotelsList = (ArrayList<Integer>) reasonabletripplan.get("hotels");
+						System.out.println("hotels:" + hotelsList);
+					}
+
+					int k1 = 0;
 					for (int i = daysBetween - 1; i <= daysBetween; i++) {
 						TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-						travelplan.setCityId(form.getReturnDepartureCity());
+						travelplan.setCityId(lastcityid);
 						travelplan.setDay(String.valueOf(i + 1));
 						travelplan.setOrderId(orderjpid);
 						travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
@@ -2106,75 +2364,100 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						//酒店和航班取返程即第二行的出发城市
 						//酒店
 						if (i != daysBetween) {
-							THotelEntity hotel = lasthotels.get(lasthotelindex);
-							travelplan.setHotel(hotel.getId());
-							//酒店历史信息
-							//				travelPlanHis.setHotel(hotel.getName());
+
+							if (lastcityid == 77 || lastcityid == 86) {
+								travelplan.setHotel(hotelsList.get(k1));
+							} else {
+								THotelEntity hotel = lasthotels.get(lasthotelindex);
+								travelplan.setHotel(hotel.getId());
+
+							}
 						}
 						if (i == daysBetween) {
 							travelplan.setScenic(lastday);
 						} else {
-							String countryAirline = countryAirline(citysList.get(j - 1), form.getReturnDepartureCity(),
-									2);
-							int nextInt = random.nextInt(lastscenics.size());
-							countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
+							String countryAirline = countryAirline(citysList.get(j - 1), lastcityid, 2);
+							if (lastcityid == 77 || lastcityid == 86) {
+								countryAirline = countryAirline + "。" + scenicsList.get(k1);
+							} else {
+
+								int nextInt = random.nextInt(lastscenics.size());
+								countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
+							}
+
 							travelplan.setScenic(countryAirline);
 						}
 						travelplans.add(travelplan);
+						k1++;
 					}
 				}
 			}
-
 		} else {//东北六县第三天要去对应的签证类型城市，不管去程抵达城市和返程出发城市是否一样，中间都随机
+
+			//冲绳和北海道时，按方位随机
+			if (cityid == 77 || cityid == 86) {
+				//随机出景点和方位list
+				Map<String, Object> reasonable = getReasonabletripplan(cityid, 2);
+				String message = (String) reasonable.get("message");
+				if (!Util.isEmpty(message)) {
+					result.put("message", message);
+					return result;
+				}
+
+				Map<String, Object> reasonabletripplan = (Map<String, Object>) reasonable.get("getsomeCount");
+
+				//景点
+				scenicsList = (ArrayList<String>) reasonabletripplan.get("scenics");
+				System.out.println("scenics:" + scenicsList);
+				//酒店
+				hotelsList = (ArrayList<Integer>) reasonabletripplan.get("hotels");
+				System.out.println("hotels:" + hotelsList);
+			}
+
 			//前两天
+			int k = 0;
 			for (int i = 0; i < 2; i++) {
 				TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-				travelplan.setCityId(form.getGoArrivedCity());
+				travelplan.setCityId(cityid);
 				travelplan.setCityName(city.getCity());
 				travelplan.setDay(String.valueOf(i + 1));
 				travelplan.setOrderId(orderjpid);
 				travelplan.setOutDate(DateUtil.addDay(form.getGoDate(), i));
 				travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
-
 				travelplan.setCreateTime(new Date());
 
 				if (i != daysBetween) {
-					THotelEntity hotel = hotels.get(hotelindex);
-					travelplan.setHotel(hotel.getId());
+
+					if (cityid == 77 || cityid == 86) {
+						travelplan.setHotel(hotelsList.get(k));
+					} else {
+						THotelEntity hotel = hotels.get(hotelindex);
+						travelplan.setHotel(hotel.getId());
+
+					}
 				}
 				if (i == 0) {
 					travelplan.setScenic(firstday);
 				}
 				if (i > 0 && i != daysBetween) {
 					//景区
-					int scenicindex = random.nextInt(scenics.size());
-					TScenicEntity scenic = scenics.get(scenicindex);
-					scenics.remove(scenic);
-					travelplan.setScenic(scenic.getName());
+
+					if (cityid == 77 || cityid == 86) {
+						travelplan.setScenic(scenicsList.get(i));
+					} else {
+						int scenicindex = random.nextInt(scenics.size());
+						TScenicEntity scenic = scenics.get(scenicindex);
+						scenics.remove(scenic);
+						travelplan.setScenic(scenic.getName());
+
+					}
 				}
 				travelplans.add(travelplan);
+				k++;
 			}
 
 			//第三天去的城市签证类型城市
-			int threeCityid = 0;
-			if (visatype == 3 || visatype == 8) {//宫城
-				threeCityid = 91;
-			}
-			if (visatype == 4 || visatype == 10) {//岩手
-				threeCityid = 92;
-			}
-			if (visatype == 5 || visatype == 9) {//福岛
-				threeCityid = 30;
-			}
-			if (visatype == 11) {//青森
-				threeCityid = 25;
-			}
-			if (visatype == 12) {//秋田
-				threeCityid = 612;
-			}
-			if (visatype == 13) {//山形
-				threeCityid = 613;
-			}
+			int threeCityid = thirddayCity(visatype);
 
 			TCityEntity threeCity = dbDao.fetch(TCityEntity.class, threeCityid);
 			List<THotelEntity> threeHotels = dbDao.query(THotelEntity.class, Cnd.where("cityId", "=", threeCityid),
@@ -2190,7 +2473,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				return result;
 			}
 			int threehotel = random.nextInt(threeHotels.size());
-
 			//第三天
 			TOrderTravelplanJpEntity thravelplan = new TOrderTravelplanJpEntity();
 			thravelplan.setCityId(threeCityid);
@@ -2204,13 +2486,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			THotelEntity thotel = threeHotels.get(threehotel);
 			thravelplan.setHotel(thotel.getId());
 			//景区
-			String threeScenic = countryAirline(form.getGoArrivedCity(), threeCityid, 1);
+			String threeScenic = countryAirline(cityid, threeCityid, 1);
 			int threeScenicIndex = random.nextInt(threeScenics.size());
 			TScenicEntity tScenicEntity = threeScenics.get(threeScenicIndex);
-
 			threeScenic = threeScenic + "。" + tScenicEntity.getName();
 			thravelplan.setScenic(threeScenic);
-
 			travelplans.add(thravelplan);
 
 			//除去开始的前两天和最后两天天，如果天数为2的倍数，则中间多2的倍数个随机城市，有余数则最后变为3天
@@ -2227,10 +2507,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			int totalstyle = subday / 2;
 			//intArray为所有有景点的城市并且出去东北六县的Id组成的数组
 			int[] intArray = generrateCityArray();
-			intArray = getCitysArray(intArray, form.getGoArrivedCity(), form.getReturnDepartureCity());
+			intArray = getCitysArray(intArray, cityid, lastcityid);
 			//randomArray为获取的不重复随机数
 			//随机城市和天数
-
 			int j = 0;
 			if (subday != 0) {
 				citysandDates = getRandomCity(intArray, totalstyle, subday);
@@ -2238,7 +2517,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				citysList = citysandDates.get("citys");
 				for (int i = 3; i < 3 + subday; i++) {
 					TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-
 					if (i == getNum(datesList, j) + 3) {
 						j++;
 						if (i == 3) {
@@ -2248,13 +2526,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 							String countryAirline = countryAirline(citysList.get(j - 2), citysList.get(j - 1), 1);
 							travelplan.setScenic(countryAirline);
 						}
-
 						List<THotelEntity> nowhotels = dbDao.query(THotelEntity.class,
 								Cnd.where("cityId", "=", citysList.get(j - 1)), null);
 						int nowhotelindex = random.nextInt(nowhotels.size());
 						THotelEntity hotel = nowhotels.get(nowhotelindex);
 						travelplan.setHotel(hotel.getId());
-
 					} else {
 						List<TScenicEntity> nowscenics = dbDao.query(TScenicEntity.class,
 								Cnd.where("cityId", "=", citysList.get(j - 1)), null);
@@ -2262,7 +2538,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						TScenicEntity scenic = nowscenics.get(scenicindex);
 						nowscenics.remove(scenic);
 						travelplan.setScenic(scenic.getName());
-
 					}
 
 					TCityEntity nowcity = dbDao.fetch(TCityEntity.class, citysList.get(j - 1).longValue());
@@ -2273,19 +2548,37 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					travelplan.setOutDate(DateUtil.addDay(form.getGoDate(), i));
 					travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
 					travelplan.setCreateTime(new Date());
-
 					travelplans.add(travelplan);
-
 				}
-			} else {
-
 			}
 
 			if (daysBetween % 2 == 1) {
+
+				//冲绳和北海道时，按方位随机
+				if (lastcityid == 77 || lastcityid == 86) {
+					//随机出景点和方位list
+					Map<String, Object> reasonable = getReasonabletripplan(lastcityid, 3);
+					String message = (String) reasonable.get("message");
+					if (!Util.isEmpty(message)) {
+						result.put("message", message);
+						return result;
+					}
+
+					Map<String, Object> reasonabletripplan = (Map<String, Object>) reasonable.get("getsomeCount");
+
+					//景点
+					scenicsList = (ArrayList<String>) reasonabletripplan.get("scenics");
+					System.out.println("scenics:" + scenicsList);
+					//酒店
+					hotelsList = (ArrayList<Integer>) reasonabletripplan.get("hotels");
+					System.out.println("hotels:" + hotelsList);
+				}
+
 				//最后三天
+				int k1 = 0;
 				for (int i = daysBetween - 2; i <= daysBetween; i++) {
 					TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-					travelplan.setCityId(form.getReturnDepartureCity());
+					travelplan.setCityId(lastcityid);
 					travelplan.setDay(String.valueOf(i + 1));
 					travelplan.setOrderId(orderjpid);
 					travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
@@ -2293,43 +2586,73 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					travelplan.setCityName(returngoCity.getCity());
 					travelplan.setCreateTime(new Date());
 					//酒店和航班取返程即第二行的出发城市
-					//酒店
 					if (i != daysBetween) {
-						THotelEntity hotel = lasthotels.get(lasthotelindex);
-						travelplan.setHotel(hotel.getId());
-						//酒店历史信息
-						//				travelPlanHis.setHotel(hotel.getName());
+
+						if (lastcityid == 77 || lastcityid == 86) {
+							travelplan.setHotel(hotelsList.get(k1));
+						} else {
+							THotelEntity hotel = lasthotels.get(lasthotelindex);
+							travelplan.setHotel(hotel.getId());
+
+						}
 					}
 					if (i == daysBetween) {
 						travelplan.setScenic(lastday);
 					} else if (i == daysBetween - 2) {
 						if (daysBetween == 5) {
-							String countryAirline = countryAirline(threeCityid, form.getReturnDepartureCity(), 2);
+							String countryAirline = countryAirline(threeCityid, lastcityid, 2);
 							travelplan.setScenic(countryAirline);
 
 						} else {
-							String countryAirline = countryAirline(citysList.get(j - 1), form.getReturnDepartureCity(),
-									2);
+							String countryAirline = countryAirline(citysList.get(j - 1), lastcityid, 2);
 							travelplan.setScenic(countryAirline);
 						}
 					} else {
 						//景区
-						if (scenics.size() == 0) {
-							scenics = dbDao.query(TScenicEntity.class,
-									Cnd.where("cityId", "=", form.getGoArrivedCity()), null);
+
+						if (lastcityid == 77 || lastcityid == 86) {
+							travelplan.setScenic(scenicsList.get(k1));
+						} else {
+							if (scenics.size() == 0) {
+								scenics = dbDao.query(TScenicEntity.class, Cnd.where("cityId", "=", cityid), null);
+							}
+							int scenicindex = random.nextInt(scenics.size());
+							TScenicEntity scenic = scenics.get(scenicindex);
+							scenics.remove(scenic);
+							travelplan.setScenic(scenic.getName());
+
 						}
-						int scenicindex = random.nextInt(scenics.size());
-						TScenicEntity scenic = scenics.get(scenicindex);
-						scenics.remove(scenic);
-						travelplan.setScenic(scenic.getName());
 					}
 					travelplans.add(travelplan);
+					k1++;
 				}
 			} else {
+
+				//冲绳和北海道时，按方位随机
+				if (lastcityid == 77 || lastcityid == 86) {
+					//随机出景点和方位list
+					Map<String, Object> reasonable = getReasonabletripplan(lastcityid, 2);
+					String message = (String) reasonable.get("message");
+					if (!Util.isEmpty(message)) {
+						result.put("message", message);
+						return result;
+					}
+
+					Map<String, Object> reasonabletripplan = (Map<String, Object>) reasonable.get("getsomeCount");
+
+					//景点
+					scenicsList = (ArrayList<String>) reasonabletripplan.get("scenics");
+					System.out.println("scenics:" + scenicsList);
+					//酒店
+					hotelsList = (ArrayList<Integer>) reasonabletripplan.get("hotels");
+					System.out.println("hotels:" + hotelsList);
+				}
+
 				//最后两天
+				int k1 = 0;
 				for (int i = daysBetween - 1; i <= daysBetween; i++) {
 					TOrderTravelplanJpEntity travelplan = new TOrderTravelplanJpEntity();
-					travelplan.setCityId(form.getReturnDepartureCity());
+					travelplan.setCityId(lastcityid);
 					travelplan.setDay(String.valueOf(i + 1));
 					travelplan.setOrderId(orderjpid);
 					travelplan.setIsupdatecity(IsYesOrNoEnum.NO.intKey());
@@ -2337,45 +2660,482 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					travelplan.setCityName(returngoCity.getCity());
 					travelplan.setCreateTime(new Date());
 					//酒店和航班取返程即第二行的出发城市
-					//酒店
 					if (i != daysBetween) {
-						THotelEntity tHotelEntity = lasthotels.get(lasthotelindex);
-						travelplan.setHotel(tHotelEntity.getId());
-						//酒店历史信息
-						//				travelPlanHis.setHotel(hotel.getName());
+
+						if (lastcityid == 77 || lastcityid == 86) {
+							travelplan.setHotel(hotelsList.get(k1));
+						} else {
+							THotelEntity tHotelEntity = lasthotels.get(lasthotelindex);
+							travelplan.setHotel(tHotelEntity.getId());
+
+						}
 					}
 					if (i == daysBetween) {
 						travelplan.setScenic(lastday);
 					} else {
 						if (daysBetween == 4) {
-							String countryAirline = countryAirline(threeCityid, form.getReturnDepartureCity(), 2);
-							int nextInt = random.nextInt(lastscenics.size());
-							countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
+							String countryAirline = countryAirline(threeCityid, lastcityid, 2);
+							if (lastcityid == 77 || lastcityid == 86) {
+								countryAirline = countryAirline + "。" + scenicsList.get(k1);
+							} else {
+								int nextInt = random.nextInt(lastscenics.size());
+								countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
+
+							}
 							travelplan.setScenic(countryAirline);
 						} else {
-							String countryAirline = countryAirline(citysList.get(j - 1), form.getReturnDepartureCity(),
-									2);
-							int nextInt = random.nextInt(lastscenics.size());
-							countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
+							String countryAirline = countryAirline(citysList.get(j - 1), lastcityid, 2);
+							if (lastcityid == 77 || lastcityid == 86) {
+								int nextInt = random.nextInt(lastscenics.size());
+								countryAirline = countryAirline + "。" + scenicsList.get(k1);
+							} else {
+								int nextInt = random.nextInt(lastscenics.size());
+								countryAirline = countryAirline + "。" + lastscenics.get(nextInt).getName();
+							}
 							travelplan.setScenic(countryAirline);
 						}
 					}
 					travelplans.add(travelplan);
+					k1++;
 				}
 			}
-
 		}
 
 		List<TOrderTravelplanJpEntity> before = dbDao.query(TOrderTravelplanJpEntity.class,
 				Cnd.where("orderid", "=", orderjpid), null);
 		//更新行程安排
 		dbDao.updateRelations(before, travelplans);
-		//更新历史行程安排
-		//		dbDao.updateRelations(beforeHis, travelplansHis);
+
+		//房间数
+
+		/*TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
+		if (Util.isEmpty(orderjp.getRoomcount())) {
+			int roomCount = getRoomCount(orderjpid);
+			orderjp.setRoomcount(roomCount);
+			dbDao.update(orderjp, "roomcount");
+		}*/
+
 		result.put("status", "success");
 		result.put("orderid", orderjpid);
 		result.put("data", getTravelPlanByOrderId(orderjpid));
 		result.put("orderjpid", orderjpid);
+		return result;
+	}
+
+	public Map<String, Object> getReasonabletripplan(int cityid, int days) {
+		Map<String, Object> result = Maps.newHashMap();
+
+		List<Integer> list = new ArrayList<>();
+
+		//查询所选城市的景区一共分几个方位,positionSize
+		String scenicString = sqlManager.get("simpleJP_getScenicinfo");
+		Sql scenicsql = Sqls.create(scenicString);
+		scenicsql.setParam("cityid", cityid);
+		List<Record> scenics = dbDao.query(scenicsql, null, null);
+		int positionSize = scenics.size();
+
+		ArrayList<ArrayList<String>> arrayList = new ArrayList();
+
+		ArrayList<Integer> intList = new ArrayList();
+
+		ArrayList<String> regionList = new ArrayList();
+		//所选城市的景区最多可以看几天
+		int scenicDays = 0;
+		for (Record record : scenics) {
+
+			regionList.add(record.getString("region"));
+
+			int scenicCount = record.getInt("sceniccount");
+			intList.add(scenicCount);
+			String region = record.getString("region");
+			String scenicString2 = sqlManager.get("simpleJP_getScenicnamebyregion");
+			Sql scenicsql2 = Sqls.create(scenicString2);
+			scenicsql2.setParam("cityid", cityid);
+			scenicsql2.setParam("region", region);
+			List<Record> scenicnames = dbDao.query(scenicsql2, null, null);
+
+			ArrayList<String> strList = new ArrayList();
+			for (Record record2 : scenicnames) {
+				strList.add(record2.getString("name"));
+			}
+			arrayList.add(strList);
+
+			//北海道时，每个方位最多呆3天
+			/*if (cityid == 86) {
+				if (scenicCount > 3) {
+					scenicCount = 3;
+				}
+			}*/
+			scenicDays += scenicCount;
+
+		}
+		System.out.println("days:" + days);
+		System.out.println("scenicDays:" + scenicDays);
+		String message = "";
+		if (days > scenicDays) {
+			message = "没有更多的景区";
+			result.put("message", message);
+			return result;
+		}
+
+		Map<String, Object> getsomeCount = getsomeCount(cityid, intList, days, arrayList, regionList);
+		if (!Util.isEmpty(getsomeCount.get("message"))) {
+			result.put("message", getsomeCount.get("message"));
+			return result;
+		}
+
+		result.put("getsomeCount", getsomeCount);
+		return result;
+	}
+
+	public Map<String, Object> getsomeCount(int cityid, ArrayList<Integer> intlist, int size,
+			ArrayList<ArrayList<String>> arrayList4, ArrayList<String> regionList) {
+
+		Map<String, Object> result = Maps.newHashMap();
+		String message = "";
+
+		try {
+			//从所有方位中随机出用几个方位
+			Random random2 = new Random();
+			int nextInt = random2.nextInt(intlist.size()) + 1;
+			System.out.println("1:" + nextInt);
+
+			//随机出给定数组中的具体的哪几个方位的下标
+			ArrayList<Integer> arrayList2 = new ArrayList();
+			//冲绳机场所在方位(南)，放在第一个
+			if (cityid == 77) {
+				arrayList2.add(2);
+			}
+			//北海道机场所在方位(西),放在第一个
+			if (cityid == 86) {
+				arrayList2.add(3);
+			}
+			//所有方位都有
+			if (nextInt == intlist.size()) {
+				for (int i = 0; i < nextInt; i++) {
+					if (cityid == 77) {
+						if (i != 2) {
+							arrayList2.add(i);
+						}
+					}
+					if (cityid == 86) {
+						if (i != 3) {
+							arrayList2.add(i);
+						}
+					}
+				}
+			} else {
+				for (int i = 0; i < nextInt - 1; i++) {
+
+					//arrayList2.add(i);
+
+					Random random3 = new Random();
+					int nextInt2 = random3.nextInt(intlist.size());
+
+					while (arrayList2.contains(nextInt2)) {
+						nextInt2 = random3.nextInt(intlist.size());
+					}
+
+					arrayList2.add(nextInt2);
+
+					/*if (!arrayList2.contains(nextInt2)) {
+					arrayList2.add(nextInt2);
+					}*/
+				}
+			}
+
+			//判断下所选取的方位个数和随机出来的是否一致，如果不一致，重新随机
+			/*if (arrayList2.size() != nextInt) {
+				return getsomeCount(cityid, intlist, size, arrayList4, regionList);
+			}*/
+
+			//按从小到大顺序排序
+			//Collections.sort(arrayList2);
+			if (cityid == 86) {
+				for (int i = 0; i < arrayList2.size(); i++) {
+					//是否包含东，东在查询的List中排在第一位
+					if (arrayList2.get(i) == 0) {
+						//如果东不在最后一位,把东挪到最后一位
+						if (i != arrayList2.size() - 1) {
+							arrayList2.remove(i);
+							arrayList2.add(arrayList2.size(), 0);
+						}
+					}
+					//是否包含西南，东在查询的List中排在第四位
+					if (arrayList2.get(i) == 4) {
+						//如果西南不在第二位,把西南挪到第二位
+						if (i != 1) {
+							arrayList2.remove(i);
+							arrayList2.add(1, 4);
+						}
+					}
+				}
+			}
+
+			if (cityid == 77) {
+				for (int i = 0; i < arrayList2.size(); i++) {
+					//是否包含北，北在查询的List中排在第二位
+					if (arrayList2.get(i) == 1) {
+						//如果北不在最后一位,把北挪到最后一位
+						if (i != arrayList2.size() - 1) {
+							arrayList2.remove(i);
+							arrayList2.add(arrayList2.size(), 1);
+						}
+					}
+				}
+			}
+
+			System.out.println("2:" + arrayList2);
+
+			//随机出的方位
+			ArrayList<String> regions = new ArrayList();
+
+			System.out.println("regionList:" + regionList);
+			for (int i = 0; i < arrayList2.size(); i++) {
+				regions.add(regionList.get(arrayList2.get(i)));
+			}
+
+			/*//list转数组
+			int[] d = new int[arrayList2.size()];
+			for (int i = 0; i < arrayList2.size(); i++) {
+				d[i] = arrayList2.get(i);
+			}*/
+
+			//把随机出的具体方位查出来
+			ArrayList<Integer> arrayList3 = new ArrayList();
+			for (int i = 0; i < arrayList2.size(); i++) {
+				int j = intlist.get(arrayList2.get(i));
+				//北海道时，如果某个方位只有一天并且随机到的方位小于3个时，重新随机
+				if (cityid == 86 && arrayList2.size() < 3 && j == 1) {
+					return getsomeCount(cityid, intlist, size, arrayList4, regionList);
+				}
+				arrayList3.add(intlist.get(arrayList2.get(i)));
+
+			}
+			System.out.println("3:" + arrayList3);
+
+			//从随机的每个方位中，再随机出几个景点
+			//count1随机出的总景点个数
+			int count = 0;
+			ArrayList<Integer> arrayList = new ArrayList();
+			for (int i = 0; i < arrayList3.size(); i++) {
+				int count1 = 0;
+				Random random = new Random();
+
+				count1 = random.nextInt(arrayList3.get(i)) + 1;
+				//限制每个方位呆几天
+				//北海道,每个方位最多三天
+				/*if (cityid == 86) {
+					if (arrayList3.get(i) > 3) {
+						count1 = random.nextInt(3) + 1;
+					}
+				}*/
+
+				/*if (cityid == 86) {
+					if (count1 > 3) {
+						return getsomeCount(cityid, intlist, size, arrayList4, regionList);
+					}
+				}*/
+				System.out.println("4:" + count1);
+
+				arrayList.add(count1);
+				count += count1;
+
+			}
+			System.out.println("arrayList:" + arrayList);
+			System.out.println("count:" + count);
+
+			if (count != size) {
+				return getsomeCount(cityid, intlist, size, arrayList4, regionList);
+			}
+
+			//从随机的每个方位，随机出酒店
+			System.out.println("regions:" + regions);
+			ArrayList<Integer> hotelsList = new ArrayList();
+			for (int i = 0; i < regions.size(); i++) {
+
+				Integer integer = arrayList.get(i);
+
+				List<THotelEntity> query = dbDao.query(THotelEntity.class,
+						Cnd.where("cityId", "=", cityid).and("region", "=", regions.get(i)), null);
+				Random random = new Random();
+				int nextInt2 = random.nextInt(query.size());
+				THotelEntity tHotelEntity = query.get(nextInt2);
+				for (int j = 0; j < integer; j++) {
+					hotelsList.add(tHotelEntity.getId());
+				}
+			}
+
+			ArrayList<String> arrayList8 = new ArrayList();
+
+			for (int i = 0; i < arrayList2.size(); i++) {
+				//随机出来的每个方位的数据
+				ArrayList<String> arrayList9 = arrayList4.get(arrayList2.get(i));
+				//需要随机的个数
+				Integer integer2 = arrayList.get(i);
+				for (int j = 0; j < integer2; j++) {
+					Random random = new Random();
+					int nextInt2 = random.nextInt(arrayList9.size());
+					String string = arrayList9.get(nextInt2);
+					arrayList8.add(string);
+					arrayList9.remove(string);
+				}
+
+			}
+			System.out.println("5:" + arrayList8);
+			System.out.println("last:" + arrayList);
+			result.put("scenics", arrayList8);
+			result.put("hotels", hotelsList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			message = "请重试";
+			result.put("message", message);
+		}
+
+		return result;
+	}
+
+	/*public int getRoomCount(int orderjpid) {
+		int roomCount = 0;
+		List<TApplicantOrderJpEntity> allCount = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpid), null);
+		List<TApplicantOrderJpEntity> mainCount = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpid).and("isMainApplicant", "=", 1), null);
+		int viceCount = allCount.size() - mainCount.size();
+		if (viceCount > 0) {
+			if (viceCount % 2 == 1) {
+				roomCount = viceCount / 2 + 1;
+			} else {
+				roomCount = viceCount / 2;
+			}
+		}
+		roomCount += mainCount.size();
+
+		return roomCount;
+	}*/
+
+	public int getRoomcount(int orderjpid) {
+		int roomCount = 0;
+		//所有人
+		List<TApplicantOrderJpEntity> allCount = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpid), null);
+		//主申请人
+		List<TApplicantOrderJpEntity> mainCount = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpid).and("isMainApplicant", "=", 1), null);
+		//副申请人数
+		int viceCount = allCount.size() - mainCount.size();
+
+		//规则：如果主申请人数大于副申请人数，则房间数为主申请人数，反之则两人一间
+		if (mainCount.size() >= viceCount) {
+			roomCount = mainCount.size();
+		} else {
+			if (allCount.size() > 0) {
+				if (allCount.size() % 2 == 1) {
+					roomCount = allCount.size() / 2 + 1;
+				} else {
+					roomCount = allCount.size() / 2;
+				}
+			}
+		}
+
+		return roomCount;
+	}
+
+	public int thirddayCity(int visatype) {
+		int threeCityid = 0;
+		if (visatype == 3 || visatype == 8) {//宫城
+			threeCityid = 91;
+		}
+		if (visatype == 4 || visatype == 10) {//岩手
+			threeCityid = 92;
+		}
+		if (visatype == 5 || visatype == 9) {//福岛
+			threeCityid = 30;
+		}
+		if (visatype == 11) {//青森
+			threeCityid = 25;
+		}
+		if (visatype == 12) {//秋田
+			threeCityid = 612;
+		}
+		if (visatype == 13) {//山形
+			threeCityid = 613;
+		}
+		return threeCityid;
+	}
+
+	/**
+	 * 出行信息验证是否该填写的都填写了，如果填写不完整，提示
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param result
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Map<String, Object> validateIsfull(Map<String, Object> result, GenerrateTravelForm form) {
+		if (Util.isEmpty(form.getCityid())) {
+			result.put("message", "请选择领区");
+			return result;
+		}
+		if (Util.isEmpty(form.getGoDate())) {
+			result.put("message", "请选择出发日期");
+			return result;
+		}
+		if (Util.isEmpty(form.getReturnDate())) {
+			result.put("message", "请选择返回日期");
+			return result;
+		}
+		if (Util.isEmpty(form.getVisatype())) {
+			result.put("message", "请选择签证类型");
+			return result;
+		}
+		if (form.getCityid() > 2) {//重庆
+			if (Util.isEmpty(form.getGotransferdeparturecity())) {
+				result.put("message", "请选择国际段出发城市");
+				return result;
+			}
+			if (Util.isEmpty(form.getNewgoarrivedcity())) {
+				result.put("message", "请选择国际段抵达城市");
+				return result;
+			}
+			if (Util.isEmpty(form.getNewreturndeparturecity())) {
+				result.put("message", "请选择国际段返回城市");
+				return result;
+			}
+			if (Util.isEmpty(form.getReturntransferarrivedcity())) {
+				result.put("message", "请选择国际段抵达城市");
+				return result;
+			}
+			if (Util.isEmpty(form.getNewgoflightnum())) {
+				result.put("message", "请选择国际段出发航班号");
+				return result;
+			}
+			if (Util.isEmpty(form.getReturntransferflightnum())) {
+				result.put("message", "请选择国际段返回航班号");
+				return result;
+			}
+		} else {//北京，上海
+			if (Util.isEmpty(form.getGoDepartureCity())) {
+				result.put("message", "请选择出发城市");
+				return result;
+			}
+
+			if (Util.isEmpty(form.getGoArrivedCity())) {
+				result.put("message", "请选择抵达城市");
+				return result;
+			}
+			if (Util.isEmpty(form.getGoFlightNum())) {
+				result.put("message", "请选择出发航班号");
+				return result;
+			}
+			if (Util.isEmpty(form.getReturnFlightNum())) {
+				result.put("message", "请选择返回航班号");
+				return result;
+			}
+		}
+		result.put("message", "");
 		return result;
 	}
 
@@ -2591,11 +3351,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			if (paramArray[i] == arrcityid) {
 				paramArray = ArrayUtils.remove(paramArray, i);
 			}
+		}
+		for (int i = 0; i < paramArray.length; i++) {
 			if (paramArray[i] == returngocityid) {
 				paramArray = ArrayUtils.remove(paramArray, i);
 			}
 		}
-
 		return paramArray;
 	}
 
@@ -2880,6 +3641,21 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderjptrip.setReturnDepartureCity(form.getReturnDepartureCity());
 		orderjptrip.setReturnArrivedCity(form.getReturnArrivedCity());
 		orderjptrip.setReturnFlightNum(form.getReturnFlightNum());
+
+		orderjptrip.setNewgoarrivedcity(form.getNewgoarrivedcity());
+		orderjptrip.setNewgodeparturecity(form.getNewgodeparturecity());
+		orderjptrip.setNewgoflightnum(form.getNewgoflightnum());
+		orderjptrip.setNewreturnarrivedcity(form.getNewreturnarrivedcity());
+		orderjptrip.setNewreturndeparturecity(form.getNewreturndeparturecity());
+		orderjptrip.setNewreturnflightnum(form.getNewreturnflightnum());
+
+		orderjptrip.setGotransferarrivedcity(form.getGotransferarrivedcity());
+		orderjptrip.setGotransferdeparturecity(form.getGotransferdeparturecity());
+		orderjptrip.setGotransferflightnum(form.getGotransferflightnum());
+		orderjptrip.setReturntransferarrivedcity(form.getReturntransferarrivedcity());
+		orderjptrip.setReturntransferdeparturecity(form.getReturntransferdeparturecity());
+		orderjptrip.setReturntransferflightnum(form.getReturntransferflightnum());
+
 		orderjptrip.setOrderId(orderjpid);
 		if (!Util.isEmpty(orderjptrip.getId())) {
 			dbDao.update(orderjptrip);
@@ -2962,6 +3738,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 		TOrderTripJpEntity tripinfo = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderid", "=", orderid));
 		List<TCityEntity> citylist = Lists.newArrayList();
+		List<TCityEntity> newcitylist = Lists.newArrayList();
 		List<TFlightEntity> flightlist = Lists.newArrayList();
 		List<ResultflyEntity> gotripAirlineSelect = Lists.newArrayList();
 		List<ResultflyEntity> returntripAirlineSelect = Lists.newArrayList();
@@ -2982,14 +3759,20 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			Integer[] cityids = { tripinfo.getGoDepartureCity(), tripinfo.getGoArrivedCity(),
 					tripinfo.getReturnDepartureCity(), tripinfo.getReturnArrivedCity() };
 			citylist = dbDao.query(TCityEntity.class, Cnd.where("id", "in", cityids), null);
-			String[] flightnums = { tripinfo.getGoFlightNum(), tripinfo.getReturnFlightNum() };
+
+			Integer[] newcityids = { tripinfo.getGotransferarrivedcity(), tripinfo.getGotransferdeparturecity(),
+					tripinfo.getReturntransferarrivedcity(), tripinfo.getReturntransferdeparturecity(),
+					tripinfo.getNewgoarrivedcity(), tripinfo.getNewgodeparturecity(),
+					tripinfo.getNewreturnarrivedcity(), tripinfo.getNewreturndeparturecity() };
+			newcitylist = dbDao.query(TCityEntity.class, Cnd.where("id", "in", newcityids), null);
+			/*String[] flightnums = { tripinfo.getGoFlightNum(), tripinfo.getReturnFlightNum() };
 			List<TFlightEntity> flightlistpre = dbDao.query(TFlightEntity.class,
 					Cnd.where("flightnum", "in", flightnums), null);
 			for (TFlightEntity tFlightEntity : flightlistpre) {
 				if (!flightlist.contains(tFlightEntity)) {
 					flightlist.add(tFlightEntity);
 				}
-			}
+			}*/
 		}
 		String orderstatus = "";
 		for (JPOrderStatusEnum orderenum : JPOrderStatusEnum.values()) {
@@ -3019,7 +3802,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("sendvisadatestr", sendvisadatestr);
 		result.put("outvisadatestr", outvisadatestr);
 		result.put("orderstatus", orderstatus);
-		result.put("flightlist", flightlist);
+		//result.put("flightlist", flightlist);
 		result.put("collarAreaEnum", EnumUtil.enum2(CollarAreaEnum.class));
 		result.put("customerTypeEnum", EnumUtil.enum2(CustomerTypeEnum.class));
 		result.put("mainSaleUrgentEnum", EnumUtil.enum2(MainSaleUrgentEnum.class));
@@ -3028,6 +3811,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("mainSalePayTypeEnum", EnumUtil.enum2(MainSalePayTypeEnum.class));
 		result.put("mainSaleVisaTypeEnum", EnumUtil.enum2(SimpleVisaTypeEnum.class));
 		result.put("citylist", citylist);
+		result.put("newcitylist", newcitylist);
 		result.put("orderjpinfo", orderjpinfo);
 		result.put("orderinfo", orderinfo);
 		result.put("tripinfo", tripinfo);
@@ -4132,7 +4916,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Map<String, Object> result = Maps.newHashMap();
 		HttpSession session = request.getSession();
 
-		System.out.println("applicantid:" + applicantid + "===============");
+		System.out.println("跳转到签证信息页的applicantid:" + applicantid + "===============");
 		result.put("applicantid", applicantid);
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
@@ -4320,17 +5104,17 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 									String wealthtype = wealthEntity.getWealthtype();
 									String wealthname = wealthEntity.getWealthname();
 
-									if (Util.isEmpty(wealthtype)
-											|| (!Util.isEmpty(wealthtype) && !Util.isEmpty(wealthvalue))) {
-										TApplicantWealthJpEntity wealthjp = new TApplicantWealthJpEntity();
-										wealthjp.setSequence(Integer.valueOf(sequence));
-										wealthjp.setBankflowfree(wealthtitle);
-										wealthjp.setDetails(wealthvalue);
-										wealthjp.setType(wealthtype);
-										wealthjp.setApplicantId(applicantOrderJpEntity.getId());
-										wealthjp.setCreateTime(new Date());
-										dbDao.insert(wealthjp);
-									}
+									/*if (Util.isEmpty(wealthtype)
+											|| (!Util.isEmpty(wealthtype) && !Util.isEmpty(wealthvalue))) {*/
+									TApplicantWealthJpEntity wealthjp = new TApplicantWealthJpEntity();
+									wealthjp.setSequence(Integer.valueOf(sequence));
+									wealthjp.setBankflowfree(wealthtitle);
+									wealthjp.setDetails(wealthvalue);
+									wealthjp.setType(wealthtype);
+									wealthjp.setApplicantId(applicantOrderJpEntity.getId());
+									wealthjp.setCreateTime(new Date());
+									dbDao.insert(wealthjp);
+									//}
 								}
 							}
 
@@ -5502,9 +6286,83 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 	public Object changeVisatype(int orderid, int visatype) {
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+		if (visatype == 7) {
+			orderjp.setVisaCounty("冲绳县");
+		} else if (visatype == 8) {
+			orderjp.setVisaCounty("宫城县");
+		} else if (visatype == 9) {
+			orderjp.setVisaCounty("福岛县");
+		} else if (visatype == 10) {
+			orderjp.setVisaCounty("岩手县");
+		} else if (visatype == 11) {
+			orderjp.setVisaCounty("青森县");
+		} else if (visatype == 12) {
+			orderjp.setVisaCounty("秋田县");
+		} else if (visatype == 13) {
+			orderjp.setVisaCounty("山形县");
+		} else {
+			orderjp.setVisaCounty("");
+		}
 		orderjp.setVisaType(visatype);
 		dbDao.update(orderjp);
 		return null;
+	}
+
+	public Object getUnitname(String searchstr, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+
+		List<String> nameList = new ArrayList<>();
+
+		String sqlStr = sqlManager.get("simpleJP_getUnitname");
+		Sql sql = Sqls.create(sqlStr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tawj.name", "like", "%" + Strings.trim(searchstr) + "%");
+		cnd.and("tr.comId", "=", loginCompany.getId());
+		List<Record> names = dbDao.query(sql, cnd, null);
+		for (Record record : names) {
+			String name = record.getString("name");
+			String telephone = record.getString("telephone");
+			String address = record.getString("address");
+			String result = Strings.trim(name) + " " + Strings.trim(telephone) + " " + Strings.trim(address);
+			if (!nameList.contains(result)) {
+				nameList.add(result);
+			}
+			if (Util.eq(nameList.size(), 5)) {
+				break;
+			}
+		}
+
+		return nameList;
+	}
+
+	public Object getUnittelephone(String searchstr, HttpServletRequest request) {
+
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+
+		List<String> telephoneList = new ArrayList<>();
+
+		String sqlStr = sqlManager.get("simpleJP_getUnitname");
+		Sql sql = Sqls.create(sqlStr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tawj.telephone", "like", "%" + Strings.trim(searchstr) + "%");
+		cnd.and("tr.comId", "=", loginCompany.getId());
+		List<Record> telephones = dbDao.query(sql, cnd, null);
+		for (Record record : telephones) {
+			String name = record.getString("name");
+			String telephone = record.getString("telephone");
+			String address = record.getString("address");
+			String result = Strings.trim(name) + " " + Strings.trim(telephone) + " " + Strings.trim(address);
+			if (!telephoneList.contains(result)) {
+				telephoneList.add(result);
+			}
+			if (Util.eq(telephoneList.size(), 5)) {
+				break;
+			}
+		}
+
+		return telephoneList;
 	}
 
 	public Object getCustomerCitySelect(String cityname, String citytype, String exname, HttpSession session) {
@@ -5516,15 +6374,28 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		if (Util.isEmpty(cityname)) {
 			if (Util.eq("goDepartureCity", citytype)) {
 				sqlStr = sqlManager.get("cityselectBygodeparturecity");
-			}
-			if (Util.eq("goArrivedCity", citytype)) {
+			} else if (Util.eq("newgodeparturecity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBynewgodeparturecity");
+			} else if (Util.eq("goArrivedCity", citytype)) {
 				sqlStr = sqlManager.get("cityselectBygoarrivedcity");
-			}
-			if (Util.eq("returnDepartureCity", citytype)) {
+			} else if (Util.eq("newgoarrivedcity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBynewgoarrivedcity");
+			} else if (Util.eq("newreturndeparturecity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBynewreturndeparturecity");
+			} else if (Util.eq("newreturnarrivedcity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBynewreturnarrivedcity");
+			} else if (Util.eq("returnDepartureCity", citytype)) {
 				sqlStr = sqlManager.get("cityselectByreturndeparturecity");
-			}
-			if (Util.eq("returnArrivedCity", citytype)) {
+			} else if (Util.eq("returnArrivedCity", citytype)) {
 				sqlStr = sqlManager.get("cityselectByreturnarrivedcity");
+			} else if (Util.eq("gotransferarrivedcity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBygotransferarrivedcity");
+			} else if (Util.eq("gotransferdeparturecity", citytype)) {
+				sqlStr = sqlManager.get("cityselectBygotransferdeparturecity");
+			} else if (Util.eq("returntransferarrivedcity", citytype)) {
+				sqlStr = sqlManager.get("cityselectByreturntransferarrivedcity");
+			} else if (Util.eq("returntransferdeparturecity", citytype)) {
+				sqlStr = sqlManager.get("cityselectByreturntransferdeparturecity");
 			}
 			Sql applysql = Sqls.create(sqlStr);
 			Cnd cnd = Cnd.NEW();
@@ -5532,10 +6403,34 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			cnd.groupBy("tc.city");
 			cnd.orderBy("count", "DESC");
 			List<Record> infoList = dbDao.query(applysql, cnd, null);
-			if (infoList.size() > 4) {
-				infoList = infoList.subList(0, 5);
+
+			if (infoList.size() == 0) {
+				List<TCityEntity> citySelect = new ArrayList<TCityEntity>();
+				try {
+					citySelect = dbDao.query(TCityEntity.class,
+							Cnd.where("city", "like", Strings.trim(cityname) + "%"), null);
+					//移除的城市
+					TCityEntity exinfo = new TCityEntity();
+					for (TCityEntity tCityEntity : citySelect) {
+						if (!Util.isEmpty(exname) && tCityEntity.getCity().equals(exname)) {
+							exinfo = tCityEntity;
+						}
+					}
+					citySelect.remove(exinfo);
+					if (citySelect.size() > 5) {
+						citySelect = citySelect.subList(0, 5);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return citySelect;
+			} else {
+				if (infoList.size() > 4) {
+					infoList = infoList.subList(0, 5);
+				}
+				return infoList;
 			}
-			return infoList;
+
 		} else {
 			List<TCityEntity> citySelect = new ArrayList<TCityEntity>();
 			try {
@@ -5559,6 +6454,218 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		}
 
+	}
+
+	public Object getInfobyOrdernum(String ordernum, int orderid, HttpSession session) {//orderid为orderjp的id
+		Map<String, Object> result = Maps.newHashMap();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		String errMsg = "";
+		int orderjpid = 0;
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, Cnd.where("orderNum", "=", ordernum));
+		//判断订单是否存在
+		if (!Util.isEmpty(orderinfo)) {
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			//跟所查询订单相关的数据
+			TOrderJpEntity orderjpinfo = dbDao
+					.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderinfo.getId()));
+			TOrderTripJpEntity tripjpinfo = dbDao.fetch(TOrderTripJpEntity.class,
+					Cnd.where("orderId", "=", orderjpinfo.getId()));
+			List<TOrderTravelplanJpEntity> travelplans = dbDao.query(TOrderTravelplanJpEntity.class,
+					Cnd.where("orderId", "=", orderjpinfo.getId()), null);
+
+			result.put("data", getTravelPlanByOrderId(orderjpinfo.getId()));
+			result.put("orderjpinfo", orderjpinfo);
+
+			Map<String, String> orderMap = MapUtil.obj2Map(orderinfo);
+			if (!Util.isEmpty(orderinfo.getSendVisaDate())) {
+				orderMap.put("sendVisaDate", sdf.format(orderinfo.getSendVisaDate()));
+			}
+			if (!Util.isEmpty(orderinfo.getOutVisaDate())) {
+				orderMap.put("outVisaDate", sdf.format(orderinfo.getOutVisaDate()));
+			}
+			result.put("orderinfo", orderMap);
+
+			Map<String, String> tripMap = MapUtil.obj2Map(tripjpinfo);
+			if (!Util.isEmpty(tripjpinfo.getGoDate())) {
+				tripMap.put("goDate", sdf.format(tripjpinfo.getGoDate()));
+			}
+			if (!Util.isEmpty(tripjpinfo.getReturnDate())) {
+				tripMap.put("returnDate", sdf.format(tripjpinfo.getReturnDate()));
+			}
+			tripMap = getTripinfoCitys(tripMap, tripjpinfo);
+			result.put("tripjpinfo", tripMap);
+
+			//没有Orderid说明为下单，需保存订单
+			if (Util.isEmpty(orderid) || Util.eq(0, orderid)) {
+				Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
+				orderid = generrateorder.get("orderid");
+				orderjpid = generrateorder.get("orderjpid");
+				orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+			} else {
+				orderjpid = orderid;
+				TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
+				TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+				orderid = order.getId();
+			}
+
+			//跟自己相关的数据
+			TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderid);
+			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", order.getId()));
+			TOrderTripJpEntity selftripjpinfo = dbDao.fetch(TOrderTripJpEntity.class,
+					Cnd.where("orderId", "=", orderjp.getId()));
+			if (Util.isEmpty(selftripjpinfo)) {
+				selftripjpinfo = new TOrderTripJpEntity();
+				selftripjpinfo.setOrderId(orderjpid);
+				selftripjpinfo.setCreateTime(new Date());
+				selftripjpinfo.setUpdateTime(new Date());
+				dbDao.insert(selftripjpinfo);
+			}
+			List<TOrderTravelplanJpEntity> selftravelplans = dbDao.query(TOrderTravelplanJpEntity.class,
+					Cnd.where("orderId", "=", orderjp.getId()), null);
+
+			//数据复制
+
+			//客户信息
+			/*TCustomerEntity customer = new TCustomerEntity();
+			if (!Util.isEmpty(orderinfo.getCustomerId())) {
+				customer = dbDao.fetch(TCustomerEntity.class, orderinfo.getCustomerId().longValue());
+			}
+			result.put("customer", customer);
+			order.setCustomerId(orderinfo.getCustomerId());*/
+
+			//订单信息
+			order.setCityId(orderinfo.getCityId());
+			order.setUrgentType(orderinfo.getUrgentType());
+			order.setUrgentDay(orderinfo.getUrgentDay());
+			order.setSendVisaDate(orderinfo.getSendVisaDate());
+			order.setOutVisaDate(orderinfo.getOutVisaDate());
+			order.setSendVisaNum(orderinfo.getSendVisaNum());
+			order.setStayDay(orderinfo.getStayDay());
+			dbDao.update(order);
+
+			//日本订单信息
+			orderjp.setVisaType(orderjpinfo.getVisaType());
+			orderjp.setAmount(orderjpinfo.getAmount());
+			dbDao.update(orderjp);
+
+			//出行信息
+			String tripjpSqlstr = sqlManager.get("simpleJP_copyordertripjp");
+			Sql tripjpSql = Sqls.create(tripjpSqlstr);
+			Cnd tripjpCnd = Cnd.NEW();
+			tripjpCnd.and("totj2.id", "=", tripjpinfo.getId());//被复制的出行信息
+			tripjpCnd.and("totj.id", "=", selftripjpinfo.getId());//自己的出行信息
+			tripjpSql.setCondition(tripjpCnd);
+			nutDao.execute(tripjpSql);
+
+			//行程安排
+			//dbDao.updateRelations(selftravelplans, travelplans);
+			//先把原来的删掉
+			if (!Util.isEmpty(selftravelplans)) {
+				dbDao.delete(selftravelplans);
+			}
+
+			Sql sql = Sqls
+					.create("INSERT INTO t_order_travelplan_jp(orderid,day,outDate,scenic,hotel,cityId,cityName,isupdatecity) SELECT @orderid,day,outDate,scenic,hotel,cityId,cityName,0 FROM t_order_travelplan_jp WHERE id=@planid");
+
+			for (TOrderTravelplanJpEntity planjp : travelplans) {
+				sql.setParam("orderid", orderjpid).setParam("planid", planjp.getId());
+				sql.addBatch();
+				System.out.println(planjp);
+			}
+			dbDao.execute(sql);
+
+			result.put("orderid", orderjpid);
+
+		} else {
+			errMsg = "没有此订单号";
+		}
+		result.put("errMsg", errMsg);
+		return result;
+	}
+
+	/**
+	 * 根据订单号复制订单信息时，回显select2的城市名称
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param tripMap
+	 * @param tripjp
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Map<String, String> getTripinfoCitys(Map<String, String> tripMap, TOrderTripJpEntity tripjp) {
+		if (!Util.isEmpty(tripjp.getGoArrivedCity())) {
+			tripMap.put("goarrivedcityname", getTripinfoCityname(tripjp.getGoArrivedCity()));
+		} else {
+			tripMap.put("goarrivedcityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getGoDepartureCity())) {
+			tripMap.put("godeparturecityname", getTripinfoCityname(tripjp.getGoDepartureCity()));
+		} else {
+			tripMap.put("godeparturecityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getGotransferarrivedcity())) {
+			tripMap.put("gotransferarrivedcityname", getTripinfoCityname(tripjp.getGotransferarrivedcity()));
+		} else {
+			tripMap.put("gotransferarrivedcityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getGotransferdeparturecity())) {
+			tripMap.put("gotransferdeparturecityname", getTripinfoCityname(tripjp.getGotransferdeparturecity()));
+		} else {
+			tripMap.put("gotransferdeparturecityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getNewgoarrivedcity())) {
+			tripMap.put("newgoarrivedcityname", getTripinfoCityname(tripjp.getNewgoarrivedcity()));
+		} else {
+			tripMap.put("newgoarrivedcityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getNewgodeparturecity())) {
+			tripMap.put("newgodeparturecityname", getTripinfoCityname(tripjp.getNewgodeparturecity()));
+		} else {
+			tripMap.put("newgodeparturecityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getNewreturnarrivedcity())) {
+			tripMap.put("newreturnarrivedcityname", getTripinfoCityname(tripjp.getNewreturnarrivedcity()));
+		} else {
+			tripMap.put("newreturnarrivedcityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getNewreturndeparturecity())) {
+			tripMap.put("newreturndeparturecityname", getTripinfoCityname(tripjp.getNewreturndeparturecity()));
+		} else {
+			tripMap.put("newreturndeparturecityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getReturnArrivedCity())) {
+			tripMap.put("returnarrivedcityname", getTripinfoCityname(tripjp.getReturnArrivedCity()));
+		} else {
+			tripMap.put("returnarrivedcityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getReturnDepartureCity())) {
+			tripMap.put("returndeparturecityname", getTripinfoCityname(tripjp.getReturnDepartureCity()));
+		} else {
+			tripMap.put("returndeparturecityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getReturntransferarrivedcity())) {
+			tripMap.put("returntransferarrivedcityname", getTripinfoCityname(tripjp.getReturntransferarrivedcity()));
+		} else {
+			tripMap.put("returntransferarrivedcityname", "");
+		}
+		if (!Util.isEmpty(tripjp.getReturntransferdeparturecity())) {
+			tripMap.put("returntransferdeparturecityname", getTripinfoCityname(tripjp.getReturntransferdeparturecity()));
+		} else {
+			tripMap.put("returntransferdeparturecityname", "");
+		}
+		return tripMap;
+	}
+
+	public String getTripinfoCityname(int cityid) {
+		String cityname = "";
+		TCityEntity city = dbDao.fetch(TCityEntity.class, cityid);
+		if (!Util.isEmpty(city)) {
+			cityname = city.getCity();
+		}
+		return cityname;
 	}
 
 	/**
@@ -5623,7 +6730,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	public String createBCode(String accessToken, String page, String scene) {
 		String url = WX_B_CODE_URL.replace("ACCESS_TOKEN", accessToken);
 		Map<String, Object> param = new HashMap<>();
-		param.put("path", page);
+		param.put("page", page);
 		param.put("scene", scene);
 		param.put("width", "100");
 		param.put("auto_color", false);
@@ -5700,6 +6807,18 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return inputStream;
 	}
 
+	/**
+	 * 判断是否有申请人，没有的话新建，有的话修改
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param applyid
+	 * @param orderid
+	 * @param token
+	 * @param request
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object hasApplyInfo(int applyid, int orderid, String token, HttpServletRequest request) {
 
 		boolean isRepeat = isRepeatSubmit(token, request);//判断用户是否是重复提交
@@ -5834,6 +6953,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return daysBetween + 1;
 	}
 
+	/**
+	 * 判断是否有主申请人
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @param applicantid
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object ishaveMainapply(int orderid, int applicantid) {
 		String applicantSqlstr = sqlManager.get("ishaveMainapply");
 		Sql applicantSql = Sqls.create(applicantSqlstr);
@@ -5859,6 +6988,793 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderjp.setGroundconnectid(groundconnectid);
 		dbDao.update(orderjp);
 		return null;
+	}
+
+	/**
+	 * 列表页根据搜索条件下载excel
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param request
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object downloadOrder(ListDataForm form, HttpServletRequest request, HttpServletResponse response) {
+		long firsttime = System.currentTimeMillis();
+
+		HttpSession session = request.getSession();
+		//获取当前公司
+		//TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		//当前登录人员
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		List<Record> downloadinfo = getDownloadinfo(form, request);
+		long secondtime = System.currentTimeMillis();
+		System.out.println("查询数据所用时间：" + (secondtime - firsttime) + "ms");
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		try {
+
+			//1.创建工作簿
+			HSSFWorkbook workbook = new HSSFWorkbook();
+			//1.1创建合并单元格对象
+			//日本签证处理系统
+			CellRangeAddress callRangeAddress = new CellRangeAddress(0, 0, 0, 23);//起始行,结束行,起始列,结束列
+			//时间
+			CellRangeAddress time = new CellRangeAddress(1, 1, 0, 23);//起始行,结束行,起始列,结束列
+
+			//基本信息
+			CellRangeAddress basic = new CellRangeAddress(2, 2, 0, 8);//起始行,结束行,起始列,结束列
+			//出行信息
+			CellRangeAddress trip = new CellRangeAddress(2, 2, 9, 16);//起始行,结束行,起始列,结束列
+			//备注信息
+			CellRangeAddress remark = new CellRangeAddress(2, 2, 17, 23);//起始行,结束行,起始列,结束列
+
+			//标题样式
+			HSSFCellStyle titlecolStyle = createCellStyle(workbook, (short) 18, true, true, 2);
+			//时间
+			HSSFCellStyle timeStyle = createCellStyle(workbook, (short) 12, false, true, 1);
+			//正文
+			HSSFCellStyle colStyle = createCellStyle(workbook, (short) 12, false, true, 2);
+			//2.创建工作表
+			HSSFSheet sheet = workbook.createSheet("visa");
+			//2.1加载合并单元格对象
+			sheet.addMergedRegion(callRangeAddress);
+			sheet.addMergedRegion(time);
+			sheet.addMergedRegion(basic);
+			sheet.addMergedRegion(trip);
+			sheet.addMergedRegion(remark);
+
+			//设置默认列宽
+			sheet.setDefaultColumnWidth(15);
+			//3.创建行
+			//3.1创建头标题行;并且设置头标题
+			HSSFRow row = sheet.createRow(0);
+			HSSFCell cell = row.createCell(0);
+
+			//加载单元格样式
+			cell.setCellStyle(titlecolStyle);
+			cell.setCellValue("日本签证处理系统");
+
+			//加边框，如果不写的话，只有第一列有边框
+			for (int i = 1; i < 24; i++) {
+				cell = row.createCell(i);
+				cell.setCellStyle(colStyle);
+			}
+
+			HSSFRow secondrow = sheet.createRow(1);
+			HSSFCell secondcell = secondrow.createCell(0);
+			//加载单元格样式
+			secondcell.setCellStyle(timeStyle);
+			String orderstartdate = "";
+			String orderenddate = "";
+
+			if (!Util.isEmpty(downloadinfo) && !Util.isEmpty(downloadinfo.get(0).getString("createdate"))) {
+				orderstartdate = downloadinfo.get(0).getString("createdate");
+			}
+			if (!Util.isEmpty(downloadinfo)
+					&& !Util.isEmpty(downloadinfo.get(downloadinfo.size() - 1).getString("createdate"))) {
+				orderenddate = downloadinfo.get(downloadinfo.size() - 1).getString("createdate");
+			}
+
+			secondcell.setCellValue("时间:" + orderstartdate + " 至 " + orderenddate);
+
+			for (int i = 1; i < 24; i++) {
+				HSSFCell createCell = secondrow.createCell(i);
+				createCell.setCellStyle(timeStyle);
+			}
+
+			HSSFRow thirdrow = sheet.createRow(2);
+			HSSFCell thirdcell = thirdrow.createCell(0);
+			//加载单元格样式
+			thirdcell.setCellStyle(colStyle);
+			thirdcell.setCellValue("基本信息");
+			HSSFCell thirdcell2 = thirdrow.createCell(9);
+			//加载单元格样式
+			thirdcell2.setCellStyle(colStyle);
+			thirdcell2.setCellValue("出行信息");
+			HSSFCell thirdcell3 = thirdrow.createCell(17);
+			//加载单元格样式
+			thirdcell3.setCellStyle(colStyle);
+			thirdcell3.setCellValue("备注信息");
+
+			HSSFCell thirdcell22 = thirdrow.createCell(23);
+			thirdcell22.setCellStyle(colStyle);
+
+			//3.2创建列标题;并且设置列标题
+			HSSFRow row2 = sheet.createRow(3);
+			String[] titles = { "序号", "订单号", "签证种类", "姓名", "姓名(拼音)", "性别", "护照号码", "居住地", "人数", "出发日期", "结束日期", "入境口岸",
+					"出境口岸", "入境航班", "出境航班", "出发城市", "返回城市", "客户来源", "申请人备注", "备注", "客户备注", "送签时间", "创建人", "送签编号" };
+			for (int i = 0; i < titles.length; i++) {
+				HSSFCell cell2 = row2.createCell(i);
+				//加载单元格样式
+				cell2.setCellStyle(colStyle);
+				cell2.setCellValue(titles[i]);
+			}
+
+			long thirdtime = System.currentTimeMillis();
+			System.out.println("标题所用时间：" + (thirdtime - secondtime) + "ms");
+			//正文内容
+			int count = 1;
+			for (int i = 0; i < downloadinfo.size(); i++) {
+
+				//CellRangeAddress firstline = new CellRangeAddress(i + 3 + query.size(), 0, 0, 0);
+				//sheet.addMergedRegion(firstline);
+
+				HSSFRow row3 = sheet.createRow(i + 4);
+				HSSFCell cell0 = row3.createCell(0);
+				cell0.setCellStyle(colStyle);
+				//判断跟上一行是否是同一个订单
+				if (i > 0 && downloadinfo.get(i).getInt("id") == downloadinfo.get(i - 1).getInt("id")) {
+					cell0.setCellValue(count - 1);
+
+				} else {
+					cell0.setCellValue(count++);
+				}
+
+				HSSFCell cell1 = row3.createCell(1);
+				cell1.setCellStyle(colStyle);
+				cell1.setCellValue(downloadinfo.get(i).getString("orderNum"));
+
+				HSSFCell cell2 = row3.createCell(2);
+				cell2.setCellStyle(colStyle);
+
+				String visatypestr = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("visaType"))) {
+					for (SimpleVisaTypeEnum typeEnum : SimpleVisaTypeEnum.values()) {
+						if (downloadinfo.get(i).get("visaType").equals(typeEnum.intKey())) {
+							visatypestr = typeEnum.value();
+						}
+					}
+				}
+				cell2.setCellValue(visatypestr);
+
+				HSSFCell cell3 = row3.createCell(3);
+				cell3.setCellStyle(colStyle);
+				cell3.setCellValue(downloadinfo.get(i).getString("applyname"));
+
+				HSSFCell cell4 = row3.createCell(4);
+				cell4.setCellStyle(colStyle);
+				cell4.setCellValue(downloadinfo.get(i).getString("applynameen"));
+
+				HSSFCell cell5 = row3.createCell(5);
+				cell5.setCellStyle(colStyle);
+				cell5.setCellValue(downloadinfo.get(i).getString("sex"));
+
+				HSSFCell cell6 = row3.createCell(6);
+				cell6.setCellStyle(colStyle);
+				cell6.setCellValue(downloadinfo.get(i).getString("passport"));
+
+				HSSFCell cell7 = row3.createCell(7);
+				cell7.setCellStyle(colStyle);
+
+				String province = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("province"))) {
+					province = downloadinfo.get(i).getString("province");
+				}
+				if (province.endsWith("省") || province.endsWith("市")) {
+					province = province.substring(0, province.length() - 1);
+				}
+				if (province.length() > 3 && province.endsWith("自治区")) {
+					province = province.substring(0, province.length() - 3);
+				}
+
+				cell7.setCellValue(province);
+
+				HSSFCell cell8 = row3.createCell(8);
+				cell8.setCellStyle(colStyle);
+				cell8.setCellValue(downloadinfo.get(i).getInt("peopleNumber"));
+
+				HSSFCell cell9 = row3.createCell(9);
+				cell9.setCellStyle(colStyle);
+				cell9.setCellValue(downloadinfo.get(i).getString("godate"));
+
+				HSSFCell cell10 = row3.createCell(10);
+				cell10.setCellStyle(colStyle);
+				cell10.setCellValue(downloadinfo.get(i).getString("returndate"));
+
+				HSSFCell cell11 = row3.createCell(11);
+				cell11.setCellStyle(colStyle);
+
+				int cityid = downloadinfo.get(i).getInt("cityId");
+				//入境口岸
+				String entryport = "";
+				//出境口岸
+				String leaveport = "";
+				//入境航班
+				String entryflight = downloadinfo.get(i).getString("goflight");
+				//出境航班
+				String leaveflight = downloadinfo.get(i).getString("returnflight");
+				//入境日本城市
+				String gocityName = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("goport"))) {
+					gocityName = downloadinfo.get(i).getString("goport");
+					if (gocityName.endsWith("市") || gocityName.endsWith("县") || gocityName.endsWith("府")) {
+						gocityName = gocityName.substring(0, gocityName.length() - 1);
+					}
+				}
+				//入境日本机场
+				String goportname = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("goportname"))) {
+					goportname = downloadinfo.get(i).getString("goportname");
+				}
+				entryport = gocityName + goportname;
+				//出境日本城市
+				String leavecityName = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("leaveport"))) {
+					leavecityName = downloadinfo.get(i).getString("leaveport");
+					if (leavecityName.endsWith("市") || leavecityName.endsWith("县") || leavecityName.endsWith("府")) {
+						leavecityName = leavecityName.substring(0, leavecityName.length() - 1);
+					}
+				}
+				//出境日本机场
+				String leaveportname = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("leaveportname"))) {
+					leaveportname = downloadinfo.get(i).getString("leaveportname");
+				}
+				leaveport = leavecityName + leaveportname;
+
+				/*//重庆
+				if (cityid > 2) {
+					//入境
+					if (!Util.isEmpty(downloadinfo.get(i).getString("newgoflightnum"))) {
+						String goFlightNum = downloadinfo.get(i).getString("newgoflightnum");
+						//入境机场名
+						String lastnum = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
+						if (!Util.isEmpty(downloadinfo.get(i).getString("gotransferflightnum"))) {//有第一行，航班号要组合
+							String gotransferflightnum = downloadinfo.get(i).getString("gotransferflightnum");
+							StringBuffer stringBuffer = new StringBuffer(gotransferflightnum.substring(
+									gotransferflightnum.indexOf(" ", gotransferflightnum.indexOf(" ")) + 1,
+									gotransferflightnum.indexOf(" ", gotransferflightnum.indexOf(" ") + 1)));
+							stringBuffer.append("//" + lastnum);
+							lastnum = stringBuffer.toString();
+						}
+
+						entryflight = lastnum;
+
+					}
+					//出境
+					if (!Util.isEmpty(downloadinfo.get(i).getString("returntransferflightnum"))) {
+						String goFlightNum = downloadinfo.get(i).getString("returntransferflightnum");
+
+						//出境机场名
+						String lastnum = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
+
+						if (!Util.isEmpty(downloadinfo.get(i).getString("newreturnflightnum"))) {
+							String newreturnflightnum = downloadinfo.get(i).getString("newreturnflightnum");
+							String substring = newreturnflightnum.substring(
+									newreturnflightnum.indexOf(" ", newreturnflightnum.indexOf(" ")) + 1,
+									newreturnflightnum.indexOf(" ", newreturnflightnum.indexOf(" ") + 1));
+							StringBuffer stringBuffer = new StringBuffer(lastnum);
+							stringBuffer.append("//" + substring);
+							lastnum = stringBuffer.toString();
+						}
+
+						leaveflight = lastnum;
+					}
+
+				} else {//北京，上海
+					//入境
+					if (!Util.isEmpty(downloadinfo.get(i).getString("goFlightNum"))) {
+
+						String goFlightNum = downloadinfo.get(i).getString("goFlightNum");
+
+						//入境机场名
+
+						entryflight = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
+					}
+					//出境
+					if (!Util.isEmpty(downloadinfo.get(i).getString("returnFlightNum"))) {
+
+						String goFlightNum = downloadinfo.get(i).getString("returnFlightNum");
+						//出境机场名
+
+						leaveflight = goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
+								goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1));
+					}
+				}*/
+
+				cell11.setCellValue(entryport);
+
+				HSSFCell cell12 = row3.createCell(12);
+				cell12.setCellStyle(colStyle);
+				cell12.setCellValue(leaveport);
+
+				HSSFCell cell13 = row3.createCell(13);
+				cell13.setCellStyle(colStyle);
+				cell13.setCellValue(entryflight);
+
+				HSSFCell cell14 = row3.createCell(14);
+				cell14.setCellStyle(colStyle);
+				cell14.setCellValue(leaveflight);
+
+				HSSFCell cell15 = row3.createCell(15);
+				cell15.setCellStyle(colStyle);
+				String gocity = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("gocity"))) {
+					gocity = downloadinfo.get(i).getString("gocity");
+
+					if (gocity.endsWith("市") || gocity.endsWith("县")) {
+						gocity = gocity.substring(0, gocity.length() - 1);
+					}
+					if (gocity.length() > 3 && gocity.endsWith("自治区")) {
+						gocity = gocity.substring(0, gocity.length() - 3);
+					}
+
+				}
+				cell15.setCellValue(gocity);
+
+				HSSFCell cell16 = row3.createCell(16);
+				cell16.setCellStyle(colStyle);
+				String leavecity = "";
+				if (!Util.isEmpty(downloadinfo.get(i).getString("leavecity"))) {
+					leavecity = downloadinfo.get(i).getString("leavecity");
+					if (leavecity.endsWith("市") || leavecity.endsWith("县")) {
+						leavecity = leavecity.substring(0, leavecity.length() - 1);
+					}
+					if (leavecity.length() > 3 && leavecity.endsWith("自治区")) {
+						leavecity = leavecity.substring(0, leavecity.length() - 3);
+					}
+				}
+				cell16.setCellValue(leavecity);
+
+				HSSFCell cell17 = row3.createCell(17);
+				cell17.setCellStyle(colStyle);
+				cell17.setCellValue(downloadinfo.get(i).getString("shortname"));
+
+				HSSFCell cell18 = row3.createCell(18);
+				cell18.setCellStyle(colStyle);
+				String relation = "";
+
+				//主申请人时取relationRemark
+				if (downloadinfo.get(i).getInt("isMainApplicant") == 1) {
+					if (!Util.isEmpty(downloadinfo.get(i).getString("relationRemark"))) {
+						relation = downloadinfo.get(i).getString("relationRemark");
+					}
+				} else {
+					if (!Util.isEmpty(downloadinfo.get(i).getString("mainRelation"))) {
+						relation = downloadinfo.get(i).getString("mainRelation");
+					}
+				}
+				cell18.setCellValue(relation);
+
+				HSSFCell cell19 = row3.createCell(19);
+				cell19.setCellStyle(colStyle);
+				cell19.setCellValue("");
+
+				HSSFCell cell20 = row3.createCell(20);
+				cell20.setCellStyle(colStyle);
+				cell20.setCellValue("");
+
+				HSSFCell cell21 = row3.createCell(21);
+				cell21.setCellStyle(colStyle);
+				cell21.setCellValue(downloadinfo.get(i).getString("sendvisadate"));
+
+				HSSFCell cell22 = row3.createCell(22);
+				cell22.setCellStyle(colStyle);
+				cell22.setCellValue(downloadinfo.get(i).getString("name"));
+
+				HSSFCell cell23 = row3.createCell(23);
+				cell23.setCellStyle(colStyle);
+				cell23.setCellValue(downloadinfo.get(i).getString("sendVisaNum"));
+
+				//i += query.size();
+
+			}
+
+			long fourthtime = System.currentTimeMillis();
+			System.out.println("正文所用时间：" + (fourthtime - thirdtime) + "ms");
+
+			CellRange(sheet, downloadinfo.size() + 4, 0, colStyle);
+			long fifthtime = System.currentTimeMillis();
+			System.out.println("合并单元格所用时间：" + (fifthtime - fourthtime) + "ms");
+
+			//冻结窗格
+			sheet.createFreezePane(2, 4, 2, 4);
+			//sheet.createFreezePane(2, 4); 跟上边的一样，两者等价，但这个需要多跳一层到上边的方法
+
+			//列宽度自适应，包括合并的单元格
+			for (int i = 0; i < 24; i++) {
+				sheet.autoSizeColumn(i, true);
+			}
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			workbook.write(baos);
+
+			// 将文件进行编码
+			String fileName = URLEncoder.encode("日本签证申请名单.xls", "UTF-8");
+			// 设置下载的响应头
+			//response.setContentType("application/zip");
+			//通过response.reset()刷新可能存在一些未关闭的getWriter(),避免可能出现未关闭的getWriter()
+			response.reset();
+			response.setContentType("application/octet-stream");
+			response.setHeader("Set-Cookie", "fileDownload=true; path=/");
+			response.addHeader("Content-Disposition", "attachment;filename=" + fileName);// 设置文件名
+			// 将字节流相应到浏览器（下载）
+			IOUtils.write(baos.toByteArray(), response.getOutputStream());
+			response.flushBuffer();
+			workbook.close();
+			IOUtils.closeQuietly(baos);
+
+		} catch (Exception e) {
+
+		}
+		long lasttime = System.currentTimeMillis();
+		System.out.println("下载所用时间：" + (lasttime - firsttime) + "ms");
+
+		return stream;
+	}
+
+	/**
+	 * 合并单元格
+	 * @param rowcount 总行数
+	 * @param colNum 合并哪一列
+	 */
+	private void CellRange(Sheet sheet, int rowcount, int colNum, CellStyle cs) {
+		int currnetRow = 4;
+		for (int p = 4; p < rowcount; p++) {
+			Cell currentCell = sheet.getRow(p).getCell(colNum);
+			String current = getStringCellValue(currentCell);
+			Cell nextCell = null;
+			String next = "";
+
+			if (p < rowcount + 1) {
+				Row nowRow = sheet.getRow(p + 1);
+				if (nowRow != null) {
+					nextCell = nowRow.getCell(colNum);
+					next = getStringCellValue(nextCell);
+				} else {
+					next = "";
+				}
+			} else {
+				next = "";
+			}
+			if (current.equals(next)) {
+				continue;
+			} else {
+
+				if (p != currnetRow) {
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 0, 0));
+					Cell nowCell = sheet.getRow(currnetRow).getCell(0);
+					nowCell.setCellValue(Integer.valueOf(current.substring(0, current.indexOf("."))));
+					nowCell.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 1, 1));
+
+					Cell currentCell1 = sheet.getRow(p).getCell(1);
+					String current1 = getStringCellValue(currentCell1);
+
+					Cell nowCell1 = sheet.getRow(currnetRow).getCell(1);
+					nowCell1.setCellValue(current1);
+					nowCell1.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 2, 2));
+
+					Cell currentCell2 = sheet.getRow(p).getCell(2);
+					String current2 = getStringCellValue(currentCell2);
+
+					Cell nowCell2 = sheet.getRow(currnetRow).getCell(2);
+					nowCell2.setCellValue(current2);
+					nowCell2.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 8, 8));
+
+					Cell currentCell8 = sheet.getRow(p).getCell(8);
+					String current8 = getStringCellValue(currentCell8);
+					if (current8.contains(".")) {
+						current8 = current8.substring(0, current8.indexOf("."));
+					}
+
+					Cell nowCell8 = sheet.getRow(currnetRow).getCell(8);
+					nowCell8.setCellValue(Integer.valueOf(current8));
+					nowCell8.setCellStyle(cs);
+
+					//人数需要用excel计算，所以只能留一个值
+					for (int i = currnetRow + 1; i <= p; i++) {
+						Cell cell = sheet.getRow(i).getCell(8);
+						cell.setCellValue("");
+					}
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 9, 9));
+
+					Cell currentCell9 = sheet.getRow(p).getCell(9);
+					String current9 = getStringCellValue(currentCell9);
+
+					Cell nowCell9 = sheet.getRow(currnetRow).getCell(9);
+					nowCell9.setCellValue(current9);
+					nowCell9.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 10, 10));
+
+					Cell currentCell10 = sheet.getRow(p).getCell(10);
+					String current10 = getStringCellValue(currentCell10);
+
+					Cell nowCell10 = sheet.getRow(currnetRow).getCell(10);
+					nowCell10.setCellValue(current10);
+					nowCell10.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 11, 11));
+
+					Cell currentCell11 = sheet.getRow(p).getCell(11);
+					String current11 = getStringCellValue(currentCell11);
+					Cell nowCell11 = sheet.getRow(currnetRow).getCell(11);
+					nowCell11.setCellValue(current11);
+					nowCell11.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 12, 12));
+
+					Cell currentCell12 = sheet.getRow(p).getCell(12);
+					String current12 = getStringCellValue(currentCell12);
+
+					Cell nowCell12 = sheet.getRow(currnetRow).getCell(12);
+					nowCell12.setCellValue(current12);
+					nowCell12.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 13, 13));
+
+					Cell currentCell13 = sheet.getRow(p).getCell(13);
+					String current13 = getStringCellValue(currentCell13);
+
+					Cell nowCell13 = sheet.getRow(currnetRow).getCell(13);
+					nowCell13.setCellValue(current13);
+					nowCell13.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 14, 14));
+
+					Cell currentCell14 = sheet.getRow(p).getCell(14);
+					String current14 = getStringCellValue(currentCell14);
+
+					Cell nowCell14 = sheet.getRow(currnetRow).getCell(14);
+					nowCell14.setCellValue(current14);
+					nowCell14.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 15, 15));
+
+					Cell currentCell15 = sheet.getRow(p).getCell(15);
+					String current15 = getStringCellValue(currentCell15);
+
+					Cell nowCell15 = sheet.getRow(currnetRow).getCell(15);
+					nowCell15.setCellValue(current15);
+					nowCell15.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 16, 16));
+
+					Cell currentCell16 = sheet.getRow(p).getCell(16);
+					String current16 = getStringCellValue(currentCell16);
+
+					Cell nowCell16 = sheet.getRow(currnetRow).getCell(16);
+					nowCell16.setCellValue(current16);
+					nowCell16.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 17, 17));
+
+					Cell currentCell17 = sheet.getRow(p).getCell(17);
+					String current17 = getStringCellValue(currentCell17);
+
+					Cell nowCell17 = sheet.getRow(currnetRow).getCell(17);
+					nowCell17.setCellValue(current17);
+					nowCell17.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 19, 19));
+
+					Cell currentCell19 = sheet.getRow(p).getCell(19);
+					String current19 = getStringCellValue(currentCell19);
+
+					Cell nowCell19 = sheet.getRow(currnetRow).getCell(19);
+					nowCell19.setCellValue(current19);
+					nowCell19.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 20, 20));
+
+					Cell currentCell20 = sheet.getRow(p).getCell(20);
+					String current20 = getStringCellValue(currentCell20);
+
+					Cell nowCell20 = sheet.getRow(currnetRow).getCell(20);
+					nowCell20.setCellValue(current20);
+					nowCell20.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 21, 21));
+
+					Cell currentCell21 = sheet.getRow(p).getCell(21);
+					String current21 = getStringCellValue(currentCell21);
+
+					Cell nowCell21 = sheet.getRow(currnetRow).getCell(21);
+					nowCell21.setCellValue(current21);
+					nowCell21.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 22, 22));
+
+					Cell currentCell22 = sheet.getRow(p).getCell(22);
+					String current22 = getStringCellValue(currentCell22);
+
+					Cell nowCell22 = sheet.getRow(currnetRow).getCell(22);
+					nowCell22.setCellValue(current22);
+					nowCell22.setCellStyle(cs);
+
+					sheet.addMergedRegion(new CellRangeAddress(currnetRow, p, 23, 23));
+
+					Cell currentCell23 = sheet.getRow(p).getCell(23);
+					String current23 = getStringCellValue(currentCell23);
+
+					Cell nowCell23 = sheet.getRow(currnetRow).getCell(23);
+					nowCell23.setCellValue(current23);
+					nowCell23.setCellStyle(cs);
+
+				}
+				currnetRow = p + 1;
+
+			}
+		}
+	}
+
+	/**
+	 * 获取单元格的值
+	 * 
+	 * @param currentCell
+	 * @return
+	 */
+	private String getStringCellValue(Cell currentCell) {
+		String strCell = "";
+		if (currentCell != null) {
+			switch (currentCell.getCellType()) {
+			case XSSFCell.CELL_TYPE_STRING:
+				strCell = currentCell.getStringCellValue();
+				break;
+			case XSSFCell.CELL_TYPE_NUMERIC:
+				strCell = String.valueOf(currentCell.getNumericCellValue());
+				break;
+			case XSSFCell.CELL_TYPE_BOOLEAN:
+				strCell = String.valueOf(currentCell.getBooleanCellValue());
+				break;
+			case XSSFCell.CELL_TYPE_BLANK:
+				strCell = "";
+				break;
+			default:
+				strCell = "";
+				break;
+			}
+			if (strCell.equals("") || strCell == null) {
+				return "";
+			}
+			if (currentCell == null) {
+				return "";
+			}
+		}
+		return strCell;
+	}
+
+	private static HSSFCellStyle createCellStyle(HSSFWorkbook workbook, short fontsize, boolean flag, boolean flag1,
+			int count) {
+		// TODO Auto-generated method stub
+		HSSFCellStyle style = workbook.createCellStyle();
+
+		style.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框
+		style.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框
+		style.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框
+		style.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框
+
+		//是否水平居中
+		if (flag1) {
+			style.setAlignment(HSSFCellStyle.ALIGN_CENTER);//水平居中
+		}
+
+		style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);//垂直居中
+		//创建字体
+		HSSFFont font = workbook.createFont();
+		font.setFontName("宋体");
+		//是否加粗字体
+		if (flag) {
+			font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		}
+
+		font.setFontHeightInPoints(fontsize);
+		//加载字体
+		style.setFont(font);
+		//时间
+		if (count == 1) {
+			style.setAlignment(HSSFCellStyle.ALIGN_RIGHT);//右对齐
+		}
+		return style;
+	}
+
+	public List<Record> getDownloadinfo(ListDataForm form, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+
+		String singlesqlStr = sqlManager.get("simpleJP_downloadExcel");
+		Sql singlesql = Sqls.create(singlesqlStr);
+
+		Cnd singlecnd = Cnd.NEW();
+		if (!Util.isEmpty(form.getSearchStr())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.orderNum", "like", "%" + form.getSearchStr() + "%")
+					.or("tcus.linkman", "like", "%" + form.getSearchStr() + "%")
+					.or("tcus.mobile", "like", "%" + form.getSearchStr() + "%")
+					.or("tcus.email", "like", "%" + form.getSearchStr() + "%")
+					.or("CONCAT(ta.firstName,ta.lastName)", "like", "%" + form.getSearchStr() + "%")
+					.or("toj.acceptDesign", "like", "%" + form.getSearchStr() + "%")
+					.or("tap.passport", "like", "%" + form.getSearchStr() + "%");
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getSendstartdate()) && !Util.isEmpty(form.getSendenddate())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.sendVisaDate", "between", new Object[] { form.getSendstartdate(), form.getSendenddate() });
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getOrderstartdate()) && !Util.isEmpty(form.getOrderenddate())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tr.createTime", "between", new Object[] { form.getOrderstartdate(), form.getOrderenddate() });
+			singlecnd.and(exp);
+		}
+		if (!Util.isEmpty(form.getStatus())) {
+			if (Util.eq(form.getStatus(), JPOrderStatusEnum.DISABLED.intKey())) {
+				singlecnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
+			} else {
+				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).and("tr.isDisabled", "=",
+						IsYesOrNoEnum.NO.intKey());
+				singlecnd.and(e1);
+			}
+		}
+
+		if (!Util.isEmpty(form.getSongqianshe())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("toj.sendsignid", "=", form.getSongqianshe());
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getEmployee())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("tu.id", "=", form.getEmployee());
+			singlecnd.and(exp);
+		}
+
+		if (!Util.isEmpty(form.getVisatype())) {
+			SqlExpressionGroup exp = new SqlExpressionGroup();
+			exp.and("toj.visatype", "=", form.getVisatype());
+			singlecnd.and(exp);
+		}
+
+		if (loginUser.getId().equals(loginCompany.getAdminId())) {
+			//公司管理员
+			singlecnd.and("tr.comId", "=", loginCompany.getId());
+		} else {
+			//普通的操作员
+			singlecnd.and("tr.salesOpid", "=", loginUser.getId());
+		}
+		singlecnd.and("tr.zhaobaoupdate", "=", 1);
+		singlecnd.and("tr.isDisabled", "=", 0);
+
+		singlesql.setCondition(singlecnd);
+		List<Record> singleperson = dbDao.query(singlesql, singlecnd, null);
+		return singleperson;
 	}
 
 }

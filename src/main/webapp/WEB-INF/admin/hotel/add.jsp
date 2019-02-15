@@ -22,6 +22,11 @@
 	href="${base}/references/public/dist/newvisacss/css/AdminLTE.css?v='20180510'">
 <link rel="stylesheet"
 	href="${base}/references/public/dist/newvisacss/css/bootstrapValidator.css">
+<style>
+	.select2-selection{
+		height:35px !important;
+	}
+</style>
 </head>
 <body>
 	<div class="modal-content">
@@ -79,7 +84,7 @@
 
 
 					<div class="row">
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>电话：</label> <input id="mobile"
 									name="mobile" type="text" class="form-control input-sm"
@@ -87,7 +92,7 @@
 							</div>
 						</div>
 
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<div class="form-group">
 								<label><span>*</span>所属城市：</label> 
 								<select id = "cityId" name="cityId"
@@ -98,6 +103,15 @@
 								<!-- <input id="cityId"
 									name="cityId" type="text" class="form-control input-sm"
 									placeholder=" " /> -->
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label><span>*</span>所属区域：</label> 
+								
+								<input id="region"
+									name="region" type="text" class="form-control input-sm"
+									placeholder=" " />
 							</div>
 						</div>
 					</div>

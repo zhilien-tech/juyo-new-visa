@@ -160,7 +160,7 @@
 }
 
 .picturesInch {
-	height: 183px;
+	height: 185px;
 	border: 1px solid #eee;
 	padding: 0px 0px;
 	margin-left:20px;
@@ -170,7 +170,7 @@
 .inchInfo {
 	position: relative;
 	top: 80px;
-	left: 22%;
+	left: 17%;
 	color: #4c8fe9;
 	cursor: pointer;
 }

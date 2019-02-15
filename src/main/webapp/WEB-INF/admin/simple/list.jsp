@@ -68,6 +68,7 @@
 			.card-content-2 span {
 				top: 50%;
 				left: 0;
+				width: 100%;
 				position: absolute;
 				margin-top: -12px;
 				height: 24px;
@@ -90,7 +91,7 @@
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="box-header"style=" padding-top:25px!important"><!-- 检索条件 -->
 		<!-- 切换卡按钮 start -->
-
+		
 		<!-- 切换卡按钮 end -->
 		<div class="row searchMar tab-header">
 			<div class="col-md col-md-2" style="width:10%">
@@ -138,10 +139,13 @@
 			<div class="col-md col-md-3 left-5px right-0px" style="margin-left:0%;width:15.5%">
 				<input type="text" class="input-sm input-class" id="searchStr" name="searchStr" placeholder="护照号/申请人/受付番号" onkeypress="onkeyEnter()"/>
 			</div>
-			<div class="col-md col-md-1 ">
-				<a class="btn btn-primary btn-sm pull-left" style="width:6%;" href="javascript:search();" id="searchbtn">搜索</a>
+			<div class="col-md col-md-1 " style="width: 6% !important;">
+				<a class="btn btn-primary btn-sm pull-right" style="" href="javascript:search();" id="searchbtn">搜索</a>
 			</div>
-			<div class="col-md col-md-1  " style="    margin-left: 0%;">
+			<div class="col-md col-md-1  " style="width: 6% !important;margin-left: 0%;">
+				<a class="btn btn-primary btn-sm pull-right" onclick="downloadOrder();">导出</a>
+			</div>
+			<div class="col-md col-md-1  " style="width: 6% !important;margin-left: 0%;">
 				<a class="btn btn-primary btn-sm pull-right" onclick="addOrder();">下单</a>
 			</div>
 		</div>
@@ -168,7 +172,11 @@
 						<div><label>受付番号：</label><span>{{data.acceptdesign}}</span></div>
 						<div><label>送签时间：</label><span>{{data.sendingtime}}</span></div>
 						<div><label>操作人：</label><span>{{data.opname}}</span></div>
-						<div><label>送签社：</label><span>{{data.shortname}}</span></div>
+						<div>
+							<label>送签社：</label>
+							<span>{{data.shortname}}</span>
+							<span style="margin-left: 20px;">{{data.comshortname}}</span>
+						</div>
 						<div><label></label><span>{{data.visatype}}</span></div>
 						<!-- <div><label></label><span style="font-weight:bold;font-size:16px;">
 							<span v-if="data.visastatus === '招宝成功'">
@@ -257,6 +265,11 @@
 							</li>
 						</ul>
 						<div class="card-content-2">
+						
+							<span v-if="data.isdisabled == 1">
+								作废
+							</span>
+							<span v-else>
 							<span v-if="data.visastatus === '招宝成功'">
 								<font color="red">{{data.visastatus}}</font>
 							</span>
@@ -270,9 +283,6 @@
 								</div>
 							</span>
 
-							<span v-else-if="data.isdisabled == 1">
-								作废
-							</span>
 
 							<span v-else-if="data.visastatus === '发招宝失败'">
 								{{data.visastatus}}
@@ -283,6 +293,10 @@
 							<span v-else>
 								{{data.visastatus}}
 							</span>
+							
+							</span>
+							
+						
 
 						</div>
 					</div>
@@ -391,35 +405,39 @@
     	                 	dataType:"json",
     	                 	type:'post',
     	                 	success: function(data){
-    	                 		if(visastatus == 19){
-    	                 			parent.successCallBack(5);
-    		                 		//layer.msg('招宝变更');
-    	                 		}else if(visastatus == 22){
-    	                 			parent.successCallBack(6);
-    		                 		//layer.msg('招宝取消');
-    	                 		}else if(visastatus == 27){
-    	                 			parent.successCallBack(7);
-    		                 		//layer.msg('报告拒签');
-    	                 		}else if(visastatus == 26){
-    	                 			parent.successCallBack(10);
+    	                 		if(data){
+    	                 			layer.msg(data);
+    	                 		}else{
+	    	                 		if(visastatus == 19){
+	    	                 			parent.successCallBack(5);
+	    		                 		//layer.msg('招宝变更');
+	    	                 		}else if(visastatus == 22){
+	    	                 			parent.successCallBack(6);
+	    		                 		//layer.msg('招宝取消');
+	    	                 		}else if(visastatus == 27){
+	    	                 			parent.successCallBack(7);
+	    		                 		//layer.msg('报告拒签');
+	    	                 		}else if(visastatus == 26){
+	    	                 			parent.successCallBack(10);
+	    	                 		}
+	    	                 		//更新列表数据
+	    	                 		var orderAuthority = "allOrder";
+	    							$(".searchOrderBtn").each(function(){
+	    								if($(this).hasClass("bgColor")){
+	    									orderAuthority = $(this).attr("name");
+	    								}
+	    							});
+	    	                 		$.ajax({
+	    	                        	url: url,
+	    	                        	data:{orderAuthority:orderAuthority},
+	    	                        	dataType:"json",
+	    	                        	type:'post',
+	    	                        	success: function(data){
+	    	                        		_self.visaJapanData = data.visaJapanData;
+	    	                          	}
+	    	                        });
     	                 		}
-    	                 		//更新列表数据
-    	                 		var orderAuthority = "allOrder";
-    							$(".searchOrderBtn").each(function(){
-    								if($(this).hasClass("bgColor")){
-    									orderAuthority = $(this).attr("name");
-    								}
-    							});
-    	                 		$.ajax({
-    	                        	url: url,
-    	                        	data:{orderAuthority:orderAuthority},
-    	                        	dataType:"json",
-    	                        	type:'post',
-    	                        	success: function(data){
-    	                        		_self.visaJapanData = data.visaJapanData;
-    	                          	}
-    	                        });
-    	                 		layer.close(index);
+	    	                 	layer.close(index);
     	                   	}
     	                 });
     				});
@@ -460,6 +478,9 @@
                  	type:'post',
                  	async:false,
                  	success: function(data){
+                 		if(data == 14){
+                 			layer.msg("签证类型为普通五年多次时不能进行此操作");
+                 		}else{
                  		var url = '${base}/admin/visaJapan/sendZhaoBao.html?orderid='+orderid;
                  		if(data.data){
                  			url = '${base}/admin/visaJapan/sendZhaoBaoError.html?orderid='+orderid+'&data='+data.data+'&type=1';
@@ -475,6 +496,9 @@
 		        		    area: ['400px', '300px'],
 		        		    content: url
 		        		  });
+                 			
+                 		}
+                 		
                    	}
                  });
         	},
@@ -949,8 +973,31 @@
 		});
 	});
 
+	//下单
 	function addOrder(){
 		window.location.href = "/admin/simple/addOrder.html";
+	}
+	//下载
+	function downloadOrder(){
+		var status = $("#status").val();
+		var songqianshe = $("#songqianshe").val();
+		var employee = $("#employee").val();
+		var visatype = $("#visatype").val();
+		var orderstartdate = $("#orderstartdate").val();
+		var orderenddate = $("#orderenddate").val();
+		var sendstartdate = $("#sendstartdate").val();
+		var sendenddate = $("#sendenddate").val();
+		var searchstr = $("#searchStr").val();
+		layer.load(1);
+		$.fileDownload("${base}/admin/simple/downloadOrder.html?status=" + status+"&songqianshe="+songqianshe+"&employee="+employee+"&visatype="+visatype+"&orderstartdate="+orderstartdate+"&orderenddate="+orderenddate+"&sendstartdate="+sendstartdate+"&sendenddate="+sendenddate+"&searchStr="+searchstr, {
+	         successCallback: function (url) {
+	        	 layer.closeAll('loading');
+	         },
+	         failCallback: function (html, url) {
+	        	layer.closeAll('loading');
+	        	layer.msg("下载失败");
+	         }
+	     });
 	}
 
 	//连接websocket

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"
 	pageEncoding="UTF-8" errorPage="/WEB-INF/common/500.jsp"%>
 <%@include file="/WEB-INF/common/tld.jsp"%>
+
 <c:set var="url" value="${base}/admin/orderJp" />
 <!DOCTYPE html>
 <html lang="en-US">
@@ -29,6 +30,7 @@
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
+
 	<div class="wrapper" id="wrapper">
 		<div class="content-wrapper">
 			<div class="qz-head">
@@ -227,11 +229,19 @@
 					<div class="orderInfo info" id="orderInfo">
 						<p class="info-head">订单信息</p>
 						<div class="info-body-from" style="margin-left:6%;">
+						<div class="row body-from-input">
+							<div class="col-sm-3">
+								<div class="form-group">
+									<input id="historyOrdernum" class="form-control input-sm" value="" placeholder="输入需要复制行程的订单号，回车" onkeypress="onkeyEnter()"/>
+								</div>
+							</div>
+						</div>
 							<div class="row body-from-input">
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>领区：</label> <select
 											class="form-control input-sm" id="cityid" name="cityid" tabindex="7">
+											<option value="">请选择</option>
 											<c:forEach var="map" items="${obj.collarAreaEnum}">
 												<c:choose>
 													<c:when test="${map.key eq obj.orderinfo.cityId}">
@@ -312,7 +322,7 @@
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label>送签编号：</label>
-										<input id="sendvisanum" type="text" class="form-control input-sm" autocomplete="off" value="${obj.orderinfo.sendVisaNum }"/>
+										<input id="sendvisanum" type="text" class="form-control input-sm" autocomplete="off" value="${obj.orderinfo.sendVisaNum }" tabindex="11"/>
 									</div>
 								</div>
 							</div>
@@ -361,7 +371,207 @@
 									</div>
 								</div>
 							</div>
-							<div class="row body-from-input"><!-- 出发日期/出发城市/抵达城市/航班号 -->
+							
+							
+									<div class="row body-from-input transfer"><!-- 出发日期/出发城市/抵达城市/航班号 -->
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>国内段出发城市：</label>
+												<select id="newgodeparturecity" oninput="clearplan()" class="form-control select2 select2City" multiple="multiple" tabindex="17" >
+													<c:forEach items="${obj.newcitylist }" var="city">
+														<c:choose>
+															<c:when test="${city.id eq obj.tripinfo.newgodeparturecity }">
+																<option value="${city.id }" selected="selected">${city.city }</option>
+															</c:when>
+															<%-- <c:otherwise>
+																<option value="${city.id }">${city.city }</option>
+															</c:otherwise> --%>
+														</c:choose>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>抵达城市：</label>
+												<select id="gotransferarrivedcity" oninput="clearplan()" class="form-control select2 select2City" multiple="multiple" tabindex="17" >
+													<c:forEach items="${obj.newcitylist }" var="city">
+														<c:choose>
+															<c:when test="${city.id eq obj.tripinfo.gotransferarrivedcity }">
+																<option value="${city.id }" selected="selected">${city.city }</option>
+															</c:when>
+															<%-- <c:otherwise>
+																<option value="${city.id }">${city.city }</option>
+															</c:otherwise> --%>
+														</c:choose>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-3 paddingRight">
+											<div class="form-group">
+												<label><span>*</span>航班号：</label>
+												<select id="gotransferflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="17" >
+													<c:if test="${!empty obj.tripinfo.gotransferflightnum }">
+														<option selected="selected" value="${obj.tripinfo.gotransferflightnum }">${obj.tripinfo.gotransferflightnum}</option>
+													
+													</c:if>
+												
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+								
+									</div><!-- end 出发日期/出发城市/抵达城市/航班号 -->
+									<div class="row body-from-input transfer">
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>国际段出发城市：</label>
+												<select id="gotransferdeparturecity" class="form-control input-sm select2City" oninput="clearplan()" multiple="multiple" tabindex="17">
+													<c:forEach items="${obj.newcitylist }" var="city">
+														<c:choose>
+															<c:when test="${!empty obj.tripinfo.gotransferdeparturecity && city.id eq obj.tripinfo.gotransferdeparturecity }">
+																<option value="${city.id }" selected="selected">${city.city }</option>
+															</c:when>
+															<%-- <c:otherwise>
+																<option value="${city.id }">${city.city }</option>
+															</c:otherwise> --%>
+														</c:choose>
+													</c:forEach>
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>抵达城市：</label>
+												<select id="newgoarrivedcity" class="form-control input-sm select2City" oninput="clearplan()" multiple="multiple" tabindex="17">
+													<c:forEach items="${obj.newcitylist }" var="city">
+														<c:choose>
+															<c:when test="${city.id eq obj.tripinfo.newgoarrivedcity }">
+																<option value="${city.id }" selected="selected">${city.city }</option>
+															</c:when>
+															<%-- <c:otherwise>
+																<option value="${city.id }">${city.city }</option>
+															</c:otherwise> --%>
+														</c:choose>
+													</c:forEach>
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+										<div class="col-sm-3 paddingRight">
+											<div class="form-group">
+												<label><span>*</span>航班号：</label>
+												<select id="newgoflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="17" >
+													<c:if test="${!empty obj.tripinfo.newgoflightnum }">
+														<option selected="selected" value="${obj.tripinfo.newgoflightnum }">${obj.tripinfo.newgoflightnum}</option>
+													
+													</c:if>
+												
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+									</div>
+									
+									<div class="row body-from-input transfer"><!-- 返回日期/出发城市/返回城市/航班号 -->
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>国际段返回城市：</label>
+												<select id="newreturndeparturecity" class="form-control select2 select2City" multiple="multiple" tabindex="17">
+													<c:forEach items="${obj.newcitylist }" var="city">
+														<c:choose>
+															<c:when test="${city.id eq obj.tripinfo.newreturndeparturecity }">
+																<option value="${city.id }" selected="selected">${city.city }</option>
+															</c:when>
+															<%-- <c:otherwise>
+																<option value="${city.id }">${city.city }</option>
+															</c:otherwise> --%>
+														</c:choose>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>抵达城市：</label>
+												<select id="returntransferarrivedcity" class="form-control select2 select2City" multiple="multiple" tabindex="17">
+													<c:forEach items="${obj.newcitylist }" var="city">
+														<c:choose>
+															<c:when test="${city.id eq obj.tripinfo.returntransferarrivedcity }">
+																<option value="${city.id }" selected="selected">${city.city }</option>
+															</c:when>
+															<%-- <c:otherwise>
+																<option value="${city.id }">${city.city }</option>
+															</c:otherwise> --%>
+														</c:choose>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-3 paddingRight">
+											<div class="form-group">
+												<label><span>*</span>航班号：</label>
+												<select id="returntransferflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="17">
+													<c:if test="${!empty obj.tripinfo.returntransferflightnum }">
+														<option selected="selected" value="${obj.tripinfo.returntransferflightnum }">${obj.tripinfo.returntransferflightnum}</option>
+													</c:if>
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+									</div><!-- end 返回日期/出发城市/返回城市/航班号 -->
+									<div class="row body-from-input transfer">
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>国内段返回城市：</label>
+												<select id="returntransferdeparturecity" class="form-control input-sm select2City" multiple="multiple" tabindex="17">
+													<c:forEach items="${obj.newcitylist }" var="city">
+														<c:choose>
+															<c:when test="${city.id eq obj.tripinfo.returntransferdeparturecity }">
+																<option value="${city.id }" selected="selected">${city.city }</option>
+															</c:when>
+															<%-- <c:otherwise>
+																<option value="${city.id }">${city.city }</option>
+															</c:otherwise> --%>
+														</c:choose>
+													</c:forEach>
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<div class="form-group">
+												<label><span>*</span>抵达城市：</label>
+												<select id="newreturnarrivedcity" class="form-control input-sm select2City" multiple="multiple" tabindex="17">
+													<c:forEach items="${obj.newcitylist }" var="city">
+														<c:choose>
+															<c:when test="${city.id eq obj.tripinfo.newreturnarrivedcity }">
+																<option value="${city.id }" selected="selected">${city.city }</option>
+															</c:when>
+															<%-- <c:otherwise>
+																<option value="${city.id }">${city.city }</option>
+															</c:otherwise> --%>
+														</c:choose>
+													</c:forEach>
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+										<div class="col-sm-3 paddingRight">
+											<div class="form-group">
+												<label><span>*</span>航班号：</label>
+												<select id="newreturnflightnum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="17">
+													<c:if test="${!empty obj.tripinfo.newreturnflightnum }">
+														<option selected="selected" value="${obj.tripinfo.newreturnflightnum }">${obj.tripinfo.newreturnflightnum}</option>
+													</c:if>
+												</select>
+												<!-- <i class="bulb"></i> -->
+											</div>
+										</div>
+									</div>
+									<div class="row body-from-input direct"><!-- 出发日期/出发城市/抵达城市/航班号 -->
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
@@ -371,9 +581,9 @@
 													<c:when test="${city.id eq obj.tripinfo.goDepartureCity }">
 														<option value="${city.id }" selected="selected">${city.city }</option>
 													</c:when>
-													<c:otherwise>
+													<%-- <c:otherwise>
 														<option value="${city.id }">${city.city }</option>
-													</c:otherwise>
+													</c:otherwise> --%>
 												</c:choose>
 											</c:forEach>
 										</select>
@@ -388,9 +598,9 @@
 													<c:when test="${city.id eq obj.tripinfo.goArrivedCity }">
 														<option value="${city.id }" selected="selected">${city.city }</option>
 													</c:when>
-													<c:otherwise>
+													<%-- <c:otherwise>
 														<option value="${city.id }">${city.city }</option>
-													</c:otherwise>
+													</c:otherwise> --%>
 												</c:choose>
 											</c:forEach>
 										</select>
@@ -401,23 +611,18 @@
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
 										<select id="goFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="19" >
-										<option selected="selected" value="${obj.tripinfo.goFlightNum }">${obj.tripinfo.goFlightNum}</option>
-											<%-- <c:set var="isDoneAir" value="0" scope="page"></c:set>
-											<c:forEach items="${obj.gotripAirlineSelect }" var="flight">
-												<c:if test="${obj.tripinfo.goFlightNum eq  flight.flightnum}">
-													<c:if test="${isDoneAir != 1 }">
-														<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
-													</c:if>
-													<c:set var="isDoneAir" value="1" scope="page"></c:set>
-												</c:if>
-											</c:forEach> --%>
+											<c:if test="${!empty obj.tripinfo.goFlightNum }">
+												<option selected="selected" value="${obj.tripinfo.goFlightNum }">${obj.tripinfo.goFlightNum}</option>
+											
+											</c:if>
+										
 										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
 							</div><!-- end 出发日期/出发城市/抵达城市/航班号 -->
 							
-							<div class="row body-from-input"><!-- 返回日期/出发城市/返回城市/航班号 -->
+							<div class="row body-from-input direct"><!-- 返回日期/出发城市/返回城市/航班号 -->
 								<div class="col-sm-3">
 									<div class="form-group">
 										<label><span>*</span>出发城市：</label>
@@ -427,9 +632,9 @@
 													<c:when test="${city.id eq obj.tripinfo.returnDepartureCity }">
 														<option value="${city.id }" selected="selected">${city.city }</option>
 													</c:when>
-													<c:otherwise>
+													<%-- <c:otherwise>
 														<option value="${city.id }">${city.city }</option>
-													</c:otherwise>
+													</c:otherwise> --%>
 												</c:choose>
 											</c:forEach>
 										</select>
@@ -444,9 +649,9 @@
 													<c:when test="${city.id eq obj.tripinfo.returnArrivedCity }">
 														<option value="${city.id }" selected="selected">${city.city }</option>
 													</c:when>
-													<c:otherwise>
+													<%-- <c:otherwise>
 														<option value="${city.id }">${city.city }</option>
-													</c:otherwise>
+													</c:otherwise> --%>
 												</c:choose>
 											</c:forEach>
 										</select>
@@ -457,24 +662,15 @@
 									<div class="form-group">
 										<label><span>*</span>航班号：</label>
 										<select id="returnFlightNum" class="form-control input-sm flightSelect2" multiple="multiple" tabindex="22">
-										<option selected="selected" value="${obj.tripinfo.returnFlightNum }">${obj.tripinfo.returnFlightNum}</option>
-											<%-- <c:if test="${!empty obj.tripinfo.returnFlightNum }">
-												<option value="${obj.tripinfo.returnFlightNum }" selected="selected">${obj.tripinfo.returnFlightNum }</option>
-											</c:if> --%>
-											<%-- <c:set var="isDone" value="0" scope="page"></c:set>
-											<c:forEach items="${obj.flightlist }" var="flight">
-												<c:if test="${obj.tripinfo.returnFlightNum eq  flight.flightnum}">
-													<c:if test="${isDone != 1 }">
-														<option selected="selected" value="${flight.flightnum }">${flight.takeOffName }-${flight.landingName } ${flight.flightnum } ${flight.takeOffTime }/${flight.landingTime }</option>
-													</c:if>
-													<c:set var="isDone" value="1" scope="page"></c:set>
-												</c:if>
-											</c:forEach> --%>
+											<c:if test="${!empty obj.tripinfo.returnFlightNum }">
+												<option selected="selected" value="${obj.tripinfo.returnFlightNum }">${obj.tripinfo.returnFlightNum}</option>
+											</c:if>
 										</select>
 										<!-- <i class="bulb"></i> -->
 									</div>
 								</div>
 							</div><!-- end 返回日期/出发城市/返回城市/航班号 -->
+							
 						</div>
 					</div>
 					<!-- end 订单信息 -->
@@ -572,15 +768,51 @@
 	<script src="${base}/admin/simple/addsimpleorder.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面js文件 -->
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
+		
 		//加载申请人表格数据
 		initApplicantTable();
 		//加载行程安排表格数据
 		initTravelPlanTable();
 		
+		if(cityidstr > 2){
+			$(".transfer").show();
+			$(".direct").hide();
+		}else{
+			$(".transfer").hide();
+			$(".direct").show();
+		}
+		
 		$("#cityid").change(function(){
 			var cityid = $(this).val();
 			$("#cityid").val(cityid);
 			cityidstr = cityid;
+			if($(this).val() == ""){
+				
+			}else if($(this).val() > 2){
+				$(".transfer").show();
+				$(".direct").hide();
+				$("#goDepartureCity").empty();
+				$("#goArrivedCity").empty();
+				$("#goFlightNum").empty();
+				$("#returnDepartureCity").empty();
+				$("#returnArrivedCity").empty();
+				$("#returnFlightNum").empty();
+			}else{
+				$(".transfer").hide();
+				$(".direct").show();
+				$("#newgodeparturecity").empty();
+				$("#gotransferarrivedcity").empty();
+				$("#gotransferflightnum").empty();
+				$("#gotransferdeparturecity").empty();
+				$("#newgoarrivedcity").empty();
+				$("#newgoflightnum").empty();
+				$("#newreturndeparturecity").empty();
+				$("#returntransferarrivedcity").empty();
+				$("#returntransferflightnum").empty();
+				$("#returntransferdeparturecity").empty();
+				$("#newreturnarrivedcity").empty();
+				$("#newreturnflightnum").empty();
+			}
 		});
 		
 		$("#visatype").change(function(){
@@ -675,7 +907,18 @@
 					$("#urgentDays").addClass("none");
 				}
 			});
-			$('#customerType').trigger('change');
+			
+			if("${obj.customerinfo.source}" == 4){
+				$('.zhiKe').removeClass('none');
+				$('.on-line').addClass('none');
+				$('#customamount').removeClass('none');
+			}else{
+				$('.zhiKe').addClass('none');
+				$('.on-line').removeClass('none');
+				$('#customamount').addClass('none');
+			}
+			
+			//$('#customerType').trigger('change');
 		});
 			$("#addCustomer").click(function(){
 				layer.open({
@@ -935,6 +1178,7 @@
                    	}
                  });
 			}
+			
 			function downLoadFile(){
 				var visatype = $("#visatype").val();
 				
@@ -996,6 +1240,7 @@
 			function clearplan(){
 					$( ".select2-selection__choice").val("");
 			}
+			
 		</script>
 </body>
 </html>

@@ -154,51 +154,23 @@
 					},2000); */
 					return;
 				}
-				if(telphone == null || telphone == ""){
+				/* if(telphone == null || telphone == ""){
 					layer.msg("手机号不能为空");
-					/* $(".telphone").css('border-bottom-color','red');
-					$(".dialog").html();
-					$(".dialog").show();
-					$(".dialog").html("手机号不能为空");
-					setTimeout(function(){
-						$(".dialog").hide();
-					},2000); */
 					return;
 				}	
 				if(!pattern.test(telphone)){
 					layer.msg("手机号格式不正确");
-					/* $(".telphone").css('border-bottom-color','red');
-					$(".dialog").html();
-					$(".dialog").show();
-					$(".dialog").html("手机号格式不正确");
-					setTimeout(function(){
-						$(".dialog").hide();
-					},2000); */
 					return;
 				}
 				if(email == null || email == ""){
 					layer.msg("邮箱不能为空");
-					/* $(".email").css('border-bottom-color','red');
-					$(".dialog").html();
-					$(".dialog").show();
-					$(".dialog").html("邮箱不能为空");
-					setTimeout(function(){
-						$(".dialog").hide();
-					},2000); */
 					return;
 				}
 				
 				if(!patternEmail.test(email)){
 					layer.msg("邮箱格式不正确");
-				/* $(".email").css('border-bottom-color','red');
-				$(".dialog").html();
-				$(".dialog").show();
-				$(".dialog").html("邮箱格式不正确");
-				setTimeout(function(){
-					$(".dialog").hide();
-				},2000); */
-				return;
-			}
+					return;
+				} */
 			
 			
 			

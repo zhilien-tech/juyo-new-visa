@@ -49,6 +49,8 @@ public class OrderUpdateForm {
 
 	private String planaddressen;
 
+	private String telephone;
+
 	/*
 	 * 市
 	 */
@@ -103,5 +105,9 @@ public class OrderUpdateForm {
 	private Date Interviewdate;
 	//人员id
 	private Integer staffid;
+
+	private String hotelname;
+
+	private String hotelnameen;
 
 }

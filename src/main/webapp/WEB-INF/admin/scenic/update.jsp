@@ -72,6 +72,17 @@
 							</div>
 						</div>
 					</div>
+					
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label><span>*</span>所属区域：</label> 
+									<input id="region"
+									name="region" value="${obj.scenic.region}" type="text"
+									class="form-control input-sm" placeholder=" " />
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</form>

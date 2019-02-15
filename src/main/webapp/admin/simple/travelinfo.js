@@ -1,18 +1,15 @@
 //加载城市的select2
-/*$('.select2City').select2({
+$('#newgodeparturecity').select2({
 	ajax : {
-		url : "/admin/city/getCustomerCitySelect.html",
+		url : "/admin/simple/getCustomerCitySelect.html",
 		dataType : 'json',
 		delay : 250,
 		type : 'post',
 		data : function(params) {
-			var cArrivalcity = $('#cArrivalcity').val();
-			if(cArrivalcity){
-				cArrivalcity = cArrivalcity.join(',');
-			}
 			return {
 				//exname : cArrivalcity,
 				cityname : params.term, // search term
+				citytype : 'newgodeparturecity',
 				page : params.page
 			};
 		},
@@ -21,7 +18,6 @@
 			var selectdata = $.map(data, function (obj) {
 				obj.id = obj.id; // replace pk with your identifier
 				obj.text = obj.city; // replace pk with your identifier
-				obj.text = obj.dictCode;
 				return obj;
 			});
 			return {
@@ -30,7 +26,6 @@
 		},
 		cache : false
 	},
-	//templateSelection: formatRepoSelection,
 	escapeMarkup : function(markup) {
 		return markup;
 	}, // let our custom formatter work
@@ -38,8 +33,9 @@
 	maximumInputLength : 20,
 	language : "zh-CN", //设置 提示语言
 	maximumSelectionLength : 1, //设置最多可以选择多少项
+	//allowClear: true,
 	tags : false //设置必须存在的选项 才能选中
-});*/
+});
 $('#goDepartureCity').select2({
 	ajax : {
 		url : "/admin/simple/getCustomerCitySelect.html",
@@ -47,10 +43,6 @@ $('#goDepartureCity').select2({
 		delay : 250,
 		type : 'post',
 		data : function(params) {
-			/*var cArrivalcity = $('#cArrivalcity').val();
-			if(cArrivalcity){
-				cArrivalcity = cArrivalcity.join(',');
-			}*/
 			return {
 				//exname : cArrivalcity,
 				cityname : params.term, // search term
@@ -80,6 +72,198 @@ $('#goDepartureCity').select2({
 	maximumInputLength : 20,
 	language : "zh-CN", //设置 提示语言
 	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+$('#newgoarrivedcity').select2({
+	ajax : {
+		url : "/admin/simple/getCustomerCitySelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			return {
+				//exname : cArrivalcity,
+				cityname : params.term, // search term
+				citytype : 'newgoarrivedcity',
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+$('#newreturndeparturecity').select2({
+	ajax : {
+		url : "/admin/simple/getCustomerCitySelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			return {
+				//exname : cArrivalcity,
+				cityname : params.term, // search term
+				citytype : 'newreturndeparturecity',
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+$('#newreturnarrivedcity').select2({
+	ajax : {
+		url : "/admin/simple/getCustomerCitySelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			return {
+				//exname : cArrivalcity,
+				cityname : params.term, // search term
+				citytype : 'newreturnarrivedcity',
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+$('#gotransferarrivedcity').select2({
+	ajax : {
+		url : "/admin/simple/getCustomerCitySelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			return {
+				//exname : cArrivalcity,
+				cityname : params.term, // search term
+				citytype : 'gotransferarrivedcity',
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	//allowClear: true,//清除
+	tags : false //设置必须存在的选项 才能选中
+});
+$('#gotransferdeparturecity').select2({
+	ajax : {
+		url : "/admin/simple/getCustomerCitySelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			return {
+				//exname : cArrivalcity,
+				cityname : params.term, // search term
+				citytype : 'gotransferdeparturecity',
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	//allowClear: true,//清空功能
 	tags : false //设置必须存在的选项 才能选中
 });
 $('#goArrivedCity').select2({
@@ -166,6 +350,91 @@ $('#returnDepartureCity').select2({
 	maximumSelectionLength : 1, //设置最多可以选择多少项
 	tags : false //设置必须存在的选项 才能选中
 });
+$('#returntransferarrivedcity').select2({
+	ajax : {
+		url : "/admin/simple/getCustomerCitySelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				cityname : params.term, // search term
+				citytype : 'returntransferarrivedcity',
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+$('#returntransferdeparturecity').select2({
+	ajax : {
+		url : "/admin/simple/getCustomerCitySelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				cityname : params.term, // search term
+				citytype : 'returntransferdeparturecity',
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	//allowClear: true,//清空功能
+	tags : false //设置必须存在的选项 才能选中
+});
 $('#returnArrivedCity').select2({
 	ajax : {
 		url : "/admin/simple/getCustomerCitySelect.html",
@@ -209,6 +478,131 @@ $('#returnArrivedCity').select2({
 	tags : false //设置必须存在的选项 才能选中
 });
 
+$('#gotransferflightnum').select2({
+	ajax : {
+		url : "/admin/tripairline/getTripAirlineSelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			//去程出发城市
+			var goDepartureCity = $('#newgodeparturecity').val();
+			if (goDepartureCity) {
+				goDepartureCity = goDepartureCity.join(',');
+			}else{
+				goDepartureCity = '';
+			}
+			//去程抵达城市
+			var goArrivedCity = $('#gotransferarrivedcity').val();
+			if (goArrivedCity) {
+				goArrivedCity = goArrivedCity.join(',');
+			}else{
+				goArrivedCity = '';
+			}
+			var date = $('#goDate').val();
+			return {
+				date:date,
+				gocity:goDepartureCity,
+				arrivecity:goArrivedCity,
+				flight : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				//obj.id = obj.id; // replace pk with your identifier
+				if(obj.zhuanflightnum != undefined){
+					obj.id = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+					obj.text = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+				}else{
+					//obj.id = obj.flightnum; // replace pk with your identifier
+					obj.id = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+					obj.text = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+				}
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+$('#newgoflightnum').select2({
+	ajax : {
+		url : "/admin/tripairline/getTripAirlineSelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			//去程出发城市
+			var goDepartureCity = $('#gotransferdeparturecity').val();
+			if (goDepartureCity) {
+				goDepartureCity = goDepartureCity.join(',');
+			}else{
+				goDepartureCity = '';
+			}
+			//去程抵达城市
+			var goArrivedCity = $('#newgoarrivedcity').val();
+			if (goArrivedCity) {
+				goArrivedCity = goArrivedCity.join(',');
+			}else{
+				goArrivedCity = '';
+			}
+			var date = $('#goDate').val();
+			return {
+				date:date,
+				//exname : cArrivalcity,
+				gocity:goDepartureCity,
+				arrivecity:goArrivedCity,
+				flight : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				//obj.id = obj.id; // replace pk with your identifier
+				if(obj.zhuanflightnum != undefined){
+					obj.id = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+					obj.text = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+				}else{
+					//obj.id = obj.flightnum; // replace pk with your identifier
+					obj.id = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+					obj.text = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+				}
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
 //出发航班select2
 $('#goFlightNum').select2({
 	ajax : {
@@ -303,6 +697,152 @@ $('#goFlightNum').select2({
 });*/
 
 
+$('#returntransferflightnum').select2({
+	ajax : {
+		url : "/admin/tripairline/getTripAirlineSelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			//去程出发城市
+			var returnDepartureCity = $('#newreturndeparturecity').val();
+			if (returnDepartureCity) {
+				returnDepartureCity = returnDepartureCity.join(',');
+			}else{
+				returnDepartureCity += '';
+			}
+			//去程抵达城市
+			var returnArrivedCity = $('#returntransferarrivedcity').val();
+			if (returnArrivedCity) {
+				returnArrivedCity = returnArrivedCity.join(',');
+			}else{
+				returnArrivedCity += '';
+			}
+			var date = $('#returnDate').val();
+			return {
+				//exname : cArrivalcity,
+				date:date,
+				gocity:returnDepartureCity,
+				arrivecity:returnArrivedCity,
+				flight : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			/*data.sort(function(a,b){
+				if(a.zhuanflightnum() != undefined){
+					return 1;
+				}
+	            });*/
+			var selectdata = $.map(data, function (obj) {
+				//obj.id = obj.id; // replace pk with your identifier
+				//obj.id = obj.flightnum; // replace pk with your identifier
+				//obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime;
+				if(obj.zhuanflightnum != undefined){
+					obj.id = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+					obj.text = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+				}else{
+					//obj.id = obj.flightnum; // replace pk with your identifier
+					obj.id = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+					obj.text = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+				}
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+$('#newreturnflightnum').select2({
+	ajax : {
+		url : "/admin/tripairline/getTripAirlineSelect.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			//去程出发城市
+			var returnDepartureCity = $('#returntransferdeparturecity').val();
+			if (returnDepartureCity) {
+				returnDepartureCity = returnDepartureCity.join(',');
+			}else{
+				returnDepartureCity += '';
+			}
+			//去程抵达城市
+			var returnArrivedCity = $('#newreturnarrivedcity').val();
+			if (returnArrivedCity) {
+				returnArrivedCity = returnArrivedCity.join(',');
+			}else{
+				returnArrivedCity += '';
+			}
+			var date = $('#returnDate').val();
+			return {
+				//exname : cArrivalcity,
+				date:date,
+				gocity:returnDepartureCity,
+				arrivecity:returnArrivedCity,
+				flight : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			/*data.sort(function(a,b){
+				if(a.zhuanflightnum() != undefined){
+					return 1;
+				}
+	            });*/
+			var selectdata = $.map(data, function (obj) {
+				//obj.id = obj.id; // replace pk with your identifier
+				//obj.id = obj.flightnum; // replace pk with your identifier
+				//obj.text = obj.takeOffName + '-' + obj.landingName + ' ' +  obj.flightnum + ' '+ obj.takeOffTime + '/' +obj.landingTime;
+				if(obj.zhuanflightnum != undefined){
+					obj.id = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+					obj.text = obj.goflightname + '-' + obj.arrflightname + '-' +  obj.zhuanflightname + ' '+ obj.flightnum + '//' +obj.zhuanflightnum +' '+obj.takeofftime + '/' + obj.landingofftime + '//' + obj.zhuantakeofftime + '/' + obj.zhuanlandingofftime;
+				}else{
+					//obj.id = obj.flightnum; // replace pk with your identifier
+					obj.id = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+					obj.text = obj.goflightname + '-' + obj.arrflightname + ' ' +  obj.flightnum + ' '+ obj.takeofftime + '/' +obj.landingofftime;
+				}
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
 //返程航班select2
 $('#returnFlightNum').select2({
 	ajax : {
@@ -402,6 +942,56 @@ $('#returnFlightNum').select2({
 	//initFlightByInterface(returnDate,goArrivedCity,thisval);
 });*/
 
+$("#newgodeparturecity").on("select2:select",function(e){
+	var thisval = $(this).val();
+	if (thisval) {
+		thisval = thisval.join(',');
+	}else{
+		thisval += '';
+	}
+	//设置回程抵达城市
+	var thistext = $(this).text();
+	$("#newreturnarrivedcity").html('<option selected="selected" value="'+thisval+'">'+thistext+'</option>');
+});
+$("#newgodeparturecity").on("select2:unselect",function(e){
+	$(this).text('');
+	$('#newreturnarrivedcity').empty();
+	$('#gotransferflightnum').empty();
+	$('#newreturnflightnum').empty();
+});
+$("#newgoarrivedcity").on("select2:select",function(e){
+	var thisval = $(this).val();
+	if (thisval) {
+		thisval = thisval.join(',');
+	}else{
+		thisval += '';
+	}
+	//设置回程抵达城市
+	var thistext = $(this).text();
+	$("#newreturndeparturecity").html('<option selected="selected" value="'+thisval+'">'+thistext+'</option>');
+});
+$("#newgoarrivedcity").on("select2:unselect",function(e){
+	$(this).text('');
+	$('#newreturndeparturecity').empty();
+	$('#newgoflightnum').empty();
+	$('#returntransferflightnum').empty();
+});
+$("#gotransferdeparturecity").on("select2:unselect",function(e){
+	$(this).text('');
+	$('#newgoflightnum').empty();
+});
+$("#newreturndeparturecity").on("select2:unselect",function(e){
+	$(this).text('');
+	$('#returntransferflightnum').empty();
+});
+$("#returntransferdeparturecity").on("select2:unselect",function(e){
+	$(this).text('');
+	$('#newreturnflightnum').empty();
+});
+$("#newreturnarrivedcity").on("select2:unselect",function(e){
+	$(this).text('');
+	$('#newreturnflightnum').empty();
+});
 //去程出发城市
 $("#goDepartureCity").on("select2:select",function(e){
 	var thisval = $(this).val();
@@ -431,6 +1021,29 @@ $("#goDepartureCity").on("select2:unselect",function(e){
 	$('#goFlightNum').empty();
 	$('#returnFlightNum').empty();
 });
+$("#gotransferarrivedcity").on("select2:select",function(e){
+	var thisval = $(this).val();
+	if (thisval) {
+		thisval = thisval.join(',');
+	}else{
+		thisval += '';
+	}
+	//设置回程抵达城市
+	var thistext = $(this).text();
+	$("#gotransferdeparturecity").html('<option selected="selected" value="'+thisval+'">'+thistext+'</option>');
+	$("#returntransferarrivedcity").html('<option selected="selected" value="'+thisval+'">'+thistext+'</option>');
+	$("#returntransferdeparturecity").html('<option selected="selected" value="'+thisval+'">'+thistext+'</option>');
+});
+$("#gotransferarrivedcity").on("select2:unselect",function(e){
+	$(this).text('');
+	$('#gotransferdeparturecity').empty();
+	$('#returntransferarrivedcity').empty();
+	$('#returntransferdeparturecity').empty();
+	$('#gotransferflightnum').empty();
+	$('#newgoflightnum').empty();
+	$('#returntransferflightnum').empty();
+	$('#newreturnflightnum').empty();
+});
 //去程抵达城市
 $("#goArrivedCity").on("select2:select",function(e){
 	var thisval = $(this).val();
@@ -459,6 +1072,23 @@ $("#goArrivedCity").on("select2:unselect",function(e){
 	$("#returnDepartureCity").html('');
 	$('#goFlightNum').empty();
 	$('#returnFlightNum').empty();
+});
+$("#returntransferarrivedcity").on("select2:select",function(e){
+	var thisval = $(this).val();
+	var thistext = $(this).text();
+	if (thisval) {
+		thisval = thisval.join(',');
+	}else{
+		thisval += '';
+	}
+	//设置回程出发城市
+	$("#returntransferdeparturecity").html('<option selected="selected" value="'+thisval+'">'+thistext+'</option>');
+});
+$("#returntransferarrivedcity").on("select2:unselect",function(e){
+	$(this).text('');
+	$('#returntransferdeparturecity').empty();
+	$('#returntransferflightnum').empty();
+	$('#newreturnflightnum').empty();
 });
 //返程出发城市
 $("#returnDepartureCity").on("select2:select",function(e){
@@ -526,6 +1156,7 @@ $('.schedulingBtn').click(function(){
 	var goDate = $('#goDate').val();
 	var returnDate = $('#returnDate').val();
 	var visatype = $('#visatype').val();
+	var cityid = $('#cityid').val();
 	console.log(visatype);
 	var goDepartureCity = $('#goDepartureCity').val();
 	if (goDepartureCity) {
@@ -563,6 +1194,82 @@ $('.schedulingBtn').click(function(){
 	}else{
 		returnFlightNum += '';
 	}
+	
+	
+	var gotransferarrivedcity = $('#gotransferarrivedcity').val();
+	if (gotransferarrivedcity) {
+		gotransferarrivedcity = gotransferarrivedcity.join(',');
+	}else{
+		gotransferarrivedcity += '';
+	}
+	var gotransferdeparturecity = $('#gotransferdeparturecity').val();
+	if (gotransferdeparturecity) {
+		gotransferdeparturecity = gotransferdeparturecity.join(',');
+	}else{
+		gotransferdeparturecity += '';
+	}
+	var returntransferarrivedcity = $('#returntransferarrivedcity').val();
+	if (returntransferarrivedcity) {
+		returntransferarrivedcity = returntransferarrivedcity.join(',');
+	}else{
+		returntransferarrivedcity += '';
+	}
+	var returntransferdeparturecity = $('#returntransferdeparturecity').val();
+	if (returntransferdeparturecity) {
+		returntransferdeparturecity = returntransferdeparturecity.join(',');
+	}else{
+		returntransferdeparturecity += '';
+	}
+	var gotransferflightnum = $('#gotransferflightnum').val();
+	if (gotransferflightnum) {
+		gotransferflightnum = gotransferflightnum.join(',');
+	}else{
+		gotransferflightnum += '';
+	}
+	var returntransferflightnum = $('#returntransferflightnum').val();
+	if (returntransferflightnum) {
+		returntransferflightnum = returntransferflightnum.join(',');
+	}else{
+		returntransferflightnum += '';
+	}
+	var newgodeparturecity = $('#newgodeparturecity').val();
+	if (newgodeparturecity) {
+		newgodeparturecity = newgodeparturecity.join(',');
+	}else{
+		newgodeparturecity += '';
+	}
+	var newgoarrivedcity = $('#newgoarrivedcity').val();
+	if (newgoarrivedcity) {
+		newgoarrivedcity = newgoarrivedcity.join(',');
+	}else{
+		newgoarrivedcity += '';
+	}
+	var newgoflightnum = $('#newgoflightnum').val();
+	if (newgoflightnum) {
+		newgoflightnum = newgoflightnum.join(',');
+	}else{
+		newgoflightnum += '';
+	}
+	var newreturndeparturecity = $('#newreturndeparturecity').val();
+	if (newreturndeparturecity) {
+		newreturndeparturecity = newreturndeparturecity.join(',');
+	}else{
+		newreturndeparturecity += '';
+	}
+	var newreturnarrivedcity = $('#newreturnarrivedcity').val();
+	if (newreturnarrivedcity) {
+		newreturnarrivedcity = newreturnarrivedcity.join(',');
+	}else{
+		newreturnarrivedcity += '';
+	}
+	var newreturnflightnum = $('#newreturnflightnum').val();
+	if (newreturnflightnum) {
+		newreturnflightnum = newreturnflightnum.join(',');
+	}else{
+		newreturnflightnum += '';
+	}
+	
+	
 	layer.load(1);
 	$.ajax({ 
 		url: '/admin/simple/generateTravelPlan.html',
@@ -578,7 +1285,20 @@ $('.schedulingBtn').click(function(){
 				returnDepartureCity:returnDepartureCity,
 				returnArrivedCity:returnArrivedCity,
 				returnFlightNum:returnFlightNum,
-				visatype:visatype
+				visatype:visatype,
+				cityid:cityid,
+				gotransferarrivedcity:gotransferarrivedcity,
+				gotransferdeparturecity:gotransferdeparturecity,
+				returntransferarrivedcity:returntransferarrivedcity,
+				returntransferdeparturecity:returntransferdeparturecity,
+				gotransferflightnum:gotransferflightnum,
+				returntransferflightnum:returntransferflightnum,
+				newgodeparturecity:newgodeparturecity,
+				newgoarrivedcity:newgoarrivedcity,
+				newgoflightnum:newgoflightnum,
+				newreturndeparturecity:newreturndeparturecity,
+				newreturnarrivedcity:newreturnarrivedcity,
+				newreturnflightnum:newreturnflightnum
 			},
 		type:'post',
 		success: function(data){
@@ -615,16 +1335,20 @@ function initTravalPlanTable(data){
 		}
 		if(value.hotelname != undefined){
 			//html += '<td>'+value.hotelname+'</td>';
-			html += '<td><table style="width:100%;"><tr><td style="text-align:center;">'+value.hotelname+'</td></tr><tr><td style="text-align:center;">'+value.hoteladdress+'</td></tr><tr><td style="text-align:center;">'+value.hotelmobile+'</td></tr></table></td>';
+			if(index != data.length - 1){
+				html += '<td><table style="width:100%;"><tr><td style="text-align:center;">'+value.hotelname+'</td></tr><tr><td style="text-align:center;">'+value.hoteladdress+'</td></tr><tr><td style="text-align:center;">'+value.hotelmobile+'</td></tr></table></td>';
+			}else{
+				html += '<td></td>';
+			}
 		}else{
-			if(index != data.length -1){
+			if(index != data.length - 1){
 				html += '<td>連泊</td>';
 			}else{
 				html += '<td></td>';
 			}
 		}
-		if(index != data.length - 1 && index != 0){
-			html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i></td>';
+		if(index != data.length - 1){
+			html += '<td><i class="editHui" onclick="schedulingEdit('+value.id+')"></i><i class="resetHui" onclick="resetPlan('+value.id+')"></i><i class="addHui" onclick="addHotel('+value.id+')"></i></td>';
 		}
 		html += '</tr>';
 	});
@@ -693,6 +1417,7 @@ $("#sendVisaDate").datetimepicker({
 					success: function (data) {
 						$("#outVisaDate").val(data);
 						$("#goDate").datetimepicker("setStartDate", data);
+						$("#returnDate").datetimepicker("setStartDate", data);
 					}
 				});
 			}
@@ -767,6 +1492,35 @@ $("#goDate").datetimepicker({
 		$("#goDate").datetimepicker("setStartDate",sendVisaDates[1]);  
 	}else{
 		$("#goDate").datetimepicker("setStartDate",now);  
+	}	
+}).on('changeDate', function (ev) {
+	console.log('change..');
+	$("#returnDate").datetimepicker("setStartDate",$("#goDate").val());
+	
+	var stayday = $("#stayday").val();
+	var startDate = $("#goDate").val();
+	var returnDate = $("#returnDate").val();
+	if(stayday != ""){
+		$.ajax({
+			url: '/admin/neworderUS/autoCalculateBackDate.html',
+			dataType: "json",
+			data: { gotripdate: startDate, stayday: stayday },
+			type: 'post',
+			success: function (data) {
+				$("#returnDate").val(data);
+			}
+		});
+	}
+	if(returnDate != "" && stayday == ""){
+		$.ajax({
+			url: '/admin/neworderUS/autoCalCulateStayday.html',
+			dataType: "json",
+			data: { gotripdate: startDate, returnDate: returnDate },
+			type: 'post',
+			success: function (data) {
+				$("#stayday").val(data);
+			}
+		});
 	}
 });
 $("#returnDate").datetimepicker({
@@ -777,12 +1531,25 @@ $("#returnDate").datetimepicker({
 	pickerPosition:"bottom-right",//显示位置
 	minView: "month"//只显示年月日
 }).on("click",function(){  
-	var sendVisaDate = $('#sendVisaDate').val();
+	var sendVisaDate = $('#goDate').val();
 	if(sendVisaDate){
-		var sendVisaDates = sendVisaDate.split(' - ');
-		$("#goDate").datetimepicker("setStartDate",sendVisaDates[1]);
-	}else{
-		$("#goDate").datetimepicker("setStartDate",now);  
+		$("#returnDate").datetimepicker("setStartDate",sendVisaDate);
+	}
+}).on('changeDate', function (ev) {
+	console.log('change..');
+	var stayday = $("#stayday").val();
+	var startDate = $("#goDate").val();
+	var returnDate = $("#returnDate").val();
+	if(returnDate != "" && startDate != ""){
+		$.ajax({
+			url: '/admin/neworderUS/autoCalCulateStayday.html',
+			dataType: "json",
+			data: { gotripdate: startDate, returnDate: returnDate },
+			type: 'post',
+			success: function (data) {
+				$("#stayday").val(data);
+			}
+		});
 	}
 });
 

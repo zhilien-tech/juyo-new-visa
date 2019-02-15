@@ -32,6 +32,62 @@ function applyValidate(){
 			validating : 'glyphicon glyphicon-refresh'
 		},
 		fields : {
+			detailedaddressen: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '详细地址英文不能为空'
+					},
+					stringLength: {//检测长度
+                        max: 60,
+                        message: '详细地址英文不能超过60个字符'
+                    }
+				}
+			},
+			mailaddress: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '街道地址不能为空'
+					}
+				}
+			},
+			mailcountry: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '国家不能为空'
+					}
+				}
+			},
+			mailprovince: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '省份不能为空'
+					}
+				}
+			},
+			mailcity: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '城市不能为空'
+					}
+				}
+			},
+			mailaddressen: {
+				trigger: "change keyup",
+				validators: {
+					notEmpty: {
+						message: '街道地址英文不能为空'
+					},
+					stringLength: {//检测长度
+						max: 80,
+						message: '街道地址地址英文不能超过80个字符'
+					}
+				}
+			},
 			telephone : {
 				trigger:"change keyup",
 				validators : {
@@ -184,19 +240,43 @@ function applyValidate(){
 					}
 				}
 			},
-			detailedaddressen : {
-				trigger:"change keyup",
-				validators : {
-					notEmpty : {
-						message : '详细地址不能为空'
-					}
-				}
-			},
 			marryexplain : {
 				trigger:"change keyup",
 				validators : {
 					notEmpty : {
 						message : '说明不能为空'
+					}
+				}
+			},
+			marrystatus : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '婚姻状况不能为空'
+					}
+				}
+			},
+			birthday : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '出生日期不能为空'
+					}
+				}
+			},
+			cardprovince : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '出生省不能为空'
+					}
+				}
+			},
+			cardcity : {
+				trigger:"change keyup",
+				validators : {
+					notEmpty : {
+						message : '出生城市不能为空'
 					}
 				}
 			},
@@ -419,6 +499,114 @@ function touristValidate(){
 	//$('#applicantInfo').bootstrapValidator('validate');
 }
 
+
+$(document).on("input","#cardprovince",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val().replace(/\s*/g,"");
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#cardprovinceen").val("").change();
+	}else{
+		if(temp.endsWith("省") || temp.endsWith("市") || temp.endsWith("区")){
+			temp = temp.substr(0,temp.length - 1);
+		}
+		console.log(temp);
+		
+		if(temp == "内蒙古" || temp == "内蒙古自治区"){
+			$("#cardprovinceen").val("NEI MONGOL").change();
+		}else if(temp == "陕西" || temp == "陕西省"){
+			$("#cardprovinceen").val("SHAANXI").change();
+		}else{
+			$("#cardprovinceen").val(pinyinchar.toUpperCase()).change();
+		}
+	}
+});
+$(document).on("input","#cardcity",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val().replace(/\s*/g,"");
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#cardcityen").val("").change();
+	}else{
+		if(temp.endsWith("省") || temp.endsWith("市") || temp.endsWith("区")){
+			temp = temp.substr(0,temp.length - 1);
+		}
+		console.log(temp);
+		
+		if(temp == "内蒙古" || temp == "内蒙古自治区"){
+			$("#cardcityen").val("NEI MONGOL").change();
+		}else if(temp == "陕西" || temp == "陕西省"){
+			$("#cardcityen").val("SHAANXI").change();
+		}else{
+			$("#cardcityen").val(pinyinchar.toUpperCase()).change();
+		}
+	}
+});
+$(document).on("input","#mailprovince",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val().replace(/\s*/g,"");
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#mailprovinceen").val("").change();
+	}else{
+		if(temp.endsWith("省") || temp.endsWith("市") || temp.endsWith("区")){
+			temp = temp.substr(0,temp.length - 1);
+		}
+		
+		if(temp == "内蒙古" || temp == "内蒙古自治区"){
+			$("#mailprovinceen").val("NEI MONGOL").change();
+		}else if(temp == "陕西" || temp == "陕西省"){
+			$("#mailprovinceen").val("SHAANXI").change();
+		}else{
+			$("#mailprovinceen").val(pinyinchar.toUpperCase()).change();
+			console.log($("#mailprovinceen").val());
+		}
+	}
+});
+$(document).on("input","#mailcity",function(){
+	if(event.shiftKey||event.altKey||event.ctrlKey||event.keyCode==16||event.keyCode==17||event.keyCode==18||(event.shiftKey&&event.keyCode==36)){
+		return;
+	}
+	var pos=$(this).getCurPos();//保存原始光标位置
+	var temp = $(this).val().replace(/\s*/g,"");
+	var pinyinchar = getPinYinStr(temp);
+	if($(this).val().length == 0){
+		$("#mailcityen").val("").change();
+	}else{
+		if(temp.endsWith("省") || temp.endsWith("市") || temp.endsWith("区")){
+			temp = temp.substr(0,temp.length - 1);
+		}
+		console.log(temp);
+		
+		if(temp == "内蒙古" || temp == "内蒙古自治区"){
+			$("#mailcityen").val("NEI MONGOL").change();
+		}else if(temp == "陕西" || temp == "陕西省"){
+			$("#mailcityen").val("SHAANXI").change();
+		}else{
+			$("#mailcityen").val(pinyinchar.toUpperCase()).change();
+		}
+	}
+});
+
+//获取拼音字符串
+function getPinYinStr(hanzi){
+	var onehanzi = hanzi.split('');
+	var pinyinchar = '';
+	for(var i=0;i<onehanzi.length;i++){
+		pinyinchar += PinYin.getPinYin(onehanzi[i]);
+	}
+	return pinyinchar.toUpperCase();
+}
+
 function translateZhToEn(from, to, param){
 	var toval = "";
 	if(param != ""){
@@ -428,14 +616,11 @@ function translateZhToEn(from, to, param){
 	}
 	$.ajax({
 		//async : false,
-		url : BASE_PATH+'/admin/translate/translate',
+		url : BASE_PATH+'/admin/neworderUS/baiduTranslate',
 		data : {
-			api : 'google',
-			strType : to,
-			en : 'en',
 			q : toval
 		},
-		type : 'POST',
+		type : 'GET',
 		dataType : 'json',
 		success : function(data) {
 			$("#" + to).val(data).change();
@@ -677,7 +862,7 @@ $(document).on('keydown','#city',function(e){
 		break;
 	case 13:
 		
-		$(this).val($(this).next().find('li:eq('+provinceindex+')').children().html());
+		$(this).val($(this).next().find('li:eq('+cityindex+')').children().html());
 		$("#city").nextAll("ul.ui-autocomplete").remove();
 		$("#city").blur();
 		var city = $("#city").val();
@@ -932,14 +1117,14 @@ function saveApplicant(status){
 			if(status == 2){
 				//左箭头跳转 
 				window.location.href = '/admin/neworderUS/updatePhoto.html?staffid='+staffId;
-				$.ajax({
+				/*$.ajax({
 					type: 'POST',
 					data : applicantInfo,
 					url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
 					success :function(data) {
 						parent.successCallback(2);
 					}
-				});
+				});*/
 			}else if(status == 3){
 				//右箭头跳转
 				window.location.href = '/admin/neworderUS/updatePassportInfo.html?staffid='+staffId;
@@ -958,10 +1143,21 @@ function saveApplicant(status){
 					data : applicantInfo,
 					url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
 					success :function(data) {
-						layer.closeAll("loading");
+						console.log(data);
 						closeWindow();
+						layer.closeAll("loading");
 						parent.successCallback(2);
-					}
+						layer.msg("保存成功");
+					},error: function (XMLHttpRequest, textStatus, errorThrown) {
+						layer.closeAll("loading");
+						console.log(XMLHttpRequest);
+	                    // 状态码
+	                    console.log(XMLHttpRequest.status);
+	                    // 状态
+	                    console.log(XMLHttpRequest.readyState);
+	                    // 错误信息   
+	                    console.log(textStatus);
+	                }
 				});
 			}
 		}
@@ -969,14 +1165,14 @@ function saveApplicant(status){
 	}else{
 		//左箭头跳转 
 		window.location.href = '/admin/neworderUS/updatePhoto.html?staffid='+staffId;
-		$.ajax({
+		/*$.ajax({
 			type: 'POST',
 			data : applicantInfo,
 			url: BASE_PATH + '/admin/neworderUS/saveBasicinfo.html',
 			success :function(data) {
 				parent.successCallback(2);
 			}
-		});
+		});*/
 	}
 	
 }
@@ -1286,3 +1482,303 @@ $("#taxpayernumberen").on('input',function(){
     $(".help-ratepayingen").attr("style","display: none;");  
     $("#taxpayernumberen").attr("style", null);
 });
+
+
+//国家
+$('#birthcountry,#mailcountry').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectCountry.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.id; // replace pk with your identifier
+				obj.text = obj.chinesename; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+
+//省
+$('#cardprovince,#mailprovince').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectProvince.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			/*var cArrivalcity = $('#cArrivalcity').val();
+			if(cArrivalcity){
+				cArrivalcity = cArrivalcity.join(',');
+			}*/
+			return {
+				//exname : cArrivalcity,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.province; // replace pk with your identifier
+				obj.text = obj.province; // replace pk with your identifier
+				/*obj.text = obj.dictCode;*/
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+
+/* 取消选中时 */
+$("#cardprovince").on('select2:unselect', function (evt) {
+	//市清空
+	$("#cardcity").val(null).trigger("change");
+});
+$("#mailprovince").on('select2:unselect', function (evt) {
+	//市清空
+	$("#mailcity").val(null).trigger("change");
+});
+
+//市
+$('#cardcity').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectCity.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+		    var province = $('#cardprovince').val();
+		    if(province){
+		    	province = province.join(',');
+			}
+			return {
+				province : province,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.city; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+$('#mailcity').select2({
+	ajax : {
+		url : "/admin/neworderUS/selectCity.html",
+		dataType : 'json',
+		delay : 250,
+		type : 'post',
+		data : function(params) {
+			var province = $('#mailprovince').val();
+			if(province){
+				province = province.join(',');
+			}
+			return {
+				province : province,
+				searchstr : params.term, // search term
+				page : params.page
+			};
+		},
+		processResults : function(data, params) {
+			params.page = params.page || 1;
+			var selectdata = $.map(data, function (obj) {
+				obj.id = obj.city; // replace pk with your identifier
+				obj.text = obj.city; // replace pk with your identifier
+				return obj;
+			});
+			return {
+				results : selectdata
+			};
+		},
+		cache : false
+	},
+	//templateSelection: formatRepoSelection,
+	escapeMarkup : function(markup) {
+		return markup;
+	}, // let our custom formatter work
+	minimumInputLength : 1,
+	maximumInputLength : 20,
+	language : "zh-CN", //设置 提示语言
+	maximumSelectionLength : 1, //设置最多可以选择多少项
+	tags : false //设置必须存在的选项 才能选中
+});
+
+
+//正面上传,扫描
+$('#uploadFile').change(function() {
+	var layerIndex = layer.load(1, {
+		shade : "#000"
+	});
+	$("#addBtn").attr('disabled', true);
+	//$("#updateBtn").attr('disabled', true);
+	var file = this.files[0];
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var dataUrl = e.target.result;
+		var blob = dataURLtoBlob(dataUrl);
+		var formData = new FormData();
+		formData.append("image", blob, file.name);
+		$.ajax({
+			type : "POST",//提交类型  
+			//dataType : "json",//返回结果格式  
+			url : BASE_PATH + '/admin/orderJp/IDCardRecognitionUS',//请求地址  
+			async : true,
+			processData : false, //当FormData在jquery中使用的时候需要设置此项
+			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+			//请求数据  
+			data : formData,
+			success : function(obj) {//请求成功后的函数 
+				//关闭加载层
+				layer.close(layerIndex);
+				console.log(obj);
+				if (false === obj.success) {
+					if(obj.url.indexOf("240K")){
+						layer.msg(obj.url);
+					}else{
+						layer.msg("识别失败");
+					}
+				}else{
+					layer.msg("识别成功");
+					$('#cardFront').val(obj.url);
+					$('#firstName').val(obj.xingCn);
+					$('#firstNameEn').val("/"+obj.xingEn);
+					$('#lastName').val(obj.mingCn);
+					$('#lastNameEn').val("/"+obj.mingEn);
+					$('#imgShow').attr('src', obj.url);
+					//$("#uploadFile").siblings("i").css("display","block");
+					//$('#detailedAddress').val(obj.address);
+					//$('#nation').val(obj.nationality);
+					$('#cardId').val(obj.num);
+					//searchByCard();
+					$("#cardprovince").html('<option selected="selected" value="'+obj.province+'">'+obj.province+'</option>');
+					$("#cardcity").html('<option selected="selected" value="'+obj.city+'">'+obj.city+'</option>');
+					$('#birthday').val(obj.birth);
+					$('#sex').val(obj.sex);
+				}
+				$("#addBtn").attr('disabled', false);
+				//$("#updateBtn").attr('disabled', false);
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				layer.close(layerIndex);
+				$("#addBtn").attr('disabled', false);
+				//$("#updateBtn").attr('disabled', false);
+			}
+		}); // end of ajaxSubmit
+	};
+	reader.readAsDataURL(file);
+});
+//二寸照片上传
+$('#uploadFileBack').change(function() {
+	var layerIndex = layer.load(1, {
+		shade : "#000"
+	});
+	$("#addBtn").attr('disabled', true);
+	//$("#updateBtn").attr('disabled', true);
+	var file = this.files[0];
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var dataUrl = e.target.result;
+		var blob = dataURLtoBlob(dataUrl);
+		var formData = new FormData();
+		formData.append("image", blob, file.name);
+		$.ajax({
+			type : "POST",//提交类型  
+			//dataType : "json",//返回结果格式  
+			url : BASE_PATH + '/admin/orderJp/twoinchphotoUpload',//请求地址  
+			async : true,
+			processData : false, //当FormData在jquery中使用的时候需要设置此项
+			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+			//请求数据  
+			data : formData,
+			success : function(obj) {//请求成功后的函数 
+				//关闭加载层
+				layer.close(layerIndex);
+				if (obj.indexOf("240K") != -1) {
+					layer.msg(obj);
+				}else{
+					$('#cardInch').val(obj);
+					$('#imgInch').attr('src', obj);
+				}
+				$("#addBtn").attr('disabled', false);
+				//$("#updateBtn").attr('disabled', false);
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				layer.close(layerIndex);
+				$("#addBtn").attr('disabled', false);
+				//$("#updateBtn").attr('disabled', false);
+			}
+		}); // end of ajaxSubmit
+	};
+	reader.readAsDataURL(file);
+});
+
+//把dataUrl类型的数据转为blob
+function dataURLtoBlob(dataurl) {
+	var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(
+			n);
+	while (n--) {
+		u8arr[n] = bstr.charCodeAt(n);
+	}
+	return new Blob([ u8arr ], {
+		type : mime
+	});
+}

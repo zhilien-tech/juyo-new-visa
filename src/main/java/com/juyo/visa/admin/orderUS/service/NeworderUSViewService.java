@@ -7,11 +7,14 @@
 package com.juyo.visa.admin.orderUS.service;
 
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,6 +22,8 @@ import javax.servlet.http.HttpSession;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import org.apache.http.HttpResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -38,12 +43,15 @@ import com.juyo.visa.admin.mobile.form.TravelinfoUSForm;
 import com.juyo.visa.admin.mobile.form.WorkandeducateinfoUSForm;
 import com.juyo.visa.admin.order.entity.TIdcardEntity;
 import com.juyo.visa.admin.weixinToken.service.WeXinTokenViewService;
+import com.juyo.visa.common.baidu.BaidutranslateEntity;
+import com.juyo.visa.common.baidu.TransApi;
 import com.juyo.visa.common.base.JuYouResult;
 import com.juyo.visa.common.base.UploadService;
 import com.juyo.visa.common.comstants.CommonConstants;
 import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
+import com.juyo.visa.common.enums.orderUS.PayRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.EmigrationreasonEnum;
 import com.juyo.visa.common.enums.visaProcess.ImmediateFamilyMembersRelationshipEnum;
 import com.juyo.visa.common.enums.visaProcess.NewTimeUnitStatusEnum;
@@ -64,17 +72,21 @@ import com.juyo.visa.entities.TAppStaffBasicinfoEntity;
 import com.juyo.visa.entities.TAppStaffBeforeeducationEntity;
 import com.juyo.visa.entities.TAppStaffBeforeworkEntity;
 import com.juyo.visa.entities.TAppStaffCompanioninfoEntity;
+import com.juyo.visa.entities.TAppStaffConscientiousEntity;
 import com.juyo.visa.entities.TAppStaffCredentialsEntity;
 import com.juyo.visa.entities.TAppStaffDriverinfoEntity;
 import com.juyo.visa.entities.TAppStaffFamilyinfoEntity;
 import com.juyo.visa.entities.TAppStaffGocountryEntity;
 import com.juyo.visa.entities.TAppStaffGousinfoEntity;
 import com.juyo.visa.entities.TAppStaffImmediaterelativesEntity;
+import com.juyo.visa.entities.TAppStaffOrganizationEntity;
 import com.juyo.visa.entities.TAppStaffPassportEntity;
 import com.juyo.visa.entities.TAppStaffPrevioustripinfoEntity;
 import com.juyo.visa.entities.TAppStaffTravelcompanionEntity;
 import com.juyo.visa.entities.TAppStaffWorkEducationTrainingEntity;
+import com.juyo.visa.entities.TCityUsEntity;
 import com.juyo.visa.entities.TCountryRegionEntity;
+import com.juyo.visa.entities.THotelUsEntity;
 import com.juyo.visa.entities.TOrderUsEntity;
 import com.juyo.visa.entities.TStateUsEntity;
 import com.juyo.visa.entities.TUserEntity;
@@ -157,7 +169,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("localPort", serverPort);
 		result.put("websocketaddr", SEND_INFO_WEBSPCKET_ADDR);
 
-		//生成二维码
+		//生成带参数小程序码，将小程序码图片上传到七牛云并返回图片地址url
 		String qrCode = dataUpload(staffid, request);
 		result.put("qrCode", qrCode);
 
@@ -189,9 +201,11 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//因为小程序参数最长为32，所以参数尽量简化，a是人员id
 		scene = "a=" + staffid;
 		System.out.println("scene:" + scene + "--------------");
+		//获取token
 		String accessToken = (String) getAccessToken();
 		System.out.println("accessToken:" + accessToken);
 		System.out.println("page:" + page);
+		//生成小程序码，并上传到七牛云，获得图片路径url
 		String url = createBCode(accessToken, page, scene);
 		System.out.println("url:" + url);
 		return url;
@@ -206,16 +220,14 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		String accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 		String requestUrl = accessTokenUrl.replace("APPID", WX_APPID).replace("APPSECRET", WX_APPSECRET);
 		com.alibaba.fastjson.JSONObject result = HttpUtil.doGet(requestUrl);
-		//redis中设置 access_token
 		accessTokenUrl = result.getString("access_token");
-
 		return accessTokenUrl;
 	}
 
 	public String createBCode(String accessToken, String page, String scene) {
 		String url = WX_B_CODE_URL.replace("ACCESS_TOKEN", accessToken);
 		Map<String, Object> param = new HashMap<>();
-		param.put("path", page);
+		param.put("page", page);
 		param.put("scene", scene);
 		param.put("width", "100");
 		param.put("auto_color", false);
@@ -226,13 +238,15 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		param.put("line_color", line_color);
 		com.alibaba.fastjson.JSONObject json = com.alibaba.fastjson.JSONObject.parseObject(JSON.toJSONString(param));
 		System.out.println("json:" + json.toString());
+		//调用微信生成小程序码接口
 		InputStream inputStream = toPostRequest(json.toString(), accessToken);
 
+		//将小程序码图片上传到七牛云
 		String imgurl = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(inputStream, "", "");
 		return imgurl;
 	}
 
-	//发送POST请求
+	//生成微信小程序码
 	public InputStream toPostRequest(String json, String accessToken) {
 		String host = "https://api.weixin.qq.com";
 		String path = "/wxa/getwxacodeunlimit?access_token=" + accessToken;
@@ -303,7 +317,25 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			sb.append("/").append(basicinfo.getLastnameen());
 			result.put("lastnameen", sb.toString());
 		}
+
+		//国家下拉
+		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
+		result.put("gocountryfivelist", gocountryFiveList);
+
 		return result;
+	}
+
+	public Object saveBasicinfoThread(BasicinfoUSForm form) {
+		Thread t = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				saveBasicinfo(form);
+			}
+
+		});
+		t.start();
+		return "ok";
 	}
 
 	/**
@@ -362,12 +394,52 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object updateBasicinfo(BasicinfoUSForm form) {
 		Integer staffid = form.getStaffid();
 
+		//身份证正面保存
+		TAppStaffCredentialsEntity credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", 3));
+		//先查询是否有图片，有的话只需更新图片，没有的话添加
+		if (Util.isEmpty(credentials)) {
+			TAppStaffCredentialsEntity credentialsEntity = new TAppStaffCredentialsEntity();
+			credentialsEntity.setCreatetime(new Date());
+			credentialsEntity.setStaffid(staffid);
+			credentialsEntity.setType(3);
+			credentialsEntity.setUpdatetime(new Date());
+			credentialsEntity.setUrl(form.getCardfront());
+			dbDao.insert(credentialsEntity);
+		} else {
+			credentials.setUpdatetime(new Date());
+			credentials.setUrl(form.getCardfront());
+			dbDao.update(credentials);
+		}
+		//二寸照片保存
+		TAppStaffCredentialsEntity twoinch = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", 13));
+		//先查询是否有图片，有的话只需更新图片，没有的话添加
+		if (Util.isEmpty(twoinch)) {
+			TAppStaffCredentialsEntity credentialsEntity = new TAppStaffCredentialsEntity();
+			credentialsEntity.setCreatetime(new Date());
+			credentialsEntity.setStaffid(staffid);
+			credentialsEntity.setType(13);
+			credentialsEntity.setUpdatetime(new Date());
+			credentialsEntity.setUrl(form.getTwoinchphoto());
+			dbDao.insert(credentialsEntity);
+		} else {
+			twoinch.setUpdatetime(new Date());
+			twoinch.setUrl(form.getTwoinchphoto());
+			dbDao.update(twoinch);
+		}
+
 		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
-		familyinfo.setMarrieddate(form.getMarrieddate());
-		familyinfo.setDivorcedate(form.getDivorcedate());
-		familyinfo.setDivorcecountry(form.getDivorcecountry());
-		familyinfo.setDivorcecountryen(form.getDivorcecountryen());
+		if (form.getMarrystatus() == 2) {//离异时，有结婚日期和离婚日期
+			familyinfo.setMarrieddate(form.getMarrieddate());
+			familyinfo.setDivorcedate(form.getDivorcedate());
+		} else {
+			familyinfo.setMarrieddate(null);
+			familyinfo.setDivorcedate(null);
+		}
+		//familyinfo.setDivorcecountry(form.getDivorcecountry());
+		//familyinfo.setDivorcecountryen(form.getDivorcecountryen());
 		dbDao.update(familyinfo);
 
 		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid.longValue());
@@ -385,24 +457,118 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 
 		basicinfo.setIsmailsamewithlive(form.getIsmailsamewithlive());
-		basicinfo.setMailcountry(form.getMailcountry());
-		basicinfo.setMailprovince(form.getMailprovince());
-		basicinfo.setMailcity(form.getMailcity());
-		basicinfo.setMailaddress(form.getMailaddress());
+		if (form.getIsmailsamewithlive() == 1) {
+
+			basicinfo.setMailcountry("中国");
+			basicinfo.setMailprovince("");
+			basicinfo.setMailcity("");
+			basicinfo.setMailaddress("");
+
+			basicinfo.setMailcountryen("China");
+			basicinfo.setMailprovinceen("");
+			basicinfo.setMailcityen("");
+			basicinfo.setMailaddressen("");
+		} else {
+
+			basicinfo.setMailcountry(form.getMailcountry());
+			basicinfo.setMailprovince(form.getMailprovince());
+			basicinfo.setMailcity(form.getMailcity());
+
+			//中文翻译成拼音并大写工具
+			PinyinTool tool = new PinyinTool();
+			if (!Util.isEmpty(form.getMailprovince())) {
+				String issuedplace = form.getMailprovince();
+				if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+					basicinfo.setMailprovinceen("NEI MONGOL");
+				} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+					basicinfo.setMailprovinceen("SHAANXI");
+				} else {
+					if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+						issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+					}
+					if (issuedplace.endsWith("自治区")) {
+						issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+					}
+					if (issuedplace.endsWith("区")) {
+						issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+					}
+					try {
+						basicinfo.setMailprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+					} catch (BadHanyuPinyinOutputFormatCombination e1) {
+						e1.printStackTrace();
+					}
+				}
+
+			}
+
+			if (!Util.isEmpty(form.getMailcity())) {
+				String issuedplace = form.getMailcity();
+				try {
+					basicinfo.setMailcityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+
+			}
+			if (!Util.isEmpty(form.getMailcountry())) {
+				String issuedplace = form.getMailcountry();
+				try {
+					basicinfo.setMailcountryen(getCountrycode(issuedplace));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+			}
+
+			//basicinfo.setMailcountryen(form.getMailcountryen());
+			//basicinfo.setMailprovinceen(form.getMailprovinceen());
+			//basicinfo.setMailcityen(form.getMailcityen());
+
+			if (Util.isEmpty(form.getMailaddressen())) {
+				basicinfo.setMailaddressen(translationHandle(2, translate(form.getMailaddress())));
+			} else {
+				if (Util.eq(form.getMailaddress(), basicinfo.getMailaddress())) {
+					basicinfo.setMailaddressen(translationHandle(2, form.getMailaddressen()));
+				} else {
+					if (Util.eq(form.getMailaddressen(), basicinfo.getMailaddressen())) {
+						basicinfo.setMailaddressen(translationHandle(2, translate(form.getMailaddress())));
+					} else {
+						basicinfo.setMailaddressen(translationHandle(2, form.getMailaddressen()));
+					}
+				}
+			}
+
+			basicinfo.setMailaddress(form.getMailaddress());
+		}
 
 		basicinfo.setSex(form.getSex());
-		basicinfo.setTelephone(form.getTelephone());
+		basicinfo.setTelephone(translationHandle(3, form.getTelephone()));
 		basicinfo.setEmail(form.getEmail());
-		basicinfo.setCardId(form.getCardId());
+		basicinfo.setCardId(form.getCardid());
 		basicinfo.setProvince(form.getProvince());
 		basicinfo.setCity(form.getCity());
 		basicinfo.setCardprovince(form.getCardprovince());
 		basicinfo.setCardcity(form.getCardcity());
+
+		//如果地址英文为空，直接翻译中文地址
+		if (Util.isEmpty(form.getDetailedaddressen())) {
+			basicinfo.setDetailedaddressen(translationHandle(2, translate(form.getDetailedaddress())));
+		} else {//地址英文不为空时，比较地址中文，如果一样，直接保存地址英文
+			if (Util.eq(form.getDetailedaddress(), basicinfo.getDetailedaddress())) {
+				basicinfo.setDetailedaddressen(translationHandle(2, form.getDetailedaddressen()));
+			} else {//中文地址变了，比较英文地址是否一样,如果英文地址一样，则翻译，否则直接存
+				if (Util.eq(form.getDetailedaddressen(), basicinfo.getDetailedaddressen())) {
+					basicinfo.setDetailedaddressen(translationHandle(2, translate(form.getDetailedaddress())));
+				} else {
+					basicinfo.setDetailedaddressen(translationHandle(2, form.getDetailedaddressen()));
+				}
+			}
+		}
 		basicinfo.setDetailedaddress(form.getDetailedaddress());
-		basicinfo.setDetailedaddressen(form.getDetailedaddressen());
 		basicinfo.setMarrystatus(form.getMarrystatus());
 		basicinfo.setBirthday(form.getBirthday());
 		basicinfo.setBirthcountry(form.getBirthcountry());
+		basicinfo.setBirthcountryen(getCountrycode(form.getBirthcountry()));
 		//basicinfo.setNationality(form.getNationality());
 		basicinfo.setHasothername(form.getHasothername());
 		basicinfo.setHasothernameen(form.getHasothername());
@@ -421,30 +587,126 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		long startTime = System.currentTimeMillis();
 		System.out.println("开始保存英文====");
 		basicinfo.setIsmailsamewithliveen(form.getIsmailsamewithliveen());
-		basicinfo.setMailcountryen(form.getMailcountryen());
-		basicinfo.setMailprovinceen(form.getMailprovinceen());
-		basicinfo.setMailcityen(form.getMailcityen());
-		basicinfo.setMailaddressen(form.getMailaddressen());
 
-		basicinfo.setTelephoneen(form.getTelephone());
+		basicinfo.setTelephoneen(translationHandle(3, form.getTelephone()));
 		basicinfo.setEmailen(form.getEmail());
-		basicinfo.setCardIden(form.getCardId());
-		basicinfo.setProvinceen(form.getProvinceen());
-		basicinfo.setCityen(form.getCityen());
-		basicinfo.setCardprovinceen(form.getCardprovinceen());
-		basicinfo.setCardcityen(form.getCardcityen());
-		basicinfo.setBirthcountryen(form.getBirthcountryen());
+		basicinfo.setCardIden(form.getCardid());
+
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
+		if (!Util.isEmpty(form.getProvince())) {
+			String issuedplace = form.getProvince();
+			if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+				basicinfo.setProvinceen("NEI MONGOL");
+			} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+				basicinfo.setProvinceen("SHAANXI");
+			} else {
+				if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				if (issuedplace.endsWith("自治区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+				}
+				if (issuedplace.endsWith("区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				try {
+					basicinfo.setProvinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
+		if (!Util.isEmpty(form.getCity())) {
+			String issuedplace = form.getCity();
+			/*if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}
+			if (issuedplace.endsWith("自治区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+			}
+			if (issuedplace.endsWith("区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}*/
+			try {
+				basicinfo.setCityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+			} catch (BadHanyuPinyinOutputFormatCombination e1) {
+				e1.printStackTrace();
+			}
+
+		}
+		//basicinfo.setProvinceen(form.getProvinceen());
+		//basicinfo.setCityen(form.getCityen());
+
+		//basicinfo.setCardprovinceen(form.getCardprovinceen());
+
+		if (!Util.isEmpty(form.getCardprovince())) {
+			String issuedplace = form.getCardprovince();
+			if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+				basicinfo.setCardprovinceen("NEI MONGOL");
+			} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+				basicinfo.setCardprovinceen("SHAANXI");
+			} else {
+				if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				if (issuedplace.endsWith("自治区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+				}
+				if (issuedplace.endsWith("区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				try {
+					basicinfo.setCardprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
+
+		if (!Util.isEmpty(form.getCardcity())) {
+			String issuedplace = form.getCardcity();
+			try {
+				basicinfo.setCardcityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+			} catch (BadHanyuPinyinOutputFormatCombination e1) {
+				e1.printStackTrace();
+			}
+
+		}
+
+		//basicinfo.setCardcityen(form.getCardcityen());
 		//basicinfo.setNationalityen(form.getNationalityen());
-		/*		basicinfo.setProvinceen(translate(form.getProvince()));
-				basicinfo.setCityen(translate(form.getCity()));
-				basicinfo.setCardprovinceen(translate(form.getCardprovince()));
-				basicinfo.setCardcityen(translate(form.getCardcity()));
-				basicinfo.setNationalityen(translate(form.getNationality()));
-		*/basicinfo.setMarrystatusen(form.getMarrystatus());
+		/*basicinfo.setBirthcountryen(translate(form.getBirthcountry()));
+		basicinfo.setProvinceen(translate(form.getProvince()));
+		basicinfo.setCityen(translate(form.getCity()));
+		basicinfo.setCardprovinceen(translate(form.getCardprovince()));
+		basicinfo.setCardcityen(translate(form.getCardcity()));
+		basicinfo.setNationalityen(translate(form.getNationality()));*/
+
+		/*if (!Util.isEmpty(form.getDetailedaddressen())) {
+			basicinfo.setDetailedaddressen(form.getDetailedaddressen());
+		} else {
+			basicinfo.setDetailedaddressen(translate(form.getDetailedaddress()));
+		}*/
+
+		basicinfo.setMarrystatusen(form.getMarrystatus());
 		long endTime = System.currentTimeMillis();
 		System.out.println("保存英文用了" + (endTime - startTime) + "ms=====");
 		dbDao.update(basicinfo);
 		return null;
+	}
+
+	//根据国家名称查询国籍代码
+	public String getCountrycode(String countryname) {
+		String countrycode = "";
+		TCountryRegionEntity fetch = dbDao
+				.fetch(TCountryRegionEntity.class, Cnd.where("chinesename", "=", countryname));
+		if (!Util.isEmpty(fetch)) {
+			countrycode = fetch.getInternationalcode();
+		}
+		return countrycode;
 	}
 
 	/**
@@ -486,6 +748,17 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
+	public Object savePassportinfoThread(PassportinfoUSForm form) {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				savePassportinfo(form);
+			}
+		});
+		t.start();
+		return "ok";
+	}
+
 	/**
 	 * 保存护照信息
 	 * TODO(这里用一句话描述这个方法的作用)
@@ -497,6 +770,25 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object savePassportinfo(PassportinfoUSForm form) {
 		Integer staffid = form.getStaffid();
+
+		//护照保存
+		TAppStaffCredentialsEntity credentials = dbDao.fetch(TAppStaffCredentialsEntity.class,
+				Cnd.where("staffid", "=", staffid).and("type", "=", 1));
+		//先查询是否有图片，有的话只需更新图片，没有的话添加
+		if (Util.isEmpty(credentials)) {
+			TAppStaffCredentialsEntity credentialsEntity = new TAppStaffCredentialsEntity();
+			credentialsEntity.setCreatetime(new Date());
+			credentialsEntity.setStaffid(staffid);
+			credentialsEntity.setType(1);
+			credentialsEntity.setUpdatetime(new Date());
+			credentialsEntity.setUrl(form.getPassporturl());
+			dbDao.insert(credentialsEntity);
+		} else {
+			credentials.setUpdatetime(new Date());
+			credentials.setUrl(form.getPassporturl());
+			dbDao.update(credentials);
+		}
+
 		TAppStaffPassportEntity passportinfo = dbDao.fetch(TAppStaffPassportEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		passportinfo.setPassport(form.getPassport());
@@ -563,6 +855,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object toFamilyinfo(int staffid) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("staffid", staffid);
+		TAppStaffBasicinfoEntity basicinfo = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+		result.put("basicinfo", basicinfo);
+
 		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		result.put("familyinfo", familyinfo);
@@ -595,6 +890,17 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
+	public Object saveFamilyinfoThread(FamilyinfoUSForm form) {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				saveFamilyinfo(form);
+			}
+		});
+		t.start();
+		return "ok";
+	}
+
 	/**
 	 * 保存家庭信息
 	 * TODO(这里用一句话描述这个方法的作用)
@@ -605,6 +911,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public Object saveFamilyinfo(FamilyinfoUSForm form) {
+		long startTime = System.currentTimeMillis();
 		Integer staffid = form.getStaffid();
 		TAppStaffFamilyinfoEntity familyinfo = dbDao.fetch(TAppStaffFamilyinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
@@ -631,7 +938,8 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 				dbDao.delete(immediaterelatives);
 			}
 		}
-
+		long endTime = System.currentTimeMillis();
+		System.out.println("保存家庭信息用了" + (endTime - startTime) + "ms");
 		return JuYouResult.ok();
 	}
 
@@ -658,7 +966,36 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		//英文
 		familyinfo.setSpousebirthdayen(form.getSpousebirthday());
 		familyinfo.setSpouseaddressen(form.getSpouseaddress());
-		familyinfo.setSpousecityen(translate(form.getSpousecity()));
+
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
+		if (!Util.isEmpty(form.getSpousecity())) {
+			String issuedplace = form.getSpousecity();
+			if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+				familyinfo.setSpousecityen("NEI MONGOL");
+			} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+				familyinfo.setSpousecityen("SHAANXI");
+			} else {
+				if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				if (issuedplace.endsWith("自治区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+				}
+				if (issuedplace.endsWith("区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				try {
+					familyinfo.setSpousecityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
+
+		//familyinfo.setSpousecityen(translate(form.getSpousecity()));
+
 		familyinfo.setSpousecountryen(form.getSpousecountry());
 		familyinfo.setSpousenationalityen(form.getSpousenationality());
 		return null;
@@ -810,6 +1147,20 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
+	public Object saveWorkandeducationThread(WorkandeducateinfoUSForm form) {
+		Thread t = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				saveWorkandeducation(form);
+			}
+
+		});
+		t.start();
+
+		return "ok";
+	}
+
 	/**
 	 * 保存教育与职业信息
 	 * TODO(这里用一句话描述这个方法的作用)
@@ -837,6 +1188,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 		}
 		//教育信息
+		//translateTime += (long) updateBeforeeducation(form);
 		if (Util.eq(1, form.getIssecondarylevel())) {
 			translateTime += (long) updateBeforeeducation(form);
 		} else {
@@ -847,7 +1199,7 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println("保存用了" + (endTime - startTime) + "ms");
+		System.out.println("保存工作教育信息用了" + (endTime - startTime) + "ms");
 		System.out.println("translateTime:" + translateTime);
 		return JuYouResult.ok();
 	}
@@ -863,40 +1215,168 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	 */
 	public Object updateWorkinfo(WorkandeducateinfoUSForm form) {
 		Integer staffid = form.getStaffid();
+		String translation = "";
 		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		workinfo.setOccupation(form.getOccupation());
+
+		/*if (!Util.isEmpty(form.getUnitnameen())) {
+			workinfo.setUnitnameen(form.getUnitnameen());
+		} else {
+			workinfo.setUnitnameen(translate(form.getUnitname()));
+		}*/
+		//translation = translationHandle(form.getUnitname());
+		if (Util.isEmpty(form.getUnitnameen())) {
+			workinfo.setUnitnameen(translationHandle(1, translate(form.getUnitname())));
+		} else {
+			if (Util.eq(form.getUnitname(), workinfo.getUnitname())) {
+				workinfo.setUnitnameen(translationHandle(1, form.getUnitnameen()));
+			} else {
+				if (Util.eq(form.getUnitnameen(), workinfo.getUnitnameen())) {
+					workinfo.setUnitnameen(translationHandle(1, translate(form.getUnitname())));
+				} else {
+					workinfo.setUnitnameen(translationHandle(1, form.getUnitnameen()));
+				}
+			}
+		}
+
 		workinfo.setUnitname(form.getUnitname());
-		workinfo.setUnitnameen(form.getUnitnameen());
-		workinfo.setTelephone(form.getTelephone());
+
+		workinfo.setTelephone(translationHandle(3, form.getTelephone()));
 		workinfo.setCountry(form.getCountry());
 		workinfo.setProvince(form.getProvince());
 		workinfo.setCity(form.getCity());
+
+		/*if (!Util.isEmpty(form.getAddressen())) {
+			workinfo.setAddressen(form.getAddressen());
+		} else {
+			workinfo.setAddressen(translate(form.getAddress()));
+		}*/
+
+		if (Util.isEmpty(form.getAddressen())) {
+			workinfo.setAddressen(translationHandle(2, translate(form.getAddress())));
+		} else {
+			if (Util.eq(form.getAddress(), workinfo.getAddress())) {
+				workinfo.setAddressen(translationHandle(2, form.getAddressen()));
+			} else {
+				if (Util.eq(form.getAddressen(), workinfo.getAddressen())) {
+					workinfo.setAddressen(translationHandle(2, translate(form.getAddress())));
+				} else {
+					workinfo.setAddressen(translationHandle(2, form.getAddressen()));
+				}
+			}
+		}
+
 		workinfo.setAddress(form.getAddress());
-		workinfo.setAddressen(form.getAddressen());
+
 		workinfo.setWorkstartdate(form.getWorkstartdate());
-		workinfo.setPosition(form.getPosition());
+
 		workinfo.setSalary(form.getSalary());
-		workinfo.setDuty(form.getDuty());
 		workinfo.setIssecondarylevel(form.getIssecondarylevel());
 		workinfo.setIsemployed(form.getIsemployed());
 		workinfo.setZipcode(getZipcode(form.getCity()));
 		workinfo.setZipcodeen(workinfo.getZipcode());
+
+		/*if (!Util.isEmpty(form.getDutyen())) {
+			workinfo.setDutyen(form.getDutyen());
+		} else {
+			workinfo.setDutyen(translate(form.getDuty()));
+		}*/
+
+		if (Util.isEmpty(form.getDutyen())) {
+			workinfo.setDutyen(translationHandle(4, translate(form.getDuty())));
+		} else {
+			if (Util.eq(form.getDuty(), workinfo.getDuty())) {
+				workinfo.setDutyen(translationHandle(4, form.getDutyen()));
+			} else {
+				if (Util.eq(form.getDutyen(), workinfo.getDutyen())) {
+					workinfo.setDutyen(translationHandle(4, translate(form.getDuty())));
+				} else {
+					workinfo.setDutyen(translationHandle(4, form.getDutyen()));
+				}
+			}
+		}
+
+		workinfo.setDuty(form.getDuty());
+
 		//英文
 		long startTime = System.currentTimeMillis();
 		workinfo.setOccupationen(form.getOccupation());
-		workinfo.setTelephoneen(form.getTelephone());
+		workinfo.setTelephoneen(translationHandle(3, form.getTelephone()));
 		workinfo.setCountryen(form.getCountry());
-		workinfo.setProvinceen(form.getProvinceen());
+		/*workinfo.setProvinceen(form.getProvinceen());
 		workinfo.setCityen(form.getCityen());
 		workinfo.setPositionen(form.getPositionen());
-		workinfo.setDutyen(form.getDutyen());
+		workinfo.setDutyen(form.getDutyen());*/
+
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
+		if (!Util.isEmpty(form.getProvince())) {
+			String issuedplace = form.getProvince();
+			if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+				workinfo.setProvinceen("NEI MONGOL");
+			} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+				workinfo.setProvinceen("SHAANXI");
+			} else {
+				if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				if (issuedplace.endsWith("自治区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+				}
+				if (issuedplace.endsWith("区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				try {
+					workinfo.setProvinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
+
+		if (!Util.isEmpty(form.getCity())) {
+			String issuedplace = form.getCity();
+			/*if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}
+			if (issuedplace.endsWith("自治区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+			}
+			if (issuedplace.endsWith("区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}*/
+			try {
+				workinfo.setCityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+			} catch (BadHanyuPinyinOutputFormatCombination e1) {
+				e1.printStackTrace();
+			}
+
+		}
 
 		//workinfo.setProvinceen(translate(form.getProvince()));
 		//workinfo.setCityen(translate(form.getCity()));
+
+		if (Util.isEmpty(form.getPositionen())) {
+			workinfo.setPositionen(translationHandle(1, translate(form.getPosition())));
+		} else {
+			if (Util.eq(form.getPosition(), workinfo.getPosition())) {
+				workinfo.setPositionen(translationHandle(1, form.getPositionen()));
+			} else {
+				if (Util.eq(form.getPositionen(), workinfo.getPositionen())) {
+					workinfo.setPositionen(translationHandle(1, translate(form.getPosition())));
+				} else {
+					workinfo.setPositionen(translationHandle(1, form.getPositionen()));
+				}
+			}
+		}
+
 		//workinfo.setPositionen(translate(form.getPosition()));
-		//workinfo.setDutyen(translate(form.getDuty()));
-		workinfo.setWorkstartdateen(form.getWorkstartdateen());
+
+		workinfo.setPosition(form.getPosition());
+
+		workinfo.setWorkstartdateen(form.getWorkstartdate());
 		workinfo.setSalaryen(form.getSalary());
 		workinfo.setIssecondarylevelen(form.getIssecondarylevel());
 		workinfo.setIsemployeden(form.getIsemployed());
@@ -924,35 +1404,160 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			beforework.setStaffid(staffid);
 			dbDao.insert(beforework);
 		}
+
+		/*if (!Util.isEmpty(form.getEmployernameen())) {
+			beforework.setEmployernameen(form.getEmployernameen());
+		} else {
+			beforework.setEmployernameen(translate(form.getEmployername()));
+		}*/
+
+		if (Util.isEmpty(form.getEmployernameen())) {
+			beforework.setEmployernameen(translationHandle(1, translate(form.getEmployername())));
+		} else {
+			if (Util.eq(form.getEmployername(), beforework.getEmployername())) {
+				beforework.setEmployernameen(translationHandle(1, form.getEmployernameen()));
+			} else {
+				if (Util.eq(form.getEmployernameen(), beforework.getEmployernameen())) {
+					beforework.setEmployernameen(translationHandle(1, translate(form.getEmployername())));
+				} else {
+					beforework.setEmployernameen(translationHandle(1, form.getEmployernameen()));
+				}
+			}
+		}
+
 		beforework.setEmployername(form.getEmployername());
-		beforework.setEmployernameen(form.getEmployernameen());
-		beforework.setEmployertelephone(form.getEmployertelephone());
+
+		beforework.setEmployertelephone(translationHandle(3, form.getEmployertelephone()));
 		beforework.setEmployercountry(form.getEmployercountry());
 		beforework.setEmployerprovince(form.getEmployerprovince());
 		beforework.setEmployercity(form.getEmployercity());
+
+		/*if (!Util.isEmpty(form.getEmployeraddressen())) {
+			beforework.setEmployeraddressen(form.getEmployeraddressen());
+		} else {
+			beforework.setEmployeraddressen(translate(form.getEmployeraddress()));
+		}*/
+
+		if (Util.isEmpty(form.getEmployeraddressen())) {
+			beforework.setEmployeraddressen(translationHandle(2, translate(form.getEmployeraddress())));
+		} else {
+			if (Util.eq(form.getEmployeraddress(), beforework.getEmployeraddress())) {
+				beforework.setEmployeraddressen(translationHandle(2, form.getEmployeraddressen()));
+			} else {
+				if (Util.eq(form.getEmployeraddressen(), beforework.getEmployeraddressen())) {
+					beforework.setEmployeraddressen(translationHandle(2, translate(form.getEmployeraddress())));
+				} else {
+					beforework.setEmployeraddressen(translationHandle(2, form.getEmployeraddressen()));
+				}
+			}
+		}
+
 		beforework.setEmployeraddress(form.getEmployeraddress());
-		beforework.setEmployeraddressen(form.getEmployeraddressen());
+
 		beforework.setEmploystartdate(form.getEmploystartdate());
 		beforework.setEmployenddate(form.getEmployenddate());
+
+		if (Util.isEmpty(form.getJobtitleen())) {
+			beforework.setJobtitleen(translationHandle(1, translate(form.getJobtitle())));
+		} else {
+			if (Util.eq(form.getJobtitle(), beforework.getJobtitle())) {
+				beforework.setJobtitleen(translationHandle(1, form.getJobtitleen()));
+			} else {
+				if (Util.eq(form.getJobtitleen(), beforework.getJobtitleen())) {
+					beforework.setJobtitleen(translationHandle(1, translate(form.getJobtitle())));
+				} else {
+					beforework.setJobtitleen(translationHandle(1, form.getJobtitleen()));
+				}
+			}
+		}
+
 		beforework.setJobtitle(form.getJobtitle());
+
+		/*if (!Util.isEmpty(form.getPreviousdutyen())) {
+			beforework.setPreviousdutyen(form.getPreviousdutyen());
+		} else {
+			beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+		}*/
+
+		if (Util.isEmpty(form.getPreviousdutyen())) {
+			beforework.setPreviousdutyen(translationHandle(4, translate(form.getPreviousduty())));
+		} else {
+			if (Util.eq(form.getPreviousduty(), beforework.getPreviousduty())) {
+				beforework.setPreviousdutyen(translationHandle(4, form.getPreviousdutyen()));
+			} else {
+				if (Util.eq(form.getPreviousdutyen(), beforework.getPreviousdutyen())) {
+					beforework.setPreviousdutyen(translationHandle(4, translate(form.getPreviousduty())));
+				} else {
+					beforework.setPreviousdutyen(translationHandle(4, form.getPreviousdutyen()));
+				}
+			}
+		}
+
 		beforework.setPreviousduty(form.getPreviousduty());
+
 		beforework.setEmployerzipcode(getZipcode(form.getEmployercity()));
 		beforework.setEmployerzipcodeen(beforework.getEmployerzipcode());
 		//英文
 		long startTime = System.currentTimeMillis();
-		beforework.setEmployertelephoneen(form.getEmployertelephone());
+		beforework.setEmployertelephoneen(translationHandle(3, form.getEmployertelephone()));
 		beforework.setEmployercountryen(form.getEmployercountry());
 		beforework.setEmploystartdateen(form.getEmploystartdate());
 		beforework.setEmployenddateen(form.getEmployenddate());
 
-		/*		beforework.setEmployerprovinceen(translate(form.getEmployerprovince()));
-				beforework.setEmployercityen(translate(form.getEmployercity()));
-				beforework.setJobtitleen(translate(form.getJobtitle()));
-				beforework.setPreviousdutyen(translate(form.getPreviousduty()));
-		*/beforework.setEmployerprovinceen(form.getEmployerprovinceen());
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
+		if (!Util.isEmpty(form.getEmployerprovince())) {
+			String issuedplace = form.getEmployerprovince();
+			if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+				beforework.setEmployerprovinceen("NEI MONGOL");
+			} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+				beforework.setEmployerprovinceen("SHAANXI");
+			} else {
+				if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				if (issuedplace.endsWith("自治区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+				}
+				if (issuedplace.endsWith("区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				try {
+					beforework.setEmployerprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
+
+		if (!Util.isEmpty(form.getEmployercity())) {
+			String issuedplace = form.getEmployercity();
+			/*if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}
+			if (issuedplace.endsWith("自治区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+			}
+			if (issuedplace.endsWith("区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}*/
+			try {
+				beforework.setEmployercityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+			} catch (BadHanyuPinyinOutputFormatCombination e1) {
+				e1.printStackTrace();
+			}
+
+		}
+
+		//beforework.setEmployerprovinceen(translate(form.getEmployerprovince()));
+		//beforework.setEmployercityen(translate(form.getEmployercity()));
+
+		//beforework.setPreviousdutyen(translate(form.getPreviousduty()));
+		/*beforework.setEmployerprovinceen(form.getEmployerprovinceen());
 		beforework.setEmployercityen(form.getEmployercityen());
-		beforework.setJobtitleen(form.getJobtitleen());
-		beforework.setPreviousdutyen(form.getPreviousdutyen());
+		beforework.setJobtitleen(form.getJobtitleen());*/
+
 		long endTime = System.currentTimeMillis();
 
 		dbDao.update(beforework);
@@ -996,14 +1601,74 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			dbDao.insert(beforeeducation);
 		}
 		beforeeducation.setHighesteducation(form.getHighesteducation());
+
+		/*if (!Util.isEmpty(form.getInstitutionen())) {
+			beforeeducation.setInstitutionen(form.getInstitutionen());
+		} else {
+			beforeeducation.setInstitutionen(translate(form.getInstitution()));
+		}*/
+
+		if (Util.isEmpty(form.getInstitutionen())) {
+			beforeeducation.setInstitutionen(translationHandle(1, translate(form.getInstitution())));
+		} else {
+			if (Util.eq(form.getInstitution(), beforeeducation.getInstitution())) {
+				beforeeducation.setInstitutionen(translationHandle(1, form.getInstitutionen()));
+			} else {
+				if (Util.eq(form.getInstitutionen(), beforeeducation.getInstitutionen())) {
+					beforeeducation.setInstitutionen(translationHandle(1, translate(form.getInstitution())));
+				} else {
+					beforeeducation.setInstitutionen(translationHandle(1, form.getInstitutionen()));
+				}
+			}
+		}
+
 		beforeeducation.setInstitution(form.getInstitution());
-		beforeeducation.setInstitutionen(form.getInstitutionen());
+
+		//beforeeducation.setCourseen(translate(form.getCourse()));
+
+		if (Util.isEmpty(form.getCourseen())) {//如果英文为空，直接翻译
+			beforeeducation.setCourseen(translate(form.getCourse()));
+		} else {
+			if (Util.eq(form.getCourse(), beforeeducation.getCourse())) {//英文不为空，中文相同说明没变，直接存英文
+				beforeeducation.setCourseen(form.getCourseen());
+			} else {
+				if (Util.eq(form.getCourseen(), beforeeducation.getCourseen())) {//中文不同，英文相同，说明没有翻译过来，需要翻译
+					beforeeducation.setCourseen(translate(form.getCourse()));
+				} else {
+					beforeeducation.setCourseen(form.getCourseen());//中文、英文都不一样，直接存英文
+				}
+			}
+		}
+
 		beforeeducation.setCourse(form.getCourse());
+
 		beforeeducation.setInstitutioncountry(form.getInstitutioncountry());
 		beforeeducation.setInstitutionprovince(form.getInstitutionprovince());
 		beforeeducation.setInstitutioncity(form.getInstitutioncity());
+
+		/*if (!Util.isEmpty(form.getInstitutionaddressen())) {
+			beforeeducation.setInstitutionaddressen(form.getInstitutionaddressen());
+		} else {
+			beforeeducation.setInstitutionaddressen(translate(form.getInstitutionaddress()));
+		}*/
+
+		if (Util.isEmpty(form.getInstitutionaddressen())) {
+			beforeeducation.setInstitutionaddressen(translationHandle(2, translate(form.getInstitutionaddress())));
+		} else {
+			if (Util.eq(form.getInstitutionaddress(), beforeeducation.getInstitutionaddress())) {
+				beforeeducation.setInstitutionaddressen(translationHandle(2, form.getInstitutionaddressen()));
+			} else {
+				if (Util.eq(form.getInstitutionaddressen(), beforeeducation.getInstitutionaddressen())) {
+					beforeeducation.setInstitutionaddressen(translationHandle(2,
+							translate(form.getInstitutionaddress())));
+				} else {
+					beforeeducation.setInstitutionaddressen(translationHandle(2, form.getInstitutionaddressen()));
+				}
+			}
+		}
+
 		beforeeducation.setInstitutionaddress(form.getInstitutionaddress());
-		beforeeducation.setInstitutionaddressen(form.getInstitutionaddressen());
+
 		beforeeducation.setCoursestartdate(form.getCoursestartdate());
 		beforeeducation.setCourseenddate(form.getCourseenddate());
 		beforeeducation.setInstitutionzipcode(getZipcode(form.getInstitutioncity()));
@@ -1014,12 +1679,58 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		beforeeducation.setInstitutioncountryen(form.getInstitutioncountry());
 		beforeeducation.setCoursestartdateen(form.getCoursestartdate());
 		beforeeducation.setCourseenddateen(form.getCourseenddate());
-		/*		beforeeducation.setCourseen(translate(form.getCourse()));
-				beforeeducation.setInstitutionprovinceen(translate(form.getInstitutionprovince()));
-				beforeeducation.setInstitutioncityen(translate(form.getInstitutioncity()));
-		*/beforeeducation.setCourseen(form.getCourseen());
+
+		//中文翻译成拼音并大写工具
+		PinyinTool tool = new PinyinTool();
+		if (!Util.isEmpty(form.getInstitutionprovince())) {
+			String issuedplace = form.getInstitutionprovince();
+			if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+				beforeeducation.setInstitutionprovinceen("NEI MONGOL");
+			} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+				beforeeducation.setInstitutionprovinceen("SHAANXI");
+			} else {
+				if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				if (issuedplace.endsWith("自治区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+				}
+				if (issuedplace.endsWith("区")) {
+					issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+				}
+				try {
+					beforeeducation.setInstitutionprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
+
+		if (!Util.isEmpty(form.getInstitutioncity())) {
+			String issuedplace = form.getInstitutioncity();
+			/*if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}
+			if (issuedplace.endsWith("自治区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+			}
+			if (issuedplace.endsWith("区")) {
+				issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+			}*/
+			try {
+				beforeeducation.setInstitutioncityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+			} catch (BadHanyuPinyinOutputFormatCombination e1) {
+				e1.printStackTrace();
+			}
+
+		}
+
+		//beforeeducation.setInstitutionprovinceen(translate(form.getInstitutionprovince()));
+		//beforeeducation.setInstitutioncityen(translate(form.getInstitutioncity()));
+		/*beforeeducation.setCourseen(form.getCourseen());
 		beforeeducation.setInstitutionprovinceen(form.getInstitutionprovinceen());
-		beforeeducation.setInstitutioncityen(form.getInstitutioncityen());
+		beforeeducation.setInstitutioncityen(form.getInstitutioncityen());*/
 		long endTime = System.currentTimeMillis();
 
 		dbDao.update(beforeeducation);
@@ -1038,6 +1749,10 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	public Object toTravelinfo(int staffid) {
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("staffId", staffid);
+
+		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid);
+		result.put("basic", basic);
+
 		TAppStaffTravelcompanionEntity travelcompanion = dbDao.fetch(TAppStaffTravelcompanionEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		result.put("travelwithother", travelcompanion.getIstravelwithother());
@@ -1087,6 +1802,32 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		}
 		result.put("gocountry", gocountry);*/
 
+		//慈善组织
+		//是否参加慈善组织
+		result.put("isworkedcharitableorganization", workinfo.getIsworkedcharitableorganization());
+
+		TAppStaffOrganizationEntity organization = dbDao.fetch(TAppStaffOrganizationEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		result.put("organization", organization);
+
+		//是否服兵役
+		result.put("hasservedinmilitary", workinfo.getHasservedinmilitary());
+
+		TAppStaffConscientiousEntity conscientious = dbDao.fetch(TAppStaffConscientiousEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		if (!Util.isEmpty(conscientious)) {
+			//日期处理
+			if (!Util.isEmpty(conscientious.getServicestartdate())) {
+				result.put("servicestartdate", sdf.format(conscientious.getServicestartdate()));
+			}
+			if (!Util.isEmpty(conscientious.getServiceenddate())) {
+				result.put("serviceenddate", sdf.format(conscientious.getServiceenddate()));
+			}
+		}
+		result.put("conscientious", conscientious);
+
+		result.put("workinfo", workinfo);
+
 		//国家下拉
 		List<TCountryRegionEntity> gocountryFiveList = dbDao.query(TCountryRegionEntity.class, null, null);
 		result.put("gocountryfivelist", gocountryFiveList);
@@ -1094,7 +1835,20 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		result.put("usstatesenum", EnumUtil.enum2(VisaUSStatesEnum.class));
 		result.put("emigrationreasonenumenum", EnumUtil.enum2(EmigrationreasonEnum.class));
 		result.put("travelcompanionrelationshipenum", EnumUtil.enum2(TravelCompanionRelationshipEnum.class));
+		result.put("payrelationshipenum", EnumUtil.enum2(PayRelationshipEnum.class));
 		return result;
+	}
+
+	public Object saveTravelinfoThread(TravelinfoUSForm form) {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				saveTravelinfo(form);
+			}
+		});
+		t.start();
+
+		return "ok";
 	}
 
 	/**
@@ -1125,18 +1879,260 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		updateGousinfo(form);
 
 		//美国驾照
-		updateDriverinfo(form);
+		//updateDriverinfo(form);
 
 		//是否有出境记录
 		TAppStaffWorkEducationTrainingEntity workinfo = dbDao.fetch(TAppStaffWorkEducationTrainingEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		workinfo.setIstraveledanycountry(form.getIstraveledanycountry());
 		workinfo.setIstraveledanycountryen(form.getIstraveledanycountry());
+		//是否为慈善组织工作
+		workinfo.setIsworkedcharitableorganization(form.getIsworkedcharitableorganization());
+		workinfo.setIsworkedcharitableorganizationen(form.getIsworkedcharitableorganization());
+		//是否服兵役
+		workinfo.setHasservedinmilitary(form.getHasservedinmilitary());
+		workinfo.setHasservedinmilitaryen(form.getHasservedinmilitary());
+		//是否属于部落宗教
+		workinfo.setIsclan(form.getIsclan());
+		workinfo.setIsclanen(form.getIsclan());
+		//部落宗教名称
+		if (Util.eq(1, form.getIsclan())) {
+			workinfo.setClanname(form.getClanname());
+
+			if (Util.isEmpty(form.getClannameen())) {
+				workinfo.setClannameen(translationHandle(1, translate(form.getClanname())));
+			} else {
+				if (Util.eq(form.getClanname(), workinfo.getClanname())) {
+					workinfo.setClannameen(translationHandle(1, form.getClannameen()));
+				} else {
+					if (Util.eq(form.getClannameen(), workinfo.getClannameen())) {
+						workinfo.setClannameen(translationHandle(1, translate(form.getClanname())));
+					} else {
+						workinfo.setClannameen(translationHandle(1, form.getClannameen()));
+					}
+				}
+			}
+		} else {
+			workinfo.setClanname("");
+			workinfo.setClannameen("");
+		}
+
+		//专业技能
+		workinfo.setHasspecializedskill(form.getHasspecializedskill());
+		workinfo.setHasspecializedskillen(form.getHasspecializedskill());
+		if (Util.eq(1, form.getHasspecializedskill())) {
+			workinfo.setSkillexplain(form.getSkillexplain());
+
+			if (Util.isEmpty(form.getSkillexplainen())) {
+				workinfo.setSkillexplainen(translate(form.getSkillexplain()));
+			} else {
+				if (Util.eq(form.getSkillexplain(), workinfo.getSkillexplain())) {
+					workinfo.setSkillexplainen(form.getSkillexplainen());
+				} else {
+					if (Util.eq(form.getSkillexplainen(), workinfo.getSkillexplainen())) {
+						workinfo.setSkillexplainen(translate(form.getSkillexplain()));
+					} else {
+						workinfo.setSkillexplainen(form.getSkillexplainen());
+					}
+				}
+			}
+		} else {
+			workinfo.setSkillexplain("");
+			workinfo.setSkillexplainen("");
+		}
+
+		//是否参与过准军事单位
+		workinfo.setIsservedinrebelgroup(form.getIsservedinrebelgroup());
+		workinfo.setIsservedinrebelgroupen(form.getIsservedinrebelgroup());
+		if (Util.eq(1, form.getIsservedinrebelgroup())) {
+			workinfo.setParamilitaryunitexplain(form.getParamilitaryunitexplain());
+
+			if (Util.isEmpty(form.getParamilitaryunitexplainen())) {
+				workinfo.setParamilitaryunitexplainen(translate(form.getParamilitaryunitexplain()));
+			} else {
+				if (Util.eq(form.getParamilitaryunitexplain(), workinfo.getParamilitaryunitexplain())) {
+					workinfo.setParamilitaryunitexplainen(form.getParamilitaryunitexplainen());
+				} else {
+					if (Util.eq(form.getParamilitaryunitexplainen(), workinfo.getParamilitaryunitexplainen())) {
+						workinfo.setParamilitaryunitexplainen(translate(form.getParamilitaryunitexplain()));
+					} else {
+						workinfo.setParamilitaryunitexplainen(form.getParamilitaryunitexplainen());
+					}
+				}
+			}
+		} else {
+			workinfo.setParamilitaryunitexplain("");
+			workinfo.setParamilitaryunitexplainen("");
+		}
+
 		dbDao.update(workinfo);
+
+		//慈善组织
+		updateOrganization(form);
+
+		//服兵役信息
+		updateMilitary(form);
 
 		//出境记录
 		updateGocountryinfo(form);
 
+		TAppStaffBasicinfoEntity basic = dbDao.fetch(TAppStaffBasicinfoEntity.class, staffid.longValue());
+		//美国社会安全码
+		basic.setIssecuritynumberapply(form.getIssecuritynumberapply());
+		basic.setIssecuritynumberapplyen(form.getIssecuritynumberapply());
+		if (Util.eq(1, form.getIssecuritynumberapply())) {
+			basic.setSocialsecuritynumber(form.getSocialsecuritynumber());
+			basic.setSocialsecuritynumberen(form.getSocialsecuritynumber());
+		} else {
+			basic.setSocialsecuritynumber("");
+			basic.setSocialsecuritynumberen("");
+		}
+
+		//美国纳税人身份号码
+		basic.setIstaxpayernumberapply(form.getIstaxpayernumberapply());
+		basic.setIstaxpayernumberapplyen(form.getIstaxpayernumberapply());
+		if (Util.eq(1, form.getIstaxpayernumberapply())) {
+			basic.setTaxpayernumber(form.getTaxpayernumber());
+			basic.setTaxpayernumberen(form.getTaxpayernumber());
+		} else {
+			basic.setTaxpayernumber("");
+			basic.setTaxpayernumberen("");
+		}
+
+		dbDao.update(basic);
+
+		return JuYouResult.ok();
+	}
+
+	/**
+	 * 慈善组织信息保存
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateOrganization(TravelinfoUSForm form) {
+		Integer staffid = form.getStaffid();
+		TAppStaffOrganizationEntity organization = dbDao.fetch(TAppStaffOrganizationEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		if (form.getIsworkedcharitableorganization() == 1) {
+			if (Util.isEmpty(organization)) {
+				organization = new TAppStaffOrganizationEntity();
+				organization.setStaffid(staffid);
+				dbDao.insert(organization);
+			}
+
+			if (Util.isEmpty(form.getOrganizationnameen())) {
+				organization.setOrganizationnameen(translationHandle(1, translate(form.getOrganizationname())));
+			} else {
+				if (Util.eq(form.getOrganizationname(), organization.getOrganizationname())) {
+					organization.setOrganizationnameen(translationHandle(1, form.getOrganizationnameen()));
+				} else {
+					if (Util.eq(form.getOrganizationnameen(), organization.getOrganizationnameen())) {
+						organization.setOrganizationnameen(translationHandle(1, translate(form.getOrganizationname())));
+					} else {
+						organization.setOrganizationnameen(translationHandle(1, form.getOrganizationnameen()));
+					}
+				}
+			}
+
+			organization.setOrganizationname(form.getOrganizationname());
+			dbDao.update(organization);
+		} else {
+			if (!Util.isEmpty(organization)) {
+				dbDao.delete(organization);
+			}
+		}
+		return JuYouResult.ok();
+	}
+
+	/**
+	 * 服兵役处理
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object updateMilitary(TravelinfoUSForm form) {
+		Integer staffid = form.getStaffid();
+		TAppStaffConscientiousEntity conscientious = dbDao.fetch(TAppStaffConscientiousEntity.class,
+				Cnd.where("staffid", "=", staffid));
+		if (form.getHasservedinmilitary() == 1) {
+			if (Util.isEmpty(conscientious)) {
+				conscientious = new TAppStaffConscientiousEntity();
+				conscientious.setStaffid(staffid);
+				dbDao.insert(conscientious);
+			}
+			conscientious.setMilitarycountry(form.getMilitarycountry());
+			conscientious.setMilitarycountryen(form.getMilitarycountry());
+			conscientious.setServicestartdate(form.getServicestartdate());
+			conscientious.setServicestartdateen(form.getServicestartdate());
+			conscientious.setServiceenddate(form.getServiceenddate());
+			conscientious.setServiceenddateen(form.getServiceenddate());
+
+			//服务分支
+			if (Util.isEmpty(form.getServicebranchen())) {
+				conscientious.setServicebranchen(translationHandle(1, translate(form.getServicebranch())));
+			} else {
+				if (Util.eq(form.getServicebranch(), conscientious.getServicebranch())) {
+					conscientious.setServicebranchen(translationHandle(1, form.getOrganizationnameen()));
+				} else {
+					if (Util.eq(form.getServicebranchen(), conscientious.getServicebranchen())) {
+						conscientious.setServicebranchen(translationHandle(1, translate(form.getServicebranch())));
+					} else {
+						conscientious.setServicebranchen(translationHandle(1, form.getServicebranchen()));
+					}
+				}
+			}
+
+			conscientious.setServicebranch(form.getServicebranch());
+
+			//排名
+			if (Util.isEmpty(form.getRanken())) {
+				conscientious.setRanken(translationHandle(1, translate(form.getRank())));
+			} else {
+				if (Util.eq(form.getRank(), conscientious.getRank())) {
+					conscientious.setRanken(translationHandle(1, form.getRanken()));
+				} else {
+					if (Util.eq(form.getRanken(), conscientious.getRanken())) {
+						conscientious.setRanken(translationHandle(1, translate(form.getRank())));
+					} else {
+						conscientious.setRanken(translationHandle(1, form.getRanken()));
+					}
+				}
+			}
+
+			conscientious.setRank(form.getRank());
+
+			//军事专业
+			if (Util.isEmpty(form.getMilitaryspecialtyen())) {
+				conscientious.setMilitaryspecialtyen(translationHandle(1, translate(form.getMilitaryspecialty())));
+			} else {
+				if (Util.eq(form.getMilitaryspecialty(), conscientious.getMilitaryspecialty())) {
+					conscientious.setMilitaryspecialtyen(translationHandle(1, form.getMilitaryspecialtyen()));
+				} else {
+					if (Util.eq(form.getMilitaryspecialtyen(), conscientious.getMilitaryspecialtyen())) {
+						conscientious.setMilitaryspecialtyen(translationHandle(1,
+								translate(form.getMilitaryspecialty())));
+					} else {
+						conscientious.setMilitaryspecialtyen(translationHandle(1, form.getMilitaryspecialtyen()));
+					}
+				}
+			}
+
+			conscientious.setMilitaryspecialty(form.getMilitaryspecialty());
+
+			dbDao.update(conscientious);
+
+		} else {
+			if (!Util.isEmpty(conscientious)) {
+				dbDao.delete(conscientious);
+			}
+		}
 		return JuYouResult.ok();
 	}
 
@@ -1179,6 +2175,9 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		Integer staffid = form.getStaffid();
 		TAppStaffGousinfoEntity gousinfo = dbDao.fetch(TAppStaffGousinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
+		//美国驾照信息
+		TAppStaffDriverinfoEntity driverinfo = dbDao.fetch(TAppStaffDriverinfoEntity.class,
+				Cnd.where("staffid", "=", staffid));
 		if (form.getHasbeeninus() == 1) {//去过美国，则添加或者修改
 			if (Util.isEmpty(gousinfo)) {
 				gousinfo = new TAppStaffGousinfoEntity();
@@ -1187,16 +2186,40 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 			}
 			if (!Util.isEmpty(form.getArrivedate())) {
 				gousinfo.setArrivedate(form.getArrivedate());
-				gousinfo.setArrivedateen(form.getArrivedateen());
+				gousinfo.setArrivedateen(form.getArrivedate());
+			} else {
+				gousinfo.setArrivedate(null);
+				gousinfo.setArrivedateen(null);
 			}
 			gousinfo.setDateunit(form.getDateunit());
-			gousinfo.setDateuniten(form.getDateuniten());
+			gousinfo.setDateuniten(form.getDateunit());
 			gousinfo.setStaydays(form.getStaydays());
-			gousinfo.setStaydaysen(form.getStaydaysen());
+			gousinfo.setStaydaysen(form.getStaydays());
 			dbDao.update(gousinfo);
+
+			if (form.getHasdriverlicense() == 1) {//有美国驾照，添加或者修改
+				if (Util.isEmpty(driverinfo)) {
+					driverinfo = new TAppStaffDriverinfoEntity();
+					driverinfo.setStaffid(staffid);
+					dbDao.insert(driverinfo);
+				}
+				driverinfo.setDriverlicensenumber(form.getDriverlicensenumber());
+				driverinfo.setWitchstateofdriver(form.getWitchstateofdriver());
+				driverinfo.setDriverlicensenumberen(form.getDriverlicensenumber());
+				driverinfo.setWitchstateofdriveren(form.getWitchstateofdriver());
+				dbDao.update(driverinfo);
+			} else {
+				if (!Util.isEmpty(driverinfo)) {
+					dbDao.delete(driverinfo);
+				}
+			}
+
 		} else {
 			if (!Util.isEmpty(gousinfo)) {
 				dbDao.delete(gousinfo);
+			}
+			if (!Util.isEmpty(driverinfo)) {
+				dbDao.delete(driverinfo);
 			}
 		}
 		return null;
@@ -1247,39 +2270,436 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		TAppStaffPrevioustripinfoEntity tripinfo = dbDao.fetch(TAppStaffPrevioustripinfoEntity.class,
 				Cnd.where("staffid", "=", staffid));
 		tripinfo.setCostpayer(form.getCostpayer());
+
+		//支付人相关保存
+		//自己
+		if (Util.eq(1, form.getCostpayer())) {
+			tripinfo.setPayaddress(null);
+			tripinfo.setPayaddressen(null);
+			tripinfo.setPayaddressissamewithyou(1);
+			tripinfo.setPaycity(null);
+			tripinfo.setPaycityen(null);
+			tripinfo.setPaycountry("中国");
+			tripinfo.setPaycountryen("CHIN");
+			tripinfo.setPaymail(null);
+			tripinfo.setPayprovince(null);
+			tripinfo.setPayprovinceen(null);
+			tripinfo.setPayrelationwithyou(1);
+			tripinfo.setPaytelephone(null);
+
+			tripinfo.setComname(null);
+			tripinfo.setComnameen(null);
+			tripinfo.setComrelationwithyou(null);
+			tripinfo.setComrelationwithyouen(null);
+			tripinfo.setComtelephone(null);
+
+			tripinfo.setPayfirstname(null);
+			tripinfo.setPayfirstnameen(null);
+			tripinfo.setPaylastname(null);
+			tripinfo.setPaylastnameen(null);
+
+		} else if (Util.eq(2, form.getCostpayer())) {//其他人
+
+			tripinfo.setComname(null);
+			tripinfo.setComnameen(null);
+			tripinfo.setComrelationwithyou(null);
+			tripinfo.setComrelationwithyouen(null);
+			tripinfo.setComtelephone(null);
+
+			tripinfo.setPayfirstname(form.getPayfirstname());
+			tripinfo.setPayfirstnameen(form.getPayfirstnameen());
+			tripinfo.setPaylastname(form.getPaylastname());
+			tripinfo.setPaylastnameen(form.getPaylastnameen());
+			tripinfo.setPaytelephone(form.getPaytelephone());
+			tripinfo.setPaymail(form.getPaymail());
+			tripinfo.setPayrelationwithyou(form.getPayrelationwithyou());
+			tripinfo.setPayaddressissamewithyou(form.getPayaddressissamewithyou());
+
+			if (Util.eq(1, form.getPayaddressissamewithyou())) {
+				tripinfo.setPaycountry("中国");
+				tripinfo.setPaycountryen("CHIN");
+				tripinfo.setPayprovince(null);
+				tripinfo.setPayprovinceen(null);
+				tripinfo.setPaycity(null);
+				tripinfo.setPaycityen(null);
+				tripinfo.setPayaddress(null);
+				tripinfo.setPayaddressen(null);
+			} else {
+				tripinfo.setPaycountry(form.getPaycountry());
+
+				if (!Util.isEmpty(form.getPaycountry())) {
+					String issuedplace = form.getPaycountry();
+					try {
+						tripinfo.setPaycountryen(getCountrycode(issuedplace));
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+
+				} else {
+					tripinfo.setPaycountryen("CHIN");
+				}
+
+				tripinfo.setPayprovince(form.getPayprovince());
+				tripinfo.setPaycity(form.getPaycity());
+
+				//中文翻译成拼音并大写工具
+				PinyinTool tool = new PinyinTool();
+				if (!Util.isEmpty(form.getPayprovince())) {
+					String issuedplace = form.getPayprovince();
+					if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+						tripinfo.setPayprovinceen("NEI MONGOL");
+					} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+						tripinfo.setPayprovinceen("SHAANXI");
+					} else {
+						if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+							issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+						}
+						if (issuedplace.endsWith("自治区")) {
+							issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+						}
+						if (issuedplace.endsWith("区")) {
+							issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+						}
+						try {
+							tripinfo.setPayprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+						} catch (BadHanyuPinyinOutputFormatCombination e1) {
+							e1.printStackTrace();
+						}
+					}
+
+				} else {
+					tripinfo.setPayprovinceen(null);
+				}
+
+				if (!Util.isEmpty(form.getPaycity())) {
+					String issuedplace = form.getPaycity();
+					try {
+						tripinfo.setPaycityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+					} catch (BadHanyuPinyinOutputFormatCombination e1) {
+						e1.printStackTrace();
+					}
+
+				} else {
+					tripinfo.setPaycityen(null);
+				}
+
+				if (Util.isEmpty(form.getPayaddressen())) {
+					tripinfo.setPayaddressen(translate(form.getPayaddress()));
+				} else {
+					if (Util.eq(form.getPayaddress(), tripinfo.getPayaddress())) {
+						tripinfo.setPayaddressen(form.getPayaddressen());
+					} else {
+						if (Util.eq(form.getPayaddressen(), tripinfo.getPayaddressen())) {
+							tripinfo.setPayaddressen(translate(form.getPayaddress()));
+						} else {
+							tripinfo.setPayaddressen(form.getPayaddressen());
+						}
+					}
+				}
+
+				tripinfo.setPayaddress(form.getPayaddress());
+			}
+		} else {//公司/组织
+
+			tripinfo.setPayfirstname(null);
+			tripinfo.setPayfirstnameen(null);
+			tripinfo.setPaylastname(null);
+			tripinfo.setPaylastnameen(null);
+
+			tripinfo.setPaymail(null);
+			tripinfo.setPaytelephone(null);
+			tripinfo.setPayrelationwithyou(1);
+			tripinfo.setPayaddressissamewithyou(1);
+
+			if (Util.isEmpty(form.getComnameen())) {
+				tripinfo.setComnameen(translationHandle(2, translate(form.getComname())));
+			} else {
+				if (Util.eq(form.getComname(), tripinfo.getComname())) {
+					tripinfo.setComnameen(translationHandle(2, form.getComnameen()));
+				} else {
+					if (Util.eq(form.getComnameen(), tripinfo.getComnameen())) {
+						tripinfo.setComnameen(translationHandle(2, translate(form.getComname())));
+					} else {
+						tripinfo.setComnameen(translationHandle(2, form.getComnameen()));
+					}
+				}
+			}
+
+			tripinfo.setComname(form.getComname());
+
+			if (Util.isEmpty(form.getComrelationwithyouen())) {
+				tripinfo.setComrelationwithyouen(translate(form.getComrelationwithyou()));
+			} else {
+				if (Util.eq(form.getComrelationwithyou(), tripinfo.getComrelationwithyou())) {
+					tripinfo.setComrelationwithyouen(form.getComrelationwithyouen());
+				} else {
+					if (Util.eq(form.getComrelationwithyouen(), tripinfo.getComrelationwithyouen())) {
+						tripinfo.setComrelationwithyouen(translate(form.getComrelationwithyou()));
+					} else {
+						tripinfo.setComrelationwithyouen(form.getComrelationwithyouen());
+					}
+				}
+			}
+
+			tripinfo.setComrelationwithyou(form.getComrelationwithyou());
+
+			tripinfo.setComtelephone(form.getComtelephone());
+
+			tripinfo.setPaycountry(form.getPaycountry());
+
+			if (!Util.isEmpty(form.getPaycountry())) {
+				String issuedplace = form.getPaycountry();
+				try {
+					tripinfo.setPaycountryen(getCountrycode(issuedplace));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+			} else {
+				tripinfo.setPaycountryen("CHIN");
+			}
+
+			tripinfo.setPayprovince(form.getPayprovince());
+			tripinfo.setPaycity(form.getPaycity());
+
+			//中文翻译成拼音并大写工具
+			PinyinTool tool = new PinyinTool();
+			if (!Util.isEmpty(form.getPayprovince())) {
+				String issuedplace = form.getPayprovince();
+				if (Util.eq("内蒙古", issuedplace) || Util.eq("内蒙古自治区", issuedplace)) {
+					tripinfo.setPayprovinceen("NEI MONGOL");
+				} else if (Util.eq("陕西", issuedplace) || Util.eq("陕西省", issuedplace)) {
+					tripinfo.setPayprovinceen("SHAANXI");
+				} else {
+					if (issuedplace.endsWith("省") || issuedplace.endsWith("市")) {
+						issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+					}
+					if (issuedplace.endsWith("自治区")) {
+						issuedplace = issuedplace.substring(0, issuedplace.length() - 3);
+					}
+					if (issuedplace.endsWith("区")) {
+						issuedplace = issuedplace.substring(0, issuedplace.length() - 1);
+					}
+					try {
+						tripinfo.setPayprovinceen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+					} catch (BadHanyuPinyinOutputFormatCombination e1) {
+						e1.printStackTrace();
+					}
+				}
+
+			} else {
+				tripinfo.setPayprovinceen(null);
+			}
+
+			if (!Util.isEmpty(form.getPaycity())) {
+				String issuedplace = form.getPaycity();
+				try {
+					tripinfo.setPaycityen(tool.toPinYin(issuedplace, "", Type.UPPERCASE));
+				} catch (BadHanyuPinyinOutputFormatCombination e1) {
+					e1.printStackTrace();
+				}
+
+			} else {
+				tripinfo.setPaycityen(null);
+			}
+
+			if (Util.isEmpty(form.getPayaddressen())) {
+				tripinfo.setPayaddressen(translate(form.getPayaddress()));
+			} else {
+				if (Util.eq(form.getPayaddress(), tripinfo.getPayaddress())) {
+					tripinfo.setPayaddressen(form.getPayaddressen());
+				} else {
+					if (Util.eq(form.getPayaddressen(), tripinfo.getPayaddressen())) {
+						tripinfo.setPayaddressen(translate(form.getPayaddress()));
+					} else {
+						tripinfo.setPayaddressen(form.getPayaddressen());
+					}
+				}
+			}
+
+			tripinfo.setPayaddress(form.getPayaddress());
+
+		}
+
 		tripinfo.setHasbeeninus(form.getHasbeeninus());
-		tripinfo.setHasdriverlicense(form.getHasdriverlicense());
+
+		if (form.getHasbeeninus() == 2) {
+			tripinfo.setHasdriverlicense(2);
+			tripinfo.setHasdriverlicenseen(2);
+		} else {
+			tripinfo.setHasdriverlicense(form.getHasdriverlicense());
+			tripinfo.setHasdriverlicenseen(form.getHasdriverlicense());
+
+		}
+
 		tripinfo.setIsissuedvisa(form.getIsissuedvisa());
 		if (form.getIsissuedvisa() == 1) {
 			tripinfo.setIssueddate(form.getIssueddate());
+			tripinfo.setIssueddateen(form.getIssueddate());
 			tripinfo.setVisanumber(form.getVisanumber());
+			tripinfo.setVisanumberen(form.getVisanumber());
+
+			//radio
+			tripinfo.setIsapplyingsametypevisa(form.getIsapplyingsametypevisa());
+			tripinfo.setIsapplyingsametypevisaen(form.getIsapplyingsametypevisa());
+			tripinfo.setIstenprinted(form.getIstenprinted());
+			tripinfo.setIstenprinteden(form.getIstenprinted());
+			tripinfo.setIslost(form.getIslost());
+			tripinfo.setIslosten(form.getIslost());
+
+			//丢失年份和说明
+			if (form.getIslost() == 1) {
+				tripinfo.setLostyear(translationHandle(5, form.getLostyear()));
+				tripinfo.setLostyearen(translationHandle(5, form.getLostyear()));
+
+				if (Util.isEmpty(form.getLostexplainen())) {//如果没有英文，则直接翻译
+					tripinfo.setLostexplainen(translate(form.getLostexplain()));
+				} else {
+					if (Util.eq(form.getLostexplain(), tripinfo.getLostexplain())) {//英文不为空，中文不变，直接保存英文
+						tripinfo.setLostexplainen(form.getLostexplainen());
+					} else {//英文不为空，中文改变，分两种情况：一种英文不变，说明没翻译，需要翻译，另一种英文改变，直接保存英文
+						if (Util.eq(form.getLostexplainen(), tripinfo.getLostexplainen())) {
+							tripinfo.setLostexplainen(translate(form.getLostexplain()));
+						} else {
+							tripinfo.setLostexplainen(form.getLostexplainen());
+						}
+					}
+				}
+
+				tripinfo.setLostexplain(form.getLostexplain());
+
+			} else {
+				tripinfo.setLostyear("");
+				tripinfo.setLostyearen("");
+				tripinfo.setLostexplain("");
+				tripinfo.setLostexplainen("");
+			}
+
+			tripinfo.setIscancelled(form.getIscancelled());
+			tripinfo.setIscancelleden(form.getIscancelled());
+
+			//取消说明
+			if (form.getIscancelled() == 1) {
+
+				if (Util.isEmpty(form.getCancelexplainen())) {//如果没有英文，则直接翻译
+					tripinfo.setCancelexplainen(translate(form.getCancelexplain()));
+				} else {
+					if (Util.eq(form.getCancelexplain(), tripinfo.getCancelexplain())) {//英文不为空，中文不变，直接保存英文
+						tripinfo.setCancelexplainen(form.getCancelexplainen());
+					} else {//英文不为空，中文改变，分两种情况：一种英文不变，说明没翻译，需要翻译，另一种英文改变，直接保存英文
+						if (Util.eq(form.getCancelexplainen(), tripinfo.getCancelexplainen())) {
+							tripinfo.setCancelexplainen(translate(form.getCancelexplain()));
+						} else {
+							tripinfo.setCancelexplainen(form.getCancelexplainen());
+						}
+					}
+				}
+
+				tripinfo.setCancelexplain(form.getCancelexplain());
+
+			} else {
+				tripinfo.setCancelexplain("");
+				tripinfo.setCancelexplainen("");
+			}
+
 		} else {
 			tripinfo.setIssueddate(null);
+			tripinfo.setIssueddateen(null);
 			tripinfo.setVisanumber("");
+			tripinfo.setVisanumberen("");
+
+			//radio
+			tripinfo.setIsapplyingsametypevisa(2);
+			tripinfo.setIsapplyingsametypevisaen(2);
+			tripinfo.setIstenprinted(2);
+			tripinfo.setIstenprinteden(2);
+			tripinfo.setIslost(2);
+			tripinfo.setIslosten(2);
+			tripinfo.setIscancelled(2);
+			tripinfo.setIscancelleden(2);
+
+			tripinfo.setLostyear("");
+			tripinfo.setLostyearen("");
+			tripinfo.setLostexplain("");
+			tripinfo.setLostexplainen("");
+			tripinfo.setCancelexplain("");
+			tripinfo.setCancelexplainen("");
 		}
-		tripinfo.setIsapplyingsametypevisa(form.getIsapplyingsametypevisa());
+
+		if (form.getIsrefused() == 1) {
+			if (Util.isEmpty(form.getRefusedexplainen())) {//如果没有英文，则直接翻译
+				tripinfo.setRefusedexplainen(translate(form.getRefusedexplain()));
+			} else {
+				if (Util.eq(form.getRefusedexplain(), tripinfo.getRefusedexplain())) {//英文不为空，中文不变，直接保存英文
+					tripinfo.setRefusedexplainen(form.getRefusedexplainen());
+				} else {//英文不为空，中文改变，分两种情况：一种英文不变，说明没翻译，需要翻译，另一种英文改变，直接保存英文
+					if (Util.eq(form.getRefusedexplainen(), tripinfo.getRefusedexplainen())) {
+						tripinfo.setRefusedexplainen(translate(form.getRefusedexplain()));
+					} else {
+						tripinfo.setRefusedexplainen(form.getRefusedexplainen());
+					}
+				}
+			}
+
+			tripinfo.setRefusedexplain(form.getRefusedexplain());
+		} else {
+			tripinfo.setRefusedexplain("");
+			tripinfo.setRefusedexplainen("");
+		}
+
+		/*tripinfo.setIsapplyingsametypevisa(form.getIsapplyingsametypevisa());
 		tripinfo.setIstenprinted(form.getIstenprinted());
 		tripinfo.setIslost(form.getIslost());
-		tripinfo.setIscancelled(form.getIscancelled());
+		tripinfo.setIscancelled(form.getIscancelled());*/
 		tripinfo.setIsrefused(form.getIsrefused());
-		tripinfo.setRefusedexplain(form.getRefusedexplain());
+
+		//tripinfo.setRefusedexplainen(translate(form.getRefusedexplain()));
+
 		tripinfo.setIsfiledimmigrantpetition(form.getIsfiledimmigrantpetition());
-		tripinfo.setEmigrationreason(form.getEmigrationreason());
-		tripinfo.setImmigrantpetitionexplain(form.getImmigrantpetitionexplain());
+
+		if (form.getIsfiledimmigrantpetition() == 1) {
+			tripinfo.setEmigrationreason(form.getEmigrationreason());
+			tripinfo.setEmigrationreasonen(form.getEmigrationreason());
+
+			if (Util.isEmpty(form.getImmigrantpetitionexplainen())) {
+				tripinfo.setImmigrantpetitionexplainen(translate(form.getImmigrantpetitionexplain()));
+			} else {
+				if (Util.eq(form.getImmigrantpetitionexplain(), tripinfo.getImmigrantpetitionexplain())) {
+					tripinfo.setImmigrantpetitionexplainen(form.getImmigrantpetitionexplainen());
+				} else {
+					if (Util.eq(form.getImmigrantpetitionexplainen(), tripinfo.getImmigrantpetitionexplainen())) {
+						tripinfo.setImmigrantpetitionexplainen(translate(form.getImmigrantpetitionexplain()));
+					} else {
+						tripinfo.setImmigrantpetitionexplainen(form.getImmigrantpetitionexplainen());
+					}
+				}
+			}
+
+			tripinfo.setImmigrantpetitionexplain(form.getImmigrantpetitionexplain());
+		} else {
+			tripinfo.setEmigrationreason(0);
+			tripinfo.setEmigrationreasonen(0);
+			tripinfo.setImmigrantpetitionexplain("");
+			tripinfo.setImmigrantpetitionexplainen("");
+		}
+
+		//tripinfo.setImmigrantpetitionexplainen(translate(form.getImmigrantpetitionexplain()));
+
 		//英文
 		tripinfo.setCostpayeren(form.getCostpayer());
 		tripinfo.setHasbeeninusen(form.getHasbeeninus());
-		tripinfo.setHasdriverlicenseen(form.getHasdriverlicense());
+		//tripinfo.setHasdriverlicenseen(form.getHasdriverlicense());
 		tripinfo.setIsissuedvisaen(form.getIsissuedvisa());
-		tripinfo.setIsapplyingsametypevisaen(form.getIsapplyingsametypevisa());
+		/*tripinfo.setIsapplyingsametypevisaen(form.getIsapplyingsametypevisa());
 		tripinfo.setIstenprinteden(form.getIstenprinted());
 		tripinfo.setIslosten(form.getIslost());
-		tripinfo.setIscancelleden(form.getIscancelled());
+		tripinfo.setIscancelleden(form.getIscancelled());*/
 		tripinfo.setIsrefuseden(form.getIsrefused());
 		tripinfo.setIsfiledimmigrantpetitionen(form.getIsfiledimmigrantpetition());
-		tripinfo.setEmigrationreasonen(form.getEmigrationreason());
-		tripinfo.setRefusedexplainen(form.getRefusedexplainen());
-		tripinfo.setImmigrantpetitionexplainen(form.getImmigrantpetitionexplainen());
+		//tripinfo.setEmigrationreasonen(form.getEmigrationreason());
+		//tripinfo.setRefusedexplainen(form.getRefusedexplainen());
+		//tripinfo.setImmigrantpetitionexplainen(form.getImmigrantpetitionexplainen());
+
 		dbDao.update(tripinfo);
 		return null;
 	}
@@ -1337,10 +2757,25 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		String result = "";
 		if (!Util.isEmpty(str)) {
 			try {
-				result = TranslateUtil.translate(str, "en");
+				TransApi api = new TransApi();
+				result = api.getTransResult(str, "auto", "en");
+				System.out.println(result);
+				JSONObject resultStr = new JSONObject(result);
+				JSONArray resultArray = (JSONArray) resultStr.get("trans_result");
+				List<BaidutranslateEntity> resultList = com.alibaba.fastjson.JSONObject.parseArray(
+						resultArray.toString(), BaidutranslateEntity.class);
+
+				result = resultList.get(0).getDst();
+				System.out.println("翻译内容为：" + str + ",翻译结果为result：" + result);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			/*try {
+				result = TranslateUtil.translate(str, "en");
+				System.out.println("翻译内容为：" + str + "，翻译结果为result:" + result);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}*/
 		} else {
 			System.out.println("没有内容你让我翻译什么啊，神经病啊o(╥﹏╥)o");
 		}
@@ -1406,20 +2841,26 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	public Object selectCity(String province, String searchstr) {
-		List<TIdcardEntity> cityList = dbDao.query(
-				TIdcardEntity.class,
-				Cnd.where("province", "=", province).and("city", "!=", "")
-						.and("city", "like", "%" + Strings.trim(searchstr) + "%").groupBy("city"), null);
-
 		List<TIdcardEntity> list = new ArrayList<>();
-		if (!Util.isEmpty(cityList) && cityList.size() >= 5) {
-			for (int i = 0; i < 5; i++) {
-				list.add(cityList.get(i));
-			}
-			return list;
+		if (province.endsWith("市")) {
+			TIdcardEntity fetch = dbDao.fetch(TIdcardEntity.class, Cnd.where("province", "=", province));
+			fetch.setCity(province);
+			list.add(fetch);
 		} else {
-			return cityList;
+			List<TIdcardEntity> cityList = dbDao.query(
+					TIdcardEntity.class,
+					Cnd.where("province", "=", province).and("city", "!=", "")
+							.and("city", "like", "%" + Strings.trim(searchstr) + "%").groupBy("city"), null);
+
+			if (!Util.isEmpty(cityList) && cityList.size() >= 5) {
+				for (int i = 0; i < 5; i++) {
+					list.add(cityList.get(i));
+				}
+			} else {
+				list.addAll(cityList);
+			}
 		}
+		return list;
 	}
 
 	/**
@@ -1452,6 +2893,72 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 	}
 
 	/**
+	 * 美国城市模糊查询
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param searchstr
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object selectUScity(String searchstr) {
+		List<TCityUsEntity> stateList = new ArrayList<>();
+		List<TCityUsEntity> state = dbDao.query(TCityUsEntity.class,
+				Cnd.where("cityname", "like", "%" + Strings.trim(searchstr) + "%"), null);
+		for (TCityUsEntity tState : state) {
+			if (!stateList.contains(tState)) {
+				stateList.add(tState);
+			}
+		}
+		List<TCityUsEntity> list = new ArrayList<>();
+		if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(stateList.get(i));
+			}
+			return list;
+		} else {
+			return stateList;
+		}
+	}
+
+	/**
+	 * 美国州城市联动模糊查询
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param searchstr
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object selectUSstateandcity(int stateid, String searchstr) {
+
+		String sqlStr = sqlManager.get("orderUS_getSomeCity");
+		Sql statesql = Sqls.create(sqlStr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("stateid", "=", stateid);
+		cnd.and("cityname", "like", "%" + Strings.trim(searchstr) + "%");
+		List<Record> state = dbDao.query(statesql, cnd, null);
+
+		List<Record> stateList = new ArrayList<>();
+
+		for (Record record : state) {
+			if (!stateList.contains(record)) {
+				stateList.add(record);
+			}
+		}
+
+		List<Record> list = new ArrayList<>();
+		if (!Util.isEmpty(stateList) && stateList.size() >= 5) {
+			for (int i = 0; i < 5; i++) {
+				list.add(stateList.get(i));
+			}
+			return list;
+		} else {
+			return stateList;
+		}
+	}
+
+	/**
 	 * 根据国家名称查询对应的国家ID
 	 * TODO(这里用一句话描述这个方法的作用)
 	 * <p>
@@ -1468,5 +2975,162 @@ public class NeworderUSViewService extends BaseService<TOrderUsEntity> {
 		} else {
 			return 0;
 		}
+	}
+
+	public Object translate(String type, String str) {
+		String result = "";
+		try {
+			result = TranslateUtil.translate(str, "en");
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		return result;
+	}
+
+	/**
+	 * 特殊字符处理
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param translation
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public String translationHandle(int type, String translation) {
+		StringBuffer result = new StringBuffer();
+		if (!Util.isEmpty(translation)) {
+			//translation = translate(translation);
+			if (type == 1) {//工作教育信息单位、学校名称,职位,慈善机构名称,服兵役相关内容特殊字符处理
+				//先把连续空格转成单空格
+				translation = translation.replaceAll("\\s+", " ").trim();
+				//去掉不合格的字符
+			} else if (type == 2) {//地址
+
+			} else if (type == 3) {//电话
+
+			} else if (type == 4) {//职位、职责
+
+			} else if (type == 5) {//美国签证丢失年份
+
+			} else {
+
+			}
+			for (int i = 0; i < translation.length(); i++) {
+				char character = translation.charAt(i);
+				boolean isLegal = isLegal(type, character);
+				if (isLegal) {
+					result.append(character);
+				}
+			}
+		}
+
+		return result.toString();
+	}
+
+	/**
+	 * 正则表达式匹配特殊字符
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param character
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public boolean isLegal(int type, char character) {
+		boolean isLegal = true;
+
+		if (type == 1) {//工作教育信息单位、学校名称,职位,慈善组织，只允许数字，字母，-,',&和单空格
+			isLegal = Pattern.compile("^[ A-Za-z0-9-&']+$").matcher(String.valueOf(character)).find();
+		} else if (type == 2) {//地址特殊字符处理
+			isLegal = Pattern.compile("^[ A-Za-z0-9-&'#$*%;!,?.()<>@^]+$").matcher(String.valueOf(character)).find();
+		} else if (type == 3) {//电话号码特殊字符处理，只允许数字和+
+			isLegal = Pattern.compile("^[0-9+]+$").matcher(String.valueOf(character)).find();
+		} else if (type == 4) {//专业名称  暂时无限制
+			//isLegal = Pattern.compile("^[ A-Za-z0-9]+$").matcher(String.valueOf(character)).find();
+		} else if (type == 5) {//美国签证丢失年份处理，只允许数字
+			isLegal = Pattern.compile("^[0-9]+$").matcher(String.valueOf(character)).find();
+		} else {
+			isLegal = Pattern.compile("^[A-Za-z]+$").matcher(String.valueOf(character)).find();
+		}
+		return isLegal;
+	}
+
+	/**
+	 * 根据城市名称获取酒店下拉
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param plancity
+	 * @param searchstr
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object selectUSHotel(String plancity, String searchstr) {
+
+		List<THotelUsEntity> hotelList = new ArrayList<>();
+		TCityUsEntity city = dbDao.fetch(TCityUsEntity.class, Cnd.where("cityname", "=", plancity));
+		if (!Util.isEmpty(city)) {
+			List<THotelUsEntity> hotels = dbDao.query(THotelUsEntity.class,
+					Cnd.where("cityid", "=", city.getId()).and("nameen", "like", "%" + Strings.trim(searchstr) + "%"),
+					null);
+
+			for (THotelUsEntity hotel : hotels) {
+				if (!hotelList.contains(hotel)) {
+					hotelList.add(hotel);
+				}
+			}
+
+			List<THotelUsEntity> list = new ArrayList<>();
+			if (!Util.isEmpty(hotelList) && hotelList.size() >= 5) {
+				for (int i = 0; i < 5; i++) {
+					list.add(hotelList.get(i));
+				}
+				return list;
+			} else {
+				return hotelList;
+			}
+		} else {
+			return hotelList;
+		}
+	}
+
+	/**
+	 * 通过酒店名称查询酒店地址
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param plancity
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object getHoteladdress(String hotelname) {
+		Map<String, String> result = Maps.newHashMap();
+		String address = "";
+		String telephone = "";
+		THotelUsEntity hotel = dbDao.fetch(THotelUsEntity.class, Cnd.where("nameen", "=", hotelname));
+		if (!Util.isEmpty(hotel)) {
+			address = hotel.getAddressen();
+			telephone = hotel.getTelephone();
+		}
+		result.put("address", address);
+		result.put("telephone", telephone);
+		return result;
+	}
+
+	public Object autoCalculateBackDate(Date gotripdate, Integer stayday) {
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		return format.format(DateUtil.addDay(gotripdate, stayday - 1));
+	}
+
+	public Object autoCalCulateStayday(Date gotripdate, Date returndate) {
+		return DateUtil.daysBetween(gotripdate, returndate) + 1;
+	}
+
+	public Object autoCalculategoDate(Date gotripdate, Integer stayday) {
+		DateFormat format = new SimpleDateFormat(DateUtil.FORMAT_YYYY_MM_DD);
+		return format.format(DateUtil.addDay(gotripdate, -stayday));
 	}
 }

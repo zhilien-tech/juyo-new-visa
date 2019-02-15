@@ -280,18 +280,25 @@ public class OrderUSModule {
 	@GET
 	@Ok("jsp")
 	public Object autofillError(@Param("errData") String errData) {
-		Map<String, Object> result = Maps.newHashMap();
-		result.put("errMsg", errData);
-		return result;
+		return errData;
 	}
 
 	/*
-	 * 自动填表
+	 * 预检查
 	 */
 	@At
 	@POST
-	public Object autofill(@Param("orderid") int orderid, HttpSession session) {
-		return orderUSViewService.autofill(orderid, session);
+	public Object preautofill(@Param("orderid") int orderid, HttpSession session) {
+		return orderUSViewService.preautofill(orderid, session);
+	}
+
+	/*
+	 * 正式填写
+	 */
+	@At
+	@POST
+	public Object autofill(@Param("orderid") int orderid) {
+		return orderUSViewService.formallyfill(orderid);
 	}
 
 	/**
@@ -426,8 +433,8 @@ public class OrderUSModule {
 	 */
 	@At
 	@GET
-	public Object downloadFile(@Param("orderid") int orderid, HttpServletResponse response) {
-		return orderUSViewService.downloadFile(orderid, response);
+	public Object downloadFile(@Param("orderid") int orderid, @Param("type") int type, HttpServletResponse response) {
+		return orderUSViewService.downloadFile(orderid, type, response);
 	}
 
 	/**
@@ -436,8 +443,17 @@ public class OrderUSModule {
 	@At
 	@GET
 	@Ok("jsp")
-	public Object toErrorphoto(@Param("errorurl") String errorurl) {
-		return errorurl;
+	public Object toErrorphoto(@Param("errorurl") String errorurl, @Param("type") int type) {
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("imgurl", errorurl);
+		result.put("imgtype", type);
+		return result;
 		//return orderUSViewService.toErrorphoto(errorurl);
+	}
+
+	@At
+	@POST
+	public Object isAutofilled(@Param("orderid") int orderid, @Param("staffid") int staffid) {
+		return orderUSViewService.isAutofilled(orderid, staffid);
 	}
 }

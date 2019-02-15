@@ -20,7 +20,7 @@ import com.juyo.visa.common.actionfilter.LoginFilter;
 import com.uxuexi.core.web.view.WeViewMaker;
 
 @IocBy(type = ComboIocProvider.class, args = { "*org.nutz.ioc.loader.json.JsonLoader", "webconfig/",
-		"*org.nutz.ioc.loader.annotation.AnnotationIocLoader", "com.juyo.visa" })
+		"*org.nutz.ioc.loader.annotation.AnnotationIocLoader", "com.juyo.visa", "*quartz" })
 @Encoding(input = "UTF-8", output = "UTF-8")
 @Modules(scanPackage = true)
 @Localization("msg")
@@ -51,11 +51,13 @@ public class MainModule {
 	public Object menu() {
 		return null;
 	}
+
 	@At("/public/header")
 	@Ok("jsp:public.header")
 	public Object header() {
 		return null;
 	}
+
 	@At("/public/aside")
 	@Ok("jsp:public.aside")
 	public Object aside() {

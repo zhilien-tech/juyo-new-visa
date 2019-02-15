@@ -1677,17 +1677,24 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		addForm.setComid(loginComId);
 		//addForm.setUserid(userId);
 		//addForm.setOpid(userId);
-		addForm.setIsidentificationnumberapply(IsYesOrNoEnum.YES.intKey());
-		addForm.setIsidentificationnumberapplyen(IsYesOrNoEnum.YES.intKey());
-		addForm.setIssecuritynumberapply(IsYesOrNoEnum.YES.intKey());
-		addForm.setIssecuritynumberapplyen(IsYesOrNoEnum.YES.intKey());
-		addForm.setIstaxpayernumberapply(IsYesOrNoEnum.YES.intKey());
-		addForm.setIstaxpayernumberapplyen(IsYesOrNoEnum.YES.intKey());
+		addForm.setIsidentificationnumberapply(2);
+		addForm.setIsidentificationnumberapplyen(2);
+		addForm.setIssecuritynumberapply(2);
+		addForm.setIssecuritynumberapplyen(2);
+		addForm.setIstaxpayernumberapply(2);
+		addForm.setIstaxpayernumberapplyen(2);
 		addForm.setIsmailsamewithlive(IsYesOrNoEnum.YES.intKey());
 		addForm.setIsmailsamewithliveen(IsYesOrNoEnum.YES.intKey());
+
 		//国家默认为中国
 		addForm.setNationality("中国");
 		addForm.setNationalityen("China");
+
+		addForm.setBirthcountry("中国");
+		addForm.setBirthcountryen("China");
+
+		addForm.setMailcountry("中国");
+		addForm.setMailcountryen("China");
 
 		//中文翻译成拼音并大写工具
 		PinyinTool tool = new PinyinTool();
@@ -1732,7 +1739,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		staffPassport.setIsrememberpassportnum(2);//是否记得丢失的护照号码，默认为2不记得
 		staffPassport.setIsrememberpassportnumen(2);//是否记得丢失的护照号码，默认为2不记得
 		staffPassport.setLostpassportnum("不知道");
-		staffPassport.setLostpassportnum("I do not know");
+		staffPassport.setLostpassportnumen("I do not know");
 		TAppStaffPassportEntity passportEntity = dbDao.insert(staffPassport);
 		Integer passportId = passportEntity.getId();
 
@@ -1769,6 +1776,12 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		previUSTripInfo.setIsrefused(DEFAULT_IS_NO);
 		previUSTripInfo.setIslegalpermanentresident(DEFAULT_IS_NO);
 		previUSTripInfo.setIsfiledimmigrantpetition(DEFAULT_IS_NO);
+		previUSTripInfo.setCostpayer(1);
+		previUSTripInfo.setCostpayeren(1);
+		previUSTripInfo.setPaycountry("中国");
+		previUSTripInfo.setPaycountryen("CHIN");
+		previUSTripInfo.setPayaddressissamewithyou(1);
+		previUSTripInfo.setPayrelationwithyou(1);
 
 		previUSTripInfo.setHasbeeninusen(DEFAULT_IS_NO);
 		previUSTripInfo.setHasdriverlicenseen(DEFAULT_IS_NO);
@@ -1833,7 +1846,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		workEducationInfo.setCountryen(chinaId);
 
 		workEducationInfo.setIsemployed(DEFAULT_IS_NO);
-		workEducationInfo.setIssecondarylevel(DEFAULT_IS_NO);
+		workEducationInfo.setIssecondarylevel(DEFAULT_IS_YES);
 		workEducationInfo.setIsclan(DEFAULT_IS_NO);
 		workEducationInfo.setIstraveledanycountry(DEFAULT_IS_NO);
 		workEducationInfo.setIsworkedcharitableorganization(DEFAULT_IS_NO);
@@ -1842,7 +1855,7 @@ public class BigCustomerViewService extends BaseService<TAppStaffBasicinfoEntity
 		workEducationInfo.setIsservedinrebelgroup(DEFAULT_IS_NO);
 
 		workEducationInfo.setIsemployeden(DEFAULT_IS_NO);
-		workEducationInfo.setIssecondarylevelen(DEFAULT_IS_NO);
+		workEducationInfo.setIssecondarylevelen(DEFAULT_IS_YES);
 		workEducationInfo.setIsclanen(DEFAULT_IS_NO);
 		workEducationInfo.setIstraveledanycountryen(DEFAULT_IS_NO);
 		workEducationInfo.setIsworkedcharitableorganizationen(DEFAULT_IS_NO);

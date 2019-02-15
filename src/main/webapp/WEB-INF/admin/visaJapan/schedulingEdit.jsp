@@ -55,10 +55,22 @@
 						<div class="col-sm-12">
 							<div class="form-group">
 								<label><span>*</span>景区：</label> 
-								<select id="scenic" name="scenic" class="form-control input-sm" multiple="multiple">
-									<%-- <option value="${obj.travelplan.scenic }" selected="selected">${obj.travelplan.scenic }</option> --%>
-										<option selected="selected" value="${obj.scenic.name }">${obj.scenic.name }</option>
-								</select>
+								<c:choose>
+								<c:when test="${obj.travelplan.day == 1 }">
+								
+									<select id="scenic" name="scenic" disabled="disabled" class="form-control input-sm" multiple="multiple">
+										<%-- <option value="${obj.travelplan.scenic }" selected="selected">${obj.travelplan.scenic }</option> --%>
+											<option selected="selected" value="${obj.scenic.name }">${obj.scenic.name }</option>
+									</select>
+								</c:when>
+								<c:otherwise>
+								
+									<select id="scenic" name="scenic" class="form-control input-sm" multiple="multiple">
+										<%-- <option value="${obj.travelplan.scenic }" selected="selected">${obj.travelplan.scenic }</option> --%>
+											<option selected="selected" value="${obj.scenic.name }">${obj.scenic.name }</option>
+									</select>
+								</c:otherwise>
+								</c:choose>
 							</div>
 						</div>
 					</div>
@@ -72,6 +84,14 @@
 										<option value="${obj.hotel.id }" selected="selected">${obj.hotel.namejp }</option>
 									</c:if>
 								</select>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="form-group">
+								<label><span>*</span>房间数：</label>
+									<input class="form-control input-sm" style="height: 28px;" id="roomcount" name="roomcount" onkeyup="value=value.replace(/[^\d]/g,'')" value="${obj.orderjp.roomcount }"/>
 							</div>
 						</div>
 					</div>
@@ -108,6 +128,7 @@
 		 $('#addBtn').click(function(){
 			var id  = $('#id').val();
 			var day = $('#day').val();
+			var roomcount = $('#roomcount').val();
 			var outDate = $('#outDate').val();
 			var cityId = $('#cityId').val();
 			if (cityId) {
@@ -132,7 +153,7 @@
 			layer.load(1);
 			$.ajax({
 				type : 'POST',
-				data : {id:id,day:day,outDate:outDate,cityId:cityId,scenic:scenic,hotel:hotel},
+				data : {id:id,day:day,outDate:outDate,cityId:cityId,scenic:scenic,hotel:hotel,roomcount:roomcount},
 				url : '${base}/admin/visaJapan/saveEditPlanData.html',
 				success : function(data) {
 					layer.closeAll('loading');

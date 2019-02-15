@@ -62,6 +62,54 @@ public class TOrderTripJpEntity implements Serializable {
 	private String returnFlightNum;
 
 	@Column
+	@Comment("中转抵达城市(去程)")
+	private Integer gotransferarrivedcity;
+
+	@Column
+	@Comment("中转出发城市(去程)")
+	private Integer gotransferdeparturecity;
+
+	@Column
+	@Comment("中转抵达城市(返程)")
+	private Integer returntransferarrivedcity;
+
+	@Column
+	@Comment("中转出发城市(返程)")
+	private Integer returntransferdeparturecity;
+
+	@Column
+	@Comment("中转航班号(去程)")
+	private String gotransferflightnum;
+
+	@Column
+	@Comment("中转航班号(返程)")
+	private String returntransferflightnum;
+
+	@Column
+	@Comment("新出发城市(去程)")
+	private Integer newgodeparturecity;
+
+	@Column
+	@Comment("新抵达城市(去程)")
+	private Integer newgoarrivedcity;
+
+	@Column
+	@Comment("新航班号(去程)")
+	private String newgoflightnum;
+
+	@Column
+	@Comment("新出发城市(返程)")
+	private Integer newreturndeparturecity;
+
+	@Column
+	@Comment("新抵达城市(返程)")
+	private Integer newreturnarrivedcity;
+
+	@Column
+	@Comment("新航班号(返程)")
+	private String newreturnflightnum;
+
+	@Column
 	@Comment("操作人")
 	private Integer opId;
 

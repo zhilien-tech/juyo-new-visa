@@ -6,11 +6,14 @@
 
 package com.juyo.visa.admin.orderUS.module;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
@@ -54,6 +57,14 @@ public class NeworderUSModule {
 		return neworderUSViewService.tofillimage(staffid, request);
 	}
 
+	@At
+	@GET
+	@Filters
+	@Ok("jsp:admin/pcVisa/QRPhoto")
+	public Object QRPhoto(@Param("staffid") int staffid, HttpServletRequest request) {
+		return neworderUSViewService.tofillimage(staffid, request);
+	}
+
 	/**
 	 * 跳转到基本信息
 	 */
@@ -71,6 +82,7 @@ public class NeworderUSModule {
 	@POST
 	public Object saveBasicinfo(@Param("..") BasicinfoUSForm form) {
 		return neworderUSViewService.saveBasicinfo(form);
+		//return neworderUSViewService.saveBasicinfoThread(form);
 	}
 
 	/**
@@ -90,6 +102,7 @@ public class NeworderUSModule {
 	@POST
 	public Object savePassportinfo(@Param("..") PassportinfoUSForm form) {
 		return neworderUSViewService.savePassportinfo(form);
+		//return neworderUSViewService.savePassportinfoThread(form);
 	}
 
 	/**
@@ -109,6 +122,7 @@ public class NeworderUSModule {
 	@POST
 	public Object saveFamilyinfo(@Param("..") FamilyinfoUSForm form) {
 		return neworderUSViewService.saveFamilyinfo(form);
+		//return neworderUSViewService.saveFamilyinfoThread(form);
 	}
 
 	/**
@@ -128,6 +142,7 @@ public class NeworderUSModule {
 	@POST
 	public Object saveWorkandeducation(@Param("..") WorkandeducateinfoUSForm form) {
 		return neworderUSViewService.saveWorkandeducation(form);
+		//return neworderUSViewService.saveWorkandeducationThread(form);
 	}
 
 	/**
@@ -147,6 +162,7 @@ public class NeworderUSModule {
 	@POST
 	public Object saveTravelinfo(@Param("..") TravelinfoUSForm form) {
 		return neworderUSViewService.saveTravelinfo(form);
+		//return neworderUSViewService.saveTravelinfoThread(form);
 	}
 
 	/**
@@ -183,12 +199,91 @@ public class NeworderUSModule {
 	}
 
 	/**
+	 * 美国城市模糊查询
+	 */
+	@At
+	@POST
+	public Object selectUScity(@Param("searchstr") String searchstr) {
+		return neworderUSViewService.selectUScity(searchstr);
+	}
+
+	/**
+	 * 美国州城市联动模糊查询
+	 */
+	@At
+	@POST
+	public Object selectUSstateandcity(@Param("province") int province, @Param("searchstr") String searchstr) {
+		return neworderUSViewService.selectUSstateandcity(province, searchstr);
+	}
+
+	/**
 	 * 根据国家名称查询id
 	 */
 	@At
 	@POST
 	public Object getCountryid(@Param("searchstr") String searchstr) {
 		return neworderUSViewService.getCountryid(searchstr);
+	}
+
+	/**
+	 * 翻译
+	 */
+	@At
+	@POST
+	@Filters
+	public Object translate(@Param("strType") String type, @Param("q") String q) {
+		return neworderUSViewService.translate(type, q);
+	}
+
+	/**
+	 * 根据城市名称获取酒店信息
+	 */
+	@At
+	@POST
+	public Object selectUSHotel(@Param("plancity") String plancity, @Param("searchstr") String searchstr) {
+		return neworderUSViewService.selectUSHotel(plancity, searchstr);
+	}
+
+	/**
+	 * 根据酒店名称查询酒店地址
+	 */
+	@At
+	@POST
+	public Object getHoteladdress(@Param("hotelname") String hotelname) {
+		return neworderUSViewService.getHoteladdress(hotelname);
+	}
+
+	/**
+	 * 根据抵达日期和停留天数计算离开日期
+	 */
+	@At
+	@POST
+	public Object autoCalculateBackDate(@Param("gotripdate") Date gotripdate, @Param("stayday") Integer stayday) {
+		return neworderUSViewService.autoCalculateBackDate(gotripdate, stayday);
+	}
+
+	/**
+	 * 根据抵达日期和离开日期计算停留天数
+	 */
+	@At
+	@POST
+	public Object autoCalCulateStayday(@Param("gotripdate") Date gotripdate, @Param("returnDate") Date returnDate) {
+		return neworderUSViewService.autoCalCulateStayday(gotripdate, returnDate);
+	}
+
+	@At
+	@POST
+	public Object autoCalculategoDate(@Param("gotripdate") Date gotripdate, @Param("stayday") Integer stayday) {
+		return neworderUSViewService.autoCalculategoDate(gotripdate, stayday);
+	}
+
+	/**
+	 * 百度翻译
+	 */
+	@At
+	@GET
+	public Object baiduTranslate(@Param("q") String q) {
+		return neworderUSViewService.translate(q);
 	}
 
 }

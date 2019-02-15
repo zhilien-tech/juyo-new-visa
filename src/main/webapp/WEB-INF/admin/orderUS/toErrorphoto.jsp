@@ -23,17 +23,24 @@
 	</style>
 </head>
 <body>
-	<div class="head">
-	<span>错误信息图片</span>
-		<div class="btnGroup">
-			<a class="btnCancel" onclick="closeWindow()">确定</a>
-		</div>
+	<%-- <div class="head">
+	<c:choose>
+		<c:when test="${obj.imgtype eq 1 }">
+			<span>错误信息图片</span>
+		</c:when>
+		<c:otherwise>
+			<span>预览信息图片</span>
+		</c:otherwise>
+	</c:choose>
+	<div class="btnGroup">
+		<a class="btnCancel" onclick="closeWindow()">确定</a>
 	</div>
-		<div class="scan1" style="margin-top: 50px;width:100%">
-			<center>
-			<img style="background-size:cover;" src="${obj }" width="100%"  />
-			</center>
-		</div>
+	</div> --%>
+	<div class="scan1" style="width:100%">
+		<center>
+		<img style="background-size:cover;" src="${obj.imgurl }" width="100%"  />
+		</center>
+	</div>
 
 	<script type="text/javascript">
 	</script>

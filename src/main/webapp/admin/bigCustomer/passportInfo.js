@@ -186,12 +186,17 @@ function returnYears(year){
 }
 
 function getPinYinStr(hanzi){
+	if(hanzi == "陕西"){
+		return "SHAANXI";
+	}else if(hanzi == "内蒙古"){
+		return "NEI MONGOL";
+	}else{
 	var onehanzi = hanzi.split('');
 	var pinyinchar = '';
 	for(var i=0;i<onehanzi.length;i++){
 		pinyinchar += PinYin.getPinYin(onehanzi[i]);
 	}
-	return pinyinchar.toUpperCase();
+	return pinyinchar.toUpperCase();}
 }
 
 function getDateYearSub(startDateStr, endDateStr) {
@@ -275,14 +280,14 @@ function save(status){
 			}else if(status ==3){
 				//往左跳基本信息
 				window.location.href = '/admin/neworderUS/updateBaseInfo.html?staffid='+staffId;
-				$.ajax({
+				/*$.ajax({
 					type: 'POST',
 					data : passportInfo,
 					url: '/admin/neworderUS/savePassportinfo',
 					success :function(data) {
 						parent.successCallback(2);
 					}
-				});
+				});*/
 			}
 		}
 	}, 500);
@@ -316,13 +321,13 @@ function save(status){
 		}else if(status ==3){
 			//往左跳基本信息
 			window.location.href = '/admin/neworderUS/updateBaseInfo.html?staffid='+staffId;
-			$.ajax({
+			/*$.ajax({
 				type: 'POST',
 				data : passportInfo,
 				url: '/admin/neworderUS/savePassportinfo',
 				success :function(data) {
 				}
-			});
+			});*/
 		}
 	}
 }
@@ -340,4 +345,112 @@ function visaBtn(){
 function closeWindow() {
 	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	parent.layer.close(index);
+}
+
+//护照上传,扫描
+
+$('#uploadFile').change(function() {
+	var layerIndex = layer.load(1, {
+		shade : "#000"
+	});
+	$("#addBtn").attr('disabled', true);
+	$("#updateBtn").attr('disabled', true);
+	var file = this.files[0];
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var dataUrl = e.target.result;
+		var blob = dataURLtoBlob(dataUrl);
+		var formData = new FormData();
+		formData.append("image", blob, file.name);
+		$.ajax({
+			type : "POST",//提交类型  
+			//dataType : "json",//返回结果格式  
+			url : '/admin/orderJp/passportRecognitionUS',//请求地址  
+			async : true,
+			processData : false, //当FormData在jquery中使用的时候需要设置此项
+			contentType : false,//如果不加，后台会报表单未封装的错误(enctype='multipart/form-data' )
+			//请求数据  
+			data : formData,
+			success : function(obj) {//请求成功后的函数 
+				//关闭加载层
+				layer.close(layerIndex);
+				if (false === obj.success) {
+					if(obj.url.indexOf("240K")){
+						layer.msg(obj.url);
+					}else{
+						layer.msg("识别失败");
+					}
+				}else{
+					layer.msg("识别成功");
+					$('#passportUrl').val(obj.url);
+					$('#sqImg').attr('src', obj.url);
+					$("#uploadFile").siblings("i").css("display","block");
+					/*$(".front").attr("class", "info-imgUpload front has-success");  
+			        $(".help-blockFront").attr("data-bv-result","IVALID");  
+			        $(".help-blockFront").attr("style","display: none;");
+					$('#type').val(obj.type).change();*/
+					$('#passport').val(obj.num).change();
+					$('#issuedPlace').val(obj.visaCountry).change();
+					$('#issuedPlaceEn').val("/"+getPinYinStr(obj.visaCountry));
+					$('#issuedDate').val(obj.issueDate).change();
+					$('#validEndDate').val(obj.expiryDay).change();
+					//$('#OCRline1').val(obj.OCRline1);
+					//$('#OCRline2').val(obj.OCRline2);
+					//$("#borderColor").attr("style", null);
+					var years = getDateYearSub($('#issuedDate').val(),$('#validEndDate').val());
+					if(years == 5){
+						$("#validType").val(2);
+					}else{
+						$("#validType").val(1);
+					}
+					
+				}
+				$("#addBtn").attr('disabled', false);
+				//$("#updateBtn").attr('disabled', false);
+			},
+			error : function(XMLHttpRequest, textStatus, errorThrown) {
+				layer.close(layerIndex);
+				$("#addBtn").attr('disabled', false);
+				//$("#updateBtn").attr('disabled', false);
+			}
+		}); // end of ajaxSubmit
+	};
+	reader.readAsDataURL(file);
+});
+
+//把dataUrl类型的数据转为blob
+function dataURLtoBlob(dataurl) {
+	var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(
+			n);
+	while (n--) {
+		u8arr[n] = bstr.charCodeAt(n);
+	}
+	return new Blob([ u8arr ], {
+		type : mime
+	});
+}
+
+function getDateYearSub(startDateStr, endDateStr) {
+	var day = 24 * 60 * 60 *1000; 
+
+	var sDate = new Date(Date.parse(startDateStr.replace(/-/g, "/")));
+	var eDate = new Date(Date.parse(endDateStr.replace(/-/g, "/")));
+
+	//得到前一天(算头不算尾)
+	sDate = new Date(sDate.getTime() - day);
+
+	//获得各自的年、月、日
+	var sY  = sDate.getFullYear();     
+	var sM  = sDate.getMonth()+1;
+	var sD  = sDate.getDate();
+	var eY  = eDate.getFullYear();
+	var eM  = eDate.getMonth()+1;
+	var eD  = eDate.getDate();
+
+	if(eY > sY && sM == eM && sD == eD) {
+		return eY - sY;
+	} else {
+		//alert("两个日期之间并非整年，请重新选择");
+		return 0;
+	}
 }

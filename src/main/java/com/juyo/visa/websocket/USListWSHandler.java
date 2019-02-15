@@ -108,8 +108,10 @@ public class USListWSHandler implements WebSocketHandler {
 				if (!Util.isEmpty(lst)) {
 					//多线程群发  TODO
 					for (WebSocketSession wss : lst) {
-						if (wss.isOpen()) {
-							wss.sendMessage(message);
+						synchronized (wss) {
+							if (wss.isOpen()) {
+								wss.sendMessage(message);
+							}
 						}
 					}
 				}

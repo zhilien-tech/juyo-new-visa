@@ -57,7 +57,7 @@
 								<div class="cardFront-div">
 									<span>点击上传护照</span>
 									<input autocomplete="new-password" id="passportUrl" name="passporturl" type="hidden" value="${obj.passurl.url }"/>
-									<input autocomplete="new-password" id="uploadFile" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
+									<input autocomplete="new-password" id="uploadFile" style="z-index: 9999999 !important;" name="uploadfile" class="btn btn-primary btn-sm" type="file"  value="上传"/>
 									<img style="top:-219px;" id="sqImg" alt="" src="${obj.passporturl }" >
 									<!-- <i class="delete" onclick="deleteApplicantFrontImg();"></i> -->
 								</div>

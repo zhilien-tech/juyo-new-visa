@@ -28,6 +28,7 @@ import org.nutz.mvc.upload.UploadAdaptor;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.visajp.form.GeneratePlanForm;
+import com.juyo.visa.admin.visajp.form.OrdertravelplanForm;
 import com.juyo.visa.admin.visajp.form.PassportForm;
 import com.juyo.visa.admin.visajp.form.SaveTravelForm;
 import com.juyo.visa.admin.visajp.form.VisaEditDataForm;
@@ -37,7 +38,6 @@ import com.juyo.visa.admin.visajp.service.VisaJapanSimulateService;
 import com.juyo.visa.common.enums.IssueValidityEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.entities.TOrderJpEntity;
-import com.juyo.visa.entities.TOrderTravelplanJpEntity;
 import com.uxuexi.core.common.util.EnumUtil;
 
 /**
@@ -160,7 +160,7 @@ public class VisaJapanModule {
 	 */
 	@At
 	@POST
-	public Object saveEditPlanData(@Param("..") TOrderTravelplanJpEntity travel, HttpSession session) {
+	public Object saveEditPlanData(@Param("..") OrdertravelplanForm travel, HttpSession session) {
 		return visaJapanService.saveEditPlanData(travel, session);
 	}
 

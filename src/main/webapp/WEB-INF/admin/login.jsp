@@ -15,6 +15,7 @@
 		<style>
 			html {height: 100%;width:100%;display: table;}
 			body {width:100%;height: 100%;}
+			.login-content{height:380px !important;}
 			.login { position: relative;}
 			.login .login-content { position:absolute !important;right:10%;}
 		</style>
@@ -52,7 +53,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="checkbox">
+					<div class="checkbox none">
 						<input id="savepassword" name="savepassword" type="checkbox" class="" style="display: block;"/>记住密码
 					</div>
 					<div class="row">

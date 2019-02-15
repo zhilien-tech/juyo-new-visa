@@ -34,6 +34,10 @@ public class TOrderJpEntity implements Serializable {
 	private Integer isVisit;
 
 	@Column
+	@Comment("房间数")
+	private Integer roomcount;
+
+	@Column
 	@Comment("过去三年访问过的县")
 	private String threeCounty;
 

@@ -48,6 +48,7 @@ public class QrCodeService {
 		qrCodeUtil.encodeQrCode(content, filepath);
 		//获取二维码临时文件的路径
 		String fileContextPath = qrCodeUtil.getFileContextPath();
+		System.out.println("二维码临时路径：" + fileContextPath);
 		//获取到二维码文件
 		File file = new File(fileContextPath);
 		//上传到七牛云
@@ -57,5 +58,17 @@ public class QrCodeService {
 		String fileqiniupath = CommonConstants.IMAGES_SERVER_ADDR + (String) map.get("data");
 		System.out.println(fileqiniupath);
 		return fileqiniupath;
+	}
+
+	public String encodeQrCode2(HttpServletRequest request, String content) {
+		QrCodeUtil qrCodeUtil = new QrCodeUtil();
+		//生成二维码的临时路径
+		String filepath = request.getContextPath();
+		//生成二维码
+		qrCodeUtil.encodeQrCode(content, filepath);
+		//获取二维码临时文件的路径
+		String fileContextPath = qrCodeUtil.getFileContextPath();
+		System.out.println("二维码临时路径：" + fileContextPath);
+		return fileContextPath;
 	}
 }

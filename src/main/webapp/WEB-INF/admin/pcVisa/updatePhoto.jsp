@@ -333,7 +333,7 @@
 				<!-- <div class="beforeOverdueInfo"></div> -->
 				<div class="uploadReleases expire-group">
 					<div>上传</div>
-					<img onclick="" class="longitudinal" src="" />
+					<img onclick="toUpperPhoto(this)" class="longitudinal" src="" />
 				</div>
 			</div>
 		</div>

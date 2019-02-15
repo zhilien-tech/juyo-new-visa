@@ -54,6 +54,7 @@ import com.juyo.visa.admin.city.service.CityViewService;
 import com.juyo.visa.admin.flight.service.FlightViewService;
 import com.juyo.visa.admin.hotel.service.HotelViewService;
 import com.juyo.visa.admin.scenic.service.ScenicViewService;
+import com.juyo.visa.admin.simple.service.SimpleVisaService;
 import com.juyo.visa.admin.visajp.util.TemplateUtil;
 import com.juyo.visa.admin.visajp.util.TtfClassLoader;
 import com.juyo.visa.common.base.QrCodeService;
@@ -98,6 +99,8 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 	private CityViewService cityViewService;
 	@Inject
 	private QrCodeService qrCodeService;
+	@Inject
+	private SimpleVisaService simpleVisaService;
 
 	private static DateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -500,7 +503,11 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 			}*/
 			//酒店信息
 
-			map.put("hotelname", record.getString("hotelname"));
+			if (!Util.isEmpty(record.getString("hotelname"))) {
+				map.put("hotelname", record.getString("hotelname"));
+			} else {
+				map.put("hotelname", "参照'赴日予定表'");
+			}
 			map.put("hotelphone", record.getString("hotelphone"));
 			map.put("hoteladdress", record.getString("hoteladdress"));
 			//上次赴日日期及停留时间
@@ -727,7 +734,7 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 		String passporturl = count + "," + passport + "," + validEndDate + "," + firstNameEn + "," + lastNameEn + ","
 				+ sex + "," + birthday + "," + "CHN" + "," + cardId + "," + " " + "," + " ";
 		//生成二维码
-		String qrCode = qrCodeService.encodeQrCode(request, passporturl);
+		String qrCode = qrCodeService.encodeQrCode2(request, passporturl);
 		return qrCode;
 	}
 
@@ -852,243 +859,126 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 						.where("orderId", "=", orderjp.getId()).orderBy("outDate", "ASC"), null);
 				Integer visatype = orderjp.getVisaType();
 				if (!Util.isEmpty(ordertravelplanList)) {
-					if (ordertravelplanList.get(1).getCityId() != ordertravelplanList.get(2).getCityId()) {//第二个和第三个城市不同，中间会随机别的城市
-						ArrayList<Integer> cityidList = new ArrayList<Integer>();
 
-						for (TOrderTravelplanJpEntity tOrderTravelplanJpEntity : ordertravelplanList) {
-							if (!cityidList.contains(tOrderTravelplanJpEntity.getCityId())) {
-								cityidList.add(tOrderTravelplanJpEntity.getCityId());
+					String room = "";
+					if (Util.isEmpty(orderjp.getRoomcount())) {
+						room = String.valueOf(simpleVisaService.getRoomcount(orderjp.getId().intValue()));
+					} else {
+						room = String.valueOf(orderjp.getRoomcount());
+					}
+
+					ArrayList<Integer> hotelidList = new ArrayList<Integer>();
+
+					for (TOrderTravelplanJpEntity tOrderTravelplanJpEntity : ordertravelplanList) {
+						if (tOrderTravelplanJpEntity != ordertravelplanList.get(ordertravelplanList.size() - 1)) {
+							if (!hotelidList.contains(tOrderTravelplanJpEntity.getHotel())) {
+								hotelidList.add(tOrderTravelplanJpEntity.getHotel());
 							}
 						}
+					}
 
-						/*if(ordertravelplanList.get(0).getCityId() == ordertravelplanList.get(ordertravelplanList.size() - 1).getCityId()){//第一个城市和最后一个城市相同，需要特殊处理
-							if(i == cityidList.size() - 1){//返回城市的第一天
-								outDate = query.get(2).getOutDate();
-							}else{
-								outDate = fetch.getOutDate();
-							}
-						}else{
-							outDate = fetch.getOutDate();
-						}*/
-						if (ordertravelplanList.get(0).getCityId() != ordertravelplanList.get(
-								ordertravelplanList.size() - 1).getCityId()) {
-							for (int i = 0; i < cityidList.size(); i++) {
-								List<TOrderTravelplanJpEntity> query = dbDao.query(TOrderTravelplanJpEntity.class, Cnd
-										.where("orderId", "=", orderjp.getId()).and("cityId", "=", cityidList.get(i)),
-										null);
-								TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
-										Cnd.where("orderId", "=", orderjp.getId())
-												.and("cityId", "=", cityidList.get(i)));
-								PdfPCell cell;
-								//第一列，宿泊
-								cell = new PdfPCell(new Paragraph("宿泊", font));
-								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(50);
-								maintable.addCell(cell);
+					if (ordertravelplanList.get(1).getCityId() != ordertravelplanList.get(2).getCityId()
+							&& ordertravelplanList.size() > 4) {//第二个和第三个城市不同，中间会随机别的城市
+						if (ordertravelplanList.size() % 2 == 0) {//最后有三天
+							//倒数第三天和倒数第二天一样，说明后酒店都一样
+							if (ordertravelplanList.get(ordertravelplanList.size() - 3).getHotel() == ordertravelplanList
+									.get(ordertravelplanList.size() - 2).getHotel()) {
+								hotelidList.add(ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel());
+							} else {
+								if (Util.eq(ordertravelplanList.get(0).getHotel(),
+										ordertravelplanList.get(ordertravelplanList.size() - 3).getHotel())) {
 
-								//第二列，时间
-								Date outDate = fetch.getOutDate();
-								SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-								String timeStampStr = simpleDateFormat.format(outDate);
-								cell = new PdfPCell(new Paragraph(timeStampStr, font));
-								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(50);
-								maintable.addCell(cell);
-
-								//第三列，酒店信息
-								String hotel = "";
-								THotelEntity hotelinfo = hotelViewService.fetch(fetch.getHotel());
-								hotel = hotelinfo.getNamejp() + "\n" + hotelinfo.getAddressjp() + "\n"
-										+ hotelinfo.getMobile() + "\n";
-								cell = new PdfPCell(new Paragraph(hotel, font));
-								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(50);
-								maintable.addCell(cell);
-
-								//第四列，停留几晚
-								if (i == cityidList.size() - 1) {
-									cell = new PdfPCell(new Paragraph((query.size() - 1) + "泊朝食", font));
-
-								} else {
-									cell = new PdfPCell(new Paragraph(query.size() + "泊朝食", font));
-
+									hotelidList.add(hotelidList.size() - 1,
+											ordertravelplanList.get(ordertravelplanList.size() - 3).getHotel());
 								}
-								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(50);
-								maintable.addCell(cell);
 
-								//第五列，需要几间房子
-								String room = "";
-								if (applyinfo.size() > 0) {
-									if (applyinfo.size() % 2 == 1) {
-										room = String.valueOf(applyinfo.size() / 2 + 1);
-									} else {
-										room = String.valueOf(applyinfo.size() / 2);
-									}
+								if (Util.eq(ordertravelplanList.get(0).getHotel(),
+										ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel())) {
+
+									hotelidList.add(ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel());
 								}
-								cell = new PdfPCell(new Paragraph(room, font));
-								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(50);
-								maintable.addCell(cell);
-
-								//第六列，回答
-								cell = new PdfPCell(new Paragraph("手配 OK", font));
-								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(50);
-								maintable.addCell(cell);
 							}
 
 						} else {
-							//第一行
-							PdfPCell cell;
-							//第一列，宿泊
-							cell = new PdfPCell(new Paragraph("宿泊", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable.addCell(cell);
+							if (Util.eq(ordertravelplanList.get(0).getHotel(),
+									ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel())) {
 
-							//第二列，时间
-							Date outDate = ordertravelplanList.get(0).getOutDate();
-							SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-							String timeStampStr = simpleDateFormat.format(outDate);
-							cell = new PdfPCell(new Paragraph(timeStampStr, font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable.addCell(cell);
-
-							//第三列，酒店信息
-							String hotel = "";
-							THotelEntity hotelinfo = hotelViewService.fetch(ordertravelplanList.get(0).getHotel());
-							hotel = hotelinfo.getNamejp() + "\n" + hotelinfo.getAddressjp() + "\n"
-									+ hotelinfo.getMobile() + "\n";
-							cell = new PdfPCell(new Paragraph(hotel, font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable.addCell(cell);
-
-							//第四列，停留几晚
-							cell = new PdfPCell(new Paragraph("2泊朝食", font));
-
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable.addCell(cell);
-
-							//第五列，需要几间房子
-							String room = "";
-							if (applyinfo.size() > 0) {
-								if (applyinfo.size() % 2 == 1) {
-									room = String.valueOf(applyinfo.size() / 2 + 1);
-								} else {
-									room = String.valueOf(applyinfo.size() / 2);
-								}
+								hotelidList.add(ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel());
 							}
-							cell = new PdfPCell(new Paragraph(room, font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable.addCell(cell);
+						}
+					}
 
-							//第六列，回答
-							cell = new PdfPCell(new Paragraph("手配 OK", font));
-							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-							cell.setFixedHeight(50);
-							maintable.addCell(cell);
+					System.out.println("hotelidList:" + hotelidList);
+					for (int i = 0; i < hotelidList.size(); i++) {
 
-							//剩下的行数
-							Integer firstcityid = cityidList.get(0);
-							cityidList.remove(0);
-							cityidList.add(firstcityid);
-							for (int i = 0; i < cityidList.size(); i++) {
-								List<TOrderTravelplanJpEntity> query = dbDao.query(TOrderTravelplanJpEntity.class, Cnd
-										.where("orderId", "=", orderjp.getId()).and("cityId", "=", cityidList.get(i)),
-										null);
-								TOrderTravelplanJpEntity fetch = null;
-								if (i == cityidList.size() - 1) {//最后一个
-									fetch = query.get(2);
-								} else {
-									fetch = dbDao.fetch(
-											TOrderTravelplanJpEntity.class,
-											Cnd.where("orderId", "=", orderjp.getId()).and("cityId", "=",
-													cityidList.get(i)));
-								}
-								//第一列，宿泊
-								cell = new PdfPCell(new Paragraph("宿泊", font));
-								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(50);
-								maintable.addCell(cell);
+						TOrderTravelplanJpEntity fetch = dbDao.fetch(TOrderTravelplanJpEntity.class,
+								Cnd.where("orderId", "=", orderjp.getId()).and("hotel", "=", hotelidList.get(i)));
 
-								//第二列，时间
-								Date outDate1 = fetch.getOutDate();
-								SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-								String timeStampStr1 = simpleDateFormat.format(outDate1);
-								cell = new PdfPCell(new Paragraph(timeStampStr1, font));
-								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(50);
-								maintable.addCell(cell);
+						List<TOrderTravelplanJpEntity> query = dbDao.query(TOrderTravelplanJpEntity.class,
+								Cnd.where("orderId", "=", orderjp.getId()).and("hotel", "=", hotelidList.get(i)), null);
+						int querysize = query.size();
+						if (ordertravelplanList.get(1).getCityId() != ordertravelplanList.get(2).getCityId()
+								&& ordertravelplanList.size() > 4) {//第二个和第三个城市不同，中间会随机别的城市
+							if (ordertravelplanList.size() % 2 == 0) {//最后有三天
 
-								//第三列，酒店信息
-								String hotel1 = "";
-								THotelEntity hotelinfo1 = hotelViewService.fetch(fetch.getHotel());
-								hotel1 = hotelinfo1.getNamejp() + "\n" + hotelinfo1.getAddressjp() + "\n"
-										+ hotelinfo1.getMobile() + "\n";
-								cell = new PdfPCell(new Paragraph(hotel1, font));
-								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(50);
-								maintable.addCell(cell);
-
-								//第四列，停留几晚
-								if (i == cityidList.size() - 1) {
-									cell = new PdfPCell(new Paragraph((query.size() - 3) + "泊朝食", font));
+								//倒数第二天和倒数第三天一样
+								if (!Util.eq(ordertravelplanList.get(ordertravelplanList.size() - 3).getHotel(),
+										ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel())) {
+									//如果倒数第三天和第一天酒店一样
+									if (Util.eq(ordertravelplanList.get(0).getHotel(),
+											ordertravelplanList.get(ordertravelplanList.size() - 3).getHotel())) {
+										if (Util.eq(i, 0)) {
+											fetch = ordertravelplanList.get(0);
+											querysize = 2;
+										}
+										if (Util.eq(i, hotelidList.size() - 2)) {
+											fetch = ordertravelplanList.get(ordertravelplanList.size() - 3);
+											querysize = 1;
+										}
+									}
+									//如果倒数第二天和第一天酒店一样
+									if (Util.eq(ordertravelplanList.get(0).getHotel(),
+											ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel())) {
+										if (Util.eq(i, 0)) {
+											fetch = ordertravelplanList.get(0);
+											querysize = 2;
+										}
+										if (Util.eq(i, hotelidList.size() - 1)) {
+											fetch = ordertravelplanList.get(ordertravelplanList.size() - 2);
+											querysize = 2;
+										}
+									}
 
 								} else {
-									cell = new PdfPCell(new Paragraph(query.size() + "泊朝食", font));
-
-								}
-								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(50);
-								maintable.addCell(cell);
-
-								//第五列，需要几间房子
-								String room1 = "";
-								if (applyinfo.size() > 0) {
-									if (applyinfo.size() % 2 == 1) {
-										room1 = String.valueOf(applyinfo.size() / 2 + 1);
-									} else {
-										room1 = String.valueOf(applyinfo.size() / 2);
+									if (Util.eq(ordertravelplanList.get(0).getHotel(),
+											ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel())) {
+										if (Util.eq(i, 0)) {
+											fetch = ordertravelplanList.get(0);
+											querysize = 2;
+										}
+										if (Util.eq(i, hotelidList.size() - 1)) {
+											fetch = ordertravelplanList.get(ordertravelplanList.size() - 2);
+											querysize = 2;
+										}
 									}
 								}
-								cell = new PdfPCell(new Paragraph(room1, font));
-								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(50);
-								maintable.addCell(cell);
 
-								//第六列，回答
-								cell = new PdfPCell(new Paragraph("手配 OK", font));
-								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-								cell.setFixedHeight(50);
-								maintable.addCell(cell);
+							} else {//最后有两天
+									//如果倒数第一天和第一天酒店一样
+								if (Util.eq(ordertravelplanList.get(0).getHotel(),
+										ordertravelplanList.get(ordertravelplanList.size() - 2).getHotel())) {
+									if (Util.eq(i, 0)) {
+										fetch = ordertravelplanList.get(0);
+										querysize = 2;
+									}
+									if (i == hotelidList.size() - 1) {
+										fetch = ordertravelplanList.get(ordertravelplanList.size() - 2);
+										querysize = 2;
+									}
+								}
 							}
-
 						}
 
-					} else {//中间不随机城市
 						PdfPCell cell;
 						//第一列，宿泊
 						cell = new PdfPCell(new Paragraph("宿泊", font));
@@ -1098,8 +988,9 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 						maintable.addCell(cell);
 
 						//第二列，时间
+						Date outDate = fetch.getOutDate();
 						SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-						String timeStampStr = simpleDateFormat.format(ordertripjp.getGoDate());
+						String timeStampStr = simpleDateFormat.format(outDate);
 						cell = new PdfPCell(new Paragraph(timeStampStr, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1108,8 +999,7 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 
 						//第三列，酒店信息
 						String hotel = "";
-						TOrderTravelplanJpEntity travelplanEntity = ordertravelplanList.get(0);
-						THotelEntity hotelinfo = hotelViewService.fetch(travelplanEntity.getHotel());
+						THotelEntity hotelinfo = hotelViewService.fetch(fetch.getHotel());
 						hotel = hotelinfo.getNamejp() + "\n" + hotelinfo.getAddressjp() + "\n" + hotelinfo.getMobile()
 								+ "\n";
 						cell = new PdfPCell(new Paragraph(hotel, font));
@@ -1119,22 +1009,19 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 						maintable.addCell(cell);
 
 						//第四列，停留几晚
-						int stayday = DateUtil.daysBetween(ordertripjp.getGoDate(), ordertripjp.getReturnDate());
-						cell = new PdfPCell(new Paragraph(String.valueOf(stayday) + "泊朝食", font));
+						if (i == hotelidList.size() - 1) {
+							cell = new PdfPCell(new Paragraph((querysize - 1) + "泊朝食", font));
+
+						} else {
+							cell = new PdfPCell(new Paragraph(querysize + "泊朝食", font));
+
+						}
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 						cell.setFixedHeight(50);
 						maintable.addCell(cell);
 
 						//第五列，需要几间房子
-						String room = "";
-						if (applyinfo.size() > 0) {
-							if (applyinfo.size() % 2 == 1) {
-								room = String.valueOf(applyinfo.size() / 2 + 1);
-							} else {
-								room = String.valueOf(applyinfo.size() / 2);
-							}
-						}
 						cell = new PdfPCell(new Paragraph(room, font));
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1147,6 +1034,7 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 						cell.setFixedHeight(50);
 						maintable.addCell(cell);
+
 					}
 				}
 			}
@@ -1635,6 +1523,12 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 									wealthType += tApplicantWealthJpEntity.getBankflowfree() + "\n";
 								}
 								detail += "元\n";
+							} else if ("过去三年内两次及以上入境日本".equals(tApplicantWealthJpEntity.getType())) {
+								if (!Util.isEmpty(tApplicantWealthJpEntity.getBankflowfree())) {
+									wealthType += tApplicantWealthJpEntity.getBankflowfree() + "\n";
+								}
+								detail += "\n";
+								detail += "\n";
 							} else {
 								if (!Util.isEmpty(tApplicantWealthJpEntity.getBankflowfree())) {
 									wealthType += tApplicantWealthJpEntity.getBankflowfree() + "\n";
@@ -2274,13 +2168,11 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 			}
 			//格式化为日本的日期
 			String pointpattren = "yyyy-MM-dd";
-			int count = 0;
 			Integer lasthotel = null;
 			for (TOrderTravelplanJpEntity ordertravelplan : ordertravelplans) {
-				count++;
 				//行程安排
 				String scenic = "";
-				//出发城市
+				/*//出发城市
 				Integer goDepartureCity = ordertripjp.getGoDepartureCity();
 				TCityEntity goCity = dbDao.fetch(TCityEntity.class, goDepartureCity.longValue());
 				String province = goCity.getProvince();
@@ -2295,8 +2187,8 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 						TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", ordertripjp.getGoFlightNum()));
 						String goFlightNum = ordertripjp.getGoFlightNum();
-						/*scenic = " " + province + "から" + goflight.getFlightnum().replace("*", "") + "便にて"
-								+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";*/
+						scenic = " " + province + "から" + goflight.getFlightnum().replace("*", "") + "便にて"
+								+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";
 						scenic = province
 								+ "から"
 								+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
@@ -2304,54 +2196,23 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 								+ "便にて"
 								+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
 										goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n到着後、ホテルへ";
-					} else if (ordertripjp.getTripType().equals(2)) {
-						//多程出发航班
-						if (!Util.isEmpty(mutiltrip)) {
-							//多程第一程为出发日期
-							TOrderTripMultiJpEntity entrytrip = mutiltrip.get(0);
-							TFlightEntity goflight = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("flightnum", "=", entrytrip.getFlightNum()));
-							String goFlightNum = entrytrip.getFlightNum();
-							/*scenic = " " + province + goflight.getFlightnum().replace("*", "") + "便にて"
-									+ goflight.getLandingName() + "へ" + "\n 到着後、ホテルへ";*/
-							scenic = province
-									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1))
-									+ "便にて"
-									+ goFlightNum.substring(goFlightNum.indexOf("-", goFlightNum.lastIndexOf("-")) + 1,
-											goFlightNum.indexOf(" ", goFlightNum.indexOf(" "))) + "へ" + "\n到着後、ホテルへ";
-						}
 					}
 				} else if (count == ordertravelplans.size()) {
 					if (ordertripjp.getTripType().equals(1)) {
 						TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
 								Cnd.where("flightnum", "=", ordertripjp.getReturnFlightNum()));
 						String goFlightNum = ordertripjp.getReturnFlightNum();
-						/*scenic = " " + returnflight.getTakeOffName() + "から"
-								+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";*/
+						scenic = " " + returnflight.getTakeOffName() + "から"
+								+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";
 						scenic = goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
 								+ "から"
 								+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
 										goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて帰国";
-					} else if (ordertripjp.getTripType().equals(2)) {
-						//多程出发航班
-						if (!Util.isEmpty(mutiltrip)) {
-							//最后一程作为返回日期
-							TOrderTripMultiJpEntity returntrip = mutiltrip.get(mutiltrip.size() - 1);
-							TFlightEntity returnflight = dbDao.fetch(TFlightEntity.class,
-									Cnd.where("flightnum", "=", returntrip.getFlightNum()));
-							String goFlightNum = returntrip.getFlightNum();
-							/*scenic = " " + returnflight.getTakeOffName() + "から"
-									+ returnflight.getFlightnum().replace("*", "") + "便にて帰国";*/
-							scenic = goFlightNum.substring(0, goFlightNum.indexOf("-", goFlightNum.indexOf("-")))
-									+ "から"
-									+ goFlightNum.substring(goFlightNum.indexOf(" ", goFlightNum.indexOf(" ")) + 1,
-											goFlightNum.indexOf(" ", goFlightNum.indexOf(" ") + 1)) + "便にて帰国";
-						}
 					}
 				} else {
 					scenic = ordertravelplan.getScenic();
-				}
+				}*/
+				scenic = ordertravelplan.getScenic();
 				//酒店信息
 				String hotel = "";
 				if (!Util.isEmpty(ordertravelplan.getHotel())) {

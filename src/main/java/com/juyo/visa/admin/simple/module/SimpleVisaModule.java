@@ -9,17 +9,20 @@ package com.juyo.visa.admin.simple.module;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.simple.form.AddOrderForm;
+import com.juyo.visa.admin.simple.form.AddSimpleHotelForm;
 import com.juyo.visa.admin.simple.form.BasicinfoForm;
 import com.juyo.visa.admin.simple.form.GenerrateTravelForm;
 import com.juyo.visa.admin.simple.form.ListDataForm;
@@ -94,6 +97,21 @@ public class SimpleVisaModule {
 	@POST
 	public Object getHotelSelect(@Param("hotelname") String hotelname, @Param("cityId") int cityId) {
 		return simpleVisaService.getHotelSelect(hotelname, cityId);
+	}
+
+	/**
+	 * 添加酒店信息
+	 */
+	@At
+	@Ok("jsp")
+	public Object addHotel(@Param("planid") Integer planid, @Param("visatype") int visatype) {
+		return simpleVisaService.addHotel(planid, visatype);
+	}
+
+	@At
+	@POST
+	public Object addsimplehotel(@Param("..") AddSimpleHotelForm form) {
+		return simpleVisaService.addsimplehotel(form);
 	}
 
 	/**
@@ -243,6 +261,7 @@ public class SimpleVisaModule {
 	@At
 	@POST
 	public Object saveEditVisa(@Param("..") VisaEditDataForm form, HttpServletRequest request) {
+		System.out.println("保存签证信息form:" + form);
 		return simpleVisaService.saveEditVisa(form, request);
 		/*try {
 			Thread.sleep(18000);//括号里面的5000代表5000毫秒，也就是5秒，可以该成你需要的时间
@@ -280,6 +299,24 @@ public class SimpleVisaModule {
 	}
 
 	/**
+	 * 获取单位名称
+	 */
+	@At
+	@POST
+	public Object getUnitname(@Param("searchStr") String searchStr, HttpServletRequest request) {
+		return simpleVisaService.getUnitname(searchStr, request);
+	}
+
+	/**
+	 * 获取单位电话
+	 */
+	@At
+	@POST
+	public Object getUnittelephone(@Param("searchStr") String searchStr, HttpServletRequest request) {
+		return simpleVisaService.getUnittelephone(searchStr, request);
+	}
+
+	/**
 	 * 获取城市下拉列表
 	 */
 	@At
@@ -287,6 +324,16 @@ public class SimpleVisaModule {
 	public Object getCustomerCitySelect(@Param("cityname") String cityname, @Param("citytype") String citytype,
 			@Param("exname") String exname, HttpSession session) {
 		return simpleVisaService.getCustomerCitySelect(cityname, citytype, exname, session);
+	}
+
+	/**
+	 * 根据历史订单号，查询相关信息
+	 */
+	@At
+	@POST
+	public Object getInfobyOrdernum(@Param("ordernum") String ordernum, @Param("orderid") int orderid,
+			HttpSession session) {
+		return simpleVisaService.getInfobyOrdernum(ordernum, orderid, session);
 	}
 
 	/**
@@ -303,6 +350,15 @@ public class SimpleVisaModule {
 	public Object dataUpload(@Param("orderid") Integer orderid, HttpServletRequest request) {
 		return simpleVisaService.dataUpload(orderid, request);
 	}*/
+
+	/**
+	 * 根据搜索条件下载excel
+	 */
+	@At
+	@GET
+	public Object downloadOrder(@Param("..") ListDataForm form, HttpServletRequest request, HttpServletResponse response) {
+		return simpleVisaService.downloadOrder(form, request, response);
+	}
 
 	@At
 	@POST
