@@ -99,6 +99,16 @@ function getNewDate(temp, fn){
     return (YYYY+"-"+MM+"-"+DD);
 }
 
+//家庭主妇和退休
+$("#occupation").change(function(){
+	var thisval = $(this).val();
+	if(thisval == 10 || thisval == 19){
+		$(".jobEduLearningInfoDiv").hide();
+	}else{
+		$(".jobEduLearningInfoDiv").show();
+	}
+});
+
 //以前的工作radio
 $(".beforeWork").change(function () {
 
