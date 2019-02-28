@@ -393,4 +393,10 @@ public class SimpleVisaModule {
 		return simpleVisaService.saveSendandGround(orderid, sendsignid, groundconnectid);
 	}
 
+	@At
+	@POST
+	public Object getSomething() {
+		return simpleVisaService.getSomething();
+	}
+
 }

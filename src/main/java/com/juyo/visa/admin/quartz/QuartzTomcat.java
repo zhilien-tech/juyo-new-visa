@@ -14,12 +14,7 @@
 
 package com.juyo.visa.admin.quartz;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -55,7 +50,10 @@ public class QuartzTomcat extends BaseService<TOrderJpEntity> implements Job {
 		System.out.println("Tomcat监控");
 		System.out.println(sdf.format(new Date()));
 
-		String path = "http://192.168.2.105:8080/admin/mobileVisa/getBasicInfoByStaffid";
+		//主
+		//String path = "http://192.168.2.138:8080/admin/mobileVisa/getBasicInfoByStaffid";
+		//从
+		/*String path = "http://192.168.2.117:8080/admin/mobileVisa/getBasicInfoByStaffid";
 		String param = "staffid=4686";
 
 		HttpURLConnection httpURLConnection = null;
@@ -112,7 +110,7 @@ public class QuartzTomcat extends BaseService<TOrderJpEntity> implements Job {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
-		}
+		}*/
 
 	}
 
