@@ -7778,11 +7778,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getSomething() {
-		for (int i = 1019; i < 24392; i++) {
-			TApplicantPassportEntity fetch = dbDao.fetch(TApplicantPassportEntity.class, i);
-			if (Util.isEmpty(fetch)) {
-				System.out.println("丢失了的id：" + i);
+		for (int i = 1036; i < 24679; i++) {
+			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, i);
+			if (!Util.isEmpty(apply)) {
+				TApplicantPassportEntity fetch = dbDao.fetch(TApplicantPassportEntity.class,
+						Cnd.where("applicantId", "=", i));
+				if (Util.isEmpty(fetch)) {
+					System.out.println("丢失了的申请人id：" + i);
+				}
 			}
+
 		}
 		return null;
 	}

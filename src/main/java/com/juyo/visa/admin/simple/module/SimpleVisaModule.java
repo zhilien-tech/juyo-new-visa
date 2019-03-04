@@ -360,6 +360,9 @@ public class SimpleVisaModule {
 		return simpleVisaService.downloadOrder(form, request, response);
 	}
 
+	/**
+	 * 判断是否有申请人，没有的话新建，有的话修改
+	 */
 	@At
 	@POST
 	public Object hasApplyInfo(@Param("applyid") int applyid, @Param("orderid") int orderid,

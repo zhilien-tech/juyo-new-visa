@@ -14,10 +14,19 @@
 
 package com.juyo.visa.admin.quartz;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 
 import org.apache.commons.io.IOUtils;
 import org.nutz.integration.quartz.annotation.Scheduled;
@@ -53,16 +62,29 @@ public class QuartzTomcat extends BaseService<TOrderJpEntity> implements Job {
 		//主
 		//String path = "http://192.168.2.138:8080/admin/mobileVisa/getBasicInfoByStaffid";
 		//从
-		/*String path = "http://192.168.2.117:8080/admin/mobileVisa/getBasicInfoByStaffid";
+		String path = "https://www.test.f-visa.com/admin/mobileVisa/getBasicInfoByStaffid";
 		String param = "staffid=4686";
 
-		HttpURLConnection httpURLConnection = null;
+		//HttpURLConnection httpURLConnection = null;
+		HttpsURLConnection httpURLConnection = null;
 		PrintWriter out = null;
 		BufferedReader in = null;
 		String result = "";
 		try {
+
+			//创建SSLContext
+			SSLContext sslContext = SSLContext.getInstance("SSL");
+			TrustManager[] tm = { new MyX509TrustManager() };
+			//初始化
+			sslContext.init(null, tm, new java.security.SecureRandom());
+			;
+			//获取SSLSocketFactory对象
+			SSLSocketFactory ssf = sslContext.getSocketFactory();
+
 			URL url = new URL(path);//创建的URL  
-			httpURLConnection = (HttpURLConnection) url.openConnection();//打开链接  
+			httpURLConnection = (HttpsURLConnection) url.openConnection();
+
+			//httpURLConnection = (HttpsURLConnection) url.openConnection();//打开链接  
 			httpURLConnection.setConnectTimeout(3000);//设置网络链接超时时间，3秒，链接失败后重新链接  
 			httpURLConnection.setReadTimeout(3000);//只有加上这个参数才能被catch到连接不上，否则catch不到错误
 			httpURLConnection.setDoInput(true);//打开输入流  
@@ -72,6 +94,10 @@ public class QuartzTomcat extends BaseService<TOrderJpEntity> implements Job {
 			httpURLConnection.setRequestProperty("User-Agent",
 					"Mozilla/5.0 (Windows; U; Windows NT 6.1; zh-CN; rv:1.9.2.6)");
 			httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");//表头，不能改变
+
+			//设置当前实例使用的SSLSoctetFactory
+			httpURLConnection.setSSLSocketFactory(ssf);
+			//httpURLConnection.connect();
 
 			out = new PrintWriter(httpURLConnection.getOutputStream());
 			// 发送请求参数
@@ -110,7 +136,7 @@ public class QuartzTomcat extends BaseService<TOrderJpEntity> implements Job {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
-		}*/
+		}
 
 	}
 
