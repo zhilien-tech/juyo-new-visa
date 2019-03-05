@@ -60,9 +60,9 @@ public class QuartzTomcat extends BaseService<TOrderJpEntity> implements Job {
 		System.out.println(sdf.format(new Date()));
 
 		//主
-		//String path = "http://192.168.2.138:8080/admin/mobileVisa/getBasicInfoByStaffid";
+		String path = "https://test.f-visa.com/admin/mobileVisa/getBasicInfoByStaffid";
 		//从
-		String path = "https://www.test.f-visa.com/admin/mobileVisa/getBasicInfoByStaffid";
+		//String path = "https://www.f-visa.com/admin/mobileVisa/getBasicInfoByStaffid";
 		String param = "staffid=4686";
 
 		//HttpURLConnection httpURLConnection = null;
