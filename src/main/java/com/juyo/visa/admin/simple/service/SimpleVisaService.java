@@ -375,7 +375,18 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 
 		//查询单组单人
-		List<Record> singleperson = getSingleperson(form);
+		List<Record> singleperson = getSingleperson(form, 1);
+
+		/*int orderscount = 0;
+		int peopletotal = 0;
+		int zhaobaoorder = 0;
+		int zhaobaopeople = 0;
+		//别的查询
+		Map<String, Integer> informationSearch = informationSearch(form, 1);
+		orderscount = informationSearch.get("orderscount");
+		peopletotal = informationSearch.get("peopletotal");
+		zhaobaoorder = informationSearch.get("zhaobaoorder");
+		zhaobaopeople = informationSearch.get("zhaobaopeople");*/
 
 		StatisticsEntity entity = new StatisticsEntity();
 		entity.setOrderscount(orderscount);
@@ -393,6 +404,45 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return result;
 	}
 
+	public Map<String, Integer> informationSearch(ListDataForm form, int type) {
+		Map<String, Integer> result = Maps.newHashMap();
+
+		long startTime = System.currentTimeMillis();
+		String singlesqlStr = sqlManager.get("get_japan_visa_list_data");
+		Sql singlesql = Sqls.create(singlesqlStr);
+		Cnd singlecnd = Cnd.NEW();
+		singlecnd = commonCondition(form, singlecnd);
+
+		singlesql.setCondition(singlecnd);
+		List<Record> totallist = dbDao.query(singlesql, singlecnd, null);
+
+		int orderscount = totallist.size();
+		int peopletotal = 0;
+		int zhaobaoorder = 0;
+		int zhaobaopeople = 0;
+		/*for (Record record : totallist) {
+			//收费单子，人数
+			if (Util.eq(1, record.get("zhaobaoupdate")) && Util.eq(0, record.get("isDisabled"))) {
+				zhaobaoorder++;
+				if (!Util.eq(0, record.get("peoplenumber"))) {
+					zhaobaopeople += record.getInt("peoplenumber");
+				}
+			}
+			//单子人数
+			if (!Util.eq(0, record.get("peoplenumber"))) {
+				peopletotal += record.getInt("peoplenumber");
+			}
+		}*/
+
+		long endTime = System.currentTimeMillis();
+		System.out.println("其他统计所用时间为：" + (endTime - startTime) + "ms");
+		result.put("zhaobaoorder", zhaobaoorder);
+		result.put("zhaobaopeople", zhaobaopeople);
+		result.put("peopletotal", peopletotal);
+		result.put("orderscount", orderscount);
+		return result;
+	}
+
 	/**
 	 * 查询单人单组数据
 	 * TODO(这里用一句话描述这个方法的作用)
@@ -402,12 +452,34 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 * @param form
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public List<Record> getSingleperson(ListDataForm form) {
+	public List<Record> getSingleperson(ListDataForm form, int type) {
 		long startTime = System.currentTimeMillis();
 		String singlesqlStr = sqlManager.get("getSingleperson");
 		Sql singlesql = Sqls.create(singlesqlStr);
-
 		Cnd singlecnd = Cnd.NEW();
+		singlecnd = commonCondition(form, singlecnd);
+
+		singlecnd.and("tr.zhaobaoupdate", "=", 1);
+		singlecnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
+
+		singlesql.setCondition(singlecnd);
+		List<Record> singleperson = dbDao.query(singlesql, singlecnd, null);
+		long endTime = System.currentTimeMillis();
+		System.out.println("查询单组单人所用时间为：" + (endTime - startTime) + "ms");
+		return singleperson;
+	}
+
+	/**
+	 * 共用的搜索条件cnd
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param singlecnd
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Cnd commonCondition(ListDataForm form, Cnd singlecnd) {
 		singlecnd.and("tr.comId", "=", form.getCompanyid());
 		if (!Util.isEmpty(form.getSearchStr())) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
@@ -471,16 +543,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			//普通的操作员
 			singlecnd.and("tr.salesOpid", "=", form.getUserid());
 		}
-		singlecnd.and("tr.zhaobaoupdate", "=", 1);
-		singlecnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
+
 		singlecnd.orderBy("tr.isDisabled", "ASC");
 		singlecnd.orderBy("tr.updatetime", "desc");
 
-		singlesql.setCondition(singlecnd);
-		List<Record> singleperson = dbDao.query(singlesql, singlecnd, null);
-		long endTime = System.currentTimeMillis();
-		System.out.println("查询单组单人所用时间为：" + (endTime - startTime) + "ms");
-		return singleperson;
+		return singlecnd;
 	}
 
 	/**
@@ -6319,6 +6386,23 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Cnd cnd = Cnd.NEW();
 		cnd.and("tawj.name", "like", "%" + Strings.trim(searchstr) + "%");
 		cnd.and("tr.comId", "=", loginCompany.getId());
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String startDate = "";
+		String endDate = "";
+		try {
+			Date nowDate = sdf.parse(sdf.format(new Date()));
+			Date pluDate = pluDate(nowDate, 30);
+			startDate = sdf.format(pluDate);
+			endDate = sdf.format(nowDate);
+		} catch (ParseException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		cnd.and("tawj.createTime", "between", new Object[] { startDate, endDate });
+
 		List<Record> names = dbDao.query(sql, cnd, null);
 		for (Record record : names) {
 			String name = record.getString("name");
@@ -6346,8 +6430,26 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		String sqlStr = sqlManager.get("simpleJP_getUnitname");
 		Sql sql = Sqls.create(sqlStr);
 		Cnd cnd = Cnd.NEW();
-		cnd.and("tawj.telephone", "like", "%" + Strings.trim(searchstr) + "%");
+		cnd.and("tawj.telephone", "like", Strings.trim(searchstr) + "%");
 		cnd.and("tr.comId", "=", loginCompany.getId());
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String startDate = "";
+		String endDate = "";
+		try {
+			Date nowDate = sdf.parse(sdf.format(new Date()));
+			Date pluDate = pluDate(nowDate, 30);
+			startDate = sdf.format(pluDate);
+			endDate = sdf.format(nowDate);
+		} catch (ParseException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		cnd.and("tawj.createTime", "between", new Object[] { startDate, endDate });
+
+		//cnd.limit(0, 500);
 		List<Record> telephones = dbDao.query(sql, cnd, null);
 		for (Record record : telephones) {
 			String name = record.getString("name");
@@ -6363,6 +6465,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 
 		return telephoneList;
+	}
+
+	public static Date pluDate(Date date, long day) throws ParseException {
+		long time = date.getTime(); // 得到指定日期的毫秒数
+		day = day * 24 * 60 * 60 * 1000; // 要加上的天数转换成毫秒数
+		//time += day; // 相加得到新的毫秒数
+		time -= day; // 相减得到新的毫秒数
+		return new Date(time); // 将毫秒数转换成日期
 	}
 
 	public Object getCustomerCitySelect(String cityname, String citytype, String exname, HttpSession session) {
