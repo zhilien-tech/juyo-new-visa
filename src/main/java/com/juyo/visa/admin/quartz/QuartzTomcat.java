@@ -14,19 +14,10 @@
 
 package com.juyo.visa.admin.quartz;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
 
 import org.apache.commons.io.IOUtils;
 import org.nutz.integration.quartz.annotation.Scheduled;
@@ -60,7 +51,7 @@ public class QuartzTomcat extends BaseService<TOrderJpEntity> implements Job {
 		System.out.println(sdf.format(new Date()));
 
 		//主
-		String path = "https://test.f-visa.com/admin/mobileVisa/getBasicInfoByStaffid";
+		/*String path = "https://test.f-visa.com/admin/mobileVisa/getBasicInfoByStaffid";
 		//从
 		//String path = "https://www.f-visa.com/admin/mobileVisa/getBasicInfoByStaffid";
 		String param = "staffid=4686";
@@ -136,7 +127,7 @@ public class QuartzTomcat extends BaseService<TOrderJpEntity> implements Job {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
-		}
+		}*/
 
 	}
 

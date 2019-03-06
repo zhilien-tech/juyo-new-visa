@@ -487,9 +487,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					.or("tc.linkman", "like", "%" + form.getSearchStr() + "%")
 					.or("tc.mobile", "like", "%" + form.getSearchStr() + "%")
 					.or("tc.email", "like", "%" + form.getSearchStr() + "%")
-					.or("taj.applyname", "like", "%" + form.getSearchStr() + "%")
+					//.or("taj.applyname", "like", "%" + form.getSearchStr() + "%")
 					.or("toj.acceptDesign", "like", "%" + form.getSearchStr() + "%")
-					.or("taj.passport", "like", "%" + form.getSearchStr() + "%");
+					//.or("taj.passport", "like", "%" + form.getSearchStr() + "%")
+					.or("(SELECT GROUP_CONCAT(CONCAT(ta.firstName,ta.lastName) SEPARATOR 'төл') applyname FROM t_applicant ta INNER JOIN t_applicant_order_jp taoj ON taoj.applicantId = ta.id LEFT JOIN t_order_jp toj ON taoj.orderId = toj.id LEFT JOIN t_order tor ON toj.orderId = tor.id WHERE tor.id = tr.id GROUP BY toj.orderId)",
+							"like", "%" + form.getSearchStr() + "%")
+					.or("(SELECT tap.passport FROM t_applicant ta INNER JOIN t_applicant_order_jp taoj ON taoj.applicantId = ta.id LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id LEFT JOIN t_order_jp toj ON taoj.orderId = toj.id LEFT JOIN t_order tor ON toj.orderId = tor.id WHERE tor.id = tr.id GROUP BY toj.orderId)",
+							"like", "%" + form.getSearchStr() + "%");
 			singlecnd.and(exp);
 		}
 
@@ -6387,7 +6391,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		cnd.and("tawj.name", "like", "%" + Strings.trim(searchstr) + "%");
 		cnd.and("tr.comId", "=", loginCompany.getId());
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String startDate = "";
 		String endDate = "";
 		try {
@@ -6433,7 +6437,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		cnd.and("tawj.telephone", "like", Strings.trim(searchstr) + "%");
 		cnd.and("tr.comId", "=", loginCompany.getId());
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String startDate = "";
 		String endDate = "";
 		try {
@@ -7888,7 +7892,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getSomething() {
-		for (int i = 1036; i < 24679; i++) {
+
+		for (int i = 0; i < 100000; i++) {
+			TApplicantWorkJpEntity workjp = new TApplicantWorkJpEntity();
+			workjp.setTelephone("0000");
+			dbDao.insert(workjp);
+		}
+
+		/*for (int i = 1036; i < 24679; i++) {
 			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, i);
 			if (!Util.isEmpty(apply)) {
 				TApplicantPassportEntity fetch = dbDao.fetch(TApplicantPassportEntity.class,
@@ -7898,7 +7909,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 			}
 
-		}
+		}*/
 		return null;
 	}
 
