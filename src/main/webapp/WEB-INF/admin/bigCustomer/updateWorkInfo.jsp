@@ -141,7 +141,7 @@
 				</div>
 				<div class="paddingTop  jobEduLearningInfoDiv">
 					<div class="groupInputInfo draBig">
-                        <label><span class="s">*</span>目前的工作单位名称</label>
+                        <label><span class="s">*</span>目前的工作单位或学校名称</label>
 						<input autocomplete="new-password" name="unitname" id="unitname" onchange="translateZhToEn(this,'unitnameen','')"  type="text" value="${obj.workinfo.unitname }" />
                     </div>
                     <div class="clear"></div>
@@ -150,7 +150,7 @@
                         <input autocomplete="new-password" name="telephone" value="${obj.workinfo.telephone }" id="jobtelphone"  type="text" />
                     </div>
 					<div class="paddingRight groupSelectInfo" style="width: 190px;padding-left: 10px;">
-                        <label><span class="s">*</span>工作国家</label>
+                        <label><span class="s">*</span>国家</label>
                         <select id='jobcountry'  class="form-control input-sm select2" multiple="multiple" name="country">
                         
                         	<c:forEach items="${obj.gocountryfivelist }" var="country">
@@ -168,7 +168,7 @@
                     </div>
                     <div class="clear"></div>
                     <div class="paddingLeft groupcheckBoxInfo" style="width: 200px;">
-                        <label><span class="s">*</span>单位地址（省）</label>
+                        <label><span class="s">*</span>省</label>
                         <select name="province" class="form-control input-sm select2"  multiple="multiple"  id="jobprovince" >
 	                   		<%-- <option selected="selected" value="${obj.workinfo.province }">${obj.workinfo.province}</option> --%>
 	                        <c:if test="${not empty obj.workinfo.province }">
@@ -178,7 +178,7 @@
                         <input type="hidden" id="jobprovinceen" name="provinceen" value="${obj.workinfo.provinceen }"/>
                     </div>
                     <div class="paddingRight groupInputInfo aaa" style="width: 180px;">
-                        <label><span class="s">*</span>单位地址（市）</label>
+                        <label><span class="s">*</span>市</label>
                          <select name="city" class="form-control input-sm select2"  multiple="multiple"  id="city" >
 	                   		<c:if test="${not empty obj.workinfo.city }">
 								<option value="${obj.workinfo.city }" selected="selected">${obj.workinfo.city }</option>
@@ -193,7 +193,7 @@
 					</div>
 					<div class="clear"></div>
                     <div class="paddingLeft groupInputInfo">
-                        <label><span class="s">*</span>入职日期</label>
+                        <label><span class="s">*</span>开始日期</label>
                         <input autocomplete="new-password" id="workstartdate"  name="workstartdate" value="${obj.workstartdate}" class="datetimepickercss form-control" type="text" placeholder="" />
                     </div>
                     <div class=" paddingRight groupcheckBoxInfo">
@@ -203,7 +203,7 @@
                     </div>
 					<div class="clear"></div>
 					<div class="paddingLeft groupcheckBoxInfo" >
-                        <label><span class="s">*</span>当前月收入</label>
+                        <label>当前月收入</label>
 						<input autocomplete="new-password" name="salary" value="${obj.workinfo.salary }" style="width: 180px;" id="salary" type="text"  onkeyup="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]" onafterpaste="this.value=(this.value.match(/\d+(\.\d{0,2})?/)||[''])[0]"/>
 					</div>
 					<div class="clear"></div>
@@ -440,7 +440,7 @@
 				
 				<div class="paddingTop  jobEduLearningInfoDiv" style="margin-top: 107px;">
 					<div class="groupInputInfo draBig">
-                            <label><span class="s">*</span> Present Employer Name</label>
+                            <label><span class="s">*</span> Present Employer or School Name </label>
 						<input autocomplete="new-password" name="unitnameen" id="unitnameen" style="width: 100%;" value="${obj.workinfo.unitnameen }" type="text" />
 					</div>
 					<div class="groupInputInfo draBig marginLS" style="margin-top: 147px;">
@@ -571,6 +571,15 @@
             openYesOrNoPage();
             
         }); */
+        
+        //职业为家庭主妇和退休时，现在的工作信息隐藏
+        //jobEduLearningInfoDiv
+        if('${obj.workinfo.occupation}' == 10 || '${obj.workinfo.occupation}' == 19){
+        	$(".jobEduLearningInfoDiv").hide();
+        }else{
+        	$(".jobEduLearningInfoDiv").show();
+        }
+        
         
         if('${obj.beforework.employercountry}' == ''){
         	$("#employercountry").val(45).trigger("change");;

@@ -588,13 +588,13 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			if (!Util.isEmpty(nowWorkinfo.getUnitname())) {
 				nowWork.put("unit_name_cn", nowWorkinfo.getUnitname());
 			} else {
-				errorMsg += "工作教育信息：目前的工作单位名称中文,</br>";
+				errorMsg += "工作教育信息：目前的工作单位或学校名称中文,</br>";
 			}
 			//单位名称 拼音(签证信息)
 			if (!Util.isEmpty(nowWorkinfo.getUnitnameen())) {
 				nowWork.put("unit_name_en", nowWorkinfo.getUnitnameen());
 			} else {
-				errorMsg += "工作教育信息：目前的工作单位名称英文,</br>";
+				errorMsg += "工作教育信息：目前的工作单位或学校名称英文,</br>";
 			}
 			//单位电话(签证信息)
 			if (!Util.isEmpty(nowWorkinfo.getTelephone())) {
@@ -618,13 +618,14 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 			if (!Util.isEmpty(nowWorkinfo.getSalary())) {
 				nowWork.put("monthly_income", nowWorkinfo.getSalary().intValue());
 			} else {
-				errorMsg += "工作教育信息：目前的工作月收入,</br>";
+				nowWork.put("monthly_income", "");
 			}
 			//入职时间(签证信息)
 			if (!Util.isEmpty(nowWorkinfo.getWorkstartdate())) {
 				nowWork.put("start_date", sdf.format(nowWorkinfo.getWorkstartdate()));
 			} else {
-				nowWork.put("start_date", "");
+				errorMsg += "工作教育信息：开始时间,</br>";
+				//nowWork.put("start_date", "");
 			}
 			nowWork.put("end_date", "");
 

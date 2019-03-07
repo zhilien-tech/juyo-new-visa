@@ -248,6 +248,8 @@ public class BeijingQinglvService extends BaseService<TOrderJpEntity> {
 		map.put("Text1", content.toString());
 		map.put("Text8", company.getLinkman());
 		map.put("Text9", company.getMobile());
+		map.put("Text11", companyname);
+		map.put("Text12", "日本国驻北京大使馆（总领事馆）");
 		if (!Util.isEmpty(ordertripjp)) {
 			if (!Util.isEmpty(ordertripjp.getGoDate())) {
 				map.put("Text3", dateFormat.format(ordertripjp.getGoDate()));
@@ -1622,7 +1624,7 @@ public class BeijingQinglvService extends BaseService<TOrderJpEntity> {
 			//表格下方数据
 			//公司名称
 			PdfPTable table2 = new PdfPTable(1); //表格一列
-			table2.setWidthPercentage(95);
+			table2.setWidthPercentage(87);
 			table2.setHorizontalAlignment(Element.ALIGN_CENTER); //垂直居中
 			table2.setTotalWidth(PageSize.A4.rotate().getWidth());
 			//table2.setWidths(wid1);

@@ -265,9 +265,13 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 					.or("tc.linkman", "like", "%" + form.getSearchStr() + "%")
 					.or("tc.mobile", "like", "%" + form.getSearchStr() + "%")
 					.or("tc.email", "like", "%" + form.getSearchStr() + "%")
-					.or("taj.applyname", "like", "%" + form.getSearchStr() + "%")
+					//.or("taj.applyname", "like", "%" + form.getSearchStr() + "%")
 					.or("toj.acceptDesign", "like", "%" + form.getSearchStr() + "%")
-					.or("taj.passport", "like", "%" + form.getSearchStr() + "%");
+					//.or("taj.passport", "like", "%" + form.getSearchStr() + "%")
+					.or("(SELECT GROUP_CONCAT(CONCAT(ta.firstName,ta.lastName) SEPARATOR 'төл') applyname FROM t_applicant ta INNER JOIN t_applicant_order_jp taoj ON taoj.applicantId = ta.id LEFT JOIN t_order_jp toj ON taoj.orderId = toj.id LEFT JOIN t_order tor ON toj.orderId = tor.id WHERE tor.id = tr.id GROUP BY toj.orderId)",
+							"like", "%" + form.getSearchStr() + "%")
+					.or("(SELECT tap.passport FROM t_applicant ta INNER JOIN t_applicant_order_jp taoj ON taoj.applicantId = ta.id LEFT JOIN t_applicant_passport tap ON tap.applicantId = ta.id LEFT JOIN t_order_jp toj ON taoj.orderId = toj.id LEFT JOIN t_order tor ON toj.orderId = tor.id WHERE tor.id = tr.id GROUP BY toj.orderId)",
+							"like", "%" + form.getSearchStr() + "%");
 			singlecnd.and(exp);
 		}
 
