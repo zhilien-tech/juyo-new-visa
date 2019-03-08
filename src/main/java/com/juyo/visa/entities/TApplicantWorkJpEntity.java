@@ -34,6 +34,10 @@ public class TApplicantWorkJpEntity implements Serializable {
 	private String name;
 
 	@Column
+	@Comment("单位名称分词")
+	private String namesplit;
+
+	@Column
 	@Comment("单位电话")
 	private String telephone;
 

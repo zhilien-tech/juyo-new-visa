@@ -6380,10 +6380,37 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getUnitname(String searchstr, HttpServletRequest request) {
+
+		long first = System.currentTimeMillis();
+
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 
 		List<String> nameList = new ArrayList<>();
+
+		/*String searchResult = "";
+		Result result1 = ToAnalysis.parse(searchstr);
+		List<Term> terms = result1.getTerms();
+		for (Term term : terms) {
+			String name = term.getName();
+			if (!Util.isEmpty(name)) {
+				searchResult += name + " +";
+			}
+		}
+
+		if (searchResult.contains("+")) {
+			searchResult = Strings.trim(searchResult).substring(0, Strings.trim(searchResult).length() - 2);
+		}
+		System.out.println(searchResult);
+
+		Sql sql = Sqls
+				.create("SELECT name,telephone,address FROM t_applicant_work_jp  WHERE MATCH(namesplit) AGAINST(@searchstr IN boolean mode)");
+
+		sql.setParam("searchstr", searchResult);
+		// and tr.comId = @comId
+		//sql.setParam("searchstr", searchResult).setParam("comId", loginCompany.getId());
+
+		List<Record> names = dbDao.query(sql, null, null);*/
 
 		String sqlStr = sqlManager.get("simpleJP_getUnitname");
 		Sql sql = Sqls.create(sqlStr);
@@ -6421,19 +6448,48 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
+		long last = System.currentTimeMillis();
+		System.out.println("查询所用时间为:" + (last - first) + "ms");
 		return nameList;
 	}
 
 	public Object getUnittelephone(String searchstr, HttpServletRequest request) {
+
+		long first = System.currentTimeMillis();
 
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 
 		List<String> telephoneList = new ArrayList<>();
 
+		/*String searchResult = "";
+		Result result1 = ToAnalysis.parse(searchstr);
+		List<Term> terms = result1.getTerms();
+		for (Term term : terms) {
+			String name = term.getName();
+			if (!Util.isEmpty(name)) {
+				searchResult += name + " +";
+			}
+		}
+
+		if (searchResult.contains("+")) {
+			searchResult = Strings.trim(searchResult).substring(0, Strings.trim(searchResult).length() - 2);
+		}
+		System.out.println(searchResult);
+
+		Sql sql = Sqls
+				.create("SELECT tawj.name,tawj.telephone,tawj.address FROM t_applicant_work_jp tawj LEFT JOIN t_applicant_order_jp taoj ON taoj.id = tawj.applicantId INNER JOIN t_order_jp toj ON toj.id = taoj.orderId LEFT JOIN t_order tr ON tr.id = toj.orderId WHERE MATCH(tawj.telephone) AGAINST(@searchstr IN boolean mode) and tr.comId = @comId");
+
+		sql.setParam("searchstr", searchResult).setParam("comId", loginCompany.getId());
+
+		List<Record> telephones = dbDao.query(sql, null, null);*/
+
 		String sqlStr = sqlManager.get("simpleJP_getUnitname");
 		Sql sql = Sqls.create(sqlStr);
 		Cnd cnd = Cnd.NEW();
+
+		//MATCH(telephone) AGAINST('国际' IN boolean mode)
+		//cnd.and("match(tawj.telephone)", "against", "(" + searchResult + "in boolean mode)");
 		cnd.and("tawj.telephone", "like", Strings.trim(searchstr) + "%");
 		cnd.and("tr.comId", "=", loginCompany.getId());
 
@@ -6468,6 +6524,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
+		long last = System.currentTimeMillis();
+		System.out.println("所用时间为:" + (last - first) + "ms");
 		return telephoneList;
 	}
 
@@ -7893,15 +7951,37 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 	public Object getSomething() {
 
-		for (int i = 0; i < 100000; i++) {
-			TApplicantWorkJpEntity workjp = new TApplicantWorkJpEntity();
-			workjp.setTelephone("0000");
-			dbDao.insert(workjp);
-		}
+		/*List<TApplicantWorkJpEntity> query = dbDao.query(TApplicantWorkJpEntity.class, null, null);
+		int count = 0;
+		int mount = 0;
+		for (TApplicantWorkJpEntity work : query) {
+			count++;
+			mount++;
+			work.setName(String.valueOf(count));
+			work.setTelephone(String.valueOf(mount));
+			String aaa = "";
+			if (!Util.isEmpty(work.getName())) {
+				Result parse = ToAnalysis.parse(work.getName());
+				List<Term> terms = parse.getTerms();
+				for (Term term : terms) {
+					String name = term.getName();
+					aaa += name + " ";
+				}
+				work.setNamesplit(aaa);
+				dbDao.update(work);
+			}
+			dbDao.update(work);
+		}*/
 
-		/*for (int i = 1036; i < 24679; i++) {
+		/*for (int i = 0; i < 1000000; i++) {
+			TApplicantWorkJpEntity work = new TApplicantWorkJpEntity();
+			work.setNamesplit("有限 公司");
+			dbDao.insert(work);
+		}*/
+
+		for (int i = 1036; i < 24679; i++) {
 			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, i);
-			if (!Util.isEmpty(apply)) {
+			if (!Util.isEmpty(apply.getFirstName())) {
 				TApplicantPassportEntity fetch = dbDao.fetch(TApplicantPassportEntity.class,
 						Cnd.where("applicantId", "=", i));
 				if (Util.isEmpty(fetch)) {
@@ -7909,7 +7989,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 			}
 
-		}*/
+		}
 		return null;
 	}
 
