@@ -6262,6 +6262,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			if (!Util.isEmpty(travelplan)) {
 				dbDao.delete(travelplan);
 			}
+
+			TOrderTripJpEntity tripjp = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderId", "=", orderid));
+			if (!Util.isEmpty(tripjp)) {
+				dbDao.delete(tripjp);
+			}
 			List<TApplicantOrderJpEntity> applicantjp = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("orderid", "=", orderid), null);
 			if (!Util.isEmpty(applicantjp)) {
@@ -6269,7 +6274,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				Integer[] applicantidjps = new Integer[applicantjp.size()];
 				int i = 0;
 				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applicantjp) {
-					applicantids[i] = tApplicantOrderJpEntity.getOrderId();
+					applicantids[i] = tApplicantOrderJpEntity.getApplicantId();
 					applicantidjps[i] = tApplicantOrderJpEntity.getId();
 					i++;
 				}
