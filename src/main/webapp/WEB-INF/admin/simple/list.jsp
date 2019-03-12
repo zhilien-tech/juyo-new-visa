@@ -365,8 +365,11 @@
         methods:{
         	visaDetail:function(orderid){
         		//跳转到签证详情页面
-        		//window.open('${base}/admin/simple/editOrder.html?orderid='+orderid);
-        		window.open('${base}/admin/simple/zhaobaoOrder.html?orderid='+orderid);
+        		if('${obj.ordertype}' == 1){
+ 		       		window.open('${base}/admin/simple/zhaobaoOrder.html?orderid='+orderid);
+        		}else{
+	        		window.open('${base}/admin/simple/editOrder.html?orderid='+orderid);
+        		}
         		//console.log(message);
         		//alert(JSON.stringify(event.target));
         	},
@@ -976,8 +979,11 @@
 
 	//下单
 	function addOrder(){
-		window.location.href = "/admin/simple/addOrder.html";
-		//window.location.href = "/admin/simple/addZhaobaoOrder.html";
+		if('${obj.ordertype}' == 1){
+			window.location.href = "/admin/simple/addZhaobaoOrder.html";
+		}else{
+			window.location.href = "/admin/simple/addOrder.html";
+		}
 	}
 	//下载
 	function downloadOrder(){

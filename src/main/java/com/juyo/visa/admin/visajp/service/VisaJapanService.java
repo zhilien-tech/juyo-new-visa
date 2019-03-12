@@ -1816,6 +1816,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	public Object sendZhaoBaoError(HttpServletRequest request, HttpSession session, Integer type) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
+
 		Map<String, Object> result = Maps.newHashMap();
 		String data = request.getParameter("data");
 		String strPtname = "";
@@ -1827,6 +1828,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		}
 		String orderid = request.getParameter("orderid");
 		int orderId = Integer.valueOf(orderid).intValue();
+		result.put("ordertype", loginUser.getOrdertype());
 		result.put("orderid", request.getParameter("orderid"));
 		result.put("data", strPtname);
 		result.put("type", type);
@@ -1965,7 +1967,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	public Object validateInfoIsFull(Integer orderjpid) {
 		StringBuffer resultstrbuf = new StringBuffer("");
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
-		if (orderjp.getVisaType() == 14) {
+		if (!Util.isEmpty(orderjp.getVisaType()) && orderjp.getVisaType() == 14) {
 			return 14;
 		} else {
 			//订单信息

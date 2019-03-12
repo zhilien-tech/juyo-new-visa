@@ -73,4 +73,8 @@ public class TUserEntity implements Serializable {
 	@Comment("操作人id")
 	private Integer opId;
 
+	@Column
+	@Comment("详情页类型")
+	private Integer ordertype;
+
 }

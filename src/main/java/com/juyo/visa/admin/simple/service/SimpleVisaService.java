@@ -220,6 +220,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Integer comid = loginCompany.getId();
 		Integer adminId = loginCompany.getAdminId();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer ordertype = loginUser.getOrdertype();
+		result.put("ordertype", ordertype);
+
 		Integer userType = loginUser.getUserType();//当前登录用户类型
 
 		//查询拥有某个权限模块的工作人员
