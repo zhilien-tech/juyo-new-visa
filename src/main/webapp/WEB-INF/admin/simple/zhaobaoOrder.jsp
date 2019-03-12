@@ -748,6 +748,10 @@
 					$( ".select2-selection__choice").val("");
 			}
 			
+			function saveZhaobaoOrderFunction(data){
+				saveZhaobaoOrder(2);
+			}
+			
 		</script>
 </body>
 </html>

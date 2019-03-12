@@ -1251,6 +1251,10 @@
 					$( ".select2-selection__choice").val("");
 			}
 			
+			function saveZhaobaoOrderFunction(data){
+				saveAddOrder(2);
+			}
+			
 		</script>
 </body>
 </html>

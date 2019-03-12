@@ -125,11 +125,18 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 			user.setUserType(UserLoginEnum.SQ_COMPANY_ADMIN.intKey());//送签社公司管理员
 		} else if (CompanyTypeEnum.DIJI.intKey() == comType) {
 			user.setUserType(UserLoginEnum.DJ_COMPANY_ADMIN.intKey());//地接社公司管理员
-		} else if (CompanyTypeEnum.SONGQIANSIMPLE.intKey() == comType) {
+		} else if (CompanyTypeEnum.SONGQIANSIMPLE.intKey() == comType
+				|| CompanyTypeEnum.ORDERSIMPLE.intKey() == comType) {
 			user.setUserType(UserLoginEnum.JJ_COMPANY_ADMIN.intKey());//送签社精简公司管理员
 		} else if (CompanyTypeEnum.BIGCUSTOMER.intKey() == comType) {
 			user.setUserType(UserLoginEnum.BIG_COMPANY_ADMIN.intKey());//大客户公司管理员
 		}
+		if (CompanyTypeEnum.ORDERSIMPLE.intKey() == comType) {
+			user.setOrdertype(1);
+		} else {
+			user.setOrdertype(2);
+		}
+
 		TUserEntity insertUser = dbDao.insert(user);
 
 		//公司信息
@@ -301,10 +308,17 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 				user.setUserType(UserLoginEnum.SQ_COMPANY_ADMIN.intKey());
 			} else if (CompanyTypeEnum.DIJI.intKey() == comType) {
 				user.setUserType(UserLoginEnum.DJ_COMPANY_ADMIN.intKey());
-			} else if (CompanyTypeEnum.SONGQIANSIMPLE.intKey() == comType) {
+			} else if (CompanyTypeEnum.SONGQIANSIMPLE.intKey() == comType
+					|| CompanyTypeEnum.ORDERSIMPLE.intKey() == comType) {
 				user.setUserType(UserLoginEnum.JJ_COMPANY_ADMIN.intKey());
 			} else if (CompanyTypeEnum.BIGCUSTOMER.intKey() == comType) {
 				user.setUserType(UserLoginEnum.BIG_COMPANY_ADMIN.intKey());
+			}
+
+			if (CompanyTypeEnum.ORDERSIMPLE.intKey() == comType) {
+				user.setOrdertype(1);
+			} else {
+				user.setOrdertype(2);
 			}
 			user.setUpdateTime(nowDate);
 			dbDao.update(user);
