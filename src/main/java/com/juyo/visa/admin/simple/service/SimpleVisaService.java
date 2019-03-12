@@ -3649,53 +3649,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderjpinfo.setVisaType(form.getVisatype());
 		orderjpinfo.setAmount(form.getAmount());
 		dbDao.update(orderjpinfo);
-		//保存或者更新客户历史表-----------------------------------------------------------------
-		//		TCustomerHisEntity customerHis = dbDao.fetch(TCustomerHisEntity.class, Cnd.where("orderId", "=", orderid));
-		//		if (Util.isEmpty(customerHis)) {
-		//			customerHis = new TCustomerHisEntity();
-		//
-		//		}
-		//		//用户id
-		//		customerHis.setUserId(loginUser.getId());
-		//		//订单Id
-		//		customerHis.setOrderId(orderid);
-		//		//公司Id
-		//		customerHis.setCompId(loginUser.getComId());
-		//		//公司名称
-		//		customerHis.setName(form.getCompName());
-		//		//公司简称
-		//		customerHis.setShortname(form.getComShortName());
-		//		//客户来源 CustomerTypeEnum
-		//		Integer customerType = form.getCustomerType();
-		//		for (CustomerTypeEnum pmEnum : CustomerTypeEnum.values())
-		//			if (!Util.isEmpty(customerType) && customerType == pmEnum.intKey()) {
-		//				customerHis.setSource(pmEnum.value());
-		//				break;
-		//			}
-		//		//支付方式 MainSalePayTypeEnum
-		//		Integer payType = form.getPayType();
-		//		for (MainSalePayTypeEnum pmEnum : MainSalePayTypeEnum.values())
-		//			if (!Util.isEmpty(payType) && payType == pmEnum.intKey()) {
-		//				customerHis.setPayType(pmEnum.value());
-		//				break;
-		//			}
-		//		//是否来自客户信息  是（直客）
-		//		if (customerType == 4) {
-		//			customerHis.setIsCustomerAdd("是");
-		//		} else {
-		//			customerHis.setIsCustomerAdd("否");
-		//		}
-		//		//手机
-		//		customerHis.setMobile(loginUser.getMobile());
-		//		//email
-		//		customerHis.setEmail(loginUser.getEmail());
-		//		if (!Util.isEmpty(customerHis.getId())) {
-		//			customerHis.setUpdateTime(new Date());
-		//			dbDao.update(customerHis);
-		//		} else {
-		//			customerHis.setCreateTime(new Date());
-		//			dbDao.insert(customerHis);
-		//		}
 
 		//出行信息---------------------------------------------------------------------------
 		TOrderTripJpEntity orderjptrip = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderId", "=", orderjpid));
@@ -3733,52 +3686,79 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		} else {
 			dbDao.insert(orderjptrip);
 		}
-		//		//出行历史信息
-		//		TOrderTripHisJpEntity tOrderTripHis = dbDao.fetch(TOrderTripHisJpEntity.class,
-		//				Cnd.where("orderId", "=", orderid));
-		//		if (Util.isEmpty(tOrderTripHis)) {
-		//			tOrderTripHis = new TOrderTripHisJpEntity();
-		//		}
-		//		//订单Id
-		//		tOrderTripHis.setOrderId(orderid);
-		//		//行程类型
-		//		if (form.getTriptype() == 1) {
-		//			tOrderTripHis.setTripType("往返");
-		//		} else {
-		//			tOrderTripHis.setTripType("多程");
-		//		}
-		//		//出行目的
-		//		tOrderTripHis.setTripPurpose(form.getTripPurpose());
-		//		//出发日期 去程
-		//		tOrderTripHis.setGoDate(form.getGoDate());
-		//		//出发城市 去程
-		//		TCityEntity goDepartureCity = dbDao.fetch(TCityEntity.class, Cnd.where("id", "", form.getGoDepartureCity()));
-		//		tOrderTripHis.setGoDepartureCity(goDepartureCity.getCity());
-		//		//抵达城市 去程
-		//		TCityEntity goArrivedCity = dbDao.fetch(TCityEntity.class, Cnd.where("id", "", form.getGoArrivedCity()));
-		//		tOrderTripHis.setGoArrivedCity(goArrivedCity.getCity());
-		//		//航班号
-		//		tOrderTripHis.setGoFlightNum(form.getGoFlightNum());
-		//		//出发日期
-		//		tOrderTripHis.setReturnDate(form.getReturnDate());
-		//		//出发城市 返程
-		//		TCityEntity returnDepartureCity = dbDao.fetch(TCityEntity.class,
-		//				Cnd.where("id", "", form.getReturnDepartureCity()));
-		//		tOrderTripHis.setReturnDepartureCity(returnDepartureCity.getCity());
-		//		//返回城市 返程
-		//		TCityEntity returnArrivedCity = dbDao
-		//				.fetch(TCityEntity.class, Cnd.where("id", "", form.getReturnArrivedCity()));
-		//		tOrderTripHis.setReturnArrivedCity(returnArrivedCity.getCity());
-		//		//航班号 返程
-		//		tOrderTripHis.setReturnFlightNum(form.getReturnFlightNum());
-		//		//新增 or 更新
-		//		if (!Util.isEmpty(tOrderTripHis.getId())) {
-		//			tOrderTripHis.setUpdateTime(new Date());
-		//			dbDao.update(tOrderTripHis);
-		//		} else {
-		//			tOrderTripHis.setCreateTime(new Date());
-		//			dbDao.insert(tOrderTripHis);
-		//		}
+
+		//消息通知
+		/*try {
+			visaInfoWSHandler.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+		return null;
+	}
+
+	/**
+	 * 保存招宝订单信息
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param request
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object saveZhaobaoOrderinfo(AddOrderForm form, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer orderjpid = form.getOrderid();
+		Integer orderid = null;
+		//获取订单id信息
+		if (Util.isEmpty(orderjpid)) {
+			Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
+			orderid = generrateorder.get("orderid");
+			orderjpid = generrateorder.get("orderjpid");
+			orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+
+		} else {
+			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
+			orderid = orderjp.getOrderId();
+			//根据订单ID查询
+			TOrderLogsEntity logs = dbDao.fetch(TOrderLogsEntity.class, Cnd.where("orderid", "=", orderid.longValue()));
+			if (Util.isEmpty(logs)) {
+				orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+			}
+			if (JpOrderSimpleEnum.PLACE_ORDER.intKey() != 1) {
+				orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+			}
+		}
+		TOrderJpEntity orderjpinfo = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderid.longValue());
+		orderinfo.setCityId(form.getCityid());
+		orderinfo.setGoTripDate(form.getGoDate());
+		orderinfo.setStayDay(form.getStayday());
+		orderinfo.setBackTripDate(form.getReturnDate());
+
+		orderinfo.setIsDisabled(IsYesOrNoEnum.NO.intKey());
+		orderinfo.setUpdateTime(new Date());
+
+		dbDao.update(orderinfo);
+		//更新日本订单表
+		orderjpinfo.setVisaType(form.getVisatype());
+		dbDao.update(orderjpinfo);
+
+		//出行信息---------------------------------------------------------------------------
+		TOrderTripJpEntity orderjptrip = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderId", "=", orderjpid));
+		if (Util.isEmpty(orderjptrip)) {
+			orderjptrip = new TOrderTripJpEntity();
+		}
+		orderjptrip.setGoDate(form.getGoDate());
+		orderjptrip.setReturnDate(form.getReturnDate());
+
+		orderjptrip.setOrderId(orderjpid);
+		if (!Util.isEmpty(orderjptrip.getId())) {
+			dbDao.update(orderjptrip);
+		} else {
+			dbDao.insert(orderjptrip);
+		}
 
 		//消息通知
 		/*try {

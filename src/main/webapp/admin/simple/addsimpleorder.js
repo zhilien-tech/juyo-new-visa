@@ -165,6 +165,46 @@ function addApplicant(){
 	});
 }
 
+function saveZhaobaoOrder(status){
+	var orderinfo = {};
+	var orderid = $('#orderid').val();
+	orderinfo.orderid = orderid;
+	
+	var visatype = $('#visatype').val();
+	orderinfo.visatype = visatype;
+	
+	var cityid = $('#cityid').val();
+	orderinfo.cityid = cityid;
+	
+	var goDate = $('#goDate').val();
+	orderinfo.goDate = goDate;
+	var stayday = $('#stayday').val();
+	orderinfo.stayday = stayday;
+	var returnDate = $('#returnDate').val();
+	orderinfo.returnDate = returnDate;
+	
+	layer.load(1);
+	$.ajax({
+		type : 'POST',
+		data : orderinfo ,
+		async: false,
+		url : '/admin/simple/saveZhaobaoOrderinfo.html',
+		success : function(data) {
+			//console.log(JSON.stringify(data));
+			layer.closeAll("loading");
+			if(status == 1){
+				window.location.href = '/admin/simple/list.html';
+			}else if(status == 2){
+			}else{
+				window.close();
+			}
+		},
+		error : function() {
+			console.log("error");
+		}
+	});
+}
+
 //下单保存  status 标注的编辑还是添加
 function saveAddOrder(status){
 	var orderinfo = {};

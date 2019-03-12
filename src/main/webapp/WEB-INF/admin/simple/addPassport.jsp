@@ -123,6 +123,8 @@
 	<script src="${base}/references/public/plugins/jQuery/jquery-3.2.1.min.js"></script>
 	<script src="${base}/references/common/js/layer/layer.js"></script>
 	<script src="${base}/admin/common/utils.js"></script>
+	
+	<script src="${base}/admin/simple/addsimpleorder.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script>
 		//const orderid 	  = '${obj.orderid}';
 		//const applicantid = '${obj.applyid}';
@@ -189,6 +191,8 @@
 					if(data == null){
 						console.log("111");
 					}else{
+						window.parent.document.getElementById('orderid').value = data.orderid;
+						parent.saveZhaobaoOrderFunction(2);
 						layerFn.close(() => {
 							socket.close();
 						});
@@ -218,6 +222,9 @@
 						socket.close();
 						console.log($("#applyid").val());
 						console.log($("#orderid").val());
+						
+						parent.saveZhaobaoOrderFunction(2);
+						
 						window.location.href = '/admin/simple/updateApplicant.html?applicantid=' + $("#applyid").val() + '&orderid=' + $("#orderid").val();
 					}
 				}

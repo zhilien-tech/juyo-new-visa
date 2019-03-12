@@ -72,6 +72,15 @@ public class SimpleVisaModule {
 	}
 
 	/**
+	 * 添加招宝订单
+	 */
+	@At
+	@Ok("jsp")
+	public Object addZhaobaoOrder(HttpServletRequest request) {
+		return simpleVisaService.addOrder(request);
+	}
+
+	/**
 	 * 生成行程安排
 	 */
 	@At
@@ -134,11 +143,29 @@ public class SimpleVisaModule {
 	}
 
 	/**
+	 * 下单保存(招宝订单)
+	 */
+	@At
+	@POST
+	public Object saveZhaobaoOrderinfo(@Param("..") AddOrderForm form, HttpServletRequest request) {
+		return simpleVisaService.saveZhaobaoOrderinfo(form, request);
+	}
+
+	/**
 	 * 跳转到编辑订单页面
 	 */
 	@At
 	@Ok("jsp")
 	public Object editOrder(HttpServletRequest request, @Param("orderid") Integer orderid) {
+		return simpleVisaService.editOrder(request, orderid);
+	}
+
+	/**
+	 * 跳转到招宝编辑订单页面(简化)
+	 */
+	@At
+	@Ok("jsp")
+	public Object zhaobaoOrder(HttpServletRequest request, @Param("orderid") Integer orderid) {
 		return simpleVisaService.editOrder(request, orderid);
 	}
 
