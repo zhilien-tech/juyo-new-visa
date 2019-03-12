@@ -256,9 +256,10 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 		Cnd singlecnd = Cnd.NEW();
 		if (!Util.isEmpty(form.getSongqianshe())) {
 			singlecnd.and("tr.comId", "=", form.getSongqianshe());
-		} else {
+		} /*else {
 			singlecnd.and("toj.groundconnectid", "=", form.getCompanyid());
-		}
+			}*/
+		singlecnd.and("toj.groundconnectid", "=", form.getCompanyid());
 		if (!Util.isEmpty(form.getSearchStr())) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("tr.orderNum", "like", "%" + form.getSearchStr() + "%")
