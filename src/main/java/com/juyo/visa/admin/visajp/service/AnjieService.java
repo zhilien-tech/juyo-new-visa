@@ -1079,11 +1079,11 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 				Image img = Image.getInstance(url);
 				img.setAlignment(Image.RIGHT);
 				//		img.scaleToFit(400, 200);//大小
-				img.scaleToFit(200, 100);//大小
+				img.scaleToFit(280, 180);//大小
 				//img.setIndentationRight(200);
 				img.setRotation(800);
 
-				img.setAbsolutePosition(430, height - totalHeight - 160);
+				img.setAbsolutePosition(350, height - totalHeight - 250);
 				img.setAlignment(Paragraph.ALIGN_RIGHT);
 
 				document.add(img);
@@ -2274,11 +2274,11 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 				Image img = Image.getInstance(url);
 				img.setAlignment(Image.RIGHT);
 				//		img.scaleToFit(400, 200);//大小
-				img.scaleToFit(200, 100);//大小
+				img.scaleToFit(280, 180);//大小
 				//img.setIndentationRight(200);
 				img.setRotation(800);
 
-				img.setAbsolutePosition(430, height - totalHeight - 200);
+				img.setAbsolutePosition(350, height - totalHeight - 250);
 				img.setAlignment(Paragraph.ALIGN_RIGHT);
 
 				document.add(img);
@@ -2647,11 +2647,11 @@ public class AnjieService extends BaseService<TOrderJpEntity> {
 				Image img = Image.getInstance(url);
 				img.setAlignment(Image.RIGHT);
 				//		img.scaleToFit(400, 200);//大小
-				img.scaleToFit(200, 100);//大小
+				img.scaleToFit(280, 180);//大小
 				//img.setIndentationRight(200);
 				img.setRotation(800);
 
-				img.setAbsolutePosition(430, height - totalHeight - 200);
+				img.setAbsolutePosition(350, height - totalHeight - 250);
 				img.setAlignment(Paragraph.ALIGN_RIGHT);
 
 				document.add(img);

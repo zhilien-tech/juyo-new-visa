@@ -6257,6 +6257,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(orderid)) {
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
 			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+			List<TOrderLogsEntity> logs = dbDao.query(TOrderLogsEntity.class,
+					Cnd.where("orderId", "=", orderinfo.getId()), null);
+			if (!Util.isEmpty(logs)) {
+				dbDao.delete(logs);
+			}
+
 			List<TOrderTravelplanJpEntity> travelplan = dbDao.query(TOrderTravelplanJpEntity.class,
 					Cnd.where("orderid", "=", orderid), null);
 			if (!Util.isEmpty(travelplan)) {
