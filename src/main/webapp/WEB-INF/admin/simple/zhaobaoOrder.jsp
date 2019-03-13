@@ -64,7 +64,7 @@
 					</c:choose >
 					<input type="button" value="取消" class="btn btn-primary btn-sm pull-right" onclick="cancelAddOrder();"/> 
 					<input type="button" value="保存并返回" class="btn btn-primary btn-sm pull-right btn-ToBig" onclick="saveZhaobaoOrder(3);" />
-					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right" onclick="downLoadFile()"/>
+					<input type="button" value="下载" class="btn btn-primary btn-sm pull-right download" onclick="downLoadFile()"/>
 					<!-- <input type="button" value="拒签" class="btn btn-primary btn-sm pull-right" onclick="sendInsurance(27)"/> -->
 					<c:choose>
 						<c:when test="${obj.orderjpinfo.visaType == 14 }">
@@ -265,6 +265,12 @@
 	<script src="${base}/admin/simple/addsimpleorder.js?v=<%=System.currentTimeMillis() %>"></script><!-- 本页面js文件 -->
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
+	
+		if('${obj.ordertype}' == 1){
+			$(".download").hide();
+		}else{
+			$(".download").show();
+		}
 		
 		//加载申请人表格数据
 		initApplicantTable();

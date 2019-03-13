@@ -1772,7 +1772,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		result.put("orderjpinfo", orderjp);
 		//送签社下拉
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
-				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())
+				|| loginCompany.getComType().equals(CompanyTypeEnum.ORDERSIMPLE.intKey())) {
 			//如果公司自己有指定番号，说明有送签资质，也需要出现在下拉中
 			if (!Util.isEmpty(loginCompany.getCdesignNum())) {
 				ja.add(loginCompany);
@@ -2033,12 +2034,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 						if (Util.isEmpty(record.get("passportno"))) {
 							resultstrbuf.append("申请人" + count + "的护照号、");
 						}
-						if (Util.isEmpty(record.get("position"))) {
+						/*if (Util.isEmpty(record.get("position"))) {
 							resultstrbuf.append("申请人" + count + "的职位、");
 						}
 						if (Util.isEmpty(record.get("unitName"))) {
 							resultstrbuf.append("申请人" + count + "的父母（配偶）职业、");
-						}
+						}*/
 					}
 					count++;
 				}

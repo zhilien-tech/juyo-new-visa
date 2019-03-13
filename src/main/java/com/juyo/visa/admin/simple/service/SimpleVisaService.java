@@ -197,7 +197,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		//送签社下拉
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
-				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())
+				|| loginCompany.getComType().equals(CompanyTypeEnum.ORDERSIMPLE.intKey())) {
 			//如果公司自己有指定番号，说明有送签资质，也需要出现在下拉中
 			if (!Util.isEmpty(loginCompany.getCdesignNum())) {
 				ja.add(loginCompany);
@@ -288,6 +289,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		form.setCompanyid(loginCompany.getId());
 		form.setAdminId(loginCompany.getAdminId());
 		Map<String, Object> result = Maps.newHashMap();
+
+		result.put("ordertype", loginUser.getOrdertype());
 		Sql sql = form.sql(sqlManager);
 
 		Integer pageNumber = form.getPageNumber();
@@ -3784,6 +3787,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	public Object editOrder(HttpServletRequest request, Integer orderid) {
 
 		Map<String, Object> result = Maps.newHashMap();
+
+		HttpSession session = request.getSession();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		result.put("ordertype", loginUser.getOrdertype());
 		TOrderJpEntity orderjpinfo = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjpinfo.getOrderId().longValue());
 		TCustomerEntity customerinfo = new TCustomerEntity();
@@ -3798,18 +3805,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		List<ResultflyEntity> returntripAirlineSelect = Lists.newArrayList();
 
 		if (!Util.isEmpty(tripinfo)) {
-			/*FlightSelectParam param = new FlightSelectParam();
-			param.setGocity(tripinfo.getGoDepartureCity().longValue());
-			param.setArrivecity(tripinfo.getGoArrivedCity().longValue());
-			param.setDate("2018-06-19");
-			param.setFlight("");
-			gotripAirlineSelect = tripAirlineService.getTripAirlineSelect(param);
-
-			param.setGocity(tripinfo.getReturnDepartureCity().longValue());
-			param.setArrivecity(tripinfo.getReturnArrivedCity().longValue());
-			param.setDate("2018-06-19");
-			param.setFlight("");
-			returntripAirlineSelect = tripAirlineService.getTripAirlineSelect(param);*/
 			Integer[] cityids = { tripinfo.getGoDepartureCity(), tripinfo.getGoArrivedCity(),
 					tripinfo.getReturnDepartureCity(), tripinfo.getReturnArrivedCity() };
 			citylist = dbDao.query(TCityEntity.class, Cnd.where("id", "in", cityids), null);
@@ -3819,14 +3814,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					tripinfo.getNewgoarrivedcity(), tripinfo.getNewgodeparturecity(),
 					tripinfo.getNewreturnarrivedcity(), tripinfo.getNewreturndeparturecity() };
 			newcitylist = dbDao.query(TCityEntity.class, Cnd.where("id", "in", newcityids), null);
-			/*String[] flightnums = { tripinfo.getGoFlightNum(), tripinfo.getReturnFlightNum() };
-			List<TFlightEntity> flightlistpre = dbDao.query(TFlightEntity.class,
-					Cnd.where("flightnum", "in", flightnums), null);
-			for (TFlightEntity tFlightEntity : flightlistpre) {
-				if (!flightlist.contains(tFlightEntity)) {
-					flightlist.add(tFlightEntity);
-				}
-			}*/
 		}
 		String orderstatus = "";
 		for (JPOrderStatusEnum orderenum : JPOrderStatusEnum.values()) {
@@ -7973,9 +7960,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(work);
 		}*/
 
-		for (int i = 1036; i < 24679; i++) {
+		for (int i = 1036; i < 31155; i++) {
 			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, i);
-			if (!Util.isEmpty(apply.getFirstName())) {
+			if (!Util.isEmpty(apply) && !Util.isEmpty(apply.getFirstName())) {
 				TApplicantPassportEntity fetch = dbDao.fetch(TApplicantPassportEntity.class,
 						Cnd.where("applicantId", "=", i));
 				if (Util.isEmpty(fetch)) {

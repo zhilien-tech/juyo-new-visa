@@ -769,6 +769,7 @@
 	<script type="text/javascript" src="${base}/admin/common/commonjs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
 		
+	
 		//加载申请人表格数据
 		initApplicantTable();
 		//加载行程安排表格数据
@@ -1062,16 +1063,16 @@
 			//下单取消
 			function cancelAddOrder(){
 				
-				/* $.ajax({ 
+				$.ajax({ 
 			    	url: '${base}/admin/simple/getSomething.html',
 			    	dataType:"json",
 			    	type:'post',
 			    	success: function(data){
 			    		//window.location.reload();
 			      	}
-			    }); */
+			    });
 				
-				window.close();
+				//window.close();
 			}
 			function successAddCustomer(data){
 				

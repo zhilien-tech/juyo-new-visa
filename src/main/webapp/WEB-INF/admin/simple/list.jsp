@@ -178,28 +178,6 @@
 							<span style="margin-left: 20px;">{{data.comshortname}}</span>
 						</div>
 						<div><label></label><span>{{data.visatype}}</span></div>
-						<!-- <div><label></label><span style="font-weight:bold;font-size:16px;">
-							<span v-if="data.visastatus === '招宝成功'">
-								<font color="red">{{data.visastatus}}</font>
-							</span>
-							<span v-else-if="data.visastatus === '发招宝中'">
-								<font>{{data.visastatus}}</font>
-
-								<div class="spinner">
-								  <div class="bounce1"></div>
-								  <div class="bounce2"></div>
-								  <div class="bounce3"></div>
-								</div>
-							</span>
-							<span v-else-if="data.isdisabled == 1">
-									作废
-								</span>
-								<span v-else>
-									{{data.visastatus}}
-								</span>
-
-							</span>
-						</div>	 -->
 						<div v-if="data.isdisabled != 1">
 							<label>操作：</label>
 							<i class="edit" v-on:click="visaDetail(data.id)"> </i>
@@ -325,6 +303,12 @@
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script src="${base}/admin/simple/listpagejs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
+	
+	if('${obj.ordertype}' == 1){
+		$(".download").hide();
+	}else{
+		$(".download").show();
+	}
 	//异步加载的URL地址
     var url="${base}/admin/simple/listData.html";
     //vue表格数据对象
