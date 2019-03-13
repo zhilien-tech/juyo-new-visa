@@ -3787,10 +3787,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	public Object editOrder(HttpServletRequest request, Integer orderid) {
 
 		Map<String, Object> result = Maps.newHashMap();
-
-		HttpSession session = request.getSession();
-		TUserEntity loginUser = LoginUtil.getLoginUser(session);
-		result.put("ordertype", loginUser.getOrdertype());
 		TOrderJpEntity orderjpinfo = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjpinfo.getOrderId().longValue());
 		TCustomerEntity customerinfo = new TCustomerEntity();
@@ -7970,6 +7966,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 			}
 
+			if (i % 1000 == 0) {
+				System.out.println("申请人id:" + i);
+			}
+			if (i == 31154) {
+				System.out.println("到最后一个了！！！");
+			}
 		}
 		return null;
 	}
