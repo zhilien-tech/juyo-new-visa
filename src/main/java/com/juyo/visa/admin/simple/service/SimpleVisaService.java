@@ -7956,7 +7956,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(work);
 		}*/
 
-		for (int i = 1036; i < 31155; i++) {
+		for (int i = 4952; i < 31826; i++) {
 			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, i);
 			if (!Util.isEmpty(apply) && !Util.isEmpty(apply.getFirstName())) {
 				TApplicantPassportEntity fetch = dbDao.fetch(TApplicantPassportEntity.class,
@@ -7969,7 +7969,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			if (i % 1000 == 0) {
 				System.out.println("申请人id:" + i);
 			}
-			if (i == 31154) {
+			if (i == 31825) {
 				System.out.println("到最后一个了！！！");
 			}
 		}
