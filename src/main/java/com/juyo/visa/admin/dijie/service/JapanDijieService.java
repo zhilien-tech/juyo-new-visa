@@ -290,6 +290,14 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 		if (!Util.isEmpty(form.getStatus())) {
 			if (Util.eq(form.getStatus(), JPOrderStatusEnum.DISABLED.intKey())) {
 				singlecnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
+			} else if (Util.eq(form.getStatus(), 22)) {
+				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).or("tr.status", "=", 35)
+						.and("tr.isDisabled", "=", IsYesOrNoEnum.NO.intKey());
+				singlecnd.and(e1);
+			} else if (Util.eq(19, form.getStatus())) {
+				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).or("tr.status", "=", 34)
+						.and("tr.isDisabled", "=", IsYesOrNoEnum.NO.intKey());
+				singlecnd.and(e1);
 			} else {
 				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).and("tr.isDisabled", "=",
 						IsYesOrNoEnum.NO.intKey());

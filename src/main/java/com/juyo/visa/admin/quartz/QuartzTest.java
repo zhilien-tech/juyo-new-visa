@@ -73,7 +73,8 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 		//查询发招宝中、提交中、变更中、取消中的订单,注意作废的订单不需要
 		Integer[] orderstatus = { JPOrderStatusEnum.READYCOMMING.intKey(), JPOrderStatusEnum.BIANGENGZHONG.intKey(),
 				JPOrderStatusEnum.QUXIAOZHONG.intKey(), JPOrderStatusEnum.COMMITING.intKey(),
-				JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey() };
+				JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey(), JPOrderStatusEnum.WANGZHANBIANGENGZHONG.intKey(),
+				JPOrderStatusEnum.WANGZHANQUXIAOZHONG.intKey() };
 		List<TOrderEntity> orderList = dbDao.query(TOrderEntity.class,
 				Cnd.where("status", "in", orderstatus).and("isDisabled", "=", 0), null);
 		//判断是否有满足需要的订单
