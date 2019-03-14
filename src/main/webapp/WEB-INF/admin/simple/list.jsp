@@ -162,6 +162,8 @@
 				<span>招宝成功(人)： {{visaJapanDataS.zhaobaopeople}}</span>
 				<span>单组单人： {{visaJapanDataS.singleperson}}</span>
 				<span>单组多人： {{visaJapanDataS.multiplayer}}</span>
+				<input type="file" multiple name="file" style="display: none" onchange="importExcel(this)" id="file"/>
+				<a class="btn btn-primary btn-sm pull-right importExcel"  id="importButton">导入</a>
 			</div>
 
 			<div style="margin-top:123px!important;" class="box-body" v-cloak><!-- 卡片列表 -->
@@ -306,8 +308,10 @@
 	
 	if('${obj.ordertype}' == 1){
 		$(".download").hide();
+		$(".importExcel").show();
 	}else{
 		$(".download").show();
+		$(".importExcel").hide();
 	}
 	//异步加载的URL地址
     var url="${base}/admin/simple/listData.html";
@@ -991,6 +995,56 @@
 	         }
 	     });
 	}
+	
+	//上传
+	function importExcel(obj){
+		layer.load(1);
+		var fileName=$("#file").val();
+		if(fileName == '') {
+	          layer.msg('请选择文件！'); 
+	          return false;
+	      }
+		console.log("fileName:"+fileName);
+		//验证文件格式
+	    var fileType = (fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length)).toLowerCase();
+		if (fileType != 'xlsx' && fileType != 'xls') {
+			layer.msg('文件格式不正确！');
+			return false;
+		} 
+		console.log("fileType:"+fileType);
+		var file = obj.files[0];
+		var form = new FormData(); // FormData 对象
+		form.append("file", file);
+		
+		$.ajax({
+			type:'POST',
+			url:'/admin/simple/importExcel.html',//请求地址  ,
+			async : true,
+			contentType : false,
+			processData : false,
+			data:form,
+			success: function(data){
+				layer.closeAll('loading');
+				if(data == "error"){
+					layer.msg("文件导入失败，请重新上传！");
+					return false;
+				}else{
+					layer.msg("文件导入成功！");
+					search();
+					return false;
+				}
+			},
+			error : function(data){
+				console.log(data.msg);
+			}
+		});
+	}
+	
+	
+	$("#importButton").click(function(){
+		$("#file").click();
+	});
+		
 
 	//连接websocket
 	/* connectWebSocket();

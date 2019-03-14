@@ -6,6 +6,7 @@
 
 package com.juyo.visa.admin.simple.module;
 
+import java.io.File;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +15,14 @@ import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.upload.UploadAdaptor;
 
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.simple.form.AddOrderForm;
@@ -385,6 +389,17 @@ public class SimpleVisaModule {
 	@GET
 	public Object downloadOrder(@Param("..") ListDataForm form, HttpServletRequest request, HttpServletResponse response) {
 		return simpleVisaService.downloadOrder(form, request, response);
+	}
+
+	/**
+	 * 上传excel数据到数据库
+	 */
+	@At
+	@Ok("json")
+	@Filters
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object importExcel(@Param("file") File file, HttpServletRequest request, HttpServletResponse response) {
+		return simpleVisaService.importExcel(file, request, response);
 	}
 
 	/**

@@ -6,13 +6,8 @@
 
 package com.juyo.visa;
 
-import java.util.List;
-
-import org.ansj.domain.Result;
-import org.ansj.domain.Term;
-import org.ansj.splitWord.analysis.ToAnalysis;
-
-import com.uxuexi.core.common.util.Util;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -25,7 +20,19 @@ import com.uxuexi.core.common.util.Util;
 public class TestAnsj {
 	public static void test() {
 
-		String aaa = "";
+		String aaa = "2019/04/02";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+		try {
+			System.out.println(sdf.parse(sdf.format(sdf2.parse(aaa))));
+		} catch (ParseException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+
+		/*String aaa = "";
 		String str = null;
 		Result result = ToAnalysis.parse(str);
 		List<Term> terms = result.getTerms();
@@ -36,7 +43,7 @@ public class TestAnsj {
 			}
 			//System.out.println(name);
 		}
-		System.out.println(aaa);
+		System.out.println(aaa);*/
 		//System.out.println(result);
 		//System.out.println(result.getTerms());
 
