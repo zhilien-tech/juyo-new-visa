@@ -69,7 +69,8 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 
 		//送签社下拉
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
-				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())
+				|| loginCompany.getComType().equals(CompanyTypeEnum.ORDERSIMPLE.intKey())) {
 			//如果公司自己有指定番号，说明有送签资质，也需要出现在下拉中
 			if (!Util.isEmpty(loginCompany.getCdesignNum())) {
 				ja.add(loginCompany);
@@ -86,8 +87,10 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 				ja.add(sendCompany);
 			}
 		}
-		List<TCompanyEntity> query = dbDao.query(TCompanyEntity.class,
-				Cnd.where("comType", "=", CompanyTypeEnum.SONGQIANSIMPLE.intKey()), null);
+		List<TCompanyEntity> query = dbDao.query(
+				TCompanyEntity.class,
+				Cnd.where("comType", "=", CompanyTypeEnum.SONGQIANSIMPLE.intKey()).or("comType", "=",
+						CompanyTypeEnum.ORDERSIMPLE.intKey()), null);
 		result.put("songqianlist", query);
 
 		//员工下拉

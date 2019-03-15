@@ -317,8 +317,20 @@ public class CompanyViewService extends BaseService<TCompanyEntity> {
 
 			if (CompanyTypeEnum.ORDERSIMPLE.intKey() == comType) {
 				user.setOrdertype(1);
+				List<TUserEntity> users = dbDao
+						.query(TUserEntity.class, Cnd.where("comId", "=", user.getComId()), null);
+				for (TUserEntity tUserEntity : users) {
+					tUserEntity.setOrdertype(1);
+					dbDao.update(tUserEntity);
+				}
 			} else {
 				user.setOrdertype(2);
+				List<TUserEntity> users = dbDao
+						.query(TUserEntity.class, Cnd.where("comId", "=", user.getComId()), null);
+				for (TUserEntity tUserEntity : users) {
+					tUserEntity.setOrdertype(2);
+					dbDao.update(tUserEntity);
+				}
 			}
 			user.setUpdateTime(nowDate);
 			dbDao.update(user);

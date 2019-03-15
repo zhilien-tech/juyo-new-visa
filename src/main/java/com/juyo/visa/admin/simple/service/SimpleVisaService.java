@@ -8,6 +8,8 @@ package com.juyo.visa.admin.simple.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.DateFormat;
@@ -43,10 +45,9 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
@@ -7192,36 +7193,66 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+		Workbook workbook = null;
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(file);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+
+		try {
+			//2003版本的excel，用.xls结尾
+			workbook = new HSSFWorkbook(fis);//得到工作簿
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			try {
+				//2007版本的excel，用.xlsx结尾
+				workbook = new XSSFWorkbook(file);//得到工作簿
+				System.out.println("excel为2007版");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 		try {
 			//创建Excel，读取文件内容
 
-			XSSFWorkbook workbook = new XSSFWorkbook(file);
+			//XSSFWorkbook workbook = new XSSFWorkbook(file);
 			//第一个sheet
-			XSSFSheet sheetAt = workbook.getSheetAt(0);
+			Sheet sheetAt = workbook.getSheetAt(0);
 			for (int i = 6; i < 11; i++) {
 				if (i == 7 || i == 8) {
 					System.out.println("要跳过了，i为" + i);
 					continue;
 				}
-				XSSFRow r = sheetAt.getRow(i);
+				Row r = sheetAt.getRow(i);
 
 				if (i == 6) {
 					String visatype = r.getCell(2).getStringCellValue();
 					if (visatype.contains("三年")) {
 						if (visatype.contains("冲绳")) {
 							orderjp.setVisaType(7);
+							orderjp.setVisaCounty("冲绳");
 						} else if (visatype.contains("宫城")) {
 							orderjp.setVisaType(8);
+							orderjp.setVisaCounty("宫城");
 						} else if (visatype.contains("福岛")) {
 							orderjp.setVisaType(9);
+							orderjp.setVisaCounty("福岛");
 						} else if (visatype.contains("岩手")) {
 							orderjp.setVisaType(10);
+							orderjp.setVisaCounty("岩手");
 						} else if (visatype.contains("青森")) {
 							orderjp.setVisaType(11);
+							orderjp.setVisaCounty("青森");
 						} else if (visatype.contains("秋田")) {
 							orderjp.setVisaType(12);
+							orderjp.setVisaCounty("秋田");
 						} else if (visatype.contains("山形")) {
 							orderjp.setVisaType(13);
+							orderjp.setVisaCounty("山形");
 						} else {
 							orderjp.setVisaType(6);
 						}
@@ -7243,17 +7274,17 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				Date date = null;
 
 				if (i == 9 || i == 10) {
-					XSSFCell cell = r.getCell(2);
+					Cell cell = r.getCell(2);
 					int cellType = cell.getCellType();
 					System.out.println("文本格式为:" + cellType);
 					/*String stringCellValue = cell.getStringCellValue();
 					System.out.println("stringCellValue:" + stringCellValue);*/
-					if (Util.eq(1, cellType)) {//文本格式
+					if (Util.eq(Cell.CELL_TYPE_STRING, cellType)) {//文本格式
 						String stringCellValue = cell.getStringCellValue();
 						if (!Util.isEmpty(stringCellValue)) {
 							date = sdf.parse(sdf.format(sdf2.parse(stringCellValue)));
 						}
-					} else if (Util.eq(0, cellType)) {//日期格式
+					} else if (Util.eq(Cell.CELL_TYPE_NUMERIC, cellType)) {//日期格式
 						Date dateCellValue = cell.getDateCellValue();
 						if (!Util.isEmpty(dateCellValue)) {
 							date = sdf.parse(sdf2.format(dateCellValue));
@@ -7283,7 +7314,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(ordertripjp);
 
 			//第二个sheet
-			XSSFSheet sheetAt2 = workbook.getSheetAt(1);
+			Sheet sheetAt2 = workbook.getSheetAt(1);
 			int lastRowNum = sheetAt2.getLastRowNum();
 			int totalRow = 0;
 			for (int i = 5; i < lastRowNum; i++) {
@@ -7295,7 +7326,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 			System.out.println("lastRowNum:" + lastRowNum);
 			for (int i = 5; i < totalRow; i++) {
-				XSSFRow r = sheetAt2.getRow(i);
+				Row r = sheetAt2.getRow(i);
 
 				//新建申请人表
 				TApplicantEntity apply = new TApplicantEntity();
@@ -8217,7 +8248,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			dbDao.insert(work);
 		}*/
 
-		for (int i = 4952; i < 31826; i++) {
+		for (int i = 4952; i < 33826; i++) {
 			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, i);
 			if (!Util.isEmpty(apply) && !Util.isEmpty(apply.getFirstName())) {
 				TApplicantPassportEntity fetch = dbDao.fetch(TApplicantPassportEntity.class,
