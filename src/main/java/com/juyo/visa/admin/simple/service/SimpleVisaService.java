@@ -8,7 +8,6 @@ package com.juyo.visa.admin.simple.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.DateFormat;
@@ -45,9 +44,9 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -3261,7 +3260,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 	public Map<String, Integer> generrateorder(TUserEntity user, TCompanyEntity company) {
 
-		System.out.println("generate:" + System.currentTimeMillis());
 		Map<String, Integer> result = Maps.newHashMap();
 		//如果订单不存在，则先创建订单
 		TOrderEntity orderinfo = new TOrderEntity();
@@ -3285,7 +3283,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TOrderJpEntity orderjpinsert = dbDao.insert(orderjp);
 		Integer orderjpid = orderjpinsert.getId();
 		result.put("orderjpid", orderjpid);
-		System.out.println("generate last:" + System.currentTimeMillis());
 		return result;
 	}
 
@@ -3454,7 +3451,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	private String generrateOrdernum() {
-		System.out.println("ordernum:" + System.currentTimeMillis());
 		//生成订单号
 		SimpleDateFormat smf = new SimpleDateFormat("yyMMdd");
 		String format = smf.format(new Date());
@@ -3479,7 +3475,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			sum1 = "" + sum;
 
 		}
-		System.out.println("ordernum last:" + System.currentTimeMillis());
 		return format + "-JP" + sum1;
 	}
 
@@ -7213,10 +7208,17 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
 			Workbook workbook = null;
-			FileInputStream fis = null;
+
 			try {
-				fis = new FileInputStream(file);
+				//fis = new FileInputStream(file);
+				workbook = WorkbookFactory.create(file);
 			} catch (Exception e1) {
+				if (!Util.isEmpty(orderjp)) {
+					dbDao.delete(orderjp);
+				}
+				if (!Util.isEmpty(order)) {
+					dbDao.delete(order);
+				}
 				e1.printStackTrace();
 			}
 			/*InputStream fis = null;
@@ -7229,7 +7231,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 			}*/
 
-			try {
+			/*try {
 				//2003版本的excel，用.xls结尾
 				workbook = new HSSFWorkbook(fis);//得到工作簿
 
@@ -7240,9 +7242,15 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					workbook = new XSSFWorkbook(file);//得到工作簿
 					System.out.println("excel为2007版");
 				} catch (Exception e) {
+					if (!Util.isEmpty(orderjp)) {
+						dbDao.delete(orderjp);
+					}
+					if (!Util.isEmpty(order)) {
+						dbDao.delete(order);
+					}
 					e.printStackTrace();
 				}
-			}
+			}*/
 
 			try {
 				//创建Excel，读取文件内容
@@ -7305,8 +7313,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 						Cell cell = r.getCell(2);
 						int cellType = cell.getCellType();
 						System.out.println("文本格式为:" + cellType);
-						/*String stringCellValue = cell.getStringCellValue();
-						System.out.println("stringCellValue:" + stringCellValue);*/
 						if (Util.eq(Cell.CELL_TYPE_STRING, cellType)) {//文本格式
 							String stringCellValue = cell.getStringCellValue();
 							if (!Util.isEmpty(stringCellValue)) {
