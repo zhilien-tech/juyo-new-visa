@@ -9,7 +9,6 @@ package com.juyo.visa.admin.simple.service;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.text.DateFormat;
@@ -61,6 +60,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.upload.TempFile;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -3260,6 +3260,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Map<String, Integer> generrateorder(TUserEntity user, TCompanyEntity company) {
+
+		System.out.println("generate:" + System.currentTimeMillis());
 		Map<String, Integer> result = Maps.newHashMap();
 		//如果订单不存在，则先创建订单
 		TOrderEntity orderinfo = new TOrderEntity();
@@ -3283,6 +3285,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		TOrderJpEntity orderjpinsert = dbDao.insert(orderjp);
 		Integer orderjpid = orderjpinsert.getId();
 		result.put("orderjpid", orderjpid);
+		System.out.println("generate last:" + System.currentTimeMillis());
 		return result;
 	}
 
@@ -3451,6 +3454,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	private String generrateOrdernum() {
+		System.out.println("ordernum:" + System.currentTimeMillis());
 		//生成订单号
 		SimpleDateFormat smf = new SimpleDateFormat("yyMMdd");
 		String format = smf.format(new Date());
@@ -3475,6 +3479,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			sum1 = "" + sum;
 
 		}
+		System.out.println("ordernum last:" + System.currentTimeMillis());
 		return format + "-JP" + sum1;
 	}
 
@@ -7169,263 +7174,290 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	@SuppressWarnings("resource")
-	public Object importExcel(File file, HttpServletRequest request, HttpServletResponse response) {
+	public Object importExcel(List<TempFile> tfs, HttpServletRequest request, HttpServletResponse response) {
 		long firsttime = System.currentTimeMillis();
 
-		String resultStr = "ok";
+		String resultStr = "error";
 
-		System.out.println("file路径:" + file);
 		HttpSession session = request.getSession();
 		//获取当前公司
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 		//当前登录人员
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 
-		//创建订单和日本订单
-		Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
-		Integer orderid = generrateorder.get("orderjpid");
+		String realPath = request.getServletContext().getRealPath("/");
 
-		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
-		TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+		for (TempFile tempFile : tfs) {
 
-		long secondtime = System.currentTimeMillis();
-		System.out.println("创建订单所用时间：" + (secondtime - firsttime) + "ms");
+			File file = tempFile.getFile();
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
-		Workbook workbook = null;
-		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(file);
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		}
+			//创建订单和日本订单
+			Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
+			Integer orderid = generrateorder.get("orderjpid");
 
-		try {
-			//2003版本的excel，用.xls结尾
-			workbook = new HSSFWorkbook(fis);//得到工作簿
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
 			try {
-				//2007版本的excel，用.xlsx结尾
-				workbook = new XSSFWorkbook(file);//得到工作簿
-				System.out.println("excel为2007版");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+				Thread.sleep(1000);
+			} catch (Exception e2) {
 
-		try {
-			//创建Excel，读取文件内容
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
 
-			//XSSFWorkbook workbook = new XSSFWorkbook(file);
-			//第一个sheet
-			Sheet sheetAt = workbook.getSheetAt(0);
-			for (int i = 6; i < 11; i++) {
-				if (i == 7 || i == 8) {
-					System.out.println("要跳过了，i为" + i);
-					continue;
-				}
-				Row r = sheetAt.getRow(i);
-
-				if (i == 6) {
-					String visatype = r.getCell(2).getStringCellValue();
-					if (visatype.contains("三年")) {
-						if (visatype.contains("冲绳")) {
-							orderjp.setVisaType(7);
-							orderjp.setVisaCounty("冲绳");
-						} else if (visatype.contains("宫城")) {
-							orderjp.setVisaType(8);
-							orderjp.setVisaCounty("宫城");
-						} else if (visatype.contains("福岛")) {
-							orderjp.setVisaType(9);
-							orderjp.setVisaCounty("福岛");
-						} else if (visatype.contains("岩手")) {
-							orderjp.setVisaType(10);
-							orderjp.setVisaCounty("岩手");
-						} else if (visatype.contains("青森")) {
-							orderjp.setVisaType(11);
-							orderjp.setVisaCounty("青森");
-						} else if (visatype.contains("秋田")) {
-							orderjp.setVisaType(12);
-							orderjp.setVisaCounty("秋田");
-						} else if (visatype.contains("山形")) {
-							orderjp.setVisaType(13);
-							orderjp.setVisaCounty("山形");
-						} else {
-							orderjp.setVisaType(6);
-						}
-					} else {
-						if (visatype.contains("冲绳")) {
-							orderjp.setVisaType(2);
-						} else if (visatype.contains("宫城")) {
-							orderjp.setVisaType(3);
-						} else if (visatype.contains("福岛")) {
-							orderjp.setVisaType(5);
-						} else if (visatype.contains("岩手")) {
-							orderjp.setVisaType(4);
-						} else {
-							orderjp.setVisaType(1);
-						}
-					}
-				}
-
-				Date date = null;
-
-				if (i == 9 || i == 10) {
-					Cell cell = r.getCell(2);
-					int cellType = cell.getCellType();
-					System.out.println("文本格式为:" + cellType);
-					/*String stringCellValue = cell.getStringCellValue();
-					System.out.println("stringCellValue:" + stringCellValue);*/
-					if (Util.eq(Cell.CELL_TYPE_STRING, cellType)) {//文本格式
-						String stringCellValue = cell.getStringCellValue();
-						if (!Util.isEmpty(stringCellValue)) {
-							date = sdf.parse(sdf.format(sdf2.parse(stringCellValue)));
-						}
-					} else if (Util.eq(Cell.CELL_TYPE_NUMERIC, cellType)) {//日期格式
-						Date dateCellValue = cell.getDateCellValue();
-						if (!Util.isEmpty(dateCellValue)) {
-							date = sdf.parse(sdf2.format(dateCellValue));
-						}
-					}
-					if (!Util.isEmpty(date)) {
-						date = sdf.parse(sdf.format(date));
-					}
-					if (i == 9) {
-						order.setGoTripDate(date);
-					} else if (i == 10) {
-						order.setBackTripDate(date);
-					}
-					System.out.println("date:" + date);
-				}
-			}
-			dbDao.update(orderjp);
-			order.setCityId(2);
-			dbDao.update(order);
-
-			TOrderTripJpEntity ordertripjp = new TOrderTripJpEntity();
-			ordertripjp.setGoDate(order.getGoTripDate());
-			ordertripjp.setReturnDate(order.getBackTripDate());
-			ordertripjp.setOrderId(orderid);
-			ordertripjp.setTripType(1);
-			ordertripjp.setTripPurpose("旅游");
-			dbDao.insert(ordertripjp);
-
-			//第二个sheet
-			Sheet sheetAt2 = workbook.getSheetAt(1);
-			int lastRowNum = sheetAt2.getLastRowNum();
-			int totalRow = 0;
-			for (int i = 5; i < lastRowNum; i++) {
-				String stringCellValue = sheetAt2.getRow(i).getCell(1).getStringCellValue();
-				if (Util.isEmpty(stringCellValue)) {
-					totalRow = i;
-					break;
-				}
-			}
-			System.out.println("lastRowNum:" + lastRowNum);
-			for (int i = 5; i < totalRow; i++) {
-				Row r = sheetAt2.getRow(i);
-
-				//新建申请人表
-				TApplicantEntity apply = new TApplicantEntity();
-				apply.setOpId(loginUser.getId());
-				apply.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
-				apply.setIsPrompted(IsYesOrNoEnum.NO.intKey());
-				apply.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
-				apply.setCreateTime(new Date());
-				apply.setFirstName(r.getCell(1).getStringCellValue());
-				apply.setFirstNameEn(r.getCell(2).getStringCellValue());
-				apply.setLastName(r.getCell(1).getStringCellValue());
-				apply.setLastNameEn(r.getCell(2).getStringCellValue());
-				apply.setSex(r.getCell(3).getStringCellValue());
-				apply.setProvince(r.getCell(4).getStringCellValue());
-				if (!Util.isEmpty(r.getCell(5).getStringCellValue())) {
-					apply.setBirthday(sdf.parse(r.getCell(5).getStringCellValue()));
-				} else {
-					apply.setBirthday(null);
-				}
-
-				TApplicantEntity insertApply = dbDao.insert(apply);
-				int applyid = insertApply.getId();
-
-				//护照信息
-				TApplicantPassportEntity passport = new TApplicantPassportEntity();
-				passport.setIssuedOrganization("公安部出入境管理局");
-				passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
-				passport.setFirstName(r.getCell(1).getStringCellValue());
-				passport.setFirstNameEn(r.getCell(2).getStringCellValue());
-				passport.setLastName(r.getCell(1).getStringCellValue());
-				passport.setLastNameEn(r.getCell(2).getStringCellValue());
-				passport.setSex(r.getCell(3).getStringCellValue());
-				if (!Util.isEmpty(r.getCell(5).getStringCellValue())) {
-					passport.setBirthday(sdf.parse(r.getCell(5).getStringCellValue()));
-				} else {
-					passport.setBirthday(null);
-				}
-				passport.setPassport(r.getCell(6).getStringCellValue());
-				passport.setApplicantId(applyid);
-				dbDao.insert(passport);
-
-				//新建日本申请人表
-				TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
-
-				//设置主申请人信息
-				List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
-						Cnd.where("orderId", "=", orderid), null);
-				if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
-
-					applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
-					TApplicantOrderJpEntity mainApply = dbDao.fetch(TApplicantOrderJpEntity.class,
-							Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=", IsYesOrNoEnum.YES.intKey()));
-					if (!Util.isEmpty(mainApply)) {
-						apply.setMainId(mainApply.getApplicantId());
-					}
-					dbDao.update(apply);
-				} else {
-					//设置为主申请人
-					applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
-					apply.setMainId(applyid);
-					dbDao.update(apply);
-				}
-
-				applicantjp.setOrderId(orderid);
-				applicantjp.setApplicantId(applyid);
-				applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
-				applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
-				applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
-				TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
-
-				//日本工作信息
-				TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
-				workJp.setApplicantId(insertappjp.getId());
-				workJp.setCreateTime(new Date());
-				workJp.setOpId(loginUser.getId());
-				workJp.setPosition(r.getCell(7).getStringCellValue());
-				dbDao.insert(workJp);
-
-				//其他信息
-				TApplicantVisaOtherInfoEntity visaother = new TApplicantVisaOtherInfoEntity();
-				visaother.setApplicantid(insertappjp.getId());
-				visaother.setHotelname("参照'赴日予定表'");
-				visaother.setVouchname("参照'身元保证书'");
-				visaother.setInvitename("同上");
-				visaother.setTraveladvice("推荐");
-				dbDao.insert(visaother);
 			}
 
-		} catch (Exception e) {
-			if (!Util.isEmpty(orderjp)) {
-				dbDao.delete(orderjp);
+			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
+			TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+
+			long secondtime = System.currentTimeMillis();
+			System.out.println("创建订单所用时间：" + (secondtime - firsttime) + "ms");
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+			Workbook workbook = null;
+			FileInputStream fis = null;
+			try {
+				fis = new FileInputStream(file);
+			} catch (Exception e1) {
+				e1.printStackTrace();
 			}
-			if (!Util.isEmpty(order)) {
-				dbDao.delete(order);
-			}
-			resultStr = "error";
+			/*InputStream fis = null;
+			try {
+			fis = file.getInputStream();
+			} catch (Exception e1) {
+
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 
+			}*/
+
+			try {
+				//2003版本的excel，用.xls结尾
+				workbook = new HSSFWorkbook(fis);//得到工作簿
+
+			} catch (Exception ex) {
+				//ex.printStackTrace();
+				try {
+					//2007版本的excel，用.xlsx结尾
+					workbook = new XSSFWorkbook(file);//得到工作簿
+					System.out.println("excel为2007版");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			try {
+				//创建Excel，读取文件内容
+
+				//XSSFWorkbook workbook = new XSSFWorkbook(file);
+				//第一个sheet
+				Sheet sheetAt = workbook.getSheetAt(0);
+				for (int i = 6; i < 11; i++) {
+					if (i == 7 || i == 8) {
+						System.out.println("要跳过了，i为" + i);
+						continue;
+					}
+					Row r = sheetAt.getRow(i);
+
+					if (i == 6) {
+						String visatype = r.getCell(2).getStringCellValue();
+						if (visatype.contains("三年")) {
+							if (visatype.contains("冲绳")) {
+								orderjp.setVisaType(7);
+								orderjp.setVisaCounty("冲绳");
+							} else if (visatype.contains("宫城")) {
+								orderjp.setVisaType(8);
+								orderjp.setVisaCounty("宫城");
+							} else if (visatype.contains("福岛")) {
+								orderjp.setVisaType(9);
+								orderjp.setVisaCounty("福岛");
+							} else if (visatype.contains("岩手")) {
+								orderjp.setVisaType(10);
+								orderjp.setVisaCounty("岩手");
+							} else if (visatype.contains("青森")) {
+								orderjp.setVisaType(11);
+								orderjp.setVisaCounty("青森");
+							} else if (visatype.contains("秋田")) {
+								orderjp.setVisaType(12);
+								orderjp.setVisaCounty("秋田");
+							} else if (visatype.contains("山形")) {
+								orderjp.setVisaType(13);
+								orderjp.setVisaCounty("山形");
+							} else {
+								orderjp.setVisaType(6);
+							}
+						} else {
+							if (visatype.contains("冲绳")) {
+								orderjp.setVisaType(2);
+							} else if (visatype.contains("宫城")) {
+								orderjp.setVisaType(3);
+							} else if (visatype.contains("福岛")) {
+								orderjp.setVisaType(5);
+							} else if (visatype.contains("岩手")) {
+								orderjp.setVisaType(4);
+							} else {
+								orderjp.setVisaType(1);
+							}
+						}
+					}
+
+					Date date = null;
+
+					if (i == 9 || i == 10) {
+						Cell cell = r.getCell(2);
+						int cellType = cell.getCellType();
+						System.out.println("文本格式为:" + cellType);
+						/*String stringCellValue = cell.getStringCellValue();
+						System.out.println("stringCellValue:" + stringCellValue);*/
+						if (Util.eq(Cell.CELL_TYPE_STRING, cellType)) {//文本格式
+							String stringCellValue = cell.getStringCellValue();
+							if (!Util.isEmpty(stringCellValue)) {
+								date = sdf.parse(sdf.format(sdf2.parse(stringCellValue)));
+							}
+						} else if (Util.eq(Cell.CELL_TYPE_NUMERIC, cellType)) {//日期格式
+							Date dateCellValue = cell.getDateCellValue();
+							if (!Util.isEmpty(dateCellValue)) {
+								date = sdf.parse(sdf2.format(dateCellValue));
+							}
+						}
+						if (!Util.isEmpty(date)) {
+							date = sdf.parse(sdf.format(date));
+						}
+						if (i == 9) {
+							order.setGoTripDate(date);
+						} else if (i == 10) {
+							order.setBackTripDate(date);
+						}
+						System.out.println("date:" + date);
+					}
+				}
+				dbDao.update(orderjp);
+				order.setCityId(2);
+				dbDao.update(order);
+
+				TOrderTripJpEntity ordertripjp = new TOrderTripJpEntity();
+				ordertripjp.setGoDate(order.getGoTripDate());
+				ordertripjp.setReturnDate(order.getBackTripDate());
+				ordertripjp.setOrderId(orderid);
+				ordertripjp.setTripType(1);
+				ordertripjp.setTripPurpose("旅游");
+				dbDao.insert(ordertripjp);
+
+				//第二个sheet
+				Sheet sheetAt2 = workbook.getSheetAt(1);
+				int lastRowNum = sheetAt2.getLastRowNum();
+				int totalRow = 0;
+				for (int i = 5; i < lastRowNum; i++) {
+					String stringCellValue = sheetAt2.getRow(i).getCell(1).getStringCellValue();
+					if (Util.isEmpty(stringCellValue)) {
+						totalRow = i;
+						break;
+					}
+				}
+				System.out.println("lastRowNum:" + lastRowNum);
+				for (int i = 5; i < totalRow; i++) {
+					Row r = sheetAt2.getRow(i);
+
+					//新建申请人表
+					TApplicantEntity apply = new TApplicantEntity();
+					apply.setOpId(loginUser.getId());
+					apply.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+					apply.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+					apply.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+					apply.setCreateTime(new Date());
+					apply.setFirstName(r.getCell(1).getStringCellValue());
+					apply.setFirstNameEn(r.getCell(2).getStringCellValue());
+					apply.setLastName(r.getCell(1).getStringCellValue());
+					apply.setLastNameEn(r.getCell(2).getStringCellValue());
+					apply.setSex(r.getCell(3).getStringCellValue());
+					apply.setProvince(r.getCell(4).getStringCellValue());
+					if (!Util.isEmpty(r.getCell(5).getStringCellValue())) {
+						apply.setBirthday(sdf.parse(r.getCell(5).getStringCellValue()));
+					} else {
+						apply.setBirthday(null);
+					}
+
+					TApplicantEntity insertApply = dbDao.insert(apply);
+					int applyid = insertApply.getId();
+
+					//护照信息
+					TApplicantPassportEntity passport = new TApplicantPassportEntity();
+					passport.setIssuedOrganization("公安部出入境管理局");
+					passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
+					passport.setFirstName(r.getCell(1).getStringCellValue());
+					passport.setFirstNameEn(r.getCell(2).getStringCellValue());
+					passport.setLastName(r.getCell(1).getStringCellValue());
+					passport.setLastNameEn(r.getCell(2).getStringCellValue());
+					passport.setSex(r.getCell(3).getStringCellValue());
+					if (!Util.isEmpty(r.getCell(5).getStringCellValue())) {
+						passport.setBirthday(sdf.parse(r.getCell(5).getStringCellValue()));
+					} else {
+						passport.setBirthday(null);
+					}
+					passport.setPassport(r.getCell(6).getStringCellValue());
+					passport.setApplicantId(applyid);
+					dbDao.insert(passport);
+
+					//新建日本申请人表
+					TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+
+					//设置主申请人信息
+					List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
+							Cnd.where("orderId", "=", orderid), null);
+					if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
+
+						applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
+						TApplicantOrderJpEntity mainApply = dbDao.fetch(
+								TApplicantOrderJpEntity.class,
+								Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=",
+										IsYesOrNoEnum.YES.intKey()));
+						if (!Util.isEmpty(mainApply)) {
+							apply.setMainId(mainApply.getApplicantId());
+						}
+						dbDao.update(apply);
+					} else {
+						//设置为主申请人
+						applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+						apply.setMainId(applyid);
+						dbDao.update(apply);
+					}
+
+					applicantjp.setOrderId(orderid);
+					applicantjp.setApplicantId(applyid);
+					applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+					applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+					applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+					TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
+
+					//日本工作信息
+					TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
+					workJp.setApplicantId(insertappjp.getId());
+					workJp.setCreateTime(new Date());
+					workJp.setOpId(loginUser.getId());
+					workJp.setPosition(r.getCell(7).getStringCellValue());
+					dbDao.insert(workJp);
+
+					//其他信息
+					TApplicantVisaOtherInfoEntity visaother = new TApplicantVisaOtherInfoEntity();
+					visaother.setApplicantid(insertappjp.getId());
+					visaother.setHotelname("参照'赴日予定表'");
+					visaother.setVouchname("参照'身元保证书'");
+					visaother.setInvitename("同上");
+					visaother.setTraveladvice("推荐");
+					dbDao.insert(visaother);
+				}
+				resultStr = "ok";
+
+			} catch (Exception e) {
+				if (!Util.isEmpty(orderjp)) {
+					dbDao.delete(orderjp);
+				}
+				if (!Util.isEmpty(order)) {
+					dbDao.delete(order);
+				}
+				resultStr = "error";
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+			}
 		}
 
 		return resultStr;

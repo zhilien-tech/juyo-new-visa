@@ -3860,6 +3860,8 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 	public Map<String, Object> savePassportinfo(PassportJsonEntity form, int applyid, int orderid, int userid) {
 
 		Map<String, Object> result = Maps.newHashMap();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
 		TUserEntity loginUser = dbDao.fetch(TUserEntity.class, userid);
 		TCompanyEntity loginCompany = dbDao.fetch(TCompanyEntity.class, loginUser.getComId().longValue());
 		TApplicantPassportEntity passport = new TApplicantPassportEntity();
@@ -3882,8 +3884,27 @@ public class OrderJpViewService extends BaseService<TOrderJpEntity> {
 		passport.setOCRline2(form.getOCRline2());
 		passport.setBirthAddress(form.getBirthCountry());
 		passport.setIssuedPlace(form.getVisaCountry());
-		passport.setIssuedOrganization("公安部出入境管理局");
-		passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
+
+		if (!Util.isEmpty(form.getIssueDate())) {
+			try {
+				if (sdf.parse(form.getIssueDate()).getTime() >= sdf.parse("2019-03-01").getTime()) {
+					passport.setIssuedOrganization("中华人民共和国国家移民管理局");
+					passport.setIssuedOrganizationEn("National Immigration Administartion,PRC");
+				} else {
+					passport.setIssuedOrganization("公安部出入境管理局");
+					passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
+				}
+			} catch (ParseException e) {
+
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+			}
+		} else {
+			passport.setIssuedOrganization("公安部出入境管理局");
+			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
+		}
+
 		PinyinTool tool = new PinyinTool();
 		try {
 			if (!Util.isEmpty(form.getXingCn())) {

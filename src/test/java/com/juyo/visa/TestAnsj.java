@@ -20,9 +20,24 @@ import java.text.SimpleDateFormat;
 public class TestAnsj {
 	public static void test() {
 
-		String aaa = "2019/04/02";
+		String aaa = "2019-04-03";
+		String bbb = "2019-04-03";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+
+		try {
+			long time = sdf.parse(aaa).getTime();
+			long time2 = sdf.parse(bbb).getTime();
+			System.out.println(time);
+			System.out.println(time2);
+			System.out.println(time = time2);
+		} catch (ParseException e1) {
+
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+
+		}
+
+		/*SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
 		try {
 			System.out.println(sdf.parse(sdf.format(sdf2.parse(aaa))));
 		} catch (ParseException e) {
@@ -30,7 +45,7 @@ public class TestAnsj {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
-		}
+		}*/
 
 		/*String aaa = "";
 		String str = null;

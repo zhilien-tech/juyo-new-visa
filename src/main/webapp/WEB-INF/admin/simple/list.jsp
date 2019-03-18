@@ -1001,7 +1001,8 @@
 		layer.load(1);
 		var fileName=$("#file").val();
 		if(fileName == '') {
-	          layer.msg('请选择文件！'); 
+	          layer.msg('请选择文件！');
+	          layer.closeAll('loading');
 	          return false;
 	      }
 		console.log("fileName:"+fileName);
@@ -1009,12 +1010,16 @@
 	    var fileType = (fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length)).toLowerCase();
 		if (fileType != 'xlsx' && fileType != 'xls') {
 			layer.msg('文件格式不正确！');
+			layer.closeAll('loading');
 			return false;
 		} 
 		console.log("fileType:"+fileType);
-		var file = obj.files[0];
+		var file = obj.files;
 		var form = new FormData(); // FormData 对象
-		form.append("file", file);
+		 for(var i = 0; i < file.length; i++){
+		 	form.append("file", file[i]);
+		 }
+		//form.append("file", file);
 		
 		$.ajax({
 			type:'POST',

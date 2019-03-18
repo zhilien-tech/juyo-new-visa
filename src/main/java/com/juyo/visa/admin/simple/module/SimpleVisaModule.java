@@ -6,8 +6,8 @@
 
 package com.juyo.visa.admin.simple.module;
 
-import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +22,7 @@ import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.upload.TempFile;
 import org.nutz.mvc.upload.UploadAdaptor;
 
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
@@ -398,8 +399,9 @@ public class SimpleVisaModule {
 	@Ok("json")
 	@Filters
 	@AdaptBy(type = UploadAdaptor.class)
-	public Object importExcel(@Param("file") File file, HttpServletRequest request, HttpServletResponse response) {
-		return simpleVisaService.importExcel(file, request, response);
+	public Object importExcel(@Param("file") List<TempFile> tfs, HttpServletRequest request,
+			HttpServletResponse response) {
+		return simpleVisaService.importExcel(tfs, request, response);
 	}
 
 	/**

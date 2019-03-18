@@ -1063,14 +1063,14 @@
 			//下单取消
 			function cancelAddOrder(){
 				
-				/* $.ajax({ 
+				/*$.ajax({ 
 			    	url: '${base}/admin/simple/getSomething.html',
 			    	dataType:"json",
 			    	type:'post',
 			    	success: function(data){
 			    		//window.location.reload();
 			      	}
-			    }); */
+			    });*/
 				
 				window.close();
 			}

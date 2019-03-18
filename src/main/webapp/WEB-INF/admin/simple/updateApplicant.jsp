@@ -1339,11 +1339,24 @@
 				var issuedOrganization = "${obj.passport.issuedOrganization }";
 				var issuedOrganizationen = "${obj.passport.issuedOrganizationEn }";
 
+				//护照签发日期在2019-03-01之后签发机关改变
+				var issuedDateStr =  $("#issuedDate").val();
+				var issued =  new Date(Date.parse(issuedDateStr));
+				var newissued =  new Date(Date.parse("2019-03-01"));
+				
 				if (issuedOrganization == "") {
-					$("#issuedOrganization").val("公安部出入境管理局");
+					if(issued >= newissued){
+						$("#issuedOrganization").val("中华人民共和国国家移民管理局");
+					}else{
+						$("#issuedOrganization").val("公安部出入境管理局");
+					}
 				}
 				if (issuedOrganizationen == "") {
-					$("#issuedOrganizationEn").val("MPS Exit & Entry Administration");
+					if(issued >= newissued){
+						$("#issuedOrganizationEn").val("National Immigration Administartion,PRC");
+					}else{
+						$("#issuedOrganizationEn").val("MPS Exit & Entry Administration");
+					}
 				}
 
 				
@@ -1359,6 +1372,7 @@
 				} else {
 					$("#sexEn").val("F");
 				}
+				
 
 				$("#issuedDate").change(function () {
 					if ($("#issuedDate").val() != "") {
