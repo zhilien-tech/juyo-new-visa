@@ -321,8 +321,8 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 		}
 		singlecnd.and("tr.zhaobaoupdate", "=", 1);
 		singlecnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
-		singlecnd.orderBy("tr.isDisabled", "ASC");
-		singlecnd.orderBy("tr.updatetime", "desc");
+		//singlecnd.orderBy("tr.isDisabled", "ASC");
+		//singlecnd.orderBy("tr.updatetime", "desc");
 
 		singlesql.setCondition(singlecnd);
 		List<Record> singleperson = dbDao.query(singlesql, singlecnd, null);
