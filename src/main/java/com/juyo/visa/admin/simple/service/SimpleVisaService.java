@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -192,6 +194,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 	private static final String VISAINFO_WEBSPCKET_ADDR = "visainfowebsocket";
 	private static String WX_B_CODE_URL = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=ACCESS_TOKEN"; //不限次数 scene长度为32个字符
+
+	private Lock lock = new ReentrantLock();
 
 	public Object toList(HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
@@ -3260,29 +3264,37 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 	public Map<String, Integer> generrateorder(TUserEntity user, TCompanyEntity company) {
 
+		lock.lock();
 		Map<String, Integer> result = Maps.newHashMap();
-		//如果订单不存在，则先创建订单
-		TOrderEntity orderinfo = new TOrderEntity();
-		orderinfo.setComId(company.getId());
-		orderinfo.setUserId(user.getId());
-		orderinfo.setOrderNum(generrateOrdernum());
-		orderinfo.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
-		orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
-		orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
-		orderinfo.setIsDisabled(IsYesOrNoEnum.NO.intKey());
-		orderinfo.setCreateTime(new Date());
-		orderinfo.setUpdateTime(new Date());
-		TOrderEntity orderinsert = dbDao.insert(orderinfo);
-		changePrincipalViewService.ChangePrincipal(orderinsert.getId(), JPOrderProcessTypeEnum.SALES_PROCESS.intKey(),
-				user.getId());
-		result.put("orderid", orderinsert.getId());
-		TOrderJpEntity orderjp = new TOrderJpEntity();
-		orderjp.setOrderId(orderinsert.getId());
-		orderjp.setVisaType(MainSaleVisaTypeEnum.SINGLE.intKey());
-		orderjp.setIsVisit(IsYesOrNoEnum.NO.intKey());
-		TOrderJpEntity orderjpinsert = dbDao.insert(orderjp);
-		Integer orderjpid = orderjpinsert.getId();
-		result.put("orderjpid", orderjpid);
+		try {
+			//如果订单不存在，则先创建订单
+			TOrderEntity orderinfo = new TOrderEntity();
+			orderinfo.setComId(company.getId());
+			orderinfo.setUserId(user.getId());
+			orderinfo.setOrderNum(generrateOrdernum());
+			orderinfo.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
+			orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+			orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
+			orderinfo.setIsDisabled(IsYesOrNoEnum.NO.intKey());
+			orderinfo.setCreateTime(new Date());
+			orderinfo.setUpdateTime(new Date());
+			TOrderEntity orderinsert = dbDao.insert(orderinfo);
+			changePrincipalViewService.ChangePrincipal(orderinsert.getId(),
+					JPOrderProcessTypeEnum.SALES_PROCESS.intKey(), user.getId());
+			result.put("orderid", orderinsert.getId());
+			TOrderJpEntity orderjp = new TOrderJpEntity();
+			orderjp.setOrderId(orderinsert.getId());
+			orderjp.setVisaType(MainSaleVisaTypeEnum.SINGLE.intKey());
+			orderjp.setIsVisit(IsYesOrNoEnum.NO.intKey());
+			TOrderJpEntity orderjpinsert = dbDao.insert(orderjp);
+			Integer orderjpid = orderjpinsert.getId();
+			result.put("orderjpid", orderjpid);
+		} catch (Exception e) {
+
+		} finally {
+			lock.unlock();
+		}
+
 		return result;
 	}
 
@@ -3451,10 +3463,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	private String generrateOrdernum() {
+
 		//生成订单号
 		SimpleDateFormat smf = new SimpleDateFormat("yyMMdd");
 		String format = smf.format(new Date());
-		String sqlString = sqlManager.get("orderJp_ordernum");
+		//String sqlString = sqlManager.get("orderJp_ordernum");
+		String sqlString = sqlManager.get("test_getOrdernum");
 		Sql sql = Sqls.create(sqlString);
 		List<Record> query = dbDao.query(sql, null, null);
 		int sum = 1;
@@ -3475,6 +3489,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			sum1 = "" + sum;
 
 		}
+
 		return format + "-JP" + sum1;
 	}
 
@@ -7191,7 +7206,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			Integer orderid = generrateorder.get("orderjpid");
 
 			try {
-				Thread.sleep(1000);
+				//Thread.sleep(1000);
 			} catch (Exception e2) {
 
 				// TODO Auto-generated catch block
@@ -7221,36 +7236,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 				e1.printStackTrace();
 			}
-			/*InputStream fis = null;
-			try {
-			fis = file.getInputStream();
-			} catch (Exception e1) {
-
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-
-			}*/
-
-			/*try {
-				//2003版本的excel，用.xls结尾
-				workbook = new HSSFWorkbook(fis);//得到工作簿
-
-			} catch (Exception ex) {
-				//ex.printStackTrace();
-				try {
-					//2007版本的excel，用.xlsx结尾
-					workbook = new XSSFWorkbook(file);//得到工作簿
-					System.out.println("excel为2007版");
-				} catch (Exception e) {
-					if (!Util.isEmpty(orderjp)) {
-						dbDao.delete(orderjp);
-					}
-					if (!Util.isEmpty(order)) {
-						dbDao.delete(order);
-					}
-					e.printStackTrace();
-				}
-			}*/
 
 			try {
 				//创建Excel，读取文件内容
@@ -7351,11 +7336,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				Sheet sheetAt2 = workbook.getSheetAt(1);
 				int lastRowNum = sheetAt2.getLastRowNum();
 				int totalRow = 0;
-				for (int i = 5; i < lastRowNum; i++) {
-					String stringCellValue = sheetAt2.getRow(i).getCell(1).getStringCellValue();
-					if (Util.isEmpty(stringCellValue)) {
+				for (int i = 5; i < lastRowNum + 2; i++) {
+					try {
+						String stringCellValue = sheetAt2.getRow(i).getCell(1).getStringCellValue();
+						if (Util.isEmpty(stringCellValue)) {
+							totalRow = i;
+							break;
+						}
+					} catch (Exception e) {
 						totalRow = i;
-						break;
+						e.printStackTrace();
 					}
 				}
 				System.out.println("lastRowNum:" + lastRowNum);
