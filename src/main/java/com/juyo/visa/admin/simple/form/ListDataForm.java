@@ -157,6 +157,7 @@ public class ListDataForm implements SQLParamForm {
 		}
 		cnd.orderBy("tr.isDisabled", "ASC");
 		cnd.orderBy("tr.updatetime", "desc");
+		cnd.orderBy("tr.id", "desc");
 		return cnd;
 	}
 }

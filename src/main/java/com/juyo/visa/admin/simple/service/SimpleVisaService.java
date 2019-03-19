@@ -570,8 +570,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			singlecnd.and("tr.salesOpid", "=", form.getUserid());
 		}
 
-		singlecnd.orderBy("tr.isDisabled", "ASC");
-		singlecnd.orderBy("tr.updatetime", "desc");
+		//singlecnd.orderBy("tr.isDisabled", "ASC");
+		//singlecnd.orderBy("tr.updatetime", "desc");
+		//singlecnd.orderBy("tr.id", "desc");
 
 		return singlecnd;
 	}
