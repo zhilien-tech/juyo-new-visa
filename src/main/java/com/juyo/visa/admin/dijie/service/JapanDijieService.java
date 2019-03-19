@@ -185,7 +185,7 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 			}*/
 
 			//收费单子，人数
-			if (Util.eq(1, record.get("zhaobaoupdate"))) {
+			if (Util.eq(1, record.get("zhaobaoupdate")) && Util.eq(0, record.get("isDisabled"))) {
 				zhaobaoorder++;
 				if (!Util.eq(0, record.get("peoplenumber"))) {
 					zhaobaopeople += record.getInt("peoplenumber");
