@@ -119,6 +119,8 @@ SELECT
 orderNum
 FROM
 t_order
+WHERE 
+DATE(createTime) = DATE(NOW())
 order by id desc LIMIT 1
 
 /*orderJp_applicantTable*/

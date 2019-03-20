@@ -7196,11 +7196,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//当前登录人员
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 
-		String realPath = request.getServletContext().getRealPath("/");
-
 		for (TempFile tempFile : tfs) {
 
 			File file = tempFile.getFile();
+
+			//for (int j = 0; j < 10000; j++) {
 
 			//创建订单和日本订单
 			Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
@@ -7455,6 +7455,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				e.printStackTrace();
 
 			}
+			//}
 		}
 
 		return resultStr;
