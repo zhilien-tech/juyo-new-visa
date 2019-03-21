@@ -469,13 +469,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 */
 	public List<Record> getSingleperson(ListDataForm form, int type) {
 		long startTime = System.currentTimeMillis();
-		String singlesqlStr = sqlManager.get("getSingleperson");
+		String singlesqlStr = sqlManager.get("new_getSingleperson");
 		Sql singlesql = Sqls.create(singlesqlStr);
 		Cnd singlecnd = Cnd.NEW();
 		singlecnd = commonCondition(form, singlecnd);
 
 		singlecnd.and("tr.zhaobaoupdate", "=", 1);
-		singlecnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
+		//singlecnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
 
 		singlesql.setCondition(singlecnd);
 		List<Record> singleperson = dbDao.query(singlesql, singlecnd, null);

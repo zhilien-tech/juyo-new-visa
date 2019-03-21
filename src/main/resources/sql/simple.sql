@@ -180,6 +180,36 @@ HAVING
 ct = 1*/
 
 
+
+/*new_getSingleperson*/
+SELECT
+taoj.ct,
+tr.orderNum,
+taoj.applicantId
+FROM
+t_order tr
+right JOIN
+(
+SELECT
+count(taoj.orderId) as ct,
+toj.orderId,
+toj.sendsignid,
+taoj.applicantId
+FROM
+t_order_jp toj
+right JOIN
+t_applicant_order_jp taoj ON taoj.orderId = toj.id
+GROUP BY taoj.orderId 
+HAVING ct > 1
+) taoj ON taoj.orderId = tr.id
+LEFT JOIN t_order_jp toj ON toj.orderId = taoj.orderId
+LEFT JOIN t_company tcom ON tr.comId = tcom.id
+LEFT JOIN t_company tcompany ON taoj.sendsignid = tcompany.id
+LEFT JOIN t_user tuser ON tr.salesOpid = tuser.id
+LEFT JOIN t_customer tc ON tr.customerId = tc.id
+$condition
+
+
 /*ishaveMainapply*/
 SELECT
 taoj.isMainApplicant,
