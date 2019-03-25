@@ -188,8 +188,8 @@ public class VisaJapanSimulateService extends BaseService<TOrderJpEntity> {
 			//changePrincipalViewService.ChangePrincipal(orderid, JPOrderProcessTypeEnum.SALES_PROCESS.intKey(), userId);
 			TUserEntity loginuser = LoginUtil.getLoginUser(session);
 			Integer userId = loginuser.getId();
-			//楽旅点击招宝变更或招宝取消处理,记录操作人为订单的原操作人，而不是楽旅
-			if (Util.eq("lelv", loginuser.getName())) {
+			//楽旅或日中(地接社)点击招宝变更或招宝取消处理,记录操作人为订单的原操作人，而不是楽旅
+			if (Util.eq("lelv", loginuser.getName()) || Util.eq("rizhong", loginuser.getName())) {
 				orderinfo.setVisaOpid(orderinfo.getSalesOpid());
 			} else {
 				orderinfo.setVisaOpid(userId);
