@@ -37,7 +37,7 @@ import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
 
 @IocBean
-@Scheduled(cron = "0 /2 6-23 * * ? *")
+@Scheduled(cron = "0 /1 6-23 * * ? *")
 //每天的早上6点到晚上12点，每隔一分钟执行一次， 秒 分 时 天 月 每周 年(可选)
 //直接使用注解来声明cron
 public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
@@ -150,7 +150,7 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 		smsContent = smsContent.replace("${ordernum}", ordernum).replace("${orderstatus}", orderstatus);
 		System.out.println("短信分享内容：" + smsContent);
 		result = orderUSViewService.sendSMS(telephone, smsContent);
-		result = orderUSViewService.sendSMS(telephone2, smsContent);
+		//result = orderUSViewService.sendSMS(telephone2, smsContent);
 
 		return result;
 

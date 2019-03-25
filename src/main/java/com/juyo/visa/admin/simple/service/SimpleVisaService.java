@@ -306,7 +306,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Integer pageSize = form.getPageSize();
 
 		Pager pager = new OffsetPager((pageNumber - 1) * pageSize, pageSize);
-		pager.setRecordCount((int) Daos.queryCount(nutDao, sql.toString()));
+
+		Sql paperSql = getPaperSql(form);
+
+		pager.setRecordCount((int) Daos.queryCount(nutDao, paperSql.toString()));
 
 		sql.setCallback(Sqls.callback.records());
 		nutDao.execute(sql);
@@ -389,9 +392,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
-		//查询单组单人
-		List<Record> singleperson = getSingleperson(form, 1);
-
 		/*int orderscount = 0;
 		int peopletotal = 0;
 		int zhaobaoorder = 0;
@@ -408,8 +408,18 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		entity.setPeopletotal(peopletotal);
 		entity.setZhaobaoorder(zhaobaoorder);
 		entity.setZhaobaopeople(zhaobaopeople);
-		entity.setSingleperson(singleperson.size());
-		entity.setMultiplayer(zhaobaoorder - singleperson.size());
+
+		if (Util.eq(form.getStatus(), JPOrderStatusEnum.DISABLED.intKey())) {//筛选条件为作废时，单人招宝成功为0
+			entity.setSingleperson(0);
+			entity.setMultiplayer(0);
+		} else {
+			//查询单组单人
+			List<Record> singleperson = getSingleperson(form, 1);
+
+			entity.setSingleperson(singleperson.size());
+			entity.setMultiplayer(zhaobaoorder - singleperson.size());
+		}
+
 		result.put("entity", entity);
 		result.put("pagetotal", pager.getPageCount());
 		result.put("visaJapanData", list);
@@ -417,6 +427,16 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		System.out.println("下头所用时间为：" + (endTime - middleTime) + "ms");
 		System.out.println("方法所用时间为：" + (endTime - startTime) + "ms");
 		return result;
+	}
+
+	public Sql getPaperSql(ListDataForm form) {
+		String singlesqlStr = sqlManager.get("get_simplelist_data_paper");
+		Sql singlesql = Sqls.create(singlesqlStr);
+		Cnd singlecnd = Cnd.NEW();
+		singlecnd = commonCondition(form, singlecnd);
+
+		singlesql.setCondition(singlecnd);
+		return singlesql;
 	}
 
 	public Map<String, Integer> informationSearch(ListDataForm form, int type) {

@@ -84,6 +84,16 @@ LEFT JOIN t_customer tc ON tr.customerId = tc.id
 LEFT JOIN t_user tu ON tr.userId = tu.id
 LEFT JOIN t_company tcom ON toj.sendsignid = tcom.id
 $condition
+/*get_Japan_dijie_list_data_paper*/
+SELECT
+	count(tr.id)
+FROM
+	t_order tr
+INNER JOIN t_order_jp toj ON toj.orderId = tr.id
+LEFT JOIN t_customer tc ON tr.customerId = tc.id
+LEFT JOIN t_user tu ON tr.userId = tu.id
+LEFT JOIN t_company tcom ON toj.sendsignid = tcom.id
+$condition
 /*get_japan_dijie_list_apply_data*/
 SELECT
 	ta.id,
