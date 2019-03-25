@@ -19,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,6 +71,8 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 	private QiniuUploadServiceImpl qiniuUploadService;
 	@Inject
 	private OrderUSViewService orderUSViewService;
+
+	private Lock lock = new ReentrantLock();
 
 	/*private VisaInfoWSHandler visaInfoWSHandler = (VisaInfoWSHandler) SpringContextUtil.getBean("myVisaInfoHander",
 			VisaInfoWSHandler.class);*/
@@ -172,84 +176,96 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public synchronized Map<String, Object> fetchAllSendOrders() {
-		long start = System.currentTimeMillis();
+
+		lock.lock();
+
 		//用来存放信息
 		Map<String, Object> map = Maps.newTreeMap();
-		//查询是否有需要自动填表的订单
-		String sqlstring = sqlManager.get("select_simulate_jp_order");
-		Sql sql = Sqls.create(sqlstring);
-		//查询发招宝、招宝变更中、招宝取消中的订单
-		Integer[] orderstatus = { JPOrderStatusEnum.READYCOMMING.intKey(), JPOrderStatusEnum.BIANGENGZHONG.intKey(),
-				JPOrderStatusEnum.QUXIAOZHONG.intKey(), JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey() };
-		List<Record> orderjplist = dbDao.query(sql, Cnd.where("tr.status", "in", orderstatus), null);
-		/*List<Record> orderjplist = dbDao.query(sql,
-						Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);*/
-		if (!Util.isEmpty(orderjplist) && orderjplist.size() > 0) {
-			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-			//获取第一条
-			Record record = orderjplist.get(0);
+		try {
+			//long start = System.currentTimeMillis();
+			//查询是否有需要自动填表的订单
+			String sqlstring = sqlManager.get("select_simulate_jp_order");
+			Sql sql = Sqls.create(sqlstring);
+			//查询发招宝、招宝变更中、招宝取消中的订单
+			Integer[] orderstatus = { JPOrderStatusEnum.READYCOMMING.intKey(),
+					JPOrderStatusEnum.BIANGENGZHONG.intKey(), JPOrderStatusEnum.QUXIAOZHONG.intKey(),
+					JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey() };
+			List<Record> orderjplist = dbDao.query(sql, Cnd.where("tr.status", "in", orderstatus), null);
+			/*List<Record> orderjplist = dbDao.query(sql,
+							Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);*/
+			if (!Util.isEmpty(orderjplist) && orderjplist.size() > 0) {
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+				//获取第一条
+				Record record = orderjplist.get(0);
 
-			System.out.println(record.get("orderjpid") + "--------");
+				System.out.println(record.get("orderjpid") + "--------");
 
-			map.put("record", record);
+				map.put("record", record);
 
-			TOrderTripJpEntity ordertripjp = dbDao.fetch(TOrderTripJpEntity.class,
-					Cnd.where("orderId", "=", record.get("orderjpid")));
-			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, Cnd.where("id", "=", record.get("orderjpid")));
-			if (!Util.isEmpty(ordertripjp)) {
-				if (ordertripjp.getTripType().equals(1)) {
-					Date goDate = ordertripjp.getGoDate();
-					if (!Util.isEmpty(goDate)) {
-						map.put("entryDate", dateFormat.format(goDate));
-					}
-					Date returnDate = ordertripjp.getReturnDate();
-					if (!Util.isEmpty(returnDate)) {
-						map.put("leaveDate", dateFormat.format(returnDate));
-					}
-				} else {
-					//多程
-					List<TOrderTripMultiJpEntity> multitripjp = dbDao.query(TOrderTripMultiJpEntity.class,
-							Cnd.where("tripid", "=", ordertripjp.getId()), null);
-					if (!Util.isEmpty(multitripjp)) {
-						//第一程为出发日期
-						Date departureDate = multitripjp.get(0).getDepartureDate();
-						if (!Util.isEmpty(departureDate)) {
-							map.put("entryDate", dateFormat.format(departureDate));
+				TOrderTripJpEntity ordertripjp = dbDao.fetch(TOrderTripJpEntity.class,
+						Cnd.where("orderId", "=", record.get("orderjpid")));
+				TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class,
+						Cnd.where("id", "=", record.get("orderjpid")));
+				if (!Util.isEmpty(ordertripjp)) {
+					if (ordertripjp.getTripType().equals(1)) {
+						Date goDate = ordertripjp.getGoDate();
+						if (!Util.isEmpty(goDate)) {
+							map.put("entryDate", dateFormat.format(goDate));
 						}
-						//最后一程为返回日期
-						Date leavedate = multitripjp.get(multitripjp.size() - 1).getDepartureDate();
-						if (!Util.isEmpty(leavedate)) {
-							map.put("leaveDate", dateFormat.format(leavedate));
+						Date returnDate = ordertripjp.getReturnDate();
+						if (!Util.isEmpty(returnDate)) {
+							map.put("leaveDate", dateFormat.format(returnDate));
+						}
+					} else {
+						//多程
+						List<TOrderTripMultiJpEntity> multitripjp = dbDao.query(TOrderTripMultiJpEntity.class,
+								Cnd.where("tripid", "=", ordertripjp.getId()), null);
+						if (!Util.isEmpty(multitripjp)) {
+							//第一程为出发日期
+							Date departureDate = multitripjp.get(0).getDepartureDate();
+							if (!Util.isEmpty(departureDate)) {
+								map.put("entryDate", dateFormat.format(departureDate));
+							}
+							//最后一程为返回日期
+							Date leavedate = multitripjp.get(multitripjp.size() - 1).getDepartureDate();
+							if (!Util.isEmpty(leavedate)) {
+								map.put("leaveDate", dateFormat.format(leavedate));
+							}
 						}
 					}
-				}
-				TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
-				Integer status = orderinfo.getStatus();
-				map.put("orderstatus", status);
-				//将订单设置为提交中
-				if (JPOrderStatusEnum.READYCOMMING.intKey() == status
-						|| JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey() == status) {
-					//如果是发招宝状态，将订单状态变为提交中
-					orderinfo.setStatus(JPOrderStatusEnum.COMMITING.intKey());
-				} else if (JPOrderStatusEnum.BIANGENGZHONG.intKey() == status) {
-					//如果是招宝变更状态变为网站变更中
-					orderinfo.setStatus(JPOrderStatusEnum.WANGZHANBIANGENGZHONG.intKey());
-				} else if (JPOrderStatusEnum.QUXIAOZHONG.intKey() == status) {
-					//如果是招宝取消状态，变为网站招宝取消中
-					orderinfo.setStatus(JPOrderStatusEnum.WANGZHANQUXIAOZHONG.intKey());
-				}
+					TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+					Integer status = orderinfo.getStatus();
+					map.put("orderstatus", status);
+					//将订单设置为提交中
+					if (JPOrderStatusEnum.READYCOMMING.intKey() == status
+							|| JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey() == status) {
+						//如果是发招宝状态，将订单状态变为提交中
+						orderinfo.setStatus(JPOrderStatusEnum.COMMITING.intKey());
+					} else if (JPOrderStatusEnum.BIANGENGZHONG.intKey() == status) {
+						//如果是招宝变更状态变为网站变更中
+						orderinfo.setStatus(JPOrderStatusEnum.WANGZHANBIANGENGZHONG.intKey());
+					} else if (JPOrderStatusEnum.QUXIAOZHONG.intKey() == status) {
+						//如果是招宝取消状态，变为网站招宝取消中
+						orderinfo.setStatus(JPOrderStatusEnum.WANGZHANQUXIAOZHONG.intKey());
+					}
 
-				//更新发招宝时间
-				if (!Util.isEmpty(orderjp)) {
-					orderjp.setZhaobaotime(new Date());
-					dbDao.update(orderjp);
-				}
+					//更新发招宝时间
+					if (!Util.isEmpty(orderjp)) {
+						orderjp.setZhaobaotime(new Date());
+						dbDao.update(orderjp);
+					}
 
-				dbDao.update(orderinfo);
-				map.put("ordernum", orderinfo.getOrderNum());
+					dbDao.update(orderinfo);
+					map.put("ordernum", orderinfo.getOrderNum());
+				}
 			}
+			//long endTime = System.currentTimeMillis();
+		} catch (Exception e) {
+
+		} finally {
+			lock.unlock();
 		}
-		long endTime = System.currentTimeMillis();
+
 		//System.out.println("走完了=====" + (endTime - start));
 		return map;
 	}
