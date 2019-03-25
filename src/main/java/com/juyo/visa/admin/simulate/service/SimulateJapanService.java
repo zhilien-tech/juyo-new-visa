@@ -175,7 +175,7 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 	 *
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public synchronized Map<String, Object> fetchAllSendOrders() {
+	public Map<String, Object> fetchAllSendOrders() {
 
 		lock.lock();
 
@@ -190,7 +190,8 @@ public class SimulateJapanService extends BaseService<TOrderJpEntity> {
 			Integer[] orderstatus = { JPOrderStatusEnum.READYCOMMING.intKey(),
 					JPOrderStatusEnum.BIANGENGZHONG.intKey(), JPOrderStatusEnum.QUXIAOZHONG.intKey(),
 					JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey() };
-			List<Record> orderjplist = dbDao.query(sql, Cnd.where("tr.status", "in", orderstatus), null);
+			List<Record> orderjplist = dbDao.query(sql,
+					Cnd.where("tr.status", "in", orderstatus).orderBy("toj.zhaobaotime", "ASC"), null);
 			/*List<Record> orderjplist = dbDao.query(sql,
 							Cnd.where("tr.status", "=", JPOrderStatusEnum.READYCOMMING.intKey()), null);*/
 			if (!Util.isEmpty(orderjplist) && orderjplist.size() > 0) {
