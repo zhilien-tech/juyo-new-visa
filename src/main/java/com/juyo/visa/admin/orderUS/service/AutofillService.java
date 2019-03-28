@@ -2095,6 +2095,353 @@ public class AutofillService extends BaseService<TOrderUsEntity> {
 		return result;
 	}
 
+	public Map<String, Object> getData1(int orderid, int staffid) {
+		//最终接收数据Map(包括所需数据和错误信息)
+		Map<String, Object> result = Maps.newHashMap();
+		//所需数据Map
+		Map<String, Object> resultData = Maps.newHashMap();
+		//错误信息
+		String errorMsg = "";
+		//格式化日期
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		//查询所需数据（除了一对多）
+		String sqlStr = sqlManager.get("getAutofilldata");
+		Sql infosql = Sqls.create(sqlStr);
+		Cnd cnd = Cnd.NEW();
+		cnd.and("tou.id", "=", orderid);
+		infosql.setCondition(cnd);
+		Record info = dbDao.fetch(infosql);
+		//根据API封装数据（从内向外）
+		Map<String, Object> InforMation = Maps.newHashMap();
+
+		//BaseInfo
+		Map<String, Object> BaseInfo = Maps.newHashMap();
+		//性别，从护照信息里取
+		//出生日期，从护照信息里取
+		//计算年龄，未满14周岁的不需要面签，不用具体离开美国的日期
+		String date2String = sdf.format(new Date());
+		int yearsBetween = 0;
+
+		//NameInfo
+		Map<String, Object> NameInfo = Maps.newHashMap();
+
+		BaseInfo.put("NameInfo", NameInfo);
+
+		//BirthplaceInfo
+		Map<String, Object> BirthplaceInfo = Maps.newHashMap();
+		//BirthplaceInfo.put("country", "CHIN");
+
+		BaseInfo.put("BirthplaceInfo", BirthplaceInfo);
+
+		InforMation.put("BaseInfo", BaseInfo);
+
+		//FamilyInfo
+		Map<String, Object> FamilyInfo = Maps.newHashMap();
+		//备用电话  不清楚  测试为空
+		FamilyInfo.put("family_phone", "");
+		//AddressInfo
+		Map<String, Object> AddressInfo = Maps.newHashMap();
+		//邮政编码  没有  测试为空
+		AddressInfo.put("zip_code", "");
+		FamilyInfo.put("AdderssInfo", AddressInfo);
+
+		//FatherInfo
+		Map<String, Object> FatherInfo = Maps.newHashMap();
+
+		//NameInfo
+		Map<String, Object> FatherNameInfo = Maps.newHashMap();
+
+		FatherInfo.put("NameInfo", FatherNameInfo);
+
+		FamilyInfo.put("FatherInfo", FatherInfo);
+
+		//MotherInfo
+		Map<String, Object> MotherInfo = Maps.newHashMap();
+
+		//NameInfo
+		Map<String, Object> MotherNameInfo = Maps.newHashMap();
+
+		MotherInfo.put("NameInfo", MotherNameInfo);
+
+		//母亲的生日(签证信息)
+
+		FamilyInfo.put("MotherInfo", MotherInfo);
+
+		//SpouseInfo
+		Map<String, Object> SpouseInfo = Maps.newHashMap();
+
+		//NameInfo
+		Map<String, Object> SpouseNameInfo = Maps.newHashMap();
+		Map<String, Object> SpouseBirthplaceInfo = Maps.newHashMap();
+		SpouseInfo.put("BirthplaceInfo", SpouseBirthplaceInfo);
+		SpouseInfo.put("date_of_birth", "");
+		SpouseInfo.put("nationality", "");
+		SpouseInfo.put("address_type", "");
+		SpouseInfo.put("NameInfo", SpouseNameInfo);
+		//查询前妻数据
+
+		//离婚原因(家庭信息)
+		SpouseInfo.put("divorced_reason", "Incompatibility of temperament");
+
+		//BirthplaceInfo  配偶的居住地址
+		Map<String, Object> SpouseAddressInfo = Maps.newHashMap();
+		//街道(签证信息)
+
+		SpouseAddressInfo.put("country", "CHIN");
+		//邮政编码  没有
+		SpouseAddressInfo.put("zip_code", "");
+
+		SpouseInfo.put("AdderssInfo", SpouseAddressInfo);
+
+		FamilyInfo.put("SpouseInfo", SpouseInfo);
+
+		InforMation.put("FamilyInfo", FamilyInfo);
+
+		//WorkEducation
+		Map<String, Object> WorkEducation = Maps.newHashMap();
+		//Works
+		ArrayList<Object> works = new ArrayList<>();
+		//Educations
+		ArrayList<Object> educations = new ArrayList<>();
+		//只有大于14岁才有工作信息
+		WorkEducation.put("current_status", "");
+		WorkEducation.put("describe", "");
+		WorkEducation.put("Works", works);
+		WorkEducation.put("Education", educations);
+
+		InforMation.put("WorkEducation", WorkEducation);
+
+		//ExitInfo
+		Map<String, Object> ExitInfo = Maps.newHashMap();
+
+		//oldpassport 没有
+		ArrayList<Object> oldPassport = new ArrayList<>();
+		ExitInfo.put("OldPassport", oldPassport);
+		//langeuages
+		ArrayList<Object> languages = new ArrayList<>();
+
+		ExitInfo.put("Language", languages);
+
+		InforMation.put("ExitInfo", ExitInfo);
+
+		//TravelInfo
+		Map<String, Object> travelInfo = Maps.newHashMap();
+		//航班号，第一行(订单详情)
+		travelInfo.put("go_country", "USA");
+		//有具体的旅行计划
+		travelInfo.put("in_street", "");
+		travelInfo.put("leave_street", "");
+		travelInfo.put("leave_date", "");
+		travelInfo.put("first_country", "USA");
+
+		//passport
+		Map<String, Object> passport = Maps.newHashMap();
+
+		//签发机构(护照信息)
+		passport.put("country", "CHIN");
+		//护照类型(护照信息)
+
+		passport.put("passport_type", "R");
+
+		passport.put("passport_no", "E12345678");
+
+		//passportissuance
+		Map<String, Object> passportissuance = Maps.newHashMap();//没有 ???
+		passportissuance.put("country", "CHIN");
+		passport.put("PassportIssuance", passportissuance);
+		travelInfo.put("Passport", passport);
+
+		//peer
+		ArrayList<Object> peers = new ArrayList<>();
+
+		travelInfo.put("Peer", peers);
+
+		InforMation.put("TravelInfo", travelInfo);
+
+		//AmericaInfo
+		Map<String, Object> AmericaInfo = Maps.newHashMap();
+
+		ArrayList<Object> otherNationalitys = new ArrayList<>();
+		ArrayList<Object> greencards = new ArrayList<>();
+
+		Map<String, Object> nationality = Maps.newHashMap();
+		Map<String, Object> greencard = Maps.newHashMap();
+
+		nationality.put("passport", "");
+		otherNationalitys.add(nationality);
+
+		AmericaInfo.put("OtherNationality", otherNationalitys);
+
+		AmericaInfo.put("GreenCard", greencards);
+
+		//RelativeUS
+		Map<String, Object> RelativeUS = Maps.newHashMap();
+
+		//father
+		Map<String, Object> father = Maps.newHashMap();
+
+		RelativeUS.put("Father", father);
+
+		//mother
+		Map<String, Object> mother = Maps.newHashMap();
+
+		RelativeUS.put("Mother", mother);
+
+		//Immediate
+		ArrayList<Object> Immediates = new ArrayList<>();
+
+		Map<String, Object> Immediate = Maps.newHashMap();
+
+		RelativeUS.put("Immediate", Immediates);
+
+		AmericaInfo.put("RelativesUS", RelativeUS);
+
+		//ResidentialInfo 住宅信息
+		Map<String, Object> ResidentialInfo = Maps.newHashMap();
+
+		//ResidentialInfo.put("country", "CN");
+		ResidentialInfo.put("zip_code", "");
+		//===========
+		AmericaInfo.put("ResidentialInfo", ResidentialInfo);
+
+		//Contacts 美国联络人
+		Map<String, Object> Contacts = Maps.newHashMap();
+
+		//contactnameinfo
+		Map<String, Object> contactnameinfo = Maps.newHashMap();
+
+		Contacts.put("NameInfo", contactnameinfo);
+
+		//组织名称(签证信息)，目前为酒店信息
+		TCityUsEntity city = new TCityUsEntity();
+		THotelUsEntity hotel = new THotelUsEntity();
+
+		//与你的关系(签证信息)
+		Contacts.put("relationship", "O");
+		//addressinfo
+		Map<String, Object> addressinfo = Maps.newHashMap();
+
+		//街道地址(签证信息)
+		addressinfo.put("street", hotel.getAddressen());
+
+		//国家
+		addressinfo.put("country", "USA");
+		//邮编(签证信息)
+		addressinfo.put("zip_code", hotel.getZipcode());
+
+		Contacts.put("AdderssInfo", addressinfo);
+
+		AmericaInfo.put("Contacts", Contacts);
+
+		//StayCity
+		Map<String, Object> StayCity = Maps.newHashMap();
+
+		ArrayList<Object> staycitys = new ArrayList<>();
+		staycitys.add(StayCity);
+
+		AmericaInfo.put("StayCity", staycitys);
+		//============
+
+		//ResidenceTime 
+		Map<String, Object> ResidenceTime = Maps.newHashMap();
+		AmericaInfo.put("ResidenceTime", ResidenceTime);
+		//ResidenceTime 没有？？？============
+
+		//EverGoToAmerica
+		Map<String, Object> EverGoToAmerica = Maps.newHashMap();
+
+		//informationUSVisit
+		ArrayList<Object> informationUSVisits = new ArrayList<>();
+
+		EverGoToAmerica.put("InformationUSVisit", informationUSVisits);
+
+		//USDriverLicens
+		ArrayList<Object> USDriverLicens = new ArrayList<>();
+
+		EverGoToAmerica.put("USDriverLicense", USDriverLicens);
+
+		//LastUSVisa
+		Map<String, Object> LastUSVisa = Maps.newHashMap();
+
+		//LostOrStolen
+		Map<String, Object> LostOrStolen = Maps.newHashMap();
+
+		//丢失年份(签证信息)
+
+		EverGoToAmerica.put("LastUSVisa", LastUSVisa);
+
+		AmericaInfo.put("EverGoToAmerica", EverGoToAmerica);
+
+		AmericaInfo.put("esta", "");
+		AmericaInfo.put("sevis_id", "");
+		AmericaInfo.put("principal_applicant_sevis_id", "");
+		AmericaInfo.put("program_number", "");
+		AmericaInfo.put("school_in_america", "");
+
+		//MailingAddress
+		Map<String, Object> MailingAddress = Maps.newHashMap();
+
+		AmericaInfo.put("MailingAddress", MailingAddress);
+		Map<String, Object> PayParty = Maps.newHashMap();
+
+		//PayerInfo
+		Map<String, Object> PayerInfo = Maps.newHashMap();
+		//PayerAddressInfo
+		Map<String, Object> PayerAddressInfo = Maps.newHashMap();
+		//PayerNameInfo
+		Map<String, Object> PayerNameInfo = Maps.newHashMap();
+
+		PayerAddressInfo.put("zip_code", "");
+
+		PayerInfo.put("AdderssInfo", PayerAddressInfo);
+		PayerInfo.put("NameInfo", PayerNameInfo);
+		PayParty.put("PayerInfo", PayerInfo);
+
+		AmericaInfo.put("PayParty", PayParty);
+
+		//Supplement
+		Map<String, Object> Supplement = Maps.newHashMap();
+
+		//部落名称(签证信息)
+
+		//VisitedCountry
+		ArrayList<Object> VisitedCountrys = new ArrayList<>();
+
+		//访问过的国家(签证信息)
+
+		Supplement.put("VisitedCountry", VisitedCountrys);
+
+		//Charitable
+		ArrayList<Object> Charitables = new ArrayList<>();
+
+		Supplement.put("Charitable", Charitables);
+
+		//特殊技能说明(签证信息)
+
+		//MilitaryService 服兵役
+		Map<String, Object> MilitaryService = Maps.newHashMap();
+
+		Supplement.put("MilitaryService", MilitaryService);
+
+		AmericaInfo.put("Supplement", Supplement);
+
+		//Security
+		Map<String, Object> Security = Maps.newHashMap();
+		AmericaInfo.put("Security", Security);
+
+		resultData.put("InforMation", InforMation);
+		resultData.put("AmericaInfo", AmericaInfo);
+
+		result.put("errMsg", errorMsg);
+		result.put("resultData", resultData);
+		if (!Util.isEmpty(errorMsg)) {
+			TOrderUsEntity orderus = dbDao.fetch(TOrderUsEntity.class, orderid);
+			orderus.setStatus(USOrderListStatusEnum.PREAUTOFILLFAILED.intKey());
+			dbDao.update(orderus);
+		}
+		return result;
+	}
+
 	//根据国家名称查询国籍代码
 	public String getCountrycode(String countryname) {
 		String countrycode = "";

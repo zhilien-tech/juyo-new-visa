@@ -86,7 +86,7 @@ LEFT JOIN t_company tcom ON toj.sendsignid = tcom.id
 $condition
 /*get_Japan_dijie_list_data_paper*/
 SELECT
-	count(tr.id)
+	tr.id
 FROM
 	t_order tr
 INNER JOIN t_order_jp toj ON toj.orderId = tr.id
