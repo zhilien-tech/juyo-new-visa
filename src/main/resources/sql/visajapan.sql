@@ -52,7 +52,42 @@ taoj.orderId
 ) taj ON taj.orderId = toj.id*/
 
 /*get_japan_visa_list_data*/
+
 SELECT
+toj.id,
+toj.errormsg,
+tuser.`name` opname,
+tcompany.shortName,
+tr.orderNum japanNumber,
+tr.comshortname,
+tc.shortname customershotname,
+toj.acceptDesign number,
+DATE_FORMAT(tr.sendVisaDate, '%Y-%m-%d') sendingTime,
+tr.STATUS japanState,
+(
+SELECT
+count(*)
+FROM
+t_applicant_order_jp
+WHERE
+orderId = toj.id
+) peopleNumber,
+tr.isDisabled,
+tr.zhaobaoupdate,
+toj.visastatus visastatus,
+toj.visaType,
+toj.acceptDesign,
+tr.id orderid
+FROM
+t_order tr
+left JOIN t_order_jp toj ON toj.orderId = tr.id
+LEFT JOIN t_company tcom ON tr.comId = tcom.id
+LEFT JOIN t_company tcompany ON toj.sendsignid = tcompany.id
+LEFT JOIN t_user tuser ON tr.salesOpid = tuser.id
+LEFT JOIN t_customer tc ON tr.customerId = tc.id
+$condition
+
+/*SELECT
 toj.id,
 toj.errormsg,
 tuser.`name` opname,
@@ -88,7 +123,7 @@ LEFT JOIN t_company tcom ON tr.comId = tcom.id
 LEFT JOIN t_company tcompany ON toj.sendsignid = tcompany.id
 LEFT JOIN t_user tuser ON tr.salesOpid = tuser.id
 LEFT JOIN t_customer tc ON tr.customerId = tc.id
-$condition
+$condition*/
 
 /*get_japan_visa_list_data_apply*/
 SELECT

@@ -6,8 +6,10 @@
 
 package com.juyo.visa;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import com.itextpdf.xmp.impl.Base64;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -18,9 +20,28 @@ import java.text.SimpleDateFormat;
  * @Date	 2019年3月7日 	 
  */
 public class TestAnsj {
-	public static void test() {
 
-		String aaa = "2019-04-03";
+	private Lock lock = new ReentrantLock();
+
+	public Object test() {
+
+		lock.lock();
+		try {
+			String encode = Base64.encode("20124");
+
+			System.out.println(encode);
+
+			String decode = Base64.decode(encode);
+			System.out.println(decode);
+
+		} catch (Exception e) {
+
+		} finally {
+			lock.unlock();
+		}
+
+		return null;
+		/*String aaa = "2019-04-03";
 		String bbb = "2019-04-03";
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -35,7 +56,7 @@ public class TestAnsj {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 
-		}
+		}*/
 
 		/*SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
 		try {
@@ -112,7 +133,16 @@ public class TestAnsj {
 	}
 
 	public static void main(String[] args) {
-		test();
+		TestAnsj test = new TestAnsj();
+		for (int i = 0; i < 100; i++) {
+			System.out.println("i:" + i + "=============");
+			Thread t = new Thread(new Runnable() {
+				public void run() {
+					// run方法调用自动填表
+					test.test();
+				}
+			});
+			t.start();
+		}
 	}
-
 }

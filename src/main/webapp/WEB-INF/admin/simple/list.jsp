@@ -185,14 +185,14 @@
 							<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 							<!-- <i class="shiShou" v-on:click="revenue(data.id)"> </i> -->
 
-							<span v-if="data.zhaobaocomplete == 0 && data.visatype != '普通五年多次'">
+							<span v-if="data.zhaobaoupdate == 0 && data.visatype != '普通五年多次'">
 								<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
 							</span>
 							<!-- <span v-else>
 								<i class="theTrial1"> </i>
 							</span> -->
 
-							<span v-else-if="data.zhaobaocomplete ==1">
+							<span v-else-if="data.zhaobaoupdate ==1">
 								<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
 								<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
 							</span>

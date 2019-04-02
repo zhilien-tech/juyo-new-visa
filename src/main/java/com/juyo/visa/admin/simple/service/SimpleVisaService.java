@@ -311,8 +311,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		pager.setRecordCount((int) Daos.queryCount(nutDao, paperSql.toString()));
 
+		long middleTime = System.currentTimeMillis();
+		System.out.println("paper所用时间:" + (middleTime - startTime) + "ms");
+
 		sql.setCallback(Sqls.callback.records());
 		nutDao.execute(sql);
+
+		long middleTime2 = System.currentTimeMillis();
+		System.out.println("查询所用时间:" + (middleTime2 - middleTime) + "ms");
 
 		@SuppressWarnings("unchecked")
 		//主sql数据
@@ -335,12 +341,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
+		long middleTime3 = System.currentTimeMillis();
+		System.out.println("循环所用时间:" + (middleTime3 - middleTime2) + "ms");
 		sql.setPager(pager);
 		sql.setCallback(Sqls.callback.records());
 		nutDao.execute(sql);
 
-		long middleTime = System.currentTimeMillis();
-		System.out.println("上头数据所用时间:" + (middleTime - startTime) + "ms");
+		long middleTime4 = System.currentTimeMillis();
+		System.out.println("上头数据所用时间:" + (middleTime4 - middleTime3) + "ms");
 
 		@SuppressWarnings("unchecked")
 		//主sql数据
@@ -424,7 +432,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("pagetotal", pager.getPageCount());
 		result.put("visaJapanData", list);
 		long endTime = System.currentTimeMillis();
-		System.out.println("下头所用时间为：" + (endTime - middleTime) + "ms");
+		System.out.println("下头所用时间为：" + (endTime - middleTime4) + "ms");
 		System.out.println("方法所用时间为：" + (endTime - startTime) + "ms");
 		return result;
 	}
