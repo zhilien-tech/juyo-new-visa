@@ -47,8 +47,8 @@ public class QuartzTomcat extends BaseService<TOrderJpEntity> implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
-		System.out.println("Tomcat监控");
-		System.out.println(sdf.format(new Date()));
+		System.out.println("Tomcat监控: " + sdf.format(new Date()));
+		//System.out.println(sdf.format(new Date()));
 
 		//主
 		/*String path = "https://test.f-visa.com/admin/mobileVisa/getBasicInfoByStaffid";

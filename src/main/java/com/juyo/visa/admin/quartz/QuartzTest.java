@@ -38,7 +38,7 @@ import com.uxuexi.core.web.base.service.BaseService;
 
 @IocBean
 @Scheduled(cron = "0 /2 6-23 * * ? *")
-//每天的早上6点到晚上12点，每隔一分钟执行一次， 秒 分 时 天 月 每周 年(可选)
+//每天的早上6点到晚上12点，每隔两分钟执行一次， 秒 分 时 天 月 每周 年(可选)
 //直接使用注解来声明cron
 public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 
@@ -51,8 +51,8 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
-		System.out.println("Just do it");
-		System.out.println(sdf.format(new Date()));
+		System.out.println("Just do it: " + sdf.format(new Date()));
+		//System.out.println(sdf.format(new Date()));
 
 		/*String result = "";
 
