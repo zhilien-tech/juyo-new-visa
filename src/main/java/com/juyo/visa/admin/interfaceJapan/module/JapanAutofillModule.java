@@ -15,7 +15,7 @@ import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
-import com.juyo.visa.admin.interfaceJapan.form.AutofillDataForm;
+import com.juyo.visa.admin.interfaceJapan.form.ParamDataForm;
 import com.juyo.visa.admin.interfaceJapan.service.JapanAutofillService;
 
 /**
@@ -41,8 +41,8 @@ public class JapanAutofillModule implements AutofillInterface {
 	@At
 	@Ok("json")
 	@AdaptBy(type = JsonAdaptor.class)
-	public Object toAutofill(@Param("..") AutofillDataForm form) {
-		return japanAutofillService.sendZhaobao(form);
+	public Object toAutofill(@Param("token") String token, @Param("..") ParamDataForm form) {
+		return japanAutofillService.sendZhaobao(token, form);
 	}
 
 	/**

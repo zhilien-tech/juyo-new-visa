@@ -6,7 +6,7 @@
 
 package com.juyo.visa.admin.interfaceJapan.module;
 
-import com.juyo.visa.admin.interfaceJapan.form.AutofillDataForm;
+import com.juyo.visa.admin.interfaceJapan.form.ParamDataForm;
 
 /**
  * TODO(这里用一句话描述这个类的作用)
@@ -17,7 +17,7 @@ import com.juyo.visa.admin.interfaceJapan.form.AutofillDataForm;
  * @Date	 2019年4月3日 	 
  */
 public interface AutofillInterface {
-	Object toAutofill(AutofillDataForm form);
+	Object toAutofill(String token, ParamDataForm form);
 
 	Object search();
 }

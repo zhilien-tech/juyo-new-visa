@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.entity.Record;
@@ -27,7 +29,9 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import com.google.common.collect.Maps;
 import com.juyo.visa.admin.interfaceJapan.entity.ApplicantInfo;
 import com.juyo.visa.admin.interfaceJapan.form.AutofillDataForm;
+import com.juyo.visa.admin.interfaceJapan.form.ParamDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
+import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.admin.simple.service.SimpleVisaService;
 import com.juyo.visa.admin.visajp.service.DownLoadVisaFileService;
 import com.juyo.visa.admin.visajp.util.TemplateUtil;
@@ -37,12 +41,17 @@ import com.juyo.visa.common.enums.IsYesOrNoEnum;
 import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JpOrderSimpleEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.msgcrypt.AesException;
+import com.juyo.visa.common.msgcrypt.WXBizMsgCrypt;
 import com.juyo.visa.common.util.ResultObject;
 import com.juyo.visa.entities.TApplicantEntity;
 import com.juyo.visa.entities.TApplicantOrderJpEntity;
 import com.juyo.visa.entities.TApplicantPassportEntity;
 import com.juyo.visa.entities.TApplicantVisaOtherInfoEntity;
 import com.juyo.visa.entities.TApplicantWorkJpEntity;
+import com.juyo.visa.entities.TAutofillComOrderEntity;
+import com.juyo.visa.entities.TAutofillCompanyEntity;
+import com.juyo.visa.entities.TComBusinessscopeEntity;
 import com.juyo.visa.entities.TCompanyEntity;
 import com.juyo.visa.entities.TOrderEntity;
 import com.juyo.visa.entities.TOrderJpEntity;
@@ -70,18 +79,78 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 	private OrderJpViewService orderJpViewService;
 
 	@Inject
+	private OrderUSViewService orderUSViewService;
+
+	@Inject
 	private DownLoadVisaFileService downLoadVisaFileService;
 
 	@Inject
 	private UploadService qiniuUpService;
 
-	public Object sendZhaobao(AutofillDataForm form) {
+	//加密解密
+	private final static String ENCODINGAESKEY = "jllZTM3ZWEzZGI1NGQ5NGI3MTc4NDNhNzAzODE5NTYt";
+	private final static String TOKEN = "ODBiOGIxNDY4NjdlMzc2Yg==";
+	private final static String APPID = "jhhMThiZjM1ZGQ2Y";
+
+	public Object sendZhaobao(String token, ParamDataForm form) {
 		System.out.println("访问到了~~~~~");
 		System.out.println("传过来的数据为:" + form);
 
-		//信息验证(身份，是否满足发招宝所需数据)
+		System.out.println("token:" + token);
+		if (!Util.eq("ODBiOGIxNDY4NjdlMzc2Yg==", token)) {
+			return ResultObject.fail("身份不正确");
+		}
 
-		String resultstr = infoValidate(form);
+		//密文，需要解密
+		String encrypt = form.getEncrypt();
+
+		WXBizMsgCrypt pc;
+		String resultStr = "";
+		try {
+			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
+			resultStr = pc.decrypt(encrypt);
+			System.out.println("toGetEncrypt解密后明文: " + resultStr);
+		} catch (AesException e) {
+			e.printStackTrace();
+		}
+
+		JSONObject paramData = new JSONObject(resultStr);
+
+		AutofillDataForm autofillform = setDataToAutofillform(paramData);
+
+		//身份验证
+
+		String designatedNum = autofillform.getDesignatedNum();
+		TComBusinessscopeEntity comBusiness = dbDao.fetch(TComBusinessscopeEntity.class,
+				Cnd.where("designatedNum", "=", designatedNum));
+
+		TCompanyEntity loginCompany = dbDao.fetch(TCompanyEntity.class, comBusiness.getComId().longValue());
+		if (Util.isEmpty(loginCompany)) {
+			return ResultObject.fail("没有这个公司");
+		}
+
+		TUserEntity loginUser = dbDao.fetch(TUserEntity.class, Cnd.where("adminId", "=", loginCompany.getAdminId()));
+		if (Util.isEmpty(loginUser)) {
+			return ResultObject.fail("查无此人");
+		}
+		/*TCompanyEntity loginCompany = dbDao.fetch(TCompanyEntity.class, Cnd.where("adminId", "=", loginUser.getId()));
+		if (Util.isEmpty(loginCompany)) {
+			return ResultObject.fail("没有这个公司");
+		}*/
+
+		TAutofillCompanyEntity autofillCom = dbDao.fetch(TAutofillCompanyEntity.class,
+				Cnd.where("comid", "=", loginCompany.getId()));
+		if (!Util.isEmpty(autofillCom)) {
+			return ResultObject.fail("此公司没有权限");
+		} else {
+			if (Util.eq(autofillCom.getIsdisabled(), 1)) {
+				return ResultObject.fail("此公司没有权限");
+			}
+		}
+
+		//信息验证(是否满足发招宝所需数据)
+		String resultstr = infoValidate(autofillform);
+
 		if (!Util.isEmpty(resultstr)) {
 			resultstr = resultstr.substring(0, resultstr.length() - 1);
 			if (!resultstr.endsWith("正确")) {
@@ -90,24 +159,30 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 			return ResultObject.fail(resultstr);
 		}
 
-		//待补充
-
-		//领区，送签社，地接社
-
-		String userName = form.getUserName();
-		TUserEntity loginUser = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", userName));
-		if (Util.isEmpty(loginUser)) {
-			return ResultObject.fail("查无此人");
+		//orderVoucher订单凭证，如果为空，入库发招宝，如果不为空招宝变更
+		TOrderEntity orderinfo = null;
+		TOrderJpEntity orderjpinfo = null;
+		if (Util.isEmpty(autofillform.getOrderVoucher())) {
+			//数据库入库并把订单状态改为发招宝中
+			Map<String, Object> insertInfo = insertInfo(autofillform, loginUser, loginCompany);
+			orderinfo = (TOrderEntity) insertInfo.get("orderinfo");
+			orderjpinfo = (TOrderJpEntity) insertInfo.get("orderjpinfo");
+		} else {
+			//修改订单信息，并把订单状态改为招宝变更
+			String orderVoucher = autofillform.getOrderVoucher();
+			TAutofillComOrderEntity autofillComOrder = dbDao.fetch(TAutofillComOrderEntity.class,
+					Cnd.where("ordervoucher", "=", orderVoucher));
+			if (Util.isEmpty(autofillComOrder)) {
+				ResultObject.fail("并无此订单，请确认订单凭证随机码是否正确");
+			} else {
+				int orderid = autofillComOrder.getOrderid();
+				Map<String, Object> updateAndChangezhaobao = updateAndChangezhaobao(autofillform, orderid, loginUser);
+				orderinfo = (TOrderEntity) updateAndChangezhaobao.get("orderinfo");
+				orderjpinfo = (TOrderJpEntity) updateAndChangezhaobao.get("orderjpinfo");
+			}
 		}
-		TCompanyEntity loginCompany = dbDao.fetch(TCompanyEntity.class, Cnd.where("adminId", "=", loginUser.getId()));
-		if (Util.isEmpty(loginCompany)) {
-			return ResultObject.fail("没有这个公司");
-		}
 
-		//验证通过后，把数据入库
-		Map<String, Object> insertInfo = insertInfo(form, loginUser, loginCompany);
-		TOrderEntity orderinfo = (TOrderEntity) insertInfo.get("orderinfo");
-		TOrderJpEntity orderjpinfo = (TOrderJpEntity) insertInfo.get("orderjpinfo");
+		//领区(待补充)
 
 		//生成excel
 
@@ -145,13 +220,271 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		orderinfo.setVisaOpid(userId);
 
 		//改变订单状态为发招宝
-		orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
+		//orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
 
 		dbDao.update(orderinfo);
-		return ResultObject.success(orderinfo.getId());
+		String result = orderUSViewService.encrypt(ResultObject.success(orderinfo.getId()));
+		System.out.println("返回的数据：" + result);
+		return result;
 	}
 
-	//信息验证
+	/**
+	 * 根据订单Id修改相关数据，并招宝变更
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param orderid
+	 * @param loginUser
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Map<String, Object> updateAndChangezhaobao(AutofillDataForm form, int orderid, TUserEntity loginUser) {
+		Map<String, Object> result = Maps.newTreeMap();
+		SimpleDateFormat sdf = new SimpleDateFormat();
+
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderid);
+		TOrderJpEntity orderjpinfo = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderid));
+
+		if (!Util.isEmpty(form.getGoDate())) {
+			try {
+				orderinfo.setGoTripDate(sdf.parse(form.getGoDate()));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		if (!Util.isEmpty(form.getReturnDate())) {
+			try {
+				orderinfo.setBackTripDate(sdf.parse(form.getReturnDate()));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+
+		orderinfo.setStatus(JPOrderStatusEnum.BIANGENGZHONG.intKey());
+
+		Integer visatype = form.getVisaType();
+		if (visatype == 7) {
+			orderjpinfo.setVisaCounty("冲绳县");
+		} else if (visatype == 8) {
+			orderjpinfo.setVisaCounty("宫城县");
+		} else if (visatype == 9) {
+			orderjpinfo.setVisaCounty("福岛县");
+		} else if (visatype == 10) {
+			orderjpinfo.setVisaCounty("岩手县");
+		} else if (visatype == 11) {
+			orderjpinfo.setVisaCounty("青森县");
+		} else if (visatype == 12) {
+			orderjpinfo.setVisaCounty("秋田县");
+		} else if (visatype == 13) {
+			orderjpinfo.setVisaCounty("山形县");
+		} else {
+			orderjpinfo.setVisaCounty("");
+		}
+		orderjpinfo.setVisaType(visatype);
+
+		//出行信息
+
+		TOrderTripJpEntity orderjptrip = dbDao.fetch(TOrderTripJpEntity.class,
+				Cnd.where("orderId", "=", orderjpinfo.getId()));
+
+		if (!Util.isEmpty(form.getGoDate())) {
+			try {
+				orderjptrip.setGoDate(sdf.parse(form.getGoDate()));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		if (!Util.isEmpty(form.getReturnDate())) {
+			try {
+				orderjptrip.setReturnDate(sdf.parse(form.getReturnDate()));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+
+		dbDao.update(orderjptrip);
+
+		//申请人信息
+		//先删除之前的申请人信息
+
+		String applysqlStr = sqlManager.get("autofillInterface_getApplicants");
+		Sql applysql = Sqls.create(applysqlStr);
+		applysql.setParam("orderjpid", orderjpinfo.getId());
+		List<Record> applyidList = dbDao.query(applysql, null, null);
+
+		for (Record record : applyidList) {
+			int applyid = record.getInt("id");
+			dbDao.delete(TApplicantEntity.class, applyid);
+			/*TApplicantPassportEntity passportEntity = dbDao.fetch(TApplicantPassportEntity.class,
+					Cnd.where("applicantId", "=", applyid));
+			dbDao.delete(passportEntity);*/
+		}
+
+		List<ApplicantInfo> applicantsList = form.getApplicantsList();
+
+		for (ApplicantInfo applicantinfo : applicantsList) {
+			//新建申请人表
+			TApplicantEntity apply = new TApplicantEntity();
+			apply.setOpId(loginUser.getId());
+			apply.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+			apply.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+			apply.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+			apply.setFirstName(applicantinfo.getFirstname());
+			apply.setFirstNameEn(applicantinfo.getFirstnameEn());
+			apply.setLastName(applicantinfo.getLastname());
+			apply.setLastNameEn(applicantinfo.getLastnameEn());
+			apply.setSex(applicantinfo.getSex());
+			if (!Util.isEmpty(applicantinfo.getBirthday())) {
+				try {
+					apply.setBirthday(sdf.parse(applicantinfo.getBirthday()));
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
+			apply.setProvince(applicantinfo.getProvince());
+
+			apply.setCreateTime(new Date());
+			TApplicantEntity insertApply = dbDao.insert(apply);
+			int applyid = insertApply.getId();
+
+			if (Util.eq(1, applicantinfo.getIsMainApplicant())) {
+				apply.setMainId(applyid);
+				dbDao.update(apply);
+			}
+
+			//新建护照信息表
+			TApplicantPassportEntity passport = new TApplicantPassportEntity();
+			passport.setApplicantId(applyid);
+			passport.setFirstName(applicantinfo.getFirstname());
+			passport.setFirstNameEn(applicantinfo.getFirstnameEn());
+			passport.setLastName(applicantinfo.getLastname());
+			passport.setLastNameEn(applicantinfo.getLastnameEn());
+			passport.setSex(applicantinfo.getSex());
+			if (!Util.isEmpty(applicantinfo.getBirthday())) {
+				try {
+					passport.setBirthday(sdf.parse(applicantinfo.getBirthday()));
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
+			passport.setPassport(applicantinfo.getPassportNo());
+			passport.setIssuedOrganization("公安部出入境管理局");
+			passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
+			dbDao.insert(passport);
+
+			//新建日本申请人表
+			TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+
+			applicantjp.setOrderId(orderjpinfo.getId());
+			applicantjp.setApplicantId(applyid);
+			applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+			applicantjp.setIsMainApplicant(applicantinfo.getIsMainApplicant());
+			TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
+
+			//日本工作信息
+			TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
+			workJp.setApplicantId(insertappjp.getId());
+			workJp.setCreateTime(new Date());
+			workJp.setOpId(loginUser.getId());
+			dbDao.insert(workJp);
+
+			TApplicantVisaOtherInfoEntity visaother = new TApplicantVisaOtherInfoEntity();
+			visaother.setApplicantid(insertappjp.getId());
+			visaother.setHotelname("参照'赴日予定表'");
+			visaother.setVouchname("参照'身元保证书'");
+			visaother.setInvitename("同上");
+			visaother.setTraveladvice("推荐");
+			dbDao.insert(visaother);
+
+		}
+		result.put("orderinfo", orderinfo);
+		result.put("orderjpinfo", orderjpinfo);
+		return result;
+
+	}
+
+	/**
+	 * 把传过来的数据解密后放入到对应的实体中
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param paramData
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public AutofillDataForm setDataToAutofillform(JSONObject paramData) {
+		AutofillDataForm autofillform = new AutofillDataForm();
+		String userName = "";
+		String goDate = "";
+		String returnDate = "";
+		String designatedNum = "";
+		String acceptDesign = "";
+		String orderVoucher = "";
+		Integer visaType = null;
+		try {
+			userName = paramData.getString("userName");
+		} catch (Exception e) {
+
+		}
+		try {
+			goDate = paramData.getString("goDate");
+		} catch (Exception e) {
+
+		}
+		try {
+			returnDate = paramData.getString("returnDate");
+		} catch (Exception e) {
+
+		}
+		try {
+			designatedNum = paramData.getString("designatedNum");
+		} catch (Exception e) {
+
+		}
+		try {
+			acceptDesign = paramData.getString("acceptDesign");
+		} catch (Exception e) {
+
+		}
+		try {
+			orderVoucher = paramData.getString("orderVoucher");
+		} catch (Exception e) {
+
+		}
+		try {
+			visaType = paramData.getInt("visaType");
+		} catch (Exception e) {
+
+		}
+
+		JSONArray jsonArray = paramData.getJSONArray("applicantsList");
+
+		List<ApplicantInfo> applicantsList = com.alibaba.fastjson.JSONObject.parseArray(jsonArray.toString(),
+				ApplicantInfo.class);
+
+		autofillform.setApplicantsList(applicantsList);
+		autofillform.setGoDate(goDate);
+		autofillform.setReturnDate(returnDate);
+		autofillform.setDesignatedNum(designatedNum);
+		autofillform.setUserName(userName);
+		autofillform.setAcceptDesign(acceptDesign);
+		autofillform.setOrderVoucher(orderVoucher);
+		autofillform.setVisaType(visaType);
+		return autofillform;
+	}
+
+	/**
+	 * 验证传过来的信息是否完整，日期格式是否正确
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public String infoValidate(AutofillDataForm form) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		StringBuffer resultstrbuf = new StringBuffer("");
@@ -182,6 +515,12 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		if (Util.isEmpty(form.getUserName())) {
 			resultstrbuf.append("公司用户名、");
 		}
+		if (Util.isEmpty(form.getDesignatedNum())) {
+			resultstrbuf.append("指定番号、");
+		}
+		/*if (Util.isEmpty(form.getAcceptDesign())) {
+			resultstrbuf.append("收付番号、");
+		}*/
 		if (Util.isEmpty(form.getVisaType())) {
 			resultstrbuf.append("签证类型、");
 		}
@@ -237,6 +576,17 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		return datebuf.toString();
 	}
 
+	/**
+	 * 把传过来的数据创建订单入库，并把订单状态改为发招宝
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param loginUser
+	 * @param loginCompany
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Map<String, Object> insertInfo(AutofillDataForm form, TUserEntity loginUser, TCompanyEntity loginCompany) {
 		Map<String, Object> result = Maps.newTreeMap();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -263,6 +613,8 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 				e.printStackTrace();
 			}
 		}
+
+		orderinfo.setStatus(JPOrderStatusEnum.READYCOMMING.intKey());
 
 		Integer visatype = form.getVisaType();
 		if (visatype == 7) {

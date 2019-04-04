@@ -24,7 +24,7 @@ import com.juyo.visa.admin.interfaceJapan.entity.ApplicantInfo;
 @Data
 public class AutofillDataForm {
 
-	/*公司或者用户信息(身份标记，并以此为依据创建订单)*/
+	/*公司或者用户信息(身份标记，并以此为依据创建订单)  临时*/
 	private String userName;
 
 	/*出行日期*/
@@ -33,8 +33,11 @@ public class AutofillDataForm {
 	/*返回日期*/
 	private String returnDate;
 
-	/*送签社id*/
-	private Integer sendsignid;
+	/*送签社指定番号*/
+	private String designatedNum;
+
+	/*订单凭证随机码，如果为空是发招宝,不为空则是招宝变更*/
+	private String orderVoucher;
 
 	/*受付番号*/
 	private String acceptDesign;
