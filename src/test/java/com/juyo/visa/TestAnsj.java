@@ -6,6 +6,8 @@
 
 package com.juyo.visa;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -132,8 +134,8 @@ public class TestAnsj {
 		}*/
 	}
 
-	public static void main(String[] args) {
-		TestAnsj test = new TestAnsj();
+	public static void main(String[] args) throws UnsupportedEncodingException {
+		/*TestAnsj test = new TestAnsj();
 		for (int i = 0; i < 100; i++) {
 			System.out.println("i:" + i + "=============");
 			Thread t = new Thread(new Runnable() {
@@ -143,6 +145,11 @@ public class TestAnsj {
 				}
 			});
 			t.start();
-		}
+		}*/
+
+		String encode = URLEncoder
+				.encode("SQtwB9EqkTmNF+hS/fV2DCG3cY1xx+IYAFj7zgzG9SATW94tOYb9JuoHUJY/t+VCn9FMFyMYbI13MPBqZtGWQXjoJqL1AN9SJ3fYGx2Ux24OuESgBEdsu9Ml9vvPcKp6HrlLIPZyose4jIVeujMmj0HGu7PZgvfAkFwhg66vcrPIo7mRBza+a09AnKug4ujwu5zjsm+JXcmU7mHgH+APVQW+iUenCYUd1+JtyC/smmoAg/7EWE3rnf3yyN8sYlA8JJjGlcbaKPOiyEfZpiHD9w3ThWDus7lif4ctmC9E6jayjKMX1DjFDkuMQaMKBQG8NOM7BhFeQto2VqZDMBKLDZj+56CYKW2Akj1wZMqUIqNQkMMdmCT5cjxPqjdPDDEmYgapIxUtmhu5lSBXVNdQiwV5HDIdINRNL4WMUUHT1SlgAeY6odFIfY7pqgLL3tbHWNmqrJDPTCrpNWB1csIIGFqh2WWS8k7ZBefCrZMbrNgpqDyglME+NWQY1El297hNWRkpQcBB2spC/WFndx6VxTDNpfIk+W3kmh6L5J8Q8xnC7KC7lSkm7XpD1c4Xx8tKdVjsWZli3tN3DXoaSQeFmGkRKgOgsbMRc12gIGFhfPDlmEcfrmOLkME3IOdB8P+3dRuLqlEuUTejUn2vFjk4ZoHrekrFi/aGFS+vgbYoPSXgvGyJIdjK14KzMYSNhWkwzs3wh02G8qz0rOUhVByTb6ve04wq6qXQoVxXtGK+oX7qecROjI3tzRdXAc8OSk60/CmtVmCKSmOzt45RCpbKKI+CrcREgEDnx8YQ0XbAuGZVjaZy+k4oouXUBSTVtxvgqPe1VqDgUOKm1zX6h8FhOIRCNbtlwqrqQ8ZGBNvIFn2egW5T6sdtFcnELMowkoHW",
+						"utf-8");
+		System.out.println(encode);
 	}
 }

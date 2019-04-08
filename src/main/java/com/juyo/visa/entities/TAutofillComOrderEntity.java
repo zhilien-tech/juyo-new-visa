@@ -22,11 +22,15 @@ public class TAutofillComOrderEntity implements Serializable {
 	private Integer comid;
 
 	@Column
+	@Comment("用户id")
+	private Integer userid;
+
+	@Column
 	@Comment("订单id")
 	private Integer orderid;
 
 	@Column
-	@Comment("订单凭证随机码")
+	@Comment("订单识别码")
 	private String ordervoucher;
 
 	@Column

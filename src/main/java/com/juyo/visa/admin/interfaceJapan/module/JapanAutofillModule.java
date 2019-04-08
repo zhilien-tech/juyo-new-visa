@@ -6,13 +6,17 @@
 
 package com.juyo.visa.admin.interfaceJapan.module;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.adaptor.JsonAdaptor;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
 import org.nutz.mvc.annotation.Filters;
+import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
 
 import com.juyo.visa.admin.interfaceJapan.form.ParamDataForm;
@@ -40,9 +44,10 @@ public class JapanAutofillModule implements AutofillInterface {
 	@Override
 	@At
 	@Ok("json")
+	@POST
 	@AdaptBy(type = JsonAdaptor.class)
-	public Object toAutofill(@Param("token") String token, @Param("..") ParamDataForm form) {
-		return japanAutofillService.sendZhaobao(token, form);
+	public Object toAutofill(@Param("token") String token, @Param("..") ParamDataForm form, HttpServletRequest request) {
+		return japanAutofillService.autofill(token, form, request);
 	}
 
 	/**
@@ -50,7 +55,10 @@ public class JapanAutofillModule implements AutofillInterface {
 	 */
 	@Override
 	@At
-	public Object search() {
-		return japanAutofillService.search();
+	@GET
+	public Object search(@Param("token") String token, @Param("timeStamp") String timeStamp,
+			@Param("nonce") String nonce, @Param("msg_signature") String msg_signature,
+			@Param("encrypt") String encrypt, HttpServletRequest request) {
+		return japanAutofillService.search(token, timeStamp, nonce, msg_signature, encrypt, request);
 	}
 }

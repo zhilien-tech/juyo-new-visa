@@ -36,8 +36,11 @@ public class AutofillDataForm {
 	/*送签社指定番号*/
 	private String designatedNum;
 
-	/*订单凭证随机码，如果为空是发招宝,不为空则是招宝变更*/
+	/*订单识别码*/
 	private String orderVoucher;
+
+	/*行为，send为发招宝，update为招宝变更，cancel为招宝取消*/
+	private String action;
 
 	/*受付番号*/
 	private String acceptDesign;

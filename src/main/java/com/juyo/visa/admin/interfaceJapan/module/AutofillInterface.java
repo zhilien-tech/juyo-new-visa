@@ -6,6 +6,8 @@
 
 package com.juyo.visa.admin.interfaceJapan.module;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.juyo.visa.admin.interfaceJapan.form.ParamDataForm;
 
 /**
@@ -17,7 +19,8 @@ import com.juyo.visa.admin.interfaceJapan.form.ParamDataForm;
  * @Date	 2019年4月3日 	 
  */
 public interface AutofillInterface {
-	Object toAutofill(String token, ParamDataForm form);
+	Object toAutofill(String token, ParamDataForm form, HttpServletRequest request);
 
-	Object search();
+	Object search(String token, String orderVoucher, String nonce, String msg_signature, String encrypt,
+			HttpServletRequest request);
 }

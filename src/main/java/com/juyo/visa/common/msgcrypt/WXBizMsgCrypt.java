@@ -158,6 +158,7 @@ public class WXBizMsgCrypt {
 		try {
 			// 设置解密模式为AES的CBC模式
 			Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
+			//Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 			SecretKeySpec key_spec = new SecretKeySpec(aesKey, "AES");
 			IvParameterSpec iv = new IvParameterSpec(Arrays.copyOfRange(aesKey, 0, 16));
 			cipher.init(Cipher.DECRYPT_MODE, key_spec, iv);
