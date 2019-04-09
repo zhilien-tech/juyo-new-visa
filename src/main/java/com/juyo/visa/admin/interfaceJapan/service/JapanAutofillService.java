@@ -369,12 +369,10 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		if (System.currentTimeMillis() - Long.valueOf(ipVal) >= 30000) {
 			System.out.println("进delete了");
 			System.out.println("记录第二次IP的时间:" + System.currentTimeMillis());
+			redisDao.set(ip + "count", "1");
 			redisDao.set(ip, String.valueOf(System.currentTimeMillis()));
-			redisDao.del(ip + "count");
+			//redisDao.del(ip + "count");
 		}
-
-		//保存一天之后过期
-		redisDao.expire(ip, 60 * 60 * 24);
 
 		/*CopyOnWriteArrayList<ConcurrentHashMap<String, Long>> ipList = new CopyOnWriteArrayList<>();
 		ConcurrentHashMap<String, Long> ipMap = new ConcurrentHashMap<>();

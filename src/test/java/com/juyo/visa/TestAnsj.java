@@ -152,6 +152,6 @@ public class TestAnsj {
 						"utf-8");
 		System.out.println(encode);
 
-		System.out.println(1554774624074.0 - 1554774587816.0);
+		System.out.println(1554777083868.0 - 1554777051705.0);
 	}
 }
