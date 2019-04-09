@@ -115,7 +115,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		}
 
 		System.out.println("token:" + token);
-		if (!Util.eq("\"ODBiOGIxNDY4NjdlMzc2Yg==\"", token)) {
+		if (!Util.eq("ODBiOGIxNDY4NjdlMzc2Yg==", token)) {
 			return orderUSViewService.encrypt(InterfaceResultObject.fail("身份验证失败"));
 		}
 
@@ -232,7 +232,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 			if (Util.isEmpty(autofillform.getOrderVoucher())) {
 				return orderUSViewService.encrypt(InterfaceResultObject.fail("招宝取消时请填写订单识别码！"));
 			} else {
-				//修改订单信息，并把订单状态改为招宝变更
+				//修改订单信息，并把订单状态改为招宝取消
 				String orderVoucher = autofillform.getOrderVoucher();
 				TAutofillComOrderEntity autofillComOrder = dbDao.fetch(TAutofillComOrderEntity.class,
 						Cnd.where("ordervoucher", "=", orderVoucher));
@@ -331,7 +331,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 	}
 
 	/**
-	 * 限制同一IP在30秒内只能访问1次
+	 * 限制同一IP在30秒内最多只能访问10次
 	 * TODO(这里用一句话描述这个方法的作用)
 	 * <p>
 	 * TODO(这里描述这个方法详情– 可选)
@@ -1032,17 +1032,18 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 	public Object search(String token, String timeStamp, String nonce, String msg_signature, String encrypt,
 			HttpServletRequest request) {
 
+		if (!Util.eq("ODBiOGIxNDY4NjdlMzc2Yg==", token)) {
+			return orderUSViewService.encrypt(InterfaceResultObject.fail("身份不正确"));
+		}
+
 		//获取ip地址
 		String ip = getIP(request);
 		System.out.println("searchIP:" + ip);
 
+		//IP访问限制
 		boolean flag = limitIPaccess(ip);
 		if (!flag) {
 			return orderUSViewService.encrypt(InterfaceResultObject.fail("提交过于频繁，请稍后再试！"));
-		}
-
-		if (!Util.eq("\"ODBiOGIxNDY4NjdlMzc2Yg==\"", token)) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("身份不正确"));
 		}
 
 		//密文，需要解密
@@ -1126,7 +1127,16 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
 			ip = request.getRemoteAddr();
 		}
-		ip = ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
+		//ip = ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
+
+		// 对于通过多个代理的情况，第一个 IP 为客户端真实 IP，多个 IP 按照','分割
+		// "***.***.***.***".length() = 15
+		if (ip != null && ip.length() > 15) {
+			if (ip.indexOf(",") > 0) {
+				ip = ip.substring(0, ip.indexOf(","));
+			}
+		}
+
 		return ip;
 	}
 }
