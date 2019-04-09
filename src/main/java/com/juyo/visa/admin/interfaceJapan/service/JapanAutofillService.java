@@ -346,6 +346,12 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 
 		String countVal = redisDao.get(ip + "count");
 
+		if (Util.isEmpty(ipVal)) {
+			ipVal = String.valueOf(System.currentTimeMillis());
+			System.out.println("记录第一次IP的时间:" + ipVal);
+			redisDao.set(ip, ipVal);
+		}
+
 		if (Util.isEmpty(countVal)) {
 			countVal = "1";
 			redisDao.set(ip + "count", "1");
@@ -356,14 +362,15 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 
 		if (!Util.isEmpty(ipVal) && (System.currentTimeMillis() - Long.valueOf(ipVal) < 30000)
 				&& (Integer.valueOf(countVal) > 10)) {
+			System.out.println("进false了");
 			flag = false;
 		}
 
-		if (Util.isEmpty(ipVal) || System.currentTimeMillis() - Long.valueOf(ipVal) >= 30000) {
+		if (System.currentTimeMillis() - Long.valueOf(ipVal) >= 30000) {
+			System.out.println("进delete了");
+			System.out.println("记录第二次IP的时间:" + System.currentTimeMillis());
 			redisDao.set(ip, String.valueOf(System.currentTimeMillis()));
-			if (System.currentTimeMillis() - Long.valueOf(ipVal) >= 30000) {
-				redisDao.del(ip + "count");
-			}
+			redisDao.del(ip + "count");
 		}
 
 		//保存一天之后过期
