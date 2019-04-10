@@ -446,4 +446,10 @@ public class SimpleVisaModule {
 		return simpleVisaService.getSomething();
 	}
 
+	@At
+	@POST
+	public Object testAutofill(@Param("orderid") int orderid) {
+		return simpleVisaService.testAutofill(orderid);
+	}
+
 }

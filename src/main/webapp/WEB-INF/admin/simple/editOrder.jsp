@@ -1071,8 +1071,18 @@
 			    		//window.location.reload();
 			      	}
 			    });*/
+			    var orderid = $('#orderid').val();
+			    $.ajax({ 
+			    	url: '${base}/admin/simple/testAutofill.html',
+			    	dataType:"json",
+			    	type:'post',
+			    	data:{orderid:orderid},
+			    	success: function(data){
+			    		//window.location.reload();
+			      	}
+			    });
 				
-				window.close();
+				//window.close();
 			}
 			function successAddCustomer(data){
 				

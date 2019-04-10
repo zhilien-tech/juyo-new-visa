@@ -34,7 +34,6 @@ import com.juyo.visa.admin.interfaceJapan.entity.ApplicantInfo;
 import com.juyo.visa.admin.interfaceJapan.form.AutofillDataForm;
 import com.juyo.visa.admin.interfaceJapan.form.ParamDataForm;
 import com.juyo.visa.admin.order.service.OrderJpViewService;
-import com.juyo.visa.admin.orderUS.service.OrderUSViewService;
 import com.juyo.visa.admin.simple.service.SimpleVisaService;
 import com.juyo.visa.admin.visajp.service.DownLoadVisaFileService;
 import com.juyo.visa.admin.visajp.util.TemplateUtil;
@@ -64,6 +63,7 @@ import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderLogsEntity;
 import com.juyo.visa.entities.TOrderTripJpEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -89,9 +89,6 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 	private OrderJpViewService orderJpViewService;
 
 	@Inject
-	private OrderUSViewService orderUSViewService;
-
-	@Inject
 	private DownLoadVisaFileService downLoadVisaFileService;
 
 	@Inject
@@ -111,12 +108,12 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 
 		boolean flag = limitIPaccess(ip);
 		if (!flag) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("提交过于频繁，请稍后再试！"));
+			return encrypt(InterfaceResultObject.fail("提交过于频繁，请稍后再试！"));
 		}
 
 		System.out.println("token:" + token);
 		if (!Util.eq("ODBiOGIxNDY4NjdlMzc2Yg==", token)) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("身份验证失败"));
+			return encrypt(InterfaceResultObject.fail("身份验证失败"));
 		}
 
 		//密文，需要解密
@@ -130,7 +127,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 			System.out.println("toGetEncrypt解密后明文: " + resultStr);
 		} catch (AesException e) {
 			e.printStackTrace();
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("请按要求传输数据"));
+			return encrypt(InterfaceResultObject.fail("请按要求传输数据"));
 		}
 
 		JSONObject paramData = new JSONObject(resultStr);
@@ -140,28 +137,28 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		//身份验证
 		TUserEntity loginUser = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", autofillform.getUserName()));
 		if (Util.isEmpty(loginUser)) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("查无此人"));
+			return encrypt(InterfaceResultObject.fail("查无此人"));
 		}
 
 		TCompanyEntity loginCompany = dbDao.fetch(TCompanyEntity.class, Cnd.where("adminId", "=", loginUser.getId()));
 		if (Util.isEmpty(loginCompany)) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("没有这个公司"));
+			return encrypt(InterfaceResultObject.fail("没有这个公司"));
 		}
 
 		TAutofillCompanyEntity autofillCom = dbDao.fetch(TAutofillCompanyEntity.class,
 				Cnd.where("comid", "=", loginCompany.getId()));
 		if (Util.isEmpty(autofillCom)) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("此公司没有权限"));
+			return encrypt(InterfaceResultObject.fail("此公司没有权限"));
 		} else {
 			if (Util.eq(autofillCom.getIsdisabled(), 1)) {
-				return orderUSViewService.encrypt(InterfaceResultObject.fail("此公司没有权限"));
+				return encrypt(InterfaceResultObject.fail("此公司没有权限"));
 			}
 		}
 
 		TCompanyEntity sendvisCom = dbDao.fetch(TCompanyEntity.class,
 				Cnd.where("cdesignNum", "=", autofillform.getDesignatedNum()));
 		if (Util.isEmpty(sendvisCom)) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("此送签社没有送签资格"));
+			return encrypt(InterfaceResultObject.fail("此送签社没有送签资格"));
 		}
 
 		//信息验证(是否满足发招宝所需数据)
@@ -172,11 +169,11 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 			if (!resultstr.endsWith("正确")) {
 				resultstr += "不能为空";
 			}
-			return orderUSViewService.encrypt(InterfaceResultObject.fail(resultstr));
+			return encrypt(InterfaceResultObject.fail(resultstr));
 		}
 
 		//orderVoucher订单凭证，如果为空，入库发招宝，如果不为空招宝变更
-		String result = orderUSViewService.encrypt(InterfaceResultObject.fail("程序出错，请重新尝试"));
+		JSONObject result = encrypt(InterfaceResultObject.fail("程序出错，请重新尝试"));
 		TOrderEntity orderinfo = null;
 		TOrderJpEntity orderjpinfo = null;
 		TAutofillComOrderEntity autofillcomorder = null;
@@ -185,70 +182,70 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		if (Util.eq("send", autofillform.getAction())) {
 
 			if (Util.eq(14, autofillform.getVisaType())) {
-				return orderUSViewService.encrypt(InterfaceResultObject.fail("签证类型为普通五年多次时不能进行此操作"));
+				return encrypt(InterfaceResultObject.fail("签证类型为普通五年多次时不能进行此操作"));
 			}
 
 			if (!Util.isEmpty(autofillform.getOrderVoucher())) {
-				return orderUSViewService.encrypt(InterfaceResultObject.fail("发招宝时别填写订单识别码！"));
+				return encrypt(InterfaceResultObject.fail("发招宝时别填写订单识别码！"));
 			}
 			//数据库入库并把订单状态改为发招宝中
 			Map<String, Object> insertInfo = insertInfo(autofillform, loginUser, loginCompany);
 			orderinfo = (TOrderEntity) insertInfo.get("orderinfo");
 			orderjpinfo = (TOrderJpEntity) insertInfo.get("orderjpinfo");
 			autofillcomorder = (TAutofillComOrderEntity) insertInfo.get("autofillcomorder");
-			result = orderUSViewService.encrypt(InterfaceResultObject.success(autofillcomorder.getOrdervoucher()));
+			result = encrypt(InterfaceResultObject.success(autofillcomorder.getOrdervoucher()));
 
 		} else if (Util.eq("update", autofillform.getAction())) {//招宝变更
 
 			if (Util.eq(14, autofillform.getVisaType())) {
-				return orderUSViewService.encrypt(InterfaceResultObject.fail("签证类型为普通五年多次时不能进行此操作"));
+				return encrypt(InterfaceResultObject.fail("签证类型为普通五年多次时不能进行此操作"));
 			}
 
 			if (Util.isEmpty(autofillform.getOrderVoucher())) {
-				return orderUSViewService.encrypt(InterfaceResultObject.fail("招宝变更时请填写订单识别码！"));
+				return encrypt(InterfaceResultObject.fail("招宝变更时请填写订单识别码！"));
 			} else {
 				//修改订单信息，并把订单状态改为招宝变更
 				String orderVoucher = autofillform.getOrderVoucher();
 				TAutofillComOrderEntity autofillComOrder = dbDao.fetch(TAutofillComOrderEntity.class,
 						Cnd.where("ordervoucher", "=", orderVoucher));
 				if (Util.isEmpty(autofillComOrder)) {
-					return orderUSViewService.encrypt(InterfaceResultObject.fail("并无此订单，请确认订单识别码是否正确"));
+					return encrypt(InterfaceResultObject.fail("并无此订单，请确认订单识别码是否正确"));
 				} else {
 					int orderid = autofillComOrder.getOrderid();
 					Map<String, Object> updateAndChangezhaobao = updateAndChangezhaobao(autofillform, orderid,
 							loginUser);
 					orderinfo = (TOrderEntity) updateAndChangezhaobao.get("orderinfo");
 					orderjpinfo = (TOrderJpEntity) updateAndChangezhaobao.get("orderjpinfo");
-					result = orderUSViewService.encrypt(InterfaceResultObject.success());
+					result = encrypt(InterfaceResultObject.success());
 				}
 			}
 
 		} else if (Util.eq("cancel", autofillform.getAction())) {//招宝取消
 
 			if (Util.eq(14, autofillform.getVisaType())) {
-				return orderUSViewService.encrypt(InterfaceResultObject.fail("签证类型为普通五年多次时不能进行此操作"));
+				return encrypt(InterfaceResultObject.fail("签证类型为普通五年多次时不能进行此操作"));
 			}
 
 			if (Util.isEmpty(autofillform.getOrderVoucher())) {
-				return orderUSViewService.encrypt(InterfaceResultObject.fail("招宝取消时请填写订单识别码！"));
+				return encrypt(InterfaceResultObject.fail("招宝取消时请填写订单识别码！"));
 			} else {
 				//修改订单信息，并把订单状态改为招宝取消
 				String orderVoucher = autofillform.getOrderVoucher();
 				TAutofillComOrderEntity autofillComOrder = dbDao.fetch(TAutofillComOrderEntity.class,
 						Cnd.where("ordervoucher", "=", orderVoucher));
 				if (Util.isEmpty(autofillComOrder)) {
-					return orderUSViewService.encrypt(InterfaceResultObject.fail("并无此订单，请确认订单识别码是否正确"));
+					return encrypt(InterfaceResultObject.fail("并无此订单，请确认订单识别码是否正确"));
 				} else {
 					int orderid = autofillComOrder.getOrderid();
 					orderinfo = dbDao.fetch(TOrderEntity.class, orderid);
 					orderinfo.setStatus(JPOrderStatusEnum.QUXIAOZHONG.intKey());
 					orderjpinfo = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderid));
 
-					result = orderUSViewService.encrypt(InterfaceResultObject.success());
+					result = encrypt(InterfaceResultObject.success());
 				}
 			}
 		} else {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("没有" + autofillform.getAction() + "行为"));
+			return encrypt(InterfaceResultObject.fail("没有" + autofillform.getAction() + "行为"));
 		}
 
 		/*if (Util.isEmpty(autofillform.getOrderVoucher())) {
@@ -328,6 +325,71 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		//result = orderUSViewService.encrypt(ResultObject.success(orderinfo.getId()));
 		System.out.println("返回的数据：" + result);
 		return result;
+	}
+
+	//将数据加密
+	public JSONObject encrypt(Object result) {
+		String encodingAesKey = ENCODINGAESKEY;
+		String token = TOKEN;
+		String timestamp = getTimeStamp();
+		String nonce = getRandomString();
+		String appId = APPID;
+
+		String jsonResult = JsonUtil.toJson(result);
+		System.out.println("jsonResult:" + jsonResult);
+
+		//加密
+		WXBizMsgCrypt pc;
+		String json = "";
+		try {
+			pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
+			json = pc.encryptMsg(jsonResult, timestamp, nonce);
+			System.out.println("body:" + json);
+
+		} catch (AesException e) {
+			e.printStackTrace();
+		}
+
+		return new JSONObject(json);
+	}
+
+	/**
+	 * 获取时间戳方法
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public String getTimeStamp() {
+		Date date = new Date();
+		//样式：yyyy年MM月dd日HH时mm分ss秒SSS毫秒
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMddHHmmss");
+		String timeStampStr = simpleDateFormat.format(date);
+		return timeStampStr;
+	}
+
+	/**
+	 * 生成随机字符串
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public String getRandomString() {
+		String str = "zxcvbnmlkjhgfdsaqwertyuiop1234567890";
+		Random random = new Random();
+		StringBuffer sb = new StringBuffer();
+		//长度为几就循环几次
+		for (int i = 0; i < 8; ++i) {
+			//产生0-61的数字
+			int number = random.nextInt(str.length());
+			//将产生的数字通过length次承载到sb中
+			sb.append(str.charAt(number));
+		}
+		//将承载的字符转换成字符串
+		return sb.toString();
 	}
 
 	/**
@@ -1032,7 +1094,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 	public Object search(String token, String encrypt, HttpServletRequest request) {
 
 		if (!Util.eq("ODBiOGIxNDY4NjdlMzc2Yg==", token)) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("身份不正确"));
+			return encrypt(InterfaceResultObject.fail("身份不正确"));
 		}
 
 		//获取ip地址
@@ -1042,7 +1104,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		//IP访问限制
 		boolean flag = limitIPaccess(ip);
 		if (!flag) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("提交过于频繁，请稍后再试！"));
+			return encrypt(InterfaceResultObject.fail("提交过于频繁，请稍后再试！"));
 		}
 
 		//密文，需要解密
@@ -1054,46 +1116,46 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 			System.out.println("toGetEncrypt解密后明文: " + resultStr);
 		} catch (AesException e) {
 			e.printStackTrace();
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("请按要求传输数据"));
+			return encrypt(InterfaceResultObject.fail("请按要求传输数据"));
 		}
 
 		JSONObject paramData = new JSONObject(resultStr);
 
 		String userName = paramData.getString("userName");
 		if (Util.isEmpty(userName)) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("用户名不能为空"));
+			return encrypt(InterfaceResultObject.fail("用户名不能为空"));
 		}
 
 		String orderVoucher = paramData.getString("orderVoucher");
 		if (Util.isEmpty(orderVoucher)) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("订单识别码不能为空"));
+			return encrypt(InterfaceResultObject.fail("订单识别码不能为空"));
 		}
 
 		//身份验证
 		TUserEntity loginUser = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", userName));
 		if (Util.isEmpty(loginUser)) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("查无此人"));
+			return encrypt(InterfaceResultObject.fail("查无此人"));
 		}
 
 		TCompanyEntity loginCompany = dbDao.fetch(TCompanyEntity.class, Cnd.where("adminId", "=", loginUser.getId()));
 		if (Util.isEmpty(loginCompany)) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("没有这个公司"));
+			return encrypt(InterfaceResultObject.fail("没有这个公司"));
 		}
 
 		TAutofillCompanyEntity autofillCom = dbDao.fetch(TAutofillCompanyEntity.class,
 				Cnd.where("comid", "=", loginCompany.getId()));
 		if (Util.isEmpty(autofillCom)) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("此公司没有权限"));
+			return encrypt(InterfaceResultObject.fail("此公司没有权限"));
 		} else {
 			if (Util.eq(autofillCom.getIsdisabled(), 1)) {
-				return orderUSViewService.encrypt(InterfaceResultObject.fail("此公司没有权限"));
+				return encrypt(InterfaceResultObject.fail("此公司没有权限"));
 			}
 		}
 
 		TAutofillComOrderEntity autofillComOrder = dbDao.fetch(TAutofillComOrderEntity.class,
 				Cnd.where("orderVoucher", "=", orderVoucher));
 		if (Util.isEmpty(autofillComOrder)) {
-			return orderUSViewService.encrypt(InterfaceResultObject.fail("并无此订单，请确认订单识别码是否正确"));
+			return encrypt(InterfaceResultObject.fail("并无此订单，请确认订单识别码是否正确"));
 		}
 		//查询订单状态
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, autofillComOrder.getOrderid().longValue());
@@ -1106,7 +1168,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 			}
 		}
 
-		return orderUSViewService.encrypt(InterfaceResultObject.success(orderstatus));
+		return encrypt(InterfaceResultObject.success(orderstatus));
 	}
 
 	public String getIP(HttpServletRequest request) {

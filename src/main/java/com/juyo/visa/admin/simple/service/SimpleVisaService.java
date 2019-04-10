@@ -35,6 +35,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -117,6 +118,8 @@ import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.SimpleVisaTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.msgcrypt.AesException;
+import com.juyo.visa.common.msgcrypt.WXBizMsgCrypt;
 import com.juyo.visa.common.newairline.ResultflyEntity;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.util.HttpUtil;
@@ -153,6 +156,7 @@ import com.juyo.visa.forms.TApplicantPassportForm;
 import com.juyo.visa.websocket.VisaInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -194,6 +198,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 	private static final String VISAINFO_WEBSPCKET_ADDR = "visainfowebsocket";
 	private static String WX_B_CODE_URL = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=ACCESS_TOKEN"; //不限次数 scene长度为32个字符
+
+	private final static String ENCODINGAESKEY = "jllZTM3ZWEzZGI1NGQ5NGI3MTc4NDNhNzAzODE5NTYt";
+	private final static String TOKEN = "ODBiOGIxNDY4NjdlMzc2Yg==";
+	private final static String APPID = "jhhMThiZjM1ZGQ2Y";
 
 	private Lock lock = new ReentrantLock();
 
@@ -8324,6 +8332,184 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 		return null;
+	}
+
+	public Object testAutofill(int orderid) {
+
+		Map<String, Object> result = getData(orderid);
+
+		WXBizMsgCrypt pc;
+		String resultStr = "";
+		String json = encrypt(result);
+		//System.out.println("json:" + json);
+		try {
+			//发送POST请求
+			String returnResult = toPostAutofill(json);
+			//String returnResult = toPatchRequest(json);
+			org.json.JSONObject resultObj = new org.json.JSONObject(returnResult);
+			String encrypt = (String) resultObj.get("encrypt");
+			//对请求返回来的encrypt解密
+			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
+			resultStr = pc.decrypt(encrypt);
+			System.out.println("toGetEncrypt解密后明文: " + resultStr);
+
+			org.json.JSONObject aacodeObj = new org.json.JSONObject(resultStr);
+			int successStatus = (int) aacodeObj.get("success");
+			String msg = "";
+			try {
+				msg = (String) aacodeObj.get("msg");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			String data = aacodeObj.getString("data");
+			System.out.println("订单识别码为:" + data);
+
+		} catch (AesException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
+
+	//发送POST请求
+	public String toPostAutofill(String json) {
+		String host = "https://192.168.2.138:443";
+		String path = "/visa/data/japan/toAutofill?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
+		String method = "POST";
+		String entityStr = "";
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Content-Type", "application/json; charset=UTF-8");
+		Map<String, String> querys = new HashMap<String, String>();
+		HttpResponse response;
+		System.out.println("httpurl:" + (host + path));
+		System.out.println("json:" + json);
+		try {
+			response = HttpUtils.doPost(host, path, method, headers, querys, json);
+			entityStr = EntityUtils.toString(response.getEntity());
+			System.out.println("POST请求返回的数据：" + entityStr);
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		return entityStr;
+	}
+
+	//将数据加密
+	public String encrypt(Object result) {
+		String encodingAesKey = ENCODINGAESKEY;
+		String token = TOKEN;
+		String timestamp = getTimeStamp();
+		String nonce = getRandomString();
+		String appId = APPID;
+
+		String jsonResult = JsonUtil.toJson(result);
+		System.out.println("jsonResult:" + jsonResult);
+
+		//加密
+		WXBizMsgCrypt pc;
+		String json = "";
+		try {
+			pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
+			json = pc.encryptMsg(jsonResult, timestamp, nonce);
+			System.out.println("body:" + json);
+
+		} catch (AesException e) {
+			e.printStackTrace();
+		}
+
+		return json;
+	}
+
+	/**
+	 * 获取时间戳方法
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public String getTimeStamp() {
+		Date date = new Date();
+		//样式：yyyy年MM月dd日HH时mm分ss秒SSS毫秒
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMddHHmmss");
+		String timeStampStr = simpleDateFormat.format(date);
+		return timeStampStr;
+	}
+
+	/**
+	 * 生成随机字符串
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public String getRandomString() {
+		String str = "zxcvbnmlkjhgfdsaqwertyuiop1234567890";
+		Random random = new Random();
+		StringBuffer sb = new StringBuffer();
+		//长度为几就循环几次
+		for (int i = 0; i < 8; ++i) {
+			//产生0-61的数字
+			int number = random.nextInt(str.length());
+			//将产生的数字通过length次承载到sb中
+			sb.append(str.charAt(number));
+		}
+		//将承载的字符转换成字符串
+		return sb.toString();
+	}
+
+	public Map<String, Object> getData(int orderid) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Map<String, Object> result = Maps.newHashMap();
+		ArrayList<Object> applicantsList = new ArrayList<>();
+
+		TOrderJpEntity orderjpinfo = dbDao.fetch(TOrderJpEntity.class, orderid);
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjpinfo.getOrderId().longValue());
+		List<TApplicantOrderJpEntity> applyorderjpList = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpinfo.getId()), null);
+		for (TApplicantOrderJpEntity applyorderjp : applyorderjpList) {
+			Map<String, Object> applicant = Maps.newHashMap();
+			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyorderjp.getApplicantId().longValue());
+			TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
+					Cnd.where("applicantId", "=", apply.getId()));
+
+			applicant.put("firstname", apply.getFirstName());
+			applicant.put("firstnameEn", apply.getFirstNameEn());
+			applicant.put("lastname", apply.getLastName());
+			applicant.put("lastnameEn", apply.getLastNameEn());
+			applicant.put("birthday", sdf.format(apply.getBirthday()));
+			applicant.put("sex", apply.getSex());
+			applicant.put("province", apply.getProvince());
+			applicant.put("passportNo", passport.getPassport());
+			applicant.put("isMainApplicant", applyorderjp.getIsMainApplicant());
+
+			applicantsList.add(applicant);
+
+		}
+
+		Date goTripDate = orderinfo.getGoTripDate();
+		Date backTripDate = orderinfo.getBackTripDate();
+
+		Integer visaType = orderjpinfo.getVisaType();
+
+		String goDate = sdf.format(goTripDate);
+		String returnDate = sdf.format(backTripDate);
+
+		result.put("userName", "zhiliren");
+		result.put("goDate", goDate);
+		result.put("returnDate", returnDate);
+		result.put("action", "send");
+		result.put("orderVoucher", "");
+		result.put("designatedNum", "GTP-BJ-000-0");
+		result.put("visaType", visaType);
+		result.put("applicantsList", applicantsList);
+
+		return result;
 	}
 
 }
