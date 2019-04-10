@@ -411,7 +411,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		String goDate = "";
 		String returnDate = "";
 		String designatedNum = "";
-		String acceptDesign = "";
+		//String acceptDesign = "";
 		String orderVoucher = "";
 		String action = "";
 		Integer visaType = null;
@@ -435,11 +435,11 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		} catch (Exception e) {
 
 		}
-		try {
+		/*try {
 			acceptDesign = paramData.getString("acceptDesign");
 		} catch (Exception e) {
 
-		}
+		}*/
 		try {
 			orderVoucher = paramData.getString("orderVoucher");
 		} catch (Exception e) {
@@ -466,7 +466,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		autofillform.setReturnDate(returnDate);
 		autofillform.setDesignatedNum(designatedNum);
 		autofillform.setUserName(userName);
-		autofillform.setAcceptDesign(acceptDesign);
+		//autofillform.setAcceptDesign(acceptDesign);
 		autofillform.setOrderVoucher(orderVoucher);
 		autofillform.setAction(action);
 		autofillform.setVisaType(visaType);
@@ -1029,8 +1029,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 	 * @param request
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object search(String token, String timeStamp, String nonce, String msg_signature, String encrypt,
-			HttpServletRequest request) {
+	public Object search(String token, String encrypt, HttpServletRequest request) {
 
 		if (!Util.eq("ODBiOGIxNDY4NjdlMzc2Yg==", token)) {
 			return orderUSViewService.encrypt(InterfaceResultObject.fail("身份不正确"));

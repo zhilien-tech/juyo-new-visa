@@ -43,7 +43,7 @@ public class AutofillDataForm {
 	private String action;
 
 	/*受付番号*/
-	private String acceptDesign;
+	//private String acceptDesign;
 
 	/*签证类型*/
 	private Integer visaType;

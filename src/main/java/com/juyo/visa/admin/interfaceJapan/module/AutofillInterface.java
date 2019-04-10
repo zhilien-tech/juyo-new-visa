@@ -21,6 +21,5 @@ import com.juyo.visa.admin.interfaceJapan.form.ParamDataForm;
 public interface AutofillInterface {
 	Object toAutofill(String token, ParamDataForm form, HttpServletRequest request);
 
-	Object search(String token, String orderVoucher, String nonce, String msg_signature, String encrypt,
-			HttpServletRequest request);
+	Object search(String token, String encrypt, HttpServletRequest request);
 }
