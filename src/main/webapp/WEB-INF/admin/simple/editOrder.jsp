@@ -1076,7 +1076,11 @@
 			    	url: '${base}/admin/simple/testAutofill.html',
 			    	dataType:"json",
 			    	type:'post',
-			    	data:{orderid:orderid},
+			    	data:
+			    	{
+			    		orderid:orderid,
+			    		action:"cancel"
+			    	},
 			    	success: function(data){
 			    		//window.location.reload();
 			      	}

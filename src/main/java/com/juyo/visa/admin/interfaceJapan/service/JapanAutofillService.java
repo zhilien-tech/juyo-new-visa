@@ -63,6 +63,7 @@ import com.juyo.visa.entities.TOrderJpEntity;
 import com.juyo.visa.entities.TOrderLogsEntity;
 import com.juyo.visa.entities.TOrderTripJpEntity;
 import com.juyo.visa.entities.TUserEntity;
+import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.redis.RedisDao;
@@ -166,7 +167,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 
 		if (!Util.isEmpty(resultstr)) {
 			resultstr = resultstr.substring(0, resultstr.length() - 1);
-			if (!resultstr.endsWith("正确")) {
+			if (!resultstr.endsWith("正确") && !resultstr.endsWith("今天")) {
 				resultstr += "不能为空";
 			}
 			return encrypt(InterfaceResultObject.fail(resultstr));
@@ -341,16 +342,19 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		//加密
 		WXBizMsgCrypt pc;
 		String json = "";
+		JSONObject jsonObject = null;
 		try {
 			pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
-			json = pc.encryptMsg(jsonResult, timestamp, nonce);
+			jsonObject = pc.encryptMsg1(jsonResult, timestamp, nonce);
 			System.out.println("body:" + json);
 
 		} catch (AesException e) {
 			e.printStackTrace();
 		}
 
-		return new JSONObject(json);
+		//JSONObject jsonObject = new JSONObject(json);
+		System.out.println("jsonObject:" + jsonObject);
+		return jsonObject;
 	}
 
 	/**
@@ -548,14 +552,21 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		StringBuffer resultstrbuf = new StringBuffer("");
 		StringBuffer datebuf = new StringBuffer("");
+		StringBuffer formatbuf = new StringBuffer("");
 		int count = 1;
+
+		int daysBetween = DateUtil.daysBetween(sdf.format(new Date()), form.getGoDate());
+		if (daysBetween < 0) {
+			datebuf.append("出发日期不能早于今天，");
+		}
+		System.out.println(daysBetween + "============");
 		if (Util.isEmpty(form.getGoDate())) {
 			resultstrbuf.append("出发日期、");
 		} else {
 			try {
 				sdf.parse(form.getGoDate());
 			} catch (ParseException e) {
-				datebuf.append("出发日期、");
+				formatbuf.append("出发日期、");
 				e.printStackTrace();
 
 			}
@@ -566,7 +577,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 			try {
 				sdf.parse(form.getReturnDate());
 			} catch (ParseException e) {
-				datebuf.append("返回日期、");
+				formatbuf.append("返回日期、");
 				e.printStackTrace();
 
 			}
@@ -605,7 +616,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 					try {
 						sdf.parse(applicant.getBirthday());
 					} catch (ParseException e) {
-						datebuf.append("申请人" + count + "的出生日期、");
+						formatbuf.append("申请人" + count + "的出生日期、");
 						e.printStackTrace();
 
 					}
@@ -625,13 +636,21 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 				count++;
 			}
 		}
-		String datestr = datebuf.toString();
-		if (!Util.isEmpty(datestr)) {
-			datebuf.deleteCharAt(datebuf.length() - 1).append("格式不正确，").append(resultstrbuf);
-		} else {
-			datebuf.append(resultstrbuf);
-		}
 
+		/*String formatstr = formatbuf.toString();
+		if (!Util.isEmpty(formatstr)) {
+			formatbuf.deleteCharAt(formatbuf.length() - 1).append("格式不正确，").append(resultstrbuf);
+		} else {
+			formatbuf.append(resultstrbuf);
+		}*/
+
+		String formatstr = formatbuf.toString();
+		if (!Util.isEmpty(formatstr)) {
+			formatbuf.deleteCharAt(formatbuf.length() - 1).append("格式不正确，").append(resultstrbuf);
+		} else {
+			formatbuf.append(resultstrbuf);
+		}
+		datebuf.append(formatbuf);
 		return datebuf.toString();
 	}
 

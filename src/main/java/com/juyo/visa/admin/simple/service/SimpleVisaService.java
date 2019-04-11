@@ -8334,9 +8334,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
-	public Object testAutofill(int orderid) {
+	public Object testAutofill(int orderid, String action) {
 
-		Map<String, Object> result = getData(orderid);
+		Map<String, Object> result = getData(orderid, action);
 
 		WXBizMsgCrypt pc;
 		String resultStr = "";
@@ -8344,9 +8344,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		//System.out.println("json:" + json);
 		try {
 			//发送POST请求
-			String returnResult = toPostAutofill(json);
-			//String returnResult = toPatchRequest(json);
-			org.json.JSONObject resultObj = new org.json.JSONObject(returnResult);
+			//String returnResult = toPostAutofill(json);
+			//org.json.JSONObject resultObj = new org.json.JSONObject(returnResult);
+			JSONObject resultObj = toPostAutofill(json);
 			String encrypt = (String) resultObj.get("encrypt");
 			//对请求返回来的encrypt解密
 			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
@@ -8362,8 +8362,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				e.printStackTrace();
 			}
 
-			String data = aacodeObj.getString("data");
-			System.out.println("订单识别码为:" + data);
+			if (Util.eq("send", action)) {
+				String data = aacodeObj.getString("data");
+				System.out.println("订单识别码为:" + data);
+			}
 
 		} catch (AesException e) {
 			e.printStackTrace();
@@ -8374,28 +8376,37 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	//发送POST请求
-	public String toPostAutofill(String json) {
+	public JSONObject toPostAutofill(String json) {
+
 		String host = "https://192.168.2.138:443";
 		String path = "/visa/data/japan/toAutofill?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
 		String method = "POST";
 		String entityStr = "";
 		Map<String, String> headers = new HashMap<String, String>();
+		//headers.put("Content-Type", "application/json; charset=UTF-8");
 		headers.put("Content-Type", "application/json; charset=UTF-8");
 		Map<String, String> querys = new HashMap<String, String>();
 		HttpResponse response;
 		System.out.println("httpurl:" + (host + path));
 		System.out.println("json:" + json);
+		JSONObject parseObject = null;
+		InputStream inputStream = null;
 		try {
 			response = HttpUtils.doPost(host, path, method, headers, querys, json);
 			entityStr = EntityUtils.toString(response.getEntity());
 			System.out.println("POST请求返回的数据：" + entityStr);
+			//entityStr = entityStr.substring(1, entityStr.length() - 1);
+			//entityStr = entityStr.substring(1, entityStr.length() - 1).replaceAll("\\\\", "");
+			//System.out.println("entityStr:" + entityStr);
+			parseObject = JSONObject.parseObject(entityStr);
+			System.out.println("parseObject:" + parseObject);
 		} catch (Exception e) {
 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 		}
-		return entityStr;
+		return parseObject;
 	}
 
 	//将数据加密
@@ -8463,7 +8474,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return sb.toString();
 	}
 
-	public Map<String, Object> getData(int orderid) {
+	public Map<String, Object> getData(int orderid, String action) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Map<String, Object> result = Maps.newHashMap();
 		ArrayList<Object> applicantsList = new ArrayList<>();
@@ -8503,8 +8514,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("userName", "zhiliren");
 		result.put("goDate", goDate);
 		result.put("returnDate", returnDate);
-		result.put("action", "send");
-		result.put("orderVoucher", "");
+		result.put("action", action);
+		result.put("orderVoucher", "d6V118dE");
 		result.put("designatedNum", "GTP-BJ-000-0");
 		result.put("visaType", visaType);
 		result.put("applicantsList", applicantsList);

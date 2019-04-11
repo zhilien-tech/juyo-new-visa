@@ -68,7 +68,6 @@ public class QuartzTomcat extends BaseService<TOrderJpEntity> implements Job {
 			TrustManager[] tm = { new MyX509TrustManager() };
 			//初始化
 			sslContext.init(null, tm, new java.security.SecureRandom());
-			;
 			//获取SSLSocketFactory对象
 			SSLSocketFactory ssf = sslContext.getSocketFactory();
 

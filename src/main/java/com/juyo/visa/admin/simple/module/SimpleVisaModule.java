@@ -448,8 +448,8 @@ public class SimpleVisaModule {
 
 	@At
 	@POST
-	public Object testAutofill(@Param("orderid") int orderid) {
-		return simpleVisaService.testAutofill(orderid);
+	public Object testAutofill(@Param("orderid") int orderid, @Param("action") String action) {
+		return simpleVisaService.testAutofill(orderid, action);
 	}
 
 }

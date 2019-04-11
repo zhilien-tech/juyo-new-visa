@@ -43,7 +43,7 @@ public class JapanAutofillModule implements AutofillInterface {
 	 */
 	@Override
 	@At
-	@Ok("json")
+	@Ok("raw:json")
 	@POST
 	@AdaptBy(type = JsonAdaptor.class)
 	public Object toAutofill(@Param("token") String token, @Param("..") ParamDataForm form, HttpServletRequest request) {
