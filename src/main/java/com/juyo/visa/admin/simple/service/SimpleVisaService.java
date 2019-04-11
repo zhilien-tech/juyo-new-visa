@@ -204,6 +204,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	private final static String TOKEN = "ODBiOGIxNDY4NjdlMzc2Yg==";
 	private final static String APPID = "jhhMThiZjM1ZGQ2Y";
 
+	private final static String HOST = "https://192.168.2.138:443";
+
 	private Lock lock = new ReentrantLock();
 
 	public Object toList(HttpServletRequest request) {
@@ -8398,7 +8400,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 */
 	public JSONObject toPostAutofill(String json) {
 
-		String host = "https://192.168.2.138:443";
+		String host = HOST;
 		String path = "/visa/data/japan/toAutofill?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
 		String method = "POST";
 		String entityStr = "";
@@ -8569,7 +8571,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 
 		//发送GET请求
-		String host = "https://192.168.2.138:443";
+		String host = HOST;
 		String path = "/visa/data/japan/search?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&encrypt=" + json;
 		String method = "GET";
 		String entityStr = "";
@@ -8592,7 +8594,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			//将解密后的json字符串转为json对象
 			parseObject = JSONObject.parseObject(resultStr);
 			String orderstatus = parseObject.getString("data");
-			System.out.println("订单状态为：" + orderstatus);
+			if (orderstatus.contains(",")) {
+				System.out.println("订单状态为：" + orderstatus.substring(0, orderstatus.indexOf(",")));
+				System.out.println("收付番号为：" + orderstatus.substring(orderstatus.indexOf(",") + 1));
+			} else {
+				System.out.println("订单状态为：" + orderstatus);
+			}
 
 		} catch (Exception e) {
 
