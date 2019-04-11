@@ -8593,12 +8593,18 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			System.out.println("解密后明文: " + resultStr);
 			//将解密后的json字符串转为json对象
 			parseObject = JSONObject.parseObject(resultStr);
-			String orderstatus = parseObject.getString("data");
-			if (orderstatus.contains(",")) {
-				System.out.println("订单状态为：" + orderstatus.substring(0, orderstatus.indexOf(",")));
-				System.out.println("收付番号为：" + orderstatus.substring(orderstatus.indexOf(",") + 1));
+
+			String errMsg = parseObject.getString("msg");
+			if (!Util.isEmpty(errMsg)) {
+				System.out.println("出错了，错误信息为：" + errMsg);
 			} else {
-				System.out.println("订单状态为：" + orderstatus);
+				String orderstatus = parseObject.getString("data");
+				if (orderstatus.contains(",")) {
+					System.out.println("订单状态为：" + orderstatus.substring(0, orderstatus.indexOf(",")));
+					System.out.println("收付番号为：" + orderstatus.substring(orderstatus.indexOf(",") + 1));
+				} else {
+					System.out.println("订单状态为：" + orderstatus);
+				}
 			}
 
 		} catch (Exception e) {

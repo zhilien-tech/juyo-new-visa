@@ -100,6 +100,17 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 	private final static String TOKEN = "ODBiOGIxNDY4NjdlMzc2Yg==";
 	private final static String APPID = "jhhMThiZjM1ZGQ2Y";
 
+	/**
+	 * 根据传递的参数来发招宝或者招宝变更或者招宝取消，并返回相关数据
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param token
+	 * @param form
+	 * @param request
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public Object autofill(String token, ParamDataForm form, HttpServletRequest request) {
 		System.out.println("访问到了~~~~~");
 		System.out.println("传过来的数据为:" + form);
@@ -246,7 +257,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 				}
 			}
 		} else {
-			return encrypt(InterfaceResultObject.fail("没有" + autofillform.getAction() + "行为"));
+			return encrypt(InterfaceResultObject.fail("请确认action是否填写正确"));
 		}
 
 		/*if (Util.isEmpty(autofillform.getOrderVoucher())) {
@@ -857,7 +868,16 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		return val;
 	}
 
-	//添加日志
+	/**
+	 * 添加日志
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @param status
+	 * @param loginUser TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public void insertLogs(Integer orderid, Integer status, TUserEntity loginUser) {
 		TOrderLogsEntity logs = new TOrderLogsEntity();
 		logs.setCreateTime(new Date());
@@ -1197,6 +1217,15 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		return encrypt(InterfaceResultObject.success(orderstatus));
 	}
 
+	/**
+	 * 获取真实IP
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param request
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public String getIP(HttpServletRequest request) {
 		String ip = request.getHeader("x-forwarded-for");
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
