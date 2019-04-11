@@ -6,7 +6,8 @@
 
 package com.juyo.visa;
 
-import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -133,7 +134,7 @@ public class TestAnsj {
 		}*/
 	}
 
-	public static void main(String[] args) throws UnsupportedEncodingException {
+	public static void main(String[] args) {
 		/*TestAnsj test = new TestAnsj();
 		for (int i = 0; i < 100; i++) {
 			System.out.println("i:" + i + "=============");
@@ -152,6 +153,18 @@ public class TestAnsj {
 		System.out.println(encode);
 
 		System.out.println(1554777083868.0 - 1554777051705.0);*/
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		sdf.setLenient(false);
+		try {
+			Date parse = sdf.parse("2018-01-01:191010");
+			System.out.println(parse);
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
 
 	}
 }

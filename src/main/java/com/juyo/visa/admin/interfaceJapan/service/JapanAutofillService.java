@@ -114,7 +114,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 
 		System.out.println("token:" + token);
 		if (!Util.eq("ODBiOGIxNDY4NjdlMzc2Yg==", token)) {
-			return encrypt(InterfaceResultObject.fail("身份验证失败"));
+			return encrypt(InterfaceResultObject.fail("token校验失败"));
 		}
 
 		//密文，需要解密
@@ -555,16 +555,16 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		StringBuffer formatbuf = new StringBuffer("");
 		int count = 1;
 
-		int daysBetween = DateUtil.daysBetween(sdf.format(new Date()), form.getGoDate());
-		if (daysBetween < 0) {
-			datebuf.append("出发日期不能早于今天，");
-		}
-		System.out.println(daysBetween + "============");
 		if (Util.isEmpty(form.getGoDate())) {
 			resultstrbuf.append("出发日期、");
 		} else {
 			try {
 				sdf.parse(form.getGoDate());
+				int daysBetween = DateUtil.daysBetween(sdf.format(new Date()), form.getGoDate());
+				if (daysBetween < 0) {
+					datebuf.append("出发日期不能早于今天，");
+				}
+				System.out.println(daysBetween + "============");
 			} catch (ParseException e) {
 				formatbuf.append("出发日期、");
 				e.printStackTrace();
@@ -1113,7 +1113,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 	public Object search(String token, String encrypt, HttpServletRequest request) {
 
 		if (!Util.eq("ODBiOGIxNDY4NjdlMzc2Yg==", token)) {
-			return encrypt(InterfaceResultObject.fail("身份不正确"));
+			return encrypt(InterfaceResultObject.fail("token校验失败"));
 		}
 
 		//获取ip地址
@@ -1185,6 +1185,13 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 			if (visaenum.intKey() == status) {
 				orderstatus = visaenum.value();
 			}
+		}
+
+		//如果招宝成功或者变更成功，把收付番号返回
+		if (status == JPOrderStatusEnum.YIBIANGENG.intKey() || status == JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey()) {
+			TOrderJpEntity orderjpinfo = dbDao
+					.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderinfo.getId()));
+			return encrypt(InterfaceResultObject.success(orderstatus + "," + orderjpinfo.getAcceptDesign()));
 		}
 
 		return encrypt(InterfaceResultObject.success(orderstatus));

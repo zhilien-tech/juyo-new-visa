@@ -1079,7 +1079,8 @@
 			    	data:
 			    	{
 			    		orderid:orderid,
-			    		action:"cancel"
+			    		action:"cancel",
+			    		orderVoucher:"d6V118dE"
 			    	},
 			    	success: function(data){
 			    		//window.location.reload();
@@ -1094,7 +1095,7 @@
 			
 			function log(orderid){//日志
 				var orderinfoid = '${obj.orderinfo.id}';
-				layer.open({
+				/* layer.open({
 					type: 2,
 					title: false,
 					closeBtn:false,
@@ -1104,7 +1105,20 @@
 					scrollbar: false,
 					area: ['700px', '80%'],
 					content:'/admin/orderJp/log.html?id='+orderinfoid+'&orderProcessType=1'
-				});
+				}); */
+				
+				$.ajax({ 
+			    	url: '${base}/admin/simple/testSearch.html',
+			    	dataType:"json",
+			    	type:'post',
+			    	data:
+			    	{
+			    		orderVoucher:"d6V118dE"
+			    	},
+			    	success: function(data){
+			    		//window.location.reload();
+			      	}
+			    });
 			}
 			//招宝变更、招宝取消、拒签
 			function sendInsurance(visastatus){

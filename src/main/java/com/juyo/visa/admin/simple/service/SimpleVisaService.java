@@ -9,6 +9,7 @@ package com.juyo.visa.admin.simple.service;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -8334,22 +8335,33 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return null;
 	}
 
-	public Object testAutofill(int orderid, String action) {
+	/**
+	 * 测试toAutofill接口
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @param action
+	 * @param orderVoucher
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object testAutofill(int orderid, String action, String orderVoucher) {
 
-		Map<String, Object> result = getData(orderid, action);
+		Map<String, Object> result = getData(orderid, action, orderVoucher);
 
 		WXBizMsgCrypt pc;
 		String resultStr = "";
-		String json = encrypt(result);
+		String json = "";
 		//System.out.println("json:" + json);
 		try {
+			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
+			//对数据进行加密
+			json = pc.encryptMsg(JsonUtil.toJson(result), getTimeStamp(), getRandomString());
 			//发送POST请求
-			//String returnResult = toPostAutofill(json);
-			//org.json.JSONObject resultObj = new org.json.JSONObject(returnResult);
 			JSONObject resultObj = toPostAutofill(json);
 			String encrypt = (String) resultObj.get("encrypt");
 			//对请求返回来的encrypt解密
-			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
 			resultStr = pc.decrypt(encrypt);
 			System.out.println("toGetEncrypt解密后明文: " + resultStr);
 
@@ -8375,7 +8387,15 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 	}
 
-	//发送POST请求
+	/**
+	 * 发送POST请求
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param json
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
 	public JSONObject toPostAutofill(String json) {
 
 		String host = "https://192.168.2.138:443";
@@ -8383,14 +8403,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		String method = "POST";
 		String entityStr = "";
 		Map<String, String> headers = new HashMap<String, String>();
-		//headers.put("Content-Type", "application/json; charset=UTF-8");
 		headers.put("Content-Type", "application/json; charset=UTF-8");
 		Map<String, String> querys = new HashMap<String, String>();
 		HttpResponse response;
 		System.out.println("httpurl:" + (host + path));
 		System.out.println("json:" + json);
 		JSONObject parseObject = null;
-		InputStream inputStream = null;
 		try {
 			response = HttpUtils.doPost(host, path, method, headers, querys, json);
 			entityStr = EntityUtils.toString(response.getEntity());
@@ -8407,32 +8425,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		}
 		return parseObject;
-	}
-
-	//将数据加密
-	public String encrypt(Object result) {
-		String encodingAesKey = ENCODINGAESKEY;
-		String token = TOKEN;
-		String timestamp = getTimeStamp();
-		String nonce = getRandomString();
-		String appId = APPID;
-
-		String jsonResult = JsonUtil.toJson(result);
-		System.out.println("jsonResult:" + jsonResult);
-
-		//加密
-		WXBizMsgCrypt pc;
-		String json = "";
-		try {
-			pc = new WXBizMsgCrypt(token, encodingAesKey, appId);
-			json = pc.encryptMsg(jsonResult, timestamp, nonce);
-			System.out.println("body:" + json);
-
-		} catch (AesException e) {
-			e.printStackTrace();
-		}
-
-		return json;
 	}
 
 	/**
@@ -8474,7 +8466,18 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		return sb.toString();
 	}
 
-	public Map<String, Object> getData(int orderid, String action) {
+	/**
+	 * 获取所需参数的值
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @param action
+	 * @param orderVoucher
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Map<String, Object> getData(int orderid, String action, String orderVoucher) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Map<String, Object> result = Maps.newHashMap();
 		ArrayList<Object> applicantsList = new ArrayList<>();
@@ -8515,12 +8518,90 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		result.put("goDate", goDate);
 		result.put("returnDate", returnDate);
 		result.put("action", action);
-		result.put("orderVoucher", "d6V118dE");
+		result.put("orderVoucher", orderVoucher);
 		result.put("designatedNum", "GTP-BJ-000-0");
 		result.put("visaType", visaType);
 		result.put("applicantsList", applicantsList);
 
 		return result;
+	}
+
+	/**
+	 * 测试search接口
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderVoucher
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object testSearch(String orderVoucher) {
+
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("userName", "zhiliren");
+		result.put("orderVoucher", orderVoucher);
+
+		WXBizMsgCrypt pc = null;
+		String resultStr = "";
+		String json = "";
+		try {
+			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
+			//对数据进行加密
+			json = pc.encryptMsg(JsonUtil.toJson(result), getTimeStamp(), getRandomString());
+		} catch (AesException e2) {
+
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+
+		}
+
+		//将json字符串转成json对象
+		org.json.JSONObject encryptObj = new org.json.JSONObject(json);
+		json = (String) encryptObj.get("encrypt");
+		//把json urlencode
+		try {
+			json = URLEncoder.encode(json, "utf-8");
+		} catch (UnsupportedEncodingException e1) {
+
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+
+		}
+
+		//发送GET请求
+		String host = "https://192.168.2.138:443";
+		String path = "/visa/data/japan/search?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&encrypt=" + json;
+		String method = "GET";
+		String entityStr = "";
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Content-Type", "application/json; charset=UTF-8");
+		Map<String, String> querys = new HashMap<String, String>();
+		HttpResponse response;
+		JSONObject parseObject = null;
+		try {
+			response = HttpUtils.doGet(host, path, method, headers, querys);
+			entityStr = EntityUtils.toString(response.getEntity());
+			System.out.println("GET请求返回的数据：" + entityStr);
+			//将返回的json字符串转成json对象
+			parseObject = JSONObject.parseObject(entityStr);
+			String encrypt = (String) parseObject.get("encrypt");
+
+			//解密
+			resultStr = pc.decrypt(encrypt);
+			System.out.println("解密后明文: " + resultStr);
+			//将解密后的json字符串转为json对象
+			parseObject = JSONObject.parseObject(resultStr);
+			String orderstatus = parseObject.getString("data");
+			System.out.println("订单状态为：" + orderstatus);
+
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+
+		return null;
 	}
 
 }
