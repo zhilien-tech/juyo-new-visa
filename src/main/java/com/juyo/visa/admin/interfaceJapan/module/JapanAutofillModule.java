@@ -57,7 +57,9 @@ public class JapanAutofillModule implements AutofillInterface {
 	@At
 	@GET
 	@Ok("raw:json")
-	public Object search(@Param("token") String token, @Param("encrypt") String encrypt, HttpServletRequest request) {
-		return japanAutofillService.search(token, encrypt, request);
+	public Object search(@Param("token") String token, @Param("timeStamp") String timeStamp,
+			@Param("msg_signature") String msg_signature, @Param("nonce") String nonce,
+			@Param("encrypt") String encrypt, HttpServletRequest request) {
+		return japanAutofillService.search(token, timeStamp, msg_signature, nonce, encrypt, request);
 	}
 }

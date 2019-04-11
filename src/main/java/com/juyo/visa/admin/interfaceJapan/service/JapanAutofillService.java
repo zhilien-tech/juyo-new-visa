@@ -44,6 +44,7 @@ import com.juyo.visa.common.enums.JPOrderStatusEnum;
 import com.juyo.visa.common.enums.JpOrderSimpleEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
 import com.juyo.visa.common.msgcrypt.AesException;
+import com.juyo.visa.common.msgcrypt.MsgCryptUtil;
 import com.juyo.visa.common.msgcrypt.WXBizMsgCrypt;
 import com.juyo.visa.common.util.InterfaceResultObject;
 import com.juyo.visa.entities.TApplicantEntity;
@@ -126,6 +127,13 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		System.out.println("token:" + token);
 		if (!Util.eq("ODBiOGIxNDY4NjdlMzc2Yg==", token)) {
 			return encrypt(InterfaceResultObject.fail("token校验失败"));
+		}
+
+		String msg_signature = form.getMsg_signature();
+		String signature = MsgCryptUtil.getSignature(token, form.getTimeStamp(), form.getNonce(), form.getEncrypt());
+
+		if (!Util.eq(signature, msg_signature)) {
+			return encrypt(InterfaceResultObject.fail("签名不合法"));
 		}
 
 		//密文，需要解密
@@ -1130,10 +1138,17 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 	 * @param request
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
-	public Object search(String token, String encrypt, HttpServletRequest request) {
+	public Object search(String token, String timeStamp, String msg_signature, String nonce, String encrypt,
+			HttpServletRequest request) {
 
 		if (!Util.eq("ODBiOGIxNDY4NjdlMzc2Yg==", token)) {
 			return encrypt(InterfaceResultObject.fail("token校验失败"));
+		}
+
+		// 生成安全签名
+		String signature = MsgCryptUtil.getSignature(token, timeStamp, nonce, encrypt);
+		if (!Util.eq(signature, msg_signature)) {
+			return encrypt(InterfaceResultObject.fail("签名不合法"));
 		}
 
 		//获取ip地址
