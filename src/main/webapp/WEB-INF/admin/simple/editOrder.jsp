@@ -1080,7 +1080,7 @@
 			    	{
 			    		orderid:orderid,
 			    		action:"cancel",
-			    		orderVoucher:"d6V118dE"
+			    		orderVoucher:"aM96NQ45"
 			    	},
 			    	success: function(data){
 			    		//window.location.reload();
@@ -1113,7 +1113,7 @@
 			    	type:'post',
 			    	data:
 			    	{
-			    		orderVoucher:"ld6t5TqH"
+			    		orderVoucher:"aM96NQ45"
 			    	},
 			    	success: function(data){
 			    		//window.location.reload();

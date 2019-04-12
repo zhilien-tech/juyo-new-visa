@@ -8376,9 +8376,11 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				e.printStackTrace();
 			}
 
-			if (Util.eq("send", action)) {
-				String data = aacodeObj.getString("data");
-				System.out.println("订单识别码为:" + data);
+			if (Util.isEmpty(msg)) {
+				if (Util.eq("send", action)) {
+					String data = aacodeObj.getString("data");
+					System.out.println("订单识别码为:" + data);
+				}
 			}
 
 		} catch (AesException e) {
@@ -8498,7 +8500,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			applicant.put("firstnameEn", apply.getFirstNameEn());
 			applicant.put("lastname", apply.getLastName());
 			applicant.put("lastnameEn", apply.getLastNameEn());
-			applicant.put("birthday", sdf.format(apply.getBirthday()));
+
+			if (!Util.isEmpty(apply.getBirthday())) {
+				applicant.put("birthday", sdf.format(apply.getBirthday()));
+			} else {
+				applicant.put("birthday", "");
+			}
 			applicant.put("sex", apply.getSex());
 			applicant.put("province", apply.getProvince());
 			applicant.put("passportNo", passport.getPassport());
@@ -8513,8 +8520,15 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		Integer visaType = orderjpinfo.getVisaType();
 
-		String goDate = sdf.format(goTripDate);
-		String returnDate = sdf.format(backTripDate);
+		String goDate = "";
+		String returnDate = "";
+
+		if (!Util.isEmpty(goTripDate)) {
+			goDate = sdf.format(goTripDate);
+		}
+		if (!Util.isEmpty(backTripDate)) {
+			returnDate = sdf.format(backTripDate);
+		}
 
 		result.put("userName", "zhiliren");
 		result.put("goDate", goDate);
@@ -8539,6 +8553,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 */
 	public Object testSearch(String orderVoucher) {
 
+		long first = System.currentTimeMillis();
+
 		Map<String, Object> result = Maps.newHashMap();
 		result.put("userName", "zhiliren");
 		result.put("orderVoucher", orderVoucher);
@@ -8559,6 +8575,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		//将json字符串转成json对象
 		org.json.JSONObject encryptObj = new org.json.JSONObject(json);
+		String timestamp = (String) encryptObj.get("timeStamp");
+		String signature = (String) encryptObj.get("msg_signature");
+		String nonce = (String) encryptObj.get("nonce");
 		json = (String) encryptObj.get("encrypt");
 		//把json urlencode
 		try {
@@ -8570,9 +8589,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		}
 
+		long second = System.currentTimeMillis();
+		System.out.println("发送请求之前所用时间：" + (second - first) + "ms");
+
 		//发送GET请求
 		String host = HOST;
-		String path = "/visa/data/japan/search?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&encrypt=" + json;
+		String path = "/visa/data/japan/search?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&timeStamp=" + timestamp
+				+ "&msg_signature=" + signature + "&nonce=" + nonce + "&encrypt=" + json;
 		String method = "GET";
 		String entityStr = "";
 		Map<String, String> headers = new HashMap<String, String>();
@@ -8582,6 +8605,10 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		JSONObject parseObject = null;
 		try {
 			response = HttpUtils.doGet(host, path, method, headers, querys);
+
+			long third = System.currentTimeMillis();
+			System.out.println("发送请求所用时间：" + (third - second) + "ms");
+
 			entityStr = EntityUtils.toString(response.getEntity());
 			System.out.println("GET请求返回的数据：" + entityStr);
 			//将返回的json字符串转成json对象
@@ -8596,6 +8623,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 			String errMsg = parseObject.getString("msg");
 			if (!Util.isEmpty(errMsg)) {
+				resultStr = errMsg;
 				System.out.println("出错了，错误信息为：" + errMsg);
 			} else {
 				String orderstatus = parseObject.getString("data");
@@ -8605,6 +8633,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				} else {
 					System.out.println("订单状态为：" + orderstatus);
 				}
+				resultStr = orderstatus;
 			}
 
 		} catch (Exception e) {
@@ -8613,8 +8642,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			e.printStackTrace();
 
 		}
-
-		return null;
+		long last = System.currentTimeMillis();
+		System.out.println("方法所用时间：" + (last - first) + "ms");
+		return resultStr;
 	}
 
 }

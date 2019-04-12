@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -232,6 +233,18 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 					return encrypt(InterfaceResultObject.fail("并无此订单，请确认订单识别码是否正确"));
 				} else {
 					int orderid = autofillComOrder.getOrderid();
+
+					TOrderEntity preOrder = dbDao.fetch(TOrderEntity.class, orderid);
+					//先判断有没有发招宝成功过
+					if (Util.eq(0, preOrder.getZhaobaoupdate())) {
+						return encrypt(InterfaceResultObject.fail("请先发招宝成功再尝试招宝变更"));
+					}
+					//判断是不是正在变更中
+					if (Util.eq(JPOrderStatusEnum.BIANGENGZHONG.intKey(), preOrder.getStatus())
+							|| Util.eq(JPOrderStatusEnum.WANGZHANBIANGENGZHONG.intKey(), preOrder.getStatus())) {
+						return encrypt(InterfaceResultObject.fail("正在招宝变更中，请稍后再试"));
+					}
+
 					Map<String, Object> updateAndChangezhaobao = updateAndChangezhaobao(autofillform, orderid,
 							loginUser);
 					orderinfo = (TOrderEntity) updateAndChangezhaobao.get("orderinfo");
@@ -257,6 +270,18 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 					return encrypt(InterfaceResultObject.fail("并无此订单，请确认订单识别码是否正确"));
 				} else {
 					int orderid = autofillComOrder.getOrderid();
+
+					TOrderEntity preOrder = dbDao.fetch(TOrderEntity.class, orderid);
+					//先判断有没有发招宝成功过
+					if (Util.eq(0, preOrder.getZhaobaoupdate())) {
+						return encrypt(InterfaceResultObject.fail("请先发招宝成功或招宝变更成功再尝试招宝取消"));
+					}
+					//判断是不是在取消中
+					if (Util.eq(JPOrderStatusEnum.QUXIAOZHONG.intKey(), preOrder.getStatus())
+							|| Util.eq(JPOrderStatusEnum.WANGZHANQUXIAOZHONG.intKey(), preOrder.getStatus())) {
+						return encrypt(InterfaceResultObject.fail("正在招宝取消中，请稍后再试"));
+					}
+
 					orderinfo = dbDao.fetch(TOrderEntity.class, orderid);
 					orderinfo.setStatus(JPOrderStatusEnum.QUXIAOZHONG.intKey());
 					orderjpinfo = dbDao.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderid));
@@ -265,7 +290,11 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 				}
 			}
 		} else {
-			return encrypt(InterfaceResultObject.fail("请确认action是否填写正确"));
+			if (Util.isEmpty(autofillform.getAction())) {
+				encrypt(InterfaceResultObject.fail("请填写action"));
+			} else {
+				return encrypt(InterfaceResultObject.fail("请确认action是否填写正确"));
+			}
 		}
 
 		/*if (Util.isEmpty(autofillform.getOrderVoucher())) {
@@ -425,6 +454,13 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
 	 */
 	public boolean limitIPaccess(String ip) {
+
+		/*//先查询IP是否在白名单，如果在不做限制
+		ArrayList<String> whiteList = whiteList();
+		if (whiteList.contains(ip)) {
+			return true;
+		}*/
+
 		boolean flag = true;
 
 		String ipVal = redisDao.get(ip);
@@ -459,26 +495,22 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 			//redisDao.del(ip + "count");
 		}
 
-		/*CopyOnWriteArrayList<ConcurrentHashMap<String, Long>> ipList = new CopyOnWriteArrayList<>();
-		ConcurrentHashMap<String, Long> ipMap = new ConcurrentHashMap<>();
-		if (ipList != null && !ipList.isEmpty()) {
-			for (ConcurrentHashMap<String, Long> myMap : ipList) {
-				if (myMap.get(ip) != null) {
-					//同一IP 1秒内只能提交一次
-					if (System.currentTimeMillis() - myMap.get(ip) > 1000) {
-						myMap.put(ip, System.currentTimeMillis());
-						flag = true;
-					}
-				}
-			}
-			if (ipList.size() == 10) {
-				//放满10次请求 清空一次
-				ipList.clear();
-			}
-		}
-		ipMap.put(ip, System.currentTimeMillis());
-		ipList.add(ipMap);*/
 		return flag;
+	}
+
+	/**
+	 * //IP白名单，可以随意访问没有限制
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public ArrayList<String> whiteList() {
+		ArrayList<String> whiteList = new ArrayList<>();
+		whiteList.add("192.168.2.198");
+		whiteList.add("192.168.2.138");
+		return whiteList;
 	}
 
 	/**
@@ -1141,11 +1173,30 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 	public Object search(String token, String timeStamp, String msg_signature, String nonce, String encrypt,
 			HttpServletRequest request) {
 
+		long first = System.currentTimeMillis();
+
 		if (!Util.eq("ODBiOGIxNDY4NjdlMzc2Yg==", token)) {
 			return encrypt(InterfaceResultObject.fail("token校验失败"));
 		}
 
 		// 生成安全签名
+		if (Util.isEmpty(timeStamp)) {
+			timeStamp = "";
+		}
+		if (Util.isEmpty(nonce)) {
+			nonce = "";
+		}
+
+		/*String json = "";
+		try {
+			json = URLDecoder.decode(encrypt, "utf-8");
+		} catch (UnsupportedEncodingException e1) {
+
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+
+		}*/
+
 		String signature = MsgCryptUtil.getSignature(token, timeStamp, nonce, encrypt);
 		if (!Util.eq(signature, msg_signature)) {
 			return encrypt(InterfaceResultObject.fail("签名不合法"));
@@ -1219,6 +1270,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		for (JPOrderStatusEnum visaenum : JPOrderStatusEnum.values()) {
 			if (visaenum.intKey() == status) {
 				orderstatus = visaenum.value();
+				break;
 			}
 		}
 
@@ -1229,6 +1281,8 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 			return encrypt(InterfaceResultObject.success(orderstatus + "," + orderjpinfo.getAcceptDesign()));
 		}
 
+		long last = System.currentTimeMillis();
+		System.out.println("search方法所用时间为：" + (last - first) + "ms");
 		return encrypt(InterfaceResultObject.success(orderstatus));
 	}
 

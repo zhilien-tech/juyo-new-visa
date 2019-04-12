@@ -455,6 +455,7 @@ public class SimpleVisaModule {
 
 	@At
 	@POST
+	@Filters
 	public Object testSearch(@Param("orderVoucher") String orderVoucher) {
 		return simpleVisaService.testSearch(orderVoucher);
 	}
