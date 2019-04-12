@@ -8378,7 +8378,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 			if (Util.isEmpty(msg)) {
 				if (Util.eq("send", action)) {
-					String data = aacodeObj.getString("data");
+					String data = aacodeObj.getString("code");
 					System.out.println("订单识别码为:" + data);
 				}
 			}
@@ -8626,7 +8626,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				resultStr = errMsg;
 				System.out.println("出错了，错误信息为：" + errMsg);
 			} else {
-				String orderstatus = parseObject.getString("data");
+				String orderstatus = parseObject.getString("status");
 				if (orderstatus.contains(",")) {
 					System.out.println("订单状态为：" + orderstatus.substring(0, orderstatus.indexOf(",")));
 					System.out.println("收付番号为：" + orderstatus.substring(orderstatus.indexOf(",") + 1));

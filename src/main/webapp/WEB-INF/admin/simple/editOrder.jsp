@@ -1071,7 +1071,7 @@
 			    		//window.location.reload();
 			      	}
 			    });*/
-			    var orderid = $('#orderid').val();
+			    /* var orderid = $('#orderid').val();
 			    $.ajax({ 
 			    	url: '${base}/admin/simple/testAutofill.html',
 			    	dataType:"json",
@@ -1079,15 +1079,15 @@
 			    	data:
 			    	{
 			    		orderid:orderid,
-			    		action:"cancel",
-			    		orderVoucher:"aM96NQ45"
+			    		action:"update",
+			    		orderVoucher:"a7RHW20X"
 			    	},
 			    	success: function(data){
 			    		//window.location.reload();
 			      	}
-			    });
+			    }); */
 				
-				//window.close();
+				window.close();
 			}
 			function successAddCustomer(data){
 				
@@ -1095,7 +1095,7 @@
 			
 			function log(orderid){//日志
 				var orderinfoid = '${obj.orderinfo.id}';
-				/* layer.open({
+				layer.open({
 					type: 2,
 					title: false,
 					closeBtn:false,
@@ -1105,20 +1105,20 @@
 					scrollbar: false,
 					area: ['700px', '80%'],
 					content:'/admin/orderJp/log.html?id='+orderinfoid+'&orderProcessType=1'
-				}); */
+				});
 				
-				$.ajax({ 
+				/* $.ajax({ 
 			    	url: '${base}/admin/simple/testSearch.html',
 			    	dataType:"json",
 			    	type:'post',
 			    	data:
 			    	{
-			    		orderVoucher:"aM96NQ45"
+			    		orderVoucher:"a7RHW20X"
 			    	},
 			    	success: function(data){
 			    		//window.location.reload();
 			      	}
-			    });
+			    }); */
 			}
 			//招宝变更、招宝取消、拒签
 			function sendInsurance(visastatus){

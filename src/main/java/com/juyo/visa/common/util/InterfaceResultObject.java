@@ -5,7 +5,8 @@ import java.util.Map;
 
 public class InterfaceResultObject<T, R> {
 	private String msg = "操作成功!";// 提示信息，一般是在失败时才有特殊提示
-	private T data = null;// 请求成功是返回的数据
+	private T code = null;// 请求成功是返回的数据
+	private T status = null;
 	private Map<String, R> attributes = null;// 附属属性信息
 	private int success = 0;
 
@@ -14,7 +15,17 @@ public class InterfaceResultObject<T, R> {
 		ro.msg = "";
 		ro.success = 1;
 		if (data != null && data.length > 0) {
-			ro.data = data[0];
+			ro.code = data[0];
+		}
+		return ro;
+	}
+
+	public static <T> InterfaceResultObject successOrder(T... data) {
+		InterfaceResultObject ro = new InterfaceResultObject();
+		ro.msg = "";
+		ro.success = 1;
+		if (data != null && data.length > 0) {
+			ro.status = data[0];
 		}
 		return ro;
 	}
@@ -22,6 +33,7 @@ public class InterfaceResultObject<T, R> {
 	public static InterfaceResultObject success() {
 		InterfaceResultObject ro = new InterfaceResultObject();
 		ro.msg = "";
+		ro.code = "";
 		ro.success = 1;
 		return ro;
 	}
@@ -29,6 +41,15 @@ public class InterfaceResultObject<T, R> {
 	public static InterfaceResultObject fail(String msg) {
 		InterfaceResultObject ro = new InterfaceResultObject();
 		ro.msg = msg;
+		ro.code = "";
+		ro.success = 0;
+		return ro;
+	}
+
+	public static InterfaceResultObject failOrder(String msg) {
+		InterfaceResultObject ro = new InterfaceResultObject();
+		ro.msg = msg;
+		ro.status = "";
 		ro.success = 0;
 		return ro;
 	}
@@ -43,7 +64,7 @@ public class InterfaceResultObject<T, R> {
 		InterfaceResultObject ro = new InterfaceResultObject();
 		ro.msg = msg;
 		if (data != null && data.length > 0) {
-			ro.data = data[0];
+			ro.code = data[0];
 		}
 		return ro;
 	}
@@ -52,7 +73,7 @@ public class InterfaceResultObject<T, R> {
 		InterfaceResultObject ro = new InterfaceResultObject();
 		ro.msg = msg;
 		if (data != null && data.length > 0) {
-			ro.data = data[0];
+			ro.code = data[0];
 		}
 		return ro;
 	}
@@ -111,12 +132,21 @@ public class InterfaceResultObject<T, R> {
 		return this;
 	}
 
-	public T getData() {
-		return data;
+	public T getCode() {
+		return code;
 	}
 
-	public InterfaceResultObject<T, R> setData(T data) {
-		this.data = data;
+	public InterfaceResultObject<T, R> setCode(T data) {
+		this.code = data;
+		return this;
+	}
+
+	public T getStatus() {
+		return status;
+	}
+
+	public InterfaceResultObject<T, R> setStatus(T data) {
+		this.status = data;
 		return this;
 	}
 

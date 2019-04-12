@@ -34,6 +34,10 @@ public class TAutofillComOrderEntity implements Serializable {
 	private String ordervoucher;
 
 	@Column
+	@Comment("护照号")
+	private String passportNo;
+
+	@Column
 	@Comment("创建时间")
 	private Date createTime;
 
@@ -69,6 +73,11 @@ public class TAutofillComOrderEntity implements Serializable {
 				return false;
 		} else if (!ordervoucher.equals(other.ordervoucher))
 			return false;
+		if (passportNo == null) {
+			if (other.passportNo != null)
+				return false;
+		} else if (!passportNo.equals(other.passportNo))
+			return false;
 		return true;
 	}
 
@@ -83,6 +92,7 @@ public class TAutofillComOrderEntity implements Serializable {
 		result = prime * result + ((comid == null) ? 0 : comid.hashCode());
 		result = prime * result + ((orderid == null) ? 0 : orderid.hashCode());
 		result = prime * result + ((ordervoucher == null) ? 0 : ordervoucher.hashCode());
+		result = prime * result + ((passportNo == null) ? 0 : passportNo.hashCode());
 		return result;
 	}
 

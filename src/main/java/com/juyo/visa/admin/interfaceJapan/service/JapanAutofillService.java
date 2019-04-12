@@ -183,6 +183,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		}
 
 		//信息验证(是否满足发招宝所需数据)
+
 		String resultstr = infoValidate(autofillform);
 
 		if (!Util.isEmpty(resultstr)) {
@@ -209,6 +210,18 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 			if (!Util.isEmpty(autofillform.getOrderVoucher())) {
 				return encrypt(InterfaceResultObject.fail("发招宝时别填写订单识别码！"));
 			}
+
+			//重复插入验证，护照号唯一
+			List<ApplicantInfo> applicantsList = autofillform.getApplicantsList();
+			String passportNo = applicantsList.get(0).getPassportNo();
+			List<TAutofillComOrderEntity> autofillOrders = dbDao.query(TAutofillComOrderEntity.class,
+					Cnd.where("comid", "=", loginCompany.getId()), null);
+			for (TAutofillComOrderEntity autofillOrder : autofillOrders) {
+				if (!Util.isEmpty(autofillOrder.getPassportNo()) && autofillOrder.getPassportNo().contains(passportNo)) {
+					return encrypt(InterfaceResultObject.fail("请不要重复发招宝"));
+				}
+			}
+
 			//数据库入库并把订单状态改为发招宝中
 			Map<String, Object> insertInfo = insertInfo(autofillform, loginUser, loginCompany);
 			orderinfo = (TOrderEntity) insertInfo.get("orderinfo");
@@ -733,7 +746,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		autofillComOrder.setOrdervoucher(stringRandom);
 		autofillComOrder.setCreateTime(new Date());
 		autofillComOrder.setUpdateTime(new Date());
-		dbDao.insert(autofillComOrder);
+		TAutofillComOrderEntity insertAutofillComOrder = dbDao.insert(autofillComOrder);
 
 		//添加下单日志
 		insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), loginUser);
@@ -802,8 +815,12 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		dbDao.insert(orderjptrip);
 
 		//创建申请人
+		String passportNums = "";
 		List<ApplicantInfo> applicantsList = form.getApplicantsList();
 		for (ApplicantInfo applicantinfo : applicantsList) {
+
+			passportNums += applicantinfo.getPassportNo();
+
 			//新建申请人表
 			TApplicantEntity apply = new TApplicantEntity();
 			apply.setOpId(loginUser.getId());
@@ -880,6 +897,11 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 			dbDao.insert(visaother);
 
 		}
+
+		//把护照号加上，作为重复插入依据
+		insertAutofillComOrder.setPassportNo(passportNums);
+		dbDao.update(insertAutofillComOrder);
+
 		result.put("orderinfo", orderinfo);
 		result.put("orderjpinfo", orderjpinfo);
 		result.put("autofillcomorder", autofillComOrder);
@@ -1176,7 +1198,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		long first = System.currentTimeMillis();
 
 		if (!Util.eq("ODBiOGIxNDY4NjdlMzc2Yg==", token)) {
-			return encrypt(InterfaceResultObject.fail("token校验失败"));
+			return encrypt(InterfaceResultObject.failOrder("token校验失败"));
 		}
 
 		// 生成安全签名
@@ -1199,7 +1221,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 
 		String signature = MsgCryptUtil.getSignature(token, timeStamp, nonce, encrypt);
 		if (!Util.eq(signature, msg_signature)) {
-			return encrypt(InterfaceResultObject.fail("签名不合法"));
+			return encrypt(InterfaceResultObject.failOrder("签名不合法"));
 		}
 
 		//获取ip地址
@@ -1209,7 +1231,7 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		//IP访问限制
 		boolean flag = limitIPaccess(ip);
 		if (!flag) {
-			return encrypt(InterfaceResultObject.fail("提交过于频繁，请稍后再试！"));
+			return encrypt(InterfaceResultObject.failOrder("提交过于频繁，请稍后再试！"));
 		}
 
 		//密文，需要解密
@@ -1221,46 +1243,46 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 			System.out.println("toGetEncrypt解密后明文: " + resultStr);
 		} catch (AesException e) {
 			e.printStackTrace();
-			return encrypt(InterfaceResultObject.fail("请按要求传输数据"));
+			return encrypt(InterfaceResultObject.failOrder("请按要求传输数据"));
 		}
 
 		JSONObject paramData = new JSONObject(resultStr);
 
 		String userName = paramData.getString("userName");
 		if (Util.isEmpty(userName)) {
-			return encrypt(InterfaceResultObject.fail("用户名不能为空"));
+			return encrypt(InterfaceResultObject.failOrder("用户名不能为空"));
 		}
 
 		String orderVoucher = paramData.getString("orderVoucher");
 		if (Util.isEmpty(orderVoucher)) {
-			return encrypt(InterfaceResultObject.fail("订单识别码不能为空"));
+			return encrypt(InterfaceResultObject.failOrder("订单识别码不能为空"));
 		}
 
 		//身份验证
 		TUserEntity loginUser = dbDao.fetch(TUserEntity.class, Cnd.where("mobile", "=", userName));
 		if (Util.isEmpty(loginUser)) {
-			return encrypt(InterfaceResultObject.fail("查无此人"));
+			return encrypt(InterfaceResultObject.failOrder("查无此人"));
 		}
 
 		TCompanyEntity loginCompany = dbDao.fetch(TCompanyEntity.class, Cnd.where("adminId", "=", loginUser.getId()));
 		if (Util.isEmpty(loginCompany)) {
-			return encrypt(InterfaceResultObject.fail("没有这个公司"));
+			return encrypt(InterfaceResultObject.failOrder("没有这个公司"));
 		}
 
 		TAutofillCompanyEntity autofillCom = dbDao.fetch(TAutofillCompanyEntity.class,
 				Cnd.where("comid", "=", loginCompany.getId()));
 		if (Util.isEmpty(autofillCom)) {
-			return encrypt(InterfaceResultObject.fail("此公司没有权限"));
+			return encrypt(InterfaceResultObject.failOrder("此公司没有权限"));
 		} else {
 			if (Util.eq(autofillCom.getIsdisabled(), 1)) {
-				return encrypt(InterfaceResultObject.fail("此公司没有权限"));
+				return encrypt(InterfaceResultObject.failOrder("此公司没有权限"));
 			}
 		}
 
 		TAutofillComOrderEntity autofillComOrder = dbDao.fetch(TAutofillComOrderEntity.class,
 				Cnd.where("orderVoucher", "=", orderVoucher));
 		if (Util.isEmpty(autofillComOrder)) {
-			return encrypt(InterfaceResultObject.fail("并无此订单，请确认订单识别码是否正确"));
+			return encrypt(InterfaceResultObject.failOrder("并无此订单，请确认订单识别码是否正确"));
 		}
 		//查询订单状态
 		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, autofillComOrder.getOrderid().longValue());
@@ -1278,12 +1300,12 @@ public class JapanAutofillService extends BaseService<TOrderEntity> {
 		if (status == JPOrderStatusEnum.YIBIANGENG.intKey() || status == JPOrderStatusEnum.AUTO_FILL_FORM_ED.intKey()) {
 			TOrderJpEntity orderjpinfo = dbDao
 					.fetch(TOrderJpEntity.class, Cnd.where("orderId", "=", orderinfo.getId()));
-			return encrypt(InterfaceResultObject.success(orderstatus + "," + orderjpinfo.getAcceptDesign()));
+			return encrypt(InterfaceResultObject.successOrder(orderstatus + "," + orderjpinfo.getAcceptDesign()));
 		}
 
 		long last = System.currentTimeMillis();
 		System.out.println("search方法所用时间为：" + (last - first) + "ms");
-		return encrypt(InterfaceResultObject.success(orderstatus));
+		return encrypt(InterfaceResultObject.successOrder(orderstatus));
 	}
 
 	/**
