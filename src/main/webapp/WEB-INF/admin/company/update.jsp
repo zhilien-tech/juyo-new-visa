@@ -235,7 +235,7 @@
 	<script src="${base}/admin/company/uploadFile.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			if(comtype == 3){
+			if(comtype == 3 || comtype == 5){
 				$("#usScopeDiv").show();
 			}else{
 				$("#usScopeDiv").hide();
@@ -530,7 +530,7 @@
 				$("#scopeDiv").hide();
 			}else{
 				$("#scopeDiv").show();
-				if(type == 3){
+				if(type == 3 || type == 5){
 					$("#usScopeDiv").show();
 				}else{
 					$("#usScopeDiv").hide();

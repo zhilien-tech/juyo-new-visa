@@ -114,9 +114,19 @@ public class ListDataForm implements SQLParamForm {
 			if (Util.eq(status, JPOrderStatusEnum.DISABLED.intKey())) {
 				cnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
 			} else {
-				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", status).and("tr.isDisabled", "=",
-						IsYesOrNoEnum.NO.intKey());
-				cnd.and(e1);
+				if (Util.eq(22, status)) {
+					SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", status).or("tr.status", "=", 35)
+							.and("tr.isDisabled", "=", IsYesOrNoEnum.NO.intKey());
+					cnd.and(e1);
+				} else if (Util.eq(19, status)) {
+					SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", status).or("tr.status", "=", 34)
+							.and("tr.isDisabled", "=", IsYesOrNoEnum.NO.intKey());
+					cnd.and(e1);
+				} else {
+					SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", status).and("tr.isDisabled", "=",
+							IsYesOrNoEnum.NO.intKey());
+					cnd.and(e1);
+				}
 			}
 		}
 
@@ -147,6 +157,7 @@ public class ListDataForm implements SQLParamForm {
 		}
 		cnd.orderBy("tr.isDisabled", "ASC");
 		cnd.orderBy("tr.updatetime", "desc");
+		cnd.orderBy("tr.id", "desc");
 		return cnd;
 	}
 }

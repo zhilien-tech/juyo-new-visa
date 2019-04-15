@@ -1530,9 +1530,44 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 
 			System.out.println("reviewurl:" + reviewurl);
 			pdfurl = applyResult.getPdf_url();
+
+			if (!Util.isEmpty(pdfurl)) {
+				try {
+					// 创建URL
+					URL url = new URL(pdfurl);
+					// 创建链接
+					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+					conn.setRequestMethod("GET");
+					conn.setConnectTimeout(5000);
+					InputStream is = conn.getInputStream();
+					pdfurl = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(is, "", "");
+					is.close();
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 			System.out.println("pdfurl:" + pdfurl);
 			daturl = applyResult.getDat_url();
 			System.out.println("daturl:" + daturl);
+
+			if (!Util.isEmpty(daturl)) {
+				try {
+					// 创建URL
+					URL url = new URL(daturl);
+					// 创建链接
+					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+					conn.setRequestMethod("GET");
+					conn.setConnectTimeout(5000);
+					InputStream is = conn.getInputStream();
+					daturl = CommonConstants.IMAGES_SERVER_ADDR + qiniuUploadService.uploadImage(is, "", "");
+					is.close();
+
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
 			AAcode = applyResult.getApp_id();
 			System.out.println("AAcode:" + AAcode);
 			errorurl = applyResult.getError_url();
@@ -1859,6 +1894,8 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 		statusname = applyResult.getStatus();
 		AAcode = applyResult.getApp_id();
 
+		//AAcodeinfo = getApplyinfo(applyidcode);
+
 		System.out.println("statusname:" + statusname);
 		System.out.println("AAcode:" + AAcode);
 		if (type == 1) {
@@ -1895,6 +1932,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				applyResult = applyinfoList.get(0);
 				statusname = applyResult.getStatus();
 				AAcode = applyResult.getApp_id();
+
+				//getApplyinfo(applyidcode);
+
 				System.out.println("while循环里申请statusname:" + statusname);
 				System.out.println("while循环里申请AAcode:" + AAcode);
 
@@ -1920,6 +1960,9 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 				applyResult = applyinfoList.get(0);
 				statusname = applyResult.getStatus();
 				AAcode = applyResult.getApp_id();
+
+				//getApplyinfo(applyidcode);
+
 				System.out.println("while循环里提交statusname:" + statusname);
 				System.out.println("while循环里提交AAcode:" + AAcode);
 			}
@@ -2045,6 +2088,7 @@ public class OrderUSViewService extends BaseService<TOrderUsEntity> {
 			daturl = "";
 		}
 
+		System.out.println("datUrl测试:" + daturl);
 		result.put("reviewurl", reviewurl);
 		result.put("pdfurl", pdfurl);
 		result.put("avatorurl", avatorurl);

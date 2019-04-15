@@ -24,6 +24,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.json.JSONObject;
 
 import com.uxuexi.core.common.util.JsonUtil;
 
@@ -158,6 +159,7 @@ public class WXBizMsgCrypt {
 		try {
 			// 设置解密模式为AES的CBC模式
 			Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
+			//Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 			SecretKeySpec key_spec = new SecretKeySpec(aesKey, "AES");
 			IvParameterSpec iv = new IvParameterSpec(Arrays.copyOfRange(aesKey, 0, 16));
 			cipher.init(Cipher.DECRYPT_MODE, key_spec, iv);
@@ -229,6 +231,26 @@ public class WXBizMsgCrypt {
 		result.put("nonce", nonce);
 
 		return JsonUtil.toJson(result);
+	}
+
+	public JSONObject encryptMsg1(String replyMsg, String timeStamp, String nonce) throws AesException {
+		//Map<String, String> result = new HashMap<String, String>();
+		JSONObject result = new JSONObject();
+		// 加密
+		String encrypt = encrypt(getRandomStr(), replyMsg);
+		//System.out.println("密文为：" + encrypt);
+
+		// 生成安全签名
+		String signature = MsgCryptUtil.getSignature(token, timeStamp, nonce, encrypt);
+		//System.out.println("签名为：" + signature);
+
+		//封装body数据，并转成json字符串返回
+		result.put("msg_signature", signature);
+		result.put("encrypt", encrypt);
+		result.put("timeStamp", timeStamp);
+		result.put("nonce", nonce);
+
+		return result;
 	}
 
 	/**

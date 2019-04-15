@@ -107,6 +107,10 @@ public class UserViewService extends BaseService<TUserEntity> {
 	 */
 	public Object addUser(TUserAddForm addForm, HttpSession session) {
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+
+		TUserEntity comUser = dbDao.fetch(TUserEntity.class, loginCompany.getAdminId().longValue());
+		addForm.setOrdertype(comUser.getOrdertype());
+
 		addForm.setComId(loginCompany.getId());
 		String password = MD5.sign("000000", AccessConfig.password_secret, AccessConfig.INPUT_CHARSET);
 

@@ -1130,10 +1130,12 @@ public class ShenzhouService extends BaseService<TOrderJpEntity> {
 				img.setAlignment(Image.RIGHT);
 				//		img.scaleToFit(400, 200);//大小
 				img.scaleToFit(280, 180);//大小
+				//img.scaleToFit(200, 100);//大小
 				//img.setIndentationRight(200);
 				img.setRotation(800);
 
 				img.setAbsolutePosition(350, height - totalHeight - 250);
+				//img.setAbsolutePosition(430, height - totalHeight - 200);
 				img.setAlignment(Paragraph.ALIGN_RIGHT);
 
 				document.add(img);

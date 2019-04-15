@@ -7,7 +7,9 @@
 package com.juyo.visa.admin.simple.service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -18,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +36,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -42,6 +47,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.nutz.dao.Cnd;
@@ -56,6 +63,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
+import org.nutz.mvc.upload.TempFile;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -111,6 +119,8 @@ import com.juyo.visa.common.enums.MarryStatusEnum;
 import com.juyo.visa.common.enums.PassportTypeEnum;
 import com.juyo.visa.common.enums.SimpleVisaTypeEnum;
 import com.juyo.visa.common.enums.TrialApplicantStatusEnum;
+import com.juyo.visa.common.msgcrypt.AesException;
+import com.juyo.visa.common.msgcrypt.WXBizMsgCrypt;
 import com.juyo.visa.common.newairline.ResultflyEntity;
 import com.juyo.visa.common.ocr.HttpUtils;
 import com.juyo.visa.common.util.HttpUtil;
@@ -147,6 +157,7 @@ import com.juyo.visa.forms.TApplicantPassportForm;
 import com.juyo.visa.websocket.VisaInfoWSHandler;
 import com.uxuexi.core.common.util.DateUtil;
 import com.uxuexi.core.common.util.EnumUtil;
+import com.uxuexi.core.common.util.JsonUtil;
 import com.uxuexi.core.common.util.Util;
 import com.uxuexi.core.web.base.page.OffsetPager;
 import com.uxuexi.core.web.base.service.BaseService;
@@ -189,6 +200,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	private static final String VISAINFO_WEBSPCKET_ADDR = "visainfowebsocket";
 	private static String WX_B_CODE_URL = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=ACCESS_TOKEN"; //不限次数 scene长度为32个字符
 
+	private final static String ENCODINGAESKEY = "jllZTM3ZWEzZGI1NGQ5NGI3MTc4NDNhNzAzODE5NTYt";
+	private final static String TOKEN = "ODBiOGIxNDY4NjdlMzc2Yg==";
+	private final static String APPID = "jhhMThiZjM1ZGQ2Y";
+
+	private final static String HOST = "https://192.168.2.138:443";
+
+	private Lock lock = new ReentrantLock();
+
 	public Object toList(HttpServletRequest request) {
 		Map<String, Object> result = Maps.newHashMap();
 		HttpSession session = request.getSession();
@@ -197,7 +216,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 		//送签社下拉
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
-				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())
+				|| loginCompany.getComType().equals(CompanyTypeEnum.ORDERSIMPLE.intKey())) {
 			//如果公司自己有指定番号，说明有送签资质，也需要出现在下拉中
 			if (!Util.isEmpty(loginCompany.getCdesignNum())) {
 				ja.add(loginCompany);
@@ -220,6 +240,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		Integer comid = loginCompany.getId();
 		Integer adminId = loginCompany.getAdminId();
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer ordertype = loginUser.getOrdertype();
+		result.put("ordertype", ordertype);
+
 		Integer userType = loginUser.getUserType();//当前登录用户类型
 
 		//查询拥有某个权限模块的工作人员
@@ -239,7 +262,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		if (!loginCompany.getAdminId().equals(loginUser.getId())) {
 			usercnd.and("id", "!=", loginCompany.getAdminId());
 		}
-		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())
+				|| loginCompany.getComType().equals(CompanyTypeEnum.ORDERSIMPLE.intKey())) {
 
 			List<TUserEntity> companyuser = dbDao.query(TUserEntity.class, usercnd, null);
 			List<Record> companyusers = Lists.newArrayList();
@@ -285,16 +309,27 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		form.setCompanyid(loginCompany.getId());
 		form.setAdminId(loginCompany.getAdminId());
 		Map<String, Object> result = Maps.newHashMap();
+
+		result.put("ordertype", loginUser.getOrdertype());
 		Sql sql = form.sql(sqlManager);
 
 		Integer pageNumber = form.getPageNumber();
 		Integer pageSize = form.getPageSize();
 
 		Pager pager = new OffsetPager((pageNumber - 1) * pageSize, pageSize);
-		pager.setRecordCount((int) Daos.queryCount(nutDao, sql.toString()));
+
+		Sql paperSql = getPaperSql(form);
+
+		pager.setRecordCount((int) Daos.queryCount(nutDao, paperSql.toString()));
+
+		long middleTime = System.currentTimeMillis();
+		System.out.println("paper所用时间:" + (middleTime - startTime) + "ms");
 
 		sql.setCallback(Sqls.callback.records());
 		nutDao.execute(sql);
+
+		long middleTime2 = System.currentTimeMillis();
+		System.out.println("查询所用时间:" + (middleTime2 - middleTime) + "ms");
 
 		@SuppressWarnings("unchecked")
 		//主sql数据
@@ -317,12 +352,14 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
+		long middleTime3 = System.currentTimeMillis();
+		System.out.println("循环所用时间:" + (middleTime3 - middleTime2) + "ms");
 		sql.setPager(pager);
 		sql.setCallback(Sqls.callback.records());
 		nutDao.execute(sql);
 
-		long middleTime = System.currentTimeMillis();
-		System.out.println("上头数据所用时间:" + (middleTime - startTime) + "ms");
+		long middleTime4 = System.currentTimeMillis();
+		System.out.println("上头数据所用时间:" + (middleTime4 - middleTime3) + "ms");
 
 		@SuppressWarnings("unchecked")
 		//主sql数据
@@ -374,9 +411,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
-		//查询单组单人
-		List<Record> singleperson = getSingleperson(form, 1);
-
 		/*int orderscount = 0;
 		int peopletotal = 0;
 		int zhaobaoorder = 0;
@@ -393,15 +427,35 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		entity.setPeopletotal(peopletotal);
 		entity.setZhaobaoorder(zhaobaoorder);
 		entity.setZhaobaopeople(zhaobaopeople);
-		entity.setSingleperson(singleperson.size());
-		entity.setMultiplayer(zhaobaoorder - singleperson.size());
+
+		if (Util.eq(form.getStatus(), JPOrderStatusEnum.DISABLED.intKey())) {//筛选条件为作废时，单人招宝成功为0
+			entity.setSingleperson(0);
+			entity.setMultiplayer(0);
+		} else {
+			//查询单组单人
+			List<Record> singleperson = getSingleperson(form, 1);
+
+			entity.setSingleperson(singleperson.size());
+			entity.setMultiplayer(zhaobaoorder - singleperson.size());
+		}
+
 		result.put("entity", entity);
 		result.put("pagetotal", pager.getPageCount());
 		result.put("visaJapanData", list);
 		long endTime = System.currentTimeMillis();
-		System.out.println("下头所用时间为：" + (endTime - middleTime) + "ms");
+		System.out.println("下头所用时间为：" + (endTime - middleTime4) + "ms");
 		System.out.println("方法所用时间为：" + (endTime - startTime) + "ms");
 		return result;
+	}
+
+	public Sql getPaperSql(ListDataForm form) {
+		String singlesqlStr = sqlManager.get("get_simplelist_data_paper");
+		Sql singlesql = Sqls.create(singlesqlStr);
+		Cnd singlecnd = Cnd.NEW();
+		singlecnd = commonCondition(form, singlecnd);
+
+		singlesql.setCondition(singlecnd);
+		return singlesql;
 	}
 
 	public Map<String, Integer> informationSearch(ListDataForm form, int type) {
@@ -454,13 +508,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	 */
 	public List<Record> getSingleperson(ListDataForm form, int type) {
 		long startTime = System.currentTimeMillis();
-		String singlesqlStr = sqlManager.get("getSingleperson");
+		String singlesqlStr = sqlManager.get("new_getSingleperson");
 		Sql singlesql = Sqls.create(singlesqlStr);
 		Cnd singlecnd = Cnd.NEW();
 		singlecnd = commonCondition(form, singlecnd);
 
 		singlecnd.and("tr.zhaobaoupdate", "=", 1);
-		singlecnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
+		//singlecnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
 
 		singlesql.setCondition(singlecnd);
 		List<Record> singleperson = dbDao.query(singlesql, singlecnd, null);
@@ -510,8 +564,15 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		}
 		if (!Util.isEmpty(form.getStatus())) {
 			if (Util.eq(form.getStatus(), JPOrderStatusEnum.DISABLED.intKey())) {
-				singlecnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey()).and("tr.isDisabled", "=",
-						IsYesOrNoEnum.NO.intKey());
+				singlecnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
+			} else if (Util.eq(form.getStatus(), 22)) {
+				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).or("tr.status", "=", 35)
+						.and("tr.isDisabled", "=", IsYesOrNoEnum.NO.intKey());
+				singlecnd.and(e1);
+			} else if (Util.eq(19, form.getStatus())) {
+				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).or("tr.status", "=", 34)
+						.and("tr.isDisabled", "=", IsYesOrNoEnum.NO.intKey());
+				singlecnd.and(e1);
 			} else {
 				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).and("tr.isDisabled", "=",
 						IsYesOrNoEnum.NO.intKey());
@@ -548,8 +609,9 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			singlecnd.and("tr.salesOpid", "=", form.getUserid());
 		}
 
-		singlecnd.orderBy("tr.isDisabled", "ASC");
-		singlecnd.orderBy("tr.updatetime", "desc");
+		//singlecnd.orderBy("tr.isDisabled", "ASC");
+		//singlecnd.orderBy("tr.updatetime", "desc");
+		//singlecnd.orderBy("tr.id", "desc");
 
 		return singlecnd;
 	}
@@ -3241,29 +3303,38 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Map<String, Integer> generrateorder(TUserEntity user, TCompanyEntity company) {
+
+		lock.lock();
 		Map<String, Integer> result = Maps.newHashMap();
-		//如果订单不存在，则先创建订单
-		TOrderEntity orderinfo = new TOrderEntity();
-		orderinfo.setComId(company.getId());
-		orderinfo.setUserId(user.getId());
-		orderinfo.setOrderNum(generrateOrdernum());
-		orderinfo.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
-		orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
-		orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
-		orderinfo.setIsDisabled(IsYesOrNoEnum.NO.intKey());
-		orderinfo.setCreateTime(new Date());
-		orderinfo.setUpdateTime(new Date());
-		TOrderEntity orderinsert = dbDao.insert(orderinfo);
-		changePrincipalViewService.ChangePrincipal(orderinsert.getId(), JPOrderProcessTypeEnum.SALES_PROCESS.intKey(),
-				user.getId());
-		result.put("orderid", orderinsert.getId());
-		TOrderJpEntity orderjp = new TOrderJpEntity();
-		orderjp.setOrderId(orderinsert.getId());
-		orderjp.setVisaType(MainSaleVisaTypeEnum.SINGLE.intKey());
-		orderjp.setIsVisit(IsYesOrNoEnum.NO.intKey());
-		TOrderJpEntity orderjpinsert = dbDao.insert(orderjp);
-		Integer orderjpid = orderjpinsert.getId();
-		result.put("orderjpid", orderjpid);
+		try {
+			//如果订单不存在，则先创建订单
+			TOrderEntity orderinfo = new TOrderEntity();
+			orderinfo.setComId(company.getId());
+			orderinfo.setUserId(user.getId());
+			orderinfo.setOrderNum(generrateOrdernum());
+			orderinfo.setStatus(JPOrderStatusEnum.PLACE_ORDER.intKey());
+			orderinfo.setZhaobaocomplete(IsYesOrNoEnum.NO.intKey());
+			orderinfo.setZhaobaoupdate(IsYesOrNoEnum.NO.intKey());
+			orderinfo.setIsDisabled(IsYesOrNoEnum.NO.intKey());
+			orderinfo.setCreateTime(new Date());
+			orderinfo.setUpdateTime(new Date());
+			TOrderEntity orderinsert = dbDao.insert(orderinfo);
+			changePrincipalViewService.ChangePrincipal(orderinsert.getId(),
+					JPOrderProcessTypeEnum.SALES_PROCESS.intKey(), user.getId());
+			result.put("orderid", orderinsert.getId());
+			TOrderJpEntity orderjp = new TOrderJpEntity();
+			orderjp.setOrderId(orderinsert.getId());
+			orderjp.setVisaType(MainSaleVisaTypeEnum.SINGLE.intKey());
+			orderjp.setIsVisit(IsYesOrNoEnum.NO.intKey());
+			TOrderJpEntity orderjpinsert = dbDao.insert(orderjp);
+			Integer orderjpid = orderjpinsert.getId();
+			result.put("orderjpid", orderjpid);
+		} catch (Exception e) {
+
+		} finally {
+			lock.unlock();
+		}
+
 		return result;
 	}
 
@@ -3432,10 +3503,12 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	private String generrateOrdernum() {
+
 		//生成订单号
 		SimpleDateFormat smf = new SimpleDateFormat("yyMMdd");
 		String format = smf.format(new Date());
-		String sqlString = sqlManager.get("orderJp_ordernum");
+		//String sqlString = sqlManager.get("orderJp_ordernum");
+		String sqlString = sqlManager.get("test_getOrdernum");
 		Sql sql = Sqls.create(sqlString);
 		List<Record> query = dbDao.query(sql, null, null);
 		int sum = 1;
@@ -3456,6 +3529,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			sum1 = "" + sum;
 
 		}
+
 		return format + "-JP" + sum1;
 	}
 
@@ -3649,53 +3723,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderjpinfo.setVisaType(form.getVisatype());
 		orderjpinfo.setAmount(form.getAmount());
 		dbDao.update(orderjpinfo);
-		//保存或者更新客户历史表-----------------------------------------------------------------
-		//		TCustomerHisEntity customerHis = dbDao.fetch(TCustomerHisEntity.class, Cnd.where("orderId", "=", orderid));
-		//		if (Util.isEmpty(customerHis)) {
-		//			customerHis = new TCustomerHisEntity();
-		//
-		//		}
-		//		//用户id
-		//		customerHis.setUserId(loginUser.getId());
-		//		//订单Id
-		//		customerHis.setOrderId(orderid);
-		//		//公司Id
-		//		customerHis.setCompId(loginUser.getComId());
-		//		//公司名称
-		//		customerHis.setName(form.getCompName());
-		//		//公司简称
-		//		customerHis.setShortname(form.getComShortName());
-		//		//客户来源 CustomerTypeEnum
-		//		Integer customerType = form.getCustomerType();
-		//		for (CustomerTypeEnum pmEnum : CustomerTypeEnum.values())
-		//			if (!Util.isEmpty(customerType) && customerType == pmEnum.intKey()) {
-		//				customerHis.setSource(pmEnum.value());
-		//				break;
-		//			}
-		//		//支付方式 MainSalePayTypeEnum
-		//		Integer payType = form.getPayType();
-		//		for (MainSalePayTypeEnum pmEnum : MainSalePayTypeEnum.values())
-		//			if (!Util.isEmpty(payType) && payType == pmEnum.intKey()) {
-		//				customerHis.setPayType(pmEnum.value());
-		//				break;
-		//			}
-		//		//是否来自客户信息  是（直客）
-		//		if (customerType == 4) {
-		//			customerHis.setIsCustomerAdd("是");
-		//		} else {
-		//			customerHis.setIsCustomerAdd("否");
-		//		}
-		//		//手机
-		//		customerHis.setMobile(loginUser.getMobile());
-		//		//email
-		//		customerHis.setEmail(loginUser.getEmail());
-		//		if (!Util.isEmpty(customerHis.getId())) {
-		//			customerHis.setUpdateTime(new Date());
-		//			dbDao.update(customerHis);
-		//		} else {
-		//			customerHis.setCreateTime(new Date());
-		//			dbDao.insert(customerHis);
-		//		}
 
 		//出行信息---------------------------------------------------------------------------
 		TOrderTripJpEntity orderjptrip = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderId", "=", orderjpid));
@@ -3733,52 +3760,79 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		} else {
 			dbDao.insert(orderjptrip);
 		}
-		//		//出行历史信息
-		//		TOrderTripHisJpEntity tOrderTripHis = dbDao.fetch(TOrderTripHisJpEntity.class,
-		//				Cnd.where("orderId", "=", orderid));
-		//		if (Util.isEmpty(tOrderTripHis)) {
-		//			tOrderTripHis = new TOrderTripHisJpEntity();
-		//		}
-		//		//订单Id
-		//		tOrderTripHis.setOrderId(orderid);
-		//		//行程类型
-		//		if (form.getTriptype() == 1) {
-		//			tOrderTripHis.setTripType("往返");
-		//		} else {
-		//			tOrderTripHis.setTripType("多程");
-		//		}
-		//		//出行目的
-		//		tOrderTripHis.setTripPurpose(form.getTripPurpose());
-		//		//出发日期 去程
-		//		tOrderTripHis.setGoDate(form.getGoDate());
-		//		//出发城市 去程
-		//		TCityEntity goDepartureCity = dbDao.fetch(TCityEntity.class, Cnd.where("id", "", form.getGoDepartureCity()));
-		//		tOrderTripHis.setGoDepartureCity(goDepartureCity.getCity());
-		//		//抵达城市 去程
-		//		TCityEntity goArrivedCity = dbDao.fetch(TCityEntity.class, Cnd.where("id", "", form.getGoArrivedCity()));
-		//		tOrderTripHis.setGoArrivedCity(goArrivedCity.getCity());
-		//		//航班号
-		//		tOrderTripHis.setGoFlightNum(form.getGoFlightNum());
-		//		//出发日期
-		//		tOrderTripHis.setReturnDate(form.getReturnDate());
-		//		//出发城市 返程
-		//		TCityEntity returnDepartureCity = dbDao.fetch(TCityEntity.class,
-		//				Cnd.where("id", "", form.getReturnDepartureCity()));
-		//		tOrderTripHis.setReturnDepartureCity(returnDepartureCity.getCity());
-		//		//返回城市 返程
-		//		TCityEntity returnArrivedCity = dbDao
-		//				.fetch(TCityEntity.class, Cnd.where("id", "", form.getReturnArrivedCity()));
-		//		tOrderTripHis.setReturnArrivedCity(returnArrivedCity.getCity());
-		//		//航班号 返程
-		//		tOrderTripHis.setReturnFlightNum(form.getReturnFlightNum());
-		//		//新增 or 更新
-		//		if (!Util.isEmpty(tOrderTripHis.getId())) {
-		//			tOrderTripHis.setUpdateTime(new Date());
-		//			dbDao.update(tOrderTripHis);
-		//		} else {
-		//			tOrderTripHis.setCreateTime(new Date());
-		//			dbDao.insert(tOrderTripHis);
-		//		}
+
+		//消息通知
+		/*try {
+			visaInfoWSHandler.broadcast(new TextMessage(""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}*/
+		return null;
+	}
+
+	/**
+	 * 保存招宝订单信息
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param request
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object saveZhaobaoOrderinfo(AddOrderForm form, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		Integer orderjpid = form.getOrderid();
+		Integer orderid = null;
+		//获取订单id信息
+		if (Util.isEmpty(orderjpid)) {
+			Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
+			orderid = generrateorder.get("orderid");
+			orderjpid = generrateorder.get("orderjpid");
+			orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+
+		} else {
+			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
+			orderid = orderjp.getOrderId();
+			//根据订单ID查询
+			TOrderLogsEntity logs = dbDao.fetch(TOrderLogsEntity.class, Cnd.where("orderid", "=", orderid.longValue()));
+			if (Util.isEmpty(logs)) {
+				orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+			}
+			if (JpOrderSimpleEnum.PLACE_ORDER.intKey() != 1) {
+				orderJpViewService.insertLogs(orderid, JpOrderSimpleEnum.PLACE_ORDER.intKey(), session);
+			}
+		}
+		TOrderJpEntity orderjpinfo = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderid.longValue());
+		orderinfo.setCityId(form.getCityid());
+		orderinfo.setGoTripDate(form.getGoDate());
+		orderinfo.setStayDay(form.getStayday());
+		orderinfo.setBackTripDate(form.getReturnDate());
+
+		orderinfo.setIsDisabled(IsYesOrNoEnum.NO.intKey());
+		orderinfo.setUpdateTime(new Date());
+
+		dbDao.update(orderinfo);
+		//更新日本订单表
+		orderjpinfo.setVisaType(form.getVisatype());
+		dbDao.update(orderjpinfo);
+
+		//出行信息---------------------------------------------------------------------------
+		TOrderTripJpEntity orderjptrip = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderId", "=", orderjpid));
+		if (Util.isEmpty(orderjptrip)) {
+			orderjptrip = new TOrderTripJpEntity();
+		}
+		orderjptrip.setGoDate(form.getGoDate());
+		orderjptrip.setReturnDate(form.getReturnDate());
+
+		orderjptrip.setOrderId(orderjpid);
+		if (!Util.isEmpty(orderjptrip.getId())) {
+			dbDao.update(orderjptrip);
+		} else {
+			dbDao.insert(orderjptrip);
+		}
 
 		//消息通知
 		/*try {
@@ -3815,18 +3869,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		List<ResultflyEntity> returntripAirlineSelect = Lists.newArrayList();
 
 		if (!Util.isEmpty(tripinfo)) {
-			/*FlightSelectParam param = new FlightSelectParam();
-			param.setGocity(tripinfo.getGoDepartureCity().longValue());
-			param.setArrivecity(tripinfo.getGoArrivedCity().longValue());
-			param.setDate("2018-06-19");
-			param.setFlight("");
-			gotripAirlineSelect = tripAirlineService.getTripAirlineSelect(param);
-
-			param.setGocity(tripinfo.getReturnDepartureCity().longValue());
-			param.setArrivecity(tripinfo.getReturnArrivedCity().longValue());
-			param.setDate("2018-06-19");
-			param.setFlight("");
-			returntripAirlineSelect = tripAirlineService.getTripAirlineSelect(param);*/
 			Integer[] cityids = { tripinfo.getGoDepartureCity(), tripinfo.getGoArrivedCity(),
 					tripinfo.getReturnDepartureCity(), tripinfo.getReturnArrivedCity() };
 			citylist = dbDao.query(TCityEntity.class, Cnd.where("id", "in", cityids), null);
@@ -3836,14 +3878,6 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 					tripinfo.getNewgoarrivedcity(), tripinfo.getNewgodeparturecity(),
 					tripinfo.getNewreturnarrivedcity(), tripinfo.getNewreturndeparturecity() };
 			newcitylist = dbDao.query(TCityEntity.class, Cnd.where("id", "in", newcityids), null);
-			/*String[] flightnums = { tripinfo.getGoFlightNum(), tripinfo.getReturnFlightNum() };
-			List<TFlightEntity> flightlistpre = dbDao.query(TFlightEntity.class,
-					Cnd.where("flightnum", "in", flightnums), null);
-			for (TFlightEntity tFlightEntity : flightlistpre) {
-				if (!flightlist.contains(tFlightEntity)) {
-					flightlist.add(tFlightEntity);
-				}
-			}*/
 		}
 		String orderstatus = "";
 		for (JPOrderStatusEnum orderenum : JPOrderStatusEnum.values()) {
@@ -4199,7 +4233,13 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object basicInfo(Integer applicantid, Integer orderid, HttpServletRequest request) {
+
 		Map<String, Object> result = Maps.newHashMap();
+
+		HttpSession session = request.getSession();
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+		result.put("ordertype", loginUser.getOrdertype());
+
 		result.put("orderid", orderid);
 		result.put("applicantid", applicantid);
 
@@ -6257,10 +6297,21 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		if (!Util.isEmpty(orderid)) {
 			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid);
 			TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+			List<TOrderLogsEntity> logs = dbDao.query(TOrderLogsEntity.class,
+					Cnd.where("orderId", "=", orderinfo.getId()), null);
+			if (!Util.isEmpty(logs)) {
+				dbDao.delete(logs);
+			}
+
 			List<TOrderTravelplanJpEntity> travelplan = dbDao.query(TOrderTravelplanJpEntity.class,
 					Cnd.where("orderid", "=", orderid), null);
 			if (!Util.isEmpty(travelplan)) {
 				dbDao.delete(travelplan);
+			}
+
+			TOrderTripJpEntity tripjp = dbDao.fetch(TOrderTripJpEntity.class, Cnd.where("orderId", "=", orderid));
+			if (!Util.isEmpty(tripjp)) {
+				dbDao.delete(tripjp);
 			}
 			List<TApplicantOrderJpEntity> applicantjp = dbDao.query(TApplicantOrderJpEntity.class,
 					Cnd.where("orderid", "=", orderid), null);
@@ -6269,7 +6320,7 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				Integer[] applicantidjps = new Integer[applicantjp.size()];
 				int i = 0;
 				for (TApplicantOrderJpEntity tApplicantOrderJpEntity : applicantjp) {
-					applicantids[i] = tApplicantOrderJpEntity.getOrderId();
+					applicantids[i] = tApplicantOrderJpEntity.getApplicantId();
 					applicantidjps[i] = tApplicantOrderJpEntity.getId();
 					i++;
 				}
@@ -6380,10 +6431,37 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 	}
 
 	public Object getUnitname(String searchstr, HttpServletRequest request) {
+
+		long first = System.currentTimeMillis();
+
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 
 		List<String> nameList = new ArrayList<>();
+
+		/*String searchResult = "";
+		Result result1 = ToAnalysis.parse(searchstr);
+		List<Term> terms = result1.getTerms();
+		for (Term term : terms) {
+			String name = term.getName();
+			if (!Util.isEmpty(name)) {
+				searchResult += name + " +";
+			}
+		}
+
+		if (searchResult.contains("+")) {
+			searchResult = Strings.trim(searchResult).substring(0, Strings.trim(searchResult).length() - 2);
+		}
+		System.out.println(searchResult);
+
+		Sql sql = Sqls
+				.create("SELECT name,telephone,address FROM t_applicant_work_jp  WHERE MATCH(namesplit) AGAINST(@searchstr IN boolean mode)");
+
+		sql.setParam("searchstr", searchResult);
+		// and tr.comId = @comId
+		//sql.setParam("searchstr", searchResult).setParam("comId", loginCompany.getId());
+
+		List<Record> names = dbDao.query(sql, null, null);*/
 
 		String sqlStr = sqlManager.get("simpleJP_getUnitname");
 		Sql sql = Sqls.create(sqlStr);
@@ -6421,19 +6499,48 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
+		long last = System.currentTimeMillis();
+		System.out.println("查询所用时间为:" + (last - first) + "ms");
 		return nameList;
 	}
 
 	public Object getUnittelephone(String searchstr, HttpServletRequest request) {
+
+		long first = System.currentTimeMillis();
 
 		HttpSession session = request.getSession();
 		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
 
 		List<String> telephoneList = new ArrayList<>();
 
+		/*String searchResult = "";
+		Result result1 = ToAnalysis.parse(searchstr);
+		List<Term> terms = result1.getTerms();
+		for (Term term : terms) {
+			String name = term.getName();
+			if (!Util.isEmpty(name)) {
+				searchResult += name + " +";
+			}
+		}
+
+		if (searchResult.contains("+")) {
+			searchResult = Strings.trim(searchResult).substring(0, Strings.trim(searchResult).length() - 2);
+		}
+		System.out.println(searchResult);
+
+		Sql sql = Sqls
+				.create("SELECT tawj.name,tawj.telephone,tawj.address FROM t_applicant_work_jp tawj LEFT JOIN t_applicant_order_jp taoj ON taoj.id = tawj.applicantId INNER JOIN t_order_jp toj ON toj.id = taoj.orderId LEFT JOIN t_order tr ON tr.id = toj.orderId WHERE MATCH(tawj.telephone) AGAINST(@searchstr IN boolean mode) and tr.comId = @comId");
+
+		sql.setParam("searchstr", searchResult).setParam("comId", loginCompany.getId());
+
+		List<Record> telephones = dbDao.query(sql, null, null);*/
+
 		String sqlStr = sqlManager.get("simpleJP_getUnitname");
 		Sql sql = Sqls.create(sqlStr);
 		Cnd cnd = Cnd.NEW();
+
+		//MATCH(telephone) AGAINST('国际' IN boolean mode)
+		//cnd.and("match(tawj.telephone)", "against", "(" + searchResult + "in boolean mode)");
 		cnd.and("tawj.telephone", "like", Strings.trim(searchstr) + "%");
 		cnd.and("tr.comId", "=", loginCompany.getId());
 
@@ -6468,6 +6575,8 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 			}
 		}
 
+		long last = System.currentTimeMillis();
+		System.out.println("所用时间为:" + (last - first) + "ms");
 		return telephoneList;
 	}
 
@@ -7102,6 +7211,293 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 		orderjp.setGroundconnectid(groundconnectid);
 		dbDao.update(orderjp);
 		return null;
+	}
+
+	/**
+	 * 上传excel数据到数据库
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param request
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	@SuppressWarnings("resource")
+	public Object importExcel(List<TempFile> tfs, HttpServletRequest request, HttpServletResponse response) {
+		long firsttime = System.currentTimeMillis();
+
+		String resultStr = "error";
+
+		HttpSession session = request.getSession();
+		//获取当前公司
+		TCompanyEntity loginCompany = LoginUtil.getLoginCompany(session);
+		//当前登录人员
+		TUserEntity loginUser = LoginUtil.getLoginUser(session);
+
+		for (TempFile tempFile : tfs) {
+
+			File file = tempFile.getFile();
+
+			//for (int j = 0; j < 10000; j++) {
+
+			//创建订单和日本订单
+			Map<String, Integer> generrateorder = generrateorder(loginUser, loginCompany);
+			Integer orderid = generrateorder.get("orderjpid");
+
+			try {
+				//Thread.sleep(1000);
+			} catch (Exception e2) {
+
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+
+			}
+
+			TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderid.longValue());
+			TOrderEntity order = dbDao.fetch(TOrderEntity.class, orderjp.getOrderId().longValue());
+
+			long secondtime = System.currentTimeMillis();
+			System.out.println("创建订单所用时间：" + (secondtime - firsttime) + "ms");
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd");
+			Workbook workbook = null;
+
+			try {
+				//fis = new FileInputStream(file);
+				workbook = WorkbookFactory.create(file);
+			} catch (Exception e1) {
+				if (!Util.isEmpty(orderjp)) {
+					dbDao.delete(orderjp);
+				}
+				if (!Util.isEmpty(order)) {
+					dbDao.delete(order);
+				}
+				e1.printStackTrace();
+			}
+
+			try {
+				//创建Excel，读取文件内容
+
+				//XSSFWorkbook workbook = new XSSFWorkbook(file);
+				//第一个sheet
+				Sheet sheetAt = workbook.getSheetAt(0);
+				for (int i = 6; i < 11; i++) {
+					if (i == 7 || i == 8) {
+						System.out.println("要跳过了，i为" + i);
+						continue;
+					}
+					Row r = sheetAt.getRow(i);
+
+					if (i == 6) {
+						String visatype = r.getCell(2).getStringCellValue();
+						if (visatype.contains("三年")) {
+							if (visatype.contains("冲绳")) {
+								orderjp.setVisaType(7);
+								orderjp.setVisaCounty("冲绳");
+							} else if (visatype.contains("宫城")) {
+								orderjp.setVisaType(8);
+								orderjp.setVisaCounty("宫城");
+							} else if (visatype.contains("福岛")) {
+								orderjp.setVisaType(9);
+								orderjp.setVisaCounty("福岛");
+							} else if (visatype.contains("岩手")) {
+								orderjp.setVisaType(10);
+								orderjp.setVisaCounty("岩手");
+							} else if (visatype.contains("青森")) {
+								orderjp.setVisaType(11);
+								orderjp.setVisaCounty("青森");
+							} else if (visatype.contains("秋田")) {
+								orderjp.setVisaType(12);
+								orderjp.setVisaCounty("秋田");
+							} else if (visatype.contains("山形")) {
+								orderjp.setVisaType(13);
+								orderjp.setVisaCounty("山形");
+							} else {
+								orderjp.setVisaType(6);
+							}
+						} else {
+							if (visatype.contains("冲绳")) {
+								orderjp.setVisaType(2);
+							} else if (visatype.contains("宫城")) {
+								orderjp.setVisaType(3);
+							} else if (visatype.contains("福岛")) {
+								orderjp.setVisaType(5);
+							} else if (visatype.contains("岩手")) {
+								orderjp.setVisaType(4);
+							} else {
+								orderjp.setVisaType(1);
+							}
+						}
+					}
+
+					Date date = null;
+
+					if (i == 9 || i == 10) {
+						Cell cell = r.getCell(2);
+						int cellType = cell.getCellType();
+						System.out.println("文本格式为:" + cellType);
+						if (Util.eq(Cell.CELL_TYPE_STRING, cellType)) {//文本格式
+							String stringCellValue = cell.getStringCellValue();
+							if (!Util.isEmpty(stringCellValue)) {
+								date = sdf.parse(sdf.format(sdf2.parse(stringCellValue)));
+							}
+						} else if (Util.eq(Cell.CELL_TYPE_NUMERIC, cellType)) {//日期格式
+							Date dateCellValue = cell.getDateCellValue();
+							if (!Util.isEmpty(dateCellValue)) {
+								date = sdf.parse(sdf2.format(dateCellValue));
+							}
+						}
+						if (!Util.isEmpty(date)) {
+							date = sdf.parse(sdf.format(date));
+						}
+						if (i == 9) {
+							order.setGoTripDate(date);
+						} else if (i == 10) {
+							order.setBackTripDate(date);
+						}
+						System.out.println("date:" + date);
+					}
+				}
+				dbDao.update(orderjp);
+				order.setCityId(2);
+				dbDao.update(order);
+
+				TOrderTripJpEntity ordertripjp = new TOrderTripJpEntity();
+				ordertripjp.setGoDate(order.getGoTripDate());
+				ordertripjp.setReturnDate(order.getBackTripDate());
+				ordertripjp.setOrderId(orderid);
+				ordertripjp.setTripType(1);
+				ordertripjp.setTripPurpose("旅游");
+				dbDao.insert(ordertripjp);
+
+				//第二个sheet
+				Sheet sheetAt2 = workbook.getSheetAt(1);
+				int lastRowNum = sheetAt2.getLastRowNum();
+				int totalRow = 0;
+				for (int i = 5; i < lastRowNum + 2; i++) {
+					try {
+						String stringCellValue = sheetAt2.getRow(i).getCell(1).getStringCellValue();
+						if (Util.isEmpty(stringCellValue)) {
+							totalRow = i;
+							break;
+						}
+					} catch (Exception e) {
+						totalRow = i;
+						e.printStackTrace();
+					}
+				}
+				System.out.println("lastRowNum:" + lastRowNum);
+				for (int i = 5; i < totalRow; i++) {
+					Row r = sheetAt2.getRow(i);
+
+					//新建申请人表
+					TApplicantEntity apply = new TApplicantEntity();
+					apply.setOpId(loginUser.getId());
+					apply.setIsSameInfo(IsYesOrNoEnum.YES.intKey());
+					apply.setIsPrompted(IsYesOrNoEnum.NO.intKey());
+					apply.setStatus(TrialApplicantStatusEnum.FIRSTTRIAL.intKey());
+					apply.setCreateTime(new Date());
+					apply.setFirstName(r.getCell(1).getStringCellValue());
+					apply.setFirstNameEn(r.getCell(2).getStringCellValue());
+					apply.setLastName(r.getCell(1).getStringCellValue());
+					apply.setLastNameEn(r.getCell(2).getStringCellValue());
+					apply.setSex(r.getCell(3).getStringCellValue());
+					apply.setProvince(r.getCell(4).getStringCellValue());
+					if (!Util.isEmpty(r.getCell(5).getStringCellValue())) {
+						apply.setBirthday(sdf.parse(r.getCell(5).getStringCellValue()));
+					} else {
+						apply.setBirthday(null);
+					}
+
+					TApplicantEntity insertApply = dbDao.insert(apply);
+					int applyid = insertApply.getId();
+
+					//护照信息
+					TApplicantPassportEntity passport = new TApplicantPassportEntity();
+					passport.setIssuedOrganization("公安部出入境管理局");
+					passport.setIssuedOrganizationEn("MPS Exit&Entry Adiministration");
+					passport.setFirstName(r.getCell(1).getStringCellValue());
+					passport.setFirstNameEn(r.getCell(2).getStringCellValue());
+					passport.setLastName(r.getCell(1).getStringCellValue());
+					passport.setLastNameEn(r.getCell(2).getStringCellValue());
+					passport.setSex(r.getCell(3).getStringCellValue());
+					if (!Util.isEmpty(r.getCell(5).getStringCellValue())) {
+						passport.setBirthday(sdf.parse(r.getCell(5).getStringCellValue()));
+					} else {
+						passport.setBirthday(null);
+					}
+					passport.setPassport(r.getCell(6).getStringCellValue());
+					passport.setApplicantId(applyid);
+					dbDao.insert(passport);
+
+					//新建日本申请人表
+					TApplicantOrderJpEntity applicantjp = new TApplicantOrderJpEntity();
+
+					//设置主申请人信息
+					List<TApplicantOrderJpEntity> orderapplicant = dbDao.query(TApplicantOrderJpEntity.class,
+							Cnd.where("orderId", "=", orderid), null);
+					if (!Util.isEmpty(orderapplicant) && orderapplicant.size() >= 1) {
+
+						applicantjp.setIsMainApplicant(IsYesOrNoEnum.NO.intKey());
+						TApplicantOrderJpEntity mainApply = dbDao.fetch(
+								TApplicantOrderJpEntity.class,
+								Cnd.where("orderId", "=", orderid).and("isMainApplicant", "=",
+										IsYesOrNoEnum.YES.intKey()));
+						if (!Util.isEmpty(mainApply)) {
+							apply.setMainId(mainApply.getApplicantId());
+						}
+						dbDao.update(apply);
+					} else {
+						//设置为主申请人
+						applicantjp.setIsMainApplicant(IsYesOrNoEnum.YES.intKey());
+						apply.setMainId(applyid);
+						dbDao.update(apply);
+					}
+
+					applicantjp.setOrderId(orderid);
+					applicantjp.setApplicantId(applyid);
+					applicantjp.setBaseIsCompleted(IsYesOrNoEnum.NO.intKey());
+					applicantjp.setPassIsCompleted(IsYesOrNoEnum.NO.intKey());
+					applicantjp.setVisaIsCompleted(IsYesOrNoEnum.NO.intKey());
+					TApplicantOrderJpEntity insertappjp = dbDao.insert(applicantjp);
+
+					//日本工作信息
+					TApplicantWorkJpEntity workJp = new TApplicantWorkJpEntity();
+					workJp.setApplicantId(insertappjp.getId());
+					workJp.setCreateTime(new Date());
+					workJp.setOpId(loginUser.getId());
+					workJp.setPosition(r.getCell(7).getStringCellValue());
+					dbDao.insert(workJp);
+
+					//其他信息
+					TApplicantVisaOtherInfoEntity visaother = new TApplicantVisaOtherInfoEntity();
+					visaother.setApplicantid(insertappjp.getId());
+					visaother.setHotelname("参照'赴日予定表'");
+					visaother.setVouchname("参照'身元保证书'");
+					visaother.setInvitename("同上");
+					visaother.setTraveladvice("推荐");
+					dbDao.insert(visaother);
+				}
+				resultStr = "ok";
+
+			} catch (Exception e) {
+				if (!Util.isEmpty(orderjp)) {
+					dbDao.delete(orderjp);
+				}
+				if (!Util.isEmpty(order)) {
+					dbDao.delete(order);
+				}
+				resultStr = "error";
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+
+			}
+			//}
+		}
+
+		return resultStr;
 	}
 
 	/**
@@ -7893,15 +8289,37 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 
 	public Object getSomething() {
 
-		for (int i = 0; i < 100000; i++) {
-			TApplicantWorkJpEntity workjp = new TApplicantWorkJpEntity();
-			workjp.setTelephone("0000");
-			dbDao.insert(workjp);
-		}
+		/*List<TApplicantWorkJpEntity> query = dbDao.query(TApplicantWorkJpEntity.class, null, null);
+		int count = 0;
+		int mount = 0;
+		for (TApplicantWorkJpEntity work : query) {
+			count++;
+			mount++;
+			work.setName(String.valueOf(count));
+			work.setTelephone(String.valueOf(mount));
+			String aaa = "";
+			if (!Util.isEmpty(work.getName())) {
+				Result parse = ToAnalysis.parse(work.getName());
+				List<Term> terms = parse.getTerms();
+				for (Term term : terms) {
+					String name = term.getName();
+					aaa += name + " ";
+				}
+				work.setNamesplit(aaa);
+				dbDao.update(work);
+			}
+			dbDao.update(work);
+		}*/
 
-		/*for (int i = 1036; i < 24679; i++) {
+		/*for (int i = 0; i < 1000000; i++) {
+			TApplicantWorkJpEntity work = new TApplicantWorkJpEntity();
+			work.setNamesplit("有限 公司");
+			dbDao.insert(work);
+		}*/
+
+		for (int i = 4952; i < 38555; i++) {
 			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, i);
-			if (!Util.isEmpty(apply)) {
+			if (!Util.isEmpty(apply) && !Util.isEmpty(apply.getFirstName())) {
 				TApplicantPassportEntity fetch = dbDao.fetch(TApplicantPassportEntity.class,
 						Cnd.where("applicantId", "=", i));
 				if (Util.isEmpty(fetch)) {
@@ -7909,8 +8327,324 @@ public class SimpleVisaService extends BaseService<TOrderJpEntity> {
 				}
 			}
 
-		}*/
+			if (i % 1000 == 0) {
+				System.out.println("申请人id:" + i);
+			}
+			if (i == 31825) {
+				System.out.println("到最后一个了！！！");
+			}
+		}
 		return null;
+	}
+
+	/**
+	 * 测试toAutofill接口
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @param action
+	 * @param orderVoucher
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object testAutofill(int orderid, String action, String orderVoucher) {
+
+		Map<String, Object> result = getData(orderid, action, orderVoucher);
+
+		WXBizMsgCrypt pc;
+		String resultStr = "";
+		String json = "";
+		//System.out.println("json:" + json);
+		try {
+			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
+			//对数据进行加密
+			json = pc.encryptMsg(JsonUtil.toJson(result), getTimeStamp(), getRandomString());
+			//发送POST请求
+			JSONObject resultObj = toPostAutofill(json);
+			String encrypt = (String) resultObj.get("encrypt");
+			//对请求返回来的encrypt解密
+			resultStr = pc.decrypt(encrypt);
+			System.out.println("toGetEncrypt解密后明文: " + resultStr);
+
+			org.json.JSONObject aacodeObj = new org.json.JSONObject(resultStr);
+			int successStatus = (int) aacodeObj.get("success");
+			String msg = "";
+			try {
+				msg = (String) aacodeObj.get("msg");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			if (Util.isEmpty(msg)) {
+				if (Util.eq("send", action)) {
+					String data = aacodeObj.getString("code");
+					System.out.println("订单识别码为:" + data);
+				}
+			}
+
+		} catch (AesException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
+
+	/**
+	 * 发送POST请求
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param json
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public JSONObject toPostAutofill(String json) {
+
+		String host = HOST;
+		String path = "/visa/data/japan/toAutofill?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d";
+		String method = "POST";
+		String entityStr = "";
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Content-Type", "application/json; charset=UTF-8");
+		Map<String, String> querys = new HashMap<String, String>();
+		HttpResponse response;
+		System.out.println("httpurl:" + (host + path));
+		System.out.println("json:" + json);
+		JSONObject parseObject = null;
+		try {
+			response = HttpUtils.doPost(host, path, method, headers, querys, json);
+			entityStr = EntityUtils.toString(response.getEntity());
+			System.out.println("POST请求返回的数据：" + entityStr);
+			//entityStr = entityStr.substring(1, entityStr.length() - 1);
+			//entityStr = entityStr.substring(1, entityStr.length() - 1).replaceAll("\\\\", "");
+			//System.out.println("entityStr:" + entityStr);
+			parseObject = JSONObject.parseObject(entityStr);
+			System.out.println("parseObject:" + parseObject);
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		return parseObject;
+	}
+
+	/**
+	 * 获取时间戳方法
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public String getTimeStamp() {
+		Date date = new Date();
+		//样式：yyyy年MM月dd日HH时mm分ss秒SSS毫秒
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMddHHmmss");
+		String timeStampStr = simpleDateFormat.format(date);
+		return timeStampStr;
+	}
+
+	/**
+	 * 生成随机字符串
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public String getRandomString() {
+		String str = "zxcvbnmlkjhgfdsaqwertyuiop1234567890";
+		Random random = new Random();
+		StringBuffer sb = new StringBuffer();
+		//长度为几就循环几次
+		for (int i = 0; i < 8; ++i) {
+			//产生0-61的数字
+			int number = random.nextInt(str.length());
+			//将产生的数字通过length次承载到sb中
+			sb.append(str.charAt(number));
+		}
+		//将承载的字符转换成字符串
+		return sb.toString();
+	}
+
+	/**
+	 * 获取所需参数的值
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderid
+	 * @param action
+	 * @param orderVoucher
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Map<String, Object> getData(int orderid, String action, String orderVoucher) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Map<String, Object> result = Maps.newHashMap();
+		ArrayList<Object> applicantsList = new ArrayList<>();
+
+		TOrderJpEntity orderjpinfo = dbDao.fetch(TOrderJpEntity.class, orderid);
+		TOrderEntity orderinfo = dbDao.fetch(TOrderEntity.class, orderjpinfo.getOrderId().longValue());
+		List<TApplicantOrderJpEntity> applyorderjpList = dbDao.query(TApplicantOrderJpEntity.class,
+				Cnd.where("orderId", "=", orderjpinfo.getId()), null);
+		for (TApplicantOrderJpEntity applyorderjp : applyorderjpList) {
+			Map<String, Object> applicant = Maps.newHashMap();
+			TApplicantEntity apply = dbDao.fetch(TApplicantEntity.class, applyorderjp.getApplicantId().longValue());
+			TApplicantPassportEntity passport = dbDao.fetch(TApplicantPassportEntity.class,
+					Cnd.where("applicantId", "=", apply.getId()));
+
+			applicant.put("firstname", apply.getFirstName());
+			applicant.put("firstnameEn", apply.getFirstNameEn());
+			applicant.put("lastname", apply.getLastName());
+			applicant.put("lastnameEn", apply.getLastNameEn());
+
+			if (!Util.isEmpty(apply.getBirthday())) {
+				applicant.put("birthday", sdf.format(apply.getBirthday()));
+			} else {
+				applicant.put("birthday", "");
+			}
+			applicant.put("sex", apply.getSex());
+			applicant.put("province", apply.getProvince());
+			applicant.put("passportNo", passport.getPassport());
+			applicant.put("isMainApplicant", applyorderjp.getIsMainApplicant());
+
+			applicantsList.add(applicant);
+
+		}
+
+		Date goTripDate = orderinfo.getGoTripDate();
+		Date backTripDate = orderinfo.getBackTripDate();
+
+		Integer visaType = orderjpinfo.getVisaType();
+
+		String goDate = "";
+		String returnDate = "";
+
+		if (!Util.isEmpty(goTripDate)) {
+			goDate = sdf.format(goTripDate);
+		}
+		if (!Util.isEmpty(backTripDate)) {
+			returnDate = sdf.format(backTripDate);
+		}
+
+		result.put("userName", "zhiliren");
+		result.put("goDate", goDate);
+		result.put("returnDate", returnDate);
+		result.put("action", action);
+		result.put("orderVoucher", orderVoucher);
+		result.put("designatedNum", "GTP-BJ-000-0");
+		result.put("visaType", visaType);
+		result.put("applicantsList", applicantsList);
+
+		return result;
+	}
+
+	/**
+	 * 测试search接口
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param orderVoucher
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Object testSearch(String orderVoucher) {
+
+		long first = System.currentTimeMillis();
+
+		Map<String, Object> result = Maps.newHashMap();
+		result.put("userName", "zhiliren");
+		result.put("orderVoucher", orderVoucher);
+
+		WXBizMsgCrypt pc = null;
+		String resultStr = "";
+		String json = "";
+		try {
+			pc = new WXBizMsgCrypt(TOKEN, ENCODINGAESKEY, APPID);
+			//对数据进行加密
+			json = pc.encryptMsg(JsonUtil.toJson(result), getTimeStamp(), getRandomString());
+		} catch (AesException e2) {
+
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+
+		}
+
+		//将json字符串转成json对象
+		org.json.JSONObject encryptObj = new org.json.JSONObject(json);
+		String timestamp = (String) encryptObj.get("timeStamp");
+		String signature = (String) encryptObj.get("msg_signature");
+		String nonce = (String) encryptObj.get("nonce");
+		json = (String) encryptObj.get("encrypt");
+		//把json urlencode
+		try {
+			json = URLEncoder.encode(json, "utf-8");
+		} catch (UnsupportedEncodingException e1) {
+
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+
+		}
+
+		long second = System.currentTimeMillis();
+		System.out.println("发送请求之前所用时间：" + (second - first) + "ms");
+
+		//发送GET请求
+		String host = HOST;
+		String path = "/visa/data/japan/search?token=ODBiOGIxNDY4NjdlMzc2Yg%3d%3d&timeStamp=" + timestamp
+				+ "&msg_signature=" + signature + "&nonce=" + nonce + "&encrypt=" + json;
+		String method = "GET";
+		String entityStr = "";
+		Map<String, String> headers = new HashMap<String, String>();
+		headers.put("Content-Type", "application/json; charset=UTF-8");
+		Map<String, String> querys = new HashMap<String, String>();
+		HttpResponse response;
+		JSONObject parseObject = null;
+		try {
+			response = HttpUtils.doGet(host, path, method, headers, querys);
+
+			long third = System.currentTimeMillis();
+			System.out.println("发送请求所用时间：" + (third - second) + "ms");
+
+			entityStr = EntityUtils.toString(response.getEntity());
+			System.out.println("GET请求返回的数据：" + entityStr);
+			//将返回的json字符串转成json对象
+			parseObject = JSONObject.parseObject(entityStr);
+			String encrypt = (String) parseObject.get("encrypt");
+
+			//解密
+			resultStr = pc.decrypt(encrypt);
+			System.out.println("解密后明文: " + resultStr);
+			//将解密后的json字符串转为json对象
+			parseObject = JSONObject.parseObject(resultStr);
+
+			String errMsg = parseObject.getString("msg");
+			if (!Util.isEmpty(errMsg)) {
+				resultStr = errMsg;
+				System.out.println("出错了，错误信息为：" + errMsg);
+			} else {
+				String orderstatus = parseObject.getString("status");
+				if (orderstatus.contains(",")) {
+					System.out.println("订单状态为：" + orderstatus.substring(0, orderstatus.indexOf(",")));
+					System.out.println("收付番号为：" + orderstatus.substring(orderstatus.indexOf(",") + 1));
+				} else {
+					System.out.println("订单状态为：" + orderstatus);
+				}
+				resultStr = orderstatus;
+			}
+
+		} catch (Exception e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		}
+		long last = System.currentTimeMillis();
+		System.out.println("方法所用时间：" + (last - first) + "ms");
+		return resultStr;
 	}
 
 }

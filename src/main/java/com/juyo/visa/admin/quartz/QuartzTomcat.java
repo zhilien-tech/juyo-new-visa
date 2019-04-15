@@ -47,8 +47,8 @@ public class QuartzTomcat extends BaseService<TOrderJpEntity> implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
-		System.out.println("Tomcat监控");
-		System.out.println(sdf.format(new Date()));
+		System.out.println("Tomcat监控: " + sdf.format(new Date()));
+		//System.out.println(sdf.format(new Date()));
 
 		//主
 		/*String path = "https://test.f-visa.com/admin/mobileVisa/getBasicInfoByStaffid";
@@ -68,7 +68,6 @@ public class QuartzTomcat extends BaseService<TOrderJpEntity> implements Job {
 			TrustManager[] tm = { new MyX509TrustManager() };
 			//初始化
 			sslContext.init(null, tm, new java.security.SecureRandom());
-			;
 			//获取SSLSocketFactory对象
 			SSLSocketFactory ssf = sslContext.getSocketFactory();
 
@@ -145,7 +144,7 @@ public class QuartzTomcat extends BaseService<TOrderJpEntity> implements Job {
 		String smsContent = tmp.toString();
 		smsContent = smsContent.replace("${ordernum}", ordernum).replace("${orderstatus}", orderstatus);
 		System.out.println("短信分享内容：" + smsContent);
-		result = orderUSViewService.sendSMS(telephone, smsContent);
+		//result = orderUSViewService.sendSMS(telephone, smsContent);
 		//result = orderUSViewService.sendSMS(telephone2, smsContent);
 
 		return result;

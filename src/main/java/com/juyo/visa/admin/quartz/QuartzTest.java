@@ -38,7 +38,7 @@ import com.uxuexi.core.web.base.service.BaseService;
 
 @IocBean
 @Scheduled(cron = "0 /2 6-23 * * ? *")
-//每天的早上6点到晚上12点，每隔一分钟执行一次， 秒 分 时 天 月 每周 年(可选)
+//每天的早上6点到晚上12点，每隔两分钟执行一次， 秒 分 时 天 月 每周 年(可选)
 //直接使用注解来声明cron
 public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 
@@ -51,8 +51,8 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
-		System.out.println("Just do it");
-		System.out.println(sdf.format(new Date()));
+		System.out.println("Just do it: " + sdf.format(new Date()));
+		//System.out.println(sdf.format(new Date()));
 
 		/*String result = "";
 
@@ -73,7 +73,8 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 		//查询发招宝中、提交中、变更中、取消中的订单,注意作废的订单不需要
 		Integer[] orderstatus = { JPOrderStatusEnum.READYCOMMING.intKey(), JPOrderStatusEnum.BIANGENGZHONG.intKey(),
 				JPOrderStatusEnum.QUXIAOZHONG.intKey(), JPOrderStatusEnum.COMMITING.intKey(),
-				JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey() };
+				JPOrderStatusEnum.AUTO_FILL_FORM_ING.intKey(), JPOrderStatusEnum.WANGZHANBIANGENGZHONG.intKey(),
+				JPOrderStatusEnum.WANGZHANQUXIAOZHONG.intKey() };
 		List<TOrderEntity> orderList = dbDao.query(TOrderEntity.class,
 				Cnd.where("status", "in", orderstatus).and("isDisabled", "=", 0), null);
 		//判断是否有满足需要的订单
@@ -148,8 +149,8 @@ public class QuartzTest extends BaseService<TOrderJpEntity> implements Job {
 		String smsContent = tmp.toString();
 		smsContent = smsContent.replace("${ordernum}", ordernum).replace("${orderstatus}", orderstatus);
 		System.out.println("短信分享内容：" + smsContent);
-		result = orderUSViewService.sendSMS(telephone, smsContent);
-		result = orderUSViewService.sendSMS(telephone2, smsContent);
+		//result = orderUSViewService.sendSMS(telephone, smsContent);
+		//result = orderUSViewService.sendSMS(telephone2, smsContent);
 
 		return result;
 

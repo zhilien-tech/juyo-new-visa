@@ -69,7 +69,8 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 
 		//送签社下拉
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
-				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())
+				|| loginCompany.getComType().equals(CompanyTypeEnum.ORDERSIMPLE.intKey())) {
 			//如果公司自己有指定番号，说明有送签资质，也需要出现在下拉中
 			if (!Util.isEmpty(loginCompany.getCdesignNum())) {
 				ja.add(loginCompany);
@@ -86,8 +87,10 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 				ja.add(sendCompany);
 			}
 		}
-		List<TCompanyEntity> query = dbDao.query(TCompanyEntity.class,
-				Cnd.where("comType", "=", CompanyTypeEnum.SONGQIANSIMPLE.intKey()), null);
+		List<TCompanyEntity> query = dbDao.query(
+				TCompanyEntity.class,
+				Cnd.where("comType", "=", CompanyTypeEnum.SONGQIANSIMPLE.intKey()).or("comType", "=",
+						CompanyTypeEnum.ORDERSIMPLE.intKey()), null);
 		result.put("songqianlist", query);
 
 		//员工下拉
@@ -158,7 +161,10 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 		Integer pageSize = form.getPageSize();
 
 		Pager pager = new OffsetPager((pageNumber - 1) * pageSize, pageSize);
-		pager.setRecordCount((int) Daos.queryCount(nutDao, sql.toString()));
+
+		Sql paperSql = getPaperSql(form);
+
+		pager.setRecordCount((int) Daos.queryCount(nutDao, paperSql.toString()));
 
 		sql.setCallback(Sqls.callback.records());
 		nutDao.execute(sql);
@@ -182,7 +188,7 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 			}*/
 
 			//收费单子，人数
-			if (Util.eq(1, record.get("zhaobaoupdate"))) {
+			if (Util.eq(1, record.get("zhaobaoupdate")) && Util.eq(0, record.get("isDisabled"))) {
 				zhaobaoorder++;
 				if (!Util.eq(0, record.get("peoplenumber"))) {
 					zhaobaopeople += record.getInt("peoplenumber");
@@ -228,8 +234,15 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 		entity.setPeopletotal(peopletotal);
 		entity.setZhaobaoorder(zhaobaoorder);
 		entity.setZhaobaopeople(zhaobaopeople);
-		entity.setSingleperson(singleperson.size());
-		entity.setMultiplayer(zhaobaoorder - singleperson.size());
+
+		if (Util.eq(form.getStatus(), JPOrderStatusEnum.DISABLED.intKey())) {//筛选条件为作废时，单人招宝成功为0
+			entity.setSingleperson(0);
+			entity.setMultiplayer(0);
+		} else {
+			entity.setSingleperson(singleperson.size());
+			entity.setMultiplayer(zhaobaoorder - singleperson.size());
+		}
+
 		result.put("entity", entity);
 
 		result.put("pagetotal", pager.getPageCount());
@@ -237,6 +250,16 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 		long endTime = System.currentTimeMillis();
 		System.out.println("方法所用时间为：" + (endTime - startTime) + "ms");
 		return result;
+	}
+
+	public Sql getPaperSql(DijieOrderListForm form) {
+		String singlesqlStr = sqlManager.get("get_Japan_dijie_list_data_paper");
+		Sql singlesql = Sqls.create(singlesqlStr);
+		Cnd singlecnd = Cnd.NEW();
+		singlecnd = commonCondition(form, singlecnd);
+
+		singlesql.setCondition(singlecnd);
+		return singlesql;
 	}
 
 	/**
@@ -250,15 +273,42 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 	 */
 	public List<Record> getSingleperson(DijieOrderListForm form) {
 		long startTime = System.currentTimeMillis();
-		String singlesqlStr = sqlManager.get("getSingleperson");
+		String singlesqlStr = sqlManager.get("new_getSingleperson");
 		Sql singlesql = Sqls.create(singlesqlStr);
 
 		Cnd singlecnd = Cnd.NEW();
+
+		singlecnd = commonCondition(form, singlecnd);
+
+		singlecnd.and("tr.zhaobaoupdate", "=", 1);
+		//singlecnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
+		//singlecnd.orderBy("tr.isDisabled", "ASC");
+		//singlecnd.orderBy("tr.updatetime", "desc");
+
+		singlesql.setCondition(singlecnd);
+		List<Record> singleperson = dbDao.query(singlesql, singlecnd, null);
+		long endTime = System.currentTimeMillis();
+		System.out.println("查询单组单人所用时间为：" + (endTime - startTime) + "ms");
+		return singleperson;
+	}
+
+	/**
+	 * 共用的搜索条件cnd
+	 * TODO(这里用一句话描述这个方法的作用)
+	 * <p>
+	 * TODO(这里描述这个方法详情– 可选)
+	 *
+	 * @param form
+	 * @param singlecnd
+	 * @return TODO(这里描述每个参数,如果有返回值描述返回值,如果有异常描述异常)
+	 */
+	public Cnd commonCondition(DijieOrderListForm form, Cnd singlecnd) {
 		if (!Util.isEmpty(form.getSongqianshe())) {
 			singlecnd.and("tr.comId", "=", form.getSongqianshe());
-		} else {
+		} /*else {
 			singlecnd.and("toj.groundconnectid", "=", form.getCompanyid());
-		}
+			}*/
+		singlecnd.and("toj.groundconnectid", "=", form.getCompanyid());
 		if (!Util.isEmpty(form.getSearchStr())) {
 			SqlExpressionGroup exp = new SqlExpressionGroup();
 			exp.and("tr.orderNum", "like", "%" + form.getSearchStr() + "%")
@@ -289,11 +339,22 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 		if (!Util.isEmpty(form.getStatus())) {
 			if (Util.eq(form.getStatus(), JPOrderStatusEnum.DISABLED.intKey())) {
 				singlecnd.and("tr.isDisabled", "=", IsYesOrNoEnum.YES.intKey());
+			} else if (Util.eq(form.getStatus(), 22)) {
+				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).or("tr.status", "=", 35)
+						.and("tr.isDisabled", "=", IsYesOrNoEnum.NO.intKey());
+				singlecnd.and(e1);
+			} else if (Util.eq(19, form.getStatus())) {
+				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).or("tr.status", "=", 34)
+						.and("tr.isDisabled", "=", IsYesOrNoEnum.NO.intKey());
+				singlecnd.and(e1);
 			} else {
 				SqlExpressionGroup e1 = Cnd.exps("tr.status", "=", form.getStatus()).and("tr.isDisabled", "=",
 						IsYesOrNoEnum.NO.intKey());
 				singlecnd.and(e1);
 			}
+		} else {
+			SqlExpressionGroup e1 = Cnd.exps("tr.isDisabled", "=", IsYesOrNoEnum.NO.intKey());
+			singlecnd.and(e1);
 		}
 
 		/*if (!Util.isEmpty(form.getSongqianshe())) {
@@ -307,16 +368,8 @@ public class JapanDijieService extends BaseService<TOrderEntity> {
 			exp.and("toj.visatype", "=", form.getVisatype());
 			singlecnd.and(exp);
 		}
-		singlecnd.and("tr.zhaobaoupdate", "=", 1);
-		singlecnd.groupBy("tr.orderNum").having(Cnd.wrap("ct = 1"));
-		singlecnd.orderBy("tr.isDisabled", "ASC");
-		singlecnd.orderBy("tr.updatetime", "desc");
 
-		singlesql.setCondition(singlecnd);
-		List<Record> singleperson = dbDao.query(singlesql, singlecnd, null);
-		long endTime = System.currentTimeMillis();
-		System.out.println("查询单组单人所用时间为：" + (endTime - startTime) + "ms");
-		return singleperson;
+		return singlecnd;
 	}
 
 	public Object orderdetail(Integer orderid, HttpServletRequest request) {

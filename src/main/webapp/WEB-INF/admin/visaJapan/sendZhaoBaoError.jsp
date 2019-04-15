@@ -59,10 +59,16 @@
 		function fillIn(){
 			var type = '${obj.type}';
 			if(type == 1){
-				window.open('${base}/admin/simple/editOrder.html?orderid='+orderid);
+				if('${obj.ordertype}' == 1){
+					window.open('${base}/admin/simple/zhaobaoOrder.html?orderid='+orderid);
+				}else{
+					window.open('${base}/admin/simple/editOrder.html?orderid='+orderid);
+				}
 			}else{
 				window.open('${base}/admin/visaJapan/visaDetail.html?orderid='+orderid);
 			}
+			
+			cancelBtn();
 		}
 		function cancelBtn(){
 			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

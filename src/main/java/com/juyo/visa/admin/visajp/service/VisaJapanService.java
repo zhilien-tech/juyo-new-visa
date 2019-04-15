@@ -1772,7 +1772,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		result.put("orderjpinfo", orderjp);
 		//送签社下拉
 		if (loginCompany.getComType().equals(CompanyTypeEnum.SONGQIAN.intKey())
-				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())) {
+				|| loginCompany.getComType().equals(CompanyTypeEnum.SONGQIANSIMPLE.intKey())
+				|| loginCompany.getComType().equals(CompanyTypeEnum.ORDERSIMPLE.intKey())) {
 			//如果公司自己有指定番号，说明有送签资质，也需要出现在下拉中
 			if (!Util.isEmpty(loginCompany.getCdesignNum())) {
 				ja.add(loginCompany);
@@ -1816,6 +1817,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	public Object sendZhaoBaoError(HttpServletRequest request, HttpSession session, Integer type) {
 		TUserEntity loginUser = LoginUtil.getLoginUser(session);
 		Integer userId = loginUser.getId();
+
 		Map<String, Object> result = Maps.newHashMap();
 		String data = request.getParameter("data");
 		String strPtname = "";
@@ -1827,6 +1829,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 		}
 		String orderid = request.getParameter("orderid");
 		int orderId = Integer.valueOf(orderid).intValue();
+		result.put("ordertype", loginUser.getOrdertype());
 		result.put("orderid", request.getParameter("orderid"));
 		result.put("data", strPtname);
 		result.put("type", type);
@@ -1899,8 +1902,8 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 			//更新订单状态为发招保中或准备提交大使馆，此时发招宝就会开始，所以必须在准备工作之后，即orderjp相关的操作和excel完成之后
 
 			Integer userId = loginuser.getId();
-			//如果是lelv点的，则记录原订单的操作人
-			if (Util.eq("lelv", loginuser.getName())) {
+			//如果是lelv或日中(地接社)点的，则记录原订单的操作人
+			if (Util.eq("lelv", loginuser.getName()) || Util.eq("rizhong", loginuser.getName())) {
 				orderinfo.setVisaOpid(orderinfo.getSalesOpid());
 			} else {
 				orderinfo.setVisaOpid(userId);
@@ -1965,7 +1968,7 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 	public Object validateInfoIsFull(Integer orderjpid) {
 		StringBuffer resultstrbuf = new StringBuffer("");
 		TOrderJpEntity orderjp = dbDao.fetch(TOrderJpEntity.class, orderjpid.longValue());
-		if (orderjp.getVisaType() == 14) {
+		if (!Util.isEmpty(orderjp.getVisaType()) && orderjp.getVisaType() == 14) {
 			return 14;
 		} else {
 			//订单信息
@@ -2031,12 +2034,12 @@ public class VisaJapanService extends BaseService<TOrderEntity> {
 						if (Util.isEmpty(record.get("passportno"))) {
 							resultstrbuf.append("申请人" + count + "的护照号、");
 						}
-						if (Util.isEmpty(record.get("position"))) {
+						/*if (Util.isEmpty(record.get("position"))) {
 							resultstrbuf.append("申请人" + count + "的职位、");
 						}
 						if (Util.isEmpty(record.get("unitName"))) {
 							resultstrbuf.append("申请人" + count + "的父母（配偶）职业、");
-						}
+						}*/
 					}
 					count++;
 				}

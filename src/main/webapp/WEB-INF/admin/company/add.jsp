@@ -473,7 +473,7 @@
 				$("#scopeDiv").hide();
 			}else{
 				$("#scopeDiv").show();
-				if(type == 3){
+				if(type == 3 || type == 5){
 					$("#usScopeDiv").show();
 				}else{
 					$("#usScopeDiv").hide();

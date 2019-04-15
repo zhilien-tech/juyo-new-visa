@@ -162,6 +162,8 @@
 				<span>招宝成功(人)： {{visaJapanDataS.zhaobaopeople}}</span>
 				<span>单组单人： {{visaJapanDataS.singleperson}}</span>
 				<span>单组多人： {{visaJapanDataS.multiplayer}}</span>
+				<input type="file" multiple name="file" style="display: none" onchange="importExcel(this)" id="file"/>
+				<a class="btn btn-primary btn-sm pull-right importExcel"  id="importButton">导入</a>
 			</div>
 
 			<div style="margin-top:123px!important;" class="box-body" v-cloak><!-- 卡片列表 -->
@@ -178,41 +180,19 @@
 							<span style="margin-left: 20px;">{{data.comshortname}}</span>
 						</div>
 						<div><label></label><span>{{data.visatype}}</span></div>
-						<!-- <div><label></label><span style="font-weight:bold;font-size:16px;">
-							<span v-if="data.visastatus === '招宝成功'">
-								<font color="red">{{data.visastatus}}</font>
-							</span>
-							<span v-else-if="data.visastatus === '发招宝中'">
-								<font>{{data.visastatus}}</font>
-
-								<div class="spinner">
-								  <div class="bounce1"></div>
-								  <div class="bounce2"></div>
-								  <div class="bounce3"></div>
-								</div>
-							</span>
-							<span v-else-if="data.isdisabled == 1">
-									作废
-								</span>
-								<span v-else>
-									{{data.visastatus}}
-								</span>
-
-							</span>
-						</div>	 -->
 						<div v-if="data.isdisabled != 1">
 							<label>操作：</label>
 							<i class="edit" v-on:click="visaDetail(data.id)"> </i>
 							<!-- <i class="shiShou" v-on:click="revenue(data.id)"> </i> -->
 
-							<span v-if="data.zhaobaocomplete == 0 && data.visatype != '普通五年多次'">
+							<span v-if="data.zhaobaoupdate == 0 && data.visatype != '普通五年多次'">
 								<i class="sendZB" v-on:click="sendzhaobao(data.id)"> </i>
 							</span>
 							<!-- <span v-else>
 								<i class="theTrial1"> </i>
 							</span> -->
 
-							<span v-else-if="data.zhaobaocomplete ==1">
+							<span v-else-if="data.zhaobaoupdate ==1">
 								<i class="ZBchange" v-on:click="sendInsurance(data.id,19)"> </i>
 								<i class="ZBcancel" v-on:click="sendInsurance(data.id,22)"> </i>
 							</span>
@@ -325,6 +305,14 @@
 	<script src="${base}/references/common/js/base/baseIcon.js"></script><!-- 图标提示语 -->
 	<script src="${base}/admin/simple/listpagejs.js?v=<%=System.currentTimeMillis() %>"></script>
 	<script type="text/javascript">
+	
+	if('${obj.ordertype}' == 1){
+		$(".download").hide();
+		$(".importExcel").show();
+	}else{
+		$(".download").show();
+		$(".importExcel").hide();
+	}
 	//异步加载的URL地址
     var url="${base}/admin/simple/listData.html";
     //vue表格数据对象
@@ -365,7 +353,11 @@
         methods:{
         	visaDetail:function(orderid){
         		//跳转到签证详情页面
-        		window.open('${base}/admin/simple/editOrder.html?orderid='+orderid);
+        		if('${obj.ordertype}' == 1){
+ 		       		window.open('${base}/admin/simple/zhaobaoOrder.html?orderid='+orderid);
+        		}else{
+	        		window.open('${base}/admin/simple/editOrder.html?orderid='+orderid);
+        		}
         		//console.log(message);
         		//alert(JSON.stringify(event.target));
         	},
@@ -975,7 +967,11 @@
 
 	//下单
 	function addOrder(){
-		window.location.href = "/admin/simple/addOrder.html";
+		if('${obj.ordertype}' == 1){
+			window.location.href = "/admin/simple/addZhaobaoOrder.html";
+		}else{
+			window.location.href = "/admin/simple/addOrder.html";
+		}
 	}
 	//下载
 	function downloadOrder(){
@@ -999,6 +995,61 @@
 	         }
 	     });
 	}
+	
+	//上传
+	function importExcel(obj){
+		layer.load(1);
+		var fileName=$("#file").val();
+		if(fileName == '') {
+	          layer.msg('请选择文件！');
+	          layer.closeAll('loading');
+	          return false;
+	      }
+		console.log("fileName:"+fileName);
+		//验证文件格式
+	    var fileType = (fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length)).toLowerCase();
+		if (fileType != 'xlsx' && fileType != 'xls') {
+			layer.msg('文件格式不正确！');
+			layer.closeAll('loading');
+			return false;
+		} 
+		console.log("fileType:"+fileType);
+		var file = obj.files;
+		var form = new FormData(); // FormData 对象
+		 for(var i = 0; i < file.length; i++){
+		 	form.append("file", file[i]);
+		 }
+		//form.append("file", file);
+		
+		$.ajax({
+			type:'POST',
+			url:'/admin/simple/importExcel.html',//请求地址  ,
+			async : true,
+			contentType : false,
+			processData : false,
+			data:form,
+			success: function(data){
+				layer.closeAll('loading');
+				if(data == "error"){
+					layer.msg("文件导入失败，请重新上传！");
+					return false;
+				}else{
+					layer.msg("文件导入成功！");
+					search();
+					return false;
+				}
+			},
+			error : function(data){
+				console.log(data.msg);
+			}
+		});
+	}
+	
+	
+	$("#importButton").click(function(){
+		$("#file").click();
+	});
+		
 
 	//连接websocket
 	/* connectWebSocket();

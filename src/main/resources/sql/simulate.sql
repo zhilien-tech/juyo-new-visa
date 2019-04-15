@@ -18,3 +18,4 @@ FROM
 INNER JOIN t_applicant_order_jp taoj ON taoj.applicantId = tr.id
 LEFT JOIN t_applicant_passport tap ON tap.applicantId = tr.id
 where taoj.orderid=@orderid
+ORDER BY taoj.isMainApplicant DESC, taoj.id ASC

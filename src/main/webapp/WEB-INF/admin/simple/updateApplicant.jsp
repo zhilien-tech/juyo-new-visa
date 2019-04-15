@@ -555,166 +555,230 @@
 					$('#lastNameEn').removeAttr('disabled').css('opacity', 1);
 				}
 			});
-		
-			$('#applicantInfo').bootstrapValidator({
-				message: '验证不通过',
-				feedbackIcons: {
-					valid: 'glyphicon glyphicon-ok',
-					invalid: 'glyphicon glyphicon-remove',
-					validating: 'glyphicon glyphicon-refresh'
-				},
-				fields: {
-					telephone: {
-						trigger: "change keyup",
-						validators: {
-							regexp: {
-								regexp: /^[1][3456789][0-9]{9}$/,
-								message: '手机号格式错误'
+			
+			if('${obj.ordertype}' == 1){
+				$('#applicantInfo').bootstrapValidator({
+					message: '验证不通过',
+					feedbackIcons: {
+						valid: 'glyphicon glyphicon-ok',
+						invalid: 'glyphicon glyphicon-remove',
+						validating: 'glyphicon glyphicon-refresh'
+					},
+					fields: {
+						firstName: {
+							validators: {
+								notEmpty: {
+									message: '姓不能为空'
+								}
 							}
-						}
-					},
-					email: {
-						trigger: "change keyup",
-						validators: {
-							regexp: {
-								regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-								message: '邮箱格式错误'
+						},
+						lastName: {
+							validators: {
+								notEmpty: {
+									message: '名不能为空'
+								}
 							}
-						}
-					},
-					emergencyTelephone: {
-						trigger: "change keyup",
-						validators: {
-							regexp: {
-								regexp: /^[1][345789][0-9]{9}$/,
-								message: '手机号格式错误'
+						},
+						firstNameEn: {
+							trigger: "change keyup",
+							validators: {
+								notEmpty: {
+									message: '姓拼音不能为空'
+								},
+								stringLength: {//检测长度
+	                                min: 2,
+	                                max: 100,
+	                                message: '姓拼音不能为空'
+	                            },
+								regexp: {
+									regexp: /^[\/a-zA-Z]{0,}$/,
+									message: '拼音中不能包含汉字或其他特殊符号'
+								},
 							}
-						}
-					},
-					cardId: {
-						trigger: "change keyup",
-						validators: {
-							stringLength: {
-								min: 18,
-								max: 18,
-								message: '身份证号必须为18位'
-							},
-						}
-					},
-					passport: {
-						trigger: "change keyup",
-						validators: {
-							stringLength: {
-								min: 9,
-								max: 9,
-								message: '护照号必须为9位'
-							},
-							regexp: {
-								regexp: /^[0-9a-zA-Z]+$/,
-								message: '护照号格式错误'
+						},
+						lastNameEn: {
+							trigger: "change keyup",
+							validators: {
+								notEmpty: {
+									message: '名拼音不能为空'
+								},
+								stringLength: {// 检测长度
+	                                min: 2,
+	                                max: 100,
+	                                message: '名拼音不能为空'
+	                            },
+								regexp: {
+									// regexp: /\/{1}[a-zA-Z]+$/,
+									regexp: /^[\/a-zA-Z]{0,}$/,
+									message: '拼音中不能包含汉字或其他特殊符号'
+								},
 							}
-							// threshold: 6 , //有6字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
-							// remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
-							// 	url: '${base}/admin/orderJp/checkPassport.html',
-							// 	message: '护照号已存在，请重新输入',//提示消息
-							// 	delay: 2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
-							// 	type: 'POST',//请求方式
-							// 	//自定义提交数据，默认值提交当前input value
-							// 	data: function (validator) {
-							// 		return {
-							// 			passport: $('#passport').val(),
-							// 			adminId: $('#id').val(),
-							// 			orderid: $('#orderid').val()
-							// 		};
-							// 	}
-							// }
-						}
+						},
+					}
+				});
+			}else{
+				$('#applicantInfo').bootstrapValidator({
+					message: '验证不通过',
+					feedbackIcons: {
+						valid: 'glyphicon glyphicon-ok',
+						invalid: 'glyphicon glyphicon-remove',
+						validating: 'glyphicon glyphicon-refresh'
 					},
-					firstName: {
-						validators: {
-							notEmpty: {
-								message: '姓不能为空'
+					fields: {
+						telephone: {
+							trigger: "change keyup",
+							validators: {
+								regexp: {
+									regexp: /^[1][3456789][0-9]{9}$/,
+									message: '手机号格式错误'
+								}
 							}
-						}
-					},
-					lastName: {
-						validators: {
-							notEmpty: {
-								message: '名不能为空'
+						},
+						email: {
+							trigger: "change keyup",
+							validators: {
+								regexp: {
+									regexp: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+									message: '邮箱格式错误'
+								}
 							}
-						}
-					},
-					firstNameEn: {
-						trigger: "change keyup",
-						validators: {
-							notEmpty: {
-								message: '姓拼音不能为空'
-							},
-							stringLength: {//检测长度
-                                min: 2,
-                                max: 100,
-                                message: '姓拼音不能为空'
-                            },
-							regexp: {
-								regexp: /^[\/a-zA-Z]{0,}$/,
-								message: '拼音中不能包含汉字或其他特殊符号'
-							},
-						}
-					},
-					lastNameEn: {
-						trigger: "change keyup",
-						validators: {
-							notEmpty: {
-								message: '名拼音不能为空'
-							},
-							stringLength: {// 检测长度
-                                min: 2,
-                                max: 100,
-                                message: '名拼音不能为空'
-                            },
-							regexp: {
-								// regexp: /\/{1}[a-zA-Z]+$/,
-								regexp: /^[\/a-zA-Z]{0,}$/,
-								message: '拼音中不能包含汉字或其他特殊符号'
-							},
-						}
-					},
-					birthAddressEn: {
-						trigger: "change keyup",
-						validators: {
-							notEmpty: {
-								message: '出生地点不能为空'
-							},
-							stringLength: {//检测长度
-                                min: 2,
-                                max: 100,
-                                message: '出生地点不能为空'
-                            },
-							regexp: {
-								regexp: /^[\/a-zA-Z\s]{0,}$/,
-								message: '拼音中不能包含汉字或其他特殊符号'
-							},
-						}
-					},
-					issuedPlaceEn: {
-						trigger: "change keyup",
-						validators: {
-							notEmpty: {
-								message: '签发地点不能为空'
-							},
-							stringLength: {//检测长度
-                                min: 2,
-                                max: 100,
-                                message: '签发地点不能为空'
-                            },
-							regexp: {
-								regexp: /^[\/a-zA-Z\s]{0,}$/,
-								message: '拼音中不能包含汉字或其他特殊符号'
-							},
+						},
+						emergencyTelephone: {
+							trigger: "change keyup",
+							validators: {
+								regexp: {
+									regexp: /^[1][345789][0-9]{9}$/,
+									message: '手机号格式错误'
+								}
+							}
+						},
+						cardId: {
+							trigger: "change keyup",
+							validators: {
+								stringLength: {
+									min: 18,
+									max: 18,
+									message: '身份证号必须为18位'
+								},
+							}
+						},
+						passport: {
+							trigger: "change keyup",
+							validators: {
+								stringLength: {
+									min: 9,
+									max: 9,
+									message: '护照号必须为9位'
+								},
+								regexp: {
+									regexp: /^[0-9a-zA-Z]+$/,
+									message: '护照号格式错误'
+								}
+								// threshold: 6 , //有6字符以上才发送ajax请求，（input中输入一个字符，插件会向服务器发送一次，设置限制，6字符以上才开始）
+								// remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}  
+								// 	url: '${base}/admin/orderJp/checkPassport.html',
+								// 	message: '护照号已存在，请重新输入',//提示消息
+								// 	delay: 2000,//每输入一个字符，就发ajax请求，服务器压力还是太大，设置2秒发送一次ajax（默认输入一个字符，提交一次，服务器压力太大）
+								// 	type: 'POST',//请求方式
+								// 	//自定义提交数据，默认值提交当前input value
+								// 	data: function (validator) {
+								// 		return {
+								// 			passport: $('#passport').val(),
+								// 			adminId: $('#id').val(),
+								// 			orderid: $('#orderid').val()
+								// 		};
+								// 	}
+								// }
+							}
+						},
+						firstName: {
+							validators: {
+								notEmpty: {
+									message: '姓不能为空'
+								}
+							}
+						},
+						lastName: {
+							validators: {
+								notEmpty: {
+									message: '名不能为空'
+								}
+							}
+						},
+						firstNameEn: {
+							trigger: "change keyup",
+							validators: {
+								notEmpty: {
+									message: '姓拼音不能为空'
+								},
+								stringLength: {//检测长度
+	                                min: 2,
+	                                max: 100,
+	                                message: '姓拼音不能为空'
+	                            },
+								regexp: {
+									regexp: /^[\/a-zA-Z]{0,}$/,
+									message: '拼音中不能包含汉字或其他特殊符号'
+								},
+							}
+						},
+						lastNameEn: {
+							trigger: "change keyup",
+							validators: {
+								notEmpty: {
+									message: '名拼音不能为空'
+								},
+								stringLength: {// 检测长度
+	                                min: 2,
+	                                max: 100,
+	                                message: '名拼音不能为空'
+	                            },
+								regexp: {
+									// regexp: /\/{1}[a-zA-Z]+$/,
+									regexp: /^[\/a-zA-Z]{0,}$/,
+									message: '拼音中不能包含汉字或其他特殊符号'
+								},
+							}
+						},
+						birthAddressEn: {
+							trigger: "change keyup",
+							validators: {
+								notEmpty: {
+									message: '出生地点不能为空'
+								},
+								stringLength: {//检测长度
+	                                min: 2,
+	                                max: 100,
+	                                message: '出生地点不能为空'
+	                            },
+								regexp: {
+									regexp: /^[\/a-zA-Z\s]{0,}$/,
+									message: '拼音中不能包含汉字或其他特殊符号'
+								},
+							}
+						},
+						issuedPlaceEn: {
+							trigger: "change keyup",
+							validators: {
+								notEmpty: {
+									message: '签发地点不能为空'
+								},
+								stringLength: {//检测长度
+	                                min: 2,
+	                                max: 100,
+	                                message: '签发地点不能为空'
+	                            },
+								regexp: {
+									regexp: /^[\/a-zA-Z\s]{0,}$/,
+									message: '拼音中不能包含汉字或其他特殊符号'
+								},
+							}
 						}
 					}
-				}
-			});
+				});
+			}
+		
+			
 
 			passportValiFn();
 			function passportValiFn() {
@@ -1275,11 +1339,24 @@
 				var issuedOrganization = "${obj.passport.issuedOrganization }";
 				var issuedOrganizationen = "${obj.passport.issuedOrganizationEn }";
 
+				//护照签发日期在2019-03-01之后签发机关改变
+				var issuedDateStr =  $("#issuedDate").val();
+				var issued =  new Date(Date.parse(issuedDateStr));
+				var newissued =  new Date(Date.parse("2019-03-01"));
+				
 				if (issuedOrganization == "") {
-					$("#issuedOrganization").val("公安部出入境管理局");
+					if(issued >= newissued){
+						$("#issuedOrganization").val("中华人民共和国国家移民管理局");
+					}else{
+						$("#issuedOrganization").val("公安部出入境管理局");
+					}
 				}
 				if (issuedOrganizationen == "") {
-					$("#issuedOrganizationEn").val("MPS Exit & Entry Administration");
+					if(issued >= newissued){
+						$("#issuedOrganizationEn").val("National Immigration Administartion,PRC");
+					}else{
+						$("#issuedOrganizationEn").val("MPS Exit & Entry Administration");
+					}
 				}
 
 				
@@ -1295,6 +1372,7 @@
 				} else {
 					$("#sexEn").val("F");
 				}
+				
 
 				$("#issuedDate").change(function () {
 					if ($("#issuedDate").val() != "") {

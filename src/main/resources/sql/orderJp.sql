@@ -114,6 +114,15 @@ DATE(createTime) = DATE(NOW())
 $condition
 order by createtime desc
 
+/*test_getOrdernum*/
+SELECT
+orderNum
+FROM
+t_order
+WHERE 
+DATE(createTime) = DATE(NOW())
+order by id desc LIMIT 1
+
 /*orderJp_applicantTable*/
 SELECT
 a.id,

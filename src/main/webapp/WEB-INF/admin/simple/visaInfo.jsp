@@ -1238,14 +1238,14 @@
 					layer.msg('主申请人备注不能为空');
 					return;
 				} */
-				if(applicVal == 1){
+				/* if(applicVal == 1){
 					var position = $('#position').val();
 					if(!position){
 						layer.msg('职位不能为空');
 						layer.closeAll("loading");
 						return;
 					}
-				}
+				} */
 			}
 			
 			var unitName = $('#unitName').val();

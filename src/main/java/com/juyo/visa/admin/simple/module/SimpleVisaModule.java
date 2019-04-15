@@ -7,6 +7,7 @@
 package com.juyo.visa.admin.simple.module;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,11 +15,15 @@ import javax.servlet.http.HttpSession;
 
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.GET;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.POST;
 import org.nutz.mvc.annotation.Param;
+import org.nutz.mvc.upload.TempFile;
+import org.nutz.mvc.upload.UploadAdaptor;
 
 import com.juyo.visa.admin.order.form.VisaEditDataForm;
 import com.juyo.visa.admin.simple.form.AddOrderForm;
@@ -68,6 +73,15 @@ public class SimpleVisaModule {
 	@At
 	@Ok("jsp")
 	public Object addOrder(HttpServletRequest request) {
+		return simpleVisaService.addOrder(request);
+	}
+
+	/**
+	 * 添加招宝订单
+	 */
+	@At
+	@Ok("jsp")
+	public Object addZhaobaoOrder(HttpServletRequest request) {
 		return simpleVisaService.addOrder(request);
 	}
 
@@ -134,11 +148,29 @@ public class SimpleVisaModule {
 	}
 
 	/**
+	 * 下单保存(招宝订单)
+	 */
+	@At
+	@POST
+	public Object saveZhaobaoOrderinfo(@Param("..") AddOrderForm form, HttpServletRequest request) {
+		return simpleVisaService.saveZhaobaoOrderinfo(form, request);
+	}
+
+	/**
 	 * 跳转到编辑订单页面
 	 */
 	@At
 	@Ok("jsp")
 	public Object editOrder(HttpServletRequest request, @Param("orderid") Integer orderid) {
+		return simpleVisaService.editOrder(request, orderid);
+	}
+
+	/**
+	 * 跳转到招宝编辑订单页面(简化)
+	 */
+	@At
+	@Ok("jsp")
+	public Object zhaobaoOrder(HttpServletRequest request, @Param("orderid") Integer orderid) {
 		return simpleVisaService.editOrder(request, orderid);
 	}
 
@@ -361,6 +393,18 @@ public class SimpleVisaModule {
 	}
 
 	/**
+	 * 上传excel数据到数据库
+	 */
+	@At
+	@Ok("json")
+	@Filters
+	@AdaptBy(type = UploadAdaptor.class)
+	public Object importExcel(@Param("file") List<TempFile> tfs, HttpServletRequest request,
+			HttpServletResponse response) {
+		return simpleVisaService.importExcel(tfs, request, response);
+	}
+
+	/**
 	 * 判断是否有申请人，没有的话新建，有的话修改
 	 */
 	@At
@@ -402,4 +446,17 @@ public class SimpleVisaModule {
 		return simpleVisaService.getSomething();
 	}
 
+	@At
+	@POST
+	public Object testAutofill(@Param("orderid") int orderid, @Param("action") String action,
+			@Param("orderVoucher") String orderVoucher) {
+		return simpleVisaService.testAutofill(orderid, action, orderVoucher);
+	}
+
+	@At
+	@POST
+	@Filters
+	public Object testSearch(@Param("orderVoucher") String orderVoucher) {
+		return simpleVisaService.testSearch(orderVoucher);
+	}
 }
